@@ -1,0 +1,1 @@
+netty=com.fccfc.framework.rpc.thrift.netty.NettyTransporter
