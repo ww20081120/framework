@@ -1,6 +1,10 @@
 package com.fccfc.framework.task.core.bean;
 
+import java.util.Date;
+
 import javax.persistence.Column;
+
+import com.fccfc.framework.task.api.SimpleTrigger;
 
 /**
  * <Description> SIMPLE_TRIGGER的Pojo<br>
@@ -37,6 +41,36 @@ public class SimpleTriggerPojo extends TriggerPojo {
     /** INTERVAL_UNIT */
     @Column(name = "INTERVAL_UNIT")
     private String intervalUnit;
+
+    public SimpleTriggerPojo() {
+    }
+
+    /**
+     * @param beginTime
+     * @param endTime
+     * @param times
+     * @param executeInterval
+     * @param intervalUnit
+     */
+    public SimpleTriggerPojo(SimpleTrigger trigger) {
+        setTriggerId(trigger.getTriggerId());
+        setTriggerName(trigger.getTriggerName());
+        if (trigger.getCreateTime() > 0) {
+            setCreateTime(new Date(trigger.getCreateTime()));
+        }
+        setOperatorId(trigger.getOperatorId());
+        setTriggerType(Integer.valueOf(trigger.getTriggerType()));
+        if (trigger.getBeginTime() > 0) {
+            setBeginTime(new Date(trigger.getBeginTime()));
+        }
+        if (trigger.getEndTime() > 0) {
+            setEndTime(new Date(trigger.getEndTime()));
+        }
+
+        setTimes(trigger.getTimes());
+        setExecuteInterval(trigger.getExecuteInterval());
+        setIntervalUnit(trigger.getIntervalUnit());
+    }
 
     public java.util.Date getBeginTime() {
         return beginTime;

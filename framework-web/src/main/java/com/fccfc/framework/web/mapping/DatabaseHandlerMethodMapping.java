@@ -20,6 +20,10 @@ import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondit
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.web.service.MappingService;
 
 /**
@@ -33,6 +37,8 @@ import com.fccfc.framework.web.service.MappingService;
  * @see com.fccfc.framework.web.mapping <br>
  */
 public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
+
+    private static Logger logger = new Logger(DatabaseHandlerMethodMapping.class);
 
     @Resource
     private MappingService mappingService;
@@ -49,7 +55,7 @@ public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
             resourceCache = mappingService.selectAllUrlResource();
         }
         catch (ServiceException e) {
-            LogUtil.error("获取URL资源失败", e);
+            logger.error("获取URL资源失败", e);
             throw new RuntimeException("获取URL资源失败", e);
         }
 
@@ -62,7 +68,7 @@ public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
         }
 
         if (isHandler) {
-            LogUtil.info("================>{0} is Handler", beanType.getName());
+            logger.info("================>{0} is Handler", beanType.getName());
         }
 
         return isHandler;
@@ -83,7 +89,7 @@ public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
             url = mappingService.getMethodUrl(handlerType.getName(), method.getName());
         }
         catch (ServiceException e) {
-            LogUtil.error("获取URL资源项失败", e);
+            logger.error("获取URL资源项失败", e);
             throw new RuntimeException("获取URL资源项失败", e);
         }
 
@@ -101,7 +107,7 @@ public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
                 }, typeAnnotation, typeCondition).combine(info);
 
             }
-            LogUtil.info("success set class[{0}].<[{1}]> url[{2}] resource [{3}]", handlerType.getName(),
+            logger.info("success set class[{0}].<[{1}]> url[{2}] resource [{3}]", handlerType.getName(),
                 method.getName(), url, info);
         }
 

@@ -1,4 +1,4 @@
-package com.fccfc.framework.api.bean.area;
+package com.fccfc.framework.web.bean.area;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import com.fccfc.framework.api.bean.BaseEntity;
+import com.fccfc.framework.db.core.BaseEntity;
 
 /**
  * <Description> AREA的Pojo<br>

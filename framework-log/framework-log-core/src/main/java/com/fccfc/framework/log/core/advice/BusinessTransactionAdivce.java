@@ -81,7 +81,7 @@ public class BusinessTransactionAdivce {
             if (transLog == null) {
                 transLog = new TransLogPojo();
                 transLog.setBeginTime(currentDate);
-                transLog.setModuleCode(Configuration.getLocalModuleCode());
+                transLog.setModuleCode(Configuration.getString(CacheConstant.LOCAL_MODULE_CODE));
                 transLog.setTransId(CommonUtil.getTransactionID());
                 manager.setTransLog(transLog);
             }

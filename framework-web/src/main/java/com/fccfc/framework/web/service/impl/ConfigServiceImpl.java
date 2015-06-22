@@ -7,9 +7,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.config.ConfigPojo;
-import com.fccfc.framework.core.db.DaoException;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.dao.ConfigDao;
 import com.fccfc.framework.web.service.ConfigService;
 
@@ -101,16 +100,6 @@ public class ConfigServiceImpl implements ConfigService {
         }
         catch (DaoException e) {
             throw new ServiceException("query modules error", e);
-        }
-    }
-
-    @Override
-    public void addParams(ConfigPojo config) throws ServiceException {
-        try {
-            configDao.addParams(config);
-        }
-        catch (DaoException e) {
-            throw new ServiceException("query addParams error", e);
         }
     }
 

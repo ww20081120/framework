@@ -10,10 +10,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.core.config.Configuration;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.utils.CommonUtil;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.dao.UrlResourceDao;
 import com.fccfc.framework.web.service.MappingService;
 

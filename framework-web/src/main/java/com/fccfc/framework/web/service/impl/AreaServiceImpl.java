@@ -10,12 +10,12 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.area.AreaPojo;
-import com.fccfc.framework.core.cache.CacheConstant;
-import com.fccfc.framework.core.cache.CacheException;
-import com.fccfc.framework.core.cache.CacheHelper;
-import com.fccfc.framework.core.db.DaoException;
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.CacheException;
+import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.web.bean.area.AreaPojo;
 import com.fccfc.framework.web.dao.AreaDao;
 import com.fccfc.framework.web.service.AreaService;
 
@@ -57,7 +57,7 @@ public class AreaServiceImpl implements AreaService {
     public List<AreaPojo> queryAreaAndParents(Integer areaId) throws ServiceException {
         List<AreaPojo> areaList = new ArrayList<AreaPojo>();
         try {
-            AreaPojo area = (AreaPojo) CacheHelper.get(CacheConstant.AREA, areaId.toString());
+            AreaPojo area = (AreaPojo) CacheHelper.getCache().getValue(CacheConstant.AREA, areaId.toString());
             if (area != null) {
                 areaList.add(area);
                 setParentArea(areaList, area);

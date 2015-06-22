@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
-import com.fccfc.framework.api.bean.BaseEntity;
+import com.fccfc.framework.db.core.BaseEntity;
 
 /**
  * <Description> MENU的Pojo<br>

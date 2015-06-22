@@ -1,4 +1,4 @@
-package com.fccfc.framework.api.bean.resource;
+package com.fccfc.framework.web.bean.resource;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fccfc.framework.api.bean.BaseEntity;
+import com.fccfc.framework.db.core.BaseEntity;
 
 /**
  * <Description> ATTACHMENTS的Pojo<br>

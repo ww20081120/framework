@@ -3,8 +3,7 @@ package com.fccfc.framework.web.service;
 import java.util.List;
 import java.util.Map;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.config.ConfigPojo;
+import com.fccfc.framework.common.ServiceException;
 
 /**
  * 参数配置Service
@@ -68,22 +67,15 @@ public interface ConfigService {
      */
     void addConfigItem(Map<String, Object> paramMap) throws ServiceException;
 
-    /**
-     * 新增配置参数
-     * 
-     * @param paramMap
-     * @throws ServiceException
-     */
-    void addParams(ConfigPojo config) throws ServiceException;
-
     void addParam(Map<String, Object> paramMap) throws ServiceException;
-    
+
     /**
      * 查询配置项参数数据
+     * 
      * @param paramMap Map<String,Object>
-     * @return  List<Map<String,Object>>
+     * @return List<Map<String,Object>>
      * @throws ServiceException ServiceException
      */
-    List<Map<String,Object>> queryParams(Map<String,Object> paramMap) throws ServiceException;
+    List<Map<String, Object>> queryParams(Map<String, Object> paramMap) throws ServiceException;
 
 }

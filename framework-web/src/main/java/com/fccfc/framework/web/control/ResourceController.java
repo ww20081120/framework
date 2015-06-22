@@ -29,19 +29,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.resource.AttachmentsPojo;
-import com.fccfc.framework.core.ErrorCodeDef;
-import com.fccfc.framework.core.GlobalConstants;
-import com.fccfc.framework.core.config.Configuration;
-import com.fccfc.framework.core.utils.Assert;
-import com.fccfc.framework.core.utils.CommonUtil;
-import com.fccfc.framework.core.utils.DateConstants;
-import com.fccfc.framework.core.utils.DateUtil;
-import com.fccfc.framework.core.utils.IOUtil;
-import com.fccfc.framework.core.utils.LogUtil;
-import com.fccfc.framework.core.utils.security.DataUtil;
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.common.utils.Assert;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.date.DateConstants;
+import com.fccfc.framework.common.utils.date.DateUtil;
+import com.fccfc.framework.common.utils.io.IOUtil;
+import com.fccfc.framework.common.utils.logger.Logger;
+import com.fccfc.framework.common.utils.security.DataUtil;
+import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
 import com.fccfc.framework.web.service.ResourceService;
 //import com.qiniu.api.auth.digest.Mac;
 //import com.qiniu.api.config.Config;
@@ -57,6 +57,8 @@ import com.fccfc.framework.web.service.ResourceService;
  */
 @Controller
 public class ResourceController {
+
+    private Logger logger = new Logger(ResourceController.class);
 
     private Map<String, Long> mediaSize;
 
@@ -108,25 +110,25 @@ public class ResourceController {
         meidaTypes.put("file", MediaType.APPLICATION_OCTET_STREAM);
     }
 
-//    @ResponseBody
-//    public Map<String, Object> upToken() throws FrameworkException {
-//        Config.ACCESS_KEY = Configuration.getString("QINIU.ACCESS_KEY");
-//        Config.SECRET_KEY = Configuration.getString("QINIU.SECRET_KEY");
-//        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
-//        // 请确保该bucket已经存在
-//        String bucketName = Configuration.getString("QINIU.BUCKET_NAME");
-//        PutPolicy putPolicy = new PutPolicy(bucketName);
-//        Map<String, Object> result = new HashMap<String, Object>();
-//        try {
-//            String uptoken = putPolicy.token(mac);
-//            result.put("uploadToken", uptoken);
-//        }
-//        catch (Exception e) {
-//            throw new ServiceException(ErrorCodeDef.QI_NIU_UP_TOKEN_ERROR_20018, e);
-//        }
-//        result.put("uploadUrl", Configuration.getString("QINIU.UPLOAD_DOMAIN"));
-//        return result;
-//    }
+    // @ResponseBody
+    // public Map<String, Object> upToken() throws FrameworkException {
+    // Config.ACCESS_KEY = Configuration.getString("QINIU.ACCESS_KEY");
+    // Config.SECRET_KEY = Configuration.getString("QINIU.SECRET_KEY");
+    // Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+    // // 请确保该bucket已经存在
+    // String bucketName = Configuration.getString("QINIU.BUCKET_NAME");
+    // PutPolicy putPolicy = new PutPolicy(bucketName);
+    // Map<String, Object> result = new HashMap<String, Object>();
+    // try {
+    // String uptoken = putPolicy.token(mac);
+    // result.put("uploadToken", uptoken);
+    // }
+    // catch (Exception e) {
+    // throw new ServiceException(ErrorCodeDef.QI_NIU_UP_TOKEN_ERROR_20018, e);
+    // }
+    // result.put("uploadUrl", Configuration.getString("QINIU.UPLOAD_DOMAIN"));
+    // return result;
+    // }
 
     @ResponseBody
     public ResponseEntity<Resource> download(@RequestParam("mediaId") Integer resourceId, @RequestParam(
@@ -221,7 +223,6 @@ public class ResourceController {
 
     }
 
-    
     private void checkFile(String fileType, Long fileSize) throws ServiceException {
         String contentType = contentTypes.get(fileType);
         if (CommonUtil.isEmpty(contentType)) {
@@ -235,7 +236,7 @@ public class ResourceController {
             throw new ServiceException(ErrorCodeDef.UNSPORT_MEDIA_TYPE_20010, "不支持的媒体类型");
         }
 
-        LogUtil.info("接收到大小为{0}的文件" + fileSize);
+        logger.info("接收到大小为{0}的文件" + fileSize);
         if (fileSize - size > 0) {
             throw new ServiceException(ErrorCodeDef.FILE_IS_TO_LARGER_20011, "文件大小超限");
         }

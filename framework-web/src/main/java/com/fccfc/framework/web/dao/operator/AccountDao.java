@@ -5,8 +5,8 @@
  ****************************************************************************************/
 package com.fccfc.framework.web.dao.operator;
 
-import com.fccfc.framework.core.db.annotation.DAO;
-import com.fccfc.framework.core.db.support.hibernate.IGenericBaseDao;
+import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.hibernate.IGenericBaseDao;
 
 /**
  * <Description> <br>
@@ -16,6 +16,6 @@ import com.fccfc.framework.core.db.support.hibernate.IGenericBaseDao;
  * @CreateDate 2014年12月4日 <br>
  * @see com.fccfc.framework.web.dao.operator <br>
  */
-@DAO
+@Dao
 public interface AccountDao extends IGenericBaseDao {
 }

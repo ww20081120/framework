@@ -5,8 +5,8 @@ package com.fccfc.framework.web.service;
 
 import java.util.List;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.area.AreaPojo;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.web.bean.area.AreaPojo;
 
 /**
  * <Description> <br>

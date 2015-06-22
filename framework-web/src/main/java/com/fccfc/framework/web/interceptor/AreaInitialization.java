@@ -10,13 +10,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.fccfc.framework.api.bean.area.AreaPojo;
-import com.fccfc.framework.core.ErrorCodeDef;
-import com.fccfc.framework.core.Initialization;
-import com.fccfc.framework.core.InitializationException;
-import com.fccfc.framework.core.cache.CacheConstant;
-import com.fccfc.framework.core.cache.CacheHelper;
-import com.fccfc.framework.core.utils.CommonUtil;
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.Initialization;
+import com.fccfc.framework.common.InitializationException;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.web.bean.area.AreaPojo;
 import com.fccfc.framework.web.service.AreaService;
 
 /**
@@ -64,7 +64,7 @@ public class AreaInitialization implements Initialization {
                 }
             }
         }
-        CacheHelper.put(CacheConstant.AREA, areaMap);
+        CacheHelper.getCache().putNode(CacheConstant.AREA, areaMap);
     }
 
     /*

@@ -5,8 +5,8 @@ package com.fccfc.framework.web.interceptor;
 
 import javax.annotation.Resource;
 
-import com.fccfc.framework.core.Initialization;
-import com.fccfc.framework.core.utils.LogUtil;
+import com.fccfc.framework.common.Initialization;
+import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.web.service.MenuService;
 
 /**
@@ -20,6 +20,8 @@ import com.fccfc.framework.web.service.MenuService;
  * @see com.fccfc.framework.web.interceptor <br>
  */
 public class MenuInitialization implements Initialization {
+
+    private static Logger logger = new Logger(MenuInitialization.class);
 
     @Resource
     private MenuService menuService;
@@ -39,7 +41,7 @@ public class MenuInitialization implements Initialization {
      */
     @Override
     public void destroy() throws Exception {
-        LogUtil.info("-------MenuInitialization destroy---------");
+        logger.info("-------MenuInitialization destroy---------");
     }
 
 }

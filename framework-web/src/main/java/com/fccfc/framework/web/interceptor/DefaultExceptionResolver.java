@@ -12,9 +12,9 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.core.ErrorCodeDef;
-import com.fccfc.framework.core.utils.CommonUtil;
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.utils.CommonUtil;
 
 /**
  * <Description> <br>

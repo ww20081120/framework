@@ -3,12 +3,12 @@
  */
 package com.fccfc.framework.web.dao;
 
-import com.fccfc.framework.api.bean.resource.AttachmentsPojo;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.db.annotation.DAO;
-import com.fccfc.framework.core.db.annotation.Param;
-import com.fccfc.framework.core.db.annotation.Sql;
-import com.fccfc.framework.core.db.support.hibernate.IGenericBaseDao;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.core.annotation.Param;
+import com.fccfc.framework.db.core.annotation.Sql;
+import com.fccfc.framework.db.hibernate.IGenericBaseDao;
+import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
 
 /**
  * <Description> <br>
@@ -20,8 +20,8 @@ import com.fccfc.framework.core.db.support.hibernate.IGenericBaseDao;
  * @since V1.0<br>
  * @see com.fccfc.framework.web.dao <br>
  */
-@DAO
-public interface AttachmentsDao extends IGenericBaseDao{
+@Dao
+public interface AttachmentsDao extends IGenericBaseDao {
 
     @Sql("SELECT * FROM ATTACHMENTS WHERE ATTACHMENTS_ID = :id")
     AttachmentsPojo selectAttachments(@Param("id") int attachmentId) throws DaoException;

@@ -3,8 +3,8 @@
  */
 package com.fccfc.framework.web.service;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.resource.AttachmentsPojo;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
 
 /**
  * <Description> <br>

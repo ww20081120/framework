@@ -15,10 +15,10 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.fccfc.framework.api.bean.operator.OperatorPojo;
-import com.fccfc.framework.core.GlobalConstants;
-import com.fccfc.framework.core.config.Configuration;
-import com.fccfc.framework.core.utils.CommonUtil;
+import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.web.bean.operator.OperatorPojo;
 
 /**
  * <Description> <br>
@@ -30,11 +30,11 @@ import com.fccfc.framework.core.utils.CommonUtil;
  */
 public final class WebUtil {
 
-	/**
-	 * 测试账号MAP
-	 */
-	public static Map<String, String> TEST_OPER_MAP = null;
-	
+    /**
+     * 测试账号MAP
+     */
+    public static Map<String, String> TEST_OPER_MAP = null;
+
     /**
      * 默认构造函数
      */
@@ -81,25 +81,26 @@ public final class WebUtil {
         }
         return obj;
     }
-    
+
     /**
      * 获取测试账号
+     * 
      * @return
      */
-    public static Map<String, String> getTestOperMap(){
-    	if(null != TEST_OPER_MAP){
-    		return TEST_OPER_MAP;
-    	}
-    	
-    	TEST_OPER_MAP = new HashMap<String, String>();
-    	String operators = Configuration.getString("OPERATOR.TEST_OPERATOR");
-		if(CommonUtil.isNotEmpty(operators)){
-			String[] operatorArr = operators.split(GlobalConstants.SPLITOR);
-			for(String value : operatorArr){
-				TEST_OPER_MAP.put(value.split(GlobalConstants.EQUAL_SPLITER)[0],
-						value.split(GlobalConstants.EQUAL_SPLITER)[1]);
-			}
-		}
-		return TEST_OPER_MAP;
+    public static Map<String, String> getTestOperMap() {
+        if (null != TEST_OPER_MAP) {
+            return TEST_OPER_MAP;
+        }
+
+        TEST_OPER_MAP = new HashMap<String, String>();
+        String operators = Configuration.getString("OPERATOR.TEST_OPERATOR");
+        if (CommonUtil.isNotEmpty(operators)) {
+            String[] operatorArr = operators.split(GlobalConstants.SPLITOR);
+            for (String value : operatorArr) {
+                TEST_OPER_MAP.put(value.split(GlobalConstants.EQUAL_SPLITER)[0],
+                    value.split(GlobalConstants.EQUAL_SPLITER)[1]);
+            }
+        }
+        return TEST_OPER_MAP;
     }
 }

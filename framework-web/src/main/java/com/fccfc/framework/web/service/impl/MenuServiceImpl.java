@@ -13,17 +13,17 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.web.MenuPojo;
-import com.fccfc.framework.core.ErrorCodeDef;
-import com.fccfc.framework.core.cache.CacheConstant;
-import com.fccfc.framework.core.cache.CacheException;
-import com.fccfc.framework.core.cache.CacheHelper;
-import com.fccfc.framework.core.config.Configuration;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.utils.CommonUtil;
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.CacheException;
+import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.WebConstant;
+import com.fccfc.framework.web.bean.resource.MenuPojo;
 import com.fccfc.framework.web.dao.MenuDao;
 import com.fccfc.framework.web.service.MenuService;
 
@@ -53,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
             final Map<Integer, MenuPojo> menuMap = new HashMap<Integer, MenuPojo>();
 
             List<MenuPojo> menuList = menuDao.selectAllMenu(Configuration.getModuleCode());
-            CacheHelper.set(CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE, menuList);
+            CacheHelper.getCache().putValue(CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE, menuList);
             if (CommonUtil.isNotEmpty(menuList)) {
                 List<MenuPojo> topMenuList = new ArrayList<MenuPojo>();
                 for (MenuPojo menu : menuList) {
@@ -76,7 +76,8 @@ public class MenuServiceImpl implements MenuService {
                         }
                     }
                 }
-                CacheHelper.set(CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE_TREE, topMenuList);
+                CacheHelper.getCache().putValue(CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE_TREE,
+                    topMenuList);
             }
         }
         catch (DaoException e) {
@@ -100,8 +101,8 @@ public class MenuServiceImpl implements MenuService {
         try {
             Integer menuId = menuDao.getMenuByClassAndMethod(Configuration.getModuleCode(), className, method);
             if (menuId != null) {
-                List<MenuPojo> menuList = (List<MenuPojo>) CacheHelper.get(CacheConstant.SYSTEM_MENU_DIR,
-                    WebConstant.MENU_VARIABLE);
+                List<MenuPojo> menuList = (List<MenuPojo>) CacheHelper.getCache().getValue(
+                    CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE);
                 if (CommonUtil.isNotEmpty(menuList)) {
                     selectBreadLine(menuId, list, menuList);
                     Collections.reverse(list);

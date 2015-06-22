@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.thrift.TException;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
@@ -22,7 +23,9 @@ import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.task.api.CronTrigger;
+import com.fccfc.framework.task.api.SimpleTrigger;
+import com.fccfc.framework.task.api.Task;
 import com.fccfc.framework.task.api.TaskService;
 import com.fccfc.framework.task.core.TaskConstants;
 import com.fccfc.framework.task.core.bean.CronTriggerPojo;
@@ -62,7 +65,7 @@ public class TaskServiceImpl implements TaskService.Iface {
      * @see com.fccfc.framework.api.task.TaskService#scheduleAllTask()
      */
     @Override
-    public void scheduleAllTask() throws ServiceException {
+    public void scheduleAllTask() throws TException {
         try {
             TaskPojo pojo = new TaskPojo();
             pojo.setTaskState(TaskPojo.TASK_STATE_ACQUIRED);
@@ -85,19 +88,28 @@ public class TaskServiceImpl implements TaskService.Iface {
                 }
             }
         }
-        catch (DaoException e) {
-            throw new ServiceException("执行任务失败", e);
+        catch (Exception e) {
+            throw new TException("执行任务失败", e);
         }
 
     }
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.api.task.TaskService#schedule(com.fccfc.framework.common.bean.task.TaskPojo,
-     * com.fccfc.framework.common.bean.task.SimpleTriggerPojo)
+     * @see com.fccfc.framework.task.api.TaskService.Iface#simpleScheduleTask(com.fccfc.framework.task.api.Task,
+     * com.fccfc.framework.task.api.SimpleTrigger)
      */
     @Override
-    public void schedule(TaskPojo taskPojo, SimpleTriggerPojo simpleTriggerPojo) throws ServiceException {
+    public void simpleScheduleTask(Task task, SimpleTrigger simpleTrigger) throws TException {
+        try {
+            schedule(new TaskPojo(task), new SimpleTriggerPojo(simpleTrigger));
+        }
+        catch (ServiceException e) {
+            throw new TException("执行simple任务失败", e);
+        }
+    }
+
+    private void schedule(TaskPojo taskPojo, SimpleTriggerPojo simpleTriggerPojo) throws ServiceException {
         try {
             Assert.notNull(taskPojo, "任务不能为空");
             Assert.notNull(simpleTriggerPojo, "触发器不能为空");
@@ -133,11 +145,20 @@ public class TaskServiceImpl implements TaskService.Iface {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.api.task.TaskService#schedule(com.fccfc.framework.common.bean.task.TaskPojo,
-     * com.fccfc.framework.common.bean.task.CronTriggerPojo)
+     * @see com.fccfc.framework.task.api.TaskService.Iface#cronScheduleTask(com.fccfc.framework.task.api.Task,
+     * com.fccfc.framework.task.api.CronTrigger)
      */
     @Override
-    public void schedule(TaskPojo taskPojo, CronTriggerPojo cronTriggerPojo) throws ServiceException {
+    public void cronScheduleTask(Task task, CronTrigger cronTrigger) throws TException {
+        try {
+            schedule(new TaskPojo(task), new CronTriggerPojo(cronTrigger));
+        }
+        catch (ServiceException e) {
+            throw new TException("执行cron任务失败", e);
+        }
+    }
+
+    private void schedule(TaskPojo taskPojo, CronTriggerPojo cronTriggerPojo) throws ServiceException {
         try {
             Assert.notNull(taskPojo, "任务不能为空");
             Assert.notNull(cronTriggerPojo, "触发器不能为空");
@@ -173,10 +194,19 @@ public class TaskServiceImpl implements TaskService.Iface {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.api.task.TaskService#pause(com.fccfc.framework.common.bean.task.TaskPojo)
+     * @see com.fccfc.framework.task.api.TaskService.Iface#pause(com.fccfc.framework.task.api.Task)
      */
     @Override
-    public void pause(TaskPojo taskPojo) throws ServiceException {
+    public void pause(Task task) throws TException {
+        try {
+            pause(new TaskPojo(task));
+        }
+        catch (ServiceException e) {
+            throw new TException("暂停任务失败", e);
+        }
+    }
+
+    private void pause(TaskPojo taskPojo) throws ServiceException {
         try {
             List<TriggerPojo> triggerList = triggerDao.selectTriggerByTaskId(taskPojo.getTaskId());
             if (CommonUtil.isNotEmpty(triggerList)) {
@@ -192,10 +222,19 @@ public class TaskServiceImpl implements TaskService.Iface {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.api.task.TaskService#resume(com.fccfc.framework.common.bean.task.TaskPojo)
+     * @see com.fccfc.framework.task.api.TaskService.Iface#resume(com.fccfc.framework.task.api.Task)
      */
     @Override
-    public void resume(TaskPojo taskPojo) throws ServiceException {
+    public void resume(Task task) throws TException {
+        try {
+            resume(new TaskPojo(task));
+        }
+        catch (ServiceException e) {
+            throw new TException("恢复任务失败", e);
+        }
+    }
+
+    private void resume(TaskPojo taskPojo) throws ServiceException {
         try {
             List<TriggerPojo> triggerList = triggerDao.selectTriggerByTaskId(taskPojo.getTaskId());
             if (CommonUtil.isNotEmpty(triggerList)) {
@@ -211,10 +250,19 @@ public class TaskServiceImpl implements TaskService.Iface {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.api.task.TaskService#remove(com.fccfc.framework.common.bean.task.TaskPojo)
+     * @see com.fccfc.framework.task.api.TaskService.Iface#remove(com.fccfc.framework.task.api.Task)
      */
     @Override
-    public void remove(TaskPojo taskPojo) throws ServiceException {
+    public void remove(Task task) throws TException {
+        try {
+            remove(new TaskPojo(task));
+        }
+        catch (ServiceException e) {
+            throw new TException("删除任务失败", e);
+        }
+    }
+
+    private void remove(TaskPojo taskPojo) throws ServiceException {
         try {
             List<TriggerPojo> triggerList = triggerDao.selectTriggerByTaskId(taskPojo.getTaskId());
             if (CommonUtil.isNotEmpty(triggerList)) {

@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fccfc.framework.api.bean.BaseEntity;
+import com.fccfc.framework.db.core.BaseEntity;
 
 /**
  * <Description> ACCOUNT的Pojo<br>

@@ -3,12 +3,12 @@
  */
 package com.fccfc.framework.web.dao.operator;
 
-import com.fccfc.framework.api.bean.operator.OperatorPojo;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.db.annotation.DAO;
-import com.fccfc.framework.core.db.annotation.Param;
-import com.fccfc.framework.core.db.annotation.Sql;
-import com.fccfc.framework.core.db.support.hibernate.IGenericBaseDao;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.core.annotation.Param;
+import com.fccfc.framework.db.core.annotation.Sql;
+import com.fccfc.framework.db.hibernate.IGenericBaseDao;
+import com.fccfc.framework.web.bean.operator.OperatorPojo;
 
 /**
  * <Description> <br>
@@ -20,7 +20,7 @@ import com.fccfc.framework.core.db.support.hibernate.IGenericBaseDao;
  * @since V1.0<br>
  * @see com.fccfc.framework.web.dao.operator <br>
  */
-@DAO
+@Dao
 public interface OperatorDao extends IGenericBaseDao {
 
     OperatorPojo getOperator(@Param("id") Integer id, @Param("code") Integer code) throws DaoException;

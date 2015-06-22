@@ -3,14 +3,12 @@ package com.fccfc.framework.web.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.config.ConfigPojo;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.db.annotation.DAO;
-import com.fccfc.framework.core.db.annotation.Param;
-import com.fccfc.framework.core.db.annotation.Sql;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.core.annotation.Param;
+import com.fccfc.framework.db.core.annotation.Sql;
 
-@DAO
+@Dao
 public interface ConfigDao {
 
     @Sql(value = "select DIRECTORY_CODE as  id,DIRECTORY_NAME as name,PARENT_DIRECTORY_CODE as pId from directory",
@@ -87,10 +85,12 @@ public interface ConfigDao {
         @Param("code") String code, @Param("name") String name, @Param("vasiable") String vasiable,
         @Param("remark") String remark) throws DaoException;
 
-    @Sql(
-        value = "insert into  config_item_param(CONFIG_ITEM_ID,PARAM_CODE,PARAM_NAME,PARAM_VALUE,DEFAULT_PARAM_VALUE,DATA_TYPE,INPUT_TYPE,VALUE_SCRIPT,UPDATE_TIME,REMARK) "
-            + "VALUES(:config.itemId,:config.paramCode,:config.paramName,:config.paramValue,:config.defaultValue,:config.dataType,:config.inputType,:config.valueScript,current_timestamp(),:config.paramRemark)")
-    void addParams(@Param("config") ConfigPojo config) throws DaoException;
+    // @Sql(
+    // value =
+    // "insert into  config_item_param(CONFIG_ITEM_ID,PARAM_CODE,PARAM_NAME,PARAM_VALUE,DEFAULT_PARAM_VALUE,DATA_TYPE,INPUT_TYPE,VALUE_SCRIPT,UPDATE_TIME,REMARK) "
+    // +
+    // "VALUES(:config.itemId,:config.paramCode,:config.paramName,:config.paramValue,:config.defaultValue,:config.dataType,:config.inputType,:config.valueScript,current_timestamp(),:config.paramRemark)")
+    // void addParams(@Param("config") ConfigPojo config) throws DaoException;
 
     @Sql(
         value = "insert into  config_item_param(CONFIG_ITEM_ID,PARAM_CODE,PARAM_NAME,PARAM_VALUE,DEFAULT_PARAM_VALUE,DATA_TYPE,INPUT_TYPE,VALUE_SCRIPT,UPDATE_TIME,REMARK) "

@@ -14,11 +14,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.fccfc.framework.api.bean.web.MenuPojo;
-import com.fccfc.framework.core.cache.CacheConstant;
-import com.fccfc.framework.core.cache.CacheHelper;
-import com.fccfc.framework.core.utils.CommonUtil;
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.web.WebConstant;
+import com.fccfc.framework.web.bean.resource.MenuPojo;
 import com.fccfc.framework.web.service.MappingService;
 import com.fccfc.framework.web.service.MenuService;
 
@@ -52,7 +52,7 @@ public class MenuInterceptor extends HandlerInterceptorAdapter {
         if (modelAndView != null) {
             ModelMap map = modelAndView.getModelMap();
             map.put(WebConstant.MENU_VARIABLE_TREE,
-                CacheHelper.get(CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE_TREE));
+                CacheHelper.getCache().getValue(CacheConstant.SYSTEM_MENU_DIR, WebConstant.MENU_VARIABLE_TREE));
 
             if (handler instanceof HandlerMethod) {
                 HandlerMethod handlerMethod = (HandlerMethod) handler;

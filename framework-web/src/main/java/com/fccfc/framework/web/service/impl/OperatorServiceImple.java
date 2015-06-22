@@ -10,20 +10,20 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.operator.AccountPojo;
-import com.fccfc.framework.api.bean.operator.OperatorPojo;
-import com.fccfc.framework.api.operator.OperatorService;
-import com.fccfc.framework.core.ErrorCodeDef;
-import com.fccfc.framework.core.GlobalConstants;
-import com.fccfc.framework.core.cache.CacheConstant;
-import com.fccfc.framework.core.cache.CacheHelper;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.utils.CommonUtil;
-import com.fccfc.framework.core.utils.UtilException;
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.UtilException;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.web.bean.operator.AccountPojo;
+import com.fccfc.framework.web.bean.operator.OperatorPojo;
 import com.fccfc.framework.web.dao.operator.AccountDao;
 import com.fccfc.framework.web.dao.operator.OperatorDao;
+import com.fccfc.framework.web.service.OperatorService;
 
 /**
  * <Description> <br>
@@ -53,7 +53,8 @@ public class OperatorServiceImple implements OperatorService {
         OperatorPojo operator = null;
         try {
             if (id != null) {
-                operator = (OperatorPojo) CacheHelper.get(CacheConstant.OPERATOR, id + GlobalConstants.BLANK);
+                operator = (OperatorPojo) CacheHelper.getCache().getValue(CacheConstant.OPERATOR,
+                    id + GlobalConstants.BLANK);
                 if (operator != null) {
                     return operator;
                 }
@@ -61,7 +62,8 @@ public class OperatorServiceImple implements OperatorService {
 
             operator = operatorDao.getOperator(id, code);
             if (operator != null) {
-                CacheHelper.set(CacheConstant.OPERATOR, operator.getOperatorId() + GlobalConstants.BLANK, operator);
+                CacheHelper.getCache().putValue(CacheConstant.OPERATOR,
+                    operator.getOperatorId() + GlobalConstants.BLANK, operator);
             }
         }
         catch (FrameworkException e) {

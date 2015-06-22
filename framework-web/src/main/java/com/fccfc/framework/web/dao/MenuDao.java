@@ -5,11 +5,11 @@ package com.fccfc.framework.web.dao;
 
 import java.util.List;
 
-import com.fccfc.framework.api.bean.web.MenuPojo;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.db.annotation.DAO;
-import com.fccfc.framework.core.db.annotation.Param;
-import com.fccfc.framework.core.db.annotation.Sql;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.core.annotation.Param;
+import com.fccfc.framework.db.core.annotation.Sql;
+import com.fccfc.framework.web.bean.resource.MenuPojo;
 
 /**
  * <Description> <br>
@@ -21,7 +21,7 @@ import com.fccfc.framework.core.db.annotation.Sql;
  * @since V1.0<br>
  * @see com.fccfc.framework.web.dao <br>
  */
-@DAO
+@Dao
 public interface MenuDao {
 
     @Sql(

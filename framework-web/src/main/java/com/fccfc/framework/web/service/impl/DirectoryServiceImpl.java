@@ -6,10 +6,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.config.DirectoryPojo;
-import com.fccfc.framework.core.db.DaoException;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.config.core.bean.DirectoryPojo;
+import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.dao.DirectoryDao;
 import com.fccfc.framework.web.service.DirectoryService;
 

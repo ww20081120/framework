@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fccfc.framework.api.bean.BaseEntity;
+import com.fccfc.framework.db.core.BaseEntity;
 
 /**
  * <Description> OPERATOR的Pojo<br>
@@ -25,7 +25,7 @@ public class OperatorPojo extends BaseEntity {
 
     /** 操作员类型 */
     public static final String OPERATOR_TYPE_ADMIN = "A";
-    
+
     /** 操作员状态 */
     public static final String STATE_AVALIABLE = "A";
 

@@ -1,5 +1,7 @@
 package com.fccfc.framework.task.core.bean;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fccfc.framework.db.core.BaseEntity;
+import com.fccfc.framework.task.api.Task;
 
 /**
  * <Description> TASK的Pojo<br>
@@ -45,6 +48,31 @@ public class TaskPojo extends BaseEntity {
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
+
+    public TaskPojo() {
+    }
+
+    public TaskPojo(Task task) {
+        this.taskId = task.taskId;
+        this.taskName = task.taskName;
+        this.className = task.className;
+        this.method = task.method;
+        this.moduleCode = task.moduleCode;
+        this.priority = task.priority;
+        this.isConcurrent = task.isConcurrent;
+        this.taskState = task.taskState;
+        if (task.lastExecuteTime > 0) {
+            this.lastExecuteTime = new Date(task.lastExecuteTime);
+        }
+        if (task.nextExcuteDate > 0) {
+            this.nextExcuteDate = new Date(task.nextExcuteDate);
+        }
+
+        this.operatorId = task.operatorId;
+        if (task.createTime > 0) {
+            this.createTime = new Date(task.createTime);
+        }
+    }
 
     /** TASK_ID */
     @Id

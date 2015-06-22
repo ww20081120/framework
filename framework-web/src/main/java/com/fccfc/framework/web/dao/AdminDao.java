@@ -5,11 +5,11 @@
  ****************************************************************************************/
 package com.fccfc.framework.web.dao;
 
-import com.fccfc.framework.api.bean.operator.AdminPojo;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.db.annotation.DAO;
-import com.fccfc.framework.core.db.annotation.Param;
-import com.fccfc.framework.core.db.annotation.Sql;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.core.annotation.Param;
+import com.fccfc.framework.db.core.annotation.Sql;
+import com.fccfc.framework.web.bean.operator.AdminPojo;
 
 /**
  * <Description> <br>
@@ -19,7 +19,7 @@ import com.fccfc.framework.core.db.annotation.Sql;
  * @CreateDate 2015年6月3日 <br>
  * @see com.fccfc.framework.web.dao <br>
  */
-@DAO
+@Dao
 public interface AdminDao {
 
     @Sql("SELECT * FROM ADMIN A WHERE A.ADMIN_ID = :id")

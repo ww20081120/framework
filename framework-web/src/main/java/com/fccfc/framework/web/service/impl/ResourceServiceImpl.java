@@ -9,13 +9,13 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.api.ServiceException;
-import com.fccfc.framework.api.bean.resource.AttachmentsPojo;
-import com.fccfc.framework.core.ErrorCodeDef;
-import com.fccfc.framework.core.config.Configuration;
-import com.fccfc.framework.core.db.DaoException;
-import com.fccfc.framework.core.utils.ImageUtil;
-import com.fccfc.framework.core.utils.LogUtil;
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.common.utils.io.ImageUtil;
+import com.fccfc.framework.common.utils.logger.Logger;
+import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
 import com.fccfc.framework.web.dao.AttachmentsDao;
 import com.fccfc.framework.web.service.ResourceService;
 
@@ -31,6 +31,8 @@ import com.fccfc.framework.web.service.ResourceService;
  */
 @Service
 public class ResourceServiceImpl implements ResourceService {
+
+    private static Logger logger = new Logger(ResourceServiceImpl.class);
 
     @Resource
     private AttachmentsDao attachmentsDao;
@@ -68,7 +70,7 @@ public class ResourceServiceImpl implements ResourceService {
                         }
                     }
                     catch (Exception e) {
-                        LogUtil.warn("生成缩略图失败", e);
+                        logger.warn("生成缩略图失败", e);
                         thumbPath = pojo.getFilePath();
                     }
                     pojo.setThumbPath(thumbPath);

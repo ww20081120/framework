@@ -9,12 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.api.bean.config.ConfigPojo;
-import com.fccfc.framework.core.utils.JsonUtil;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.utils.bean.JsonUtil;
 import com.fccfc.framework.web.service.ConfigService;
 
 /**
@@ -63,7 +61,7 @@ public class ConfigController {
      * @throws FrameworkException
      */
     @ResponseBody
-    //@RequestMapping("/system/config/qryItem")
+    // @RequestMapping("/system/config/qryItem")
     public String queryConfigItem(HttpServletRequest request) throws FrameworkException {
         String directory = request.getParameter("directory");
         Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -79,7 +77,7 @@ public class ConfigController {
      * @throws FrameworkException
      */
     @ResponseBody
-   // @RequestMapping("/system/config/addItem")
+    // @RequestMapping("/system/config/addItem")
     public String addConfigItem(HttpServletRequest request) throws FrameworkException {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         String configCode = request.getParameter("configCode");
@@ -110,7 +108,7 @@ public class ConfigController {
      * @throws FrameworkException
      */
     @ResponseBody
-    //@RequestMapping("/system/config/queryParams")
+    // @RequestMapping("/system/config/queryParams")
     public String queryParams(HttpServletRequest request) throws FrameworkException {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("itemId", request.getParameter("itemId"));
@@ -130,16 +128,16 @@ public class ConfigController {
         String itemId = request.getParameter("itemId");
         String inputType = request.getParameter("inputType");
 
-        ConfigPojo config = new ConfigPojo();
-        config.setDataType(dataType);
-        config.setDefaultValue(defaultValue);
-        config.setParamCode(paramCode);
-        config.setParamValue(paramValues);
-        config.setParamRemark(paramRemark);
-        config.setInputType(inputType);
-        config.setItemId(itemId);
-        config.setParamName(paramName);
-        config.setValueScript(valueScript);
+//        ConfigPojo config = new ConfigPojo();
+//        config.setDataType(dataType);
+//        config.setDefaultValue(defaultValue);
+//        config.setParamCode(paramCode);
+//        config.setParamValue(paramValues);
+//        config.setParamRemark(paramRemark);
+//        config.setInputType(inputType);
+//        config.setItemId(itemId);
+//        config.setParamName(paramName);
+//        config.setValueScript(valueScript);
         int type = Integer.parseInt(inputType);
 
         Map<String, Object> paramMap = new HashMap<String, Object>();

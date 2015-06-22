@@ -10,15 +10,14 @@ import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fccfc.framework.api.FrameworkException;
-import com.fccfc.framework.api.bean.config.DirectoryPojo;
-import com.fccfc.framework.core.utils.Assert;
-import com.fccfc.framework.core.utils.CommonUtil;
-import com.fccfc.framework.core.utils.JsonUtil;
+import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.utils.Assert;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.bean.JsonUtil;
+import com.fccfc.framework.config.core.bean.DirectoryPojo;
 import com.fccfc.framework.web.service.DirectoryService;
 
 @Controller

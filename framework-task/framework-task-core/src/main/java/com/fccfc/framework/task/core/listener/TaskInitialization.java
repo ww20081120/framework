@@ -5,10 +5,11 @@ package com.fccfc.framework.task.core.listener;
 
 import javax.annotation.Resource;
 
+import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.Initialization;
 import com.fccfc.framework.common.InitializationException;
-import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.core.utils.LogUtil;
+import com.fccfc.framework.common.utils.logger.Logger;
+import com.fccfc.framework.task.api.TaskService;
 
 /**
  * <Description> <br>
@@ -20,8 +21,10 @@ import com.fccfc.framework.core.utils.LogUtil;
  */
 public class TaskInitialization implements Initialization {
 
+    private static Logger logger = new Logger(TaskInitialization.class);
+
     @Resource
-    private TaskService taskService;
+    private TaskService.Iface taskService;
 
     /*
      * (non-Javadoc)
@@ -29,14 +32,14 @@ public class TaskInitialization implements Initialization {
      */
     @Override
     public void afterPropertiesSet() throws InitializationException {
-        LogUtil.debug("---------------task start up listener stop ------------------");
+        logger.debug("---------------task start up listener stop ------------------");
         try {
             taskService.scheduleAllTask();
         }
-        catch (ServiceException e) {
-            throw new InitializationException(e);
+        catch (Exception e) {
+            throw new InitializationException(ErrorCodeDef.EXECUTE_ALL_TAKS_ERROR, e);
         }
-        LogUtil.debug("---------------task start up listener stop ------------------");
+        logger.debug("---------------task start up listener stop ------------------");
     }
 
     /*
@@ -45,6 +48,6 @@ public class TaskInitialization implements Initialization {
      */
     @Override
     public void destroy() throws InitializationException {
-        LogUtil.debug("---------------task start up listener stop ------------------");
+        logger.debug("---------------task start up listener stop ------------------");
     }
 }

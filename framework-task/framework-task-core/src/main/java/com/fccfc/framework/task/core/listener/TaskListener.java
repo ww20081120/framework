@@ -19,7 +19,7 @@ import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 
-import com.fccfc.framework.core.utils.LogUtil;
+import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.task.core.TaskConstants;
 import com.fccfc.framework.task.core.bean.TaskPojo;
 import com.fccfc.framework.task.core.dao.TaskDao;
@@ -33,6 +33,8 @@ import com.fccfc.framework.task.core.dao.TaskDao;
  * @see com.fccfc.framework.task.listener <br>
  */
 public class TaskListener implements JobListener, TriggerListener, SchedulerListener {
+
+    private static Logger logger = new Logger(TaskListener.class);
 
     @Resource
     private TaskDao taskDao;
@@ -54,10 +56,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_COMPLETE);
             }
-            LogUtil.debug("Task[{0}] Complete", taskId);
+            logger.debug("Task[{0}] Complete", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("triggerComplete", e);
+            logger.warn("triggerComplete", e);
         }
     }
 
@@ -74,10 +76,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_ACQUIRED);
             }
-            LogUtil.debug("Task[{0}] Complete", taskId);
+            logger.debug("Task[{0}] Complete", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("triggerFired", e);
+            logger.warn("triggerFired", e);
         }
     }
 
@@ -94,10 +96,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_BLOCKED);
             }
-            LogUtil.debug("Task[{0}] Complete", taskId);
+            logger.debug("Task[{0}] Complete", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("triggerMisfired", e);
+            logger.warn("triggerMisfired", e);
         }
     }
 
@@ -114,10 +116,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
-            LogUtil.debug("Task[{0}] vetoJobExecution", taskId);
+            logger.debug("Task[{0}] vetoJobExecution", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("vetoJobExecution", e);
+            logger.warn("vetoJobExecution", e);
         }
         return false;
     }
@@ -144,10 +146,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
-            LogUtil.debug("Task[{0}] jobExecutionVetoed", taskId);
+            logger.debug("Task[{0}] jobExecutionVetoed", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("jobExecutionVetoed", e);
+            logger.warn("jobExecutionVetoed", e);
         }
     }
 
@@ -164,10 +166,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_ACQUIRED);
             }
-            LogUtil.debug("Task[{0}] jobToBeExecuted", taskId);
+            logger.debug("Task[{0}] jobToBeExecuted", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("jobToBeExecuted", e);
+            logger.warn("jobToBeExecuted", e);
         }
     }
 
@@ -184,10 +186,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
                 taskDao.insertTaskHistory(taskId, null);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_COMPLETE);
             }
-            LogUtil.debug("Task[{0}] jobWasExecuted", taskId);
+            logger.debug("Task[{0}] jobWasExecuted", taskId);
         }
         catch (Exception e) {
-            LogUtil.warn("jobWasExecuted", e);
+            logger.warn("jobWasExecuted", e);
         }
     }
 
@@ -197,7 +199,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void jobScheduled(Trigger trigger) {
-        LogUtil.info("---------------->jobScheduled trigger[{0}]<---------------", trigger.getKey());
+        logger.info("---------------->jobScheduled trigger[{0}]<---------------", trigger.getKey());
     }
 
     /*
@@ -206,7 +208,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void jobUnscheduled(TriggerKey triggerKey) {
-        LogUtil.info("---------------->jobUnscheduled trigger[{0}]<---------------", triggerKey);
+        logger.info("---------------->jobUnscheduled trigger[{0}]<---------------", triggerKey);
     }
 
     /*
@@ -215,7 +217,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void triggerFinalized(Trigger trigger) {
-        LogUtil.info("---------------->triggerFinalized trigger[{0}]<---------------", trigger.getKey());
+        logger.info("---------------->triggerFinalized trigger[{0}]<---------------", trigger.getKey());
     }
 
     /*
@@ -234,7 +236,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             }
         }
         catch (Exception e) {
-            LogUtil.warn("恢复Job失败", e);
+            logger.warn("恢复Job失败", e);
         }
     }
 
@@ -244,7 +246,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void triggersPaused(String triggerGroup) {
-        LogUtil.info("---------------->triggersPaused group[{0}]<---------------", triggerGroup);
+        logger.info("---------------->triggersPaused group[{0}]<---------------", triggerGroup);
     }
 
     /*
@@ -263,7 +265,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             }
         }
         catch (Exception e) {
-            LogUtil.warn("恢复Job失败", e);
+            logger.warn("恢复Job失败", e);
         }
     }
 
@@ -273,7 +275,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void triggersResumed(String triggerGroup) {
-        LogUtil.info("---------------->triggersResumed group[{0}]<---------------", triggerGroup);
+        logger.info("---------------->triggersResumed group[{0}]<---------------", triggerGroup);
     }
 
     /*
@@ -282,7 +284,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void jobAdded(JobDetail jobDetail) {
-        LogUtil.info("---------------->jobAdded jobDetail[{0}]<---------------", jobDetail.getKey());
+        logger.info("---------------->jobAdded jobDetail[{0}]<---------------", jobDetail.getKey());
     }
 
     /*
@@ -301,7 +303,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             }
         }
         catch (Exception e) {
-            LogUtil.warn("恢复Job失败", e);
+            logger.warn("恢复Job失败", e);
         }
     }
 
@@ -321,7 +323,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             }
         }
         catch (Exception e) {
-            LogUtil.warn("恢复Job失败", e);
+            logger.warn("恢复Job失败", e);
         }
     }
 
@@ -331,7 +333,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void jobsPaused(String jobGroup) {
-        LogUtil.info("---------------->jobsPaused group[{0}]<---------------", jobGroup);
+        logger.info("---------------->jobsPaused group[{0}]<---------------", jobGroup);
     }
 
     /*
@@ -350,7 +352,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             }
         }
         catch (Exception e) {
-            LogUtil.warn("恢复Job失败", e);
+            logger.warn("恢复Job失败", e);
         }
     }
 
@@ -360,7 +362,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void jobsResumed(String jobGroup) {
-        LogUtil.info("---------------->jobsResumed group[{0}]<---------------", jobGroup);
+        logger.info("---------------->jobsResumed group[{0}]<---------------", jobGroup);
     }
 
     /*
@@ -369,7 +371,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulerError(String msg, SchedulerException cause) {
-        LogUtil.error(msg, cause);
+        logger.error(msg, cause);
     }
 
     /*
@@ -378,7 +380,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulerInStandbyMode() {
-        LogUtil.info("---------------->schedulerInStandbyMode<---------------");
+        logger.info("---------------->schedulerInStandbyMode<---------------");
     }
 
     /*
@@ -387,7 +389,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulerStarted() {
-        LogUtil.info("---------------->schedulerStarted<---------------");
+        logger.info("---------------->schedulerStarted<---------------");
     }
 
     /*
@@ -396,7 +398,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulerStarting() {
-        LogUtil.info("---------------->schedulerStarting<---------------");
+        logger.info("---------------->schedulerStarting<---------------");
     }
 
     /*
@@ -405,7 +407,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulerShutdown() {
-        LogUtil.info("---------------->schedulerShutdown<---------------");
+        logger.info("---------------->schedulerShutdown<---------------");
     }
 
     /*
@@ -414,7 +416,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulerShuttingdown() {
-        LogUtil.info("---------------->schedulerShuttingdown<---------------");
+        logger.info("---------------->schedulerShuttingdown<---------------");
     }
 
     /*
@@ -423,7 +425,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Override
     public void schedulingDataCleared() {
-        LogUtil.info("---------------->schedulingDataCleared<---------------");
+        logger.info("---------------->schedulingDataCleared<---------------");
     }
 
 }
