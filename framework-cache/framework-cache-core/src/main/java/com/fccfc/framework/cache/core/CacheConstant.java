@@ -44,10 +44,10 @@ public interface CacheConstant {
     String COMMON_DIR = "/COMMON_DIR";
 
     /** 模块代码 */
-    String MODULE_CODE = "MODULE_CODES";
-
-    /** 模块代码 */
     String LOCAL_MODULE_CODE = "MODULE_CODE";
+
+    /** 缓存时间 */
+    String CONFIG_CACHE_TIME = "CONFIG_CACHE_TIME";
 
     /** 静态资源 */
     String RESOURCE = "/RESOURCE";

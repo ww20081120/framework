@@ -22,6 +22,11 @@
 			<version>${parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-task-api</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>${quartz.version}</version>

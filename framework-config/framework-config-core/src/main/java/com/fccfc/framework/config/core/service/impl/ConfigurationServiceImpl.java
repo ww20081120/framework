@@ -4,7 +4,6 @@
 package com.fccfc.framework.config.core.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.config.core.bean.ModulePojo;
-import com.fccfc.framework.config.core.dao.ConfigItemDao;
 import com.fccfc.framework.config.core.dao.ModuleDao;
 import com.fccfc.framework.config.core.service.ConfigurationService;
 import com.fccfc.framework.db.core.DaoException;
@@ -31,24 +29,7 @@ import com.fccfc.framework.db.core.DaoException;
 public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Resource
-    private ConfigItemDao configItemDao;
-
-    @Resource
     private ModuleDao moduleDao;
-
-    /*
-     * (non-Javadoc)
-     * @see com.fccfc.framework.core.config.service.ConfigurationService#loadAll()
-     */
-    @Override
-    public List<Map<String, Object>> loadAll() throws ServiceException {
-        try {
-            return configItemDao.selectAll();
-        }
-        catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-    }
 
     /*
      * (non-Javadoc)

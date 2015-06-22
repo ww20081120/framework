@@ -3,22 +3,15 @@
  */
 package com.fccfc.framework.config.core;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.fccfc.framework.cache.core.CacheConstant;
-import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.FrameworkException;
 import com.fccfc.framework.common.Initialization;
 import com.fccfc.framework.common.InitializationException;
-import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
-import com.fccfc.framework.config.core.bean.ModulePojo;
+import com.fccfc.framework.config.api.ConfigService;
 import com.fccfc.framework.config.core.service.ConfigurationService;
 
 /**
@@ -35,12 +28,13 @@ public class ConfigItemInitialization implements Initialization {
 
     private static Logger logger = new Logger(ConfigItemInitialization.class);
 
-    private Map<String, Object> params;
-
-    private boolean loadFromDatabase = true;
+    private Map<String, String> params;
 
     @Resource
     private ConfigurationService configurationService;
+
+    @Resource
+    private ConfigService.Iface configService;
 
     /*
      * (non-Javadoc)
@@ -49,37 +43,11 @@ public class ConfigItemInitialization implements Initialization {
     @Override
     public void afterPropertiesSet() throws FrameworkException {
         logger.debug("---------------begin ConfigItem init ------------------");
+        Configuration.setConfigService(configService);
         Configuration.setCache(params);
-        if (loadFromDatabase) {
-            List<Map<String, Object>> paramList = configurationService.loadAll();
-            if (CommonUtil.isNotEmpty(paramList)) {
-                for (Map<String, Object> param : paramList) {
-                    CacheHelper.getStringCache().putValue(CacheConstant.CACHE_KEY_CONFIGITEM,
-                        param.get("CONFIG_ITEM_CODE") + "." + param.get("PARAM_CODE"),
-                        (String) param.get("PARAM_VALUE"));
-                }
-            }
-
-            String moduleCode = Configuration.getLocalModuleCode();
-            List<ModulePojo> moduleList = configurationService.selectAllModule();
-            if (CommonUtil.isNotEmpty(moduleList)) {
-                params.put(CacheConstant.MODULE_CODE, selectAllModule(moduleCode, new ArrayList<String>(), moduleList));
-            }
-        }
+        Configuration.setAllModules(configurationService.selectAllModule());
+        Configuration.reloadCache();
         logger.debug("---------------end ConfigItem int ------------------");
-    }
-
-    public List<String> selectAllModule(String moduleCode, List<String> moduleList, List<ModulePojo> modulePojoList) {
-        for (ModulePojo modulePojo : modulePojoList) {
-            if (StringUtils.equals(moduleCode, modulePojo.getModuleCode())) {
-                moduleList.add(moduleCode);
-                if (CommonUtil.isNotEmpty(modulePojo.getParentModuleCode())) {
-                    selectAllModule(modulePojo.getParentModuleCode(), moduleList, modulePojoList);
-                }
-                break;
-            }
-        }
-        return moduleList;
     }
 
     /*
@@ -89,14 +57,10 @@ public class ConfigItemInitialization implements Initialization {
     @Override
     public void destroy() throws InitializationException {
         logger.debug("---------------ConfigItem destory ------------------");
-        Configuration.clear();
+        params.clear();
     }
 
-    public void setParams(Map<String, Object> params) {
+    public void setParams(Map<String, String> params) {
         this.params = params;
-    }
-
-    public void setLoadFromDatabase(boolean loadFromDatabase) {
-        this.loadFromDatabase = loadFromDatabase;
     }
 }

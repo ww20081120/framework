@@ -23,6 +23,7 @@ import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.task.api.TaskService;
 import com.fccfc.framework.task.core.TaskConstants;
 import com.fccfc.framework.task.core.bean.CronTriggerPojo;
 import com.fccfc.framework.task.core.bean.SimpleTriggerPojo;
@@ -44,7 +45,7 @@ import com.fccfc.framework.task.core.listener.TaskListener;
  * @since V1.0<br>
  * @see com.fccfc.framework.task.listener <br>
  */
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceImpl implements TaskService.Iface {
     @Resource
     private TaskDao taskDao;
 
