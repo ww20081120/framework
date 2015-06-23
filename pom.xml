@@ -19,7 +19,7 @@
 		<module>framework-config</module>
 	</modules>
 	<properties>
-		<framework.version>0.0.1-SNAPSHOT</framework.version>
+		<framework.version>0.1-SNAPSHOT</framework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 		<junit.version>4.10</junit.version>
