@@ -5,10 +5,14 @@
  ****************************************************************************************/
 package com.fccfc.framework.bootstrap;
 
+import java.lang.management.ManagementFactory;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.common.utils.logger.Logger;
+import com.fccfc.framework.config.core.Configuration;
 
 /**
  * <Description> <br>
@@ -34,6 +38,8 @@ public class Startup {
         ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/META-INF/spring/*.xml");
         context = ac;
         ac.start();
+        logger.info(ManagementFactory.getRuntimeMXBean().getName());
+        logger.info(Configuration.get(CacheConstant.LOCAL_MODULE_CODE) + "模块启动成功！");
     }
 
     public static ApplicationContext getContext() {

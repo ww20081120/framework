@@ -85,7 +85,8 @@ public final class Configuration {
                 value = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_KEY_CONFIGITEM, key);
             }
             catch (Exception e) {
-                logger.warn("get cache error. key is [{0}]", e, key);
+                logger.warn("get cache error. key is [{0}]", key);
+                logger.warn(e);
             }
         }
         return value;

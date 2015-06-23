@@ -37,7 +37,7 @@
 	</aop:config>
 
 	<bean id="transactionAdviceBean"
-		class="com.fccfc.framework.core.log.advice.BusinessTransactionAdivce">
+		class="com.fccfc.framework.log.core.advice.BusinessTransactionAdivce">
 		<!-- 拦截的栈最大深度 -->
 		<property name="maxDeepLen" value="10" />
 		<!-- 是否保存正常的流程日志 -->
