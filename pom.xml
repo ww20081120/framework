@@ -17,6 +17,7 @@
 		<module>framework-message</module>
 		<module>framework-log</module>
 		<module>framework-config</module>
+		<module>framework-bootstrap</module>
 	</modules>
 	<properties>
 		<framework.version>0.1-SNAPSHOT</framework.version>

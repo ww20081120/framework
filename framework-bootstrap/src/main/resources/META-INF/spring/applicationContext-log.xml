@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-autowire="byName" default-lazy-init="false">
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="com.fccfc.*" />
+
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<!-- 设置日志拦截 -->
+	<aop:config>
+		<aop:aspect id="transactionAdviceAspect" ref="transactionAdviceBean"
+			order="2">
+			<aop:pointcut id="transactionPointcut"
+				expression="
+				 (execution(public * com.fccfc..*Service*.*(..)) 
+				 or execution(public * com.fccfc..*Controller*.*(..))
+				 or execution(public * com.fccfc..*Interceptor*.*(..))
+				 or execution(public * com.fccfc..*Excutor*.*(..))
+				  or execution(public * com.fccfc..*Task*.*(..))
+				 or execution(public * com.fccfc..*Handler*.*(..)))
+				 and !execution(public * com.fccfc..*.set*(..))
+				 and !execution(public * com.fccfc..*.get*())
+				 and !execution(public * com.fccfc..*.is*())
+           		 and !execution(* com.fccfc.framework.core.log..*.*(..))" />
+			<aop:before pointcut-ref="transactionPointcut" method="before" />
+			<aop:after-returning pointcut-ref="transactionPointcut"
+				method="afterReturning" returning="returnValue" />
+			<aop:after-throwing pointcut-ref="transactionPointcut"
+				method="afterThrowing" throwing="ex" />
+		</aop:aspect>
+	</aop:config>
+
+	<bean id="transactionAdviceBean"
+		class="com.fccfc.framework.core.log.advice.BusinessTransactionAdivce">
+		<!-- 拦截的栈最大深度 -->
+		<property name="maxDeepLen" value="10" />
+		<!-- 是否保存正常的流程日志 -->
+		<property name="saveLog" value="false" />
+		<!-- 该配置项用于配置方法超过多长时间需要记录日志 （毫秒） -->
+		<property name="maxExcuteTime" value="1000" />
+	</bean>
+</beans>
