@@ -17,8 +17,4 @@
 	<!-- 声明需要暴露的服务接口 -->
 	<dubbo:service interface="com.fccfc.framework.config.api.ConfigService$Iface"
 		ref="configService" />
-
-	<!-- 和本地bean一样实现服务 -->
-	<bean id="configService"
-		class="com.fccfc.framework.config.core.service.impl.ConfigServiceImpl" />
 </beans>

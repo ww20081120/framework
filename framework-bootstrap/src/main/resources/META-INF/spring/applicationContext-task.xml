@@ -11,4 +11,5 @@
 	</bean>
 
 	<bean name="taskListener" class="com.fccfc.framework.task.listener.TaskListener" />
+	<bean name="taskService" class="com.fccfc.framework.task.service.impl.TaskServiceImpl"></bean>
 </beans>

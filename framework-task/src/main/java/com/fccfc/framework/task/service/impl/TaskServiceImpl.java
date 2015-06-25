@@ -17,7 +17,6 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
-import org.springframework.stereotype.Service;
 
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
@@ -46,7 +45,6 @@ import com.fccfc.framework.task.service.TaskService;
  * @since V1.0<br>
  * @see com.fccfc.framework.task.listener <br>
  */
-@Service
 public class TaskServiceImpl implements TaskService {
     @Resource
     private JobDao jobDao;
