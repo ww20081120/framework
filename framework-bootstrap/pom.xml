@@ -30,22 +30,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
+			<artifactId>framework-config-core</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-core</artifactId>
 			<version>${framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-sh</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-config-api</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-config-core</artifactId>
 			<version>${framework.version}</version>
 		</dependency>
 		<dependency>
@@ -65,12 +60,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
-			<artifactId>framework-task-api</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-task-core</artifactId>
+			<artifactId>framework-task</artifactId>
 			<version>${framework.version}</version>
 		</dependency>
 	</dependencies>

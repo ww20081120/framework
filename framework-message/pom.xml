@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>framework-message-api</module>
+  	<module>framework-message-core</module>
   </modules>
 </project>

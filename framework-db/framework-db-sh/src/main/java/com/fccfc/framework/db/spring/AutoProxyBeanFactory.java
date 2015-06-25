@@ -53,11 +53,11 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                     for (Class<?> clazz : clazzSet) {
                         if (clazz.isAnnotationPresent(Dao.class)) {
                             className = clazz.getName();
-                            logger.debug("----->before set dao class[{0}]", className);
+                            logger.info("----->before set dao class[{0}]", className);
                             String beanName = CommonUtil.lowerCaseFirstChar(clazz.getSimpleName());
                             if (!beanFactory.containsBean(beanName)) {
-                                // 缓存SQL
-                                handler.invoke(clazz);
+                                // 此处不缓存SQL
+                                // handler.invoke(clazz);
 
                                 // 单独加载一个接口的代理类
                                 ProxyFactoryBean factoryBean = new ProxyFactoryBean();
@@ -67,7 +67,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                                 beanFactory.registerSingleton(beanName, factoryBean);
                                 logger.info("Interface [{0}] init name is [{1}]", clazz.getName(), beanName);
                             }
-                            logger.debug("----->success set dao class[{0}]", className);
+                            logger.info("----->success set dao class[{0}]", className);
                         }
                     }
                 }

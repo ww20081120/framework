@@ -18,7 +18,7 @@ public class Logger {
     /**
      * sql语句日志名称，用于记录日志
      */
-    private static final String SQL_LOG_NAME = "sql.log";
+    private static final String SQL_LOG_NAME = "framework.sql.log";
 
     private org.apache.log4j.Logger logger;
 

@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.fccfc.framework.bootstrap;
 
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 
 import org.springframework.context.ApplicationContext;
@@ -33,13 +34,22 @@ public class Startup {
      * 
      * @author 王伟 <br>
      * @param args <br>
+     * @throws IOException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        logger.info("====================>准备加载Spring配置文件<====================");
         ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/META-INF/spring/*.xml");
         context = ac;
         ac.start();
-        logger.info(ManagementFactory.getRuntimeMXBean().getName());
-        logger.info(Configuration.get(CacheConstant.LOCAL_MODULE_CODE) + "模块启动成功！");
+        logger.info("====================>Spring配置文件加载完毕<====================");
+        System.out.println(new StringBuilder().append("\n***************************************").append('\n')
+            .append("*         ").append(ManagementFactory.getRuntimeMXBean().getName()).append("        *")
+            .append('\n').append("*            ").append(Configuration.get(CacheConstant.LOCAL_MODULE_CODE))
+            .append("模块启动成功！").append("                                   *").append('\n')
+            .append("***************************************"));
+        System.in.read();
+        ac.close();
+        logger.info("====================>系统正常停止运行<====================");
     }
 
     public static ApplicationContext getContext() {

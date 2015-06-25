@@ -28,6 +28,11 @@ import com.fccfc.framework.common.utils.CommonUtil;
 public class RedisCache extends AbstractCache {
 
     /**
+     * 缓存模式
+     */
+    public static final String CACHE_MODEL = "REDIS";
+
+    /**
      * 缓存
      */
     private Jedis jedis;

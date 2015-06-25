@@ -46,15 +46,15 @@
 
 		<!-- 开启Druid的监控统计功能 -->
 		<property name="filters" value="stat" />
-		
+
 		<property name="proxyFilters">
 			<list>
-	            <ref bean="log-filter"/>
-	        </list>
+				<ref bean="log-filter" />
+			</list>
 		</property>
 	</bean>
-	
-	<bean id="log-filter" class="com.fccfc.framework.log.core.filter.SqlLogFilter"/>
+
+	<bean id="log-filter" class="com.fccfc.framework.log.core.filter.SqlLogFilter" />
 
 	<!-- Hibernate sessionFactory 配置 -->
 	<bean id="sessionFactory"
@@ -89,24 +89,38 @@
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<!-- 包含事务的方法 -->
-			<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="add*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="create*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="destroy*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="regist" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			<tx:method name="getToken" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
-			
+			<tx:method name="save*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="add*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="create*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="destroy*" propagation="REQUIRED"
+				read-only="false" rollback-for="Exception" />
+			<tx:method name="regist" propagation="REQUIRED" read-only="false"
+				rollback-for="Exception" />
+			<tx:method name="getToken" propagation="REQUIRED"
+				read-only="false" rollback-for="Exception" />
+
 			<!-- 不包含事务 -->
-			<tx:method name="addTransactionLog" propagation="NOT_SUPPORTED" read-only="false" />
-			<tx:method name="addTransactionStackLog" propagation="NOT_SUPPORTED" read-only="false" />
-			<tx:method name="sendMessage" propagation="NOT_SUPPORTED" read-only="false" />
-			<tx:method name="reSendMessage" propagation="NOT_SUPPORTED" read-only="false" />
-			
+			<tx:method name="addTransactionLog" propagation="NOT_SUPPORTED"
+				read-only="false" />
+			<tx:method name="addTransactionStackLog" propagation="NOT_SUPPORTED"
+				read-only="false" />
+			<tx:method name="sendMessage" propagation="NOT_SUPPORTED"
+				read-only="false" />
+			<tx:method name="reSendMessage" propagation="NOT_SUPPORTED"
+				read-only="false" />
+
 			<!-- 其它的都为只读方法， 有事务就包含在事务之内，没有事务就不开启事务 -->
-			<tx:method name="*" propagation="SUPPORTS" read-only="true" rollback-for="Exception"/>
+			<tx:method name="*" propagation="SUPPORTS" read-only="true"
+				rollback-for="Exception" />
 		</tx:attributes>
 	</tx:advice>
 
@@ -115,8 +129,7 @@
 			pointcut="execution(public * com.fccfc..*Service*.*(..))" />
 	</aop:config>
 
-	<bean id="baseHibernateDao"
-		class="com.fccfc.framework.db.hibernate.BaseHibernateDao">
+	<bean id="baseHibernateDao" class="com.fccfc.framework.db.hibernate.BaseHibernateDao">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
@@ -129,8 +142,7 @@
 	</bean>
 
 	<!-- Dao动态代理类 -->
-	<bean id="springDaoHandler"
-		class="com.fccfc.framework.db.spring.SpringDaoHandler">
+	<bean id="springDaoHandler" class="com.fccfc.framework.db.spring.SpringDaoHandler">
 		<property name="daoConfig" ref="daoConfig" />
 		<property name="sqlExcutor" ref="baseHibernateDao" />
 	</bean>

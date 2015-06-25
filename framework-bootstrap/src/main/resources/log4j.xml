@@ -14,7 +14,7 @@
 	</appender>
 
 	<appender name="debugAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/home/o2o/log/portal/debug.log" />
+		<param name="File" value="/home/o2o/log/bootstrap/debug.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -28,7 +28,7 @@
 	</appender>
 
 	<appender name="infoAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/home/o2o/log/portal/info.log" />
+		<param name="File" value="/home/o2o/log/bootstrap/info.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -42,7 +42,7 @@
 	</appender>
 
 	<appender name="errorAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/home/o2o/log/portal/error.log" />
+		<param name="File" value="/home/o2o/log/bootstrap/error.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -56,7 +56,7 @@
 	</appender>
 
 	<appender name="warnAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/home/o2o/log/portal/warn.log" />
+		<param name="File" value="/home/o2o/log/bootstrap/warn.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -70,7 +70,7 @@
 	</appender>
 
 	<appender name="sqlAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/home/o2o/log/portal/sql.log" />
+		<param name="File" value="/home/o2o/log/bootstrap/sql.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -79,18 +79,21 @@
 		</layout>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="DEBUG" />
-			<param name="LevelMax" value="WARN" />
+			<param name="LevelMax" value="ERROR" />
 		</filter>
 	</appender>
 
 	<!--通过<category></category>的定义可以将各个包中的类日志输出到不同的日志文件中 -->
-	<category name="o2o.sql.log" additivity="false">
+	<category name="framework.sql.log" additivity="false">
 		<priority value="info" />
 		<appender-ref ref="sqlAppender" />
 	</category>
 
 	<root>
 		<appender-ref ref="debugAppender" />
+		<appender-ref ref="infoAppender" />
+		<appender-ref ref="warnAppender" />
+		<appender-ref ref="errorAppender" />
 		<appender-ref ref="consoleAppender" />
 	</root>
 

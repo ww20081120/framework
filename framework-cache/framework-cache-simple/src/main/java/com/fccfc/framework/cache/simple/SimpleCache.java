@@ -21,6 +21,11 @@ import com.fccfc.framework.cache.core.ICache;
  */
 public class SimpleCache implements ICache {
 
+    /**
+     * 缓存模式
+     */
+    public static final String CACHE_MODEL = "SIMPLE";
+
     /** cachesMap */
     private Map<String, Map<String, Object>> cachesMap;
 
