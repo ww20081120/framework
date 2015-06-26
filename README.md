@@ -36,7 +36,7 @@ Framework框架集成了log、cache、config、db、rpc、message、task、web�
 + framework-bootstrap 非web项目启动模块，运行 Startup启动、Shutdown关闭，关闭端口在config.properties里面配置
 
 -------
-<h2 id="framework-db">framework-db</h2>具有以下特征:
+###[framework-db]:framework-db具有以下特征:
 
 1. O/R mapping不用设置xml，零配置便于维护  
 2. 不需要了解JDBC的知识  
