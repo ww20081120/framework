@@ -12,4 +12,6 @@
 	<bean id="configService"
 		class="com.fccfc.framework.config.core.service.impl.ConfigServiceImpl" />
 
+	<bean id="messageService"
+		class="com.fccfc.framework.message.core.service.impl.MessageServiceImpl" />
 </beans>

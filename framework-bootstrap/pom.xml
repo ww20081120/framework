@@ -10,52 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.fccfc</groupId>
-			<artifactId>framework-common</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-cache-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-cache-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-config-api</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-config-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-db-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-db-sh</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-log-api</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-log-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-message-api</artifactId>
+			<artifactId>framework-message-core</artifactId>
 			<version>${framework.version}</version>
 		</dependency>
 		<dependency>
