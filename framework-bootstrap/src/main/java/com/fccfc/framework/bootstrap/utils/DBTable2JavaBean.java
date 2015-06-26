@@ -358,7 +358,7 @@ public class DBTable2JavaBean extends JFrame {
         try {
             final ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
                 "/META-INF/spring/applicationContext-init.xml", "/META-INF/spring/applicationContext-dao.xml",
-                "/META-INF/spring/applicationContext-service.xml"
+                "/META-INF/spring/applicationContext-remote-service.xml"
             });
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
