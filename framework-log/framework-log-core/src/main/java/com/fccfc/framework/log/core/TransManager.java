@@ -28,9 +28,9 @@ import com.fccfc.framework.log.core.bean.TransLogStackPojo;
 public final class TransManager implements Serializable {
 
     /**
-     * 
+     * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2162951151671381710L;
 
     /**
      * 序列

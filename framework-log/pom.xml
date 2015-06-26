@@ -11,5 +11,8 @@
   	<module>framework-log-api</module>
   	<module>framework-log-common</module>
   	<module>framework-log-core</module>
+  	<module>framework-log-db</module>
+  	<module>framework-log-file</module>
+  	<module>framework-log-mongodb</module>
   </modules>
 </project>

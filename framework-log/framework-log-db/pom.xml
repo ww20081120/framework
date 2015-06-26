@@ -3,25 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.fccfc</groupId>
-		<artifactId>framework</artifactId>
+		<artifactId>framework-log</artifactId>
 		<version>${framework.version}</version>
 	</parent>
-	<artifactId>framework-bootstrap</artifactId>
+	<artifactId>framework-log-db</artifactId>
+	<properties>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-log-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-message-core</artifactId>
-			<version>${framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fccfc</groupId>
-			<artifactId>framework-task</artifactId>
-			<version>${framework.version}</version>
+			<version>${parent.version}</version>
 		</dependency>
 	</dependencies>
 </project>

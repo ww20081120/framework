@@ -287,6 +287,6 @@ public class BusinessTransactionAdivce {
     }
 
     public void setMaxExcuteTime(long maxExcuteTime) {
-        this.maxExcuteTime = maxExcuteTime;
+        this.maxExcuteTime = maxExcuteTime * 1000;
     }
 }

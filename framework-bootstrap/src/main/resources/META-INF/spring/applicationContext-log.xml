@@ -7,7 +7,7 @@
            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
 	default-autowire="byName" default-lazy-init="false">
 	<aop:aspectj-autoproxy />
-	
+
 	<!-- 设置日志拦截 -->
 	<aop:config>
 		<aop:aspect id="transactionAdviceAspect" ref="transactionAdviceBean"
@@ -34,11 +34,20 @@
 
 	<bean id="transactionAdviceBean"
 		class="com.fccfc.framework.log.core.advice.BusinessTransactionAdivce">
-		<!-- 拦截的栈最大深度 -->
-		<property name="maxDeepLen" value="10" />
-		<!-- 是否保存正常的流程日志 -->
-		<property name="saveLog" value="false" />
-		<!-- 该配置项用于配置方法超过多长时间需要记录日志 （毫秒） -->
-		<property name="maxExcuteTime" value="1000" />
+		
+		<!-- 该配置项用于配置方法超过多长时间需要记录日志 （秒） -->
+		<property name="maxExcuteTime" value="${system.max.execute.time}" />
+		<!-- 服务运行栈的最大深度 -->
+		<property name="maxDeepLen" value="${system.max.deep.size}" />
+		
+		<!-- 日志服务 -->
+		<property name="serviceMap">
+			<map>
+				<entry key="file" value-ref="" />
+				<entry key="mongodb" value-ref="" />
+				<entry key="db" value-ref="" />
+			</map>
+		</property>
+		<property name="opendService" value="${system.open.logservice}"/>
 	</bean>
 </beans>
