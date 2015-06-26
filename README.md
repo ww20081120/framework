@@ -33,6 +33,8 @@ Framework框架集成了log、cache、config、db、rpc、message、task、web�
 + framework-task-api 远程接口
 + framework-task-core Job核心模块
 
++ framework-bootstrap 非web项目启动模块，运行 Startup启动、Shutdown关闭，关闭端口在config.properties里面配置
+
 -------
 <h2 id="framework-db">framework-db</h2>具有以下特征:
 
