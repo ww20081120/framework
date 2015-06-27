@@ -92,13 +92,13 @@ public class SimpleStringCache implements IStringCache {
      * @see com.fccfc.framework.cache.core.ICache#removeValue(java.lang.String, java.lang.String)
      */
     @Override
-    public String removeValue(String nodeName, String key) throws CacheException {
+    public void removeValue(String nodeName, String key) throws CacheException {
         Map<String, String> node = getNode(nodeName);
         if (node == null) {
             node = new ConcurrentHashMap<String, String>();
             putNode(nodeName, node);
         }
-        return node.remove(key);
+        node.remove(key);
     }
 
     /*

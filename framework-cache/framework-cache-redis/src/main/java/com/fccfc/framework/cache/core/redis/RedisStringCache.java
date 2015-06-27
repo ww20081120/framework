@@ -129,13 +129,9 @@ public class RedisStringCache implements IStringCache {
      * @see com.fccfc.framework.cache.core.IStringCache#removeValue(java.lang.String, java.lang.String)
      */
     @Override
-    public String removeValue(String nodeName, String key) throws CacheException {
+    public void removeValue(String nodeName, String key) throws CacheException {
         try {
-            String value = getValue(nodeName, key);
-            if (value != null) {
-                jedis.hdel(nodeName, key);
-            }
-            return value;
+            jedis.hdel(nodeName, key);
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);

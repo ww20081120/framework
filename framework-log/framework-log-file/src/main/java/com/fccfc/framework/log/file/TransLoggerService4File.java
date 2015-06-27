@@ -3,13 +3,24 @@
  */
 package com.fccfc.framework.log.file;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.CacheException;
+import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.cache.core.IStringCache;
+import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.log.core.TransLoggerService;
+import com.fccfc.framework.log.core.TransManager;
 
 /**
  * <Description> <br>
@@ -31,8 +42,21 @@ public class TransLoggerService4File implements TransLoggerService {
      */
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
-        logger.debug("[{0}]进入[{1}]方法，参数为[{2}],statckId[{3}],parentStackId[{4}]", beginTime, method,
-            (CommonUtil.isEmpty(params) ? "" : Arrays.toString(params)), stackId, parentStackId);
+        try {
+            String data = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId);
+            if (CommonUtil.isEmpty(data)) {
+                JSONObject json = new JSONObject();
+                json.put("stackId", stackId);
+                json.put("parentStackId", parentStackId);
+                json.put("beginTime", beginTime);
+                json.put("method", method);
+                json.put("params", CommonUtil.isEmpty(params) ? "" : Arrays.toString(params));
+                CacheHelper.getStringCache().putValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+            }
+        }
+        catch (CacheException e) {
+            logger.warn(e);
+        }
     }
 
     /*
@@ -41,7 +65,20 @@ public class TransLoggerService4File implements TransLoggerService {
      */
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, Object returnValue) {
-        logger.debug("[{0}]执行statckId[{1}]完毕，共执行[{2}],返回值为[{3}]", endTime, stackId, consumeTime, returnValue);
+        try {
+            String data = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId);
+            if (CommonUtil.isNotEmpty(data)) {
+                JSONObject json = JSONObject.parseObject(data);
+                json.put("endTime", endTime);
+                json.put("consumeTime", consumeTime);
+                json.put("returnValue", returnValue == null ? "" : returnValue.toString());
+                json.put("result", 0);
+                CacheHelper.getStringCache().updateValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+            }
+        }
+        catch (CacheException e) {
+            logger.warn(e);
+        }
     }
 
     /*
@@ -51,7 +88,37 @@ public class TransLoggerService4File implements TransLoggerService {
      */
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, Exception e) {
-        logger.warn(e, "[{0}]执行statckId[{1}]失败，共执行[{2}]", endTime, stackId, consumeTime);
+        try {
+            String data = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId);
+            if (CommonUtil.isNotEmpty(data)) {
+                JSONObject json = JSONObject.parseObject(data);
+                json.put("endTime", endTime);
+                json.put("consumeTime", consumeTime);
+                json.put("exception", getExceptionMsg(e));
+                json.put("result", 1);
+                CacheHelper.getStringCache().updateValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+            }
+        }
+        catch (Exception ex) {
+            logger.warn(ex);
+        }
+    }
+
+    private String getExceptionMsg(Exception ex) throws UnsupportedEncodingException {
+        String result = null;
+        PrintWriter writer = null;
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            writer = new PrintWriter(new OutputStreamWriter(out, GlobalConstants.DEFAULT_CHARSET));
+            ex.printStackTrace(writer);
+            result = out.toString(GlobalConstants.DEFAULT_CHARSET);
+        }
+        finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+        return result;
     }
 
     /*
@@ -61,6 +128,20 @@ public class TransLoggerService4File implements TransLoggerService {
      */
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e) {
+        TransManager manager = TransManager.getInstance();
+        IStringCache cache = CacheHelper.getStringCache();
+        for (String key : manager.getIdSet()) {
+            try {
+                if (manager.isError() || manager.isTimeout()) {
+                    logger.warn(cache.getValue(CacheConstant.CACHE_LOGS, key));
+                }
+                cache.removeValue(CacheConstant.CACHE_LOGS, key);
+            }
+            catch (CacheException ex) {
+                logger.warn(ex);
+            }
+        }
+
     }
 
     /*

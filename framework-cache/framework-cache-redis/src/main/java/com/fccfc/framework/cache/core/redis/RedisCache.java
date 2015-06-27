@@ -118,13 +118,9 @@ public class RedisCache extends AbstractCache {
     }
 
     @Override
-    public Object removeValue(String nodeName, String key) throws CacheException {
+    public void removeValue(String nodeName, String key) throws CacheException {
         try {
-            Object obj = getValue(nodeName, key);
-            if (obj != null) {
-                jedis.hdel(nodeName.getBytes(), key.getBytes());
-            }
-            return obj;
+            jedis.hdel(nodeName.getBytes(), key.getBytes());
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);

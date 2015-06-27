@@ -79,7 +79,7 @@ public interface IStringCache {
      * @param key
      * @return <br>
      */
-    String removeValue(String nodeName, String key) throws CacheException;
+    void removeValue(String nodeName, String key) throws CacheException;
 
     /**
      * Description: clean<br>

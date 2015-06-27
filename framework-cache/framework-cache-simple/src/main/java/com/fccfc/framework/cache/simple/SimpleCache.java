@@ -99,13 +99,13 @@ public class SimpleCache implements ICache {
      * @see com.fccfc.framework.cache.core.ICache#removeValue(java.lang.String, java.lang.String)
      */
     @Override
-    public Object removeValue(String nodeName, String key) throws CacheException {
+    public void removeValue(String nodeName, String key) throws CacheException {
         Map<String, Object> node = getNode(nodeName);
         if (node == null) {
             node = new ConcurrentHashMap<String, Object>();
             putNode(nodeName, node);
         }
-        return node.remove(key);
+        node.remove(key);
     }
 
     /*

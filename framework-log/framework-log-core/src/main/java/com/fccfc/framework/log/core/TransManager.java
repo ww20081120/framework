@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -126,6 +127,10 @@ public final class TransManager implements Serializable {
         seq = 0;
         error = false;
         timeout = false;
+    }
+
+    public Set<String> getIdSet() {
+        return executeTimeMap.keySet();
     }
 
     public List<TransLoggerService> getTransLoggerServices() {
