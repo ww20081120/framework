@@ -85,7 +85,7 @@ public class Startup {
                 .get("port"))));
             boolean flag = true;
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[128];
 
             while (flag) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
