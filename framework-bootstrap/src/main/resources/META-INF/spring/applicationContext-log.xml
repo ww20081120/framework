@@ -23,7 +23,7 @@
 				 and !execution(public * com.fccfc..*.set*(..))
 				 and !execution(public * com.fccfc..*.get*())
 				 and !execution(public * com.fccfc..*.is*())
-           		 and !execution(* com.fccfc.framework.core.log..*.*(..))" />
+           		 and !execution(* com.fccfc.framework.log..*.*(..))" />
 			<aop:before pointcut-ref="transactionPointcut" method="before" />
 			<aop:after-returning pointcut-ref="transactionPointcut"
 				method="afterReturning" returning="returnValue" />
@@ -43,9 +43,9 @@
 		<!-- 日志服务 -->
 		<property name="serviceMap">
 			<map>
-				<entry key="file" value-ref="" />
-				<entry key="mongodb" value-ref="" />
-				<entry key="db" value-ref="" />
+				<entry key="file" value-ref="transLoggerService4File" />
+				<entry key="mongodb" value-ref="transLoggerService4Mongodb" />
+				<entry key="db" value-ref="transLoggerService4db" />
 			</map>
 		</property>
 		<property name="opendService" value="${system.open.logservice}"/>

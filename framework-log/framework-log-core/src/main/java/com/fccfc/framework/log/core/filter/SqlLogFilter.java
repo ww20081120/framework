@@ -6,6 +6,7 @@ package com.fccfc.framework.log.core.filter;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Types;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -20,8 +21,9 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
-import com.fccfc.framework.cache.core.CacheException;
+import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
+import com.fccfc.framework.log.core.TransLoggerService;
 import com.fccfc.framework.log.core.TransManager;
 
 /**
@@ -351,11 +353,13 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param msg
      */
     private void saveMsg2Cache(String msg) {
-        try {
-            TransManager.getInstance().addSqlLog(msg);
-        }
-        catch (CacheException e) {
-            logger.warn(e.getMessage(), e);
+        TransManager manager = TransManager.getInstance();
+        String statckId = manager.peek();
+        List<TransLoggerService> serviceList = manager.getTransLoggerServices();
+        if (CommonUtil.isNotEmpty(serviceList)) {
+            for (TransLoggerService service : serviceList) {
+                service.sql(statckId, msg);
+            }
         }
     }
 }

@@ -3,26 +3,22 @@
  */
 package com.fccfc.framework.log.core.advice;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import javax.annotation.Resource;
-
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
 
-import com.fccfc.framework.cache.core.CacheConstant;
-import com.fccfc.framework.cache.core.CacheException;
-import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
-import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.log.core.TransLoggerService;
 import com.fccfc.framework.log.core.TransManager;
-import com.fccfc.framework.log.core.bean.TransLogPojo;
-import com.fccfc.framework.log.core.bean.TransLogStackPojo;
-import com.fccfc.framework.log.core.service.TransLogService;
 
 /**
  * <Description> <br>
@@ -39,9 +35,6 @@ public class BusinessTransactionAdivce {
 
     private static Logger logger = new Logger(BusinessTransactionAdivce.class);
 
-    @Resource
-    private TransLogService transLogService;
-
     /**
      * 栈最大深度
      */
@@ -51,9 +44,13 @@ public class BusinessTransactionAdivce {
     private long maxExcuteTime;
 
     /**
-     * 是否保存正常的流程日志
+     * 已经开启对服务
      */
-    private boolean saveLog;
+    private String opendService;
+
+    private Map<String, TransLoggerService> serviceMap;
+
+    private List<TransLoggerService> transLoggerServices;
 
     /**
      * 方法执行前拦截
@@ -62,63 +59,35 @@ public class BusinessTransactionAdivce {
      * @throws FrameworkException
      */
     public void before(JoinPoint point) throws FrameworkException {
-        Date currentDate = new Date();
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+
+        // 执行方法
         String method = getMethodSignature(point);
-        StringBuilder paramsSb = new StringBuilder();
-        Object[] args = point.getArgs();
-        for (Object obj : args) {
-            paramsSb.append(obj).append(',');
-        }
-        String inputParam = paramsSb.toString();
-        try {
-            TransManager manager = TransManager.getInstance();
-            if (manager.getStackSize() > maxDeepLen) {
-                throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030, "业务过于复杂，请简化业务");
-            }
 
-            // 设置transLog
-            TransLogPojo transLog = manager.getTransLog();
-            if (transLog == null) {
-                transLog = new TransLogPojo();
-                transLog.setBeginTime(currentDate);
-                transLog.setModuleCode(Configuration.getString(CacheConstant.LOCAL_MODULE_CODE));
-                transLog.setTransId(CommonUtil.getTransactionID());
-                manager.setTransLog(transLog);
-            }
-
-            // 设置transLogStack
-            TransLogStackPojo logStack = new TransLogStackPojo();
-            logStack.setStackId(CommonUtil.getTransactionID());
-            logStack.setBeginTime(currentDate);
-            CacheHelper.getStringCache().putValue(CacheConstant.CACHE_LOGS, logStack.getStackId() + "_inputparam",
-                inputParam);
-            logStack.setMethod(method);
-
-            TransLogStackPojo parentTransLogStatck = manager.getLastTransLogStack();
-            logStack.setParentStackId(parentTransLogStatck == null ? null : parentTransLogStatck.getStackId());
-            logStack.setSeq(manager.getSeq());
-            logStack.setTransId(transLog.getTransId());
-            manager.addTransLogStack(logStack);
-        }
-        catch (CacheException e) {
-            logger.error(e);
-        }
-    }
-
-    private String getMethodSignature(JoinPoint point) {
-        StringBuilder sbuf = new StringBuilder();
-        sbuf.append(point.getTarget().getClass().getName()).append('<').append(point.getSignature().getName())
-            .append('>');
-        sbuf.append('(');
+        // 输入参数
         Object[] args = point.getArgs();
 
-        if (CommonUtil.isNotEmpty(args)) {
-            for (Object obj : args) {
-                sbuf.append(obj == null ? "NULL" : obj.getClass().getName()).append(',');
-            }
+        TransManager manager = TransManager.getInstance();
+        manager.setTransLoggerServices(getTransLoggerServices());
+
+        // 深度检测
+        if (manager.getStackSize() > maxDeepLen) {
+            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030, "业务过于复杂，请简化业务");
         }
-        sbuf.append(')');
-        return sbuf.toString();
+
+        // 父id
+        String parentStackId = manager.peek();
+
+        // id
+        String stackId = UUID.randomUUID().toString();
+        manager.push(stackId, beginTime);
+
+        // 执行记录
+        List<TransLoggerService> serviceList = getTransLoggerServices();
+        for (TransLoggerService service : serviceList) {
+            service.before(stackId, parentStackId, beginTime, method, args);
+        }
     }
 
     /**
@@ -129,53 +98,34 @@ public class BusinessTransactionAdivce {
      * @throws ServiceException
      */
     public void afterReturning(JoinPoint point, Object returnValue) {
-        Date currentDate = new Date();
+        // 执行完成时间
+        long endTime = System.currentTimeMillis();
 
         TransManager manager = TransManager.getInstance();
-        TransLogStackPojo logStack = manager.removeLast();
-        if (CommonUtil.isNull(logStack)) {
+        String stackId = manager.pop();
+        if (CommonUtil.isEmpty(stackId)) {
             return;
         }
-        logStack.setEndTime(currentDate);
-        logStack.setConsumeTime(new Long(logStack.getEndTime().getTime() - logStack.getBeginTime().getTime())
-            .intValue());
-        logStack.setIsSuccess("Y");
 
-        if (logStack.getConsumeTime() >= maxExcuteTime) {
-            manager.setError(true);
+        long beginTime = manager.getBeginTime(stackId);
+        long consumeTime = endTime - beginTime;
+
+        if (consumeTime > maxExcuteTime) {
+            manager.setTimeout(true);
         }
 
-        try {
-            if (returnValue != null) {
-                CacheHelper.getStringCache().putValue(CacheConstant.CACHE_LOGS, logStack.getStackId() + "_outputparam",
-                    returnValue.toString());
+        // 执行记录
+        List<TransLoggerService> serviceList = getTransLoggerServices();
+        for (TransLoggerService service : serviceList) {
+            service.afterReturn(stackId, endTime, consumeTime, returnValue);
+        }
+
+        if (manager.getStackSize() <= 0) {
+            for (TransLoggerService service : serviceList) {
+                service.end(stackId, beginTime, endTime, consumeTime, returnValue, null);
             }
-            manager.getLogList().add(logStack);
-
-            // 设置transLog
-            TransLogPojo transLog = manager.getTransLog();
-
-            if (manager.getStackSize() <= 0) {
-                if (saveLog || manager.isError()) {
-                    transLog.setEndTime(currentDate);
-                    transLog.setConsumeTime(new Long(transLog.getEndTime().getTime()
-                        - transLog.getBeginTime().getTime()).intValue());
-                    transLog.setInputParam(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS,
-                        logStack.getStackId() + "_inputparam"));
-                    transLog.setOutputParam(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS,
-                        logStack.getStackId() + "_outputparam"));
-                    transLog.setSqlLog(manager.getSqlLog());
-
-                    transLogService.addTransactionLog(transLog);
-                    saveLogList(manager.getLogList());
-                }
-                cleanCache(manager.getLogList());
-            }
+            manager.clean();
         }
-        catch (FrameworkException e) {
-            logger.error(e);
-        }
-
     }
 
     /**
@@ -186,104 +136,86 @@ public class BusinessTransactionAdivce {
      * @throws ServiceException
      */
     public void afterThrowing(JoinPoint point, Exception ex) {
-        Date currentDate = new Date();
-        TransManager manager = TransManager.getInstance();
+        // 执行完成时间
+        long endTime = System.currentTimeMillis();
 
-        TransLogStackPojo logStack = manager.removeLast();
-        if (CommonUtil.isNull(logStack)) {
+        TransManager manager = TransManager.getInstance();
+        String stackId = manager.pop();
+        if (CommonUtil.isEmpty(stackId)) {
             return;
         }
 
-        logStack.setEndTime(currentDate);
-        logStack.setConsumeTime(new Long(logStack.getEndTime().getTime() - logStack.getBeginTime().getTime())
-            .intValue());
-        logStack.setIsSuccess("N");
-        manager.setError(true);
-        manager.getLogList().add(logStack);
-        try {
-            // 设置transLog
-            TransLogPojo transLog = manager.getTransLog();
-            if (manager.getStackSize() <= 0) {
-                String inpuKey = logStack.getStackId() + "_inputparam";
-                transLog.setEndTime(currentDate);
-                transLog.setConsumeTime(new Long(transLog.getEndTime().getTime() - transLog.getBeginTime().getTime())
-                    .intValue());
-                transLog.setInputParam(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, inpuKey));
-                transLog.setExceptionLog(getExceptionMsg(ex));
-                transLog.setSqlLog(manager.getSqlLog());
+        long beginTime = manager.getBeginTime(stackId);
+        long consumeTime = endTime - beginTime;
 
-                transLogService.addTransactionLog(transLog);
-                saveLogList(manager.getLogList());
-                cleanCache(manager.getLogList());
+        manager.setError(true);
+
+        // 执行记录
+        List<TransLoggerService> serviceList = getTransLoggerServices();
+        for (TransLoggerService service : serviceList) {
+            service.afterThrow(stackId, endTime, consumeTime, ex);
+        }
+
+        if (manager.getStackSize() <= 0) {
+            for (TransLoggerService service : serviceList) {
+                service.end(stackId, beginTime, endTime, consumeTime, null, ex);
+            }
+            manager.clean();
+        }
+
+    }
+
+    /**
+     * 获取 方法描述
+     * 
+     * @param point
+     * @return
+     */
+    private String getMethodSignature(JoinPoint point) {
+        StringBuilder sbuf = new StringBuilder();
+        sbuf.append(point.getTarget().getClass().getName()).append('<').append(point.getSignature().getName())
+            .append('>');
+        sbuf.append('(');
+
+        Object[] args = point.getArgs();
+        if (CommonUtil.isNotEmpty(args)) {
+            for (Object obj : args) {
+                sbuf.append(obj == null ? "NULL" : obj.getClass().getName()).append(',');
             }
         }
-        catch (FrameworkException e) {
-            logger.error(e);
-        }
+        sbuf.append(')');
+        return sbuf.toString();
     }
 
-    /**
-     * 获取异常栈信息
-     * 
-     * @param ex 异常
-     * @return 结果
-     */
-    private String getExceptionMsg(Exception ex) {
-        StringBuilder exceptionMsg = new StringBuilder();
-        StackTraceElement[] messages = ex.getStackTrace();
-        StackTraceElement element = null;
-
-        for (int i = 0; i < messages.length; i++) {
-            element = messages[i];
-            exceptionMsg.append("File: ").append(element.getFileName()).append("Class: ")
-                .append(element.getClassName()).append("Method: ").append(element.getMethodName()).append("Line: ")
-                .append(element.getLineNumber()).append("<br/>");
+    private List<TransLoggerService> getTransLoggerServices() {
+        if (transLoggerServices == null) {
+            transLoggerServices = new ArrayList<TransLoggerService>();
+            if (CommonUtil.isNotEmpty(opendService) && CommonUtil.isNotEmpty(serviceMap)) {
+                String[] serviceIds = StringUtils.split(opendService, GlobalConstants.SPLITOR);
+                for (String id : serviceIds) {
+                    TransLoggerService service = serviceMap.get(id);
+                    if (service == null) {
+                        logger.warn("不支持{0}日志类型", id);
+                    }
+                    else {
+                        transLoggerServices.add(service);
+                    }
+                }
+            }
         }
-
-        return exceptionMsg.toString();
-    }
-
-    /**
-     * 保存流程日志
-     * 
-     * @param logList 日志集合
-     * @throws ServiceException 异常
-     * @throws CacheException 异常
-     */
-    private void saveLogList(List<TransLogStackPojo> logList) throws ServiceException, CacheException {
-        for (TransLogStackPojo pojo : logList) {
-            pojo.setInputParam(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS,
-                pojo.getStackId() + "_inputparam"));
-            pojo.setOutputParam(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS,
-                pojo.getStackId() + "_outputparam"));
-            transLogService.addTransactionStackLog(pojo);
-        }
-    }
-
-    /**
-     * 清除缓存数据
-     * 
-     * @param logList 日志集合
-     * @throws CacheException 异常
-     */
-    private void cleanCache(List<TransLogStackPojo> logList) throws CacheException {
-        for (TransLogStackPojo pojo : logList) {
-            CacheHelper.getStringCache().removeValue(CacheConstant.CACHE_LOGS, pojo.getStackId() + "_inputparam");
-            CacheHelper.getStringCache().removeValue(CacheConstant.CACHE_LOGS, pojo.getStackId() + "_outputparam");
-        }
-        TransManager.getInstance().getLogList().clear();
-        TransManager.getInstance().setError(false);
-        TransManager.getInstance().setSeq(0);
-        TransManager.getInstance().removeSqlLog();
-        TransManager.getInstance().setTransLog(null);
+        return transLoggerServices;
     }
 
     public void setMaxDeepLen(int maxDeepLen) {
         this.maxDeepLen = maxDeepLen;
     }
 
-    public void setSaveLog(boolean saveLog) {
-        this.saveLog = saveLog;
+    public void setOpendService(String opendService) {
+        this.opendService = opendService;
+    }
+
+    public void setServiceMap(Map<String, TransLoggerService> serviceMap) {
+        this.serviceMap = serviceMap;
     }
 
     public void setMaxExcuteTime(long maxExcuteTime) {

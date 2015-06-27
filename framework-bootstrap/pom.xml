@@ -15,6 +15,21 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
+			<artifactId>framework-log-db</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-log-file</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-log-mongodb</artifactId>
+			<version>${framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
 			<artifactId>framework-message-core</artifactId>
 			<version>${framework.version}</version>
 		</dependency>

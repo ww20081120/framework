@@ -1,4 +1,4 @@
-package com.fccfc.framework.log.core.bean;
+package com.fccfc.framework.log.db.bean;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

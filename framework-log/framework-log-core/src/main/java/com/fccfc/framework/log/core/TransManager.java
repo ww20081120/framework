@@ -4,16 +4,10 @@
 package com.fccfc.framework.log.core;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
-
-import com.fccfc.framework.cache.core.CacheConstant;
-import com.fccfc.framework.cache.core.CacheException;
-import com.fccfc.framework.cache.core.CacheHelper;
-import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.log.core.bean.TransLogPojo;
-import com.fccfc.framework.log.core.bean.TransLogStackPojo;
 
 /**
  * <Description> <br>
@@ -35,32 +29,36 @@ public final class TransManager implements Serializable {
     /**
      * 序列
      */
-    private int seq;
+    private int seq = 0;
 
     /**
      * 流程是否出错
      */
-    private boolean error;
+    private boolean error = false;
+
+    /**
+     * 流程是否执行超时
+     */
+    private boolean timeout = false;
 
     /**
      * 日志栈
      */
-    private Stack<TransLogStackPojo> logStack;
+    private Stack<String> executeStack;
 
     /**
-     * 流程日志集合
+     * 
      */
-    private List<TransLogStackPojo> logList;
+    private Map<String, Long> executeTimeMap;
 
-    /**
-     * 事务日志信息
-     */
-    private TransLogPojo transLog;
+    private List<TransLoggerService> transLoggerServices;
 
     /**
      * 私有构造, 不需要外部实例化
      */
     private TransManager() {
+        executeStack = new Stack<String>();
+        executeTimeMap = new HashMap<String, Long>();
     }
 
     /**
@@ -81,85 +79,25 @@ public final class TransManager implements Serializable {
         return sessionThread.get();
     }
 
-    /**
-     * 获取栈顶
-     * 
-     * @return
-     */
-    public TransLogStackPojo getLastTransLogStack() {
-        return getLogStack().isEmpty() ? null : getLogStack().peek();
-    }
-
-    public void setTransLog(TransLogPojo transLog) {
-        this.transLog = transLog;
-    }
-
-    public void addTransLogStack(TransLogStackPojo pojo) {
-        getLogStack().push(pojo);
-    }
-
-    public TransLogStackPojo removeLast() {
-        return getLogStack().isEmpty() ? null : getLogStack().pop();
-    }
-
     public int getStackSize() {
-        return getLogStack().size();
+        return executeStack.size();
     }
 
-    private Stack<TransLogStackPojo> getLogStack() {
-        if (logStack == null) {
-            logStack = new Stack<TransLogStackPojo>();
-        }
-        return logStack;
+    public void push(String id, long beginTime) {
+        executeTimeMap.put(id, beginTime);
+        executeStack.push(id);
     }
 
-    public void addSqlLog(String msg) throws CacheException {
-        if (CommonUtil.isNull(transLog) || msg == null) {
-            return;
-        }
-        String key = transLog.getTransId() + "_sql";
-        String value = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, key);
-        value = value + msg + "<br/>";
-        CacheHelper.getStringCache().updateValue(CacheConstant.CACHE_LOGS, key, value);
+    public String pop() {
+        return executeStack.isEmpty() ? null : executeStack.pop();
     }
 
-    public String getSqlLog() throws CacheException {
-        if (CommonUtil.isNull(transLog)) {
-            return null;
-        }
-        String key = transLog.getTransId() + "_sql";
-        return CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, key);
-    }
-
-    public void removeSqlLog() throws CacheException {
-        if (CommonUtil.isNull(transLog)) {
-            return;
-        }
-        String key = transLog.getTransId() + "_sql";
-        CacheHelper.getStringCache().removeValue(CacheConstant.CACHE_LOGS, key);
-    }
-
-    public TransLogPojo getTransLog() {
-        return transLog;
-    }
-
-    public List<TransLogStackPojo> getLogList() {
-        if (logList == null) {
-            logList = new ArrayList<TransLogStackPojo>();
-        }
-        return logList;
-    }
-
-    public void setLogList(List<TransLogStackPojo> logList) {
-        this.logList = logList;
+    public String peek() {
+        return executeStack.isEmpty() ? null : executeStack.peek();
     }
 
     public int getSeq() {
-        return ++seq;
-    }
-
-    public void setSeq(int seq) {
-        this.seq = seq;
+        return seq;
     }
 
     public boolean isError() {
@@ -170,4 +108,31 @@ public final class TransManager implements Serializable {
         this.error = error;
     }
 
+    public long getBeginTime(String id) {
+        return executeTimeMap.get(id);
+    }
+
+    public boolean isTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(boolean timeout) {
+        this.timeout = timeout;
+    }
+
+    public void clean() {
+        executeStack.clear();
+        executeTimeMap.clear();
+        seq = 0;
+        error = false;
+        timeout = false;
+    }
+
+    public List<TransLoggerService> getTransLoggerServices() {
+        return transLoggerServices;
+    }
+
+    public void setTransLoggerServices(List<TransLoggerService> transLoggerServices) {
+        this.transLoggerServices = transLoggerServices;
+    }
 }

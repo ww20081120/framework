@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.log.core.dao;
+package com.fccfc.framework.log.db.dao;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import com.fccfc.framework.db.core.annotation.Dao;
 import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.db.core.annotation.Sql;
 import com.fccfc.framework.db.hibernate.IGenericBaseDao;
-import com.fccfc.framework.log.core.bean.TransLogPojo;
-import com.fccfc.framework.log.core.bean.TransLogStackPojo;
+import com.fccfc.framework.log.db.bean.TransLogPojo;
+import com.fccfc.framework.log.db.bean.TransLogStackPojo;
 
 /**
  * <Description> <br>
