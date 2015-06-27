@@ -195,7 +195,7 @@ public class BusinessTransactionAdivce {
                 for (String id : serviceIds) {
                     TransLoggerService service = serviceMap.get(id);
                     if (service == null) {
-                        logger.warn("不支持{0}日志类型", id);
+                        logger.warn(new ServiceException(ErrorCodeDef.UNSPORT_LOGGER_TYPE), "不支持{0}日志类型", id);
                     }
                     else {
                         transLoggerServices.add(service);

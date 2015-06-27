@@ -3,8 +3,12 @@
  */
 package com.fccfc.framework.log.file;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.log.core.TransLoggerService;
 
 /**
@@ -18,6 +22,8 @@ import com.fccfc.framework.log.core.TransLoggerService;
 @Service
 public class TransLoggerService4File implements TransLoggerService {
 
+    private Logger logger = new Logger(TransLoggerService4File.class);
+
     /*
      * (non-Javadoc)
      * @see com.fccfc.framework.log.core.TransLoggerService#before(java.lang.String, java.lang.String, long,
@@ -25,6 +31,8 @@ public class TransLoggerService4File implements TransLoggerService {
      */
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
+        logger.debug("[{0}]进入[{1}]方法，参数为[{2}],statckId[{3}],parentStackId[{4}]", beginTime, method,
+            (CommonUtil.isEmpty(params) ? "" : Arrays.toString(params)), stackId, parentStackId);
     }
 
     /*
@@ -32,7 +40,8 @@ public class TransLoggerService4File implements TransLoggerService {
      * @see com.fccfc.framework.log.core.TransLoggerService#afterReturn(java.lang.String, long, long, java.lang.Object)
      */
     @Override
-    public void afterReturn(String stackId, long endTime, long consumeTime, Object retrunValue) {
+    public void afterReturn(String stackId, long endTime, long consumeTime, Object returnValue) {
+        logger.debug("[{0}]执行statckId[{1}]完毕，共执行[{2}],返回值为[{3}]", endTime, stackId, consumeTime, returnValue);
     }
 
     /*
@@ -42,6 +51,7 @@ public class TransLoggerService4File implements TransLoggerService {
      */
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, Exception e) {
+        logger.warn(e, "[{0}]执行statckId[{1}]失败，共执行[{2}]", endTime, stackId, consumeTime);
     }
 
     /*

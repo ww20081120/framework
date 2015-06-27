@@ -5,14 +5,5 @@
 						http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://code.alibabatech.com/schema/dubbo
 						http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
-	<!-- 提供方应用信息，用于计算依赖关系 -->
-	<dubbo:application name="framework-bootstrap" />
 
-	<!-- 使用multicast广播注册中心暴露服务地址 -->
-	<dubbo:registry address="${service.registry.address}" />
-
-	<!-- 用dubbo协议在20880端口暴露服务 -->
-	<dubbo:protocol name="${service.protocol.name}" port="${service.protocol.port}" />
-
-		
 </beans>

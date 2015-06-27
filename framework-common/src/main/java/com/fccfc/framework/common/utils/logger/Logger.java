@@ -57,7 +57,7 @@ public class Logger {
      * @param message 日志信息
      * @param params 日志信息
      */
-    public void error(String message, Object... params) {
+    public void error(Throwable t, String message, Object... params) {
         logger.error(CommonUtil.messageFormat(message, params));
     }
 
@@ -86,8 +86,8 @@ public class Logger {
      * @param message 日志信息
      * @param params 日志信息
      */
-    public void warn(String message, Object... params) {
-        logger.warn(CommonUtil.messageFormat(message, params));
+    public void warn(Throwable t, String message, Object... params) {
+        logger.warn(CommonUtil.messageFormat(message, params), t);
     }
 
     /**

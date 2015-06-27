@@ -212,4 +212,9 @@ public interface ErrorCodeDef {
 
     /** 密码和验证码不能同时为空 */
     int VERIFY_CODE_IS_NULL_20019 = 20019;
+
+    /**
+     * 不支持的日志类型
+     */
+    int UNSPORT_LOGGER_TYPE = 20020;
 }

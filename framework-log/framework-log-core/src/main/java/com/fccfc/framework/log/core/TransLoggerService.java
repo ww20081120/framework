@@ -15,7 +15,7 @@ public interface TransLoggerService {
 
     void before(String stackId, String parentStackId, long beginTime, String method, Object[] params);
 
-    void afterReturn(String stackId, long endTime, long consumeTime, Object retrunValue);
+    void afterReturn(String stackId, long endTime, long consumeTime, Object returnValue);
 
     void afterThrow(String stackId, long endTime, long consumeTime, Exception e);
 
