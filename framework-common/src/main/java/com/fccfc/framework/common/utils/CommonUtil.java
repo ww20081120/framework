@@ -194,6 +194,14 @@ public final class CommonUtil {
         return sb.toString();
     }
 
+    public static String getString(Object obj) {
+        String result = null;
+        if (obj != null) {
+            result = obj instanceof String ? (String) obj : obj.toString();
+        }
+        return result;
+    }
+
     public final static String md5(String s) throws UtilException {
         char hexDigits[] = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'

@@ -31,5 +31,5 @@ public interface ConfigItemDao extends IGenericBaseDao {
         @Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize) throws DaoException;
 
     @Sql(bean = Map.class)
-    List<Map<String, Object>> selectAll() throws DaoException;
+    List<Map<String, Object>> selectAll(@Param("moduleList") List<String> moduleList) throws DaoException;
 }

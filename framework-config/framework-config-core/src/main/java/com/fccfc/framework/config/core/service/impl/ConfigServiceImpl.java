@@ -3,15 +3,20 @@
  */
 package com.fccfc.framework.config.core.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.thrift.TException;
 
+import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.config.api.Config;
 import com.fccfc.framework.config.api.ConfigService;
+import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.config.core.dao.ConfigItemDao;
+import com.fccfc.framework.db.core.DaoException;
 
 /**
  * <Description> <br>
@@ -32,7 +37,22 @@ public class ConfigServiceImpl implements ConfigService.Iface {
      */
     @Override
     public List<Config> queryAllConfig(String moduleCode) throws TException {
-        return null;
+        List<Config> configList = new ArrayList<Config>();
+        try {
+            List<Map<String, Object>> list = configItemDao.selectAll(Configuration.getModuleCode(moduleCode));
+            for (Map<String, Object> map : list) {
+                Config config = new Config();
+                config.setConfigItemCode(CommonUtil.getString(map.get("CONFIG_ITEM_CODE")));
+                config.setModuleCode(CommonUtil.getString(map.get("MODULE_CODE")));
+                config.setParamCode(CommonUtil.getString(map.get("PARAM_CODE")));
+                config.setParamValue(CommonUtil.getString(map.get("PARAM_VALUE")));
+                configList.add(config);
+            }
+        }
+        catch (DaoException e) {
+            throw new TException(e);
+        }
+        return configList;
     }
 
     /*
