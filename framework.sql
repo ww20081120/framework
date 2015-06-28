@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/5/30 18:49:25                           */
+/* Created on:     2015/6/28 15:00:33                           */
 /*==============================================================*/
 
 
@@ -670,9 +670,11 @@ create table MODULE
    primary key (MODULE_CODE)
 );
 
-INSERT INTO MODULE (MODULE_CODE,PARENT_MODULE_CODE,MODULE_NAME) VALUES ('COMMON',NULL,'公共模块');
-INSERT INTO MODULE (MODULE_CODE,PARENT_MODULE_CODE,MODULE_NAME) VALUES ('PORTAL','COMMON','系统门户');
-INSERT INTO MODULE (MODULE_CODE,PARENT_MODULE_CODE,MODULE_NAME) VALUES ('MONITOR','COMMON','系统监控模块');
+INSERT INTO MODULE (MODULE_CODE,PARENT_MODULE_CODE,MODULE_NAME) VALUES 
+('COMMON',NULL,'公共模块'),
+('PORTAL','COMMON','系统门户'),
+('MESSAGE', 'COMMON', '消息中心'),
+('MONITOR','COMMON','系统监控模块');
 
 /*==============================================================*/
 /* Table: OPERATOR                                              */
