@@ -13,5 +13,14 @@
 		class="com.fccfc.framework.config.core.service.impl.ConfigServiceImpl" />
 
 	<bean id="messageService"
-		class="com.fccfc.framework.message.core.service.impl.MessageServiceImpl" />
+		class="com.fccfc.framework.message.core.service.impl.MessageServiceImpl">
+		<property name="messageExcutorMap">
+			<map>
+				<entry key="4" value-ref="smsMessageExcutorImpl" />
+				<entry key="5" value-ref="emailMessageExcutorImpl" />
+				<entry key="6" value-ref="baiduPushMessageExcutorImpl" />
+				<entry key="7" value-ref="getuiPushMessageExcutorImpl" />
+			</map>
+		</property>
+	</bean>
 </beans>
