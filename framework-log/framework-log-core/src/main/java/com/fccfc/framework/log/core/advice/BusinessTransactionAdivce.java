@@ -124,6 +124,11 @@ public class BusinessTransactionAdivce {
             for (TransLoggerService service : serviceList) {
                 service.end(stackId, beginTime, endTime, consumeTime, returnValue, null);
             }
+
+            for (TransLoggerService service : serviceList) {
+                service.clean();
+            }
+
             manager.clean();
         }
     }
@@ -160,6 +165,11 @@ public class BusinessTransactionAdivce {
             for (TransLoggerService service : serviceList) {
                 service.end(stackId, beginTime, endTime, consumeTime, null, ex);
             }
+
+            for (TransLoggerService service : serviceList) {
+                service.clean();
+            }
+            
             manager.clean();
         }
 

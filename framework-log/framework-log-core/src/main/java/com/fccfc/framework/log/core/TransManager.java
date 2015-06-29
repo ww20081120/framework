@@ -98,7 +98,7 @@ public final class TransManager implements Serializable {
     }
 
     public int getSeq() {
-        return seq;
+        return seq++;
     }
 
     public boolean isError() {

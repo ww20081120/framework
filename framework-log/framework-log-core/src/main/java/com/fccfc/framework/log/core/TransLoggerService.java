@@ -22,4 +22,6 @@ public interface TransLoggerService {
     void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e);
 
     void sql(String stackId, String sql);
+
+    void clean();
 }
