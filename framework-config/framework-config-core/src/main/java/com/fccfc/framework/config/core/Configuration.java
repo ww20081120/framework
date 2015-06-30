@@ -34,19 +34,34 @@ import com.fccfc.framework.config.core.bean.ModulePojo;
 
 public final class Configuration {
 
+    /**
+     * CACHE_TIME
+     */
     private static final long CACHE_TIME = 3600 * 1000;
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(Configuration.class);
 
+    /**
+     * cache
+     */
     private static Map<String, String> cache;
 
+    /**
+     * allModules
+     */
     private static Map<String, ModulePojo> allModules;
 
+    /**
+     * configService
+     */
     private static ConfigService.Iface configService;
 
     /**
      * 获取模块代码
-     * 
+     * @param modelCode <br>
      * @return 模块代码
      */
     public static List<String> getModuleCode(String modelCode) {
@@ -68,6 +83,15 @@ public final class Configuration {
         return getModuleCode(cache.get(CacheConstant.LOCAL_MODULE_CODE));
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
+     */
     public static Object get(String key) {
         String value = cache == null ? null : cache.get(key);
         if (value == null) {
@@ -136,6 +160,14 @@ public final class Configuration {
         Configuration.cache = cache;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param allModules <br>
+     */
     public static void setAllModules(List<ModulePojo> allModules) {
         Map<String, ModulePojo> map = new ConcurrentHashMap<String, ModulePojo>();
         for (ModulePojo pojo : allModules) {
@@ -144,6 +176,14 @@ public final class Configuration {
         Configuration.allModules = map;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws ServiceException <br>
+     */
     public static void reloadCache() throws ServiceException {
         String moduleCode = cache.get(CacheConstant.LOCAL_MODULE_CODE);
         try {

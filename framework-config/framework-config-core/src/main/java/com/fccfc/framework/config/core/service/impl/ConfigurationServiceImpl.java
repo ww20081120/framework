@@ -28,6 +28,9 @@ import com.fccfc.framework.db.core.DaoException;
 @Service
 public class ConfigurationServiceImpl implements ConfigurationService {
 
+    /**
+     * moduleDao
+     */
     @Resource
     private ModuleDao moduleDao;
 

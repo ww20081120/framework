@@ -28,6 +28,9 @@ import com.fccfc.framework.db.core.DaoException;
  */
 public class ConfigServiceImpl implements ConfigService.Iface {
 
+    /**
+     * configItemDao
+     */
     @Resource
     private ConfigItemDao configItemDao;
 

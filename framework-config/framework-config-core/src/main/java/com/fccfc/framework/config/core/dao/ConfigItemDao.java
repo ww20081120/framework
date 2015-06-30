@@ -26,10 +26,28 @@ import com.fccfc.framework.db.hibernate.IGenericBaseDao;
 @Dao
 public interface ConfigItemDao extends IGenericBaseDao {
 
+    /**
+     * selectConfigItemList
+     * @param configItemPojo <br>
+     * @param pageIndex <br>
+     * @param pageSize <br>
+     * @throws DaoException <br>
+     * @return <br>
+     */
     @Sql(bean = ConfigItemPojo.class)
     List<ConfigItemPojo> selectConfigItemList(@Param("configItem") ConfigItemPojo configItemPojo,
         @Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param moduleList <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(bean = Map.class)
     List<Map<String, Object>> selectAll(@Param("moduleList") List<String> moduleList) throws DaoException;
 }

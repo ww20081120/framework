@@ -23,6 +23,15 @@ import com.fccfc.framework.db.core.annotation.Sql;
 @Dao
 public interface ModuleDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT * FROM MODULE", bean = ModulePojo.class)
     List<ModulePojo> selectAllModule() throws DaoException;
 }
