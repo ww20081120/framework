@@ -37,10 +37,19 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 public class VelocityParseFactory {
 
+    /**
+     * dateTool
+     */
     private static DateTool dateTool;
 
+    /**
+     * properties
+     */
     private static Properties properties;
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(VelocityParseFactory.class);
 
     static {

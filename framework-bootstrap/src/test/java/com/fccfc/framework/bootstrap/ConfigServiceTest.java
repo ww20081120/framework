@@ -24,9 +24,20 @@ import com.fccfc.framework.config.api.ConfigService;
 })
 public class ConfigServiceTest {
 
+    /**
+     * configService
+     */
     @Resource
     private ConfigService.Iface configService;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws TException <br>
+     */
     @Test
     public void queryAll() throws TException {
         System.out.println(configService.queryAllConfig("PORTAL"));

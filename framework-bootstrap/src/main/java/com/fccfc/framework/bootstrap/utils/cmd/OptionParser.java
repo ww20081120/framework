@@ -23,9 +23,21 @@ import com.fccfc.framework.common.utils.CommonUtil;
  */
 public final class OptionParser {
 
+    /**
+     * OptionParser
+     */
     private OptionParser() {
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param target <br>
+     * @param args <br>
+     */
     public static void parse(Object target, String[] args) {
         Map<String, String> paramsMap = parse(target.getClass(), args);
         if (CommonUtil.isNotEmpty(paramsMap)) {
@@ -42,6 +54,16 @@ public final class OptionParser {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @param args <br>
+     * @return <br>
+     */
     public static Map<String, String> parse(Class<?> clazz, String[] args) {
         Map<String, Option> optionMap = getOptions(clazz, args);
 
@@ -88,6 +110,16 @@ public final class OptionParser {
         return paramsMap;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @param args <br>
+     * @return <br>
+     */
     private static Map<String, Option> getOptions(Class<?> clazz, String[] args) {
         Map<String, Option> optionMap = new HashMap<String, Option>();
 

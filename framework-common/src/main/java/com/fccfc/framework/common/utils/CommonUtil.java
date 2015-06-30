@@ -26,13 +26,16 @@ import com.fccfc.framework.common.ErrorCodeDef;
  */
 public final class CommonUtil {
 
-    private static final Random random = new Random();
+    /**
+     * random
+     */
+    private static final Random RANDOM = new Random();
 
     /**
      * Description: 字符串是为NULL或为空<br>
      * 
      * @author 王伟 <br>
-     * @param str
+     * @param str <br>
      * @return <br>
      */
     public static boolean isEmpty(String str) {
@@ -43,7 +46,7 @@ public final class CommonUtil {
      * Description:字符串不为NULL也不为空 <br>
      * 
      * @author 王伟 <br>
-     * @param str
+     * @param str <br>
      * @return <br>
      */
     public static boolean isNotEmpty(String str) {
@@ -51,10 +54,14 @@ public final class CommonUtil {
     }
 
     /**
-     * 判断数组是否为NULL或为空
      * 
-     * @param t
-     * @return
+     * Description: 判断数组是否为NULL或为空<br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param t <br>
+     * @param <T> <br>
+     * @return <br>
      */
     public static <T> boolean isEmpty(T[] t) {
         return t == null || t.length == 0;
@@ -63,8 +70,9 @@ public final class CommonUtil {
     /**
      * 判断数组不为NULL也不为空
      * 
-     * @param t
-     * @return
+     * @param t <br>
+     * @param <T> <br>
+     * @return <br>
      */
     public static <T> boolean isNotEmpty(T[] t) {
         return !isEmpty(t);
@@ -75,6 +83,7 @@ public final class CommonUtil {
      * 
      * @author 王伟 <br>
      * @param col <br>
+     * @return  <br>
      */
     public static boolean isEmpty(Collection<?> col) {
         return col == null || col.isEmpty();
@@ -84,7 +93,7 @@ public final class CommonUtil {
      * Description:集合不为NULL也不为空 <br>
      * 
      * @author 王伟 <br>
-     * @param col
+     * @param col <br>
      * @return <br>
      */
     public static boolean isNotEmpty(Collection<?> col) {
@@ -95,7 +104,8 @@ public final class CommonUtil {
      * Description: map是否为NULL或为空<br>
      * 
      * @author 王伟 <br>
-     * @param col <br>
+     * @param map  <br>
+     * @return <br>
      */
     public static boolean isEmpty(Map<?, ?> map) {
         return map == null || map.isEmpty();
@@ -105,7 +115,7 @@ public final class CommonUtil {
      * Description:map不为NULL也不为空 <br>
      * 
      * @author 王伟 <br>
-     * @param col
+     * @param map <br>
      * @return <br>
      */
     public static boolean isNotEmpty(Map<?, ?> map) {
@@ -116,7 +126,7 @@ public final class CommonUtil {
      * Description: <br>
      * 
      * @author 王伟 <br>
-     * @param str
+     * @param str <br>
      * @return <br>
      */
     public static String lowerCaseFirstChar(String str) {
@@ -134,9 +144,9 @@ public final class CommonUtil {
     /**
      * 消息格式化
      * 
-     * @param message message
-     * @param params params
-     * @return String
+     * @param message message <br>
+     * @param params params <br>
+     * @return String <br>
      */
     public static String messageFormat(String message, Object... params) {
         return isNotEmpty(params) ? MessageFormat.format(message, params) : message;
@@ -145,8 +155,8 @@ public final class CommonUtil {
     /**
      * 判断是否是空对象
      * 
-     * @param obj obj
-     * @return boolean
+     * @param obj obj <br>
+     * @return boolean <br>
      */
     public static boolean isNull(Object obj) {
         return null == obj;
@@ -155,7 +165,7 @@ public final class CommonUtil {
     /**
      * 获取事务ID
      * 
-     * @return 事务ID
+     * @return 事务ID <br>
      */
     public static String getTransactionID() {
         return UUID.randomUUID().toString();
@@ -165,35 +175,54 @@ public final class CommonUtil {
      * Description: 获取指定位数的随机数<br>
      * 
      * @author 王伟 <br>
-     * @param size
+     * @param size <br>
      * @return <br>
      */
     public static String getRandomNumber(int size) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size; i++) {
-            sb.append((char) ('0' + random.nextInt(10)));
+            sb.append((char) ('0' + RANDOM.nextInt(10)));
         }
         return sb.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param size <br>
+     * @return <br>
+     */
     public static String getRandomChar(int size) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size; i++) {
-            switch (random.nextInt(10) % 3) {
+            switch (RANDOM.nextInt(10) % 3) {
                 case 0:
-                    sb.append((char) ('0' + random.nextInt(10)));
+                    sb.append((char) ('0' + RANDOM.nextInt(10)));
                     break;
                 case 1:
-                    sb.append((char) ('a' + random.nextInt(26)));
+                    sb.append((char) ('a' + RANDOM.nextInt(26)));
                     break;
                 case 2:
-                    sb.append((char) ('A' + random.nextInt(26)));
+                    sb.append((char) ('A' + RANDOM.nextInt(26)));
                     break;
+                default : ;
             }
         }
         return sb.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param obj <br>
+     * @return <br>
+     */
     public static String getString(Object obj) {
         String result = null;
         if (obj != null) {
@@ -202,7 +231,17 @@ public final class CommonUtil {
         return result;
     }
 
-    public final static String md5(String s) throws UtilException {
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param s <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
+    public static final String md5(String s) throws UtilException {
         char hexDigits[] = {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
         };

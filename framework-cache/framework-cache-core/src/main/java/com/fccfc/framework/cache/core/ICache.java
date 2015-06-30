@@ -23,6 +23,7 @@ public interface ICache {
      * 
      * @author 王伟 <br>
      * @param nodeName 节点名称
+     * @throws CacheException <br>
      * @return <br>
      */
     Map<String, Object> getNode(String nodeName) throws CacheException;
@@ -31,8 +32,9 @@ public interface ICache {
      * Description: putNode<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
+     * @param nodeName <br>
      * @param node <br>
+     * @throws CacheException <br>
      */
     void putNode(String nodeName, Map<String, Object> node) throws CacheException;
 
@@ -40,7 +42,8 @@ public interface ICache {
      * Description: removeNode<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
+     * @param nodeName <br>
+     * @throws CacheException <br>
      * @return <br>
      */
     boolean removeNode(String nodeName) throws CacheException;
@@ -49,8 +52,9 @@ public interface ICache {
      * Description: getValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
+     * @throws CacheException <br>
      * @return <br>
      */
     Object getValue(String nodeName, String key) throws CacheException;
@@ -59,9 +63,10 @@ public interface ICache {
      * Description: putValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
      * @param t <br>
+     * @throws CacheException <br>
      */
     void putValue(String nodeName, String key, Object t) throws CacheException;
 
@@ -69,9 +74,10 @@ public interface ICache {
      * Description: updateValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
      * @param t <br>
+     * @throws CacheException <br>
      */
     void updateValue(String nodeName, String key, Object t) throws CacheException;
 
@@ -79,8 +85,9 @@ public interface ICache {
      * Description: removeValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
+     * @throws CacheException <br>
      */
     void removeValue(String nodeName, String key) throws CacheException;
 
@@ -88,7 +95,7 @@ public interface ICache {
      * Description: clean<br>
      * 
      * @author 王伟 <br>
-     * <br>
+     * @throws CacheException <br>
      */
     void clean() throws CacheException;
 }

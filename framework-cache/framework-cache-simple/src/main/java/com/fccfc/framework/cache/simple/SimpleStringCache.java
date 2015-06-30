@@ -22,6 +22,10 @@ public class SimpleStringCache implements IStringCache {
     /** cachesMap */
     private Map<String, Map<String, String>> cachesMap;
 
+    /**
+     * SimpleStringCache
+     * @param cachesMap <br>
+     */
     public SimpleStringCache(Map<String, Map<String, String>> cachesMap) {
         this.cachesMap = cachesMap;
     }

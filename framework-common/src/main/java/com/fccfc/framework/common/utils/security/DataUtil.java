@@ -39,7 +39,7 @@ public final class DataUtil {
      * @param msg 加密信息
      * @return 结果
      * @throws UtilException
-     * @throws NoSuchAlgorithmException 异常
+     * @throws UtilException 异常
      */
     public static String md5For16(String msg) throws UtilException {
         String result = md5(msg);
@@ -52,7 +52,7 @@ public final class DataUtil {
      * @param msg 加密信息
      * @return 结果
      * @throws UtilException
-     * @throws NoSuchAlgorithmException 异常
+     * @throws UtilException 异常
      */
     public static String md5(String msg) throws UtilException {
         byte[] msgBytes = msg.getBytes();
@@ -79,6 +79,16 @@ public final class DataUtil {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
     public static byte[] base64Decode(String content) throws UtilException {
         try {
             return Base64.decodeBase64(content.getBytes(GlobalConstants.DEFAULT_CHARSET));
@@ -88,6 +98,16 @@ public final class DataUtil {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
     public static String base64Encode(byte[] content) throws UtilException {
         try {
             return new String(Base64.encodeBase64(content), GlobalConstants.DEFAULT_CHARSET);

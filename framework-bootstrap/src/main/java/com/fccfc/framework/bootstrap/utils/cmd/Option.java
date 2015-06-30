@@ -24,10 +24,31 @@ import com.fccfc.framework.common.GlobalConstants;
 @Target(ElementType.FIELD)
 public @interface Option {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     */
     String name();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     */
     String value() default GlobalConstants.BLANK;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     */
     boolean required() default false;
 
 }

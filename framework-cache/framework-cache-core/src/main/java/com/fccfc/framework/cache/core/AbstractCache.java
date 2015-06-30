@@ -17,6 +17,9 @@ import com.esotericsoftware.kryo.io.Output;
  */
 public abstract class AbstractCache implements ICache {
 
+    /**
+     * INIT_SIZE
+     */
     private static final int INIT_SIZE = 4096;
 
     /**
@@ -24,6 +27,15 @@ public abstract class AbstractCache implements ICache {
      */
     private final Kryo kryo = new Kryo();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param obj <br>
+     * @return <br>
+     */
     protected byte[] serial(Object obj) {
         byte[] result = null;
         if (obj != null && !(obj instanceof Void)) {
@@ -42,6 +54,15 @@ public abstract class AbstractCache implements ICache {
         return result;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param data <br>
+     * @return <br>
+     */
     protected Object unserial(byte[] data) {
         Object result = null;
         if (data != null && data.length > 0) {

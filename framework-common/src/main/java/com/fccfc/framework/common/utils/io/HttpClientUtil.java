@@ -21,10 +21,14 @@ import com.fccfc.framework.common.utils.UtilException;
 import com.fccfc.framework.common.utils.logger.Logger;
 
 /**
+ * HttpClientUtil
  * @author Administrator
  */
 public final class HttpClientUtil {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(HttpClientUtil.class);
 
     /**
@@ -33,7 +37,7 @@ public final class HttpClientUtil {
      * @param url 链接
      * @param paramMap 参数
      * @return 结果
-     * @throws UtilException
+     * @throws UtilException <br>
      */
     public static String post(String url, Map<String, String> paramMap) throws UtilException {
         HttpClient httpClient = new HttpClient();

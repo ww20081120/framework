@@ -29,6 +29,10 @@ public class SimpleCache implements ICache {
     /** cachesMap */
     private Map<String, Map<String, Object>> cachesMap;
 
+    /**
+     * SimpleCache
+     * @param cachesMap <br>
+     */
     public SimpleCache(Map<String, Map<String, Object>> cachesMap) {
         this.cachesMap = cachesMap;
     }

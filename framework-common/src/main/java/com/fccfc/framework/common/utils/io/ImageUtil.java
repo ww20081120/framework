@@ -10,11 +10,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.Thumbnails.Builder;
 
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.UtilException;
+
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.Thumbnails.Builder;
 
 /**
  * <Description> <br>
@@ -32,10 +33,9 @@ public final class ImageUtil {
      * Description: 缩放图片<br>
      * 
      * @author 王伟 <br>
-     * @param source
-     * @param dist
-     * @param scale
-     * @param height
+     * @param source <br>
+     * @param dist <br>
+     * @param height <br>
      * @throws UtilException <br>
      */
     public static void pictureZoom(String source, String dist, int height) throws UtilException {
@@ -56,15 +56,25 @@ public final class ImageUtil {
      * Description: 缩放图片<br>
      * 
      * @author 王伟 <br>
-     * @param source
-     * @param dist
+     * @param source <br>
+     * @param dist <br>
      * @throws UtilException <br>
      */
     public static void pictureZoom(String source, String dist) throws UtilException {
         pictureZoom(source, dist, 100);
     }
     
-    private static BufferedImage cutByShort(String source) throws UtilException{
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param source <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
+    private static BufferedImage cutByShort(String source) throws UtilException {
         
         try {
             BufferedImage src = ImageIO.read(new File(source));

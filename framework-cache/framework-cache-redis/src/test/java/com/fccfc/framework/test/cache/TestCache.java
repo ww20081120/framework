@@ -23,16 +23,37 @@ import com.fccfc.framework.cache.core.redis.RedisStringCache;
  */
 public class TestCache {
 
+    /**
+     * cache
+     */
     private ICache cache;
 
+    /**
+     * stringCache
+     */
     private IStringCache stringCache;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     @Before
     public void init() {
         cache = new RedisCache("112.124.36.185", 6379);
         stringCache = new RedisStringCache("112.124.36.185", 6379);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws CacheException <br>
+     */
     @Test
     public void getNode() throws CacheException {
 
@@ -42,8 +63,7 @@ public class TestCache {
      * Description: putNode<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param node <br>
+     * @throws CacheException <br>
      */
     public void putNode() throws CacheException {
 
@@ -53,19 +73,34 @@ public class TestCache {
      * Description: removeNode<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @return <br>
+     * @throws CacheException <br>
      */
     public void removeNode() throws CacheException {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws CacheException <br>
+     */
     @Test
     public void getValue() throws CacheException {
         System.out.println(cache.getValue("a", "a"));
         System.out.println(stringCache.getValue("b", "a"));
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws CacheException <br>
+     */
     @Test
     public void putValue() throws CacheException {
         JSONObject object = new JSONObject();
@@ -79,9 +114,7 @@ public class TestCache {
      * Description: updateValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
-     * @param t <br>
+     * @throws CacheException <br>
      */
     public void updateValue() throws CacheException {
     }
@@ -90,9 +123,7 @@ public class TestCache {
      * Description: removeValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
-     * @return <br>
+     * @throws CacheException <br>
      */
     public void removeValue() throws CacheException {
     }
@@ -101,7 +132,7 @@ public class TestCache {
      * Description: clean<br>
      * 
      * @author 王伟 <br>
-     * <br>
+     * @throws CacheException <br>
      */
     public void clean() throws CacheException {
     }
