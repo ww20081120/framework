@@ -49,11 +49,17 @@ public class AbstractAnnotationHandler {
     /** sql 包名 */
     private static final String SQL_PACKAGE = "/sql";
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(AbstractAnnotationHandler.class);
 
     /** IGenericBaseDao 的方法签名 */
     private static Map<String, Method> genericBaseDaoMethodMap;
 
+    /**
+     * daoConfig
+     */
     private DaoConfig daoConfig;
 
     /**
@@ -65,8 +71,8 @@ public class AbstractAnnotationHandler {
     /**
      * 获取IGenericBaseDao执行方法
      * 
-     * @param method
-     * @return
+     * @param method <br>
+     * @return <br>
      */
     protected Method getBaseDaoExcutor(Method method) {
         Method result = null;
@@ -90,10 +96,10 @@ public class AbstractAnnotationHandler {
     /**
      * 检查sql路径
      * 
-     * @param method
-     * @param path
-     * @return
-     * @throws InitializationException
+     * @param method <br>
+     * @param path <br>
+     * @return <br>
+     * @throws InitializationException <br>
      */
     private String checkSqlPath(Method method, String path) throws InitializationException {
         StringBuilder sb = new StringBuilder();
@@ -152,9 +158,10 @@ public class AbstractAnnotationHandler {
     }
 
     /**
-     * @param method
-     * @return
-     * @throws InitializationException
+     * ParamMetadata
+     * @param method <br>
+     * @return <br>
+     * @throws InitializationException <br>
      */
     protected ParamMetadata cacheSqlParamMetadata(Method method) throws InitializationException {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
@@ -179,7 +186,7 @@ public class AbstractAnnotationHandler {
                 }
 
                 // 设置返回类型
-                metadata.setReturnType(method.getReturnType().equals(void.class) ? null : method.getReturnType());
+                metadata.setReturnType((void.class).equals(method.getReturnType()) ? null : method.getReturnType());
 
                 String[] paramNames = null;
                 for (int i = 0; i < parameterAnnotations.length; i++) {
@@ -258,7 +265,7 @@ public class AbstractAnnotationHandler {
      * Description: <br>
      * 
      * @author 王伟 <br>
-     * @param method
+     * @param method <br>
      * @throws InitializationException InitializationException
      */
     protected String cacheSqlTemplate(Method method) throws InitializationException {
@@ -292,6 +299,7 @@ public class AbstractAnnotationHandler {
     }
 
     /**
+     * DaoConfig
      * @return the daoConfig
      */
     public DaoConfig getDaoConfig() {
@@ -299,6 +307,7 @@ public class AbstractAnnotationHandler {
     }
 
     /**
+     * setDaoConfig
      * @param daoConfig the daoConfig to set
      */
     public void setDaoConfig(DaoConfig daoConfig) {

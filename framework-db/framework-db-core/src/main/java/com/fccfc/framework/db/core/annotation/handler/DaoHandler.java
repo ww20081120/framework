@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ognl.Ognl;
-import ognl.OgnlException;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -30,6 +27,8 @@ import com.fccfc.framework.db.core.config.DataParam;
 import com.fccfc.framework.db.core.config.ParamMetadata;
 import com.fccfc.framework.db.core.executor.ISqlExcutor;
 
+import ognl.Ognl;
+
 /**
  * <Description> <br>
  * 
@@ -42,15 +41,38 @@ import com.fccfc.framework.db.core.executor.ISqlExcutor;
  */
 public class DaoHandler extends AbstractAnnotationHandler implements InvocationHandler {
 
-    // 表示以：开头的合法变量名
+    /**
+     *  表示以：开头的合法变量名
+     */
     private static final String REG_EX = ":[ tnx0Bfr]*[_a-zA-Z][_a-zA-Z.0-9]*";
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(DaoHandler.class);
 
+    /**
+     * pat
+     */
     private static Pattern pat = Pattern.compile(REG_EX);
 
+    /**
+     * sqlExcutor
+     */
     private ISqlExcutor sqlExcutor;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param proxy <br>
+     * @param method <br>
+     * @param args <br>
+     * @return <br>
+     * @throws Throwable <br>
+     */
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // Step1:判断是否是抽象方法，如果是非抽象方法，则不执行代理拦截器
         if (proxy != null && !BeanUtil.isAbstract(method)) {
@@ -85,11 +107,10 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
     /**
      * 组装占位符参数 -> Map
      * 
-     * @param dataParam
-     * @param executeSql
-     * @return
-     * @throws DaoException
-     * @throws OgnlException
+     * @param dataParam <br>
+     * @param executeSql <br>
+     * @param sqlParamsMap <br>
+     * @throws DaoException <br>
      */
     private void installPlaceholderSqlParam(DataParam dataParam, String executeSql, Map<String, Object> sqlParamsMap)
         throws DaoException {
@@ -112,11 +133,11 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
     /**
      * 获取所需参数
      * 
-     * @param method
-     * @param args
-     * @param dataParam
-     * @return
-     * @throws DaoException
+     * @param method <br>
+     * @param args <br>
+     * @param dataParam <br>
+     * @return <br>
+     * @throws DaoException <br>
      */
     private Map<String, Object> loadDaoMetaData(Method method, Object[] args, DataParam dataParam) throws DaoException {
         Map<String, Object> paramMap;
@@ -154,11 +175,11 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
     }
 
     /**
-     * @param method
-     * @param sql
-     * @param param
-     * @return
-     * @throws DaoException
+     * executeSql
+     * @param sql <br>
+     * @param param <br>
+     * @return <br>
+     * @throws DaoException <br>
      */
     private Object excuteSql(String sql, DataParam param) throws DaoException {
         Object result = null;
@@ -176,11 +197,12 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
     }
 
     /**
-     * @param method
-     * @param templateSql
-     * @param sqlParamsMap
-     * @return
-     * @throws UtilException
+     * parseSqlTemplate
+     * @param method <br>
+     * @param templateSql <br>
+     * @param sqlParamsMap <br>
+     * @return <br>
+     * @throws UtilException <br>
      */
     private String parseSqlTemplate(Method method, String templateSql, Map<String, Object> sqlParamsMap)
         throws UtilException {

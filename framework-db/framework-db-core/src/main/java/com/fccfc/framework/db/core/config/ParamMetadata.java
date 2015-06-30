@@ -18,47 +18,78 @@ import com.fccfc.framework.db.core.BaseEntity;
 public class ParamMetadata extends BaseEntity {
 
     /**
-     * 
+     * serialVersionUID
      */
     private static final long serialVersionUID = -4716201082587162232L;
 
+    /**
+     * indexPosition
+     */
     private int indexPosition = -1;
 
+    /**
+     * sizePosition
+     */
     private int sizePosition = -1;
 
+    /**
+     * callBackPosition
+     */
     private int callBackPosition = -1;
 
+    /**
+     * paramNames
+     */
     private String[] paramNames;
 
+    /**
+     * beanType
+     */
     private Class<?> beanType;
 
+    /**
+     * returnType
+     */
     private Class<?> returnType;
 
+    /**
+     * dbId
+     */
     private String dbId;
 
+    /**
+     * ParamMetadata
+     */
     public ParamMetadata() {
         paramNames = new String[1];
     }
 
+    /**
+     * ParamMetadata
+     * @param size <br>
+     */
     public ParamMetadata(int size) {
         paramNames = new String[size];
     }
 
     /**
-     * @return the indexPosition
+     * getIndexPosition
+     * @return <br>
      */
     public int getIndexPosition() {
         return indexPosition;
     }
 
     /**
-     * @param indexPosition the indexPosition to set
+     * setIndexPosition
+     * @param indexPosition <br>
      */
     public void setIndexPosition(int indexPosition) {
         this.indexPosition = indexPosition;
     }
 
     /**
+     * getSizePosition
      * @return the sizePosition
      */
     public int getSizePosition() {
@@ -66,21 +97,25 @@ public class ParamMetadata extends BaseEntity {
     }
 
     /**
-     * @param sizePosition the sizePosition to set
+     * setSizePosition
+     * @param sizePosition <br>
      */
     public void setSizePosition(int sizePosition) {
         this.sizePosition = sizePosition;
     }
 
     /**
-     * @return the paramNames
+     * getParamNames
+     * @return the paramNames <br>
      */
     public String[] getParamNames() {
         return paramNames;
     }
 
     /**
-     * @param paramNames the paramNames to set
+     * setParamName
+     * @param index <br>
+     * @param name <br>
      */
     public void setParamName(int index, String name) {
         this.paramNames[index] = name;
