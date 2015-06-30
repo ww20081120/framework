@@ -32,10 +32,31 @@ import com.fccfc.framework.common.utils.UtilException;
  */
 public final class IOUtil {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param filePath <br>
+     * @param in <br>
+     * @throws UtilException <br>
+     */
     public static void copyFileFromInputStream(String filePath, InputStream in) throws UtilException {
         copyFileFromInputStream(filePath, in, null);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param filePath <br>
+     * @param in <br>
+     * @param charset <br>
+     * @throws UtilException <br>
+     */
     public static void copyFileFromInputStream(String filePath, InputStream in, String charset) throws UtilException {
         OutputStream out = null;
         try {
@@ -57,6 +78,16 @@ public final class IOUtil {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param in <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
     public static String readString(InputStream in) throws UtilException {
         StringBuilder sb = new StringBuilder();
         BufferedReader reader = null;
@@ -81,8 +112,8 @@ public final class IOUtil {
      * Description: readFile<br>
      * 
      * @author 王伟 <br>
-     * @param filePath
-     * @return
+     * @param filePath <br>
+     * @return <br>
      * @throws IOException <br>
      */
     public static String readFile(String filePath) throws IOException {
@@ -109,6 +140,16 @@ public final class IOUtil {
         return null;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @param file <br>
+     * @throws UtilException <br>
+     */
     public static void writeFile(byte[] content, File file) throws UtilException {
         if (file != null) {
             BufferedOutputStream out = null;
@@ -130,9 +171,9 @@ public final class IOUtil {
      * Description: writeFile<br>
      * 
      * @author 王伟 <br>
-     * @param contents
-     * @param file
-     * @throws IOException <br>
+     * @param contents <br>
+     * @param file <br>
+     * @throws UtilException <br>
      */
     public static void writeFile(String contents, File file) throws UtilException {
         if (file != null) {

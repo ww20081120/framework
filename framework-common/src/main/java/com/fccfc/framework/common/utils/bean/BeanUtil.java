@@ -19,6 +19,15 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.springframework.beans.BeanUtils;
+
+
+import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.UtilException;
+import com.fccfc.framework.common.utils.logger.Logger;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -26,14 +35,6 @@ import javassist.NotFoundException;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
-
-import org.springframework.beans.BeanUtils;
-
-import com.fccfc.framework.common.ErrorCodeDef;
-import com.fccfc.framework.common.GlobalConstants;
-import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.common.utils.UtilException;
-import com.fccfc.framework.common.utils.logger.Logger;
 
 /**
  * <Description> <br>
@@ -45,17 +46,26 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 public final class BeanUtil {
 
+    /**
+     * SUB_PACKAGE_SCREEN_SUFFIX
+     */
     private static final String SUB_PACKAGE_SCREEN_SUFFIX = ".*";
 
-    private static final String SUB_PACKAGE_SCREEN_SUFFIX_RE = ".\\*";// 替换使用
+    /**
+     * SUB_PACKAGE_SCREEN_SUFFIX_RE
+     */
+    private static final String SUB_PACKAGE_SCREEN_SUFFIX_RE = ".\\*"; // 替换使用
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(BeanUtil.class);
 
     /**
      * 判断方法是否是抽象方法
      * 
-     * @param method
-     * @return
+     * @param method <br>
+     * @return <br>
      */
     public static boolean isAbstract(Method method) {
         int mod = method.getModifiers();
@@ -65,12 +75,12 @@ public final class BeanUtil {
     /**
      * 获取方法参数名称，按给定的参数类型匹配方法
      * 
-     * @param clazz
-     * @param method
-     * @param paramTypes
-     * @return
-     * @throws NotFoundException 如果类或者方法不存在
-     * @throws UtilException 如果最终编译的class文件不包含局部变量表信息
+     * @param clazz <br>
+     * @param method <br>
+     * @param paramTypes <br>
+     * @return <br>
+     * @throws NotFoundException 如果类或者方法不存在 <br>
+     * @throws UtilException 如果最终编译的class文件不包含局部变量表信息 <br>
      */
     public static String[] getMethodParamNames(Class<?> clazz, String method, Class<?>... paramTypes)
         throws NotFoundException, UtilException {
@@ -78,8 +88,9 @@ public final class BeanUtil {
         ClassPool pool = ClassPool.getDefault();
         CtClass cc = pool.get(clazz.getName());
         String[] paramTypeNames = new String[paramTypes.length];
-        for (int i = 0; i < paramTypes.length; i++)
+        for (int i = 0; i < paramTypes.length; i++) {
             paramTypeNames[i] = paramTypes[i].getName();
+        }
         CtMethod cm = cc.getDeclaredMethod(method, pool.get(paramTypeNames));
         return getMethodParamNames(cm);
     }
@@ -87,10 +98,10 @@ public final class BeanUtil {
     /**
      * 获取方法参数名称，匹配同名的某一个方法
      * 
-     * @param method
-     * @return
-     * @throws NotFoundException 如果类或者方法不存在
-     * @throws MissingLVException 如果最终编译的class文件不包含局部变量表信息
+     * @param method <br>
+     * @return <br>
+     * @throws NotFoundException 如果类或者方法不存在 <br>
+     * @throws UtilException <br>
      */
     public static String[] getMethodParamNames(Method method) throws NotFoundException, UtilException {
         return getMethodParamNames(method.getDeclaringClass(), method.getName(), method.getParameterTypes());
@@ -99,10 +110,10 @@ public final class BeanUtil {
     /**
      * 获取方法参数名称
      * 
-     * @param cm
-     * @return
-     * @throws NotFoundException
-     * @throws UtilException 如果最终编译的class文件不包含局部变量表信息
+     * @param cm <br>
+     * @return <br>
+     * @throws NotFoundException <br>
+     * @throws UtilException 如果最终编译的class文件不包含局部变量表信息 <br>
      */
     protected static String[] getMethodParamNames(CtMethod cm) throws NotFoundException, UtilException {
         CtClass cc = cm.getDeclaringClass();
@@ -113,22 +124,23 @@ public final class BeanUtil {
                 "class:{0} 不包含局部变量表信息，请使用编译器选项 javac -g:'{'vars'}'来编译源文件。", cc.getName());
         }
         LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
-        if (attr == null)
+        if (null == attr) {
             throw new UtilException(ErrorCodeDef.CAN_NOT_FIND_VER_NAME_10003,
                 "class:{0} 不包含局部变量表信息，请使用编译器选项 javac -g:'{'vars'}'来编译源文件。", cc.getName());
-
+        }
         String[] paramNames = new String[cm.getParameterTypes().length];
         int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
-        for (int i = 0; i < paramNames.length; i++)
+        for (int i = 0; i < paramNames.length; i++) {
             paramNames[i] = attr.variableName(i + pos);
+        }
         return paramNames;
     }
 
     /**
      * 获取对象的方法签名
      * 
-     * @param method
-     * @return
+     * @param method <br>
+     * @return <br>
      */
     public static String getMethodSignature(Method method) {
         StringBuilder sbuf = new StringBuilder();
@@ -147,9 +159,9 @@ public final class BeanUtil {
     /**
      * 从包package中获取所有的Class
      * 
-     * @param pack
-     * @return
-     * @throws UtilException
+     * @param pack <br>
+     * @return <br>
+     * @throws UtilException <br>
      */
     public static Set<Class<?>> getClasses(String pack) throws UtilException {
         // 是否循环迭代
@@ -211,13 +223,13 @@ public final class BeanUtil {
     /**
      * 以文件的形式来获取包下的所有Class <br>
      * 
-     * @author cmh
-     * @version 2014-2-16 下午6:59:03
-     * @param packageName
-     * @param packArr
-     * @param packagePath
-     * @param recursive
-     * @param classes
+     * @author cmh <br>
+     * @version 2014-2-16 下午6:59:03 <br>
+     * @param packageName <br>
+     * @param packArr <br>
+     * @param packagePath <br>
+     * @param recursive <br>
+     * @param classes <br>
      */
     private static void findAndAddClassesInPackageByFile(String packageName, String[] packArr, String packagePath,
         final boolean recursive, Set<Class<?>> classes) {
@@ -260,10 +272,10 @@ public final class BeanUtil {
                     if (packArr.length > 1) {
                         for (int i = 1; i < packArr.length; i++) {
                             if (classUrl.indexOf(packArr[i]) <= -1) {
-                                flag = flag && false;
+                                flag = flag & false;
                             }
                             else {
-                                flag = flag && true;
+                                flag = flag & true;
                             }
                         }
                     }
@@ -282,13 +294,14 @@ public final class BeanUtil {
     /**
      * 以Jar文件的形式来获取包下的所有Class <br>
      * 
-     * @author cmh
-     * @version 2014-2-16 下午7:51:05
-     * @param packageName
-     * @param url
-     * @param packageDirName
-     * @param recursive
-     * @param classes
+     * @author cmh <br>
+     * @version 2014-2-16 下午7:51:05 <br>
+     * @param packageName <br>
+     * @param url <br>
+     * @param packArr <br>
+     * @param packageDirName <br>
+     * @param recursive <br>
+     * @param classes <br>
      */
     private static void findAndAddClassesInPackageByJarFile(String packageName, String[] packArr, URL url,
         String packageDirName, final boolean recursive, Set<Class<?>> classes) {
@@ -332,10 +345,10 @@ public final class BeanUtil {
                                 if (packArr.length > 1) {
                                     for (int i = 1; i < packArr.length; i++) {
                                         if (packageName.indexOf(packArr[i]) <= -1) {
-                                            flag = flag && false;
+                                            flag = flag & false;
                                         }
                                         else {
-                                            flag = flag && true;
+                                            flag = flag & true;
                                         }
                                     }
                                 }
@@ -357,6 +370,15 @@ public final class BeanUtil {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param s <br>
+     * @return <br>
+     */
     public static String toUnderlineName(String s) {
         if (s == null) {
             return null;
@@ -375,8 +397,9 @@ public final class BeanUtil {
 
             if ((i >= 0) && Character.isUpperCase(c)) {
                 if (!upperCase || !nextUpperCase) {
-                    if (i > 0)
+                    if (i > 0) {
                         sb.append(GlobalConstants.UNDERLINE);
+                    }
                 }
                 upperCase = true;
             }
@@ -390,6 +413,15 @@ public final class BeanUtil {
         return sb.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param s <br>
+     * @return <br>
+     */
     public static String toCamelCase(String s) {
         if (s == null) {
             return null;
@@ -417,6 +449,15 @@ public final class BeanUtil {
         return sb.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param s <br>
+     * @return <br>
+     */
     public static String toCapitalizeCamelCase(String s) {
         if (s == null) {
             return null;
@@ -425,10 +466,27 @@ public final class BeanUtil {
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @return <br>
+     */
     public static boolean isSimpleValueType(Class<?> clazz) {
         return BeanUtils.isSimpleValueType(clazz);
     }
 
+    /**
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @return <br>
+     */
     public static boolean isSimpleProperty(Class<?> clazz) {
         return BeanUtils.isSimpleProperty(clazz);
     }

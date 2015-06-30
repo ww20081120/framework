@@ -28,8 +28,20 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 public final class DateUtil {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(DateUtil.class);
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param dateStr <br>
+     * @return <br>
+     */
     public static Date string2Date(String dateStr) {
         if (CommonUtil.isEmpty(dateStr)) {
             return null;
@@ -67,6 +79,16 @@ public final class DateUtil {
         return date;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param date <br>
+     * @param format <br>
+     * @return <br>
+     */
     public static Date string2Date(String date, String format) {
         if (CommonUtil.isEmpty(format)) {
             throw new IllegalArgumentException("the date format string is null!");
@@ -80,10 +102,29 @@ public final class DateUtil {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param date <br>
+     * @return <br>
+     */
     public static String date2String(Date date) {
         return date2String(date, DateConstants.DATETIME_FORMAT_19);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param date <br>
+     * @param format <br>
+     * @return <br>
+     */
     public static String date2String(Date date, String format) {
         String result = null;
         if (date != null) {
@@ -101,6 +142,16 @@ public final class DateUtil {
         return System.currentTimeMillis();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param date <br>
+     * @param formatStr <br>
+     * @return <br>
+     */
     public static String getDatetimeFormat(Date date, String formatStr) {
         if (CommonUtil.isNotEmpty(formatStr)) {
             Map<String, Object> param = new HashMap<String, Object>();

@@ -20,14 +20,28 @@ public class Logger {
      */
     private static final String SQL_LOG_NAME = "framework.sql.log";
 
+    /**
+     * logger
+     */
     private org.apache.log4j.Logger logger;
 
+    /**
+     * sqlLoger
+     */
     private static org.apache.log4j.Logger sqlLoger;
 
+    /**
+     * Logger
+     * @param clazz <br>
+     */
     public Logger(Class<?> clazz) {
         this.logger = org.apache.log4j.Logger.getLogger(clazz);
     }
 
+    /**
+     * Logger
+     * @param name <br>
+     */
     public Logger(String name) {
         this.logger = org.apache.log4j.Logger.getLogger(name);
     }
@@ -53,9 +67,9 @@ public class Logger {
 
     /**
      * 记录日志信息
-     * 
-     * @param message 日志信息
-     * @param params 日志信息
+     * @param t <br>
+     * @param message 日志信息 <br>
+     * @param params 日志信息 <br>
      */
     public void error(Throwable t, String message, Object... params) {
         logger.error(CommonUtil.messageFormat(message, params));
@@ -82,9 +96,9 @@ public class Logger {
 
     /**
      * 记录日志信息
-     * 
-     * @param message 日志信息
-     * @param params 日志信息
+     * @param t <br>
+     * @param message 日志信息 <br>
+     * @param params 日志信息 <br>
      */
     public void warn(Throwable t, String message, Object... params) {
         logger.warn(CommonUtil.messageFormat(message, params), t);
@@ -162,8 +176,8 @@ public class Logger {
 
     /**
      * sql日志
-     * 
-     * @param message 日志信息
+     * @param t <br>
+     * @param message 日志信息 <br>
      */
     public static void sqlErrorLog(String message, Throwable t) {
         if (sqlLoger == null) {

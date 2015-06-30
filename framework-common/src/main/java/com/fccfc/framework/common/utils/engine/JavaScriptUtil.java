@@ -27,6 +27,9 @@ import com.fccfc.framework.common.utils.UtilException;
  */
 public final class JavaScriptUtil {
 
+    /**
+     * 默认构造器
+     */
     private JavaScriptUtil() {
     }
 
