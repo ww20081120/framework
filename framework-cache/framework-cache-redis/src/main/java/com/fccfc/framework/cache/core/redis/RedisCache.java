@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import redis.clients.jedis.Jedis;
 
 import com.fccfc.framework.cache.core.AbstractCache;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
+import redis.clients.jedis.Jedis;
 
 /**
  * <Description> <br>
@@ -37,6 +37,11 @@ public class RedisCache extends AbstractCache {
      */
     private Jedis jedis;
 
+    /**
+     * RedisCache
+     * @param host <br>
+     * @param port <br>
+     */
     public RedisCache(String host, int port) {
         jedis = new Jedis(host, port);
     }
