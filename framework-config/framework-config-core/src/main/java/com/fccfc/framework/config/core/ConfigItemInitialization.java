@@ -32,13 +32,25 @@ import com.fccfc.framework.config.core.service.ConfigurationService;
  */
 public class ConfigItemInitialization implements Initialization {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(ConfigItemInitialization.class);
 
+    /**
+     * params
+     */
     private Map<String, String> params;
 
+    /**
+     * configurationService
+     */
     @Resource
     private ConfigurationService configurationService;
 
+    /**
+     * configService
+     */
     @Resource
     private ConfigService.Iface configService;
 

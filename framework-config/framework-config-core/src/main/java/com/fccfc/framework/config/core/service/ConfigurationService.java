@@ -19,5 +19,15 @@ import com.fccfc.framework.config.core.bean.ModulePojo;
  * @see com.fccfc.framework.core.config <br>
  */
 public interface ConfigurationService {
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     List<ModulePojo> selectAllModule() throws ServiceException;
 }
