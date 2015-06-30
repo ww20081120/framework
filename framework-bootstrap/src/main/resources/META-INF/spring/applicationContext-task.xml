@@ -10,6 +10,6 @@
         <property name="configLocation" value="classpath:quartz.properties" />
     </bean>
 
-    <bean name="taskListener" class="com.fccfc.framework.task.listener.TaskListener" />
-    <bean name="taskService" class="com.fccfc.framework.task.service.impl.TaskServiceImpl"></bean>
+    <bean name="taskListener" class="com.fccfc.framework.task.core.listener.TaskListener" />
+    <bean name="taskService" class="com.fccfc.framework.task.core.service.impl.TaskServiceImpl"></bean>
 </beans>

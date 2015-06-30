@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.fccfc</groupId>
+		<artifactId>framework-task</artifactId>
+		<version>${framework.version}</version>
+	</parent>
+	<artifactId>framework-task-core</artifactId>
+	<properties>
+		<quartz.version>2.2.1</quartz.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-task-api</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-db-core</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-db-sh</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>${quartz.version}</version>
+		</dependency>
+	</dependencies>
+</project>

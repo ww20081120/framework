@@ -8,6 +8,7 @@ package com.fccfc.framework.common.utils;
 import java.security.MessageDigest;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -54,9 +55,8 @@ public final class CommonUtil {
     }
 
     /**
+     * Description: 判断数组是否为NULL或为空<br>
      * 
-     * Description: 判断数组是否为NULL或为空<br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param t <br>
@@ -83,7 +83,7 @@ public final class CommonUtil {
      * 
      * @author 王伟 <br>
      * @param col <br>
-     * @return  <br>
+     * @return <br>
      */
     public static boolean isEmpty(Collection<?> col) {
         return col == null || col.isEmpty();
@@ -104,7 +104,7 @@ public final class CommonUtil {
      * Description: map是否为NULL或为空<br>
      * 
      * @author 王伟 <br>
-     * @param map  <br>
+     * @param map <br>
      * @return <br>
      */
     public static boolean isEmpty(Map<?, ?> map) {
@@ -187,9 +187,8 @@ public final class CommonUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param size <br>
@@ -208,16 +207,16 @@ public final class CommonUtil {
                 case 2:
                     sb.append((char) ('A' + RANDOM.nextInt(26)));
                     break;
-                default : ;
+                default:
+                    ;
             }
         }
         return sb.toString();
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param obj <br>
@@ -233,8 +232,22 @@ public final class CommonUtil {
 
     /**
      * 
-     * Description: <br> 
+     * Description:getDate <br> 
      *  
+     * @author 王伟 <br>
+     * @param time
+     * @return <br>
+     */
+    public static Date getDate(Long time) {
+        if (time != null) {
+            return new Date(time);
+        }
+        return null;
+    }
+
+    /**
+     * Description: <br>
+     * 
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param s <br>
