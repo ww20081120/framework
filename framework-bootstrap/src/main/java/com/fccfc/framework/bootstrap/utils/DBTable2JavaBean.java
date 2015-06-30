@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -46,24 +45,51 @@ import com.fccfc.framework.common.utils.io.IOUtil;
  */
 public class DBTable2JavaBean extends JFrame {
 
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * TITLE
+     */
     private static final String TITLE = "根据数据库生成javabean小工具";
 
+    /**
+     * filedNames
+     */
     private String[] filedNames = new String[] {
         "表名", "包名", "输出目录", "模板文件"
     };
 
+    /**
+     * textFields
+     */
     private JTextField[] textFields;
 
+    /**
+     * tips
+     */
     private JLabel[] tips;
 
+    /**
+     * dataSource
+     */
     private DataSource dataSource;
 
+    /**
+     * template
+     */
     private String template;
 
+    /**
+     * dateFormat
+     */
     private DateFormat dateFormat;
 
+    /**
+     * DBTable2JavaBean
+     */
     public DBTable2JavaBean() {
         dateFormat = new SimpleDateFormat(DateConstants.DATE_FORMAT_11);
 
@@ -122,6 +148,13 @@ public class DBTable2JavaBean extends JFrame {
         });
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     private void setDefaultValue() {
         tips[0].setText("表名不填则导出所有的表");
         textFields[1].setText("com.fccfc.framework.bootstrap.bean");
@@ -133,11 +166,19 @@ public class DBTable2JavaBean extends JFrame {
         textFields[3].setText(classPath + "com/fccfc/framework/bootstrap/utils/template");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws Exception <br>
+     */
     public void export() throws Exception {
 
         String tablename = textFields[0].getText();
         String packname = textFields[1].getText();
-        String dirstr = textFields[2].getText();// 空表示当前目录
+        String dirstr = textFields[2].getText(); // 空表示当前目录
         String tempPath = textFields[3].getText();
 
         if (CommonUtil.isEmpty(tempPath) || !new File(tempPath).exists()) {
@@ -168,7 +209,7 @@ public class DBTable2JavaBean extends JFrame {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        String outputdir = dir.getAbsolutePath();// bean的生成目录
+        String outputdir = dir.getAbsolutePath(); // bean的生成目录
 
         Connection conn = null;
 
@@ -195,9 +236,15 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
-     * 开始处理生成所有表 如果不传入表名，表示将数据库中所有表生成bean; 可以指定表名生成bean;
      * 
-     * @throws IOException
+     * Description: 开始处理生成所有表 如果不传入表名，表示将数据库中所有表生成bean; 可以指定表名生成bean;<br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param conn <br>
+     * @param packname <br>
+     * @param outputdir <br>
+     * @throws Exception <br>
      */
     public void parseAllTable(Connection conn, String packname, String outputdir) throws Exception {
         ResultSet rs = null;
@@ -219,13 +266,16 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
-     * 通过 mysql的 show create table TABLE_NAME逆向生成Bean;
      * 
-     * @param conn
-     * @param tname
-     * @param outputdir
-     * @param packname
-     * @throws IOException
+     * Description:通过 mysql的 show create table TABLE_NAME逆向生成Bean; <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param conn <br>
+     * @param tablename <br>
+     * @param packname <br>
+     * @param outputdir <br>
+     * @throws Exception <br>
      */
     public void parseTableByShowCreate(Connection conn, String tablename, String packname, String outputdir)
         throws Exception {
@@ -280,13 +330,19 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
-     * @param type
-     * @return
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param field <br>
+     * @param type <br>
+     * @return <br>
      */
     private String getMethodStr(String field, String type) {
         StringBuilder get = new StringBuilder('\n');
         get.append("    ").append("public ").append(type).append(" ");
-        if (type.equals("boolean")) {
+        if ("boolean".equals(type)) {
             get.append(field);
         }
         else {
@@ -297,7 +353,7 @@ public class DBTable2JavaBean extends JFrame {
 
         StringBuilder set = new StringBuilder("\n");
         set.append("    public void ");
-        if (type.equals("boolean")) {
+        if ("boolean".equals(type)) {
             set.append(field);
         }
         else {
@@ -310,10 +366,31 @@ public class DBTable2JavaBean extends JFrame {
         return get.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param src <br>
+     * @return <br>
+     */
     private String upperFirestChar(String src) {
         return src.substring(0, 1).toUpperCase().concat(src.substring(1));
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param field <br>
+     * @param type <br>
+     * @param cmt <br>
+     * @param pkColum <br>
+     * @return <br>
+     */
     private String getFieldStr(String field, String type, String cmt, String pkColum) {
         StringBuilder sb = new StringBuilder('\n');
         sb.append("    ").append("/** ").append(cmt).append(" */").append('\n');
@@ -327,7 +404,13 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
-     * mysql的类型转换到java 类型参考文章 http://hi.baidu.com/wwtvanessa/blog/item/9fe555945a07bd16d31b70cd.html
+     * 
+     * Description: mysql的类型转换到java 类型参考文章 http://hi.baidu.com/wwtvanessa/blog/item/9fe555945a07bd16d31b70cd.html<br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param type <br>
+     * @return <br>
      */
     private String typeTrans(String type) {
         if ("TINYINT".equals(type) || "INTEGER".equals(type) || "INT".equals(type)) {
@@ -351,7 +434,12 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
-     * @param args
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param args <br>
      */
     @SuppressWarnings("resource")
     public static void main(String[] args) {

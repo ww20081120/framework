@@ -33,19 +33,37 @@ import com.fccfc.framework.config.core.Configuration;
  */
 public class Startup {
 
+    /**
+     * xmlPath
+     */
     @Option(name = "-x", value = "classpath:/META-INF/spring/*.xml")
     private String xmlPath;
 
+    /**
+     * host
+     */
     @Option(name = "-h", value = "127.0.0.1")
     private String host;
 
+    /**
+     * port
+     */
     @Option(name = "-p", value = "7777")
     private String port;
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(Startup.class);
 
+    /**
+     * context
+     */
     private static ApplicationContext context;
 
+    /**
+     * paramMap
+     */
     private static Map<String, String> paramMap = null;
 
     /**
@@ -53,7 +71,7 @@ public class Startup {
      * 
      * @author 王伟 <br>
      * @param args <br>
-     * @throws IOException
+     * @throws IOException <br>
      */
     public static void main(String[] args) throws IOException {
 
@@ -78,6 +96,13 @@ public class Startup {
         logger.info("====================>系统正常停止运行<====================");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     private static void startShutdownServer() {
         DatagramSocket server = null;
         try {
