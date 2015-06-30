@@ -18,80 +18,89 @@ import com.fccfc.framework.common.FrameworkException;
 public class CacheException extends FrameworkException {
 
     /**
-     * 
+     * serialVersionUID
      */
     private static final long serialVersionUID = -863830498282709480L;
 
     /**
-     * @param exception
+     * CacheException
+     * @param exception <br>
      */
     public CacheException(FrameworkException exception) {
         super(exception);
     }
 
     /**
-     * @param code
-     * @param msg
-     * @param params
+     * CacheException
+     * @param code <br>
+     * @param msg <br>
+     * @param params <br>
      */
     public CacheException(int code, String msg, Object... params) {
         super(code, msg, params);
     }
 
     /**
-     * @param code
-     * @param arg0
-     * @param arg1
-     * @param params
+     * CacheException
+     * @param code <br>
+     * @param arg0 <br>
+     * @param arg1 <br>
+     * @param params <br>
      */
     public CacheException(int code, String arg0, Throwable arg1, Object... params) {
         super(code, arg0, arg1, params);
     }
 
     /**
-     * @param code
-     * @param arg0
-     * @param arg1
+     * CacheException
+     * @param code <br>
+     * @param arg0 <br>
+     * @param arg1 <br>
      */
     public CacheException(int code, String arg0, Throwable arg1) {
         super(code, arg0, arg1);
     }
 
     /**
-     * @param code
-     * @param msg
+     * CacheException
+     * @param code <br>
+     * @param msg <br>
      */
     public CacheException(int code, String msg) {
         super(code, msg);
     }
 
     /**
-     * @param code
-     * @param arg0
+     * CacheException
+     * @param code <br>
+     * @param arg0 <br>
      */
     public CacheException(int code, Throwable arg0) {
         super(code, arg0);
     }
 
     /**
-     * @param code
+     * CacheException
+     * @param code <br>
      */
     public CacheException(int code) {
         super(code);
     }
 
     /**
-     * @param arg0
-     * @param arg1
-     * @param params
+     * CacheException
+     * @param arg0 <br>
+     * @param arg1 <br>
+     * @param params <br>
      */
     public CacheException(String arg0, FrameworkException arg1, Object... params) {
         super(arg0, arg1, params);
     }
 
     /**
-     * @param arg0
-     * @param exception
+     * CacheException
+     * @param arg0 <br>
+     * @param exception <br>
      */
     public CacheException(String arg0, FrameworkException exception) {
         super(arg0, exception);

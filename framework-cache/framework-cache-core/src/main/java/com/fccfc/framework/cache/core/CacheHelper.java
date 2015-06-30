@@ -43,7 +43,7 @@ public final class CacheHelper {
      * Description: <br>
      * 
      * @author 王伟 <br>
-     * @param paths
+     * @param paths <br>
      * @return <br>
      */
     public static String buildKey(String... paths) {

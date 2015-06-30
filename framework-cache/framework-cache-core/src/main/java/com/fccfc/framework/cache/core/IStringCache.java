@@ -18,7 +18,8 @@ public interface IStringCache {
      * Description: 获取节点<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName 节点名称
+     * @param nodeName 节点名称 <br>
+     * @throws CacheException <br>
      * @return <br>
      */
     Map<String, String> getNode(String nodeName) throws CacheException;
@@ -27,8 +28,9 @@ public interface IStringCache {
      * Description: putNode<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
+     * @param nodeName <br>
      * @param node <br>
+     * @throws CacheException <br>
      */
     void putNode(String nodeName, Map<String, String> node) throws CacheException;
 
@@ -36,7 +38,8 @@ public interface IStringCache {
      * Description: removeNode<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
+     * @param nodeName <br>
+     * @throws CacheException <br>
      * @return <br>
      */
     boolean removeNode(String nodeName) throws CacheException;
@@ -45,8 +48,9 @@ public interface IStringCache {
      * Description: getValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
+     * @throws CacheException <br>
      * @return <br>
      */
     String getValue(String nodeName, String key) throws CacheException;
@@ -55,8 +59,9 @@ public interface IStringCache {
      * Description: putValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
+     * @throws CacheException <br>
      * @param t <br>
      */
     void putValue(String nodeName, String key, String t) throws CacheException;
@@ -65,8 +70,9 @@ public interface IStringCache {
      * Description: updateValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
+     * @param nodeName <br>
+     * @param key <br>
+     * @throws CacheException <br>
      * @param t <br>
      */
     void updateValue(String nodeName, String key, String t) throws CacheException;
@@ -75,9 +81,9 @@ public interface IStringCache {
      * Description: removeValue<br>
      * 
      * @author 王伟 <br>
-     * @param nodeName
-     * @param key
-     * @return <br>
+     * @param nodeName <br>
+     * @param key <br>
+     * @throws CacheException <br>
      */
     void removeValue(String nodeName, String key) throws CacheException;
 
@@ -85,7 +91,7 @@ public interface IStringCache {
      * Description: clean<br>
      * 
      * @author 王伟 <br>
-     * <br>
+     * @throws CacheException <br>>
      */
     void clean() throws CacheException;
 }
