@@ -26,18 +26,60 @@ import com.fccfc.framework.log.db.bean.TransLogStackPojo;
 @Dao
 public interface TransLogDao extends IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param pageIndex <br>
+     * @param pageSize <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(bean = TransLogPojo.class)
     List<TransLogPojo> listTransLog(@Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize)
         throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT COUNT(*) FROM TRANS_LOG", bean = Integer.class)
     int getTransLogListSize() throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param transId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(
-        value = "SELECT STACK_ID, SEQ, TRANS_ID, PARENT_STACK_ID, METHOD, BEGIN_TIME, END_TIME, CONSUME_TIME FROM TRANS_LOG_STACK WHERE TRANS_ID = :transId",
+        value = "SELECT STACK_ID, SEQ, TRANS_ID, PARENT_STACK_ID, METHOD, BEGIN_TIME, END_TIME, CONSUME_TIME FROM TRANS_LOG_STACK "
+              + " WHERE TRANS_ID = :transId",
         bean = TransLogStackPojo.class)
     List<TransLogStackPojo> listTransLogStack(@Param("transId") String transId) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param transId <br>
+     * @param stackId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT * FROM TRANS_LOG_STACK WHERE TRANS_ID = :transId AND STACK_ID = :stackId",
         bean = TransLogStackPojo.class)
     TransLogStackPojo getTransLogStackPojo(@Param("transId") String transId, @Param("stackId") String stackId)

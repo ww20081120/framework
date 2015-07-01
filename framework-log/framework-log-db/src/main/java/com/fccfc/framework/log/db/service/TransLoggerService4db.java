@@ -19,8 +19,17 @@ import com.fccfc.framework.log.core.AbstractTransLoggerService;
 public class TransLoggerService4db extends AbstractTransLoggerService {
 
     /**
-     * @see com.fccfc.framework.log.core.TransLoggerService#end(java.lang.String, long, long, long, java.lang.Object,
-     *      java.lang.Exception)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param stackId <br>
+     * @param beginTime <br>
+     * @param endTime <br>
+     * @param consumeTime <br>
+     * @param returnValue <br>
+     * @param e <br>
      */
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e) {
