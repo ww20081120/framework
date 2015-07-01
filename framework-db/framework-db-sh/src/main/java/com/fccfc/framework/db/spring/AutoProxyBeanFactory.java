@@ -29,6 +29,9 @@ import com.fccfc.framework.db.core.annotation.handler.SQLHandler;
  */
 public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(AutoProxyBeanFactory.class);
 
     /** 扫描路径 */
@@ -41,7 +44,13 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     private SQLHandler handler;
 
     /**
-     * @see org.springframework.beans.factory.config.BeanFactoryPostProcessor#postProcessBeanFactory(org.springframework.beans.factory.config.ConfigurableListableBeanFactory)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param beanFactory <br>
+     * @throws BeansException <br>
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {

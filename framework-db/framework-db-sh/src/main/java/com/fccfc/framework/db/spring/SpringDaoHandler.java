@@ -23,7 +23,14 @@ import com.fccfc.framework.db.core.annotation.handler.DaoHandler;
 public class SpringDaoHandler extends DaoHandler implements MethodInterceptor {
 
     /**
-     * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param invocation <br>
+     * @return <br>
+     * @throws Throwable <br>
      */
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {

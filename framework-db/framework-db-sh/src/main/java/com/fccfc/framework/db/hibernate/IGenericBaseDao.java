@@ -24,61 +24,65 @@ public interface IGenericBaseDao {
     /**
      * 保存
      * 
-     * @param t
-     * @throws DaoException
+     * @param t <br>
+     * @throws DaoException <br>
      */
     void save(BaseEntity t) throws DaoException;
 
     /**
      * 根据Id查询
      * 
-     * @param entityClass
-     * @param id
-     * @return
-     * @throws DaoException
+     * @param entityClass <br>
+     * @param id <br>
+     * @param <T> <br>
+     * @return <br>
+     * @throws DaoException <br>
      */
     <T extends BaseEntity> T getById(Class<T> entityClass, final Serializable id) throws DaoException;
 
     /**
      * 根据实体查询
      * 
-     * @param entity
-     * @return
-     * @throws DaoException
+     * @param entity <br>
+     * @return <br>
+     * @param <T> <br>
+     * @throws DaoException <br>
      */
     <T extends BaseEntity> T getByEntity(T entity) throws DaoException;
 
     /**
      * 更新实体
      * 
-     * @param entity
-     * @throws DaoException
+     * @param entity <br>
+     * @throws DaoException <br>
      */
     void update(BaseEntity entity) throws DaoException;
 
     /**
      * 删除实体
      * 
-     * @param entity
-     * @throws DaoException
+     * @param entity <br>
+     * @throws DaoException <br>
      */
     void delete(BaseEntity entity) throws DaoException;
 
     /**
      * 根据Id删除实体
      * 
-     * @param entityClass
-     * @param id
-     * @throws DaoException
+     * @param entityClass <br>
+     * @param id <br>
+     * @param <T> <br>
+     * @throws DaoException <br>
      */
     <T extends BaseEntity> void deleteById(Class<T> entityClass, final Serializable id) throws DaoException;
 
     /**
      * 根据实体查询
      * 
-     * @param entity
-     * @return
-     * @throws DaoException
+     * @param <T> <br>
+     * @param entityClass <br>
+     * @return <br>
+     * @throws DaoException <br>
      */
     <T extends BaseEntity> List<T> selectList(Class<T> entityClass) throws DaoException;
 }

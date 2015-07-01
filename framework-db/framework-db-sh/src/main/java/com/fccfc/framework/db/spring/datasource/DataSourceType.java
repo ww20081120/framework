@@ -14,5 +14,9 @@ package com.fccfc.framework.db.spring.datasource;
  * @see com.fccfc.framework.dao.datasource <br>
  */
 public enum DataSourceType {
+    
+    /**
+     * system
+     */
     system, biz
 }

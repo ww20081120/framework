@@ -32,12 +32,19 @@ public class AutoResultTransformer implements ResultTransformer {
      */
     private static final long serialVersionUID = 7131196081465940115L;
 
+    /**
+     * resultClass
+     */
     private final Class<?> resultClass;
 
+    /**
+     * isSimpleClass
+     */
     private final boolean isSimpleClass;
 
     /**
      * 默认构造函数
+     * @param resultClass <br>
      */
     public AutoResultTransformer(Class<?> resultClass) {
         if (resultClass == null) {
@@ -47,7 +54,16 @@ public class AutoResultTransformer implements ResultTransformer {
         this.isSimpleClass = BeanUtil.isSimpleValueType(resultClass) || Date.class.equals(resultClass);
     }
 
-    // 结果转换时，HIBERNATE调用此方法
+    /**
+     *  结果转换时，HIBERNATE调用此方法
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param tuple <br>
+     * @param aliases <br>
+     * @return <br>
+     */
     public Object transformTuple(Object[] tuple, String[] aliases) {
         if (CommonUtil.isEmpty(tuple)) {
             return null;
@@ -79,6 +95,16 @@ public class AutoResultTransformer implements ResultTransformer {
         return result;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @param value <br>
+     * @return <br>
+     */
     private Object getValue(Class<?> clazz, Object value) {
         if (value == null || clazz.isAssignableFrom(value.getClass())) {
             return value;
@@ -115,7 +141,10 @@ public class AutoResultTransformer implements ResultTransformer {
     }
 
     /**
+     * transformList
+     * @param collection <br>
      * @see org.hibernate.transform.ResultTransformer#transformList(java.util.List)
+     * @return <br>
      */
     @SuppressWarnings("rawtypes")
     @Override

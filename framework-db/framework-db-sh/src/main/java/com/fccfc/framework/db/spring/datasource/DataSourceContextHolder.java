@@ -14,6 +14,10 @@ package com.fccfc.framework.db.spring.datasource;
  * @see com.fccfc.framework.dao.datasource <br>
  */
 public class DataSourceContextHolder {
+    
+    /**
+     * contextHolder
+     */
     private static final ThreadLocal<DataSourceType> contextHolder;
 
     static {

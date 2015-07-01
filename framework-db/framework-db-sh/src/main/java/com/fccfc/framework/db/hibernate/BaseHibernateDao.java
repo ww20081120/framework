@@ -87,6 +87,16 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param paramMap <br>
+     * @param query <br>
+     * @throws DaoException <br>
+     */
     private void setParamMap(Map<String, Object> paramMap, Query query) throws DaoException {
         if (CommonUtil.isNotEmpty(paramMap)) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {
