@@ -30,6 +30,9 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 public abstract class AbstractTransLoggerService implements TransLoggerService {
 
+    /**
+     * logger
+     */
     private Logger logger = new Logger(AbstractTransLoggerService.class);
 
     /*
@@ -101,6 +104,16 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param ex <br>
+     * @return <br>
+     * @throws UnsupportedEncodingException <br>
+     */
     private String getExceptionMsg(Exception ex) throws UnsupportedEncodingException {
         String result = null;
         PrintWriter writer = null;
@@ -119,7 +132,13 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     }
 
     /**
-     * @see com.fccfc.framework.log.core.TransLoggerService#sql(java.lang.String, java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param stackId <br>
+     * @param sql <br>
      */
     @Override
     public void sql(String stackId, String sql) {

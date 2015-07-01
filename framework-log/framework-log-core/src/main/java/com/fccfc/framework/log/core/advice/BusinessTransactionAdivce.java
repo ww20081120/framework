@@ -33,6 +33,9 @@ import com.fccfc.framework.log.core.TransManager;
 
 public class BusinessTransactionAdivce {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(BusinessTransactionAdivce.class);
 
     /**
@@ -48,15 +51,21 @@ public class BusinessTransactionAdivce {
      */
     private String opendService;
 
+    /**
+     * serviceMap
+     */
     private Map<String, TransLoggerService> serviceMap;
 
+    /**
+     * transLoggerServices
+     */
     private List<TransLoggerService> transLoggerServices;
 
     /**
      * 方法执行前拦截
      * 
      * @param point 参数
-     * @throws FrameworkException
+     * @throws FrameworkException <br>
      */
     public void before(JoinPoint point) throws FrameworkException {
         // 开始执行时间
@@ -178,8 +187,8 @@ public class BusinessTransactionAdivce {
     /**
      * 获取 方法描述
      * 
-     * @param point
-     * @return
+     * @param point <br>
+     * @return <br>
      */
     private String getMethodSignature(JoinPoint point) {
         StringBuilder sbuf = new StringBuilder();
@@ -197,6 +206,14 @@ public class BusinessTransactionAdivce {
         return sbuf.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     private List<TransLoggerService> getTransLoggerServices() {
         if (transLoggerServices == null) {
             transLoggerServices = new ArrayList<TransLoggerService>();

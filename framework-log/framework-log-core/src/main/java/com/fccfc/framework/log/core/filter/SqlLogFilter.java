@@ -27,14 +27,31 @@ import com.fccfc.framework.log.core.TransLoggerService;
 import com.fccfc.framework.log.core.TransManager;
 
 /**
- * @author Administrator
+ * 
+ * <Description> <br> 
+ *  
+ * @author yang.zhipeng <br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2015年7月1日 <br>
+ * @since V7.3<br>
+ * @see com.fccfc.framework.log.core.filter <br>
  */
 public class SqlLogFilter extends FilterEventAdapter {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(SqlLogFilter.class);
 
+    /**
+     * dataSource
+     */
     protected DataSourceProxy dataSource;
 
+    /**
+     * SqlLogFilter
+     */
     public SqlLogFilter() {
     }
 
@@ -43,36 +60,109 @@ public class SqlLogFilter extends FilterEventAdapter {
         this.dataSource = dataSource;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     */
     protected void connectionLog(String message) {
         Logger.sqlInfoLog(message);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     */
     protected void statementLog(String message) {
         Logger.sqlInfoLog(message);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @param error <br>
+     */
     protected void statementLogError(String message, Throwable error) {
         Logger.sqlErrorLog(message, error);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     */
     protected void resultSetLog(String message) {
         // LogUtil.sqlInfoLog(message);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @param error <br>
+     */
     protected void resultSetLogError(String message, Throwable error) {
         Logger.sqlErrorLog(message, error);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param connection <br>
+     */
     public void connection_connectAfter(ConnectionProxy connection) {
         connectionLog("{conn-" + connection.getId() + "} connected");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public Savepoint connection_setSavepoint(FilterChain chain, ConnectionProxy connection) throws SQLException {
         Savepoint savepoint = chain.connection_setSavepoint(connection);
         return savepoint;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @param name <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public Savepoint connection_setSavepoint(FilterChain chain, ConnectionProxy connection, String name)
         throws SQLException {
@@ -80,12 +170,33 @@ public class SqlLogFilter extends FilterEventAdapter {
         return savepoint;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void connection_rollback(FilterChain chain, ConnectionProxy connection) throws SQLException {
         super.connection_rollback(chain, connection);
         connectionLog("{conn " + connection.getId() + "} rollback");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @param savePoint <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void connection_rollback(FilterChain chain, ConnectionProxy connection, Savepoint savePoint)
         throws SQLException {
@@ -93,12 +204,33 @@ public class SqlLogFilter extends FilterEventAdapter {
         connectionLog("{conn " + connection.getId() + "} rollback -> " + savePoint.getSavepointId());
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void connection_commit(FilterChain chain, ConnectionProxy connection) throws SQLException {
         super.connection_commit(chain, connection);
         connectionLog("{conn-" + connection.getId() + "} commited");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @param autoCommit <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void connection_setAutoCommit(FilterChain chain, ConnectionProxy connection, boolean autoCommit)
         throws SQLException {
@@ -106,12 +238,32 @@ public class SqlLogFilter extends FilterEventAdapter {
         chain.connection_setAutoCommit(connection, autoCommit);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param connection <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void connection_close(FilterChain chain, ConnectionProxy connection) throws SQLException {
         super.connection_close(chain, connection);
         connectionLog("{conn-" + connection.getId() + "} closed");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param statement <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void statement_close(FilterChain chain, StatementProxy statement) throws SQLException {
         super.statement_close(chain, statement);
@@ -205,16 +357,49 @@ public class SqlLogFilter extends FilterEventAdapter {
         saveMsg2Cache(sqlMsg);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param resultSet <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void resultSet_close(FilterChain chain, ResultSetProxy resultSet) throws SQLException {
         chain.resultSet_close(resultSet);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param resultSet <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public boolean resultSet_next(FilterChain chain, ResultSetProxy resultSet) throws SQLException {
         return super.resultSet_next(chain, resultSet);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param statement <br>
+     * @param parameterIndex <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, int parameterIndex)
         throws SQLException {
@@ -227,6 +412,19 @@ public class SqlLogFilter extends FilterEventAdapter {
         return obj;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param statement <br>
+     * @param parameterIndex <br>
+     * @param map <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, int parameterIndex,
         java.util.Map<String, Class<?>> map) throws SQLException {
@@ -239,6 +437,18 @@ public class SqlLogFilter extends FilterEventAdapter {
         return obj;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param statement <br>
+     * @param parameterName <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, String parameterName)
         throws SQLException {
@@ -251,6 +461,19 @@ public class SqlLogFilter extends FilterEventAdapter {
         return obj;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param statement <br>
+     * @param parameterName <br>
+     * @param map <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement,
         String parameterName, java.util.Map<String, Class<?>> map) throws SQLException {
@@ -267,18 +490,52 @@ public class SqlLogFilter extends FilterEventAdapter {
     protected void resultSetOpenAfter(ResultSetProxy resultSet) {
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     */
     protected void statementCreateAfter(StatementProxy statement) {
         statementLog("{conn-" + statement.getConnectionProxy().getId() + ", stmt-" + statement.getId() + "} created");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     */
     protected void statementPrepareAfter(PreparedStatementProxy statement) {
         statementLog("{conn-" + statement.getConnectionProxy().getId() + ", pstmt-" + statement.getId() + "} created. ");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     */
     protected void statementPrepareCallAfter(CallableStatementProxy statement) {
         statementLog("{conn-" + statement.getConnectionProxy().getId() + ", cstmt-" + statement.getId() + "} created. ");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     * @param sql <br>
+     * @param error <br>
+     */
     @Override
     protected void statement_executeErrorAfter(StatementProxy statement, String sql, Throwable error) {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
@@ -287,6 +544,15 @@ public class SqlLogFilter extends FilterEventAdapter {
         saveMsg2Cache(sqlMsg);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     * @return <br>
+     */
     private String stmtId(StatementProxy statement) {
         StringBuffer buf = new StringBuffer();
         if (statement instanceof CallableStatementProxy) {
@@ -303,9 +569,27 @@ public class SqlLogFilter extends FilterEventAdapter {
         return buf.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     */
     protected void logParameter(PreparedStatementProxy statement) {
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param conn <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void dataSource_releaseConnection(FilterChain chain, DruidPooledConnection conn) throws SQLException {
         long connectionId = -1;
@@ -319,6 +603,18 @@ public class SqlLogFilter extends FilterEventAdapter {
         connectionLog("{conn-" + connectionId + "} pool-recycle");
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param dataSource <br>
+     * @param maxWaitMillis <br>
+     * @return <br>
+     * @throws SQLException <br>
+     */
     @Override
     public DruidPooledConnection dataSource_getConnection(FilterChain chain, DruidDataSource dataSource,
         long maxWaitMillis) throws SQLException {
@@ -329,12 +625,31 @@ public class SqlLogFilter extends FilterEventAdapter {
         return conn;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param chain <br>
+     * @param statement <br>
+     * @throws SQLException <br>
+     */
     @Override
     public void preparedStatement_clearParameters(FilterChain chain, PreparedStatementProxy statement)
         throws SQLException {
         chain.preparedStatement_clearParameters(statement);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param statement <br>
+     * @return <br>
+     */
     private String getExcuteSql(PreparedStatementProxy statement) {
         String sqlStr = statement.getSql();
         for (JdbcParameter parameter : statement.getParameters().values()) {
@@ -350,7 +665,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     /**
      * 保存日志信息岛缓存
      * 
-     * @param msg
+     * @param msg <br>
      */
     private void saveMsg2Cache(String msg) {
         TransManager manager = TransManager.getInstance();

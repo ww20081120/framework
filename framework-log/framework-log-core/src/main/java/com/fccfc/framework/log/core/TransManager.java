@@ -48,10 +48,13 @@ public final class TransManager implements Serializable {
     private Stack<String> executeStack;
 
     /**
-     * 
+     * executeTimeMap
      */
     private Map<String, Long> executeTimeMap;
 
+    /**
+     * transLoggerServices
+     */
     private List<TransLoggerService> transLoggerServices;
 
     /**
@@ -84,15 +87,40 @@ public final class TransManager implements Serializable {
         return executeStack.size();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param id <br>
+     * @param beginTime <br>
+     */
     public void push(String id, long beginTime) {
         executeTimeMap.put(id, beginTime);
         executeStack.push(id);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String pop() {
         return executeStack.isEmpty() ? null : executeStack.pop();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String peek() {
         return executeStack.isEmpty() ? null : executeStack.peek();
     }
@@ -109,6 +137,15 @@ public final class TransManager implements Serializable {
         this.error = error;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param id <br>
+     * @return <br>
+     */
     public long getBeginTime(String id) {
         return executeTimeMap.get(id);
     }
@@ -121,6 +158,13 @@ public final class TransManager implements Serializable {
         this.timeout = timeout;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void clean() {
         executeStack.clear();
         executeTimeMap.clear();
