@@ -24,6 +24,9 @@ import com.fccfc.framework.log.core.TransManager;
 @Service
 public class TransLoggerService4File extends AbstractTransLoggerService {
 
+    /**
+     * logger
+     */
     private Logger logger = new Logger(TransLoggerService4File.class);
 
     /*
