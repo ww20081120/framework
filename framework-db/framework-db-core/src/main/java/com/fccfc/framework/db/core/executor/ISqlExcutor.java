@@ -19,29 +19,30 @@ public interface ISqlExcutor {
     /**
      * 查询
      * 
-     * @param sql
-     * @param param
-     * @return
-     * @throws DaoException
+     * @param sql <br>
+     * @param param <br>
+     * @return <br>
+     * @throws DaoException <br>
      */
     Object query(String sql, DataParam param) throws DaoException;
 
     /**
      * 执行sql语句
      * 
-     * @param sql sql
-     * @param param params
-     * @return Object
-     * @throws DaoException DaoException
+     * @param sql sql <br>
+     * @param param params <br>
+     * @return Object <br>
+     * @throws DaoException DaoException <br>
      */
     int excuteSql(String sql, DataParam param) throws DaoException;
 
     /**
      * 批处理sql
      * 
-     * @param sql
-     * @return
-     * @throws DaoException
+     * @param sql <br>
+     * @param param <br>
+     * @return <br>
+     * @throws DaoException <br>
      */
     int[] batchExcuteSql(String[] sql, DataParam param) throws DaoException;
 }

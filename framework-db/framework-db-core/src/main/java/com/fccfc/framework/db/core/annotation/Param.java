@@ -25,9 +25,23 @@ import com.fccfc.framework.db.core.DaoConstants;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface Param {
+    
+    /**
+     * pageSize
+     */
     String pageSize = DaoConstants.PAGE_SIZE;
 
+    /**
+     * pageIndex
+     */
     String pageIndex = DaoConstants.PAGE_INDEX;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     */
     String value() default "";
 }

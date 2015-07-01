@@ -20,6 +20,15 @@ import com.fccfc.framework.common.utils.CommonUtil;
  */
 public class SQLHandler extends AbstractAnnotationHandler {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @throws InitializationException <br>
+     */
     public void invoke(Class<?> clazz) throws InitializationException {
         Method[] methods = clazz.getDeclaredMethods();
         if (CommonUtil.isNotEmpty(methods)) {

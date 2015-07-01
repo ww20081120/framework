@@ -28,6 +28,7 @@ public class DaoConfig {
     private Class<?> callBackType;
 
     /**
+     * isCache
      * @return the cache
      */
     public boolean isCache() {
@@ -35,6 +36,7 @@ public class DaoConfig {
     }
 
     /**
+     * setCache
      * @param cache the cache to set
      */
     public void setCache(boolean cache) {
@@ -42,6 +44,7 @@ public class DaoConfig {
     }
 
     /**
+     * getDbType
      * @return the dbType
      */
     public String getDbType() {
@@ -49,6 +52,7 @@ public class DaoConfig {
     }
 
     /**
+     * setDbType
      * @param dbType the dbType to set
      */
     public void setDbType(String dbType) {
@@ -56,6 +60,7 @@ public class DaoConfig {
     }
 
     /**
+     * getBaseDao
      * @return the baseDao
      */
     public Object getBaseDao() {
@@ -63,6 +68,7 @@ public class DaoConfig {
     }
 
     /**
+     * setBaseDao
      * @param baseDao the baseDao to set
      */
     public void setBaseDao(Object baseDao) {
@@ -77,6 +83,15 @@ public class DaoConfig {
         this.callBackType = callBackType;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param typeName <br>
+     * @throws ClassNotFoundException <br>
+     */
     public void setCallBackType(String typeName) throws ClassNotFoundException {
         this.callBackType = Class.forName(typeName);
     }

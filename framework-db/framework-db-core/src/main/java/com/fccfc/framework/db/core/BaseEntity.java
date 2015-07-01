@@ -20,12 +20,14 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  */
 public abstract class BaseEntity implements Serializable {
     /**
-     * 
+     * serialVersionUID
      */
     private static final long serialVersionUID = 540091732380370744L;
 
     /**
+     * toString
      * @see java.lang.Object#toString()
+     * @return <br>
      */
     @Override
     public String toString() {

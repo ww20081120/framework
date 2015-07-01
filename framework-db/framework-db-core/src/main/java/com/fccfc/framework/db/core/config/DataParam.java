@@ -16,18 +16,40 @@ import java.util.Map;
  * @see com.fccfc.framework.dao.datasource <br>
  */
 public class DataParam {
+    
+    /**
+     * pageIndex
+     */
     private int pageIndex = -1;
 
+    /**
+     * pageSize
+     */
     private int pageSize = -1;
 
+    /**
+     * paramMap
+     */
     private Map<String, Object> paramMap;
 
+    /**
+     * beanType
+     */
     private Class<?> beanType;
 
+    /**
+     * returnType
+     */
     private Class<?> returnType;
 
+    /**
+     * callback
+     */
     private Object callback;
 
+    /**
+     * dbId
+     */
     private String dbId;
 
     public int getPageIndex() {
@@ -87,7 +109,9 @@ public class DataParam {
     }
 
     /**
+     * toString
      * @see java.lang.Object#toString()
+     * @return <br>
      */
     @Override
     public String toString() {
