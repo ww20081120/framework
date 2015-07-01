@@ -2371,24 +2371,44 @@ public class MessageService {
     public static class resendMessage_args implements
         org.apache.thrift.TBase<resendMessage_args, resendMessage_args._Fields>, java.io.Serializable, Cloneable,
         Comparable<resendMessage_args> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "resendMessage_args");
 
+        /**
+         * MESSAGE_ID_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField MESSAGE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "messageId", org.apache.thrift.protocol.TType.I64, (short) 1);
 
+        /**
+         * schemes
+         */
         private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
             schemes.put(StandardScheme.class, new resendMessage_argsStandardSchemeFactory());
             schemes.put(TupleScheme.class, new resendMessage_argsTupleSchemeFactory());
         }
 
+        /**
+         * messageId
+         */
         public long messageId; // required
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+            
+            /**
+             * MESSAGE_ID
+             */
             MESSAGE_ID((short) 1, "messageId");
 
+            /**
+             * byName
+             */
             private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
             static {
@@ -2399,6 +2419,8 @@ public class MessageService {
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -2411,25 +2433,41 @@ public class MessageService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
             public static _Fields findByName(String name) {
                 return byName.get(name);
             }
 
+            /**
+             * _thriftId
+             */
             private final short _thriftId;
 
+            /**
+             * _fieldName
+             */
             private final String _fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
                 _thriftId = thriftId;
                 _fieldName = fieldName;
@@ -2444,11 +2482,19 @@ public class MessageService {
             }
         }
 
-        // isset id assignments
+        /**
+         *  isset id assignments
+         */
         private static final int __MESSAGEID_ISSET_ID = 0;
 
+        /**
+         * __isset_bitfield
+         */
         private byte __isset_bitfield = 0;
 
+        /**
+         * metaDataMap
+         */
         public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
@@ -2460,9 +2506,16 @@ public class MessageService {
             org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resendMessage_args.class, metaDataMap);
         }
 
+        /**
+         * resendMessage_args
+         */
         public resendMessage_args() {
         }
 
+        /**
+         * resendMessage_args
+         * @param messageId <br>
+         */
         public resendMessage_args(long messageId) {
             this();
             this.messageId = messageId;
@@ -2471,12 +2524,21 @@ public class MessageService {
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public resendMessage_args(resendMessage_args other) {
             __isset_bitfield = other.__isset_bitfield;
             this.messageId = other.messageId;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public resendMessage_args deepCopy() {
             return new resendMessage_args(this);
         }
@@ -2491,17 +2553,34 @@ public class MessageService {
             return this.messageId;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param messageId <br>
+         * @return <br>
+         */
         public resendMessage_args setMessageId(long messageId) {
             this.messageId = messageId;
             setMessageIdIsSet(true);
             return this;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void unsetMessageId() {
             __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __MESSAGEID_ISSET_ID);
         }
 
-        /** Returns true if field messageId is set (has been assigned a value) and false otherwise */
+        /** Returns true if field messageId is set (has been assigned a value) and false otherwise
+         * @return <br> */
         public boolean isSetMessageId() {
             return EncodingUtils.testBit(__isset_bitfield, __MESSAGEID_ISSET_ID);
         }
@@ -2510,6 +2589,15 @@ public class MessageService {
             __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __MESSAGEID_ISSET_ID, value);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
                 case MESSAGE_ID:
@@ -2520,20 +2608,32 @@ public class MessageService {
                         setMessageId((Long) value);
                     }
                     break;
-
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
                 case MESSAGE_ID:
                     return Long.valueOf(getMessageId());
-
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
@@ -2542,16 +2642,19 @@ public class MessageService {
             switch (field) {
                 case MESSAGE_ID:
                     return isSetMessageId();
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof resendMessage_args)
+            }
+            if (that instanceof resendMessage_args) {
                 return this.equals((resendMessage_args) that);
+            }
             return false;
         }
 
