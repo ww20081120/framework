@@ -79,11 +79,11 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
     /**
      * schemes
      */
-    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
 
     static {
-        schemes.put(StandardScheme.class, new AttachmentStandardSchemeFactory());
-        schemes.put(TupleScheme.class, new AttachmentTupleSchemeFactory());
+        SCHEMES.put(StandardScheme.class, new AttachmentStandardSchemeFactory());
+        SCHEMES.put(TupleScheme.class, new AttachmentTupleSchemeFactory());
     }
 
     /**
@@ -142,11 +142,11 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
         /**
          * byName
          */
-        private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+        private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
         static {
             for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                byName.put(field.getFieldName(), field);
+                BY_NAME.put(field.getFieldName(), field);
             }
         }
 
@@ -192,18 +192,18 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
          * @return <br>
          */
         public static _Fields findByName(String name) {
-            return byName.get(name);
+            return BY_NAME.get(name);
         }
 
         /**
          * _thriftId
          */
-        private final short _thriftId;
+        private final short thriftId;
 
         /**
          * _fieldName
          */
-        private final String _fieldName;
+        private final String fieldName;
 
         /**
          * _Fields
@@ -211,45 +211,45 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
          * @param fieldName <br>
          */
         _Fields(short thriftId, String fieldName) {
-            _thriftId = thriftId;
-            _fieldName = fieldName;
+            this.thriftId = thriftId;
+            this.fieldName = fieldName;
         }
 
         public short getThriftFieldId() {
-            return _thriftId;
+            return thriftId;
         }
 
         public String getFieldName() {
-            return _fieldName;
+            return fieldName;
         }
     }
 
     /**
      *  isset id assignments
      */
-    private static final int __ID_ISSET_ID = 0;
+    private static final int ID_ISSET_ID = 0;
 
     /**
-     * __FILESIZE_ISSET_ID
+     * FILESIZE_ISSET_ID
      */
-    private static final int __FILESIZE_ISSET_ID = 1;
+    private static final int FILESIZE_ISSET_ID = 1;
 
     /**
-     * __isset_bitfield
+     * isset_bitfield
      */
-    private byte __isset_bitfield = 0;
+    private byte issetBitfield = 0;
 
     /**
      * optionals
      */
-    private static final _Fields optionals[] = {
+    private static final _Fields OPTIONALS[] = {
         _Fields.ID, _Fields.NAME, _Fields.FILE_SIZE
     };
 
     /**
      * metaDataMap
      */
-    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
     static {
         Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
             _Fields.class);
@@ -268,8 +268,8 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
         tmpMap.put(_Fields.URL, new org.apache.thrift.meta_data.FieldMetaData("url",
             org.apache.thrift.TFieldRequirementType.REQUIRED, new org.apache.thrift.meta_data.FieldValueMetaData(
                 org.apache.thrift.protocol.TType.STRING)));
-        metaDataMap = Collections.unmodifiableMap(tmpMap);
-        org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Attachment.class, metaDataMap);
+        META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+        org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Attachment.class, META_DATA_MAP);
     }
 
     /**
@@ -294,7 +294,7 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
      * @param other <br>
      */
     public Attachment(Attachment other) {
-        __isset_bitfield = other.__isset_bitfield;
+        issetBitfield = other.issetBitfield;
         this.id = other.id;
         if (other.isSetType()) {
             this.type = other.type;
@@ -358,18 +358,18 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
      * @taskId <br> <br>
      */
     public void unsetId() {
-        __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __ID_ISSET_ID);
+        issetBitfield = EncodingUtils.clearBit(issetBitfield, ID_ISSET_ID);
     }
 
     /** Returns true if field id is set (has been assigned a value) and false otherwise 
      * @return <br>
      * */
     public boolean isSetId() {
-        return EncodingUtils.testBit(__isset_bitfield, __ID_ISSET_ID);
+        return EncodingUtils.testBit(issetBitfield, ID_ISSET_ID);
     }
 
     public void setIdIsSet(boolean value) {
-        __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ID_ISSET_ID, value);
+        issetBitfield = EncodingUtils.setBit(issetBitfield, ID_ISSET_ID, value);
     }
 
     public String getType() {
@@ -499,18 +499,18 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
      * @taskId <br> <br>
      */
     public void unsetFileSize() {
-        __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __FILESIZE_ISSET_ID);
+        issetBitfield = EncodingUtils.clearBit(issetBitfield, FILESIZE_ISSET_ID);
     }
 
     /** Returns true if field fileSize is set (has been assigned a value) and false otherwise 
      * @return <br>
      * */
     public boolean isSetFileSize() {
-        return EncodingUtils.testBit(__isset_bitfield, __FILESIZE_ISSET_ID);
+        return EncodingUtils.testBit(issetBitfield, FILESIZE_ISSET_ID);
     }
 
     public void setFileSizeIsSet(boolean value) {
-        __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __FILESIZE_ISSET_ID, value);
+        issetBitfield = EncodingUtils.setBit(issetBitfield, FILESIZE_ISSET_ID, value);
     }
 
     public String getUrl() {
@@ -881,7 +881,7 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
      * @throws org.apache.thrift.TException <br>
      */
     public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-        schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+        SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
     /**
@@ -894,7 +894,7 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
      * @throws org.apache.thrift.TException <br>
      */
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-        schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+        SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
 
     @Override
@@ -1008,7 +1008,7 @@ public class Attachment implements org.apache.thrift.TBase<Attachment, Attachmen
         try {
             // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the
             // default constructor.
-            __isset_bitfield = 0;
+            issetBitfield = 0;
             read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
         }
         catch (org.apache.thrift.TException te) {

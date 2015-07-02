@@ -217,8 +217,8 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public long sendMessage(String templateCode, Message message) throws org.apache.thrift.TException {
-            send_sendMessage(templateCode, message);
-            return recv_sendMessage();
+            sendSendMessage(templateCode, message);
+            return recvSendMessage();
         }
 
         /**
@@ -231,8 +231,8 @@ public class MessageService {
          * @param message <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void send_sendMessage(String templateCode, Message message) throws org.apache.thrift.TException {
-            sendMessage_args args = new sendMessage_args();
+        public void sendSendMessage(String templateCode, Message message) throws org.apache.thrift.TException {
+            SendMessageArgs args = new SendMessageArgs();
             args.setTemplateCode(templateCode);
             args.setMessage(message);
             sendBase("sendMessage", args);
@@ -247,8 +247,8 @@ public class MessageService {
          * @return <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public long recv_sendMessage() throws org.apache.thrift.TException {
-            sendMessage_result result = new sendMessage_result();
+        public long recvSendMessage() throws org.apache.thrift.TException {
+            SendMessageResult result = new SendMessageResult();
             receiveBase(result, "sendMessage");
             if (result.isSetSuccess()) {
                 return result.success;
@@ -267,8 +267,8 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void resendMessage(long messageId) throws org.apache.thrift.TException {
-            send_resendMessage(messageId);
-            recv_resendMessage();
+            sendResendMessage(messageId);
+            recvResendMessage();
         }
 
         /**
@@ -280,8 +280,8 @@ public class MessageService {
          * @param messageId <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void send_resendMessage(long messageId) throws org.apache.thrift.TException {
-            resendMessage_args args = new resendMessage_args();
+        public void sendResendMessage(long messageId) throws org.apache.thrift.TException {
+            ResendMessageArgs args = new ResendMessageArgs();
             args.setMessageId(messageId);
             sendBase("resendMessage", args);
         }
@@ -294,8 +294,8 @@ public class MessageService {
          * @taskId <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void recv_resendMessage() throws org.apache.thrift.TException {
-            resendMessage_result result = new resendMessage_result();
+        public void recvResendMessage() throws org.apache.thrift.TException {
+            ResendMessageResult result = new ResendMessageResult();
             receiveBase(result, "resendMessage");
             return;
         }
@@ -389,7 +389,7 @@ public class MessageService {
         public void sendMessage(String templateCode, Message message,
             org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
             checkReady();
-            sendMessage_call method_call = new sendMessage_call(templateCode, message, resultHandler, this,
+            SendMessageCall method_call = new SendMessageCall(templateCode, message, resultHandler, this,
                 ___protocolFactory, ___transport);
             this.___currentMethod = method_call;
             ___manager.call(method_call);
@@ -406,7 +406,7 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        public static class sendMessage_call extends org.apache.thrift.async.TAsyncMethodCall {
+        public static class SendMessageCall extends org.apache.thrift.async.TAsyncMethodCall {
             
             /**
              * templateCode
@@ -428,7 +428,7 @@ public class MessageService {
              * @param transport <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public sendMessage_call(String templateCode, Message message,
+            public SendMessageCall(String templateCode, Message message,
                 org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client,
                 org.apache.thrift.protocol.TProtocolFactory protocolFactory,
                 org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
@@ -449,7 +449,7 @@ public class MessageService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("sendMessage",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                sendMessage_args args = new sendMessage_args();
+                SendMessageArgs args = new SendMessageArgs();
                 args.setTemplateCode(templateCode);
                 args.setMessage(message);
                 args.write(prot);
@@ -472,7 +472,7 @@ public class MessageService {
                 org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
                     getFrameBuffer().array());
                 org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-                return (new Client(prot)).recv_sendMessage();
+                return (new Client(prot)).recvSendMessage();
             }
         }
 
@@ -489,7 +489,7 @@ public class MessageService {
         public void resendMessage(long messageId, org.apache.thrift.async.AsyncMethodCallback resultHandler)
             throws org.apache.thrift.TException {
             checkReady();
-            resendMessage_call method_call = new resendMessage_call(messageId, resultHandler, this, ___protocolFactory,
+            ResendMessageCall method_call = new ResendMessageCall(messageId, resultHandler, this, ___protocolFactory,
                 ___transport);
             this.___currentMethod = method_call;
             ___manager.call(method_call);
@@ -506,7 +506,7 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        public static class resendMessage_call extends org.apache.thrift.async.TAsyncMethodCall {
+        public static class ResendMessageCall extends org.apache.thrift.async.TAsyncMethodCall {
             
             /**
              * messageId
@@ -522,7 +522,7 @@ public class MessageService {
              * @param transport <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public resendMessage_call(long messageId, org.apache.thrift.async.AsyncMethodCallback resultHandler,
+            public ResendMessageCall(long messageId, org.apache.thrift.async.AsyncMethodCallback resultHandler,
                 org.apache.thrift.async.TAsyncClient client,
                 org.apache.thrift.protocol.TProtocolFactory protocolFactory,
                 org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
@@ -542,7 +542,7 @@ public class MessageService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("resendMessage",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                resendMessage_args args = new resendMessage_args();
+                ResendMessageArgs args = new ResendMessageArgs();
                 args.setMessageId(messageId);
                 args.write(prot);
                 prot.writeMessageEnd();
@@ -563,7 +563,7 @@ public class MessageService {
                 org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
                     getFrameBuffer().array());
                 org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-                (new Client(prot)).recv_resendMessage();
+                (new Client(prot)).recvResendMessage();
             }
         }
 
@@ -620,8 +620,8 @@ public class MessageService {
          */
         private static <I extends Iface> Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> getProcessMap(
             Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> processMap) {
-            processMap.put("sendMessage", new sendMessage());
-            processMap.put("resendMessage", new resendMessage());
+            processMap.put("sendMessage", new SendMessage());
+            processMap.put("resendMessage", new ResendMessage());
             return processMap;
         }
 
@@ -636,17 +636,17 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        public static class sendMessage<I extends Iface> extends org.apache.thrift.ProcessFunction<I, sendMessage_args> {
+        public static class SendMessage<I extends Iface> extends org.apache.thrift.ProcessFunction<I, SendMessageArgs> {
             
             /**
              * sendMessage
              */
-            public sendMessage() {
+            public SendMessage() {
                 super("sendMessage");
             }
 
-            public sendMessage_args getEmptyArgsInstance() {
-                return new sendMessage_args();
+            public SendMessageArgs getEmptyArgsInstance() {
+                return new SendMessageArgs();
             }
 
             protected boolean isOneway() {
@@ -664,8 +664,8 @@ public class MessageService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public sendMessage_result getResult(I iface, sendMessage_args args) throws org.apache.thrift.TException {
-                sendMessage_result result = new sendMessage_result();
+            public SendMessageResult getResult(I iface, SendMessageArgs args) throws org.apache.thrift.TException {
+                SendMessageResult result = new SendMessageResult();
                 result.success = iface.sendMessage(args.templateCode, args.message);
                 result.setSuccessIsSet(true);
                 return result;
@@ -683,18 +683,18 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        public static class resendMessage<I extends Iface> extends
-            org.apache.thrift.ProcessFunction<I, resendMessage_args> {
+        public static class ResendMessage<I extends Iface> extends
+            org.apache.thrift.ProcessFunction<I, ResendMessageArgs> {
             
             /**
              * resendMessage
              */
-            public resendMessage() {
+            public ResendMessage() {
                 super("resendMessage");
             }
 
-            public resendMessage_args getEmptyArgsInstance() {
-                return new resendMessage_args();
+            public ResendMessageArgs getEmptyArgsInstance() {
+                return new ResendMessageArgs();
             }
 
             protected boolean isOneway() {
@@ -712,8 +712,8 @@ public class MessageService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public resendMessage_result getResult(I iface, resendMessage_args args) throws org.apache.thrift.TException {
-                resendMessage_result result = new resendMessage_result();
+            public ResendMessageResult getResult(I iface, ResendMessageArgs args) throws org.apache.thrift.TException {
+                ResendMessageResult result = new ResendMessageResult();
                 iface.resendMessage(args.messageId);
                 return result;
             }
@@ -772,8 +772,8 @@ public class MessageService {
         private static <I extends AsyncIface> Map<String, 
                                                        org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> getProcessMap(
             Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> processMap) {
-            processMap.put("sendMessage", new sendMessage());
-            processMap.put("resendMessage", new resendMessage());
+            processMap.put("sendMessage", new SendMessage());
+            processMap.put("resendMessage", new ResendMessage());
             return processMap;
         }
 
@@ -788,18 +788,18 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        public static class sendMessage<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, sendMessage_args, Long> {
+        public static class SendMessage<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, SendMessageArgs, Long> {
             
             /**
              * sendMessage
              */
-            public sendMessage() {
+            public SendMessage() {
                 super("sendMessage");
             }
 
-            public sendMessage_args getEmptyArgsInstance() {
-                return new sendMessage_args();
+            public SendMessageArgs getEmptyArgsInstance() {
+                return new SendMessageArgs();
             }
 
             /**
@@ -816,7 +816,7 @@ public class MessageService {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Long>() {
                     public void onComplete(Long o) {
-                        sendMessage_result result = new sendMessage_result();
+                        SendMessageResult result = new SendMessageResult();
                         result.success = o;
                         result.setSuccessIsSet(true);
                         try {
@@ -832,7 +832,7 @@ public class MessageService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        sendMessage_result result = new sendMessage_result();
+                        SendMessageResult result = new SendMessageResult();
                         msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
                         msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
                             org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -863,7 +863,7 @@ public class MessageService {
              * @param resultHandler <br>
              * @throws TException <br>
              */
-            public void start(I iface, sendMessage_args args,
+            public void start(I iface, SendMessageArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Long> resultHandler) throws TException {
                 iface.sendMessage(args.templateCode, args.message, resultHandler);
             }
@@ -880,18 +880,18 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        public static class resendMessage<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, resendMessage_args, Void> {
+        public static class ResendMessage<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, ResendMessageArgs, Void> {
             
             /**
              * resendMessage
              */
-            public resendMessage() {
+            public ResendMessage() {
                 super("resendMessage");
             }
 
-            public resendMessage_args getEmptyArgsInstance() {
-                return new resendMessage_args();
+            public ResendMessageArgs getEmptyArgsInstance() {
+                return new ResendMessageArgs();
             }
 
             /**
@@ -908,7 +908,7 @@ public class MessageService {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
                     public void onComplete(Void o) {
-                        resendMessage_result result = new resendMessage_result();
+                        ResendMessageResult result = new ResendMessageResult();
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
                             return;
@@ -922,7 +922,7 @@ public class MessageService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        resendMessage_result result = new resendMessage_result();
+                        ResendMessageResult result = new ResendMessageResult();
                         msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
                         msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
                             org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -953,7 +953,7 @@ public class MessageService {
              * @param resultHandler <br>
              * @throws TException <br>
              */
-            public void start(I iface, resendMessage_args args,
+            public void start(I iface, ResendMessageArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
                 iface.resendMessage(args.messageId, resultHandler);
             }
@@ -972,15 +972,15 @@ public class MessageService {
      * @since V7.3<br>
      * @see com.fccfc.framework.message.api <br>
      */
-    public static class sendMessage_args implements
-        org.apache.thrift.TBase<sendMessage_args, sendMessage_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<sendMessage_args> {
+    public static class SendMessageArgs implements
+        org.apache.thrift.TBase<SendMessageArgs, SendMessageArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<SendMessageArgs> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "sendMessage_args");
+            "SendMessageArgs");
 
         /**
          * TEMPLATE_CODE_FIELD_DESC
@@ -995,12 +995,12 @@ public class MessageService {
             "message", org.apache.thrift.protocol.TType.STRUCT, (short) 2);
 
         /**
-         * schemes
+         * SCHEMES
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new sendMessage_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new sendMessage_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new SendMessageArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new SendMessageArgsTupleSchemeFactory());
         }
 
         /**
@@ -1022,13 +1022,13 @@ public class MessageService {
             TEMPLATE_CODE((short) 1, "templateCode"), MESSAGE((short) 2, "message");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -1066,19 +1066,19 @@ public class MessageService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -1086,23 +1086,23 @@ public class MessageService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          *  isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
@@ -1112,22 +1112,22 @@ public class MessageService {
             tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, Message.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sendMessage_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(SendMessageArgs.class, META_DATA_MAP);
         }
 
         /**
-         * sendMessage_args
+         * SendMessageArgs
          */
-        public sendMessage_args() {
+        public SendMessageArgs() {
         }
 
         /**
-         * sendMessage_args
+         * SendMessageArgs
          * @param templateCode <br>
          * @param message <br>
          */
-        public sendMessage_args(String templateCode, Message message) {
+        public SendMessageArgs(String templateCode, Message message) {
             this();
             this.templateCode = templateCode;
             this.message = message;
@@ -1137,7 +1137,7 @@ public class MessageService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public sendMessage_args(sendMessage_args other) {
+        public SendMessageArgs(SendMessageArgs other) {
             if (other.isSetTemplateCode()) {
                 this.templateCode = other.templateCode;
             }
@@ -1154,8 +1154,8 @@ public class MessageService {
          * @taskId <br>
          * @return <br>
          */
-        public sendMessage_args deepCopy() {
-            return new sendMessage_args(this);
+        public SendMessageArgs deepCopy() {
+            return new SendMessageArgs(this);
         }
 
         @Override
@@ -1177,7 +1177,7 @@ public class MessageService {
          * @param templateCode <br>
          * @return <br>
          */
-        public sendMessage_args setTemplateCode(String templateCode) {
+        public SendMessageArgs setTemplateCode(String templateCode) {
             this.templateCode = templateCode;
             return this;
         }
@@ -1227,7 +1227,7 @@ public class MessageService {
          * @param message <br>
          * @return <br>
          */
-        public sendMessage_args setMessage(Message message) {
+        public SendMessageArgs setMessage(Message message) {
             this.message = message;
             return this;
         }
@@ -1341,8 +1341,8 @@ public class MessageService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof sendMessage_args) {
-                return this.equals((sendMessage_args) that);
+            if (that instanceof SendMessageArgs) {
+                return this.equals((SendMessageArgs) that);
             }
             return false;
         }
@@ -1356,7 +1356,7 @@ public class MessageService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(sendMessage_args that) {
+        public boolean equals(SendMessageArgs that) {
             if (that == null) {
                 return false;
             }
@@ -1406,7 +1406,7 @@ public class MessageService {
         }
 
         @Override
-        public int compareTo(sendMessage_args other) {
+        public int compareTo(SendMessageArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -1459,7 +1459,7 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -1472,12 +1472,12 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("sendMessage_args(");
+            StringBuilder sb = new StringBuilder("SendMessageArgs(");
             boolean first = true;
 
             sb.append("templateCode:");
@@ -1569,9 +1569,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_argsStandardSchemeFactory implements SchemeFactory {
-            public sendMessage_argsStandardScheme getScheme() {
-                return new sendMessage_argsStandardScheme();
+        private static class SendMessageArgsStandardSchemeFactory implements SchemeFactory {
+            public SendMessageArgsStandardScheme getScheme() {
+                return new SendMessageArgsStandardScheme();
             }
         }
 
@@ -1586,7 +1586,7 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_argsStandardScheme extends StandardScheme<sendMessage_args> {
+        private static class SendMessageArgsStandardScheme extends StandardScheme<SendMessageArgs> {
 
             /**
              * 
@@ -1598,7 +1598,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, sendMessage_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, SendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -1648,7 +1648,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, sendMessage_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, SendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -1680,9 +1680,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_argsTupleSchemeFactory implements SchemeFactory {
-            public sendMessage_argsTupleScheme getScheme() {
-                return new sendMessage_argsTupleScheme();
+        private static class SendMessageArgsTupleSchemeFactory implements SchemeFactory {
+            public SendMessageArgsTupleScheme getScheme() {
+                return new SendMessageArgsTupleScheme();
             }
         }
 
@@ -1697,10 +1697,10 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_argsTupleScheme extends TupleScheme<sendMessage_args> {
+        private static class SendMessageArgsTupleScheme extends TupleScheme<SendMessageArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, sendMessage_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, SendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -1720,7 +1720,7 @@ public class MessageService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, sendMessage_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, SendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(2);
@@ -1749,15 +1749,15 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-    public static class sendMessage_result implements
-        org.apache.thrift.TBase<sendMessage_result, sendMessage_result._Fields>, java.io.Serializable, Cloneable,
-        Comparable<sendMessage_result> {
+    public static class SendMessageResult implements
+        org.apache.thrift.TBase<SendMessageResult, SendMessageResult._Fields>, java.io.Serializable, Cloneable,
+        Comparable<SendMessageResult> {
         
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "sendMessage_result");
+            "SendMessageResult");
 
         /**
          * SUCCESS_FIELD_DESC
@@ -1766,12 +1766,12 @@ public class MessageService {
             "success", org.apache.thrift.protocol.TType.I64, (short) 0);
 
         /**
-         * schemes
+         * SCHEMES
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new sendMessage_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new sendMessage_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new SendMessageResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new SendMessageResultTupleSchemeFactory());
         }
 
         /**
@@ -1788,13 +1788,13 @@ public class MessageService {
             SUCCESS((short) 0, "success");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -1830,19 +1830,19 @@ public class MessageService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -1850,54 +1850,54 @@ public class MessageService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          *  isset id assignments
          */
-        private static final int __SUCCESS_ISSET_ID = 0;
+        private static final int SUCCESS_ISSET_ID = 0;
 
         /**
-         * __isset_bitfield
+         * issetBitfield
          */
-        private byte __isset_bitfield = 0;
+        private byte issetBitfield = 0;
 
         /**
          * metaDataMap
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.FieldValueMetaData(
                     org.apache.thrift.protocol.TType.I64)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(sendMessage_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(SendMessageResult.class, META_DATA_MAP);
         }
 
         /**
-         * sendMessage_result
+         * SendMessageResult
          */
-        public sendMessage_result() {
+        public SendMessageResult() {
         }
 
         /**
-         * sendMessage_result
+         * SendMessageResult
          * @param success <br>
          */
-        public sendMessage_result(long success) {
+        public SendMessageResult(long success) {
             this();
             this.success = success;
             setSuccessIsSet(true);
@@ -1907,8 +1907,8 @@ public class MessageService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public sendMessage_result(sendMessage_result other) {
-            __isset_bitfield = other.__isset_bitfield;
+        public SendMessageResult(SendMessageResult other) {
+            issetBitfield = other.issetBitfield;
             this.success = other.success;
         }
 
@@ -1920,8 +1920,8 @@ public class MessageService {
          * @taskId <br>
          * @return <br>
          */
-        public sendMessage_result deepCopy() {
-            return new sendMessage_result(this);
+        public SendMessageResult deepCopy() {
+            return new SendMessageResult(this);
         }
 
         @Override
@@ -1943,7 +1943,7 @@ public class MessageService {
          * @param success <br>
          * @return <br>
          */
-        public sendMessage_result setSuccess(long success) {
+        public SendMessageResult setSuccess(long success) {
             this.success = success;
             setSuccessIsSet(true);
             return this;
@@ -1957,18 +1957,18 @@ public class MessageService {
          * @taskId <br> <br>
          */
         public void unsetSuccess() {
-            __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+            issetBitfield = EncodingUtils.clearBit(issetBitfield, SUCCESS_ISSET_ID);
         }
 
         /** Returns true if field success is set (has been assigned a value) and false otherwise
          * @return <br>
          *  */
         public boolean isSetSuccess() {
-            return EncodingUtils.testBit(__isset_bitfield, __SUCCESS_ISSET_ID);
+            return EncodingUtils.testBit(issetBitfield, SUCCESS_ISSET_ID);
         }
 
         public void setSuccessIsSet(boolean value) {
-            __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __SUCCESS_ISSET_ID, value);
+            issetBitfield = EncodingUtils.setBit(issetBitfield, SUCCESS_ISSET_ID, value);
         }
 
         /**
@@ -2034,8 +2034,8 @@ public class MessageService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof sendMessage_result) {
-                return this.equals((sendMessage_result) that);
+            if (that instanceof SendMessageResult) {
+                return this.equals((SendMessageResult) that);
             }
             return false;
         }
@@ -2049,7 +2049,7 @@ public class MessageService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(sendMessage_result that) {
+        public boolean equals(SendMessageResult that) {
             if (that == null) {
                 return false;
             }
@@ -2082,7 +2082,7 @@ public class MessageService {
         }
 
         @Override
-        public int compareTo(sendMessage_result other) {
+        public int compareTo(SendMessageResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -2125,7 +2125,7 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -2138,12 +2138,12 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("sendMessage_result(");
+            StringBuilder sb = new StringBuilder("SendMessageResult(");
             boolean first = true;
 
             sb.append("success:");
@@ -2199,7 +2199,7 @@ public class MessageService {
             try {
                 // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call
                 // the default constructor.
-                __isset_bitfield = 0;
+                issetBitfield = 0;
                 read(new org.apache.thrift.protocol.TCompactProtocol(
                     new org.apache.thrift.transport.TIOStreamTransport(in)));
             }
@@ -2219,9 +2219,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_resultStandardSchemeFactory implements SchemeFactory {
-            public sendMessage_resultStandardScheme getScheme() {
-                return new sendMessage_resultStandardScheme();
+        private static class SendMessageResultStandardSchemeFactory implements SchemeFactory {
+            public SendMessageResultStandardScheme getScheme() {
+                return new SendMessageResultStandardScheme();
             }
         }
 
@@ -2236,7 +2236,7 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_resultStandardScheme extends StandardScheme<sendMessage_result> {
+        private static class SendMessageResultStandardScheme extends StandardScheme<SendMessageResult> {
 
             /**
              * 
@@ -2248,7 +2248,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, sendMessage_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, SendMessageResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2288,7 +2288,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, sendMessage_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, SendMessageResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2315,9 +2315,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_resultTupleSchemeFactory implements SchemeFactory {
-            public sendMessage_resultTupleScheme getScheme() {
-                return new sendMessage_resultTupleScheme();
+        private static class SendMessageResultTupleSchemeFactory implements SchemeFactory {
+            public SendMessageResultTupleScheme getScheme() {
+                return new SendMessageResultTupleScheme();
             }
         }
 
@@ -2332,10 +2332,10 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class sendMessage_resultTupleScheme extends TupleScheme<sendMessage_result> {
+        private static class SendMessageResultTupleScheme extends TupleScheme<SendMessageResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, sendMessage_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, SendMessageResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -2349,7 +2349,7 @@ public class MessageService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, sendMessage_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, SendMessageResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -2373,15 +2373,15 @@ public class MessageService {
      * @since V7.3<br>
      * @see com.fccfc.framework.message.api <br>
      */
-    public static class resendMessage_args implements
-        org.apache.thrift.TBase<resendMessage_args, resendMessage_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<resendMessage_args> {
+    public static class ResendMessageArgs implements
+        org.apache.thrift.TBase<ResendMessageArgs, ResendMessageArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<ResendMessageArgs> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "resendMessage_args");
+            "ResendMessageArgs");
 
         /**
          * MESSAGE_ID_FIELD_DESC
@@ -2390,12 +2390,12 @@ public class MessageService {
             "messageId", org.apache.thrift.protocol.TType.I64, (short) 1);
 
         /**
-         * schemes
+         * SCHEMES
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new resendMessage_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new resendMessage_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new ResendMessageArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new ResendMessageArgsTupleSchemeFactory());
         }
 
         /**
@@ -2412,13 +2412,13 @@ public class MessageService {
             MESSAGE_ID((short) 1, "messageId");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -2454,19 +2454,19 @@ public class MessageService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -2474,54 +2474,54 @@ public class MessageService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          *  isset id assignments
          */
-        private static final int __MESSAGEID_ISSET_ID = 0;
+        private static final int MESSAGEID_ISSET_ID = 0;
 
         /**
-         * __isset_bitfield
+         * issetBitfield
          */
-        private byte __isset_bitfield = 0;
+        private byte issetBitfield = 0;
 
         /**
          * metaDataMap
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.MESSAGE_ID, new org.apache.thrift.meta_data.FieldMetaData("messageId",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.FieldValueMetaData(
                     org.apache.thrift.protocol.TType.I64)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resendMessage_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(ResendMessageArgs.class, META_DATA_MAP);
         }
 
         /**
-         * resendMessage_args
+         * ResendMessageArgs
          */
-        public resendMessage_args() {
+        public ResendMessageArgs() {
         }
 
         /**
-         * resendMessage_args
+         * ResendMessageArgs
          * @param messageId <br>
          */
-        public resendMessage_args(long messageId) {
+        public ResendMessageArgs(long messageId) {
             this();
             this.messageId = messageId;
             setMessageIdIsSet(true);
@@ -2531,8 +2531,8 @@ public class MessageService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public resendMessage_args(resendMessage_args other) {
-            __isset_bitfield = other.__isset_bitfield;
+        public ResendMessageArgs(ResendMessageArgs other) {
+            issetBitfield = other.issetBitfield;
             this.messageId = other.messageId;
         }
 
@@ -2544,8 +2544,8 @@ public class MessageService {
          * @taskId <br>
          * @return <br>
          */
-        public resendMessage_args deepCopy() {
-            return new resendMessage_args(this);
+        public ResendMessageArgs deepCopy() {
+            return new ResendMessageArgs(this);
         }
 
         @Override
@@ -2567,7 +2567,7 @@ public class MessageService {
          * @param messageId <br>
          * @return <br>
          */
-        public resendMessage_args setMessageId(long messageId) {
+        public ResendMessageArgs setMessageId(long messageId) {
             this.messageId = messageId;
             setMessageIdIsSet(true);
             return this;
@@ -2581,17 +2581,17 @@ public class MessageService {
          * @taskId <br> <br>
          */
         public void unsetMessageId() {
-            __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __MESSAGEID_ISSET_ID);
+            issetBitfield = EncodingUtils.clearBit(issetBitfield, MESSAGEID_ISSET_ID);
         }
 
         /** Returns true if field messageId is set (has been assigned a value) and false otherwise
          * @return <br> */
         public boolean isSetMessageId() {
-            return EncodingUtils.testBit(__isset_bitfield, __MESSAGEID_ISSET_ID);
+            return EncodingUtils.testBit(issetBitfield, MESSAGEID_ISSET_ID);
         }
 
         public void setMessageIdIsSet(boolean value) {
-            __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __MESSAGEID_ISSET_ID, value);
+            issetBitfield = EncodingUtils.setBit(issetBitfield, MESSAGEID_ISSET_ID, value);
         }
 
         /**
@@ -2657,8 +2657,8 @@ public class MessageService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof resendMessage_args) {
-                return this.equals((resendMessage_args) that);
+            if (that instanceof ResendMessageArgs) {
+                return this.equals((ResendMessageArgs) that);
             }
             return false;
         }
@@ -2672,7 +2672,7 @@ public class MessageService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(resendMessage_args that) {
+        public boolean equals(ResendMessageArgs that) {
             if (that == null) {
                 return false;
             }
@@ -2705,7 +2705,7 @@ public class MessageService {
         }
 
         @Override
-        public int compareTo(resendMessage_args other) {
+        public int compareTo(ResendMessageArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -2748,7 +2748,7 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -2761,12 +2761,12 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("resendMessage_args(");
+            StringBuilder sb = new StringBuilder("ResendMessageArgs(");
             boolean first = true;
 
             sb.append("messageId:");
@@ -2822,7 +2822,7 @@ public class MessageService {
             try {
                 // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call
                 // the default constructor.
-                __isset_bitfield = 0;
+                issetBitfield = 0;
                 read(new org.apache.thrift.protocol.TCompactProtocol(
                     new org.apache.thrift.transport.TIOStreamTransport(in)));
             }
@@ -2842,9 +2842,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_argsStandardSchemeFactory implements SchemeFactory {
-            public resendMessage_argsStandardScheme getScheme() {
-                return new resendMessage_argsStandardScheme();
+        private static class ResendMessageArgsStandardSchemeFactory implements SchemeFactory {
+            public ResendMessageArgsStandardScheme getScheme() {
+                return new ResendMessageArgsStandardScheme();
             }
         }
 
@@ -2859,7 +2859,7 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_argsStandardScheme extends StandardScheme<resendMessage_args> {
+        private static class ResendMessageArgsStandardScheme extends StandardScheme<ResendMessageArgs> {
 
             /**
              * 
@@ -2871,7 +2871,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, resendMessage_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, ResendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2911,7 +2911,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, resendMessage_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, ResendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2936,9 +2936,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_argsTupleSchemeFactory implements SchemeFactory {
-            public resendMessage_argsTupleScheme getScheme() {
-                return new resendMessage_argsTupleScheme();
+        private static class ResendMessageArgsTupleSchemeFactory implements SchemeFactory {
+            public ResendMessageArgsTupleScheme getScheme() {
+                return new ResendMessageArgsTupleScheme();
             }
         }
 
@@ -2953,10 +2953,10 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_argsTupleScheme extends TupleScheme<resendMessage_args> {
+        private static class ResendMessageArgsTupleScheme extends TupleScheme<ResendMessageArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, resendMessage_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, ResendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -2970,7 +2970,7 @@ public class MessageService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, resendMessage_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, ResendMessageArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -2994,23 +2994,23 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-    public static class resendMessage_result implements
-        org.apache.thrift.TBase<resendMessage_result, resendMessage_result._Fields>, java.io.Serializable, Cloneable,
-        Comparable<resendMessage_result> {
+    public static class ResendMessageResult implements
+        org.apache.thrift.TBase<ResendMessageResult, ResendMessageResult._Fields>, java.io.Serializable, Cloneable,
+        Comparable<ResendMessageResult> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "resendMessage_result");
+            "ResendMessageResult");
 
         /**
-         * schemes
+         * SCHEMES
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new resendMessage_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new resendMessage_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new ResendMessageResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new ResendMessageResultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
@@ -3018,13 +3018,13 @@ public class MessageService {
             ;
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -3058,19 +3058,19 @@ public class MessageService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -3078,41 +3078,41 @@ public class MessageService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * metaDataMap
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resendMessage_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(ResendMessageResult.class, META_DATA_MAP);
         }
 
         /**
-         * resendMessage_result
+         * ResendMessageResult
          */
-        public resendMessage_result() {
+        public ResendMessageResult() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public resendMessage_result(resendMessage_result other) {
+        public ResendMessageResult(ResendMessageResult other) {
         }
 
         /**
@@ -3123,8 +3123,8 @@ public class MessageService {
          * @taskId <br>
          * @return <br>
          */
-        public resendMessage_result deepCopy() {
-            return new resendMessage_result(this);
+        public ResendMessageResult deepCopy() {
+            return new ResendMessageResult(this);
         }
 
         @Override
@@ -3182,8 +3182,8 @@ public class MessageService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof resendMessage_result) {
-                return this.equals((resendMessage_result) that);
+            if (that instanceof ResendMessageResult) {
+                return this.equals((ResendMessageResult) that);
             }
             return false;
         }
@@ -3197,7 +3197,7 @@ public class MessageService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(resendMessage_result that) {
+        public boolean equals(ResendMessageResult that) {
             if (that == null) {
                 return false;
             }
@@ -3213,7 +3213,7 @@ public class MessageService {
         }
 
         @Override
-        public int compareTo(resendMessage_result other) {
+        public int compareTo(ResendMessageResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -3246,7 +3246,7 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -3259,12 +3259,12 @@ public class MessageService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("resendMessage_result(");
+            StringBuilder sb = new StringBuilder("ResendMessageResult(");
             boolean first = true;
 
             sb.append(")");
@@ -3334,9 +3334,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_resultStandardSchemeFactory implements SchemeFactory {
-            public resendMessage_resultStandardScheme getScheme() {
-                return new resendMessage_resultStandardScheme();
+        private static class ResendMessageResultStandardSchemeFactory implements SchemeFactory {
+            public ResendMessageResultStandardScheme getScheme() {
+                return new ResendMessageResultStandardScheme();
             }
         }
 
@@ -3351,7 +3351,7 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_resultStandardScheme extends StandardScheme<resendMessage_result> {
+        private static class ResendMessageResultStandardScheme extends StandardScheme<ResendMessageResult> {
 
             /**
              * 
@@ -3363,7 +3363,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, resendMessage_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, ResendMessageResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -3394,7 +3394,7 @@ public class MessageService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, resendMessage_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, ResendMessageResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -3416,9 +3416,9 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_resultTupleSchemeFactory implements SchemeFactory {
-            public resendMessage_resultTupleScheme getScheme() {
-                return new resendMessage_resultTupleScheme();
+        private static class ResendMessageResultTupleSchemeFactory implements SchemeFactory {
+            public ResendMessageResultTupleScheme getScheme() {
+                return new ResendMessageResultTupleScheme();
             }
         }
 
@@ -3433,16 +3433,16 @@ public class MessageService {
          * @since V7.3<br>
          * @see com.fccfc.framework.message.api <br>
          */
-        private static class resendMessage_resultTupleScheme extends TupleScheme<resendMessage_result> {
+        private static class ResendMessageResultTupleScheme extends TupleScheme<ResendMessageResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, resendMessage_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, ResendMessageResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, resendMessage_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, ResendMessageResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
             }
