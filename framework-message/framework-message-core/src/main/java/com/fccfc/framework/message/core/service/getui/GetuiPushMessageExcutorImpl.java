@@ -58,6 +58,15 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @return <br>
+     */
     private ITemplate getTemplate(String content) {
         TransmissionTemplate template = new TransmissionTemplate();
         template.setAppId(Configuration.getString("GETUI.APP_ID"));
@@ -68,6 +77,15 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
         return template;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws IOException <br>
+     */
     private IGtPush getGetPush() throws IOException {
         String host = Configuration.getString("GETUI.HOST");
         String appKey = Configuration.getString("GETUI.APP_KEY");
@@ -77,6 +95,17 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
         return push;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @param receivers <br>
+     * @return <br>
+     * @throws IOException <br>
+     */
     private IPushResult sendListMessage(String content, String[] receivers) throws IOException {
         ListMessage message = new ListMessage();
         message.setData(getTemplate(content));
@@ -105,6 +134,17 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
         return push.pushMessageToList(taskId, targets);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @param receiver <br>
+     * @return <br>
+     * @throws IOException <br>
+     */
     private IPushResult sendSingleMessage(String content, String receiver) throws IOException {
         SingleMessage message = new SingleMessage();
         message.setOffline(true);

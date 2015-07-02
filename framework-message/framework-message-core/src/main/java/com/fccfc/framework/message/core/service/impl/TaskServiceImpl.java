@@ -28,11 +28,20 @@ import com.fccfc.framework.message.core.service.TaskService;
 @Service
 public class TaskServiceImpl implements TaskService {
 
+    /**
+     * messageBoxDao
+     */
     @Resource
     private MessageBoxDao messageBoxDao;
 
     /**
-     * @see com.fccfc.framework.message.service.TaskService#selectResendMessage()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     public List<Long> selectResendMessage() throws ServiceException {
         try {

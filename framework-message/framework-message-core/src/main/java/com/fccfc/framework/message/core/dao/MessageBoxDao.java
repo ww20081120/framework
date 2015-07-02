@@ -26,13 +26,43 @@ import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 @Dao
 public interface MessageBoxDao extends IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param date <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT M.MESSAGE_ID FROM MESSAGE_BOX M WHERE M.NEXT_SEND_TIME >= :date", bean = Long.class)
     List<Long> selectMessageBox(@Param("date") Date date) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param messageId <br>
+     * @param attachmentId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("INSERT INTO MESSAGE_ATTACHMENTS (ATTACHMENTS_ID, MESSAGE_ID) VALUES (:messageId, :attachmentId)")
     int saveMessageAttachments(@Param("messageId") long messageId, @Param("attachmentId") long attachmentId)
         throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param messageId <br>
+     * @return <br>
+     */
     @Sql(
         value = "SELECT A.* FROM MESSAGE_ATTACHMENTS M, ATTACHMENTS A WHERE A.ATTACHMENTS_ID = M.ATTACHMENTS_ID AND M.MESSAGE_ID = :messageId",
         bean = AttachmentsPojo.class)

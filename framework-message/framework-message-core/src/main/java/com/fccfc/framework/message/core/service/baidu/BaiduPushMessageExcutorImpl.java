@@ -56,12 +56,26 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param user_id <br>
+     * @param channel_id <br>
+     * @param title <br>
+     * @param description <br>
+     * @return <br>
+     * @throws UnsupportedEncodingException <br>
+     * @throws UtilException <br>
+     */
     public String pushMsg(String user_id, String channel_id, String title, String description)
         throws UnsupportedEncodingException, UtilException {
-        String url = "http://channel.api.duapp.com/rest/2.0/channel/channel";// Configuration.getString(CacheConstant.BAIDUYUN_URL);//
+        String url = "http://channel.api.duapp.com/rest/2.0/channel/channel"; // Configuration.getString(CacheConstant.BAIDUYUN_URL);//
         String method = "push_msg";
-        String apikey = "wNTs4veiwjRS6y9ZWmXj3fSl";// Configuration.getString(CacheConstant.BAIDUYUN_APIKEY);
-        String secret = "jLj7WGaDLPOeKdez2Pu944Nb3ntarla4";// Configuration.getString(CacheConstant.BAIDUYUN_SECRETKEY);
+        String apikey = "wNTs4veiwjRS6y9ZWmXj3fSl"; // Configuration.getString(CacheConstant.BAIDUYUN_APIKEY);
+        String secret = "jLj7WGaDLPOeKdez2Pu944Nb3ntarla4"; // Configuration.getString(CacheConstant.BAIDUYUN_SECRETKEY);
         // 推送类型，取值范围为：1～3
         // 1：单个人，必须指定user_id 和 channel_id （指定用户的指定设备）或者user_id（指定用户的所有设备）
         // 2：一群人，必须指定 tag
@@ -125,11 +139,11 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
      * 获取签名
      * 
      * @param url 地址
-     * @param parameters 参数
+     * @param paramMap 参数
      * @param secret 密钥
      * @return 结果
-     * @throws UnsupportedEncodingException
-     * @throws UtilException
+     * @throws UnsupportedEncodingException <br>
+     * @throws UtilException <br>
      */
     public String getSignature(String url, Map<String, String> paramMap, String secret)
         throws UnsupportedEncodingException, UtilException {

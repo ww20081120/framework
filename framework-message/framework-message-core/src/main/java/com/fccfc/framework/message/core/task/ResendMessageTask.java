@@ -25,11 +25,20 @@ import com.fccfc.framework.message.core.service.TaskService;
  */
 public class ResendMessageTask {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(ResendMessageTask.class);
 
+    /**
+     * messageService
+     */
     @Resource
     private MessageService.Iface messageService;
 
+    /**
+     * resendService
+     */
     @Resource
     private TaskService resendService;
 

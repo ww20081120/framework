@@ -23,6 +23,16 @@ import com.fccfc.framework.message.core.bean.MessageTemplatePojo;
 @Dao
 public interface MessageTemplateDao extends IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param code <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("SELECT * FROM MESSAGE_TEMPLATE M WHERE M.STATE = 'A' AND M.MESSAGE_TEMPLATE_CODE = :code")
     MessageTemplatePojo getByCode(@Param("code") String code) throws DaoException;
 }

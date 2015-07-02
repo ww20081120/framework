@@ -44,7 +44,7 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
     public String sendMessage(String title, String content, String sender, String[] receiver,
         List<Attachment> attachments) throws ServiceException {
         HttpClient client = new HttpClient();
-        client.getParams().setSoTimeout(60 * 1000);// 设置超时时间
+        client.getParams().setSoTimeout(60 * 1000); // 设置超时时间
         client.getParams().setContentCharset("UTF-8");
         String receives = getReceives(receiver);
 
@@ -86,7 +86,7 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
      * @param content 发送内容
      * @param receives 接收人
      * @return 返回链接
-     * @throws Exception
+     * @throws Exception <br>
      */
     private String getSendUrl(String content, String receives) throws Exception {
         String url = Configuration.getString("SMS.SMS_URL");

@@ -22,6 +22,16 @@ import com.fccfc.framework.message.core.bean.MessageHistoryPojo;
 @Dao
 public interface MessageHistoryDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param messageHistoryPojo <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("INSERT INTO MESSAGE_HISTORY VALUES (:history.messageId,:history.receivers,:history.sender,"
         + ":history.messageType,:history.messageTemplateId,:history.subject,:history.content,:history."
         + "attachmentsNum,:history.createTime,:history.sendTime,:history.sendTimes,:history.result,:history.expDate,:history.extendAttrs)")

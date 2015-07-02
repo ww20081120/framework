@@ -19,5 +19,14 @@ import com.fccfc.framework.common.ServiceException;
  */
 public interface TaskService {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     List<Long> selectResendMessage() throws ServiceException;
 }

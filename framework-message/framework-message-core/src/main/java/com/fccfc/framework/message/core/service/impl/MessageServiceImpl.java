@@ -48,18 +48,33 @@ import com.fccfc.framework.message.core.service.MessageExcutor;
  */
 public class MessageServiceImpl implements MessageService.Iface {
 
+    /**
+     * messageBoxDao
+     */
     @Resource
     private MessageBoxDao messageBoxDao;
 
+    /**
+     * messageHistoryDao
+     */
     @Resource
     private MessageHistoryDao messageHistoryDao;
 
+    /**
+     * messageTemplateDao
+     */
     @Resource
     private MessageTemplateDao messageTemplateDao;
 
+    /**
+     * sendRecordDao
+     */
     @Resource
     private SendRecordDao sendRecordDao;
 
+    /**
+     * messageExcutorMap
+     */
     private Map<String, MessageExcutor> messageExcutorMap;
 
     /*
@@ -130,6 +145,17 @@ public class MessageServiceImpl implements MessageService.Iface {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param template <br>
+     * @param message <br>
+     * @param attachments <br>
+     * @throws ServiceException <br>
+     */
     private void sendMessage(MessageTemplatePojo template, MessageBoxPojo message, List<Attachment> attachments)
         throws ServiceException {
 
@@ -198,6 +224,17 @@ public class MessageServiceImpl implements MessageService.Iface {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param template <br>
+     * @param message <br>
+     * @param result <br>
+     * @throws DaoException <br>
+     */
     private void deleteMessage(MessageTemplatePojo template, MessageBoxPojo message, String result) throws DaoException {
         if (GlobalConstants.YES.equals(template.getSaveHistory())) {
             Calendar calendar = Calendar.getInstance();
@@ -229,7 +266,10 @@ public class MessageServiceImpl implements MessageService.Iface {
     }
 
     /**
+     * resendMessage
      * @see com.fccfc.framework.api.message.MessageService#resendMessage(int)
+     * @param messageId <br>
+     * @throws TException <br>
      */
     public void resendMessage(long messageId) throws TException {
         MessageTemplatePojo template;

@@ -19,6 +19,21 @@ import com.fccfc.framework.message.api.Attachment;
  * @see com.fccfc.framework.message.service <br>
  */
 public interface MessageExcutor {
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param title <br>
+     * @param content <br>
+     * @param sender <br>
+     * @param receiver <br>
+     * @param attachments <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     String sendMessage(String title, String content, String sender, String[] receiver, List<Attachment> attachments)
         throws ServiceException;
 }
