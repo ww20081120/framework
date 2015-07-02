@@ -23,16 +23,42 @@ import com.alibaba.dubbo.remoting.Server;
 import com.alibaba.dubbo.remoting.Transporter;
 
 /**
+ * NettyTransporter
  * @author ding.lid
  */
 public class NettyTransporter implements Transporter {
 
+    /**
+     * NAME
+     */
     public static final String NAME = "netty";
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @param listener <br>
+     * @return <br>
+     * @throws RemotingException <br>
+     */
     public Server bind(URL url, ChannelHandler listener) throws RemotingException {
         return new NettyServer(url, listener);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @param listener <br>
+     * @return <br>
+     * @throws RemotingException <br>
+     */
     public Client connect(URL url, ChannelHandler listener) throws RemotingException {
         return new NettyClient(url, listener);
     }

@@ -28,12 +28,19 @@ import com.alibaba.dubbo.remoting.exchange.ResponseFuture;
 @SuppressWarnings("deprecation")
 public class HeaderExchangeClient implements ExchangeClient {
 
+    /**
+     * client
+     */
     private final Client client;
 
+    /**
+     * channel
+     */
     private final ExchangeChannel channel;
 
     /**
-     * 默认构造函数
+     * HeaderExchangeClient
+     * @param client <br>
      */
     public HeaderExchangeClient(Client client) {
         if (client == null) {
@@ -44,7 +51,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Client#reconnect()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws RemotingException <br>
      */
     @Override
     public void reconnect() throws RemotingException {
@@ -52,7 +64,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#getUrl()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public URL getUrl() {
@@ -60,7 +77,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#getChannelHandler()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public ChannelHandler getChannelHandler() {
@@ -68,7 +90,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#getLocalAddress()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public InetSocketAddress getLocalAddress() {
@@ -76,7 +103,13 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#send(java.lang.Object)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @throws RemotingException <br>
      */
     @Override
     public void send(Object message) throws RemotingException {
@@ -84,7 +117,14 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#send(java.lang.Object, boolean)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @param sent <br>
+     * @throws RemotingException <br>
      */
     @Override
     public void send(Object message, boolean sent) throws RemotingException {
@@ -92,7 +132,11 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#close()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
      */
     @Override
     public void close() {
@@ -100,7 +144,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#close(int)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param timeout <br>
      */
     @Override
     public void close(int timeout) {
@@ -108,7 +157,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#isClosed()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public boolean isClosed() {
@@ -116,7 +170,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#getRemoteAddress()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public InetSocketAddress getRemoteAddress() {
@@ -124,7 +183,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#isConnected()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public boolean isConnected() {
@@ -132,7 +196,13 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#hasAttribute(java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
      */
     @Override
     public boolean hasAttribute(String key) {
@@ -140,7 +210,13 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#getAttribute(java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
      */
     @Override
     public Object getAttribute(String key) {
@@ -148,7 +224,13 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#setAttribute(java.lang.String, java.lang.Object)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @param value <br>
      */
     @Override
     public void setAttribute(String key, Object value) {
@@ -156,7 +238,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#removeAttribute(java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
      */
     @Override
     public void removeAttribute(String key) {
@@ -164,7 +251,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Client#reset(com.alibaba.dubbo.common.Parameters)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param parameters <br>
      */
     @Override
     public void reset(Parameters parameters) {
@@ -172,7 +264,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.common.Resetable#reset(com.alibaba.dubbo.common.URL)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
      */
     @Override
     public void reset(URL url) {
@@ -180,7 +277,14 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#request(java.lang.Object)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws RemotingException <br>
      */
     @Override
     public ResponseFuture request(Object request) throws RemotingException {
@@ -188,7 +292,15 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#request(java.lang.Object, int)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @param timeout <br>
+     * @return <br>
+     * @throws RemotingException <br>
      */
     @Override
     public ResponseFuture request(Object request, int timeout) throws RemotingException {
@@ -196,7 +308,12 @@ public class HeaderExchangeClient implements ExchangeClient {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#getExchangeHandler()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public ExchangeHandler getExchangeHandler() {

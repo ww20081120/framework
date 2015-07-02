@@ -22,6 +22,9 @@ import com.alibaba.dubbo.remoting.exchange.Exchanger;
  */
 public class HeaderExchanger implements Exchanger {
 
+    /**
+     * NAME
+     */
     public static final String NAME = "header";
 
     /**
@@ -31,8 +34,15 @@ public class HeaderExchanger implements Exchanger {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.Exchanger#bind(com.alibaba.dubbo.common.URL,
-     *      com.alibaba.dubbo.remoting.exchange.ExchangeHandler)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @param handler <br>
+     * @return <br>
+     * @throws RemotingException <br>
      */
     @Override
     public ExchangeServer bind(URL url, ExchangeHandler handler) throws RemotingException {
@@ -40,8 +50,15 @@ public class HeaderExchanger implements Exchanger {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.Exchanger#connect(com.alibaba.dubbo.common.URL,
-     *      com.alibaba.dubbo.remoting.exchange.ExchangeHandler)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @param handler <br>
+     * @return <br>
+     * @throws RemotingException <br>
      */
     @Override
     public ExchangeClient connect(URL url, ExchangeHandler handler) throws RemotingException {

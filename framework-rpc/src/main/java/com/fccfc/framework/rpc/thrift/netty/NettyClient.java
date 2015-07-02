@@ -47,18 +47,35 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 public class NettyClient extends AbstractClient {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(NettyClient.class);
 
-    // 因ChannelFactory的关闭有DirectMemory泄露，采用静态化规避
-    // https://issues.jboss.org/browse/NETTY-424
+    /**
+     *  因ChannelFactory的关闭有DirectMemory泄露，采用静态化规避
+     *  https://issues.jboss.org/browse/NETTY-424
+     */
     private static final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
         Executors.newCachedThreadPool(new NamedThreadFactory("NettyClientBoss", true)),
         Executors.newCachedThreadPool(new NamedThreadFactory("NettyClientWorker", true)), Constants.DEFAULT_IO_THREADS);
 
+    /**
+     * bootstrap
+     */
     private ClientBootstrap bootstrap;
 
+    /**
+     * channel
+     */
     private volatile Channel channel; // volatile, please copy reference to use
 
+    /**
+     * NettyClient
+     * @param url <br>
+     * @param handler <br>
+     * @throws RemotingException <br>
+     */
     public NettyClient(final URL url, final ChannelHandler handler) throws RemotingException {
         super(url, wrapChannelHandler(url, handler));
     }
@@ -84,6 +101,14 @@ public class NettyClient extends AbstractClient {
         });
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws Throwable <br>
+     */
     protected void doConnect() throws Throwable {
         long start = System.currentTimeMillis();
         ChannelFuture future = bootstrap.connect(getConnectAddress());
@@ -162,8 +187,9 @@ public class NettyClient extends AbstractClient {
     @Override
     protected com.alibaba.dubbo.remoting.Channel getChannel() {
         Channel c = channel;
-        if (c == null || !c.isConnected())
+        if (c == null || !c.isConnected()) {
             return null;
+        }
         return NettyChannel.getOrAddChannel(c, getUrl(), this);
     }
 

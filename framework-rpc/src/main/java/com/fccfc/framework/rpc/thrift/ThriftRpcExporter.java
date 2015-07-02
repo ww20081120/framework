@@ -20,24 +20,44 @@ import java.util.Map;
 import com.alibaba.dubbo.rpc.Exporter;
 import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.protocol.AbstractExporter;
+
 /**
  * InjvmExporter
- * 
+ * @param <T> <br>
  * @author william.liangf
  */
 public class ThriftRpcExporter<T> extends AbstractExporter<T> {
 
-    private final String                        key;
+    /**
+     * key
+     */
+    private final String key;
 
+    /**
+     * exporterMap
+     */
     private final Map<String, Exporter<?>> exporterMap;
 
-    public ThriftRpcExporter(Invoker<T> invoker, String key, Map<String, Exporter<?>> exporterMap){
+    /**
+     * ThriftRpcExporter
+     * @param invoker <br>
+     * @param key <br>
+     * @param exporterMap <br>
+     */
+    public ThriftRpcExporter(Invoker<T> invoker, String key, Map<String, Exporter<?>> exporterMap) {
         super(invoker);
         this.key = key;
         this.exporterMap = exporterMap;
     }
 
-	@Override
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
+    @Override
     public void unexport() {
         super.unexport();
         exporterMap.remove(key);

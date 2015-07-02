@@ -23,7 +23,6 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 
 import com.alibaba.dubbo.common.Constants;
-import com.alibaba.dubbo.common.utils.LogUtil;
 import com.alibaba.dubbo.remoting.Channel;
 import com.alibaba.dubbo.remoting.RemotingException;
 import com.alibaba.dubbo.remoting.TimeoutException;
@@ -44,39 +43,88 @@ import com.fccfc.framework.rpc.thrift.common.TBaseTools;
  */
 public class DefaultFuture implements ResponseFuture {
 
+    /**
+     * CHANNELS
+     */
     private static final Map<Integer, Channel> CHANNELS = new ConcurrentHashMap<Integer, Channel>();
 
+    /**
+     * FUTURES
+     */
     private static final Map<Integer, DefaultFuture> FUTURES = new ConcurrentHashMap<Integer, DefaultFuture>();
 
-    // add new TMessageType instead of Response.CLIENT_TIMEOUT, Response.SERVER_TIMEOUT
+    /**
+     *  add new TMessageType instead of Response.CLIENT_TIMEOUT, Response.SERVER_TIMEOUT
+     */
     private static final byte T_CLIENT_TIMEOUT = 127;
 
+    /**
+     * T_SERVER_TIMEOUT
+     */
     private static final byte T_SERVER_TIMEOUT = 126;
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(DefaultFuture.class);
 
+    /**
+     * id
+     */
     private final int id;
 
+    /**
+     * channel
+     */
     private final Channel channel;
 
+    /**
+     * timeout
+     */
     private final int timeout;
 
+    /**
+     * lock
+     */
     private final Lock lock = new ReentrantLock();
 
+    /**
+     * done
+     */
     private final Condition done = lock.newCondition();
 
+    /**
+     * start
+     */
     private final long start = System.currentTimeMillis();
 
+    /**
+     * serviceName
+     */
     private final String serviceName;
 
+    /**
+     * methodName
+     */
     private final String methodName;
 
+    /**
+     * sent
+     */
     private volatile long sent;
 
+    /**
+     * response
+     */
     private volatile ChannelBuffer response;
 
     /**
-     * 默认构造函数
+     * DefaultFuture
+     * @param id <br>
+     * @param channel <br>
+     * @param timeout <br>
+     * @param serviceName <br>
+     * @param methodName <br>
      */
     public DefaultFuture(int id, Channel channel, int timeout, String serviceName, String methodName) {
         this.channel = channel;
@@ -89,10 +137,29 @@ public class DefaultFuture implements ResponseFuture {
         CHANNELS.put(id, channel);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws RemotingException <br>
+     */
     public Object get() throws RemotingException {
         return get(timeout);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param timeout <br>
+     * @return <br>
+     * @throws RemotingException <br>
+     */
     public Object get(int timeout) throws RemotingException {
         if (timeout <= 0) {
             timeout = Constants.DEFAULT_TIMEOUT;
@@ -121,6 +188,13 @@ public class DefaultFuture implements ResponseFuture {
         return returnFromResponse();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void cancel() {
         FUTURES.remove(id);
         CHANNELS.remove(id);
@@ -130,6 +204,15 @@ public class DefaultFuture implements ResponseFuture {
         return response != null;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws RemotingException <br>
+     */
     private Object returnFromResponse() throws RemotingException {
         ChannelBuffer res = response;
         try {
@@ -159,6 +242,15 @@ public class DefaultFuture implements ResponseFuture {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param channel <br>
+     * @param message <br>
+     */
     public static void sent(Channel channel, Object message) {
         ChannelBuffer buf = (ChannelBuffer) message;
         int id = TBaseTools.getTMessageId(buf);
@@ -168,10 +260,26 @@ public class DefaultFuture implements ResponseFuture {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     private void doSent() {
         sent = System.currentTimeMillis();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param channel <br>
+     * @param response <br>
+     */
     public static void received(Channel channel, ChannelBuffer response) {
         int id = TBaseTools.getTMessageId(response);
         try {
@@ -193,6 +301,14 @@ public class DefaultFuture implements ResponseFuture {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param res <br>
+     */
     private void doReceived(ChannelBuffer res) {
         lock.lock();
         try {
@@ -206,6 +322,15 @@ public class DefaultFuture implements ResponseFuture {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param scan <br>
+     * @return <br>
+     */
     private String getTimeoutMessage(boolean scan) {
         long nowTimestamp = System.currentTimeMillis();
         return (sent > 0 ? "Waiting server-side response timeout" : "Sending request timeout in client-side")
@@ -245,10 +370,28 @@ public class DefaultFuture implements ResponseFuture {
         return start;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param channel <br>
+     * @return <br>
+     */
     public static boolean hasFuture(Channel channel) {
         return CHANNELS.containsValue(channel);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param id <br>
+     * @return <br>
+     */
     public static DefaultFuture getFuture(int id) {
         return FUTURES.get(id);
     }
@@ -259,6 +402,13 @@ public class DefaultFuture implements ResponseFuture {
 
     private static class RemotingInvocationTimeoutScan implements Runnable {
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void run() {
             while (true) {
                 try {

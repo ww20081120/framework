@@ -37,14 +37,33 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 final class NettyChannel extends AbstractChannel {
 
-    private static final ConcurrentMap<org.jboss.netty.channel.Channel, NettyChannel> channelMap = new ConcurrentHashMap<org.jboss.netty.channel.Channel, NettyChannel>();
+    /**
+     * channelMap
+     */
+    private static final ConcurrentMap<org.jboss.netty.channel.Channel, NettyChannel> channelMap = 
+            new ConcurrentHashMap<org.jboss.netty.channel.Channel, NettyChannel>();
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(NettyChannel.class);
 
+    /**
+     * channel
+     */
     private final org.jboss.netty.channel.Channel channel;
 
+    /**
+     * attributes
+     */
     private final Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
 
+    /**
+     * NettyChannel
+     * @param channel <br>
+     * @param url <br>
+     * @param handler <br>
+     */
     private NettyChannel(org.jboss.netty.channel.Channel channel, URL url, ChannelHandler handler) {
         super(url, handler);
         if (channel == null) {
@@ -53,6 +72,17 @@ final class NettyChannel extends AbstractChannel {
         this.channel = channel;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param ch <br>
+     * @param url <br>
+     * @param handler <br>
+     * @return <br>
+     */
     static NettyChannel getOrAddChannel(org.jboss.netty.channel.Channel ch, URL url, ChannelHandler handler) {
         if (ch == null) {
             return null;
@@ -70,6 +100,14 @@ final class NettyChannel extends AbstractChannel {
         return ret;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param ch <br>
+     */
     static void removeChannelIfDisconnected(org.jboss.netty.channel.Channel ch) {
         if (ch != null && !ch.isConnected()) {
             channelMap.remove(ch);
@@ -88,6 +126,16 @@ final class NettyChannel extends AbstractChannel {
         return channel.isConnected();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @param sent <br>
+     * @throws RemotingException <br>
+     */
     public void send(Object message, boolean sent) throws RemotingException {
         super.send(message, sent);
 
@@ -115,6 +163,13 @@ final class NettyChannel extends AbstractChannel {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void close() {
         try {
             super.close();
@@ -143,14 +198,41 @@ final class NettyChannel extends AbstractChannel {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
+     */
     public boolean hasAttribute(String key) {
         return attributes.containsKey(key);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
+     */
     public Object getAttribute(String key) {
         return attributes.get(key);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @param value <br>
+     */
     public void setAttribute(String key, Object value) {
         if (value == null) { // The null value unallowed in the ConcurrentHashMap.
             attributes.remove(key);
@@ -160,6 +242,14 @@ final class NettyChannel extends AbstractChannel {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     */
     public void removeAttribute(String key) {
         attributes.remove(key);
     }
@@ -174,19 +264,24 @@ final class NettyChannel extends AbstractChannel {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         NettyChannel other = (NettyChannel) obj;
         if (channel == null) {
-            if (other.channel != null)
+            if (other.channel != null) {
                 return false;
+            }
         }
-        else if (!channel.equals(other.channel))
+        else if (!channel.equals(other.channel)) {
             return false;
+        }
         return true;
     }
 

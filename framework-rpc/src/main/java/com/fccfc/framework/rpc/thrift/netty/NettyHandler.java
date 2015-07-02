@@ -39,13 +39,27 @@ import com.alibaba.dubbo.remoting.ChannelHandler;
 @Sharable
 public class NettyHandler extends SimpleChannelHandler {
 
+    /**
+     * channels
+     */
     private final Map<String, Channel> channels = new ConcurrentHashMap<String, Channel>(); // <ip:port, channel>
     
+    /**
+     * url
+     */
     private final URL url;
     
+    /**
+     * handler
+     */
     private final ChannelHandler handler;
     
-    public NettyHandler(URL url, ChannelHandler handler){
+    /**
+     * NettyHandler
+     * @param url <br>
+     * @param handler <br>
+     */
+    public NettyHandler(URL url, ChannelHandler handler) {
         if (url == null) {
             throw new IllegalArgumentException("url == null");
         }
@@ -68,7 +82,8 @@ public class NettyHandler extends SimpleChannelHandler {
                 channels.put(NetUtils.toAddressString((InetSocketAddress) ctx.getChannel().getRemoteAddress()), channel);
             }
             handler.connected(channel);
-        } finally {
+        }
+        finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());
         }
     }
@@ -79,7 +94,8 @@ public class NettyHandler extends SimpleChannelHandler {
         try {
             channels.remove(NetUtils.toAddressString((InetSocketAddress) ctx.getChannel().getRemoteAddress()));
             handler.disconnected(channel);
-        } finally {
+        }
+        finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());
         }
     }
@@ -89,7 +105,8 @@ public class NettyHandler extends SimpleChannelHandler {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.getChannel(), url, handler);
         try {
             handler.received(channel, e.getMessage());
-        } finally {
+        }
+        finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());
         }
     }
@@ -100,7 +117,8 @@ public class NettyHandler extends SimpleChannelHandler {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.getChannel(), url, handler);
         try {
             handler.sent(channel, e.getMessage());
-        } finally {
+        }
+        finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());
         }
     }
@@ -110,7 +128,8 @@ public class NettyHandler extends SimpleChannelHandler {
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.getChannel(), url, handler);
         try {
             handler.caught(channel, e.getCause());
-        } finally {
+        }
+        finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());
         }
     }

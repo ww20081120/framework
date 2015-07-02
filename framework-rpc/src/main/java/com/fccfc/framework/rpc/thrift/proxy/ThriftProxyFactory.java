@@ -18,18 +18,45 @@ import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.rpc.thrift.common.TBaseTools;
 
 /**
+ * ThriftProxyFactory
  * @author yankai
  * @date 2012-3-28
  */
 public class ThriftProxyFactory extends AbstractProxyFactory {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(ThriftProxyFactory.class);
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param invoker <br>
+     * @param <T> <br>
+     * @param interfaces <br>
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Invoker<T> invoker, Class<?>[] interfaces) {
         return (T) Proxy.getProxy(interfaces).newInstance(new InvokerInvocationHandler(invoker));
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param proxy <br>
+     * @param <T> <br>
+     * @param type <br>
+     * @param url <br>
+     * @return <br>
+     */
     public <T> Invoker<T> getInvoker(T proxy, Class<T> type, URL url) {
 
         final TProcessor processor = getTProcessor(type, proxy);
@@ -61,6 +88,16 @@ public class ThriftProxyFactory extends AbstractProxyFactory {
         };
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param serviceIface <br>
+     * @param serviceImpl <br>
+     * @return <br>
+     */
     final TProcessor getTProcessor(Class<?> serviceIface, Object serviceImpl) {
         try {
             if (serviceImpl == null) {
@@ -82,5 +119,8 @@ public class ThriftProxyFactory extends AbstractProxyFactory {
         }
     }
 
+    /**
+     * serviceClazz2Processor
+     */
     static ConcurrentHashMap<Class<?>, TProcessor> serviceClazz2Processor = new ConcurrentHashMap<Class<?>, TProcessor>();
 }

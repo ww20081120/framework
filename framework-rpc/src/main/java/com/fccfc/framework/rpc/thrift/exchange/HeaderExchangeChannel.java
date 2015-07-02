@@ -37,14 +37,29 @@ import com.fccfc.framework.rpc.thrift.common.TBaseTools;
  */
 public class HeaderExchangeChannel implements ExchangeChannel {
 
+    /**
+     * SEQ_ID
+     */
     public static final String SEQ_ID = "seqId";
 
+    /**
+     * CHANNEL_KEY
+     */
     private static final String CHANNEL_KEY = HeaderExchangeChannel.class.getName() + ".CHANNEL";
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(HeaderExchangeChannel.class);
 
+    /**
+     * channel
+     */
     private final Channel channel;
 
+    /**
+     * closed
+     */
     private volatile boolean closed = false;
 
     /** seqId generator */
@@ -52,6 +67,7 @@ public class HeaderExchangeChannel implements ExchangeChannel {
 
     /**
      * 默认构造函数
+     * @param channel <br>
      */
     public HeaderExchangeChannel(Channel channel) {
         if (channel == null) {
@@ -60,6 +76,15 @@ public class HeaderExchangeChannel implements ExchangeChannel {
         this.channel = channel;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param ch <br>
+     * @return <br>
+     */
     public static HeaderExchangeChannel getOrAddChannel(Channel ch) {
         if (ch == null) {
             return null;
@@ -74,6 +99,14 @@ public class HeaderExchangeChannel implements ExchangeChannel {
         return ret;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param ch <br>
+     */
     public static void removeChannelIfDisconnected(Channel ch) {
         if (ch != null && !ch.isConnected()) {
             ch.removeAttribute(CHANNEL_KEY);
@@ -81,7 +114,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#getRemoteAddress()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public InetSocketAddress getRemoteAddress() {
@@ -89,7 +127,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#isConnected()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public boolean isConnected() {
@@ -97,7 +140,13 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#hasAttribute(java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
      */
     @Override
     public boolean hasAttribute(String key) {
@@ -105,7 +154,13 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#getAttribute(java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @return <br>
      */
     @Override
     public Object getAttribute(String key) {
@@ -113,7 +168,13 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#setAttribute(java.lang.String, java.lang.Object)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @param value <br>
      */
     @Override
     public void setAttribute(String key, Object value) {
@@ -121,7 +182,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Channel#removeAttribute(java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
      */
     @Override
     public void removeAttribute(String key) {
@@ -129,7 +195,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#getUrl()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public URL getUrl() {
@@ -137,7 +208,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#getChannelHandler()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public ChannelHandler getChannelHandler() {
@@ -145,7 +221,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#getLocalAddress()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public InetSocketAddress getLocalAddress() {
@@ -153,7 +234,13 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#send(java.lang.Object)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @throws RemotingException <br>
      */
     @Override
     public void send(Object message) throws RemotingException {
@@ -161,7 +248,14 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#send(java.lang.Object, boolean)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @param sent <br>
+     * @throws RemotingException <br>
      */
     @Override
     public void send(Object message, boolean sent) throws RemotingException {
@@ -178,6 +272,17 @@ public class HeaderExchangeChannel implements ExchangeChannel {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param id <br>
+     * @param inv <br>
+     * @return <br>
+     * @throws RemotingException <br>
+     */
     private ChannelBuffer createRequestBuffer(int id, RpcInvocation inv) throws RemotingException {
         ChannelBuffer output = ChannelBuffers.dynamicBuffer(512);
         TProtocol oprot = TBaseTools.newProtocol(null, output);
@@ -201,7 +306,11 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#close()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
      */
     @Override
     public void close() {
@@ -214,7 +323,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.Endpoint#isClosed()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public boolean isClosed() {
@@ -222,7 +336,14 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#request(java.lang.Object)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws RemotingException <br>
      */
     @Override
     public ResponseFuture request(Object request) throws RemotingException {
@@ -230,7 +351,15 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#request(java.lang.Object, int)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @param timeout <br>
+     * @return <br>
+     * @throws RemotingException <br>
      */
     @Override
     public ResponseFuture request(Object request, int timeout) throws RemotingException {
@@ -252,7 +381,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#getExchangeHandler()
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
      */
     @Override
     public ExchangeHandler getExchangeHandler() {
@@ -260,7 +394,12 @@ public class HeaderExchangeChannel implements ExchangeChannel {
     }
 
     /**
-     * @see com.alibaba.dubbo.remoting.exchange.ExchangeChannel#close(int)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param timeout <br>
      */
     @Override
     public void close(int timeout) {
@@ -293,19 +432,24 @@ public class HeaderExchangeChannel implements ExchangeChannel {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         HeaderExchangeChannel other = (HeaderExchangeChannel) obj;
         if (channel == null) {
-            if (other.channel != null)
+            if (other.channel != null) {
                 return false;
+            }
         }
-        else if (!channel.equals(other.channel))
+        else if (!channel.equals(other.channel)) {
             return false;
+        }
         return true;
     }
 

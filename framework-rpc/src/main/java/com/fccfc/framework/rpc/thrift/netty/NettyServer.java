@@ -51,16 +51,32 @@ import com.fccfc.framework.common.utils.logger.Logger;
  */
 public class NettyServer extends AbstractServer implements Server {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(NettyServer.class);
 
+    /**
+     * channels
+     */
     private Map<String, Channel> channels; // <ip:port, channel>
 
+    /**
+     * bootstrap
+     */
     private ServerBootstrap bootstrap;
 
+    /**
+     * channel
+     */
     private org.jboss.netty.channel.Channel channel;
 
-    // private int maxLength;
-
+    /**
+     *  private int maxLength;
+     * @param url <br>
+     * @param handler <br>
+     * @throws RemotingException <br>
+     */
     public NettyServer(URL url, ChannelHandler handler) throws RemotingException {
         super(url, ChannelHandlers.wrap(handler,
             url.addParameterIfAbsent(Constants.THREAD_NAME_KEY, SERVER_THREAD_POOL_NAME + "-" + url.getPath())));
@@ -144,6 +160,14 @@ public class NettyServer extends AbstractServer implements Server {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Collection<Channel> getChannels() {
         Collection<Channel> chs = new HashSet<Channel>();
         for (Channel channel : this.channels.values()) {
@@ -157,6 +181,15 @@ public class NettyServer extends AbstractServer implements Server {
         return chs;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param remoteAddress <br>
+     * @return <br>
+     */
     public Channel getChannel(InetSocketAddress remoteAddress) {
         return channels.get(NetUtils.toAddressString(remoteAddress));
     }

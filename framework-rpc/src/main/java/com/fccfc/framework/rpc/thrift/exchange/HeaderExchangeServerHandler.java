@@ -17,13 +17,21 @@ import com.alibaba.dubbo.rpc.RpcResult;
 import com.fccfc.framework.rpc.thrift.common.TBaseTools;
 
 /**
+ * HeaderExchangeServerHandler
  * @author yankai
  * @date 2012-8-31
  */
 public class HeaderExchangeServerHandler implements ChannelHandlerDelegate {
 
+    /**
+     * ExchangeHandler
+     */
     private final ExchangeHandler handler;
 
+    /**
+     * HeaderExchangeServerHandler
+     * @param handler <br>
+     */
     public HeaderExchangeServerHandler(ExchangeHandler handler) {
         if (handler == null) {
             throw new IllegalArgumentException("handler == null");

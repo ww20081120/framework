@@ -28,14 +28,21 @@ import com.alibaba.dubbo.rpc.RpcException;
 
 /**
  * FutureAdapter
- * 
+ * @param <V> <br>
  * @author william.liangf
  */
 public class FutureAdapter<V> implements Future<V> {
     
+    /**
+     * future
+     */
     private final ResponseFuture future;
 
-    public FutureAdapter(ResponseFuture future){
+    /**
+     * FutureAdapter
+     * @param future <br>
+     */
+    public FutureAdapter(ResponseFuture future) {
         this.future = future;
     }
 
@@ -43,6 +50,15 @@ public class FutureAdapter<V> implements Future<V> {
         return future;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param mayInterruptIfRunning <br>
+     * @return <br>
+     */
     public boolean cancel(boolean mayInterruptIfRunning) {
         return false;
     }
@@ -55,27 +71,55 @@ public class FutureAdapter<V> implements Future<V> {
         return future.isDone();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws InterruptedException <br>
+     * @throws ExecutionException <br>
+     */
     @SuppressWarnings("unchecked")
     public V get() throws InterruptedException, ExecutionException {
         try {
             return (V) (((Result) future.get()).recreate());
-        } catch (RemotingException e) {
+        }
+        catch (RemotingException e) {
             throw new ExecutionException(e.getMessage(), e);
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             throw new RpcException(e);
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param timeout <br>
+     * @param unit <br>
+     * @return <br>
+     * @throws InterruptedException <br>
+     * @throws ExecutionException <br>
+     * @throws TimeoutException <br>
+     */
     @SuppressWarnings("unchecked")
     public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         int timeoutInMillis = (int) unit.convert(timeout, TimeUnit.MILLISECONDS);
         try {
             return (V) (((Result) future.get(timeoutInMillis)).recreate());
-        } catch (com.alibaba.dubbo.remoting.TimeoutException e) {
+        }
+        catch (com.alibaba.dubbo.remoting.TimeoutException e) {
             throw new TimeoutException(StringUtils.toString(e));
-        } catch (RemotingException e) {
+        }
+        catch (RemotingException e) {
             throw new ExecutionException(e.getMessage(), e);
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             throw new RpcException(e);
         }
     }

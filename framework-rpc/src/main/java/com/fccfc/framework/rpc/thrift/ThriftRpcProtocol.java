@@ -39,23 +39,45 @@ import com.fccfc.framework.rpc.thrift.netty.NettyTransporter;
 //import com.sodao.dubbo.thrift.codec.ThriftExchangeCodec;
 
 /**
+ * ThriftRpcProtocol
  * @author yankai
  * @date 2012-8-31
  */
 public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
 
+    /**
+     * NAME
+     */
     public static final String NAME = "thrift";
 
+    /**
+     * DEFAULT_PORT
+     */
     public static final int DEFAULT_PORT = 28088;
 
+    /**
+     * lock
+     */
     public final ReentrantLock lock = new ReentrantLock();
 
+    /**
+     * serverMap
+     */
     private final Map<String, ExchangeServer> serverMap = new ConcurrentHashMap<String, ExchangeServer>();
 
+    /**
+     * referenceClientMap
+     */
     private final Map<String, ReferenceCountExchangeClient> referenceClientMap = new ConcurrentHashMap<String, ReferenceCountExchangeClient>();
 
+    /**
+     * ghostClientMap
+     */
     private final ConcurrentMap<String, LazyConnectExchangeClient> ghostClientMap = new ConcurrentHashMap<String, LazyConnectExchangeClient>();
 
+    /**
+     * requestHandler
+     */
     private ExchangeHandler requestHandler = new ExchangeHandlerAdapter() {
 
         @Override
@@ -98,12 +120,26 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
 
     };
 
+    /**
+     * INSTANCE
+     */
     private static ThriftRpcProtocol INSTANCE;
 
+    /**
+     * ThriftRpcProtocol
+     */
     public ThriftRpcProtocol() {
         INSTANCE = this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static ThriftRpcProtocol getThriftRpcProtocol() {
         if (INSTANCE == null) {
             ExtensionLoader.getExtensionLoader(Protocol.class).getExtension(ThriftRpcProtocol.NAME); // load
@@ -131,6 +167,17 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
         return DEFAULT_PORT;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param <T> <br>
+     * @param invoker <br>
+     * @return <br>
+     * @throws RpcException <br>
+     */
     public <T> Exporter<T> export(Invoker<T> invoker) throws RpcException {
         URL url = invoker.getUrl();
         // export service.
@@ -143,6 +190,14 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
         return exporter;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     */
     private void openServer(URL url) {
         // find server.
         String key = url.getAddress();
@@ -163,6 +218,15 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @return <br>
+     */
     private ExchangeServer getServer(URL url) {
         // 指定自己的exchanger
         url = url.addParameterIfAbsent(Constants.EXCHANGER_KEY, HeaderExchanger.NAME);
@@ -191,6 +255,18 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
         return server;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param serviceType <br>
+     * @param url <br>
+     * @param <T> <br>
+     * @return <br>
+     * @throws RpcException <br>
+     */
     public <T> Invoker<T> refer(Class<T> serviceType, URL url) throws RpcException {
         // create rpc invoker.
         ThriftRpcInvoker<T> invoker = new ThriftRpcInvoker<T>(serviceType, url, getClients(url), invokers);
@@ -198,6 +274,15 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
         return invoker;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @return <br>
+     */
     private ExchangeClient[] getClients(URL url) {
         // 是否共享连接
         boolean service_share_connect = false;
@@ -221,7 +306,13 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
     }
 
     /**
-     * 获取共享连接
+     * 
+     * Description:获取共享连接 <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @return <br>
      */
     private ExchangeClient getSharedClient(URL url) {
         String key = url.getAddress();
@@ -245,7 +336,13 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
     }
 
     /**
-     * 创建新连接.
+     * 
+     * Description:创建新连接. <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @return <br>
      */
     private ExchangeClient initClient(URL url) {
         // 指定自己的exchanger
@@ -278,6 +375,13 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
         return client;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void destroy() {
         super.destroy();
         for (String key : new ArrayList<String>(serverMap.keySet())) {

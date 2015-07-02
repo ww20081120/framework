@@ -10,13 +10,21 @@ import com.alibaba.dubbo.remoting.exchange.ExchangeHandler;
 import com.alibaba.dubbo.remoting.transport.ChannelHandlerDelegate;
 
 /**
+ * HeaderExchangeClientHandler
  * @author yankai
  * @date 2012-8-31
  */
 public class HeaderExchangeClientHandler implements ChannelHandlerDelegate {
 
+    /**
+     * ExchangeHandler
+     */
     private final ExchangeHandler handler;
 
+    /**
+     * HeaderExchangeClientHandler
+     * @param handler <br>
+     */
     public HeaderExchangeClientHandler(ExchangeHandler handler) {
         if (handler == null) {
             throw new IllegalArgumentException("handler == null");
