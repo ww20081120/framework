@@ -38,9 +38,15 @@ import com.fccfc.framework.web.service.OperatorService;
 @Service
 public class OperatorServiceImple implements OperatorService {
 
+    /**
+     * operatorDao
+     */
     @Resource
     private OperatorDao operatorDao;
 
+    /**
+     * accountDao
+     */
     @Resource
     private AccountDao accountDao;
 
@@ -74,8 +80,18 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
-     * @see com.fccfc.framework.api.operator.OperatorService#addOperator(java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param username <br>
+     * @param password <br>
+     * @param accountType <br>
+     * @param operatorType <br>
+     * @param registIp <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     @Override
     public OperatorPojo addOperator(String username, String password, String accountType, String operatorType,
@@ -123,7 +139,15 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
-     * @see com.fccfc.framework.api.operator.OperatorService#updateOperatorCode(int, int)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param id <br>
+     * @param code <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     @Override
     public int updateOperatorCode(int id, int code) throws ServiceException {
@@ -136,7 +160,17 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
-     * @see com.fccfc.framework.api.operator.OperatorService#login(java.lang.String, java.lang.String, java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param type <br>
+     * @param username <br>
+     * @param password <br>
+     * @param ip <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     @Override
     public OperatorPojo login(String type, String username, String password, String ip) throws ServiceException {
@@ -155,7 +189,15 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
-     * @see com.fccfc.framework.api.operator.OperatorService#getOperatorByAccount(java.lang.String, java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param type <br>
+     * @param username <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     @Override
     public OperatorPojo getOperatorByAccount(String type, String username) throws ServiceException {
@@ -168,8 +210,16 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
-     * @see com.fccfc.framework.api.operator.OperatorService#checkOperator(java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param type <br>
+     * @param username <br>
+     * @param password <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     @Override
     public OperatorPojo checkOperator(String type, String username, String password) throws ServiceException {
@@ -200,8 +250,14 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
-     * @see com.fccfc.framework.api.operator.OperatorService#updatePassword(java.lang.String, java.lang.String,
-     *      java.lang.String)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param operator <br>
+     * @param password <br>
+     * @throws ServiceException <br>
      */
     @Override
     public void updatePassword(OperatorPojo operator, String password) throws ServiceException {

@@ -12,10 +12,23 @@ import com.fccfc.framework.web.WebUtil;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 
 /**
+ * SercurityInterceptor
  * @author Administrator
  */
 public class SercurityInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @param response <br>
+     * @param handler <br>
+     * @return <br>
+     * @throws Exception <br>
+     */
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         OperatorPojo operator = WebUtil.getCurrentOperator();
         if (null == operator) {

@@ -22,6 +22,16 @@ import com.fccfc.framework.web.bean.operator.AdminPojo;
 @Dao
 public interface AdminDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param id <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("SELECT * FROM ADMIN A WHERE A.ADMIN_ID = :id")
     AdminPojo getAdminById(@Param("id") Integer id) throws DaoException;
 }

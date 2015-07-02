@@ -20,9 +20,38 @@ import com.fccfc.framework.web.bean.area.AreaPojo;
  */
 public interface AreaService {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     List<AreaPojo> queryAllAreaPojo() throws ServiceException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param areaId <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     List<AreaPojo> queryAreaAndParents(Integer areaId) throws ServiceException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param areaId <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     List<Integer> queryAreaAndParentIds(Integer areaId) throws ServiceException;
 }

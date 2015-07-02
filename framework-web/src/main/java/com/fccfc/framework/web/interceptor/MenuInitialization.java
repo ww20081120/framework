@@ -21,8 +21,14 @@ import com.fccfc.framework.web.service.MenuService;
  */
 public class MenuInitialization implements Initialization {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(MenuInitialization.class);
 
+    /**
+     * menuService
+     */
     @Resource
     private MenuService menuService;
 

@@ -24,12 +24,36 @@ import com.fccfc.framework.web.bean.resource.MenuPojo;
 @Dao
 public interface MenuDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param moduleCode <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(
-        value = "SELECT M.*,U.URL FROM MENU M LEFT JOIN URL_RESOURCE U ON M.RESOURCE_ID = U.RESOURCE_ID WHERE M.MODULE_CODE IN (:moduleCode) ORDER BY M.PARENT_ID ASC, M.SEQ ASC",
+        value = "SELECT M.*,U.URL FROM MENU M LEFT JOIN URL_RESOURCE U ON "
+            + "M.RESOURCE_ID = U.RESOURCE_ID WHERE M.MODULE_CODE IN (:moduleCode) ORDER BY M.PARENT_ID ASC, M.SEQ ASC",
         bean = MenuPojo.class)
     List<MenuPojo> selectAllMenu(@Param("moduleCode") List<String> moduleCode) throws DaoException;
 
-    @Sql("SELECT M.MENU_ID FROM MENU M, URL_RESOURCE U WHERE M.RESOURCE_ID = U.RESOURCE_ID AND U.MODULE_CODE IN (:moduleCode) AND M.IS_LEAF = 'Y' AND U.EXECUTE_CLASS = :class AND U.EXECUTE_METHOD = :method")
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param moduleCode <br>
+     * @param clazz <br>
+     * @param method <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
+    @Sql("SELECT M.MENU_ID FROM MENU M, URL_RESOURCE U WHERE M.RESOURCE_ID = U.RESOURCE_ID "
+        + "AND U.MODULE_CODE IN (:moduleCode) AND M.IS_LEAF = 'Y' AND U.EXECUTE_CLASS = :class AND U.EXECUTE_METHOD = :method")
     Integer getMenuByClassAndMethod(@Param("moduleCode") List<String> moduleCode, @Param("class") String clazz,
         @Param("method") String method) throws DaoException;
 }

@@ -20,20 +20,71 @@ import com.fccfc.framework.db.hibernate.IGenericBaseDao;
 @Dao
 public interface DirectoryDao extends IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param directoryCode <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT * FROM DIRECTORY WHERE DIRECTORY_CODE = :directoryCode", bean = DirectoryPojo.class)
     List<DirectoryPojo> queryDirectory(@Param("directoryCode") String directoryCode) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param parentDirectoryCode <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT * FROM DIRECTORY WHERE PARENT_DIRECTORY_CODE = :parentDirectoryCode",
         bean = DirectoryPojo.class)
     List<DirectoryPojo> queryDirectoryByParentCode(@Param("parentDirectoryCode") String parentDirectoryCode)
         throws DaoException;
 
-    @Sql("INSERT INTO DIRECTORY(DIRECTORY_CODE,DIRECTORY_NAME,PARENT_DIRECTORY_CODE,REMARK) VALUES(:directory.directoryCode,:directory.directoryName,:directory.parentDirectoryCode,:directory.remark)")
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param directory <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
+    @Sql("INSERT INTO DIRECTORY(DIRECTORY_CODE,DIRECTORY_NAME,PARENT_DIRECTORY_CODE,REMARK)"
+        + " VALUES(:directory.directoryCode,:directory.directoryName,:directory.parentDirectoryCode,:directory.remark)")
     int insertDirectory(@Param("directory") DirectoryPojo directory) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param directoryCode <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("DELETE FROM DIRECTORY WHERE DIRECTORY_CODE = :directoryCode")
     int deleteDirectory(@Param("directoryCode") String directoryCode) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param pojo <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("UPDATE DIRECTORY SET DIRECTORY_NAME = :directory.directoryName , REMARK= :directory.remark WHERE DIRECTORY_CODE = :directory.directoryCode")
     int updateDirectory(@Param("directory") DirectoryPojo pojo) throws DaoException;
 

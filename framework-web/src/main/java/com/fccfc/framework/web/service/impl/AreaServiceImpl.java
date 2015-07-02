@@ -32,6 +32,9 @@ import com.fccfc.framework.web.service.AreaService;
 @Service
 public class AreaServiceImpl implements AreaService {
 
+    /**
+     * areaDao
+     */
     @Resource
     private AreaDao areaDao;
 
@@ -69,6 +72,15 @@ public class AreaServiceImpl implements AreaService {
         return areaList;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param areaList <br>
+     * @param area <br>
+     */
     private void setParentArea(List<AreaPojo> areaList, AreaPojo area) {
         AreaPojo parent = area.getParent();
         if (parent != null) {
@@ -78,7 +90,14 @@ public class AreaServiceImpl implements AreaService {
     }
 
     /**
-     * @see com.fccfc.framework.web.service.AreaService#queryAreaAndParentIds(java.lang.Integer)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param areaId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     @Override
     public List<Integer> queryAreaAndParentIds(Integer areaId) throws ServiceException {

@@ -25,11 +25,22 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 public class GlobalDataInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     * caches
+     */
     private static Map<String, Object> caches;
 
     /**
-     * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#postHandle(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.web.servlet.ModelAndView)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @param response <br>
+     * @param handler <br>
+     * @param modelAndView <br>
+     * @throws Exception <br>
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,

@@ -69,9 +69,15 @@ public class AreaPojo extends BaseEntity {
     @Column(name = "REMARK")
     private String remark;
 
+    /**
+     * parent
+     */
     @Transient
     private AreaPojo parent;
 
+    /**
+     * children
+     */
     @Transient
     private List<AreaPojo> children;
 

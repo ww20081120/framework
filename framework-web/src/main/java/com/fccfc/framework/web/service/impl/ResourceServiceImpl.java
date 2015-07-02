@@ -32,8 +32,14 @@ import com.fccfc.framework.web.service.ResourceService;
 @Service
 public class ResourceServiceImpl implements ResourceService {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(ResourceServiceImpl.class);
 
+    /**
+     * attachmentsDao
+     */
     @Resource
     private AttachmentsDao attachmentsDao;
 

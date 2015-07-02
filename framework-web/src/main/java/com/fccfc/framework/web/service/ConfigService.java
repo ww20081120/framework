@@ -13,60 +13,92 @@ import com.fccfc.framework.common.ServiceException;
 public interface ConfigService {
 
     /**
-     * 查询配置项目录
      * 
-     * @return
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<Map<String, Object>> queryConfigCatalogs() throws ServiceException;
 
     /**
-     * 查询参数配置项
      * 
-     * @return
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param paramMap <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<Map<String, Object>> queryConfigItems(Map<String, Object> paramMap) throws ServiceException;
 
     /**
-     * 查询所有目录
      * 
-     * @return
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<Map<String, Object>> queryDirectorys() throws ServiceException;
 
     /**
-     * 查询所有模块
      * 
-     * @return
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<Map<String, Object>> queryModules() throws ServiceException;
 
     /**
-     * 查询输入类型
      * 
-     * @return
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<Map<String, Object>> queryInputTypes() throws ServiceException;
 
     /**
-     * 查询数据类型
      * 
-     * @return
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<Map<String, Object>> queryDataTypes() throws ServiceException;
 
     /**
-     * 新增配置项
      * 
-     * @param paramMap
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param paramMap <br>
+     * @throws ServiceException <br>
      */
     void addConfigItem(Map<String, Object> paramMap) throws ServiceException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param paramMap <br>
+     * @throws ServiceException <br>
+     */
     void addParam(Map<String, Object> paramMap) throws ServiceException;
 
     /**

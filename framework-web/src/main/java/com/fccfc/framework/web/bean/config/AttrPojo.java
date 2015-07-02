@@ -72,6 +72,9 @@ public class AttrPojo extends BaseEntity {
     @Column(name = "VALUE_SCRIPT")
     private String valueScript;
 
+    /**
+     * attrValue
+     */
     @Transient
     private String attrValue;
 

@@ -23,13 +23,21 @@ import com.fccfc.framework.web.service.ConfigService;
 @Controller
 public class ConfigController {
 
+    /**
+     * configService
+     */
     @Resource
     private ConfigService configService;
 
     /**
-     * 参数配置里诶包
      * 
-     * @return
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws FrameworkException <br>
      */
     public String listConfigItems(HttpServletRequest request) throws FrameworkException {
         // 查询所有配置项目录
@@ -54,11 +62,14 @@ public class ConfigController {
     }
 
     /**
-     * 参数配置项查询
      * 
-     * @param request
-     * @return
-     * @throws FrameworkException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws FrameworkException <br>
      */
     @ResponseBody
     // @RequestMapping("/system/config/qryItem")
@@ -70,11 +81,14 @@ public class ConfigController {
     }
 
     /**
-     * 参数配置项新增
      * 
-     * @param request
-     * @return
-     * @throws FrameworkException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws FrameworkException <br>
      */
     @ResponseBody
     // @RequestMapping("/system/config/addItem")
@@ -101,11 +115,14 @@ public class ConfigController {
     }
 
     /**
-     * 查询配置参数
      * 
-     * @param request
-     * @return
-     * @throws FrameworkException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws FrameworkException <br>
      */
     @ResponseBody
     // @RequestMapping("/system/config/queryParams")
@@ -116,6 +133,16 @@ public class ConfigController {
         return JsonUtil.writeObj2JSON(params);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws FrameworkException <br>
+     */
     @ResponseBody
     public String addParams(HttpServletRequest request) throws FrameworkException {
         String paramCode = request.getParameter("paramCode");

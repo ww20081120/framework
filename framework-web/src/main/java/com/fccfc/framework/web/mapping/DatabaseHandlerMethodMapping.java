@@ -38,8 +38,14 @@ import com.fccfc.framework.web.service.MappingService;
  */
 public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(DatabaseHandlerMethodMapping.class);
 
+    /**
+     * mappingService
+     */
     @Resource
     private MappingService mappingService;
 
@@ -114,6 +120,17 @@ public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
         return info;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param value <br>
+     * @param annotation <br>
+     * @param customCondition <br>
+     * @return <br>
+     */
     protected RequestMappingInfo createRequestMappingInfo(String[] value, RequestMapping annotation,
         RequestCondition<?> customCondition) {
         String[] patterns = resolveEmbeddedValuesInPatterns(value);
@@ -121,11 +138,11 @@ public class DatabaseHandlerMethodMapping extends RequestMappingHandlerMapping {
             getPathMatcher(), useSuffixPatternMatch(), useTrailingSlashMatch(), getFileExtensions()), null, null, null,
             null, null, customCondition)
 
-        : new RequestMappingInfo(annotation.name(), new PatternsRequestCondition(patterns, getUrlPathHelper(),
-            getPathMatcher(), useSuffixPatternMatch(), useTrailingSlashMatch(), getFileExtensions()),
-            new RequestMethodsRequestCondition(annotation.method()), new ParamsRequestCondition(annotation.params()),
-            new HeadersRequestCondition(annotation.headers()), new ConsumesRequestCondition(annotation.consumes(),
-                annotation.headers()), new ProducesRequestCondition(annotation.produces(), annotation.headers(),
-                getContentNegotiationManager()), customCondition);
+            : new RequestMappingInfo(annotation.name(), new PatternsRequestCondition(patterns, getUrlPathHelper(),
+                getPathMatcher(), useSuffixPatternMatch(), useTrailingSlashMatch(), getFileExtensions()),
+                new RequestMethodsRequestCondition(annotation.method()), new ParamsRequestCondition(annotation.params()),
+                new HeadersRequestCondition(annotation.headers()), new ConsumesRequestCondition(annotation.consumes(),
+                    annotation.headers()), new ProducesRequestCondition(annotation.produces(), annotation.headers(),
+                        getContentNegotiationManager()), customCondition);
     }
 }

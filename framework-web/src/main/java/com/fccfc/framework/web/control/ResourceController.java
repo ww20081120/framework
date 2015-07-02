@@ -58,17 +58,35 @@ import com.fccfc.framework.web.service.ResourceService;
 @Controller
 public class ResourceController {
 
+    /**
+     * logger
+     */
     private Logger logger = new Logger(ResourceController.class);
 
+    /**
+     * mediaSize
+     */
     private Map<String, Long> mediaSize;
 
+    /**
+     * contentTypes
+     */
     private Map<String, String> contentTypes;
 
+    /**
+     * meidaTypes
+     */
     private Map<String, MediaType> meidaTypes;
 
+    /**
+     * resourceService
+     */
     @javax.annotation.Resource
     private ResourceService resourceService;
 
+    /**
+     * ResourceController
+     */
     public ResourceController() {
         mediaSize = new HashMap<String, Long>();
         mediaSize.put("text", 1024 * 1024 * 2014l);
@@ -130,6 +148,18 @@ public class ResourceController {
     // return result;
     // }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param resourceId <br>
+     * @param isThumb <br>
+     * @param reqHeader <br>
+     * @return <br>
+     * @throws Exception <br>
+     */
     @ResponseBody
     public ResponseEntity<Resource> download(@RequestParam("mediaId") Integer resourceId, @RequestParam(
         value = "isThumb", required = false) String isThumb, @RequestHeader HttpHeaders reqHeader) throws Exception {
@@ -157,6 +187,16 @@ public class ResourceController {
         return new ResponseEntity<Resource>(new FileSystemResource(file), httpHeader, HttpStatus.OK);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     * @throws FrameworkException <br>
+     */
     @ResponseBody
     public Map<String, Object> upload(HttpServletRequest request) throws FrameworkException {
         if (!(request instanceof MultipartHttpServletRequest)) {
@@ -223,6 +263,16 @@ public class ResourceController {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param fileType <br>
+     * @param fileSize <br>
+     * @throws ServiceException <br>
+     */
     private void checkFile(String fileType, Long fileSize) throws ServiceException {
         String contentType = contentTypes.get(fileType);
         if (CommonUtil.isEmpty(contentType)) {
@@ -242,6 +292,21 @@ public class ResourceController {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param fileName <br>
+     * @param contentType <br>
+     * @param currentDate <br>
+     * @param expDate <br>
+     * @param path <br>
+     * @param fileSize <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     private Map<String, Object> saveFile(String fileName, String contentType, Date currentDate, Date expDate,
         String path, long fileSize) throws ServiceException {
         AttachmentsPojo pojo = new AttachmentsPojo();
@@ -267,6 +332,15 @@ public class ResourceController {
         return result;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param type <br>
+     * @return <br>
+     */
     private String getType(String type) {
         String tempType = "," + type + ",";
 
@@ -284,6 +358,15 @@ public class ResourceController {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param type <br>
+     * @return <br>
+     */
     private MediaType getMediaType(String type) {
         if (CommonUtil.isNotEmpty(type)) {
             MediaType mediaType = meidaTypes.get(type);

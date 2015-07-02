@@ -23,8 +23,29 @@ import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
 @Dao
 public interface AttachmentsDao extends IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param attachmentId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("SELECT * FROM ATTACHMENTS WHERE ATTACHMENTS_ID = :id")
     AttachmentsPojo selectAttachments(@Param("id") int attachmentId) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param attachmentId <br>
+     * @param thumbPath <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     int updateAttachments(@Param("id") int attachmentId, @Param("thumbPath") String thumbPath) throws DaoException;
 }

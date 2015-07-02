@@ -23,9 +23,31 @@ import com.fccfc.framework.db.core.annotation.Sql;
 @Dao
 public interface UrlResourceDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param moduleCode <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT U.EXECUTE_CLASS FROM URL_RESOURCE U WHERE U.MODULE_CODE IN (:moduleCode)", bean = String.class)
     List<String> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param moduleCode <br>
+     * @param clazz <br>
+     * @param method <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("SELECT U.URL FROM URL_RESOURCE U WHERE U.MODULE_CODE IN (:moduleCode) AND U.EXECUTE_CLASS = :class AND U.EXECUTE_METHOD = :method")
     String selectUrlByClassAndName(@Param("moduleCode") List<String> moduleCode, @Param("class") String clazz,
         @Param("method") String method) throws DaoException;

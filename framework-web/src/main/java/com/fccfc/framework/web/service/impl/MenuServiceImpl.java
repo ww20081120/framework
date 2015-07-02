@@ -40,6 +40,9 @@ import com.fccfc.framework.web.service.MenuService;
 @Service
 public class MenuServiceImpl implements MenuService {
 
+    /**
+     * menuDao
+     */
     @Resource
     private MenuDao menuDao;
 
@@ -115,6 +118,16 @@ public class MenuServiceImpl implements MenuService {
         return list;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param menuId <br>
+     * @param breadLineList <br>
+     * @param allMenuList <br>
+     */
     private void selectBreadLine(int menuId, List<MenuPojo> breadLineList, List<MenuPojo> allMenuList) {
         for (MenuPojo menu : allMenuList) {
             if (menu.getMenuId().equals(menuId)) {

@@ -23,9 +23,20 @@ public interface MenuService {
     /**
      * 缓存所有菜单
      * 
-     * @throws ServiceException
+     * @throws ServiceException <br>
      */
     void cacheAllMenu() throws ServiceException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param className <br>
+     * @param method <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     List<MenuPojo> selectBreadLine(String className, String method) throws ServiceException;
 }

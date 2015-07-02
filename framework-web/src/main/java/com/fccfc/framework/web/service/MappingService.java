@@ -22,10 +22,21 @@ public interface MappingService {
     /**
      * 获取url资源
      * 
-     * @return
-     * @throws ServiceException
+     * @return <br>
+     * @throws ServiceException <br>
      */
     List<String> selectAllUrlResource() throws ServiceException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param clazz <br>
+     * @param method <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     String getMethodUrl(String clazz, String method) throws ServiceException;
 }

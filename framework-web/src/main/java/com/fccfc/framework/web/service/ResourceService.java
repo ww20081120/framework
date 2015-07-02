@@ -17,13 +17,26 @@ import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
 public interface ResourceService {
 
     /**
-     * 下载文件
      * 
-     * @param resourceId
-     * @return
-     * @throws ServiceException
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param resourceId <br>
+     * @param isThumb <br>
+     * @return <br>
+     * @throws ServiceException <br>
      */
     AttachmentsPojo downloadResource(int resourceId, boolean isThumb) throws ServiceException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param attachments <br>
+     * @throws ServiceException <br>
+     */
     void saveAttachment(AttachmentsPojo attachments) throws ServiceException;
 }

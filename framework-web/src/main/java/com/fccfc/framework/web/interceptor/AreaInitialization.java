@@ -31,6 +31,9 @@ import com.fccfc.framework.web.service.AreaService;
  */
 public class AreaInitialization implements Initialization {
 
+    /**
+     * areaService
+     */
     @Resource
     private AreaService areaService;
 

@@ -22,9 +22,31 @@ import com.fccfc.framework.web.bean.area.AreaPojo;
 @Dao
 public interface AreaDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param area <br>
+     * @param pageIndex <br>
+     * @param pageSize <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(bean = AreaPojo.class)
     List<AreaPojo> selectAreaList(@Param("area") AreaPojo area, @Param(Param.pageIndex) Integer pageIndex,
         @Param(Param.pageSize) Integer pageSize) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param memberId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     AreaPojo selectAreaByMemberId(@Param("memberId") Integer memberId) throws DaoException;
 }

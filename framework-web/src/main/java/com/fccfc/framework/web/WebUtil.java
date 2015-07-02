@@ -41,11 +41,27 @@ public final class WebUtil {
     private WebUtil() {
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static Integer getCurrentOperatorId() {
         OperatorPojo pojo = getCurrentOperator();
         return pojo == null ? null : pojo.getOperatorId();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static OperatorPojo getCurrentOperator() {
         RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
         if (requestAttr instanceof ServletRequestAttributes) {
@@ -61,6 +77,15 @@ public final class WebUtil {
         return null;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param attrCode <br>
+     * @param attrValue <br>
+     */
     public static void setAttribute(String attrCode, Object attrValue) {
         RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
         if (requestAttr instanceof ServletRequestAttributes) {
@@ -69,6 +94,15 @@ public final class WebUtil {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param attrCode <br>
+     * @return <br>
+     */
     public static Object getAttribute(String attrCode) {
         Object obj = null;
         RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
@@ -85,7 +119,7 @@ public final class WebUtil {
     /**
      * 获取测试账号
      * 
-     * @return
+     * @return <br>
      */
     public static Map<String, String> getTestOperMap() {
         if (null != TEST_OPER_MAP) {

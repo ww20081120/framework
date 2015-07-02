@@ -69,6 +69,9 @@ public class MenuPojo extends BaseEntity {
     @Column(name = "SEQ")
     private Integer seq;
 
+    /**
+     * url
+     */
     @Transient
     private String url;
 
@@ -164,6 +167,15 @@ public class MenuPojo extends BaseEntity {
         this.seq = seq;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param menuList <br>
+     * @return <br>
+     */
     public boolean contain(List<MenuPojo> menuList) {
         if (menuList != null && menuList.size() > 0) {
             for (MenuPojo menu : menuList) {

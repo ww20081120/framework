@@ -30,8 +30,14 @@ import com.fccfc.framework.web.service.MappingService;
 @Service
 public class MappingServiceImpl implements MappingService {
 
+    /**
+     * resourceCache
+     */
     private List<String> resourceCache = new ArrayList<String>();
 
+    /**
+     * urlResourceDao
+     */
     @Resource
     private UrlResourceDao urlResourceDao;
 

@@ -34,9 +34,15 @@ import com.fccfc.framework.web.service.MenuService;
  */
 public class MenuInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     * menuService
+     */
     @Resource
     private MenuService menuService;
 
+    /**
+     * mappingService
+     */
     @Resource
     private MappingService mappingService;
 

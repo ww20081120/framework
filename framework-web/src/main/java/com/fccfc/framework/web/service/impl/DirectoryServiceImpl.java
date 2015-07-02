@@ -13,12 +13,36 @@ import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.dao.DirectoryDao;
 import com.fccfc.framework.web.service.DirectoryService;
 
+/**
+ * 
+ * <Description> <br> 
+ *  
+ * @author yang.zhipeng <br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2015年7月2日 <br>
+ * @since V7.3<br>
+ * @see com.fccfc.framework.web.service.impl <br>
+ */
 @Service
 public class DirectoryServiceImpl implements DirectoryService {
 
+    /**
+     * directoryDao
+     */
     @Resource
     private DirectoryDao directoryDao;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param directoryCode <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     public List<DirectoryPojo> selectDirectoryByCode(String directoryCode) throws ServiceException {
         try {
             return directoryDao.queryDirectory(directoryCode);
@@ -28,6 +52,16 @@ public class DirectoryServiceImpl implements DirectoryService {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param parentDirectoryCode <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     public List<DirectoryPojo> queryDirectoryByParentCode(String parentDirectoryCode) throws ServiceException {
         try {
             return directoryDao.queryDirectoryByParentCode(parentDirectoryCode);
@@ -37,6 +71,16 @@ public class DirectoryServiceImpl implements DirectoryService {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param directoryCode <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     public int deleteDirectory(String directoryCode) throws ServiceException {
         try {
             return directoryDao.deleteDirectory(directoryCode);
@@ -46,6 +90,16 @@ public class DirectoryServiceImpl implements DirectoryService {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param pojo <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     public int modifyDirectory(DirectoryPojo pojo) throws ServiceException {
         try {
             return directoryDao.updateDirectory(pojo);
@@ -55,6 +109,16 @@ public class DirectoryServiceImpl implements DirectoryService {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param pojo <br>
+     * @return <br>
+     * @throws ServiceException <br>
+     */
     public int addDirectory(DirectoryPojo pojo) throws ServiceException {
         try {
             return directoryDao.insertDirectory(pojo);

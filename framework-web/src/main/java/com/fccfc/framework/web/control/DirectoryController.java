@@ -20,12 +20,37 @@ import com.fccfc.framework.common.utils.bean.JsonUtil;
 import com.fccfc.framework.config.core.bean.DirectoryPojo;
 import com.fccfc.framework.web.service.DirectoryService;
 
+/**
+ * 
+ * <Description> <br> 
+ *  
+ * @author yang.zhipeng <br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2015年7月2日 <br>
+ * @since V7.3<br>
+ * @see com.fccfc.framework.web.control <br>
+ */
 @Controller
 public class DirectoryController {
 
+    /**
+     * directoryService
+     */
     @Resource
     private DirectoryService directoryService;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param code <br>
+     * @param root <br>
+     * @return <br>
+     * @throws FrameworkException <br>
+     */
     @ResponseBody
     public String listDirectory(@RequestParam(value = "id", required = false) String code,
         @RequestParam("root") String root) throws FrameworkException {
@@ -51,6 +76,19 @@ public class DirectoryController {
         return JsonUtil.writeObj2JSON(result);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param parentCode <br>
+     * @param code <br>
+     * @param name <br>
+     * @param remark <br>
+     * @return <br>
+     * @throws FrameworkException <br>
+     */
     @ResponseBody
     public ResponseEntity<String> addDirectory(@RequestParam("pid") String parentCode, @RequestParam("id") String code,
         @RequestParam("name") String name, @RequestParam(value = "remark", required = false) String remark)
@@ -67,6 +105,18 @@ public class DirectoryController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param code <br>
+     * @param name <br>
+     * @param remark <br>
+     * @return <br>
+     * @throws FrameworkException <br>
+     */
     @ResponseBody
     public ResponseEntity<String> modifyDirectory(@RequestParam("id") String code, @RequestParam("name") String name,
         @RequestParam(value = "remark", required = false) String remark) throws FrameworkException {
@@ -80,6 +130,16 @@ public class DirectoryController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param code <br>
+     * @return <br>
+     * @throws FrameworkException <br>
+     */
     @ResponseBody
     public ResponseEntity<String> deleteDirectory(@RequestParam("id") String code) throws FrameworkException {
         Assert.notEmpty(code, "目录代码不能为空");

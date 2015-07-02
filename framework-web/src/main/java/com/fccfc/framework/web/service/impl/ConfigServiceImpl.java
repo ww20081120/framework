@@ -20,6 +20,9 @@ import com.fccfc.framework.web.service.ConfigService;
 @Service
 public class ConfigServiceImpl implements ConfigService {
 
+    /**
+     * configDao
+     */
     @Resource
     private ConfigDao configDao;
 
