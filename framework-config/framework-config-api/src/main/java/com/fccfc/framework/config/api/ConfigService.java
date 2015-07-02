@@ -267,8 +267,8 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public List<Config> queryAllConfig(String moduleCode) throws org.apache.thrift.TException {
-            send_queryAllConfig(moduleCode);
-            return recv_queryAllConfig();
+            sendQueryAllConfig(moduleCode);
+            return recvQueryAllConfig();
         }
 
         /**
@@ -280,8 +280,8 @@ public class ConfigService {
          * @param moduleCode <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void send_queryAllConfig(String moduleCode) throws org.apache.thrift.TException {
-            queryAllConfig_args args = new queryAllConfig_args();
+        public void sendQueryAllConfig(String moduleCode) throws org.apache.thrift.TException {
+            QueryAllConfigArgs args = new QueryAllConfigArgs();
             args.setModuleCode(moduleCode);
             sendBase("queryAllConfig", args);
         }
@@ -295,8 +295,8 @@ public class ConfigService {
          * @return <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public List<Config> recv_queryAllConfig() throws org.apache.thrift.TException {
-            queryAllConfig_result result = new queryAllConfig_result();
+        public List<Config> recvQueryAllConfig() throws org.apache.thrift.TException {
+            QueryAllConfigResult result = new QueryAllConfigResult();
             receiveBase(result, "queryAllConfig");
             if (result.isSetSuccess()) {
                 return result.success;
@@ -319,8 +319,8 @@ public class ConfigService {
          */
         public String queryConfig(String moduleCode, String configItemCode, String paramCode)
             throws org.apache.thrift.TException {
-            send_queryConfig(moduleCode, configItemCode, paramCode);
-            return recv_queryConfig();
+            sendQueryConfig(moduleCode, configItemCode, paramCode);
+            return recvQueryConfig();
         }
 
         /**
@@ -334,9 +334,9 @@ public class ConfigService {
          * @param paramCode <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void send_queryConfig(String moduleCode, String configItemCode, String paramCode)
+        public void sendQueryConfig(String moduleCode, String configItemCode, String paramCode)
             throws org.apache.thrift.TException {
-            queryConfig_args args = new queryConfig_args();
+            QueryConfigArgs args = new QueryConfigArgs();
             args.setModuleCode(moduleCode);
             args.setConfigItemCode(configItemCode);
             args.setParamCode(paramCode);
@@ -352,8 +352,8 @@ public class ConfigService {
          * @return <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public String recv_queryConfig() throws org.apache.thrift.TException {
-            queryConfig_result result = new queryConfig_result();
+        public String recvQueryConfig() throws org.apache.thrift.TException {
+            QueryConfigResult result = new QueryConfigResult();
             receiveBase(result, "queryConfig");
             if (result.isSetSuccess()) {
                 return result.success;
@@ -372,8 +372,8 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void updateConfig(Config config) throws org.apache.thrift.TException {
-            send_updateConfig(config);
-            recv_updateConfig();
+            sendUpdateConfig(config);
+            recvUpdateConfig();
         }
 
         /**
@@ -385,8 +385,8 @@ public class ConfigService {
          * @param config <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void send_updateConfig(Config config) throws org.apache.thrift.TException {
-            updateConfig_args args = new updateConfig_args();
+        public void sendUpdateConfig(Config config) throws org.apache.thrift.TException {
+            UpdateConfigArgs args = new UpdateConfigArgs();
             args.setConfig(config);
             sendBase("updateConfig", args);
         }
@@ -399,8 +399,8 @@ public class ConfigService {
          * @taskId <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void recv_updateConfig() throws org.apache.thrift.TException {
-            updateConfig_result result = new updateConfig_result();
+        public void recvUpdateConfig() throws org.apache.thrift.TException {
+            UpdateConfigResult result = new UpdateConfigResult();
             receiveBase(result, "updateConfig");
             return;
         }
@@ -415,8 +415,8 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void addConfig(Config config) throws org.apache.thrift.TException {
-            send_addConfig(config);
-            recv_addConfig();
+            sendAddConfig(config);
+            recvAddConfig();
         }
 
         /**
@@ -428,8 +428,8 @@ public class ConfigService {
          * @param config <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void send_addConfig(Config config) throws org.apache.thrift.TException {
-            addConfig_args args = new addConfig_args();
+        public void sendAddConfig(Config config) throws org.apache.thrift.TException {
+            AddConfigArgs args = new AddConfigArgs();
             args.setConfig(config);
             sendBase("addConfig", args);
         }
@@ -442,8 +442,8 @@ public class ConfigService {
          * @taskId <br>
          * @throws org.apache.thrift.TException <br>
          */
-        public void recv_addConfig() throws org.apache.thrift.TException {
-            addConfig_result result = new addConfig_result();
+        public void recvAddConfig() throws org.apache.thrift.TException {
+            AddConfigResult result = new AddConfigResult();
             receiveBase(result, "addConfig");
             return;
         }
@@ -536,7 +536,7 @@ public class ConfigService {
         public void queryAllConfig(String moduleCode, org.apache.thrift.async.AsyncMethodCallback resultHandler)
             throws org.apache.thrift.TException {
             checkReady();
-            queryAllConfig_call method_call = new queryAllConfig_call(moduleCode, resultHandler, this,
+            QueryAllConfigCall method_call = new QueryAllConfigCall(moduleCode, resultHandler, this,
                 ___protocolFactory, ___transport);
             this.___currentMethod = method_call;
             ___manager.call(method_call);
@@ -553,7 +553,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class queryAllConfig_call extends org.apache.thrift.async.TAsyncMethodCall {
+        public static class QueryAllConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
             
             /**
              * moduleCode
@@ -569,7 +569,7 @@ public class ConfigService {
              * @param transport <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public queryAllConfig_call(String moduleCode, org.apache.thrift.async.AsyncMethodCallback resultHandler,
+            public QueryAllConfigCall(String moduleCode, org.apache.thrift.async.AsyncMethodCallback resultHandler,
                 org.apache.thrift.async.TAsyncClient client,
                 org.apache.thrift.protocol.TProtocolFactory protocolFactory,
                 org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
@@ -589,7 +589,7 @@ public class ConfigService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("queryAllConfig",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                queryAllConfig_args args = new queryAllConfig_args();
+                QueryAllConfigArgs args = new QueryAllConfigArgs();
                 args.setModuleCode(moduleCode);
                 args.write(prot);
                 prot.writeMessageEnd();
@@ -611,7 +611,7 @@ public class ConfigService {
                 org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
                     getFrameBuffer().array());
                 org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-                return (new Client(prot)).recv_queryAllConfig();
+                return (new Client(prot)).recvQueryAllConfig();
             }
         }
 
@@ -630,7 +630,7 @@ public class ConfigService {
         public void queryConfig(String moduleCode, String configItemCode, String paramCode,
             org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
             checkReady();
-            queryConfig_call method_call = new queryConfig_call(moduleCode, configItemCode, paramCode, resultHandler,
+            QueryConfigCall method_call = new QueryConfigCall(moduleCode, configItemCode, paramCode, resultHandler,
                 this, ___protocolFactory, ___transport);
             this.___currentMethod = method_call;
             ___manager.call(method_call);
@@ -647,7 +647,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class queryConfig_call extends org.apache.thrift.async.TAsyncMethodCall {
+        public static class QueryConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
             
             /**
              * moduleCode
@@ -675,7 +675,7 @@ public class ConfigService {
              * @param transport <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public queryConfig_call(String moduleCode, String configItemCode, String paramCode,
+            public QueryConfigCall(String moduleCode, String configItemCode, String paramCode,
                 org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client,
                 org.apache.thrift.protocol.TProtocolFactory protocolFactory,
                 org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
@@ -697,7 +697,7 @@ public class ConfigService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("queryConfig",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                queryConfig_args args = new queryConfig_args();
+                QueryConfigArgs args = new QueryConfigArgs();
                 args.setModuleCode(moduleCode);
                 args.setConfigItemCode(configItemCode);
                 args.setParamCode(paramCode);
@@ -721,7 +721,7 @@ public class ConfigService {
                 org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
                     getFrameBuffer().array());
                 org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-                return (new Client(prot)).recv_queryConfig();
+                return (new Client(prot)).recvQueryConfig();
             }
         }
 
@@ -738,7 +738,7 @@ public class ConfigService {
         public void updateConfig(Config config, org.apache.thrift.async.AsyncMethodCallback resultHandler)
             throws org.apache.thrift.TException {
             checkReady();
-            updateConfig_call method_call = new updateConfig_call(config, resultHandler, this, ___protocolFactory,
+            UpdateConfigCall method_call = new UpdateConfigCall(config, resultHandler, this, ___protocolFactory,
                 ___transport);
             this.___currentMethod = method_call;
             ___manager.call(method_call);
@@ -755,7 +755,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class updateConfig_call extends org.apache.thrift.async.TAsyncMethodCall {
+        public static class UpdateConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
             
             /**
              * config
@@ -771,7 +771,7 @@ public class ConfigService {
              * @param transport <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public updateConfig_call(Config config, org.apache.thrift.async.AsyncMethodCallback resultHandler,
+            public UpdateConfigCall(Config config, org.apache.thrift.async.AsyncMethodCallback resultHandler,
                 org.apache.thrift.async.TAsyncClient client,
                 org.apache.thrift.protocol.TProtocolFactory protocolFactory,
                 org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
@@ -791,7 +791,7 @@ public class ConfigService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("updateConfig",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                updateConfig_args args = new updateConfig_args();
+                UpdateConfigArgs args = new UpdateConfigArgs();
                 args.setConfig(config);
                 args.write(prot);
                 prot.writeMessageEnd();
@@ -812,7 +812,7 @@ public class ConfigService {
                 org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
                     getFrameBuffer().array());
                 org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-                (new Client(prot)).recv_updateConfig();
+                (new Client(prot)).recvUpdateConfig();
             }
         }
 
@@ -829,7 +829,7 @@ public class ConfigService {
         public void addConfig(Config config, org.apache.thrift.async.AsyncMethodCallback resultHandler)
             throws org.apache.thrift.TException {
             checkReady();
-            addConfig_call method_call = new addConfig_call(config, resultHandler, this, ___protocolFactory,
+            AddConfigCall method_call = new AddConfigCall(config, resultHandler, this, ___protocolFactory,
                 ___transport);
             this.___currentMethod = method_call;
             ___manager.call(method_call);
@@ -846,7 +846,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class addConfig_call extends org.apache.thrift.async.TAsyncMethodCall {
+        public static class AddConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
             
             /**
              * config
@@ -862,7 +862,7 @@ public class ConfigService {
              * @param transport <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public addConfig_call(Config config, org.apache.thrift.async.AsyncMethodCallback resultHandler,
+            public AddConfigCall(Config config, org.apache.thrift.async.AsyncMethodCallback resultHandler,
                 org.apache.thrift.async.TAsyncClient client,
                 org.apache.thrift.protocol.TProtocolFactory protocolFactory,
                 org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
@@ -882,7 +882,7 @@ public class ConfigService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("addConfig",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                addConfig_args args = new addConfig_args();
+                AddConfigArgs args = new AddConfigArgs();
                 args.setConfig(config);
                 args.write(prot);
                 prot.writeMessageEnd();
@@ -903,7 +903,7 @@ public class ConfigService {
                 org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(
                     getFrameBuffer().array());
                 org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-                (new Client(prot)).recv_addConfig();
+                (new Client(prot)).recvAddConfig();
             }
         }
 
@@ -960,10 +960,10 @@ public class ConfigService {
          */
         private static <I extends Iface> Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> getProcessMap(
             Map<String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> processMap) {
-            processMap.put("queryAllConfig", new queryAllConfig());
-            processMap.put("queryConfig", new queryConfig());
-            processMap.put("updateConfig", new updateConfig());
-            processMap.put("addConfig", new addConfig());
+            processMap.put("queryAllConfig", new QueryAllConfig());
+            processMap.put("queryConfig", new QueryConfig());
+            processMap.put("updateConfig", new UpdateConfig());
+            processMap.put("addConfig", new AddConfig());
             return processMap;
         }
 
@@ -978,18 +978,18 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class queryAllConfig<I extends Iface> extends
-            org.apache.thrift.ProcessFunction<I, queryAllConfig_args> {
+        public static class QueryAllConfig<I extends Iface> extends
+            org.apache.thrift.ProcessFunction<I, QueryAllConfigArgs> {
             
             /**
              * queryAllConfig
              */
-            public queryAllConfig() {
+            public QueryAllConfig() {
                 super("queryAllConfig");
             }
 
-            public queryAllConfig_args getEmptyArgsInstance() {
-                return new queryAllConfig_args();
+            public QueryAllConfigArgs getEmptyArgsInstance() {
+                return new QueryAllConfigArgs();
             }
 
             protected boolean isOneway() {
@@ -1007,9 +1007,9 @@ public class ConfigService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public queryAllConfig_result getResult(I iface, queryAllConfig_args args)
+            public QueryAllConfigResult getResult(I iface, QueryAllConfigArgs args)
                 throws org.apache.thrift.TException {
-                queryAllConfig_result result = new queryAllConfig_result();
+                QueryAllConfigResult result = new QueryAllConfigResult();
                 result.success = iface.queryAllConfig(args.moduleCode);
                 return result;
             }
@@ -1026,17 +1026,17 @@ public class ConfigService {
              * @since V7.3<br>
              * @see com.fccfc.framework.config.api <br>
              */
-        public static class queryConfig<I extends Iface> extends org.apache.thrift.ProcessFunction<I, queryConfig_args> {
+        public static class QueryConfig<I extends Iface> extends org.apache.thrift.ProcessFunction<I, QueryConfigArgs> {
             
             /**
              * queryConfig
              */
-            public queryConfig() {
+            public QueryConfig() {
                 super("queryConfig");
             }
 
-            public queryConfig_args getEmptyArgsInstance() {
-                return new queryConfig_args();
+            public QueryConfigArgs getEmptyArgsInstance() {
+                return new QueryConfigArgs();
             }
 
             protected boolean isOneway() {
@@ -1054,8 +1054,8 @@ public class ConfigService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public queryConfig_result getResult(I iface, queryConfig_args args) throws org.apache.thrift.TException {
-                queryConfig_result result = new queryConfig_result();
+            public QueryConfigResult getResult(I iface, QueryConfigArgs args) throws org.apache.thrift.TException {
+                QueryConfigResult result = new QueryConfigResult();
                 result.success = iface.queryConfig(args.moduleCode, args.configItemCode, args.paramCode);
                 return result;
             }
@@ -1072,18 +1072,18 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class updateConfig<I extends Iface> extends
-            org.apache.thrift.ProcessFunction<I, updateConfig_args> {
+        public static class UpdateConfig<I extends Iface> extends
+            org.apache.thrift.ProcessFunction<I, UpdateConfigArgs> {
                 
             /**
              * updateConfig
              */
-            public updateConfig() {
+            public UpdateConfig() {
                 super("updateConfig");
             }
 
-            public updateConfig_args getEmptyArgsInstance() {
-                return new updateConfig_args();
+            public UpdateConfigArgs getEmptyArgsInstance() {
+                return new UpdateConfigArgs();
             }
 
             protected boolean isOneway() {
@@ -1101,8 +1101,8 @@ public class ConfigService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public updateConfig_result getResult(I iface, updateConfig_args args) throws org.apache.thrift.TException {
-                updateConfig_result result = new updateConfig_result();
+            public UpdateConfigResult getResult(I iface, UpdateConfigArgs args) throws org.apache.thrift.TException {
+                UpdateConfigResult result = new UpdateConfigResult();
                 iface.updateConfig(args.config);
                 return result;
             }
@@ -1119,17 +1119,17 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class addConfig<I extends Iface> extends org.apache.thrift.ProcessFunction<I, addConfig_args> {
+        public static class AddConfig<I extends Iface> extends org.apache.thrift.ProcessFunction<I, AddConfigArgs> {
             
             /**
              * addConfig
              */
-            public addConfig() {
+            public AddConfig() {
                 super("addConfig");
             }
 
-            public addConfig_args getEmptyArgsInstance() {
-                return new addConfig_args();
+            public AddConfigArgs getEmptyArgsInstance() {
+                return new AddConfigArgs();
             }
 
             protected boolean isOneway() {
@@ -1147,8 +1147,8 @@ public class ConfigService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public addConfig_result getResult(I iface, addConfig_args args) throws org.apache.thrift.TException {
-                addConfig_result result = new addConfig_result();
+            public AddConfigResult getResult(I iface, AddConfigArgs args) throws org.apache.thrift.TException {
+                AddConfigResult result = new AddConfigResult();
                 iface.addConfig(args.config);
                 return result;
             }
@@ -1207,10 +1207,10 @@ public class ConfigService {
         private static <I extends AsyncIface> Map<String, org.apache.thrift.AsyncProcessFunction
                                                             <I, ? extends org.apache.thrift.TBase, ?>> getProcessMap(
             Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> processMap) {
-            processMap.put("queryAllConfig", new queryAllConfig());
-            processMap.put("queryConfig", new queryConfig());
-            processMap.put("updateConfig", new updateConfig());
-            processMap.put("addConfig", new addConfig());
+            processMap.put("queryAllConfig", new QueryAllConfig());
+            processMap.put("queryConfig", new QueryConfig());
+            processMap.put("updateConfig", new UpdateConfig());
+            processMap.put("addConfig", new AddConfig());
             return processMap;
         }
 
@@ -1225,18 +1225,18 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class queryAllConfig<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, queryAllConfig_args, List<Config>> {
+        public static class QueryAllConfig<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, QueryAllConfigArgs, List<Config>> {
             
             /**
              * queryAllConfig
              */
-            public queryAllConfig() {
+            public QueryAllConfig() {
                 super("queryAllConfig");
             }
 
-            public queryAllConfig_args getEmptyArgsInstance() {
-                return new queryAllConfig_args();
+            public QueryAllConfigArgs getEmptyArgsInstance() {
+                return new QueryAllConfigArgs();
             }
 
             /**
@@ -1253,7 +1253,7 @@ public class ConfigService {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<List<Config>>() {
                     public void onComplete(List<Config> o) {
-                        queryAllConfig_result result = new queryAllConfig_result();
+                        QueryAllConfigResult result = new QueryAllConfigResult();
                         result.success = o;
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
@@ -1268,7 +1268,7 @@ public class ConfigService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        queryAllConfig_result result = new queryAllConfig_result();
+                        QueryAllConfigResult result = new QueryAllConfigResult();
                         msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
                         msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
                             org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -1299,7 +1299,7 @@ public class ConfigService {
              * @param resultHandler <br>
              * @throws TException <br>
              */
-            public void start(I iface, queryAllConfig_args args,
+            public void start(I iface, QueryAllConfigArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<List<Config>> resultHandler) throws TException {
                 iface.queryAllConfig(args.moduleCode, resultHandler);
             }
@@ -1316,18 +1316,18 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class queryConfig<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, queryConfig_args, String> {
+        public static class QueryConfig<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, QueryConfigArgs, String> {
             
             /**
              * queryConfig
              */
-            public queryConfig() {
+            public QueryConfig() {
                 super("queryConfig");
             }
 
-            public queryConfig_args getEmptyArgsInstance() {
-                return new queryConfig_args();
+            public QueryConfigArgs getEmptyArgsInstance() {
+                return new QueryConfigArgs();
             }
 
             /**
@@ -1344,7 +1344,7 @@ public class ConfigService {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<String>() {
                     public void onComplete(String o) {
-                        queryConfig_result result = new queryConfig_result();
+                        QueryConfigResult result = new QueryConfigResult();
                         result.success = o;
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
@@ -1359,7 +1359,7 @@ public class ConfigService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        queryConfig_result result = new queryConfig_result();
+                        QueryConfigResult result = new QueryConfigResult();
                         msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
                         msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
                             org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -1390,7 +1390,7 @@ public class ConfigService {
              * @param resultHandler <br>
              * @throws TException <br>
              */
-            public void start(I iface, queryConfig_args args,
+            public void start(I iface, QueryConfigArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
                 iface.queryConfig(args.moduleCode, args.configItemCode, args.paramCode, resultHandler);
             }
@@ -1407,18 +1407,18 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class updateConfig<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, updateConfig_args, Void> {
+        public static class UpdateConfig<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, UpdateConfigArgs, Void> {
             
             /**
              * updateConfig
              */
-            public updateConfig() {
+            public UpdateConfig() {
                 super("updateConfig");
             }
 
-            public updateConfig_args getEmptyArgsInstance() {
-                return new updateConfig_args();
+            public UpdateConfigArgs getEmptyArgsInstance() {
+                return new UpdateConfigArgs();
             }
 
             /**
@@ -1435,7 +1435,7 @@ public class ConfigService {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
                     public void onComplete(Void o) {
-                        updateConfig_result result = new updateConfig_result();
+                        UpdateConfigResult result = new UpdateConfigResult();
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
                             return;
@@ -1449,7 +1449,7 @@ public class ConfigService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        updateConfig_result result = new updateConfig_result();
+                        UpdateConfigResult result = new UpdateConfigResult();
                         msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
                         msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
                             org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -1480,7 +1480,7 @@ public class ConfigService {
              * @param resultHandler <br>
              * @throws TException <br>
              */
-            public void start(I iface, updateConfig_args args,
+            public void start(I iface, UpdateConfigArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
                 iface.updateConfig(args.config, resultHandler);
             }
@@ -1497,18 +1497,18 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        public static class addConfig<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, addConfig_args, Void> {
+        public static class AddConfig<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, AddConfigArgs, Void> {
             
             /**
              * addConfig
              */
-            public addConfig() {
+            public AddConfig() {
                 super("addConfig");
             }
 
-            public addConfig_args getEmptyArgsInstance() {
-                return new addConfig_args();
+            public AddConfigArgs getEmptyArgsInstance() {
+                return new AddConfigArgs();
             }
 
             /**
@@ -1525,7 +1525,7 @@ public class ConfigService {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
                     public void onComplete(Void o) {
-                        addConfig_result result = new addConfig_result();
+                        AddConfigResult result = new AddConfigResult();
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
                             return;
@@ -1539,7 +1539,7 @@ public class ConfigService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        addConfig_result result = new addConfig_result();
+                        AddConfigResult result = new AddConfigResult();
                         msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
                         msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
                             org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
@@ -1570,7 +1570,7 @@ public class ConfigService {
              * @param resultHandler <br>
              * @throws TException <br>
              */
-            public void start(I iface, addConfig_args args,
+            public void start(I iface, AddConfigArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
                 iface.addConfig(args.config, resultHandler);
             }
@@ -1589,15 +1589,15 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class queryAllConfig_args implements
-        org.apache.thrift.TBase<queryAllConfig_args, queryAllConfig_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<queryAllConfig_args> {
+    public static class QueryAllConfigArgs implements
+        org.apache.thrift.TBase<QueryAllConfigArgs, QueryAllConfigArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<QueryAllConfigArgs> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "queryAllConfig_args");
+            "QueryAllConfigArgs");
 
         /**
          * MODULE_CODE_FIELD_DESC
@@ -1608,10 +1608,10 @@ public class ConfigService {
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new queryAllConfig_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new queryAllConfig_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new QueryAllConfigArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new QueryAllConfigArgsTupleSchemeFactory());
         }
 
         /**
@@ -1628,13 +1628,13 @@ public class ConfigService {
             MODULE_CODE((short) 1, "moduleCode");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -1670,19 +1670,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -1690,44 +1690,44 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.MODULE_CODE, new org.apache.thrift.meta_data.FieldMetaData("moduleCode",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.FieldValueMetaData(
                     org.apache.thrift.protocol.TType.STRING)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(queryAllConfig_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(QueryAllConfigArgs.class, META_DATA_MAP);
         }
 
         /**
-         * queryAllConfig_args
+         * QueryAllConfigArgs
          */
-        public queryAllConfig_args() {
+        public QueryAllConfigArgs() {
         }
 
         /**
-         * queryAllConfig_args
+         * QueryAllConfigArgs
          * @param moduleCode <br>
          */
-        public queryAllConfig_args(String moduleCode) {
+        public QueryAllConfigArgs(String moduleCode) {
             this();
             this.moduleCode = moduleCode;
         }
@@ -1735,9 +1735,8 @@ public class ConfigService {
         /**
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
-         * @return <br>
          */
-        public queryAllConfig_args(queryAllConfig_args other) {
+        public QueryAllConfigArgs(QueryAllConfigArgs other) {
             if (other.isSetModuleCode()) {
                 this.moduleCode = other.moduleCode;
             }
@@ -1751,8 +1750,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public queryAllConfig_args deepCopy() {
-            return new queryAllConfig_args(this);
+        public QueryAllConfigArgs deepCopy() {
+            return new QueryAllConfigArgs(this);
         }
 
         @Override
@@ -1773,7 +1772,7 @@ public class ConfigService {
          * @param moduleCode <br>
          * @return <br>
          */
-        public queryAllConfig_args setModuleCode(String moduleCode) {
+        public QueryAllConfigArgs setModuleCode(String moduleCode) {
             this.moduleCode = moduleCode;
             return this;
         }
@@ -1829,7 +1828,7 @@ public class ConfigService {
                         setModuleCode((String) value);
                     }
                     break;
-
+                default:;
             }
         }
 
@@ -1846,7 +1845,7 @@ public class ConfigService {
             switch (field) {
                 case MODULE_CODE:
                     return getModuleCode();
-
+                default:;
             }
             throw new IllegalStateException();
         }
@@ -1873,8 +1872,8 @@ public class ConfigService {
             if (null == that) {
                 return false;
             }
-            if (that instanceof queryAllConfig_args) {
-                return this.equals((queryAllConfig_args) that);
+            if (that instanceof QueryAllConfigArgs) {
+                return this.equals((QueryAllConfigArgs) that);
             }
             return false;
         }
@@ -1888,7 +1887,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(queryAllConfig_args that) {
+        public boolean equals(QueryAllConfigArgs that) {
             if (null == that) {
                 return false;
             }
@@ -1921,7 +1920,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(queryAllConfig_args other) {
+        public int compareTo(QueryAllConfigArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -1964,7 +1963,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -1977,12 +1976,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("queryAllConfig_args(");
+            StringBuilder sb = new StringBuilder("QueryAllConfigArgs(");
             boolean first = true;
 
             sb.append("moduleCode:");
@@ -2060,9 +2059,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_argsStandardSchemeFactory implements SchemeFactory {
-            public queryAllConfig_argsStandardScheme getScheme() {
-                return new queryAllConfig_argsStandardScheme();
+        private static class QueryAllConfigArgsStandardSchemeFactory implements SchemeFactory {
+            public QueryAllConfigArgsStandardScheme getScheme() {
+                return new QueryAllConfigArgsStandardScheme();
             }
         }
 
@@ -2077,7 +2076,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_argsStandardScheme extends StandardScheme<queryAllConfig_args> {
+        private static class QueryAllConfigArgsStandardScheme extends StandardScheme<QueryAllConfigArgs> {
 
             /**
              * 
@@ -2089,7 +2088,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, queryAllConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, QueryAllConfigArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2129,7 +2128,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, queryAllConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, QueryAllConfigArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2156,9 +2155,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_argsTupleSchemeFactory implements SchemeFactory {
-            public queryAllConfig_argsTupleScheme getScheme() {
-                return new queryAllConfig_argsTupleScheme();
+        private static class QueryAllConfigArgsTupleSchemeFactory implements SchemeFactory {
+            public QueryAllConfigArgsTupleScheme getScheme() {
+                return new QueryAllConfigArgsTupleScheme();
             }
         }
 
@@ -2173,10 +2172,10 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_argsTupleScheme extends TupleScheme<queryAllConfig_args> {
+        private static class QueryAllConfigArgsTupleScheme extends TupleScheme<QueryAllConfigArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, queryAllConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, QueryAllConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -2190,7 +2189,7 @@ public class ConfigService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, queryAllConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, QueryAllConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -2214,15 +2213,15 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class queryAllConfig_result implements
-        org.apache.thrift.TBase<queryAllConfig_result, queryAllConfig_result._Fields>, java.io.Serializable, Cloneable,
-        Comparable<queryAllConfig_result> {
+    public static class QueryAllConfigResult implements
+        org.apache.thrift.TBase<QueryAllConfigResult, QueryAllConfigResult._Fields>, java.io.Serializable, Cloneable,
+        Comparable<QueryAllConfigResult> {
         
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "queryAllConfig_result");
+            "QueryAllConfigResult");
 
         /**
          * SUCCESS_FIELD_DESC
@@ -2233,10 +2232,10 @@ public class ConfigService {
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new queryAllConfig_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new queryAllConfig_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new QueryAllConfigResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new QueryAllConfigResultTupleSchemeFactory());
         }
 
         /**
@@ -2253,13 +2252,13 @@ public class ConfigService {
             SUCCESS((short) 0, "success");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -2295,19 +2294,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -2315,23 +2314,23 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
@@ -2339,21 +2338,21 @@ public class ConfigService {
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.ListMetaData(
                     org.apache.thrift.protocol.TType.LIST, new org.apache.thrift.meta_data.StructMetaData(
                         org.apache.thrift.protocol.TType.STRUCT, Config.class))));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(queryAllConfig_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(QueryAllConfigResult.class, META_DATA_MAP);
         }
 
         /**
-         * queryAllConfig_result
+         * QueryAllConfigResult
          */
-        public queryAllConfig_result() {
+        public QueryAllConfigResult() {
         }
 
         /**
-         * queryAllConfig_result
+         * QueryAllConfigResult
          * @param success <br>
          */
-        public queryAllConfig_result(List<Config> success) {
+        public QueryAllConfigResult(List<Config> success) {
             this();
             this.success = success;
         }
@@ -2362,7 +2361,7 @@ public class ConfigService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public queryAllConfig_result(queryAllConfig_result other) {
+        public QueryAllConfigResult(QueryAllConfigResult other) {
             if (other.isSetSuccess()) {
                 List<Config> __this__success = new ArrayList<Config>(other.success.size());
                 for (Config other_element : other.success) {
@@ -2380,8 +2379,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public queryAllConfig_result deepCopy() {
-            return new queryAllConfig_result(this);
+        public QueryAllConfigResult deepCopy() {
+            return new QueryAllConfigResult(this);
         }
 
         @Override
@@ -2425,7 +2424,7 @@ public class ConfigService {
          * @param success <br>
          * @return <br>
          */
-        public queryAllConfig_result setSuccess(List<Config> success) {
+        public QueryAllConfigResult setSuccess(List<Config> success) {
             this.success = success;
             return this;
         }
@@ -2525,8 +2524,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof queryAllConfig_result) {
-                return this.equals((queryAllConfig_result) that);
+            if (that instanceof QueryAllConfigResult) {
+                return this.equals((QueryAllConfigResult) that);
             }
             return false;
         }
@@ -2540,7 +2539,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(queryAllConfig_result that) {
+        public boolean equals(QueryAllConfigResult that) {
             if (that == null) {
                 return false;
             }
@@ -2573,7 +2572,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(queryAllConfig_result other) {
+        public int compareTo(QueryAllConfigResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -2616,7 +2615,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -2629,12 +2628,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("queryAllConfig_result(");
+            StringBuilder sb = new StringBuilder("QueryAllConfigResult(");
             boolean first = true;
 
             sb.append("success:");
@@ -2712,9 +2711,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_resultStandardSchemeFactory implements SchemeFactory {
-            public queryAllConfig_resultStandardScheme getScheme() {
-                return new queryAllConfig_resultStandardScheme();
+        private static class QueryAllConfigResultStandardSchemeFactory implements SchemeFactory {
+            public QueryAllConfigResultStandardScheme getScheme() {
+                return new QueryAllConfigResultStandardScheme();
             }
         }
 
@@ -2729,7 +2728,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_resultStandardScheme extends StandardScheme<queryAllConfig_result> {
+        private static class QueryAllConfigResultStandardScheme extends StandardScheme<QueryAllConfigResult> {
 
             /**
              * 
@@ -2741,7 +2740,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, queryAllConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, QueryAllConfigResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2789,7 +2788,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, queryAllConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, QueryAllConfigResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2821,9 +2820,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_resultTupleSchemeFactory implements SchemeFactory {
-            public queryAllConfig_resultTupleScheme getScheme() {
-                return new queryAllConfig_resultTupleScheme();
+        private static class QueryAllConfigResultTupleSchemeFactory implements SchemeFactory {
+            public QueryAllConfigResultTupleScheme getScheme() {
+                return new QueryAllConfigResultTupleScheme();
             }
         }
 
@@ -2838,10 +2837,10 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryAllConfig_resultTupleScheme extends TupleScheme<queryAllConfig_result> {
+        private static class QueryAllConfigResultTupleScheme extends TupleScheme<QueryAllConfigResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, queryAllConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, QueryAllConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -2858,7 +2857,7 @@ public class ConfigService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, queryAllConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, QueryAllConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -2891,15 +2890,15 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class queryConfig_args implements
-        org.apache.thrift.TBase<queryConfig_args, queryConfig_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<queryConfig_args> {
+    public static class QueryConfigArgs implements
+        org.apache.thrift.TBase<QueryConfigArgs, QueryConfigArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<QueryConfigArgs> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "queryConfig_args");
+            "QueryConfigArgs");
 
         /**
          * MODULE_CODE_FIELD_DESC
@@ -2922,10 +2921,10 @@ public class ConfigService {
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new queryConfig_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new queryConfig_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new QueryConfigArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new QueryConfigArgsTupleSchemeFactory());
         }
 
         /**
@@ -2953,13 +2952,13 @@ public class ConfigService {
                 "paramCode");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -2999,19 +2998,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -3019,23 +3018,23 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          *  isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
@@ -3048,23 +3047,23 @@ public class ConfigService {
             tmpMap.put(_Fields.PARAM_CODE, new org.apache.thrift.meta_data.FieldMetaData("paramCode",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.FieldValueMetaData(
                     org.apache.thrift.protocol.TType.STRING)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(queryConfig_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(QueryConfigArgs.class, META_DATA_MAP);
         }
 
         /**
-         * queryConfig_args
+         * QueryConfigArgs
          */
-        public queryConfig_args() {
+        public QueryConfigArgs() {
         }
 
         /**
-         * queryConfig_args
+         * QueryConfigArgs
          * @param moduleCode <br>
          * @param configItemCode <br>
          * @param paramCode <br>
          */
-        public queryConfig_args(String moduleCode, String configItemCode, String paramCode) {
+        public QueryConfigArgs(String moduleCode, String configItemCode, String paramCode) {
             this();
             this.moduleCode = moduleCode;
             this.configItemCode = configItemCode;
@@ -3076,7 +3075,7 @@ public class ConfigService {
          * @param other <br>
          * @return;
          */
-        public queryConfig_args(queryConfig_args other) {
+        public QueryConfigArgs(QueryConfigArgs other) {
             if (other.isSetModuleCode()) {
                 this.moduleCode = other.moduleCode;
             }
@@ -3096,8 +3095,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public queryConfig_args deepCopy() {
-            return new queryConfig_args(this);
+        public QueryConfigArgs deepCopy() {
+            return new QueryConfigArgs(this);
         }
 
         @Override
@@ -3120,7 +3119,7 @@ public class ConfigService {
          * @param moduleCode <br>
          * @return <br>
          */
-        public queryConfig_args setModuleCode(String moduleCode) {
+        public QueryConfigArgs setModuleCode(String moduleCode) {
             this.moduleCode = moduleCode;
             return this;
         }
@@ -3170,7 +3169,7 @@ public class ConfigService {
          * @param configItemCode <br>
          * @return <br>
          */
-        public queryConfig_args setConfigItemCode(String configItemCode) {
+        public QueryConfigArgs setConfigItemCode(String configItemCode) {
             this.configItemCode = configItemCode;
             return this;
         }
@@ -3220,7 +3219,7 @@ public class ConfigService {
          * @param paramCode <br>
          * @return <br>
          */
-        public queryConfig_args setParamCode(String paramCode) {
+        public QueryConfigArgs setParamCode(String paramCode) {
             this.paramCode = paramCode;
             return this;
         }
@@ -3348,8 +3347,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof queryConfig_args) {
-                return this.equals((queryConfig_args) that);
+            if (that instanceof QueryConfigArgs) {
+                return this.equals((QueryConfigArgs) that);
             }
             return false;
         }
@@ -3363,7 +3362,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(queryConfig_args that) {
+        public boolean equals(QueryConfigArgs that) {
             if (that == null) {
                 return false;
             }
@@ -3430,7 +3429,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(queryConfig_args other) {
+        public int compareTo(QueryConfigArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -3493,7 +3492,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -3506,12 +3505,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("queryConfig_args(");
+            StringBuilder sb = new StringBuilder("QueryConfigArgs(");
             boolean first = true;
 
             sb.append("moduleCode:");
@@ -3611,9 +3610,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_argsStandardSchemeFactory implements SchemeFactory {
-            public queryConfig_argsStandardScheme getScheme() {
-                return new queryConfig_argsStandardScheme();
+        private static class QueryConfigArgsStandardSchemeFactory implements SchemeFactory {
+            public QueryConfigArgsStandardScheme getScheme() {
+                return new QueryConfigArgsStandardScheme();
             }
         }
 
@@ -3628,7 +3627,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_argsStandardScheme extends StandardScheme<queryConfig_args> {
+        private static class QueryConfigArgsStandardScheme extends StandardScheme<QueryConfigArgs> {
 
             /**
              * 
@@ -3640,7 +3639,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, queryConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, QueryConfigArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -3698,7 +3697,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, queryConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, QueryConfigArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -3735,9 +3734,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_argsTupleSchemeFactory implements SchemeFactory {
-            public queryConfig_argsTupleScheme getScheme() {
-                return new queryConfig_argsTupleScheme();
+        private static class QueryConfigArgsTupleSchemeFactory implements SchemeFactory {
+            public QueryConfigArgsTupleScheme getScheme() {
+                return new QueryConfigArgsTupleScheme();
             }
         }
 
@@ -3752,10 +3751,10 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_argsTupleScheme extends TupleScheme<queryConfig_args> {
+        private static class QueryConfigArgsTupleScheme extends TupleScheme<QueryConfigArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, queryConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, QueryConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -3781,7 +3780,7 @@ public class ConfigService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, queryConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, QueryConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(3);
@@ -3813,15 +3812,15 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-    public static class queryConfig_result implements
-        org.apache.thrift.TBase<queryConfig_result, queryConfig_result._Fields>, java.io.Serializable, Cloneable,
-        Comparable<queryConfig_result> {
+    public static class QueryConfigResult implements
+        org.apache.thrift.TBase<QueryConfigResult, QueryConfigResult._Fields>, java.io.Serializable, Cloneable,
+        Comparable<QueryConfigResult> {
         
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "queryConfig_result");
+            "QueryConfigResult");
 
         /**
          * SUCCESS_FIELD_DESC
@@ -3832,10 +3831,10 @@ public class ConfigService {
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new queryConfig_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new queryConfig_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new QueryConfigResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new QueryConfigResultTupleSchemeFactory());
         }
 
         /**
@@ -3852,13 +3851,13 @@ public class ConfigService {
             SUCCESS((short) 0, "success");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -3894,19 +3893,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -3914,44 +3913,44 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.FieldValueMetaData(
                     org.apache.thrift.protocol.TType.STRING)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(queryConfig_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(QueryConfigResult.class, META_DATA_MAP);
         }
 
         /**
-         * queryConfig_result
+         * QueryConfigResult
          */
-        public queryConfig_result() {
+        public QueryConfigResult() {
         }
 
         /**
-         * queryConfig_result
+         * QueryConfigResult
          * @param success <br>
          */
-        public queryConfig_result(String success) {
+        public QueryConfigResult(String success) {
             this();
             this.success = success;
         }
@@ -3960,7 +3959,7 @@ public class ConfigService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public queryConfig_result(queryConfig_result other) {
+        public QueryConfigResult(QueryConfigResult other) {
             if (other.isSetSuccess()) {
                 this.success = other.success;
             }
@@ -3974,8 +3973,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public queryConfig_result deepCopy() {
-            return new queryConfig_result(this);
+        public QueryConfigResult deepCopy() {
+            return new QueryConfigResult(this);
         }
 
         @Override
@@ -3996,7 +3995,7 @@ public class ConfigService {
          * @param success <br>
          * @return <br>
          */
-        public queryConfig_result setSuccess(String success) {
+        public QueryConfigResult setSuccess(String success) {
             this.success = success;
             return this;
         }
@@ -4096,8 +4095,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof queryConfig_result) {
-                return this.equals((queryConfig_result) that);
+            if (that instanceof QueryConfigResult) {
+                return this.equals((QueryConfigResult) that);
             }
             return false;
         }
@@ -4111,7 +4110,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(queryConfig_result that) {
+        public boolean equals(QueryConfigResult that) {
             if (that == null) {
                 return false;
             }
@@ -4144,7 +4143,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(queryConfig_result other) {
+        public int compareTo(QueryConfigResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -4187,7 +4186,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -4200,12 +4199,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("queryConfig_result(");
+            StringBuilder sb = new StringBuilder("QueryConfigResult(");
             boolean first = true;
 
             sb.append("success:");
@@ -4283,9 +4282,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_resultStandardSchemeFactory implements SchemeFactory {
-            public queryConfig_resultStandardScheme getScheme() {
-                return new queryConfig_resultStandardScheme();
+        private static class QueryConfigResultStandardSchemeFactory implements SchemeFactory {
+            public QueryConfigResultStandardScheme getScheme() {
+                return new QueryConfigResultStandardScheme();
             }
         }
 
@@ -4300,7 +4299,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_resultStandardScheme extends StandardScheme<queryConfig_result> {
+        private static class QueryConfigResultStandardScheme extends StandardScheme<QueryConfigResult> {
 
             /**
              * 
@@ -4312,7 +4311,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, queryConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, QueryConfigResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -4352,7 +4351,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, queryConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, QueryConfigResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -4379,9 +4378,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_resultTupleSchemeFactory implements SchemeFactory {
-            public queryConfig_resultTupleScheme getScheme() {
-                return new queryConfig_resultTupleScheme();
+        private static class QueryConfigResultTupleSchemeFactory implements SchemeFactory {
+            public QueryConfigResultTupleScheme getScheme() {
+                return new QueryConfigResultTupleScheme();
             }
         }
 
@@ -4396,10 +4395,10 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class queryConfig_resultTupleScheme extends TupleScheme<queryConfig_result> {
+        private static class QueryConfigResultTupleScheme extends TupleScheme<QueryConfigResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, queryConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, QueryConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -4413,7 +4412,7 @@ public class ConfigService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, queryConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, QueryConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -4437,15 +4436,15 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class updateConfig_args implements
-        org.apache.thrift.TBase<updateConfig_args, updateConfig_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<updateConfig_args> {
+    public static class UpdateConfigArgs implements
+        org.apache.thrift.TBase<UpdateConfigArgs, UpdateConfigArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<UpdateConfigArgs> {
         
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "updateConfig_args");
+            "UpdateConfigArgs");
 
         /**
          * CONFIG_FIELD_DESC
@@ -4456,10 +4455,10 @@ public class ConfigService {
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new updateConfig_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new updateConfig_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new UpdateConfigArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new UpdateConfigArgsTupleSchemeFactory());
         }
 
         /**
@@ -4476,13 +4475,13 @@ public class ConfigService {
             CONFIG((short) 1, "config");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -4518,19 +4517,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -4538,44 +4537,44 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          *  isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.CONFIG, new org.apache.thrift.meta_data.FieldMetaData("config",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, Config.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(updateConfig_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(UpdateConfigArgs.class, META_DATA_MAP);
         }
 
         /**
-         * updateConfig_args
+         * UpdateConfigArgs
          */
-        public updateConfig_args() {
+        public UpdateConfigArgs() {
         }
 
         /**
-         * updateConfig_args
+         * UpdateConfigArgs
          * @param config <br>
          */
-        public updateConfig_args(Config config) {
+        public UpdateConfigArgs(Config config) {
             this();
             this.config = config;
         }
@@ -4584,7 +4583,7 @@ public class ConfigService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public updateConfig_args(updateConfig_args other) {
+        public UpdateConfigArgs(UpdateConfigArgs other) {
             if (other.isSetConfig()) {
                 this.config = new Config(other.config);
             }
@@ -4598,8 +4597,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public updateConfig_args deepCopy() {
-            return new updateConfig_args(this);
+        public UpdateConfigArgs deepCopy() {
+            return new UpdateConfigArgs(this);
         }
 
         @Override
@@ -4620,7 +4619,7 @@ public class ConfigService {
          * @param config <br>
          * @return <br>
          */
-        public updateConfig_args setConfig(Config config) {
+        public UpdateConfigArgs setConfig(Config config) {
             this.config = config;
             return this;
         }
@@ -4720,8 +4719,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof updateConfig_args) {
-                return this.equals((updateConfig_args) that);
+            if (that instanceof UpdateConfigArgs) {
+                return this.equals((UpdateConfigArgs) that);
             }
             return false;
         }
@@ -4735,7 +4734,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(updateConfig_args that) {
+        public boolean equals(UpdateConfigArgs that) {
             if (that == null) {
                 return false;
             }
@@ -4768,7 +4767,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(updateConfig_args other) {
+        public int compareTo(UpdateConfigArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -4811,7 +4810,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -4824,12 +4823,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("updateConfig_args(");
+            StringBuilder sb = new StringBuilder("UpdateConfigArgs(");
             boolean first = true;
 
             sb.append("config:");
@@ -4910,9 +4909,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_argsStandardSchemeFactory implements SchemeFactory {
-            public updateConfig_argsStandardScheme getScheme() {
-                return new updateConfig_argsStandardScheme();
+        private static class UpdateConfigArgsStandardSchemeFactory implements SchemeFactory {
+            public UpdateConfigArgsStandardScheme getScheme() {
+                return new UpdateConfigArgsStandardScheme();
             }
         }
 
@@ -4927,7 +4926,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_argsStandardScheme extends StandardScheme<updateConfig_args> {
+        private static class UpdateConfigArgsStandardScheme extends StandardScheme<UpdateConfigArgs> {
 
             /**
              * 
@@ -4939,7 +4938,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, updateConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, UpdateConfigArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -4980,7 +4979,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, updateConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, UpdateConfigArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -5007,9 +5006,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_argsTupleSchemeFactory implements SchemeFactory {
-            public updateConfig_argsTupleScheme getScheme() {
-                return new updateConfig_argsTupleScheme();
+        private static class UpdateConfigArgsTupleSchemeFactory implements SchemeFactory {
+            public UpdateConfigArgsTupleScheme getScheme() {
+                return new UpdateConfigArgsTupleScheme();
             }
         }
 
@@ -5024,10 +5023,10 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_argsTupleScheme extends TupleScheme<updateConfig_args> {
+        private static class UpdateConfigArgsTupleScheme extends TupleScheme<UpdateConfigArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, updateConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, UpdateConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -5041,7 +5040,7 @@ public class ConfigService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, updateConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, UpdateConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -5066,36 +5065,36 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class updateConfig_result implements
-        org.apache.thrift.TBase<updateConfig_result, updateConfig_result._Fields>, java.io.Serializable, Cloneable,
-        Comparable<updateConfig_result> {
+    public static class UpdateConfigResult implements
+        org.apache.thrift.TBase<UpdateConfigResult, UpdateConfigResult._Fields>, java.io.Serializable, Cloneable,
+        Comparable<UpdateConfigResult> {
             
        /**
         * STRUCT_DESC
         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "updateConfig_result");
+            "UpdateConfigResult");
 
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new updateConfig_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new updateConfig_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new UpdateConfigResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new UpdateConfigResultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
 ;
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -5129,19 +5128,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -5149,41 +5148,41 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * metaDataMap
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(updateConfig_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(UpdateConfigResult.class, META_DATA_MAP);
         }
 
         /**
-         * updateConfig_result
+         * UpdateConfigResult
          */
-        public updateConfig_result() {
+        public UpdateConfigResult() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public updateConfig_result(updateConfig_result other) {
+        public UpdateConfigResult(UpdateConfigResult other) {
         }
 
         /**
@@ -5194,8 +5193,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public updateConfig_result deepCopy() {
-            return new updateConfig_result(this);
+        public UpdateConfigResult deepCopy() {
+            return new UpdateConfigResult(this);
         }
 
         @Override
@@ -5213,6 +5212,7 @@ public class ConfigService {
          */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
@@ -5227,6 +5227,7 @@ public class ConfigService {
          */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
@@ -5241,6 +5242,7 @@ public class ConfigService {
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
@@ -5250,8 +5252,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof updateConfig_result) {
-                return this.equals((updateConfig_result) that);
+            if (that instanceof UpdateConfigResult) {
+                return this.equals((UpdateConfigResult) that);
             }
             return false;
         }
@@ -5265,7 +5267,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(updateConfig_result that) {
+        public boolean equals(UpdateConfigResult that) {
             if (that == null) {
                 return false;
             }
@@ -5281,7 +5283,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(updateConfig_result other) {
+        public int compareTo(UpdateConfigResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -5314,7 +5316,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -5327,12 +5329,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("updateConfig_result(");
+            StringBuilder sb = new StringBuilder("UpdateConfigResult(");
             boolean first = true;
 
             sb.append(")");
@@ -5402,9 +5404,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_resultStandardSchemeFactory implements SchemeFactory {
-            public updateConfig_resultStandardScheme getScheme() {
-                return new updateConfig_resultStandardScheme();
+        private static class UpdateConfigResultStandardSchemeFactory implements SchemeFactory {
+            public UpdateConfigResultStandardScheme getScheme() {
+                return new UpdateConfigResultStandardScheme();
             }
         }
 
@@ -5419,7 +5421,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_resultStandardScheme extends StandardScheme<updateConfig_result> {
+        private static class UpdateConfigResultStandardScheme extends StandardScheme<UpdateConfigResult> {
 
             /**
              * 
@@ -5431,7 +5433,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, updateConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, UpdateConfigResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -5462,7 +5464,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, updateConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, UpdateConfigResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -5484,9 +5486,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_resultTupleSchemeFactory implements SchemeFactory {
-            public updateConfig_resultTupleScheme getScheme() {
-                return new updateConfig_resultTupleScheme();
+        private static class UpdateConfigResultTupleSchemeFactory implements SchemeFactory {
+            public UpdateConfigResultTupleScheme getScheme() {
+                return new UpdateConfigResultTupleScheme();
             }
         }
 
@@ -5501,16 +5503,16 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class updateConfig_resultTupleScheme extends TupleScheme<updateConfig_result> {
+        private static class UpdateConfigResultTupleScheme extends TupleScheme<UpdateConfigResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, updateConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, UpdateConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, updateConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, UpdateConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
             }
@@ -5529,14 +5531,14 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class addConfig_args implements org.apache.thrift.TBase<addConfig_args, addConfig_args._Fields>,
-        java.io.Serializable, Cloneable, Comparable<addConfig_args> {
+    public static class AddConfigArgs implements org.apache.thrift.TBase<AddConfigArgs, AddConfigArgs._Fields>,
+        java.io.Serializable, Cloneable, Comparable<AddConfigArgs> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "addConfig_args");
+            "AddConfigArgs");
 
         /**
          * CONFIG_FIELD_DESC
@@ -5547,10 +5549,10 @@ public class ConfigService {
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new addConfig_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new addConfig_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new AddConfigArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new AddConfigArgsTupleSchemeFactory());
         }
 
         /**
@@ -5567,13 +5569,13 @@ public class ConfigService {
             CONFIG((short) 1, "config");
 
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -5609,19 +5611,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -5629,44 +5631,44 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * isset id assignments
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.CONFIG, new org.apache.thrift.meta_data.FieldMetaData("config",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, Config.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(addConfig_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(AddConfigArgs.class, META_DATA_MAP);
         }
 
         /**
-         * addConfig_args
+         * AddConfigArgs
          */
-        public addConfig_args() {
+        public AddConfigArgs() {
         }
 
         /**
-         * addConfig_args
+         * AddConfigArgs
          * @param config <br>
          */
-        public addConfig_args(Config config) {
+        public AddConfigArgs(Config config) {
             this();
             this.config = config;
         }
@@ -5675,7 +5677,7 @@ public class ConfigService {
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public addConfig_args(addConfig_args other) {
+        public AddConfigArgs(AddConfigArgs other) {
             if (other.isSetConfig()) {
                 this.config = new Config(other.config);
             }
@@ -5689,8 +5691,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public addConfig_args deepCopy() {
-            return new addConfig_args(this);
+        public AddConfigArgs deepCopy() {
+            return new AddConfigArgs(this);
         }
 
         @Override
@@ -5711,7 +5713,7 @@ public class ConfigService {
          * @param config <br>
          * @return <br>
          */
-        public addConfig_args setConfig(Config config) {
+        public AddConfigArgs setConfig(Config config) {
             this.config = config;
             return this;
         }
@@ -5811,8 +5813,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof addConfig_args) {
-                return this.equals((addConfig_args) that);
+            if (that instanceof AddConfigArgs) {
+                return this.equals((AddConfigArgs) that);
             }
             return false;
         }
@@ -5826,7 +5828,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(addConfig_args that) {
+        public boolean equals(AddConfigArgs that) {
             if (that == null) {
                 return false;
             }
@@ -5859,7 +5861,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(addConfig_args other) {
+        public int compareTo(AddConfigArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -5902,7 +5904,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -5915,12 +5917,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("addConfig_args(");
+            StringBuilder sb = new StringBuilder("AddConfigArgs(");
             boolean first = true;
 
             sb.append("config:");
@@ -6001,9 +6003,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_argsStandardSchemeFactory implements SchemeFactory {
-            public addConfig_argsStandardScheme getScheme() {
-                return new addConfig_argsStandardScheme();
+        private static class AddConfigArgsStandardSchemeFactory implements SchemeFactory {
+            public AddConfigArgsStandardScheme getScheme() {
+                return new AddConfigArgsStandardScheme();
             }
         }
 
@@ -6018,7 +6020,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_argsStandardScheme extends StandardScheme<addConfig_args> {
+        private static class AddConfigArgsStandardScheme extends StandardScheme<AddConfigArgs> {
 
             /**
              * 
@@ -6030,7 +6032,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, addConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, AddConfigArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -6071,7 +6073,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, addConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, AddConfigArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -6098,9 +6100,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_argsTupleSchemeFactory implements SchemeFactory {
-            public addConfig_argsTupleScheme getScheme() {
-                return new addConfig_argsTupleScheme();
+        private static class AddConfigArgsTupleSchemeFactory implements SchemeFactory {
+            public AddConfigArgsTupleScheme getScheme() {
+                return new AddConfigArgsTupleScheme();
             }
         }
 
@@ -6115,10 +6117,10 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_argsTupleScheme extends TupleScheme<addConfig_args> {
+        private static class AddConfigArgsTupleScheme extends TupleScheme<AddConfigArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, addConfig_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, AddConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -6132,7 +6134,7 @@ public class ConfigService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, addConfig_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, AddConfigArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(1);
@@ -6157,36 +6159,36 @@ public class ConfigService {
      * @since V7.3<br>
      * @see com.fccfc.framework.config.api <br>
      */
-    public static class addConfig_result implements
-        org.apache.thrift.TBase<addConfig_result, addConfig_result._Fields>, java.io.Serializable, Cloneable,
-        Comparable<addConfig_result> {
+    public static class AddConfigResult implements
+        org.apache.thrift.TBase<AddConfigResult, AddConfigResult._Fields>, java.io.Serializable, Cloneable,
+        Comparable<AddConfigResult> {
             
         /**
          * STRUCT_DESC
          */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "addConfig_result");
+            "AddConfigResult");
 
         /**
          * schemes
          */
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new addConfig_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new addConfig_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new AddConfigResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new AddConfigResultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
 ;
             /**
-             * byName
+             * BY_NAME
              */
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -6220,19 +6222,19 @@ public class ConfigService {
              * @param name <br>
              * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
             /**
-             * _thriftId
+             * thriftId
              */
-            private final short _thriftId;
+            private final short thriftId;
 
             /**
-             * _fieldName
+             * fieldName
              */
-            private final String _fieldName;
+            private final String fieldName;
 
             /**
              * _Fields
@@ -6240,41 +6242,41 @@ public class ConfigService {
              * @param fieldName <br>
              */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
         /**
          * metaDataMap
          */
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(addConfig_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(AddConfigResult.class, META_DATA_MAP);
         }
 
         /**
-         * addConfig_result
+         * AddConfigResult
          */
-        public addConfig_result() {
+        public AddConfigResult() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
          * @param other <br>
          */
-        public addConfig_result(addConfig_result other) {
+        public AddConfigResult(AddConfigResult other) {
         }
 
         /**
@@ -6285,8 +6287,8 @@ public class ConfigService {
          * @taskId <br>
          * @return <br>
          */
-        public addConfig_result deepCopy() {
-            return new addConfig_result(this);
+        public AddConfigResult deepCopy() {
+            return new AddConfigResult(this);
         }
 
         @Override
@@ -6304,6 +6306,7 @@ public class ConfigService {
          */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
@@ -6318,6 +6321,7 @@ public class ConfigService {
          */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
@@ -6342,8 +6346,8 @@ public class ConfigService {
             if (that == null) {
                 return false;
             }
-            if (that instanceof addConfig_result) {
-                return this.equals((addConfig_result) that);
+            if (that instanceof AddConfigResult) {
+                return this.equals((AddConfigResult) that);
             }
             return false;
         }
@@ -6357,7 +6361,7 @@ public class ConfigService {
          * @param that <br>
          * @return <br>
          */
-        public boolean equals(addConfig_result that) {
+        public boolean equals(AddConfigResult that) {
             if (that == null) {
                 return false;
             }
@@ -6373,7 +6377,7 @@ public class ConfigService {
         }
 
         @Override
-        public int compareTo(addConfig_result other) {
+        public int compareTo(AddConfigResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -6406,7 +6410,7 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         /**
@@ -6419,12 +6423,12 @@ public class ConfigService {
          * @throws org.apache.thrift.TException <br>
          */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("addConfig_result(");
+            StringBuilder sb = new StringBuilder("AddConfigResult(");
             boolean first = true;
 
             sb.append(")");
@@ -6494,9 +6498,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_resultStandardSchemeFactory implements SchemeFactory {
-            public addConfig_resultStandardScheme getScheme() {
-                return new addConfig_resultStandardScheme();
+        private static class AddConfigResultStandardSchemeFactory implements SchemeFactory {
+            public AddConfigResultStandardScheme getScheme() {
+                return new AddConfigResultStandardScheme();
             }
         }
 
@@ -6511,7 +6515,7 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_resultStandardScheme extends StandardScheme<addConfig_result> {
+        private static class AddConfigResultStandardScheme extends StandardScheme<AddConfigResult> {
 
             /**
              * 
@@ -6523,7 +6527,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void read(org.apache.thrift.protocol.TProtocol iprot, addConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, AddConfigResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -6554,7 +6558,7 @@ public class ConfigService {
              * @param struct <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public void write(org.apache.thrift.protocol.TProtocol oprot, addConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, AddConfigResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -6576,9 +6580,9 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_resultTupleSchemeFactory implements SchemeFactory {
-            public addConfig_resultTupleScheme getScheme() {
-                return new addConfig_resultTupleScheme();
+        private static class AddConfigResultTupleSchemeFactory implements SchemeFactory {
+            public AddConfigResultTupleScheme getScheme() {
+                return new AddConfigResultTupleScheme();
             }
         }
 
@@ -6593,16 +6597,16 @@ public class ConfigService {
          * @since V7.3<br>
          * @see com.fccfc.framework.config.api <br>
          */
-        private static class addConfig_resultTupleScheme extends TupleScheme<addConfig_result> {
+        private static class AddConfigResultTupleScheme extends TupleScheme<AddConfigResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, addConfig_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, AddConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, addConfig_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, AddConfigResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
             }

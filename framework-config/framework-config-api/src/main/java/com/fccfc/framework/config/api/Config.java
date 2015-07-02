@@ -74,10 +74,10 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
     /**
      * schemes
      */
-    private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+    private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
-        schemes.put(StandardScheme.class, new ConfigStandardSchemeFactory());
-        schemes.put(TupleScheme.class, new ConfigTupleSchemeFactory());
+        SCHEMES.put(StandardScheme.class, new ConfigStandardSchemeFactory());
+        SCHEMES.put(TupleScheme.class, new ConfigTupleSchemeFactory());
     }
 
     /**
@@ -116,11 +116,11 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
         /**
          * byName
          */
-        private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+        private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
         static {
             for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                byName.put(field.getFieldName(), field);
+                BY_NAME.put(field.getFieldName(), field);
             }
         }
 
@@ -163,18 +163,18 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
          * @return <br>
          */
         public static _Fields findByName(String name) {
-            return byName.get(name);
+            return BY_NAME.get(name);
         }
 
         /**
-         * _thriftId
+         * thriftId
          */
-        private final short _thriftId;
+        private final short thriftId;
 
         /**
-         * _fieldName
+         * fieldName
          */
-        private final String _fieldName;
+        private final String fieldName;
 
         /**
          * _Fields
@@ -182,30 +182,30 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
          * @param fieldName <br>
          */
         _Fields(short thriftId, String fieldName) {
-            _thriftId = thriftId;
-            _fieldName = fieldName;
+            this.thriftId = thriftId;
+            this.fieldName = fieldName;
         }
 
         public short getThriftFieldId() {
-            return _thriftId;
+            return thriftId;
         }
 
         public String getFieldName() {
-            return _fieldName;
+            return fieldName;
         }
     }
 
     /**
      * isset id assignments
      */
-    private static final _Fields optionals[] = {
+    private static final _Fields OPTIONALS[] = {
         _Fields.PARAM_VALUE
     };
 
     /**
      * metaDataMap
      */
-    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
     static {
         Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
             _Fields.class);
@@ -221,8 +221,8 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
         tmpMap.put(_Fields.PARAM_VALUE, new org.apache.thrift.meta_data.FieldMetaData("paramValue",
             org.apache.thrift.TFieldRequirementType.OPTIONAL, new org.apache.thrift.meta_data.FieldValueMetaData(
                 org.apache.thrift.protocol.TType.STRING)));
-        metaDataMap = Collections.unmodifiableMap(tmpMap);
-        org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Config.class, metaDataMap);
+        META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+        org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Config.class, META_DATA_MAP);
     }
 
     /**
@@ -760,7 +760,7 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
      * @throws org.apache.thrift.TException <br>
      */
     public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-        schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+        SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
     /**
@@ -773,7 +773,7 @@ public class Config implements org.apache.thrift.TBase<Config, Config._Fields>, 
      * @throws org.apache.thrift.TException <br>
      */
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-        schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+        SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
 
     @Override
