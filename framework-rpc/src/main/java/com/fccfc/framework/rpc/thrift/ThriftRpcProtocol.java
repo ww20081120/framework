@@ -123,13 +123,13 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
     /**
      * INSTANCE
      */
-    private static ThriftRpcProtocol INSTANCE;
+    private static ThriftRpcProtocol instance;
 
     /**
      * ThriftRpcProtocol
      */
     public ThriftRpcProtocol() {
-        INSTANCE = this;
+        instance = this;
     }
 
     /**
@@ -141,10 +141,10 @@ public class ThriftRpcProtocol extends AbstractProtocol implements Protocol {
      * @return <br>
      */
     public static ThriftRpcProtocol getThriftRpcProtocol() {
-        if (INSTANCE == null) {
+        if (instance == null) {
             ExtensionLoader.getExtensionLoader(Protocol.class).getExtension(ThriftRpcProtocol.NAME); // load
         }
-        return INSTANCE;
+        return instance;
     }
 
     public Collection<ExchangeServer> getServers() {

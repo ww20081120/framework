@@ -56,7 +56,7 @@ public class NettyClient extends AbstractClient {
      *  因ChannelFactory的关闭有DirectMemory泄露，采用静态化规避
      *  https://issues.jboss.org/browse/NETTY-424
      */
-    private static final ChannelFactory channelFactory = new NioClientSocketChannelFactory(
+    private static final ChannelFactory CHANNEL_FACTORY = new NioClientSocketChannelFactory(
         Executors.newCachedThreadPool(new NamedThreadFactory("NettyClientBoss", true)),
         Executors.newCachedThreadPool(new NamedThreadFactory("NettyClientWorker", true)), Constants.DEFAULT_IO_THREADS);
 
@@ -82,7 +82,7 @@ public class NettyClient extends AbstractClient {
 
     @Override
     protected void doOpen() throws Throwable {
-        bootstrap = new ClientBootstrap(channelFactory);
+        bootstrap = new ClientBootstrap(CHANNEL_FACTORY);
         // config
         // @see org.jboss.netty.channel.socket.SocketChannelConfig
         bootstrap.setOption("keepAlive", true);
