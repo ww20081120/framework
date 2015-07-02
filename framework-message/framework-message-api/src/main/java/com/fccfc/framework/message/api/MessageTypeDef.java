@@ -13,11 +13,23 @@ package com.fccfc.framework.message.api;
  */
 public interface MessageTypeDef {
 
+    /**
+     * TEXT
+     */
     String TEXT = "T";
 
+    /**
+     * VOICE
+     */
     String VOICE = "V";
 
+    /**
+     * MEDIA
+     */
     String MEDIA = "M";
 
+    /**
+     * PICTURE
+     */
     String PICTURE = "P";
 }

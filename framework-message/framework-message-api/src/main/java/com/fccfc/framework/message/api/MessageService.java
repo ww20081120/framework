@@ -1318,6 +1318,7 @@ public class MessageService {
         }
 
         /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
          * @return <br>
          *  */
         public boolean isSet(_Fields field) {
@@ -1363,19 +1364,23 @@ public class MessageService {
             boolean this_present_templateCode = true & this.isSetTemplateCode();
             boolean that_present_templateCode = true & that.isSetTemplateCode();
             if (this_present_templateCode || that_present_templateCode) {
-                if (!(this_present_templateCode && that_present_templateCode))
+                if (!(this_present_templateCode && that_present_templateCode)) {
                     return false;
-                if (!this.templateCode.equals(that.templateCode))
+                }
+                if (!this.templateCode.equals(that.templateCode)) {
                     return false;
+                }
             }
 
-            boolean this_present_message = true && this.isSetMessage();
-            boolean that_present_message = true && that.isSetMessage();
+            boolean this_present_message = true & this.isSetMessage();
+            boolean that_present_message = true & that.isSetMessage();
             if (this_present_message || that_present_message) {
-                if (!(this_present_message && that_present_message))
+                if (!(this_present_message && that_present_message)) {
                     return false;
-                if (!this.message.equals(that.message))
+                }
+                if (!this.message.equals(that.message)) {
                     return false;
+                }
             }
 
             return true;
@@ -1385,7 +1390,7 @@ public class MessageService {
         public int hashCode() {
             List<Object> list = new ArrayList<Object>();
 
-            boolean present_templateCode = true && (isSetTemplateCode());
+            boolean present_templateCode = true & (isSetTemplateCode());
             list.add(present_templateCode);
             if (present_templateCode) {
                 list.add(templateCode);
@@ -2658,17 +2663,29 @@ public class MessageService {
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(resendMessage_args that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
             boolean this_present_messageId = true;
             boolean that_present_messageId = true;
             if (this_present_messageId || that_present_messageId) {
-                if (!(this_present_messageId && that_present_messageId))
+                if (!(this_present_messageId && that_present_messageId)) {
                     return false;
-                if (this.messageId != that.messageId)
+                }
+                if (this.messageId != that.messageId) {
                     return false;
+                }
             }
 
             return true;
@@ -2680,8 +2697,9 @@ public class MessageService {
 
             boolean present_messageId = true;
             list.add(present_messageId);
-            if (present_messageId)
+            if (present_messageId) {
                 list.add(messageId);
+            }
 
             return list.hashCode();
         }
@@ -2707,14 +2725,41 @@ public class MessageService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
             schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
             schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
@@ -2731,11 +2776,28 @@ public class MessageService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2746,6 +2808,16 @@ public class MessageService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call
@@ -2759,14 +2831,46 @@ public class MessageService {
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_argsStandardSchemeFactory implements SchemeFactory {
             public resendMessage_argsStandardScheme getScheme() {
                 return new resendMessage_argsStandardScheme();
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_argsStandardScheme extends StandardScheme<resendMessage_args> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, resendMessage_args struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -2797,6 +2901,16 @@ public class MessageService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, resendMessage_args struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -2811,12 +2925,34 @@ public class MessageService {
 
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_argsTupleSchemeFactory implements SchemeFactory {
             public resendMessage_argsTupleScheme getScheme() {
                 return new resendMessage_argsTupleScheme();
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_argsTupleScheme extends TupleScheme<resendMessage_args> {
 
             @Override
@@ -2847,12 +2983,30 @@ public class MessageService {
 
     }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
     public static class resendMessage_result implements
         org.apache.thrift.TBase<resendMessage_result, resendMessage_result._Fields>, java.io.Serializable, Cloneable,
         Comparable<resendMessage_result> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "resendMessage_result");
 
+        /**
+         * schemes
+         */
         private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
             schemes.put(StandardScheme.class, new resendMessage_resultStandardSchemeFactory());
@@ -2863,6 +3017,9 @@ public class MessageService {
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
+            /**
+             * byName
+             */
             private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
             static {
@@ -2873,6 +3030,8 @@ public class MessageService {
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -2883,25 +3042,41 @@ public class MessageService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
             public static _Fields findByName(String name) {
                 return byName.get(name);
             }
 
+            /**
+             * _thriftId
+             */
             private final short _thriftId;
 
+            /**
+             * _fieldName
+             */
             private final String _fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
                 _thriftId = thriftId;
                 _fieldName = fieldName;
@@ -2916,6 +3091,9 @@ public class MessageService {
             }
         }
 
+        /**
+         * metaDataMap
+         */
         public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
@@ -2924,15 +3102,27 @@ public class MessageService {
             org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resendMessage_result.class, metaDataMap);
         }
 
+        /**
+         * resendMessage_result
+         */
         public resendMessage_result() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public resendMessage_result(resendMessage_result other) {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public resendMessage_result deepCopy() {
             return new resendMessage_result(this);
         }
@@ -2941,40 +3131,76 @@ public class MessageService {
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof resendMessage_result)
+            }
+            if (that instanceof resendMessage_result) {
                 return this.equals((resendMessage_result) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(resendMessage_result that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -2997,14 +3223,41 @@ public class MessageService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
             schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
             schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
@@ -3018,11 +3271,28 @@ public class MessageService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -3033,6 +3303,16 @@ public class MessageService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -3043,14 +3323,46 @@ public class MessageService {
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_resultStandardSchemeFactory implements SchemeFactory {
             public resendMessage_resultStandardScheme getScheme() {
                 return new resendMessage_resultStandardScheme();
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_resultStandardScheme extends StandardScheme<resendMessage_result> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, resendMessage_result struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -3072,6 +3384,16 @@ public class MessageService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, resendMessage_result struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -3083,12 +3405,34 @@ public class MessageService {
 
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_resultTupleSchemeFactory implements SchemeFactory {
             public resendMessage_resultTupleScheme getScheme() {
                 return new resendMessage_resultTupleScheme();
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月2日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.message.api <br>
+         */
         private static class resendMessage_resultTupleScheme extends TupleScheme<resendMessage_result> {
 
             @Override
