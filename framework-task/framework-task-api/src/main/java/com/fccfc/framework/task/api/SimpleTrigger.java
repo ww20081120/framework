@@ -377,9 +377,16 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(SimpleTrigger.class, META_DATA_MAP);
     }
 
+    /**
+     * SimpleTrigger
+     */
     public SimpleTrigger() {
     }
 
+    /**
+     * SimpleTrigger
+     * @param triggerName <br>
+     */
     public SimpleTrigger(String triggerName) {
         this();
         this.triggerName = triggerName;
@@ -387,6 +394,7 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
 
     /**
      * Performs a deep copy on <i>other</i>.
+     * @param other <br>
      */
     public SimpleTrigger(SimpleTrigger other) {
         issetBitfield = other.issetBitfield;
@@ -406,6 +414,14 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public SimpleTrigger deepCopy() {
         return new SimpleTrigger(this);
     }
@@ -436,17 +452,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.triggerId;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param triggerId <br>
+     * @return <br>
+     */
     public SimpleTrigger setTriggerId(int triggerId) {
         this.triggerId = triggerId;
         setTriggerIdIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetTriggerId() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, TRIGGERID_ISSET_ID);
     }
 
-    /** Returns true if field triggerId is set (has been assigned a value) and false otherwise */
+    /** Returns true if field triggerId is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetTriggerId() {
         return EncodingUtils.testBit(issetBitfield, TRIGGERID_ISSET_ID);
     }
@@ -459,20 +493,46 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.triggerName;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param triggerName <br>
+     * @return <br>
+     */
     public SimpleTrigger setTriggerName(String triggerName) {
         this.triggerName = triggerName;
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetTriggerName() {
         this.triggerName = null;
     }
 
-    /** Returns true if field triggerName is set (has been assigned a value) and false otherwise */
+    /** Returns true if field triggerName is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetTriggerName() {
         return this.triggerName != null;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param value <br>
+     */
     public void setTriggerNameIsSet(boolean value) {
         if (!value) {
             this.triggerName = null;
@@ -483,17 +543,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.createTime;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param createTime <br>
+     * @return <br>
+     */
     public SimpleTrigger setCreateTime(long createTime) {
         this.createTime = createTime;
         setCreateTimeIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetCreateTime() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, CREATETIME_ISSET_ID);
     }
 
-    /** Returns true if field createTime is set (has been assigned a value) and false otherwise */
+    /** Returns true if field createTime is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetCreateTime() {
         return EncodingUtils.testBit(issetBitfield, CREATETIME_ISSET_ID);
     }
@@ -506,17 +584,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.operatorId;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param operatorId <br>
+     * @return <br>
+     */
     public SimpleTrigger setOperatorId(int operatorId) {
         this.operatorId = operatorId;
         setOperatorIdIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetOperatorId() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, OPERATORID_ISSET_ID);
     }
 
-    /** Returns true if field operatorId is set (has been assigned a value) and false otherwise */
+    /** Returns true if field operatorId is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetOperatorId() {
         return EncodingUtils.testBit(issetBitfield, OPERATORID_ISSET_ID);
     }
@@ -529,17 +625,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.triggerType;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param triggerType <br>
+     * @return <br>
+     */
     public SimpleTrigger setTriggerType(short triggerType) {
         this.triggerType = triggerType;
         setTriggerTypeIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetTriggerType() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, TRIGGERTYPE_ISSET_ID);
     }
 
-    /** Returns true if field triggerType is set (has been assigned a value) and false otherwise */
+    /** Returns true if field triggerType is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetTriggerType() {
         return EncodingUtils.testBit(issetBitfield, TRIGGERTYPE_ISSET_ID);
     }
@@ -552,17 +666,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.beginTime;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param beginTime <br>
+     * @return <br>
+     */
     public SimpleTrigger setBeginTime(long beginTime) {
         this.beginTime = beginTime;
         setBeginTimeIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetBeginTime() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, BEGINTIME_ISSET_ID);
     }
 
-    /** Returns true if field beginTime is set (has been assigned a value) and false otherwise */
+    /** Returns true if field beginTime is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetBeginTime() {
         return EncodingUtils.testBit(issetBitfield, BEGINTIME_ISSET_ID);
     }
@@ -575,17 +707,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.endTime;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param endTime <br>
+     * @return <br>
+     */
     public SimpleTrigger setEndTime(long endTime) {
         this.endTime = endTime;
         setEndTimeIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetEndTime() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, ENDTIME_ISSET_ID);
     }
 
-    /** Returns true if field endTime is set (has been assigned a value) and false otherwise */
+    /** Returns true if field endTime is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetEndTime() {
         return EncodingUtils.testBit(issetBitfield, ENDTIME_ISSET_ID);
     }
@@ -598,17 +748,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.times;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param times <br>
+     * @return <br>
+     */
     public SimpleTrigger setTimes(int times) {
         this.times = times;
         setTimesIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetTimes() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, TIMES_ISSET_ID);
     }
 
-    /** Returns true if field times is set (has been assigned a value) and false otherwise */
+    /** Returns true if field times is set (has been assigned a value) and false otherwise 
+     * @return <br>
+     * */
     public boolean isSetTimes() {
         return EncodingUtils.testBit(issetBitfield, TIMES_ISSET_ID);
     }
@@ -621,17 +789,35 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.executeInterval;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param executeInterval <br>
+     * @return <br>
+     */
     public SimpleTrigger setExecuteInterval(int executeInterval) {
         this.executeInterval = executeInterval;
         setExecuteIntervalIsSet(true);
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetExecuteInterval() {
         issetBitfield = EncodingUtils.clearBit(issetBitfield, EXECUTEINTERVAL_ISSET_ID);
     }
 
-    /** Returns true if field executeInterval is set (has been assigned a value) and false otherwise */
+    /** Returns true if field executeInterval is set (has been assigned a value) and false otherwise
+     * @return <br>
+     *  */
     public boolean isSetExecuteInterval() {
         return EncodingUtils.testBit(issetBitfield, EXECUTEINTERVAL_ISSET_ID);
     }
@@ -644,26 +830,61 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return this.intervalUnit;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param intervalUnit <br>
+     * @return <br>
+     */
     public SimpleTrigger setIntervalUnit(String intervalUnit) {
         this.intervalUnit = intervalUnit;
         return this;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
     public void unsetIntervalUnit() {
         this.intervalUnit = null;
     }
 
-    /** Returns true if field intervalUnit is set (has been assigned a value) and false otherwise */
+    /** Returns true if field intervalUnit is set (has been assigned a value) and false otherwise 
+     * @return <br>
+     * */
     public boolean isSetIntervalUnit() {
         return this.intervalUnit != null;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param value <br>
+     */
     public void setIntervalUnitIsSet(boolean value) {
         if (!value) {
             this.intervalUnit = null;
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param field <br>
+     * @param value <br>
+     */
     public void setFieldValue(_Fields field, Object value) {
         switch (field) {
             case TRIGGER_ID:
@@ -755,10 +976,19 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
                     setIntervalUnit((String) value);
                 }
                 break;
-
+            default:;
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param field <br>
+     * @return <br>
+     */
     public Object getFieldValue(_Fields field) {
         switch (field) {
             case TRIGGER_ID:
@@ -790,12 +1020,15 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
 
             case INTERVAL_UNIT:
                 return getIntervalUnit();
-
+            default:;
         }
         throw new IllegalStateException();
     }
 
-    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+     * @param field <br>
+     * @return <br>
+     *  */
     public boolean isSet(_Fields field) {
         if (field == null) {
             throw new IllegalArgumentException();
@@ -822,111 +1055,144 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
                 return isSetExecuteInterval();
             case INTERVAL_UNIT:
                 return isSetIntervalUnit();
+            default:;
         }
         throw new IllegalStateException();
     }
 
     @Override
     public boolean equals(Object that) {
-        if (that == null)
+        if (that == null) {
             return false;
-        if (that instanceof SimpleTrigger)
+        }
+        if (that instanceof SimpleTrigger) {
             return this.equals((SimpleTrigger) that);
+        }
         return false;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param that <br>
+     * @return <br>
+     */
     public boolean equals(SimpleTrigger that) {
-        if (that == null)
+        if (that == null) {
             return false;
+        }
 
-        boolean this_present_triggerId = true && this.isSetTriggerId();
-        boolean that_present_triggerId = true && that.isSetTriggerId();
+        boolean this_present_triggerId = true & this.isSetTriggerId();
+        boolean that_present_triggerId = true & that.isSetTriggerId();
         if (this_present_triggerId || that_present_triggerId) {
-            if (!(this_present_triggerId && that_present_triggerId))
+            if (!(this_present_triggerId && that_present_triggerId)) {
                 return false;
-            if (this.triggerId != that.triggerId)
+            }
+            if (this.triggerId != that.triggerId) {
                 return false;
+            }
         }
 
-        boolean this_present_triggerName = true && this.isSetTriggerName();
-        boolean that_present_triggerName = true && that.isSetTriggerName();
+        boolean this_present_triggerName = true & this.isSetTriggerName();
+        boolean that_present_triggerName = true & that.isSetTriggerName();
         if (this_present_triggerName || that_present_triggerName) {
-            if (!(this_present_triggerName && that_present_triggerName))
+            if (!(this_present_triggerName && that_present_triggerName)) {
                 return false;
-            if (!this.triggerName.equals(that.triggerName))
+            }
+            if (!this.triggerName.equals(that.triggerName)) {
                 return false;
+            }
         }
 
-        boolean this_present_createTime = true && this.isSetCreateTime();
-        boolean that_present_createTime = true && that.isSetCreateTime();
+        boolean this_present_createTime = true & this.isSetCreateTime();
+        boolean that_present_createTime = true & that.isSetCreateTime();
         if (this_present_createTime || that_present_createTime) {
-            if (!(this_present_createTime && that_present_createTime))
+            if (!(this_present_createTime && that_present_createTime)) {
                 return false;
-            if (this.createTime != that.createTime)
+            }
+            if (this.createTime != that.createTime) {
                 return false;
+            }
         }
 
-        boolean this_present_operatorId = true && this.isSetOperatorId();
-        boolean that_present_operatorId = true && that.isSetOperatorId();
+        boolean this_present_operatorId = true & this.isSetOperatorId();
+        boolean that_present_operatorId = true & that.isSetOperatorId();
         if (this_present_operatorId || that_present_operatorId) {
-            if (!(this_present_operatorId && that_present_operatorId))
+            if (!(this_present_operatorId && that_present_operatorId)) {
                 return false;
-            if (this.operatorId != that.operatorId)
+            }
+            if (this.operatorId != that.operatorId) {
                 return false;
+            }
         }
 
-        boolean this_present_triggerType = true && this.isSetTriggerType();
-        boolean that_present_triggerType = true && that.isSetTriggerType();
+        boolean this_present_triggerType = true & this.isSetTriggerType();
+        boolean that_present_triggerType = true & that.isSetTriggerType();
         if (this_present_triggerType || that_present_triggerType) {
-            if (!(this_present_triggerType && that_present_triggerType))
+            if (!(this_present_triggerType && that_present_triggerType)) {
                 return false;
-            if (this.triggerType != that.triggerType)
+            }
+            if (this.triggerType != that.triggerType) {
                 return false;
+            }
         }
 
-        boolean this_present_beginTime = true && this.isSetBeginTime();
-        boolean that_present_beginTime = true && that.isSetBeginTime();
+        boolean this_present_beginTime = true & this.isSetBeginTime();
+        boolean that_present_beginTime = true & that.isSetBeginTime();
         if (this_present_beginTime || that_present_beginTime) {
-            if (!(this_present_beginTime && that_present_beginTime))
+            if (!(this_present_beginTime && that_present_beginTime)) {
                 return false;
-            if (this.beginTime != that.beginTime)
+            }
+            if (this.beginTime != that.beginTime) {
                 return false;
+            }
         }
 
-        boolean this_present_endTime = true && this.isSetEndTime();
-        boolean that_present_endTime = true && that.isSetEndTime();
+        boolean this_present_endTime = true & this.isSetEndTime();
+        boolean that_present_endTime = true & that.isSetEndTime();
         if (this_present_endTime || that_present_endTime) {
-            if (!(this_present_endTime && that_present_endTime))
+            if (!(this_present_endTime && that_present_endTime)) {
                 return false;
-            if (this.endTime != that.endTime)
+            }
+            if (this.endTime != that.endTime) {
                 return false;
+            }
         }
 
-        boolean this_present_times = true && this.isSetTimes();
-        boolean that_present_times = true && that.isSetTimes();
+        boolean this_present_times = true & this.isSetTimes();
+        boolean that_present_times = true & that.isSetTimes();
         if (this_present_times || that_present_times) {
-            if (!(this_present_times && that_present_times))
+            if (!(this_present_times && that_present_times)) {
                 return false;
-            if (this.times != that.times)
+            }
+            if (this.times != that.times) {
                 return false;
+            }
         }
 
-        boolean this_present_executeInterval = true && this.isSetExecuteInterval();
-        boolean that_present_executeInterval = true && that.isSetExecuteInterval();
+        boolean this_present_executeInterval = true & this.isSetExecuteInterval();
+        boolean that_present_executeInterval = true & that.isSetExecuteInterval();
         if (this_present_executeInterval || that_present_executeInterval) {
-            if (!(this_present_executeInterval && that_present_executeInterval))
+            if (!(this_present_executeInterval && that_present_executeInterval)) {
                 return false;
-            if (this.executeInterval != that.executeInterval)
+            }
+            if (this.executeInterval != that.executeInterval) {
                 return false;
+            }
         }
 
-        boolean this_present_intervalUnit = true && this.isSetIntervalUnit();
-        boolean that_present_intervalUnit = true && that.isSetIntervalUnit();
+        boolean this_present_intervalUnit = true & this.isSetIntervalUnit();
+        boolean that_present_intervalUnit = true & that.isSetIntervalUnit();
         if (this_present_intervalUnit || that_present_intervalUnit) {
-            if (!(this_present_intervalUnit && that_present_intervalUnit))
+            if (!(this_present_intervalUnit && that_present_intervalUnit)) {
                 return false;
-            if (!this.intervalUnit.equals(that.intervalUnit))
+            }
+            if (!this.intervalUnit.equals(that.intervalUnit)) {
                 return false;
+            }
         }
 
         return true;
@@ -936,55 +1202,65 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
     public int hashCode() {
         List<Object> list = new ArrayList<Object>();
 
-        boolean present_triggerId = true && (isSetTriggerId());
+        boolean present_triggerId = true & (isSetTriggerId());
         list.add(present_triggerId);
-        if (present_triggerId)
+        if (present_triggerId) {
             list.add(triggerId);
+        }
 
-        boolean present_triggerName = true && (isSetTriggerName());
+        boolean present_triggerName = true & (isSetTriggerName());
         list.add(present_triggerName);
-        if (present_triggerName)
+        if (present_triggerName) {
             list.add(triggerName);
+        }
 
-        boolean present_createTime = true && (isSetCreateTime());
+        boolean present_createTime = true & (isSetCreateTime());
         list.add(present_createTime);
-        if (present_createTime)
+        if (present_createTime) {
             list.add(createTime);
+        }
 
-        boolean present_operatorId = true && (isSetOperatorId());
+        boolean present_operatorId = true & (isSetOperatorId());
         list.add(present_operatorId);
-        if (present_operatorId)
+        if (present_operatorId) {
             list.add(operatorId);
+        }
 
-        boolean present_triggerType = true && (isSetTriggerType());
+        boolean present_triggerType = true & (isSetTriggerType());
         list.add(present_triggerType);
-        if (present_triggerType)
+        if (present_triggerType) {
             list.add(triggerType);
+        }
 
-        boolean present_beginTime = true && (isSetBeginTime());
+        boolean present_beginTime = true & (isSetBeginTime());
         list.add(present_beginTime);
-        if (present_beginTime)
+        if (present_beginTime) {
             list.add(beginTime);
+        }
 
-        boolean present_endTime = true && (isSetEndTime());
+        boolean present_endTime = true & (isSetEndTime());
         list.add(present_endTime);
-        if (present_endTime)
+        if (present_endTime) {
             list.add(endTime);
+        }
 
-        boolean present_times = true && (isSetTimes());
+        boolean present_times = true & (isSetTimes());
         list.add(present_times);
-        if (present_times)
+        if (present_times) {
             list.add(times);
+        }
 
-        boolean present_executeInterval = true && (isSetExecuteInterval());
+        boolean present_executeInterval = true & (isSetExecuteInterval());
         list.add(present_executeInterval);
-        if (present_executeInterval)
+        if (present_executeInterval) {
             list.add(executeInterval);
+        }
 
-        boolean present_intervalUnit = true && (isSetIntervalUnit());
+        boolean present_intervalUnit = true & (isSetIntervalUnit());
         list.add(present_intervalUnit);
-        if (present_intervalUnit)
+        if (present_intervalUnit) {
             list.add(intervalUnit);
+        }
 
         return list.hashCode();
     }
@@ -1100,14 +1376,41 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return 0;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param fieldId <br>
+     * @return <br>
+     */
     public _Fields fieldForId(int fieldId) {
         return _Fields.findByThriftId(fieldId);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param iprot <br>
+     * @throws org.apache.thrift.TException <br>
+     */
     public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
         SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param oprot <br>
+     * @throws org.apache.thrift.TException <br>
+     */
     public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
         SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
     }
@@ -1122,8 +1425,9 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
             sb.append(this.triggerId);
             first = false;
         }
-        if (!first)
+        if (!first) {
             sb.append(", ");
+        }
         sb.append("triggerName:");
         if (this.triggerName == null) {
             sb.append("null");
@@ -1133,57 +1437,65 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         }
         first = false;
         if (isSetCreateTime()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("createTime:");
             sb.append(this.createTime);
             first = false;
         }
         if (isSetOperatorId()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("operatorId:");
             sb.append(this.operatorId);
             first = false;
         }
         if (isSetTriggerType()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("triggerType:");
             sb.append(this.triggerType);
             first = false;
         }
         if (isSetBeginTime()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("beginTime:");
             sb.append(this.beginTime);
             first = false;
         }
         if (isSetEndTime()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("endTime:");
             sb.append(this.endTime);
             first = false;
         }
         if (isSetTimes()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("times:");
             sb.append(this.times);
             first = false;
         }
         if (isSetExecuteInterval()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("executeInterval:");
             sb.append(this.executeInterval);
             first = false;
         }
         if (isSetIntervalUnit()) {
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("intervalUnit:");
             if (this.intervalUnit == null) {
                 sb.append("null");
@@ -1197,6 +1509,14 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         return sb.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @throws org.apache.thrift.TException <br>
+     */
     public void validate() throws org.apache.thrift.TException {
         // check for required fields
         if (triggerName == null) {
@@ -1206,6 +1526,15 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
         // check for sub-struct validity
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param out <br>
+     * @throws java.io.IOException <br>
+     */
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
         try {
             write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(
@@ -1222,8 +1551,8 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
      *  
      * @author yang.zhipeng <br>
      * @taskId <br>
-     * @param in
-     * @throws java.io.IOException
+     * @param in <br>
+     * @throws java.io.IOException <br>
      * @throws ClassNotFoundException <br>
      */
     private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
@@ -1246,6 +1575,16 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
 
     private static class SimpleTriggerStandardScheme extends StandardScheme<SimpleTrigger> {
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @param struct <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot, SimpleTrigger struct)
             throws org.apache.thrift.TException {
             org.apache.thrift.protocol.TField schemeField;
@@ -1357,6 +1696,16 @@ public class SimpleTrigger implements org.apache.thrift.TBase<SimpleTrigger, Sim
             struct.validate();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @param struct <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot, SimpleTrigger struct)
             throws org.apache.thrift.TException {
             struct.validate();
