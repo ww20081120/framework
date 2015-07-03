@@ -321,7 +321,7 @@ public class TaskService {
          * @throws org.apache.thrift.TException <br>
          */
         public void sendScheduleAllTask() throws org.apache.thrift.TException {
-            scheduleAllTask_args args = new scheduleAllTask_args();
+            ScheduleAllTaskArgs args = new ScheduleAllTaskArgs();
             sendBase("scheduleAllTask", args);
         }
 
@@ -334,7 +334,7 @@ public class TaskService {
          * @throws org.apache.thrift.TException <br>
          */
         public void recvScheduleAllTask() throws org.apache.thrift.TException {
-            scheduleAllTask_result result = new scheduleAllTask_result();
+            ScheduleAllTaskResult result = new ScheduleAllTaskResult();
             receiveBase(result, "scheduleAllTask");
             return;
         }
@@ -365,7 +365,7 @@ public class TaskService {
          * @throws org.apache.thrift.TException <br>
          */
         public void sendSimpleScheduleTask(Task task, SimpleTrigger simpleTrigger) throws org.apache.thrift.TException {
-            simpleScheduleTask_args args = new simpleScheduleTask_args();
+            SimpleScheduleTaskArgs args = new SimpleScheduleTaskArgs();
             args.setTask(task);
             args.setSimpleTrigger(simpleTrigger);
             sendBase("simpleScheduleTask", args);
@@ -380,7 +380,7 @@ public class TaskService {
          * @throws org.apache.thrift.TException <br>
          */
         public void recvSimpleScheduleTask() throws org.apache.thrift.TException {
-            simpleScheduleTask_result result = new simpleScheduleTask_result();
+            SimpleScheduleTaskResult result = new SimpleScheduleTaskResult();
             receiveBase(result, "simpleScheduleTask");
             return;
         }
@@ -411,7 +411,7 @@ public class TaskService {
          * @throws org.apache.thrift.TException <br>
          */
         public void sendCronScheduleTask(Task task, CronTrigger cronTrigger) throws org.apache.thrift.TException {
-            cronScheduleTask_args args = new cronScheduleTask_args();
+            CronScheduleTaskArgs args = new CronScheduleTaskArgs();
             args.setTask(task);
             args.setCronTrigger(cronTrigger);
             sendBase("cronScheduleTask", args);
@@ -693,7 +693,7 @@ public class TaskService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("scheduleAllTask",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                scheduleAllTask_args args = new scheduleAllTask_args();
+                ScheduleAllTaskArgs args = new ScheduleAllTaskArgs();
                 args.write(prot);
                 prot.writeMessageEnd();
             }
@@ -791,7 +791,7 @@ public class TaskService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("simpleScheduleTask",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                simpleScheduleTask_args args = new simpleScheduleTask_args();
+                SimpleScheduleTaskArgs args = new SimpleScheduleTaskArgs();
                 args.setTask(task);
                 args.setSimpleTrigger(simpleTrigger);
                 args.write(prot);
@@ -891,7 +891,7 @@ public class TaskService {
             public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
                 prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("cronScheduleTask",
                     org.apache.thrift.protocol.TMessageType.CALL, 0));
-                cronScheduleTask_args args = new cronScheduleTask_args();
+                CronScheduleTaskArgs args = new CronScheduleTaskArgs();
                 args.setTask(task);
                 args.setCronTrigger(cronTrigger);
                 args.write(prot);
@@ -1261,7 +1261,7 @@ public class TaskService {
          * @see com.fccfc.framework.task.api <br>
          */
         public static class ScheduleAllTask<I extends Iface> extends
-            org.apache.thrift.ProcessFunction<I, scheduleAllTask_args> {
+            org.apache.thrift.ProcessFunction<I, ScheduleAllTaskArgs> {
             
             /**
              * scheduleAllTask
@@ -1270,8 +1270,8 @@ public class TaskService {
                 super("scheduleAllTask");
             }
 
-            public scheduleAllTask_args getEmptyArgsInstance() {
-                return new scheduleAllTask_args();
+            public ScheduleAllTaskArgs getEmptyArgsInstance() {
+                return new ScheduleAllTaskArgs();
             }
 
             protected boolean isOneway() {
@@ -1289,9 +1289,9 @@ public class TaskService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public scheduleAllTask_result getResult(I iface, scheduleAllTask_args args)
+            public ScheduleAllTaskResult getResult(I iface, ScheduleAllTaskArgs args)
                 throws org.apache.thrift.TException {
-                scheduleAllTask_result result = new scheduleAllTask_result();
+                ScheduleAllTaskResult result = new ScheduleAllTaskResult();
                 iface.scheduleAllTask();
                 return result;
             }
@@ -1309,7 +1309,7 @@ public class TaskService {
          * @see com.fccfc.framework.task.api <br>
          */
         public static class SimpleScheduleTask<I extends Iface> extends
-            org.apache.thrift.ProcessFunction<I, simpleScheduleTask_args> {
+            org.apache.thrift.ProcessFunction<I, SimpleScheduleTaskArgs> {
             
             /**
              * simpleScheduleTask
@@ -1318,8 +1318,8 @@ public class TaskService {
                 super("simpleScheduleTask");
             }
 
-            public simpleScheduleTask_args getEmptyArgsInstance() {
-                return new simpleScheduleTask_args();
+            public SimpleScheduleTaskArgs getEmptyArgsInstance() {
+                return new SimpleScheduleTaskArgs();
             }
 
             protected boolean isOneway() {
@@ -1337,9 +1337,9 @@ public class TaskService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public simpleScheduleTask_result getResult(I iface, simpleScheduleTask_args args)
+            public SimpleScheduleTaskResult getResult(I iface, SimpleScheduleTaskArgs args)
                 throws org.apache.thrift.TException {
-                simpleScheduleTask_result result = new simpleScheduleTask_result();
+                SimpleScheduleTaskResult result = new SimpleScheduleTaskResult();
                 iface.simpleScheduleTask(args.task, args.simpleTrigger);
                 return result;
             }
@@ -1357,7 +1357,7 @@ public class TaskService {
          * @see com.fccfc.framework.task.api <br>
          */
         public static class CronScheduleTask<I extends Iface> extends
-            org.apache.thrift.ProcessFunction<I, cronScheduleTask_args> {
+            org.apache.thrift.ProcessFunction<I, CronScheduleTaskArgs> {
             
             /**
              * cronScheduleTask
@@ -1366,8 +1366,8 @@ public class TaskService {
                 super("cronScheduleTask");
             }
 
-            public cronScheduleTask_args getEmptyArgsInstance() {
-                return new cronScheduleTask_args();
+            public CronScheduleTaskArgs getEmptyArgsInstance() {
+                return new CronScheduleTaskArgs();
             }
 
             protected boolean isOneway() {
@@ -1385,7 +1385,7 @@ public class TaskService {
              * @return <br>
              * @throws org.apache.thrift.TException <br>
              */
-            public cronScheduleTask_result getResult(I iface, cronScheduleTask_args args)
+            public cronScheduleTask_result getResult(I iface, CronScheduleTaskArgs args)
                 throws org.apache.thrift.TException {
                 cronScheduleTask_result result = new cronScheduleTask_result();
                 iface.cronScheduleTask(args.task, args.cronTrigger);
@@ -1513,6 +1513,17 @@ public class TaskService {
                 return false;
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @return <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public remove_result getResult(I iface, remove_args args) throws org.apache.thrift.TException {
                 remove_result result = new remove_result();
                 iface.remove(args.task);
@@ -1522,46 +1533,106 @@ public class TaskService {
 
     }
 
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
     public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
+        
+        /**
+         * LOGGER
+         */
         private static final Logger LOGGER = LoggerFactory.getLogger(AsyncProcessor.class.getName());
 
+        /**
+         * AsyncProcessor
+         * @param iface <br>
+         */
         public AsyncProcessor(I iface) {
             super(
                 iface,
                 getProcessMap(new HashMap<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>>()));
         }
 
+        /**
+         * AsyncProcessor
+         * @param iface <br>
+         * @param processMap <br>
+         */
         protected AsyncProcessor(I iface,
             Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> processMap) {
             super(iface, getProcessMap(processMap));
         }
 
-        private static <I extends AsyncIface> Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> getProcessMap(
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param <I> <br>
+         * @param processMap <br>
+         * @return <br>
+         */
+        private static <I extends AsyncIface> 
+        Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> getProcessMap(
             Map<String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>> processMap) {
-            processMap.put("scheduleAllTask", new scheduleAllTask());
-            processMap.put("simpleScheduleTask", new simpleScheduleTask());
-            processMap.put("cronScheduleTask", new cronScheduleTask());
-            processMap.put("pause", new pause());
-            processMap.put("resume", new resume());
-            processMap.put("remove", new remove());
+            processMap.put("scheduleAllTask", new ScheduleAllTask());
+            processMap.put("simpleScheduleTask", new SimpleScheduleTask());
+            processMap.put("cronScheduleTask", new CronScheduleTask());
+            processMap.put("pause", new Pause());
+            processMap.put("resume", new Resume());
+            processMap.put("remove", new Remove());
             return processMap;
         }
 
-        public static class scheduleAllTask<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, scheduleAllTask_args, Void> {
-            public scheduleAllTask() {
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
+        public static class ScheduleAllTask<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, ScheduleAllTaskArgs, Void> {
+            
+            /**
+             * scheduleAllTask
+             */
+            public ScheduleAllTask() {
                 super("scheduleAllTask");
             }
 
-            public scheduleAllTask_args getEmptyArgsInstance() {
-                return new scheduleAllTask_args();
+            public ScheduleAllTaskArgs getEmptyArgsInstance() {
+                return new ScheduleAllTaskArgs();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param fb <br>
+             * @param seqid <br>
+             * @return <br>
+             */
             public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
                     public void onComplete(Void o) {
-                        scheduleAllTask_result result = new scheduleAllTask_result();
+                        ScheduleAllTaskResult result = new ScheduleAllTaskResult();
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
                             return;
@@ -1575,12 +1646,10 @@ public class TaskService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        scheduleAllTask_result result = new scheduleAllTask_result();
-                        {
-                            msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-                            msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-                                org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-                        }
+                        ScheduleAllTaskResult result = new ScheduleAllTaskResult();
+                        msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+                        msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
+                            org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
                         try {
                             fcall.sendResponse(fb, msg, msgType, seqid);
                             return;
@@ -1597,27 +1666,63 @@ public class TaskService {
                 return false;
             }
 
-            public void start(I iface, scheduleAllTask_args args,
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @param resultHandler <br>
+             * @throws TException <br>
+             */
+            public void start(I iface, ScheduleAllTaskArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
                 iface.scheduleAllTask(resultHandler);
             }
         }
 
-        public static class simpleScheduleTask<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, simpleScheduleTask_args, Void> {
-            public simpleScheduleTask() {
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
+        public static class SimpleScheduleTask<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, SimpleScheduleTaskArgs, Void> {
+            
+            /**
+             * simpleScheduleTask
+             */
+            public SimpleScheduleTask() {
                 super("simpleScheduleTask");
             }
 
-            public simpleScheduleTask_args getEmptyArgsInstance() {
-                return new simpleScheduleTask_args();
+            public SimpleScheduleTaskArgs getEmptyArgsInstance() {
+                return new SimpleScheduleTaskArgs();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param fb <br>
+             * @param seqid <br>
+             * @return <br>
+             */
             public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
                     public void onComplete(Void o) {
-                        simpleScheduleTask_result result = new simpleScheduleTask_result();
+                        SimpleScheduleTaskResult result = new SimpleScheduleTaskResult();
                         try {
                             fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY, seqid);
                             return;
@@ -1631,12 +1736,10 @@ public class TaskService {
                     public void onError(Exception e) {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
-                        simpleScheduleTask_result result = new simpleScheduleTask_result();
-                        {
-                            msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-                            msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-                                org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-                        }
+                        SimpleScheduleTaskResult result = new SimpleScheduleTaskResult();
+                        msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+                        msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
+                            org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
                         try {
                             fcall.sendResponse(fb, msg, msgType, seqid);
                             return;
@@ -1653,22 +1756,58 @@ public class TaskService {
                 return false;
             }
 
-            public void start(I iface, simpleScheduleTask_args args,
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @param resultHandler <br>
+             * @throws TException <br>
+             */
+            public void start(I iface, SimpleScheduleTaskArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
                 iface.simpleScheduleTask(args.task, args.simpleTrigger, resultHandler);
             }
         }
 
-        public static class cronScheduleTask<I extends AsyncIface> extends
-            org.apache.thrift.AsyncProcessFunction<I, cronScheduleTask_args, Void> {
-            public cronScheduleTask() {
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
+        public static class CronScheduleTask<I extends AsyncIface> extends
+            org.apache.thrift.AsyncProcessFunction<I, CronScheduleTaskArgs, Void> {
+           
+            /**
+             * cronScheduleTask
+             */
+            public CronScheduleTask() {
                 super("cronScheduleTask");
             }
 
-            public cronScheduleTask_args getEmptyArgsInstance() {
-                return new cronScheduleTask_args();
+            public CronScheduleTaskArgs getEmptyArgsInstance() {
+                return new CronScheduleTaskArgs();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param fb <br>
+             * @param seqid <br>
+             * @return <br>
+             */
             public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
@@ -1688,11 +1827,9 @@ public class TaskService {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
                         cronScheduleTask_result result = new cronScheduleTask_result();
-                        {
-                            msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-                            msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-                                org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-                        }
+                        msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+                        msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
+                            org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
                         try {
                             fcall.sendResponse(fb, msg, msgType, seqid);
                             return;
@@ -1709,15 +1846,41 @@ public class TaskService {
                 return false;
             }
 
-            public void start(I iface, cronScheduleTask_args args,
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @param resultHandler <br>
+             * @throws TException <br>
+             */
+            public void start(I iface, CronScheduleTaskArgs args,
                 org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws TException {
                 iface.cronScheduleTask(args.task, args.cronTrigger, resultHandler);
             }
         }
 
-        public static class pause<I extends AsyncIface> extends
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
+        public static class Pause<I extends AsyncIface> extends
             org.apache.thrift.AsyncProcessFunction<I, pause_args, Void> {
-            public pause() {
+            
+            /**
+             * pause
+             */
+            public Pause() {
                 super("pause");
             }
 
@@ -1725,6 +1888,16 @@ public class TaskService {
                 return new pause_args();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param fb <br>
+             * @param seqid <br>
+             * @return <br>
+             */
             public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
@@ -1744,11 +1917,9 @@ public class TaskService {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
                         pause_result result = new pause_result();
-                        {
-                            msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-                            msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-                                org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-                        }
+                        msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+                        msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
+                            org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
                         try {
                             fcall.sendResponse(fb, msg, msgType, seqid);
                             return;
@@ -1765,15 +1936,41 @@ public class TaskService {
                 return false;
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @param resultHandler <br>
+             * @throws TException <br>
+             */
             public void start(I iface, pause_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler)
                 throws TException {
                 iface.pause(args.task, resultHandler);
             }
         }
 
-        public static class resume<I extends AsyncIface> extends
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
+        public static class Resume<I extends AsyncIface> extends
             org.apache.thrift.AsyncProcessFunction<I, resume_args, Void> {
-            public resume() {
+            
+            /**
+             *Resume 
+             */
+            public Resume() {
                 super("resume");
             }
 
@@ -1781,6 +1978,16 @@ public class TaskService {
                 return new resume_args();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param fb <br>
+             * @param seqid <br>
+             * @return <br>
+             */
             public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
@@ -1800,11 +2007,9 @@ public class TaskService {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
                         resume_result result = new resume_result();
-                        {
-                            msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-                            msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-                                org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-                        }
+                        msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+                        msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
+                            org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
                         try {
                             fcall.sendResponse(fb, msg, msgType, seqid);
                             return;
@@ -1821,15 +2026,41 @@ public class TaskService {
                 return false;
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @param resultHandler <br>
+             * @throws TException <br>
+             */
             public void start(I iface, resume_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler)
                 throws TException {
                 iface.resume(args.task, resultHandler);
             }
         }
 
-        public static class remove<I extends AsyncIface> extends
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
+        public static class Remove<I extends AsyncIface> extends
             org.apache.thrift.AsyncProcessFunction<I, remove_args, Void> {
-            public remove() {
+            
+            /**
+             * Remove
+             */
+            public Remove() {
                 super("remove");
             }
 
@@ -1837,6 +2068,16 @@ public class TaskService {
                 return new remove_args();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param fb <br>
+             * @param seqid <br>
+             * @return <br>
+             */
             public AsyncMethodCallback<Void> getResultHandler(final AsyncFrameBuffer fb, final int seqid) {
                 final org.apache.thrift.AsyncProcessFunction fcall = this;
                 return new AsyncMethodCallback<Void>() {
@@ -1856,11 +2097,9 @@ public class TaskService {
                         byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
                         org.apache.thrift.TBase msg;
                         remove_result result = new remove_result();
-                        {
-                            msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-                            msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
-                                org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
-                        }
+                        msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+                        msg = (org.apache.thrift.TBase) new org.apache.thrift.TApplicationException(
+                            org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
                         try {
                             fcall.sendResponse(fb, msg, msgType, seqid);
                             return;
@@ -1877,6 +2116,17 @@ public class TaskService {
                 return false;
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iface <br>
+             * @param args <br>
+             * @param resultHandler <br>
+             * @throws TException <br>
+             */
             public void start(I iface, remove_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler)
                 throws TException {
                 iface.remove(args.task, resultHandler);
@@ -1885,32 +2135,55 @@ public class TaskService {
 
     }
 
-    public static class scheduleAllTask_args implements
-        org.apache.thrift.TBase<scheduleAllTask_args, scheduleAllTask_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<scheduleAllTask_args> {
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
+    public static class ScheduleAllTaskArgs implements
+        org.apache.thrift.TBase<ScheduleAllTaskArgs, ScheduleAllTaskArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<ScheduleAllTaskArgs> {
+        
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "scheduleAllTask_args");
+            "ScheduleAllTaskArgs");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new scheduleAllTask_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new scheduleAllTask_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new ScheduleAllTaskArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new ScheduleAllTaskArgsTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -1921,98 +2194,166 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
+             * 
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * META_DATA_MAP
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(scheduleAllTask_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(ScheduleAllTaskArgs.class, META_DATA_MAP);
         }
 
-        public scheduleAllTask_args() {
+        /**
+         * ScheduleAllTaskArgs
+         */
+        public ScheduleAllTaskArgs() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
-        public scheduleAllTask_args(scheduleAllTask_args other) {
+        public ScheduleAllTaskArgs(ScheduleAllTaskArgs other) {
         }
 
-        public scheduleAllTask_args deepCopy() {
-            return new scheduleAllTask_args(this);
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
+        public ScheduleAllTaskArgs deepCopy() {
+            return new ScheduleAllTaskArgs(this);
         }
 
         @Override
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof scheduleAllTask_args)
-                return this.equals((scheduleAllTask_args) that);
+            }
+            if (that instanceof ScheduleAllTaskArgs) {
+                return this.equals((ScheduleAllTaskArgs) that);
+            }
             return false;
         }
 
-        public boolean equals(scheduleAllTask_args that) {
-            if (that == null)
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
+        public boolean equals(ScheduleAllTaskArgs that) {
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -2025,7 +2366,7 @@ public class TaskService {
         }
 
         @Override
-        public int compareTo(scheduleAllTask_args other) {
+        public int compareTo(ScheduleAllTaskArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -2035,32 +2376,76 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("scheduleAllTask_args(");
+            StringBuilder sb = new StringBuilder("ScheduleAllTaskArgs(");
             boolean first = true;
 
             sb.append(")");
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2071,6 +2456,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2081,15 +2476,25 @@ public class TaskService {
             }
         }
 
-        private static class scheduleAllTask_argsStandardSchemeFactory implements SchemeFactory {
-            public scheduleAllTask_argsStandardScheme getScheme() {
-                return new scheduleAllTask_argsStandardScheme();
+        private static class ScheduleAllTaskArgsStandardSchemeFactory implements SchemeFactory {
+            public ScheduleAllTaskArgsStandardScheme getScheme() {
+                return new ScheduleAllTaskArgsStandardScheme();
             }
         }
 
-        private static class scheduleAllTask_argsStandardScheme extends StandardScheme<scheduleAllTask_args> {
+        private static class ScheduleAllTaskArgsStandardScheme extends StandardScheme<ScheduleAllTaskArgs> {
 
-            public void read(org.apache.thrift.protocol.TProtocol iprot, scheduleAllTask_args struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void read(org.apache.thrift.protocol.TProtocol iprot, ScheduleAllTaskArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2110,7 +2515,17 @@ public class TaskService {
                 struct.validate();
             }
 
-            public void write(org.apache.thrift.protocol.TProtocol oprot, scheduleAllTask_args struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void write(org.apache.thrift.protocol.TProtocol oprot, ScheduleAllTaskArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2121,22 +2536,22 @@ public class TaskService {
 
         }
 
-        private static class scheduleAllTask_argsTupleSchemeFactory implements SchemeFactory {
-            public scheduleAllTask_argsTupleScheme getScheme() {
-                return new scheduleAllTask_argsTupleScheme();
+        private static class ScheduleAllTaskArgsTupleSchemeFactory implements SchemeFactory {
+            public ScheduleAllTaskArgsTupleScheme getScheme() {
+                return new ScheduleAllTaskArgsTupleScheme();
             }
         }
 
-        private static class scheduleAllTask_argsTupleScheme extends TupleScheme<scheduleAllTask_args> {
+        private static class ScheduleAllTaskArgsTupleScheme extends TupleScheme<ScheduleAllTaskArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, scheduleAllTask_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, ScheduleAllTaskArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, scheduleAllTask_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, ScheduleAllTaskArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
             }
@@ -2144,32 +2559,55 @@ public class TaskService {
 
     }
 
-    public static class scheduleAllTask_result implements
-        org.apache.thrift.TBase<scheduleAllTask_result, scheduleAllTask_result._Fields>, java.io.Serializable,
-        Cloneable, Comparable<scheduleAllTask_result> {
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
+    public static class ScheduleAllTaskResult implements
+        org.apache.thrift.TBase<ScheduleAllTaskResult, ScheduleAllTaskResult._Fields>, java.io.Serializable,
+        Cloneable, Comparable<ScheduleAllTaskResult> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "scheduleAllTask_result");
+            "ScheduleAllTaskResult");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new scheduleAllTask_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new scheduleAllTask_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new ScheduleAllTaskResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new ScheduleAllTaskResultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -2180,98 +2618,166 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
+             * 
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * META_DATA_MAP
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(scheduleAllTask_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(ScheduleAllTaskResult.class, META_DATA_MAP);
         }
 
-        public scheduleAllTask_result() {
+        /**
+         * ScheduleAllTaskResult
+         */
+        public ScheduleAllTaskResult() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
-        public scheduleAllTask_result(scheduleAllTask_result other) {
+        public ScheduleAllTaskResult(ScheduleAllTaskResult other) {
         }
 
-        public scheduleAllTask_result deepCopy() {
-            return new scheduleAllTask_result(this);
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
+        public ScheduleAllTaskResult deepCopy() {
+            return new ScheduleAllTaskResult(this);
         }
 
         @Override
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof scheduleAllTask_result)
-                return this.equals((scheduleAllTask_result) that);
+            }
+            if (that instanceof ScheduleAllTaskResult) {
+                return this.equals((ScheduleAllTaskResult) that);
+            }
             return false;
         }
 
-        public boolean equals(scheduleAllTask_result that) {
-            if (that == null)
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
+        public boolean equals(ScheduleAllTaskResult that) {
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -2284,7 +2790,7 @@ public class TaskService {
         }
 
         @Override
-        public int compareTo(scheduleAllTask_result other) {
+        public int compareTo(ScheduleAllTaskResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -2294,32 +2800,76 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("scheduleAllTask_result(");
+            StringBuilder sb = new StringBuilder("ScheduleAllTaskResult(");
             boolean first = true;
 
             sb.append(")");
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2330,6 +2880,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2340,15 +2900,25 @@ public class TaskService {
             }
         }
 
-        private static class scheduleAllTask_resultStandardSchemeFactory implements SchemeFactory {
-            public scheduleAllTask_resultStandardScheme getScheme() {
-                return new scheduleAllTask_resultStandardScheme();
+        private static class ScheduleAllTaskResultStandardSchemeFactory implements SchemeFactory {
+            public ScheduleAllTaskResultStandardScheme getScheme() {
+                return new ScheduleAllTaskResultStandardScheme();
             }
         }
 
-        private static class scheduleAllTask_resultStandardScheme extends StandardScheme<scheduleAllTask_result> {
+        private static class ScheduleAllTaskResultStandardScheme extends StandardScheme<ScheduleAllTaskResult> {
 
-            public void read(org.apache.thrift.protocol.TProtocol iprot, scheduleAllTask_result struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void read(org.apache.thrift.protocol.TProtocol iprot, ScheduleAllTaskResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2369,7 +2939,17 @@ public class TaskService {
                 struct.validate();
             }
 
-            public void write(org.apache.thrift.protocol.TProtocol oprot, scheduleAllTask_result struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void write(org.apache.thrift.protocol.TProtocol oprot, ScheduleAllTaskResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2380,22 +2960,22 @@ public class TaskService {
 
         }
 
-        private static class scheduleAllTask_resultTupleSchemeFactory implements SchemeFactory {
-            public scheduleAllTask_resultTupleScheme getScheme() {
-                return new scheduleAllTask_resultTupleScheme();
+        private static class ScheduleAllTaskResultTupleSchemeFactory implements SchemeFactory {
+            public ScheduleAllTaskResultTupleScheme getScheme() {
+                return new ScheduleAllTaskResultTupleScheme();
             }
         }
 
-        private static class scheduleAllTask_resultTupleScheme extends TupleScheme<scheduleAllTask_result> {
+        private static class ScheduleAllTaskResultTupleScheme extends TupleScheme<ScheduleAllTaskResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, scheduleAllTask_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, ScheduleAllTaskResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, scheduleAllTask_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, ScheduleAllTaskResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
             }
@@ -2403,42 +2983,81 @@ public class TaskService {
 
     }
 
-    public static class simpleScheduleTask_args implements
-        org.apache.thrift.TBase<simpleScheduleTask_args, simpleScheduleTask_args._Fields>, java.io.Serializable,
-        Cloneable, Comparable<simpleScheduleTask_args> {
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
+    public static class SimpleScheduleTaskArgs implements
+        org.apache.thrift.TBase<SimpleScheduleTaskArgs, SimpleScheduleTaskArgs._Fields>, java.io.Serializable,
+        Cloneable, Comparable<SimpleScheduleTaskArgs> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "simpleScheduleTask_args");
+            "SimpleScheduleTaskArgs");
 
+        /**
+         * TASK_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField TASK_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "task", org.apache.thrift.protocol.TType.STRUCT, (short) 1);
 
+        /**
+         * SIMPLE_TRIGGER_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField SIMPLE_TRIGGER_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "simpleTrigger", org.apache.thrift.protocol.TType.STRUCT, (short) 2);
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new simpleScheduleTask_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new simpleScheduleTask_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new SimpleScheduleTaskArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new SimpleScheduleTaskArgsTupleSchemeFactory());
         }
 
+        /**
+         * task
+         */
         public Task task; // required
 
+        /**
+         * simpleTrigger
+         */
         public SimpleTrigger simpleTrigger; // required
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+            
+            /**
+             * TASK
+             */
             TASK((short) 1, "task"), SIMPLE_TRIGGER((short) 2, "simpleTrigger");
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -2453,41 +3072,59 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        // isset id assignments
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         *  isset id assignments
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
@@ -2497,14 +3134,22 @@ public class TaskService {
             tmpMap.put(_Fields.SIMPLE_TRIGGER, new org.apache.thrift.meta_data.FieldMetaData("simpleTrigger",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, SimpleTrigger.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(simpleScheduleTask_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(SimpleScheduleTaskArgs.class, META_DATA_MAP);
         }
 
-        public simpleScheduleTask_args() {
+        /**
+         * SimpleScheduleTaskArgs
+         */
+        public SimpleScheduleTaskArgs() {
         }
 
-        public simpleScheduleTask_args(Task task, SimpleTrigger simpleTrigger) {
+        /**
+         * SimpleScheduleTaskArgs
+         * @param task <br>
+         * @param simpleTrigger <br>
+         */
+        public SimpleScheduleTaskArgs(Task task, SimpleTrigger simpleTrigger) {
             this();
             this.task = task;
             this.simpleTrigger = simpleTrigger;
@@ -2512,8 +3157,9 @@ public class TaskService {
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
-        public simpleScheduleTask_args(simpleScheduleTask_args other) {
+        public SimpleScheduleTaskArgs(SimpleScheduleTaskArgs other) {
             if (other.isSetTask()) {
                 this.task = new Task(other.task);
             }
@@ -2522,8 +3168,16 @@ public class TaskService {
             }
         }
 
-        public simpleScheduleTask_args deepCopy() {
-            return new simpleScheduleTask_args(this);
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
+        public SimpleScheduleTaskArgs deepCopy() {
+            return new SimpleScheduleTaskArgs(this);
         }
 
         @Override
@@ -2536,20 +3190,46 @@ public class TaskService {
             return this.task;
         }
 
-        public simpleScheduleTask_args setTask(Task task) {
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param task <br>
+         * @return <br>
+         */
+        public SimpleScheduleTaskArgs setTask(Task task) {
             this.task = task;
             return this;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void unsetTask() {
             this.task = null;
         }
 
-        /** Returns true if field task is set (has been assigned a value) and false otherwise */
+        /** Returns true if field task is set (has been assigned a value) and false otherwise
+         * @return <br>
+         *  */
         public boolean isSetTask() {
             return this.task != null;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param value <br>
+         */
         public void setTaskIsSet(boolean value) {
             if (!value) {
                 this.task = null;
@@ -2560,26 +3240,61 @@ public class TaskService {
             return this.simpleTrigger;
         }
 
-        public simpleScheduleTask_args setSimpleTrigger(SimpleTrigger simpleTrigger) {
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param simpleTrigger <br>
+         * @return <br>
+         */
+        public SimpleScheduleTaskArgs setSimpleTrigger(SimpleTrigger simpleTrigger) {
             this.simpleTrigger = simpleTrigger;
             return this;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void unsetSimpleTrigger() {
             this.simpleTrigger = null;
         }
 
-        /** Returns true if field simpleTrigger is set (has been assigned a value) and false otherwise */
+        /** Returns true if field simpleTrigger is set (has been assigned a value) and false otherwise
+         * @return <br>
+         *  */
         public boolean isSetSimpleTrigger() {
             return this.simpleTrigger != null;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param value <br>
+         */
         public void setSimpleTriggerIsSet(boolean value) {
             if (!value) {
                 this.simpleTrigger = null;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
                 case TASK:
@@ -2599,10 +3314,19 @@ public class TaskService {
                         setSimpleTrigger((SimpleTrigger) value);
                     }
                     break;
-
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
                 case TASK:
@@ -2610,12 +3334,15 @@ public class TaskService {
 
                 case SIMPLE_TRIGGER:
                     return getSimpleTrigger();
-
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
@@ -2626,39 +3353,56 @@ public class TaskService {
                     return isSetTask();
                 case SIMPLE_TRIGGER:
                     return isSetSimpleTrigger();
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof simpleScheduleTask_args)
-                return this.equals((simpleScheduleTask_args) that);
+            }
+            if (that instanceof SimpleScheduleTaskArgs) {
+                return this.equals((SimpleScheduleTaskArgs) that);
+            }
             return false;
         }
 
-        public boolean equals(simpleScheduleTask_args that) {
-            if (that == null)
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
+        public boolean equals(SimpleScheduleTaskArgs that) {
+            if (that == null) {
                 return false;
-
-            boolean this_present_task = true && this.isSetTask();
-            boolean that_present_task = true && that.isSetTask();
-            if (this_present_task || that_present_task) {
-                if (!(this_present_task && that_present_task))
-                    return false;
-                if (!this.task.equals(that.task))
-                    return false;
             }
 
-            boolean this_present_simpleTrigger = true && this.isSetSimpleTrigger();
-            boolean that_present_simpleTrigger = true && that.isSetSimpleTrigger();
+            boolean this_present_task = true & this.isSetTask();
+            boolean that_present_task = true & that.isSetTask();
+            if (this_present_task || that_present_task) {
+                if (!(this_present_task && that_present_task)) {
+                    return false;
+                }
+                if (!this.task.equals(that.task)) {
+                    return false;
+                }
+            }
+
+            boolean this_present_simpleTrigger = true & this.isSetSimpleTrigger();
+            boolean that_present_simpleTrigger = true & that.isSetSimpleTrigger();
             if (this_present_simpleTrigger || that_present_simpleTrigger) {
-                if (!(this_present_simpleTrigger && that_present_simpleTrigger))
+                if (!(this_present_simpleTrigger && that_present_simpleTrigger)) {
                     return false;
-                if (!this.simpleTrigger.equals(that.simpleTrigger))
+                }
+                if (!this.simpleTrigger.equals(that.simpleTrigger)) {
                     return false;
+                }
             }
 
             return true;
@@ -2668,21 +3412,23 @@ public class TaskService {
         public int hashCode() {
             List<Object> list = new ArrayList<Object>();
 
-            boolean present_task = true && (isSetTask());
+            boolean present_task = true & (isSetTask());
             list.add(present_task);
-            if (present_task)
+            if (present_task) {
                 list.add(task);
+            }
 
-            boolean present_simpleTrigger = true && (isSetSimpleTrigger());
+            boolean present_simpleTrigger = true & (isSetSimpleTrigger());
             list.add(present_simpleTrigger);
-            if (present_simpleTrigger)
+            if (present_simpleTrigger) {
                 list.add(simpleTrigger);
+            }
 
             return list.hashCode();
         }
 
         @Override
-        public int compareTo(simpleScheduleTask_args other) {
+        public int compareTo(SimpleScheduleTaskArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -2712,21 +3458,48 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("simpleScheduleTask_args(");
+            StringBuilder sb = new StringBuilder("SimpleScheduleTaskArgs(");
             boolean first = true;
 
             sb.append("task:");
@@ -2737,8 +3510,9 @@ public class TaskService {
                 sb.append(this.task);
             }
             first = false;
-            if (!first)
+            if (!first) {
                 sb.append(", ");
+            }
             sb.append("simpleTrigger:");
             if (this.simpleTrigger == null) {
                 sb.append("null");
@@ -2751,6 +3525,14 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
@@ -2762,6 +3544,15 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2772,6 +3563,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -2782,15 +3583,25 @@ public class TaskService {
             }
         }
 
-        private static class simpleScheduleTask_argsStandardSchemeFactory implements SchemeFactory {
-            public simpleScheduleTask_argsStandardScheme getScheme() {
-                return new simpleScheduleTask_argsStandardScheme();
+        private static class SimpleScheduleTaskArgsStandardSchemeFactory implements SchemeFactory {
+            public SimpleScheduleTaskArgsStandardScheme getScheme() {
+                return new SimpleScheduleTaskArgsStandardScheme();
             }
         }
 
-        private static class simpleScheduleTask_argsStandardScheme extends StandardScheme<simpleScheduleTask_args> {
+        private static class SimpleScheduleTaskArgsStandardScheme extends StandardScheme<SimpleScheduleTaskArgs> {
 
-            public void read(org.apache.thrift.protocol.TProtocol iprot, simpleScheduleTask_args struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void read(org.apache.thrift.protocol.TProtocol iprot, SimpleScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -2831,7 +3642,17 @@ public class TaskService {
                 struct.validate();
             }
 
-            public void write(org.apache.thrift.protocol.TProtocol oprot, simpleScheduleTask_args struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void write(org.apache.thrift.protocol.TProtocol oprot, SimpleScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -2852,16 +3673,16 @@ public class TaskService {
 
         }
 
-        private static class simpleScheduleTask_argsTupleSchemeFactory implements SchemeFactory {
-            public simpleScheduleTask_argsTupleScheme getScheme() {
-                return new simpleScheduleTask_argsTupleScheme();
+        private static class SimpleScheduleTaskArgsTupleSchemeFactory implements SchemeFactory {
+            public SimpleScheduleTaskArgsTupleScheme getScheme() {
+                return new SimpleScheduleTaskArgsTupleScheme();
             }
         }
 
-        private static class simpleScheduleTask_argsTupleScheme extends TupleScheme<simpleScheduleTask_args> {
+        private static class SimpleScheduleTaskArgsTupleScheme extends TupleScheme<SimpleScheduleTaskArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, simpleScheduleTask_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, SimpleScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -2881,7 +3702,7 @@ public class TaskService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, simpleScheduleTask_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, SimpleScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(2);
@@ -2900,32 +3721,55 @@ public class TaskService {
 
     }
 
-    public static class simpleScheduleTask_result implements
-        org.apache.thrift.TBase<simpleScheduleTask_result, simpleScheduleTask_result._Fields>, java.io.Serializable,
-        Cloneable, Comparable<simpleScheduleTask_result> {
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
+    public static class SimpleScheduleTaskResult implements
+        org.apache.thrift.TBase<SimpleScheduleTaskResult, SimpleScheduleTaskResult._Fields>, java.io.Serializable,
+        Cloneable, Comparable<SimpleScheduleTaskResult> {
+        
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "simpleScheduleTask_result");
+            "SimpleScheduleTaskResult");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new simpleScheduleTask_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new simpleScheduleTask_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new SimpleScheduleTaskResultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new SimpleScheduleTaskResultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -2936,99 +3780,166 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * META_DATA_MAP
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
             org.apache.thrift.meta_data.FieldMetaData
-                .addStructMetaDataMap(simpleScheduleTask_result.class, metaDataMap);
+                .addStructMetaDataMap(SimpleScheduleTaskResult.class, META_DATA_MAP);
         }
 
-        public simpleScheduleTask_result() {
+        /**
+         * SimpleScheduleTaskResult
+         */
+        public SimpleScheduleTaskResult() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
-        public simpleScheduleTask_result(simpleScheduleTask_result other) {
+        public SimpleScheduleTaskResult(SimpleScheduleTaskResult other) {
         }
 
-        public simpleScheduleTask_result deepCopy() {
-            return new simpleScheduleTask_result(this);
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
+        public SimpleScheduleTaskResult deepCopy() {
+            return new SimpleScheduleTaskResult(this);
         }
 
         @Override
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof simpleScheduleTask_result)
-                return this.equals((simpleScheduleTask_result) that);
+            }
+            if (that instanceof SimpleScheduleTaskResult) {
+                return this.equals((SimpleScheduleTaskResult) that);
+            }
             return false;
         }
 
-        public boolean equals(simpleScheduleTask_result that) {
-            if (that == null)
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
+        public boolean equals(SimpleScheduleTaskResult that) {
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -3041,7 +3952,7 @@ public class TaskService {
         }
 
         @Override
-        public int compareTo(simpleScheduleTask_result other) {
+        public int compareTo(SimpleScheduleTaskResult other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -3051,32 +3962,76 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("simpleScheduleTask_result(");
+            StringBuilder sb = new StringBuilder("SimpleScheduleTaskResult(");
             boolean first = true;
 
             sb.append(")");
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -3087,6 +4042,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -3097,15 +4062,25 @@ public class TaskService {
             }
         }
 
-        private static class simpleScheduleTask_resultStandardSchemeFactory implements SchemeFactory {
-            public simpleScheduleTask_resultStandardScheme getScheme() {
-                return new simpleScheduleTask_resultStandardScheme();
+        private static class SimpleScheduleTaskResultStandardSchemeFactory implements SchemeFactory {
+            public SimpleScheduleTaskResultStandardScheme getScheme() {
+                return new SimpleScheduleTaskResultStandardScheme();
             }
         }
 
-        private static class simpleScheduleTask_resultStandardScheme extends StandardScheme<simpleScheduleTask_result> {
+        private static class SimpleScheduleTaskResultStandardScheme extends StandardScheme<SimpleScheduleTaskResult> {
 
-            public void read(org.apache.thrift.protocol.TProtocol iprot, simpleScheduleTask_result struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void read(org.apache.thrift.protocol.TProtocol iprot, SimpleScheduleTaskResult struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -3126,7 +4101,17 @@ public class TaskService {
                 struct.validate();
             }
 
-            public void write(org.apache.thrift.protocol.TProtocol oprot, simpleScheduleTask_result struct)
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
+            public void write(org.apache.thrift.protocol.TProtocol oprot, SimpleScheduleTaskResult struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -3137,22 +4122,22 @@ public class TaskService {
 
         }
 
-        private static class simpleScheduleTask_resultTupleSchemeFactory implements SchemeFactory {
-            public simpleScheduleTask_resultTupleScheme getScheme() {
-                return new simpleScheduleTask_resultTupleScheme();
+        private static class SimpleScheduleTaskResultTupleSchemeFactory implements SchemeFactory {
+            public SimpleScheduleTaskResultTupleScheme getScheme() {
+                return new SimpleScheduleTaskResultTupleScheme();
             }
         }
 
-        private static class simpleScheduleTask_resultTupleScheme extends TupleScheme<simpleScheduleTask_result> {
+        private static class SimpleScheduleTaskResultTupleScheme extends TupleScheme<SimpleScheduleTaskResult> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, simpleScheduleTask_result struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, SimpleScheduleTaskResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, simpleScheduleTask_result struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, SimpleScheduleTaskResult struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
             }
@@ -3160,42 +4145,81 @@ public class TaskService {
 
     }
 
-    public static class cronScheduleTask_args implements
-        org.apache.thrift.TBase<cronScheduleTask_args, cronScheduleTask_args._Fields>, java.io.Serializable, Cloneable,
-        Comparable<cronScheduleTask_args> {
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
+    public static class CronScheduleTaskArgs implements
+        org.apache.thrift.TBase<CronScheduleTaskArgs, CronScheduleTaskArgs._Fields>, java.io.Serializable, Cloneable,
+        Comparable<CronScheduleTaskArgs> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
-            "cronScheduleTask_args");
+            "CronScheduleTaskArgs");
 
+        /**
+         * TASK_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField TASK_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "task", org.apache.thrift.protocol.TType.STRUCT, (short) 1);
 
+        /**
+         * CRON_TRIGGER_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField CRON_TRIGGER_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "cronTrigger", org.apache.thrift.protocol.TType.STRUCT, (short) 2);
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new cronScheduleTask_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new cronScheduleTask_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new CronScheduleTaskArgsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new CronScheduleTaskArgsTupleSchemeFactory());
         }
 
+        /**
+         * task
+         */
         public Task task; // required
 
+        /**
+         * cronTrigger
+         */
         public CronTrigger cronTrigger; // required
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+            
+            /**
+             * TASK
+             */
             TASK((short) 1, "task"), CRON_TRIGGER((short) 2, "cronTrigger");
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -3210,36 +4234,52 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
@@ -3255,13 +4295,13 @@ public class TaskService {
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, CronTrigger.class)));
             metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(cronScheduleTask_args.class, metaDataMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(CronScheduleTaskArgs.class, metaDataMap);
         }
 
-        public cronScheduleTask_args() {
+        public CronScheduleTaskArgs() {
         }
 
-        public cronScheduleTask_args(Task task, CronTrigger cronTrigger) {
+        public CronScheduleTaskArgs(Task task, CronTrigger cronTrigger) {
             this();
             this.task = task;
             this.cronTrigger = cronTrigger;
@@ -3270,7 +4310,7 @@ public class TaskService {
         /**
          * Performs a deep copy on <i>other</i>.
          */
-        public cronScheduleTask_args(cronScheduleTask_args other) {
+        public CronScheduleTaskArgs(CronScheduleTaskArgs other) {
             if (other.isSetTask()) {
                 this.task = new Task(other.task);
             }
@@ -3279,8 +4319,8 @@ public class TaskService {
             }
         }
 
-        public cronScheduleTask_args deepCopy() {
-            return new cronScheduleTask_args(this);
+        public CronScheduleTaskArgs deepCopy() {
+            return new CronScheduleTaskArgs(this);
         }
 
         @Override
@@ -3293,7 +4333,7 @@ public class TaskService {
             return this.task;
         }
 
-        public cronScheduleTask_args setTask(Task task) {
+        public CronScheduleTaskArgs setTask(Task task) {
             this.task = task;
             return this;
         }
@@ -3317,7 +4357,7 @@ public class TaskService {
             return this.cronTrigger;
         }
 
-        public cronScheduleTask_args setCronTrigger(CronTrigger cronTrigger) {
+        public CronScheduleTaskArgs setCronTrigger(CronTrigger cronTrigger) {
             this.cronTrigger = cronTrigger;
             return this;
         }
@@ -3391,12 +4431,12 @@ public class TaskService {
         public boolean equals(Object that) {
             if (that == null)
                 return false;
-            if (that instanceof cronScheduleTask_args)
-                return this.equals((cronScheduleTask_args) that);
+            if (that instanceof CronScheduleTaskArgs)
+                return this.equals((CronScheduleTaskArgs) that);
             return false;
         }
 
-        public boolean equals(cronScheduleTask_args that) {
+        public boolean equals(CronScheduleTaskArgs that) {
             if (that == null)
                 return false;
 
@@ -3439,7 +4479,7 @@ public class TaskService {
         }
 
         @Override
-        public int compareTo(cronScheduleTask_args other) {
+        public int compareTo(CronScheduleTaskArgs other) {
             if (!getClass().equals(other.getClass())) {
                 return getClass().getName().compareTo(other.getClass().getName());
             }
@@ -3474,16 +4514,16 @@ public class TaskService {
         }
 
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder("cronScheduleTask_args(");
+            StringBuilder sb = new StringBuilder("CronScheduleTaskArgs(");
             boolean first = true;
 
             sb.append("task:");
@@ -3539,15 +4579,15 @@ public class TaskService {
             }
         }
 
-        private static class cronScheduleTask_argsStandardSchemeFactory implements SchemeFactory {
-            public cronScheduleTask_argsStandardScheme getScheme() {
-                return new cronScheduleTask_argsStandardScheme();
+        private static class CronScheduleTaskArgsStandardSchemeFactory implements SchemeFactory {
+            public CronScheduleTaskArgsStandardScheme getScheme() {
+                return new CronScheduleTaskArgsStandardScheme();
             }
         }
 
-        private static class cronScheduleTask_argsStandardScheme extends StandardScheme<cronScheduleTask_args> {
+        private static class CronScheduleTaskArgsStandardScheme extends StandardScheme<CronScheduleTaskArgs> {
 
-            public void read(org.apache.thrift.protocol.TProtocol iprot, cronScheduleTask_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol iprot, CronScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
                 iprot.readStructBegin();
@@ -3588,7 +4628,7 @@ public class TaskService {
                 struct.validate();
             }
 
-            public void write(org.apache.thrift.protocol.TProtocol oprot, cronScheduleTask_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol oprot, CronScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
 
@@ -3609,16 +4649,16 @@ public class TaskService {
 
         }
 
-        private static class cronScheduleTask_argsTupleSchemeFactory implements SchemeFactory {
-            public cronScheduleTask_argsTupleScheme getScheme() {
-                return new cronScheduleTask_argsTupleScheme();
+        private static class CronScheduleTaskArgsTupleSchemeFactory implements SchemeFactory {
+            public CronScheduleTaskArgsTupleScheme getScheme() {
+                return new CronScheduleTaskArgsTupleScheme();
             }
         }
 
-        private static class cronScheduleTask_argsTupleScheme extends TupleScheme<cronScheduleTask_args> {
+        private static class CronScheduleTaskArgsTupleScheme extends TupleScheme<CronScheduleTaskArgs> {
 
             @Override
-            public void write(org.apache.thrift.protocol.TProtocol prot, cronScheduleTask_args struct)
+            public void write(org.apache.thrift.protocol.TProtocol prot, CronScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol oprot = (TTupleProtocol) prot;
                 BitSet optionals = new BitSet();
@@ -3638,7 +4678,7 @@ public class TaskService {
             }
 
             @Override
-            public void read(org.apache.thrift.protocol.TProtocol prot, cronScheduleTask_args struct)
+            public void read(org.apache.thrift.protocol.TProtocol prot, CronScheduleTaskArgs struct)
                 throws org.apache.thrift.TException {
                 TTupleProtocol iprot = (TTupleProtocol) prot;
                 BitSet incoming = iprot.readBitSet(2);
@@ -3663,21 +4703,21 @@ public class TaskService {
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "cronScheduleTask_result");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new cronScheduleTask_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new cronScheduleTask_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new cronScheduleTask_resultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new cronScheduleTask_resultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
@@ -3704,25 +4744,25 @@ public class TaskService {
             /**
              * Find the _Fields constant that matches name, or null if its not found.
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBY_NAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            private final short thriftId;
 
-            private final String _fieldName;
+            private final String fieldName;
 
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
@@ -3812,11 +4852,11 @@ public class TaskService {
         }
 
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -3861,6 +4901,16 @@ public class TaskService {
 
         private static class cronScheduleTask_resultStandardScheme extends StandardScheme<cronScheduleTask_result> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, cronScheduleTask_result struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -3882,6 +4932,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, cronScheduleTask_result struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -3893,12 +4953,34 @@ public class TaskService {
 
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
         private static class cronScheduleTask_resultTupleSchemeFactory implements SchemeFactory {
             public cronScheduleTask_resultTupleScheme getScheme() {
                 return new cronScheduleTask_resultTupleScheme();
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
         private static class cronScheduleTask_resultTupleScheme extends TupleScheme<cronScheduleTask_result> {
 
             @Override
@@ -3916,36 +4998,66 @@ public class TaskService {
 
     }
 
+    
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
     public static class pause_args implements org.apache.thrift.TBase<pause_args, pause_args._Fields>,
         java.io.Serializable, Cloneable, Comparable<pause_args> {
+        
+        /**
+         * 
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "pause_args");
 
+        /**
+         * 
+         */
         private static final org.apache.thrift.protocol.TField TASK_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "task", org.apache.thrift.protocol.TType.STRUCT, (short) 1);
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * 
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new pause_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new pause_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new pause_argsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new pause_argsTupleSchemeFactory());
         }
 
+        /**
+         * 
+         */
         public Task task; // required
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             TASK((short) 1, "task");
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * 
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -3958,54 +5070,80 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
+             * 
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBY_NAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        // isset id assignments
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         *  isset id assignments
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.TASK, new org.apache.thrift.meta_data.FieldMetaData("task",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, Task.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pause_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pause_args.class, META_DATA_MAP);
         }
 
+        /**
+         * pause_args
+         */
         public pause_args() {
         }
 
+        /**
+         * pause_args
+         * @param task <br>
+         */
         public pause_args(Task task) {
             this();
             this.task = task;
@@ -4013,6 +5151,7 @@ public class TaskService {
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public pause_args(pause_args other) {
             if (other.isSetTask()) {
@@ -4020,6 +5159,14 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public pause_args deepCopy() {
             return new pause_args(this);
         }
@@ -4033,26 +5180,61 @@ public class TaskService {
             return this.task;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param task <br>
+         * @return <br>
+         */
         public pause_args setTask(Task task) {
             this.task = task;
             return this;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void unsetTask() {
             this.task = null;
         }
 
-        /** Returns true if field task is set (has been assigned a value) and false otherwise */
+        /** Returns true if field task is set (has been assigned a value) and false otherwise
+         * @return <br>
+         *  */
         public boolean isSetTask() {
             return this.task != null;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param value <br>
+         */
         public void setTaskIsSet(boolean value) {
             if (!value) {
                 this.task = null;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
                 case TASK:
@@ -4063,20 +5245,32 @@ public class TaskService {
                         setTask((Task) value);
                     }
                     break;
-
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
                 case TASK:
                     return getTask();
-
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
@@ -4085,30 +5279,45 @@ public class TaskService {
             switch (field) {
                 case TASK:
                     return isSetTask();
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof pause_args)
+            }
+            if (that instanceof pause_args) {
                 return this.equals((pause_args) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(pause_args that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
-            boolean this_present_task = true && this.isSetTask();
-            boolean that_present_task = true && that.isSetTask();
+            boolean this_present_task = true & this.isSetTask();
+            boolean that_present_task = true & that.isSetTask();
             if (this_present_task || that_present_task) {
-                if (!(this_present_task && that_present_task))
+                if (!(this_present_task && that_present_task)) {
                     return false;
-                if (!this.task.equals(that.task))
+                }
+                if (!this.task.equals(that.task)) {
                     return false;
+                }
             }
 
             return true;
@@ -4118,10 +5327,11 @@ public class TaskService {
         public int hashCode() {
             List<Object> list = new ArrayList<Object>();
 
-            boolean present_task = true && (isSetTask());
+            boolean present_task = true & (isSetTask());
             list.add(present_task);
-            if (present_task)
+            if (present_task) {
                 list.add(task);
+            }
 
             return list.hashCode();
         }
@@ -4147,16 +5357,43 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -4176,6 +5413,14 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
@@ -4184,6 +5429,15 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -4194,6 +5448,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -4204,6 +5468,17 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
         private static class pause_argsStandardSchemeFactory implements SchemeFactory {
             public pause_argsStandardScheme getScheme() {
                 return new pause_argsStandardScheme();
@@ -4212,6 +5487,16 @@ public class TaskService {
 
         private static class pause_argsStandardScheme extends StandardScheme<pause_args> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, pause_args struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -4243,6 +5528,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, pause_args struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -4296,31 +5591,54 @@ public class TaskService {
 
     }
 
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
     public static class pause_result implements org.apache.thrift.TBase<pause_result, pause_result._Fields>,
         java.io.Serializable, Cloneable, Comparable<pause_result> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "pause_result");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new pause_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new pause_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new pause_resultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new pause_resultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -4331,56 +5649,88 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
+             * 
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBY_NAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * META_DATA_MAP
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pause_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(pause_result.class, META_DATA_MAP);
         }
 
+        /**
+         * pause_result
+         */
         public pause_result() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public pause_result(pause_result other) {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public pause_result deepCopy() {
             return new pause_result(this);
         }
@@ -4389,40 +5739,76 @@ public class TaskService {
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof pause_result)
+            }
+            if (that instanceof pause_result) {
                 return this.equals((pause_result) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(pause_result that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -4445,16 +5831,43 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -4466,11 +5879,28 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -4481,6 +5911,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -4499,6 +5939,16 @@ public class TaskService {
 
         private static class pause_resultStandardScheme extends StandardScheme<pause_result> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, pause_result struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -4520,6 +5970,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, pause_result struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -4554,36 +6014,69 @@ public class TaskService {
 
     }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
     public static class resume_args implements org.apache.thrift.TBase<resume_args, resume_args._Fields>,
         java.io.Serializable, Cloneable, Comparable<resume_args> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "resume_args");
 
+        /**
+         * TASK_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField TASK_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "task", org.apache.thrift.protocol.TType.STRUCT, (short) 1);
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new resume_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new resume_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new resume_argsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new resume_argsTupleSchemeFactory());
         }
 
+        /**
+         * task
+         */
         public Task task; // required
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+            
+            /**
+             * TASK
+             */
             TASK((short) 1, "task");
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -4596,54 +6089,79 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBY_NAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        // isset id assignments
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         *  isset id assignments
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.TASK, new org.apache.thrift.meta_data.FieldMetaData("task",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, Task.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resume_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resume_args.class, META_DATA_MAP);
         }
 
+        /**
+         * resume_args
+         */
         public resume_args() {
         }
 
+        /**
+         * resume_args
+         * @param task <br>
+         */
         public resume_args(Task task) {
             this();
             this.task = task;
@@ -4651,6 +6169,7 @@ public class TaskService {
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public resume_args(resume_args other) {
             if (other.isSetTask()) {
@@ -4658,6 +6177,14 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public resume_args deepCopy() {
             return new resume_args(this);
         }
@@ -4671,26 +6198,61 @@ public class TaskService {
             return this.task;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param task <br>
+         * @return <br>
+         */
         public resume_args setTask(Task task) {
             this.task = task;
             return this;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void unsetTask() {
             this.task = null;
         }
 
-        /** Returns true if field task is set (has been assigned a value) and false otherwise */
+        /** Returns true if field task is set (has been assigned a value) and false otherwise
+         * @return <br>
+         *  */
         public boolean isSetTask() {
             return this.task != null;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param value <br>
+         */
         public void setTaskIsSet(boolean value) {
             if (!value) {
                 this.task = null;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
                 case TASK:
@@ -4701,20 +6263,32 @@ public class TaskService {
                         setTask((Task) value);
                     }
                     break;
-
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
                 case TASK:
                     return getTask();
-
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
@@ -4723,30 +6297,45 @@ public class TaskService {
             switch (field) {
                 case TASK:
                     return isSetTask();
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof resume_args)
+            }
+            if (that instanceof resume_args) {
                 return this.equals((resume_args) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(resume_args that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
-            boolean this_present_task = true && this.isSetTask();
-            boolean that_present_task = true && that.isSetTask();
+            boolean this_present_task = true & this.isSetTask();
+            boolean that_present_task = true & that.isSetTask();
             if (this_present_task || that_present_task) {
-                if (!(this_present_task && that_present_task))
+                if (!(this_present_task && that_present_task)) {
                     return false;
-                if (!this.task.equals(that.task))
+                }
+                if (!this.task.equals(that.task)) {
                     return false;
+                }
             }
 
             return true;
@@ -4756,10 +6345,11 @@ public class TaskService {
         public int hashCode() {
             List<Object> list = new ArrayList<Object>();
 
-            boolean present_task = true && (isSetTask());
+            boolean present_task = true & (isSetTask());
             list.add(present_task);
-            if (present_task)
+            if (present_task) {
                 list.add(task);
+            }
 
             return list.hashCode();
         }
@@ -4785,16 +6375,43 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -4814,6 +6431,14 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
@@ -4822,6 +6447,15 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -4832,6 +6466,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -4850,6 +6494,16 @@ public class TaskService {
 
         private static class resume_argsStandardScheme extends StandardScheme<resume_args> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, resume_args struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -4881,6 +6535,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, resume_args struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -4934,31 +6598,54 @@ public class TaskService {
 
     }
 
+        /**
+         * 
+         * <Description> <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @version 1.0<br>
+         * @taskId <br>
+         * @CreateDate 2015年7月3日 <br>
+         * @since V7.3<br>
+         * @see com.fccfc.framework.task.api <br>
+         */
     public static class resume_result implements org.apache.thrift.TBase<resume_result, resume_result._Fields>,
         java.io.Serializable, Cloneable, Comparable<resume_result> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "resume_result");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new resume_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new resume_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new resume_resultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new resume_resultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -4969,56 +6656,87 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * META_DATA_MAP
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resume_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(resume_result.class, META_DATA_MAP);
         }
 
+        /**
+         * resume_result
+         */
         public resume_result() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public resume_result(resume_result other) {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public resume_result deepCopy() {
             return new resume_result(this);
         }
@@ -5027,40 +6745,76 @@ public class TaskService {
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof resume_result)
+            }
+            if (that instanceof resume_result) {
                 return this.equals((resume_result) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(resume_result that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -5083,16 +6837,43 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -5104,11 +6885,28 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -5119,6 +6917,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -5137,6 +6945,16 @@ public class TaskService {
 
         private static class resume_resultStandardScheme extends StandardScheme<resume_result> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, resume_result struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -5158,6 +6976,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, resume_result struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -5192,36 +7020,69 @@ public class TaskService {
 
     }
 
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
     public static class remove_args implements org.apache.thrift.TBase<remove_args, remove_args._Fields>,
         java.io.Serializable, Cloneable, Comparable<remove_args> {
+            
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "remove_args");
 
+        /**
+         * TASK_FIELD_DESC
+         */
         private static final org.apache.thrift.protocol.TField TASK_FIELD_DESC = new org.apache.thrift.protocol.TField(
             "task", org.apache.thrift.protocol.TType.STRUCT, (short) 1);
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new remove_argsStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new remove_argsTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new remove_argsStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new remove_argsTupleSchemeFactory());
         }
 
+        /**
+         * task
+         */
         public Task task; // required
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+            
+            /**
+             * TASK
+             */
             TASK((short) 1, "task");
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -5234,54 +7095,79 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        // isset id assignments
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * isset id assignments
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
             tmpMap.put(_Fields.TASK, new org.apache.thrift.meta_data.FieldMetaData("task",
                 org.apache.thrift.TFieldRequirementType.DEFAULT, new org.apache.thrift.meta_data.StructMetaData(
                     org.apache.thrift.protocol.TType.STRUCT, Task.class)));
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(remove_args.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(remove_args.class, META_DATA_MAP);
         }
 
+        /**
+         * remove_args
+         */
         public remove_args() {
         }
 
+        /**
+         * remove_args
+         * @param task <br>
+         */
         public remove_args(Task task) {
             this();
             this.task = task;
@@ -5289,6 +7175,7 @@ public class TaskService {
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public remove_args(remove_args other) {
             if (other.isSetTask()) {
@@ -5296,6 +7183,14 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public remove_args deepCopy() {
             return new remove_args(this);
         }
@@ -5309,26 +7204,61 @@ public class TaskService {
             return this.task;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param task <br>
+         * @return <br>
+         */
         public remove_args setTask(Task task) {
             this.task = task;
             return this;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br> <br>
+         */
         public void unsetTask() {
             this.task = null;
         }
 
-        /** Returns true if field task is set (has been assigned a value) and false otherwise */
+        /** Returns true if field task is set (has been assigned a value) and false otherwise
+         * @return <br>
+         *  */
         public boolean isSetTask() {
             return this.task != null;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param value <br>
+         */
         public void setTaskIsSet(boolean value) {
             if (!value) {
                 this.task = null;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
                 case TASK:
@@ -5339,20 +7269,32 @@ public class TaskService {
                         setTask((Task) value);
                     }
                     break;
-
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
                 case TASK:
                     return getTask();
-
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param field <br>
+         * @return <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
@@ -5361,30 +7303,45 @@ public class TaskService {
             switch (field) {
                 case TASK:
                     return isSetTask();
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof remove_args)
+            }
+            if (that instanceof remove_args) {
                 return this.equals((remove_args) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(remove_args that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
-            boolean this_present_task = true && this.isSetTask();
-            boolean that_present_task = true && that.isSetTask();
+            boolean this_present_task = true & this.isSetTask();
+            boolean that_present_task = true & that.isSetTask();
             if (this_present_task || that_present_task) {
-                if (!(this_present_task && that_present_task))
+                if (!(this_present_task && that_present_task)) {
                     return false;
-                if (!this.task.equals(that.task))
+                }
+                if (!this.task.equals(that.task)) {
                     return false;
+                }
             }
 
             return true;
@@ -5394,10 +7351,11 @@ public class TaskService {
         public int hashCode() {
             List<Object> list = new ArrayList<Object>();
 
-            boolean present_task = true && (isSetTask());
+            boolean present_task = true & (isSetTask());
             list.add(present_task);
-            if (present_task)
+            if (present_task) {
                 list.add(task);
+            }
 
             return list.hashCode();
         }
@@ -5423,16 +7381,43 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -5452,6 +7437,14 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
@@ -5460,6 +7453,15 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -5470,6 +7472,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -5488,6 +7500,16 @@ public class TaskService {
 
         private static class remove_argsStandardScheme extends StandardScheme<remove_args> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, remove_args struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -5519,6 +7541,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, remove_args struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -5572,31 +7604,54 @@ public class TaskService {
 
     }
 
+    /**
+     * 
+     * <Description> <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2015年7月3日 <br>
+     * @since V7.3<br>
+     * @see com.fccfc.framework.task.api <br>
+     */
     public static class remove_result implements org.apache.thrift.TBase<remove_result, remove_result._Fields>,
         java.io.Serializable, Cloneable, Comparable<remove_result> {
+        
+        /**
+         * STRUCT_DESC
+         */
         private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct(
             "remove_result");
 
-        private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
+        /**
+         * SCHEMES
+         */
+        private static final Map<Class<? extends IScheme>, SchemeFactory> SCHEMES = new HashMap<Class<? extends IScheme>, SchemeFactory>();
         static {
-            schemes.put(StandardScheme.class, new remove_resultStandardSchemeFactory());
-            schemes.put(TupleScheme.class, new remove_resultTupleSchemeFactory());
+            SCHEMES.put(StandardScheme.class, new remove_resultStandardSchemeFactory());
+            SCHEMES.put(TupleScheme.class, new RemoveResultTupleSchemeFactory());
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
         public enum _Fields implements org.apache.thrift.TFieldIdEnum {
             ;
 
-            private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
+            /**
+             * BY_NAME
+             */
+            private static final Map<String, _Fields> BY_NAME = new HashMap<String, _Fields>();
 
             static {
                 for (_Fields field : EnumSet.allOf(_Fields.class)) {
-                    byName.put(field.getFieldName(), field);
+                    BY_NAME.put(field.getFieldName(), field);
                 }
             }
 
             /**
              * Find the _Fields constant that matches fieldId, or null if its not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftId(int fieldId) {
                 switch (fieldId) {
@@ -5607,56 +7662,87 @@ public class TaskService {
 
             /**
              * Find the _Fields constant that matches fieldId, throwing an exception if it is not found.
+             * @param fieldId <br>
+             * @return <br>
              */
             public static _Fields findByThriftIdOrThrow(int fieldId) {
                 _Fields fields = findByThriftId(fieldId);
-                if (fields == null)
+                if (fields == null) {
                     throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+                }
                 return fields;
             }
 
             /**
              * Find the _Fields constant that matches name, or null if its not found.
+             * @param name <br>
+             * @return <br>
              */
-            public static _Fields findByName(String name) {
-                return byName.get(name);
+            public static _Fields findBYNAME(String name) {
+                return BY_NAME.get(name);
             }
 
-            private final short _thriftId;
+            /**
+             * thriftId
+             */
+            private final short thriftId;
 
-            private final String _fieldName;
+            /**
+             * fieldName
+             */
+            private final String fieldName;
 
+            /**
+             * _Fields
+             * @param thriftId <br>
+             * @param fieldName <br>
+             */
             _Fields(short thriftId, String fieldName) {
-                _thriftId = thriftId;
-                _fieldName = fieldName;
+                this.thriftId = thriftId;
+                this.fieldName = fieldName;
             }
 
             public short getThriftFieldId() {
-                return _thriftId;
+                return thriftId;
             }
 
             public String getFieldName() {
-                return _fieldName;
+                return fieldName;
             }
         }
 
-        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+        /**
+         * META_DATA_MAP
+         */
+        public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> META_DATA_MAP;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
                 _Fields.class);
-            metaDataMap = Collections.unmodifiableMap(tmpMap);
-            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(remove_result.class, metaDataMap);
+            META_DATA_MAP = Collections.unmodifiableMap(tmpMap);
+            org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(remove_result.class, META_DATA_MAP);
         }
 
+        /**
+         * remove_result
+         */
         public remove_result() {
         }
 
         /**
          * Performs a deep copy on <i>other</i>.
+         * @param other <br>
          */
         public remove_result(remove_result other) {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @return <br>
+         */
         public remove_result deepCopy() {
             return new remove_result(this);
         }
@@ -5665,40 +7751,75 @@ public class TaskService {
         public void clear() {
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @param value <br>
+         */
         public void setFieldValue(_Fields field, Object value) {
             switch (field) {
+                default:;
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param field <br>
+         * @return <br>
+         */
         public Object getFieldValue(_Fields field) {
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
-        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+        /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise
+         * @param <br>
+         *  */
         public boolean isSet(_Fields field) {
             if (field == null) {
                 throw new IllegalArgumentException();
             }
 
             switch (field) {
+                default:;
             }
             throw new IllegalStateException();
         }
 
         @Override
         public boolean equals(Object that) {
-            if (that == null)
+            if (that == null) {
                 return false;
-            if (that instanceof remove_result)
+            }
+            if (that instanceof remove_result) {
                 return this.equals((remove_result) that);
+            }
             return false;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param that <br>
+         * @return <br>
+         */
         public boolean equals(remove_result that) {
-            if (that == null)
+            if (that == null) {
                 return false;
+            }
 
             return true;
         }
@@ -5721,16 +7842,43 @@ public class TaskService {
             return 0;
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param fieldId <br>
+         * @return <br>
+         */
         public _Fields fieldForId(int fieldId) {
             return _Fields.findByThriftId(fieldId);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param iprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
-            schemes.get(iprot.getScheme()).getScheme().read(iprot, this);
+            SCHEMES.get(iprot.getScheme()).getScheme().read(iprot, this);
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param oprot <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
-            schemes.get(oprot.getScheme()).getScheme().write(oprot, this);
+            SCHEMES.get(oprot.getScheme()).getScheme().write(oprot, this);
         }
 
         @Override
@@ -5742,11 +7890,28 @@ public class TaskService {
             return sb.toString();
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @throws org.apache.thrift.TException <br>
+         */
         public void validate() throws org.apache.thrift.TException {
             // check for required fields
             // check for sub-struct validity
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param out <br>
+         * @throws java.io.IOException <br>
+         */
         private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
             try {
                 write(new org.apache.thrift.protocol.TCompactProtocol(
@@ -5757,6 +7922,16 @@ public class TaskService {
             }
         }
 
+        /**
+         * 
+         * Description: <br> 
+         *  
+         * @author yang.zhipeng <br>
+         * @taskId <br>
+         * @param in <br>
+         * @throws java.io.IOException <br>
+         * @throws ClassNotFoundException <br>
+         */
         private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
             try {
                 read(new org.apache.thrift.protocol.TCompactProtocol(
@@ -5775,6 +7950,16 @@ public class TaskService {
 
         private static class remove_resultStandardScheme extends StandardScheme<remove_result> {
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param iprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void read(org.apache.thrift.protocol.TProtocol iprot, remove_result struct)
                 throws org.apache.thrift.TException {
                 org.apache.thrift.protocol.TField schemeField;
@@ -5796,6 +7981,16 @@ public class TaskService {
                 struct.validate();
             }
 
+            /**
+             * 
+             * Description: <br> 
+             *  
+             * @author yang.zhipeng <br>
+             * @taskId <br>
+             * @param oprot <br>
+             * @param struct <br>
+             * @throws org.apache.thrift.TException <br>
+             */
             public void write(org.apache.thrift.protocol.TProtocol oprot, remove_result struct)
                 throws org.apache.thrift.TException {
                 struct.validate();
@@ -5807,13 +8002,13 @@ public class TaskService {
 
         }
 
-        private static class remove_resultTupleSchemeFactory implements SchemeFactory {
-            public remove_resultTupleScheme getScheme() {
-                return new remove_resultTupleScheme();
+        private static class RemoveResultTupleSchemeFactory implements SchemeFactory {
+            public RemoveResultTupleScheme getScheme() {
+                return new RemoveResultTupleScheme();
             }
         }
 
-        private static class remove_resultTupleScheme extends TupleScheme<remove_result> {
+        private static class RemoveResultTupleScheme extends TupleScheme<remove_result> {
 
             @Override
             public void write(org.apache.thrift.protocol.TProtocol prot, remove_result struct)
