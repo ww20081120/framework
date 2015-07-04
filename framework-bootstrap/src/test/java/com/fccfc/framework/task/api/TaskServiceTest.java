@@ -24,6 +24,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 })
 public class TaskServiceTest {
 
+    /**
+     * iface
+     */
     @Resource
     private TaskService.Iface iface;
     
