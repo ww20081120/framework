@@ -48,6 +48,9 @@ public class TriggerPojo extends BaseEntity {
     @Column(name = "OPERATOR_ID")
     private Integer operatorId;
 
+    /**
+     * triggerType
+     */
     @Transient
     private Integer triggerType;
 

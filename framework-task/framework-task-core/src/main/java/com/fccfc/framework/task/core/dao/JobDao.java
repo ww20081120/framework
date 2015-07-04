@@ -26,15 +26,58 @@ import com.fccfc.framework.task.core.bean.TaskTriggerPojo;
 @Dao
 public interface JobDao extends IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @param pageIndex <br>
+     * @param pageSize <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(bean = TaskPojo.class)
     List<TaskPojo> selectTaskList(@Param("task") TaskPojo taskPojo, @Param(Param.pageIndex) int pageIndex,
         @Param(Param.pageSize) int pageSize) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskId <br>
+     * @param operatorId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     int insertTaskHistory(@Param("taskId") int taskId, @Param("operatorId") Integer operatorId) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskTrigger <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("INSERT INTO TASK_TRIGGER (TASK_ID, TRIGGER_TYPE, TRIGGER_ID) VALUES (:t.taskId, :t.triggerType, :t.triggerId)")
     int insertTaskTrigger(@Param("t") TaskTriggerPojo taskTrigger) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskId <br>
+     * @param state <br>
+     * @throws DaoException <br>
+     */
     @Sql("UPDATE TASK T SET T.TASK_STATE = :state WHERE T.TASK_ID = :taskId")
     void updateTaskState(@Param("taskId") int taskId, @Param("state") String state) throws DaoException;
 }

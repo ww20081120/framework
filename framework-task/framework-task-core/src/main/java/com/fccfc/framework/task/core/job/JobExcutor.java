@@ -28,7 +28,10 @@ import com.fccfc.framework.task.core.TaskConstants;
 public class JobExcutor implements Job {
 
     /**
+     * execute
      * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
+     * @param context <br>
+     * @throws JobExecutionException <br>
      */
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {

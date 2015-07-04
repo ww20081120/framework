@@ -49,6 +49,7 @@ public class SimpleTriggerPojo extends TriggerPojo {
 
     /**
      * 默认构造函数
+     * @param trigger <br>
      */
     public SimpleTriggerPojo(SimpleTrigger trigger) {
         this.setTriggerId(trigger.getTriggerId());

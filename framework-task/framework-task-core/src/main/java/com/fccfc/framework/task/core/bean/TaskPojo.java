@@ -55,7 +55,8 @@ public class TaskPojo extends BaseEntity {
     }
 
     /**
-     * 默认构造函数
+     * TaskPojo
+     * @param task <br>
      */
     public TaskPojo(Task task) {
         this.taskId = task.getTaskId();

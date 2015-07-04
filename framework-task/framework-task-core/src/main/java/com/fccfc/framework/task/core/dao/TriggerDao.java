@@ -26,19 +26,78 @@ import com.fccfc.framework.task.core.bean.TriggerPojo;
 @Dao
 public interface TriggerDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(bean = TriggerPojo.class)
     List<TriggerPojo> selectTriggerByTaskId(@Param("taskId") int taskId) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param trigger <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     int saveOrUpdateCronTrigger(@Param("trigger") CronTriggerPojo trigger) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param trigger <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     int saveOrUpdateSimpleTrigger(@Param("trigger") SimpleTriggerPojo trigger) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param triggerId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT T.* FROM CRON_TRIGGER T WHERE T.TRIGGER_ID = :id", bean = CronTriggerPojo.class)
     CronTriggerPojo getCronTriggerById(@Param("id") int triggerId) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param triggerId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql(value = "SELECT T.* FROM SIMPLE_TRIGGER t WHERE T.TRIGGER_ID = :id", bean = CronTriggerPojo.class)
     SimpleTriggerPojo getSimpleTriggerById(@Param("id") int triggerId) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
     @Sql("SELECT LAST_INSERT_ID()")
     int getId() throws DaoException;
 }

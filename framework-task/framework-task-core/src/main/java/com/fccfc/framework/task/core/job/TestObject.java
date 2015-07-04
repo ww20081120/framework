@@ -15,7 +15,14 @@ package com.fccfc.framework.task.core.job;
  */
 public class TestObject {
 
-    public void test(){
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
+    public void test() {
         System.out.println("这是测试类");
     }
 

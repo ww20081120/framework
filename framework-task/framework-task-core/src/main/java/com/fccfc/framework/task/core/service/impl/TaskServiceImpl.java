@@ -49,15 +49,28 @@ import com.fccfc.framework.task.core.listener.TaskListener;
  * @see com.fccfc.framework.task.core.listener <br>
  */
 public class TaskServiceImpl implements TaskService.Iface {
+    
+    /**
+     * jobDao
+     */
     @Resource
     private JobDao jobDao;
-
+    
+    /**
+     * triggerDao
+     */
     @Resource
     private TriggerDao triggerDao;
-
+    
+    /**
+     * scheduler
+     */
     @Resource
     private Scheduler scheduler;
-
+    
+    /**
+     * taskListener
+     */
     @Resource
     private TaskListener taskListener;
 
@@ -96,8 +109,14 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * @see com.fccfc.framework.task.api.TaskService.Iface#simpleScheduleTask(com.fccfc.framework.task.api.Task,
-     *      com.fccfc.framework.task.api.SimpleTrigger)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param task <br>
+     * @param simpleTrigger <br>
+     * @throws TException <br>
      */
     @Override
     public void simpleScheduleTask(Task task, SimpleTrigger simpleTrigger) throws TException {
@@ -110,6 +129,16 @@ public class TaskServiceImpl implements TaskService.Iface {
 
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @param simpleTriggerPojo <br>
+     * @throws ServiceException <br>
+     */
     private void schedule(TaskPojo taskPojo, SimpleTriggerPojo simpleTriggerPojo) throws ServiceException {
         try {
             Assert.notNull(taskPojo, "任务不能为空");
@@ -145,8 +174,14 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * @see com.fccfc.framework.task.api.TaskService.Iface#cronScheduleTask(com.fccfc.framework.task.api.Task,
-     *      com.fccfc.framework.task.api.CronTrigger)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param task <br>
+     * @param cronTrigger <br>
+     * @throws TException <br>
      */
     @Override
     public void cronScheduleTask(Task task, CronTrigger cronTrigger) throws TException {
@@ -158,6 +193,16 @@ public class TaskServiceImpl implements TaskService.Iface {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @param cronTriggerPojo <br>
+     * @throws ServiceException <br>
+     */
     private void schedule(TaskPojo taskPojo, CronTriggerPojo cronTriggerPojo) throws ServiceException {
         try {
             Assert.notNull(taskPojo, "任务不能为空");
@@ -193,7 +238,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * @see com.fccfc.framework.task.api.TaskService.Iface#pause(com.fccfc.framework.task.api.Task)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param task <br>
+     * @throws TException <br>
      */
     @Override
     public void pause(Task task) throws TException {
@@ -205,6 +256,15 @@ public class TaskServiceImpl implements TaskService.Iface {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @throws ServiceException <br>
+     */
     private void pause(TaskPojo taskPojo) throws ServiceException {
         try {
             List<TriggerPojo> triggerList = triggerDao.selectTriggerByTaskId(taskPojo.getTaskId());
@@ -220,7 +280,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * @see com.fccfc.framework.task.api.TaskService.Iface#resume(com.fccfc.framework.task.api.Task)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param task <br>
+     * @throws TException <br>
      */
     @Override
     public void resume(Task task) throws TException {
@@ -232,6 +298,15 @@ public class TaskServiceImpl implements TaskService.Iface {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @throws ServiceException <br>
+     */
     private void resume(TaskPojo taskPojo) throws ServiceException {
         try {
             List<TriggerPojo> triggerList = triggerDao.selectTriggerByTaskId(taskPojo.getTaskId());
@@ -247,7 +322,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * @see com.fccfc.framework.task.api.TaskService.Iface#remove(com.fccfc.framework.task.api.Task)
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param task <br>
+     * @throws TException <br>
      */
     @Override
     public void remove(Task task) throws TException {
@@ -259,6 +340,15 @@ public class TaskServiceImpl implements TaskService.Iface {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @throws ServiceException <br>
+     */
     private void remove(TaskPojo taskPojo) throws ServiceException {
         try {
             List<TriggerPojo> triggerList = triggerDao.selectTriggerByTaskId(taskPojo.getTaskId());
@@ -276,6 +366,15 @@ public class TaskServiceImpl implements TaskService.Iface {
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @return <br>
+     */
     private JobDetail getJobDetail(TaskPojo taskPojo) {
         JobDetail detail = JobBuilder
             .newJob("Y".equals(taskPojo.getIsConcurrent()) ? JobExcutor.class : SynchronizedJobExcutor.class)

@@ -34,11 +34,20 @@ import com.fccfc.framework.task.core.dao.JobDao;
  */
 public class TaskListener implements JobListener, TriggerListener, SchedulerListener {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(TaskListener.class);
 
+    /**
+     * taskDao
+     */
     @Resource
     private JobDao taskDao;
 
+    /**
+     * scheduler
+     */
     @Resource
     private Scheduler scheduler;
 

@@ -29,6 +29,7 @@ public class CronTriggerPojo extends TriggerPojo {
 
     /**
      * 默认构造函数
+     * @param trigger <br>
      */
     public CronTriggerPojo(CronTrigger trigger) {
         this.setTriggerId(trigger.getTriggerId());

@@ -21,8 +21,14 @@ import com.fccfc.framework.task.api.TaskService;
  */
 public class TaskInitialization implements Initialization {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(TaskInitialization.class);
 
+    /**
+     * taskService
+     */
     @Resource
     private TaskService.Iface taskService;
 
