@@ -18,10 +18,10 @@ public class DataSourceContextHolder {
     /**
      * contextHolder
      */
-    private static final ThreadLocal<DataSourceType> contextHolder;
+    private static final ThreadLocal<DataSourceType> CONTEXT_HOLDER;
 
     static {
-        contextHolder = new ThreadLocal<DataSourceType>();
+        CONTEXT_HOLDER = new ThreadLocal<DataSourceType>();
     }
 
     /**
@@ -31,7 +31,7 @@ public class DataSourceContextHolder {
      * @param dataSourceType <br>
      */
     public static void setDataSourceType(DataSourceType dataSourceType) {
-        contextHolder.set(dataSourceType);
+        CONTEXT_HOLDER.set(dataSourceType);
     }
 
     /**
@@ -41,7 +41,7 @@ public class DataSourceContextHolder {
      * @return <br>
      */
     public static DataSourceType getDataSourceType() {
-        return contextHolder.get();
+        return CONTEXT_HOLDER.get();
     }
 
     /**
@@ -51,7 +51,7 @@ public class DataSourceContextHolder {
      * @author 王伟 <br> <br>
      */
     public static void clearDataSourceType() {
-        contextHolder.remove();
+        CONTEXT_HOLDER.remove();
     }
 
 }
