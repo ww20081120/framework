@@ -8,7 +8,7 @@
 	<name>${project.artifactId}</name>
 	<description>框架</description>
 	<modules>
-		<module>framework-common</module> 
+		<module>framework-common</module>
 		<module>framework-db</module>
 		<module>framework-cache</module>
 		<module>framework-rpc</module>
