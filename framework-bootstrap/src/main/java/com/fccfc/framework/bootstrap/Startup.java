@@ -135,6 +135,7 @@ public class Startup {
     }
 
     public static ApplicationContext getContext() {
+        
         return context;
         
     }
