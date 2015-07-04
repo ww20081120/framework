@@ -4283,7 +4283,9 @@ public class TaskService {
             }
         }
 
-        // isset id assignments
+        /**
+         *  isset id assignments
+         */
         public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
         static {
             Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(
