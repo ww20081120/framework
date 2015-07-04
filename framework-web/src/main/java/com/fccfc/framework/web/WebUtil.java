@@ -33,7 +33,7 @@ public final class WebUtil {
     /**
      * 测试账号MAP
      */
-    public static Map<String, String> TEST_OPER_MAP = null;
+    public static Map<String, String> testOperMap = null;
 
     /**
      * 默认构造函数
@@ -122,19 +122,19 @@ public final class WebUtil {
      * @return <br>
      */
     public static Map<String, String> getTestOperMap() {
-        if (null != TEST_OPER_MAP) {
-            return TEST_OPER_MAP;
+        if (null != testOperMap) {
+            return testOperMap;
         }
 
-        TEST_OPER_MAP = new HashMap<String, String>();
+        testOperMap = new HashMap<String, String>();
         String operators = Configuration.getString("OPERATOR.TEST_OPERATOR");
         if (CommonUtil.isNotEmpty(operators)) {
             String[] operatorArr = operators.split(GlobalConstants.SPLITOR);
             for (String value : operatorArr) {
-                TEST_OPER_MAP.put(value.split(GlobalConstants.EQUAL_SPLITER)[0],
+                testOperMap.put(value.split(GlobalConstants.EQUAL_SPLITER)[0],
                     value.split(GlobalConstants.EQUAL_SPLITER)[1]);
             }
         }
-        return TEST_OPER_MAP;
+        return testOperMap;
     }
 }
