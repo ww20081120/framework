@@ -4,7 +4,7 @@
 	<groupId>com.fccfc</groupId>
 	<artifactId>framework</artifactId>
 	<version>${framework.version}</version>
-	<packaging>pom</packaging>
+	<packaging>pom</packaging> 
 	<name>${project.artifactId}</name>
 	<description>框架</description>
 	<modules>
