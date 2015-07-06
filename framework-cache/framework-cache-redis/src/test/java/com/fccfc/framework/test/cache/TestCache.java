@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.ICache;
 import com.fccfc.framework.cache.core.IStringCache;
