@@ -39,8 +39,8 @@ public interface JobDao extends IGenericBaseDao {
      * @throws DaoException <br>
      */
     @Sql(bean = TaskPojo.class)
-    List<TaskPojo> selectTaskList(@Param("task") TaskPojo taskPojo, @Param(Param.pageIndex) int pageIndex,
-        @Param(Param.pageSize) int pageSize) throws DaoException;
+    List<TaskPojo> selectTaskList(@Param("task") TaskPojo taskPojo, @Param(Param.PAGE_INDEX) int pageIndex,
+        @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
 
     /**
      * 

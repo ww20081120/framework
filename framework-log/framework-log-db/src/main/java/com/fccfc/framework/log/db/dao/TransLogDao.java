@@ -38,7 +38,7 @@ public interface TransLogDao extends IGenericBaseDao {
      * @throws DaoException <br>
      */
     @Sql(bean = TransLogPojo.class)
-    List<TransLogPojo> listTransLog(@Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize)
+    List<TransLogPojo> listTransLog(@Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize)
         throws DaoException;
 
     /**
