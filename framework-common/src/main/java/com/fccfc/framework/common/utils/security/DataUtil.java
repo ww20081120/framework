@@ -20,7 +20,7 @@ import com.fccfc.framework.common.utils.UtilException;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年12月14日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.common.utils.security <br>
  */
 

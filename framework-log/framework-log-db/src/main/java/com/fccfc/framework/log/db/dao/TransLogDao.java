@@ -20,7 +20,7 @@ import com.fccfc.framework.log.db.bean.TransLogStackPojo;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年11月29日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.log.dao <br>
  */
 @Dao

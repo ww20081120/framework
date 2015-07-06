@@ -31,7 +31,7 @@ import org.apache.thrift.scheme.TupleScheme;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月3日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.task.api <br>
  */
 @SuppressWarnings({

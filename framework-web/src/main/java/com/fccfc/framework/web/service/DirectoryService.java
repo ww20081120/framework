@@ -13,7 +13,7 @@ import com.fccfc.framework.config.core.bean.DirectoryPojo;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月2日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.web.service <br>
  */
 public interface DirectoryService {

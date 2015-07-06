@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月3日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.task.api <br>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
