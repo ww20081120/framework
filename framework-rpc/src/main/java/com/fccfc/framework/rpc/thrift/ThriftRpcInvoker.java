@@ -44,7 +44,7 @@ import com.alibaba.dubbo.rpc.protocol.dubbo.FutureAdapter;
  * @taskId <br>
  * @param <T> <br>
  * @CreateDate 2015年7月2日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.rpc.thrift <br>
  */
 public class ThriftRpcInvoker<T> extends AbstractInvoker<T> {

@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月1日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.message.api <br>
  */
 @SuppressWarnings({
@@ -54,7 +54,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public interface Iface {
@@ -93,7 +93,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public interface AsyncIface {
@@ -135,7 +135,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public static class Client extends org.apache.thrift.TServiceClient implements Iface {
@@ -148,7 +148,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class Factory implements org.apache.thrift.TServiceClientFactory<Client> {
@@ -310,7 +310,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public static class AsyncClient extends org.apache.thrift.async.TAsyncClient implements AsyncIface {
@@ -323,7 +323,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class Factory implements org.apache.thrift.async.TAsyncClientFactory<AsyncClient> {
@@ -403,7 +403,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class SendMessageCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -503,7 +503,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class ResendMessageCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -577,7 +577,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements
@@ -633,7 +633,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class SendMessage<I extends Iface> extends org.apache.thrift.ProcessFunction<I, SendMessageArgs> {
@@ -680,7 +680,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class ResendMessage<I extends Iface> extends
@@ -729,7 +729,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
@@ -785,7 +785,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class SendMessage<I extends AsyncIface> extends
@@ -877,7 +877,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         public static class ResendMessage<I extends AsyncIface> extends
@@ -969,7 +969,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public static class SendMessageArgs implements
@@ -1566,7 +1566,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageArgsStandardSchemeFactory implements SchemeFactory {
@@ -1583,7 +1583,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageArgsStandardScheme extends StandardScheme<SendMessageArgs> {
@@ -1677,7 +1677,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageArgsTupleSchemeFactory implements SchemeFactory {
@@ -1694,7 +1694,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageArgsTupleScheme extends TupleScheme<SendMessageArgs> {
@@ -1746,7 +1746,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
     public static class SendMessageResult implements
@@ -2216,7 +2216,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageResultStandardSchemeFactory implements SchemeFactory {
@@ -2233,7 +2233,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageResultStandardScheme extends StandardScheme<SendMessageResult> {
@@ -2312,7 +2312,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageResultTupleSchemeFactory implements SchemeFactory {
@@ -2329,7 +2329,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月1日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class SendMessageResultTupleScheme extends TupleScheme<SendMessageResult> {
@@ -2370,7 +2370,7 @@ public class MessageService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月1日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.message.api <br>
      */
     public static class ResendMessageArgs implements
@@ -2839,7 +2839,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageArgsStandardSchemeFactory implements SchemeFactory {
@@ -2856,7 +2856,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageArgsStandardScheme extends StandardScheme<ResendMessageArgs> {
@@ -2933,7 +2933,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageArgsTupleSchemeFactory implements SchemeFactory {
@@ -2950,7 +2950,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageArgsTupleScheme extends TupleScheme<ResendMessageArgs> {
@@ -2991,7 +2991,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
     public static class ResendMessageResult implements
@@ -3014,8 +3014,7 @@ public class MessageService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -3331,7 +3330,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageResultStandardSchemeFactory implements SchemeFactory {
@@ -3348,7 +3347,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageResultStandardScheme extends StandardScheme<ResendMessageResult> {
@@ -3413,7 +3412,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageResultTupleSchemeFactory implements SchemeFactory {
@@ -3430,7 +3429,7 @@ public class MessageService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月2日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.message.api <br>
          */
         private static class ResendMessageResultTupleScheme extends TupleScheme<ResendMessageResult> {

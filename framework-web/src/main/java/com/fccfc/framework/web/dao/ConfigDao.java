@@ -16,7 +16,7 @@ import com.fccfc.framework.db.core.annotation.Sql;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月2日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.web.dao <br>
  */
 @Dao

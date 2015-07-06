@@ -20,7 +20,7 @@ import com.fccfc.framework.db.hibernate.IGenericBaseDao;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年11月9日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.core.db.config <br>
  */
 @Dao
@@ -36,7 +36,7 @@ public interface ConfigItemDao extends IGenericBaseDao {
      */
     @Sql(bean = ConfigItemPojo.class)
     List<ConfigItemPojo> selectConfigItemList(@Param("configItem") ConfigItemPojo configItemPojo,
-        @Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize) throws DaoException;
+        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
 
     /**
      * 

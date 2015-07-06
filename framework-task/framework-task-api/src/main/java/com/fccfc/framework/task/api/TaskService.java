@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月3日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.task.api <br>
  */
 @SuppressWarnings({
@@ -51,7 +51,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public interface Iface {
@@ -126,7 +126,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public interface AsyncIface {
@@ -213,7 +213,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class Client extends org.apache.thrift.TServiceClient implements Iface {
@@ -225,7 +225,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Factory implements org.apache.thrift.TServiceClientFactory<Client> {
@@ -534,7 +534,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class AsyncClient extends org.apache.thrift.async.TAsyncClient implements AsyncIface {
@@ -546,7 +546,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Factory implements org.apache.thrift.async.TAsyncClientFactory<AsyncClient> {
@@ -623,7 +623,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class ScheduleAllTaskCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -704,7 +704,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class SimpleScheduleTaskCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -801,7 +801,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class CronScheduleTaskCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -896,7 +896,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class PauseCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -983,7 +983,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class ResumeCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -1070,7 +1070,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class RemoveCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -1142,7 +1142,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements
@@ -1202,7 +1202,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class ScheduleAllTask<I extends Iface> extends
@@ -1248,7 +1248,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class SimpleScheduleTask<I extends Iface> extends
@@ -1294,7 +1294,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class CronScheduleTask<I extends Iface> extends
@@ -1340,7 +1340,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Pause<I extends Iface> extends org.apache.thrift.ProcessFunction<I, PauseArgs> {
@@ -1384,7 +1384,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Resume<I extends Iface> extends org.apache.thrift.ProcessFunction<I, ResumeArgs> {
@@ -1428,7 +1428,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Remove<I extends Iface> extends org.apache.thrift.ProcessFunction<I, RemoveArgs> {
@@ -1474,7 +1474,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
@@ -1533,7 +1533,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class ScheduleAllTask<I extends AsyncIface> extends
@@ -1620,7 +1620,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class SimpleScheduleTask<I extends AsyncIface> extends
@@ -1707,7 +1707,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class CronScheduleTask<I extends AsyncIface> extends
@@ -1794,7 +1794,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Pause<I extends AsyncIface> extends
@@ -1881,7 +1881,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Resume<I extends AsyncIface> extends
@@ -1968,7 +1968,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         public static class Remove<I extends AsyncIface> extends
@@ -2057,7 +2057,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class ScheduleAllTaskArgs implements
@@ -2080,8 +2080,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -2477,7 +2476,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class ScheduleAllTaskResult implements
@@ -2500,8 +2499,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -2897,7 +2895,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class SimpleScheduleTaskArgs implements
@@ -3633,7 +3631,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class SimpleScheduleTaskResult implements
@@ -3656,8 +3654,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -4054,7 +4051,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class CronScheduleTaskArgs implements
@@ -4790,7 +4787,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月4日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class CronScheduleTaskResult implements
@@ -4813,8 +4810,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -5187,7 +5183,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         private static class CronScheduleTaskResultTupleSchemeFactory implements SchemeFactory {
@@ -5203,7 +5199,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         private static class CronScheduleTaskResultTupleScheme extends TupleScheme<CronScheduleTaskResult> {
@@ -5230,7 +5226,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class PauseArgs implements org.apache.thrift.TBase<PauseArgs, PauseArgs._Fields>,
@@ -5702,7 +5698,7 @@ public class TaskService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年7月3日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.task.api <br>
          */
         private static class PauseArgsStandardSchemeFactory implements SchemeFactory {
@@ -5822,7 +5818,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class PauseResult implements org.apache.thrift.TBase<PauseResult, PauseResult._Fields>,
@@ -5844,8 +5840,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -6241,7 +6236,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class ResumeArgs implements org.apache.thrift.TBase<ResumeArgs, ResumeArgs._Fields>,
@@ -6823,7 +6818,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class ResumeResult implements org.apache.thrift.TBase<ResumeResult, ResumeResult._Fields>,
@@ -6845,8 +6840,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME
@@ -7242,7 +7236,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class RemoveArgs implements org.apache.thrift.TBase<RemoveArgs, RemoveArgs._Fields>,
@@ -7824,7 +7818,7 @@ public class TaskService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年7月3日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.task.api <br>
      */
     public static class RemoveResult implements org.apache.thrift.TBase<RemoveResult, RemoveResult._Fields>,
@@ -7846,8 +7840,7 @@ public class TaskService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-            ;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
 
             /**
              * BY_NAME

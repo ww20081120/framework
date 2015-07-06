@@ -10,12 +10,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.Thumbnails.Builder;
 
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.UtilException;
-
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.Thumbnails.Builder;
 
 /**
  * <Description> <br>

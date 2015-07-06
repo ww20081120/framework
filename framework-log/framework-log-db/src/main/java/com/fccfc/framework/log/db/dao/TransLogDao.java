@@ -20,7 +20,7 @@ import com.fccfc.framework.log.db.bean.TransLogStackPojo;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年11月29日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.log.dao <br>
  */
 @Dao
@@ -38,7 +38,7 @@ public interface TransLogDao extends IGenericBaseDao {
      * @throws DaoException <br>
      */
     @Sql(bean = TransLogPojo.class)
-    List<TransLogPojo> listTransLog(@Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize)
+    List<TransLogPojo> listTransLog(@Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize)
         throws DaoException;
 
     /**

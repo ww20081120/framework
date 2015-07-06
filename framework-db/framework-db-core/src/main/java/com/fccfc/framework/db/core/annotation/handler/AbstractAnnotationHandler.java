@@ -1,5 +1,5 @@
 /**************************************************************************************** 
- Copyright © 2003-2012 ZTEsoft Corporation. All rights reserved. Reproduction or       <br>
+ Copyright © 2003-2012 fccfc Corporation. All rights reserved. Reproduction or       <br>
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
@@ -218,10 +218,10 @@ public class AbstractAnnotationHandler {
                             if (annotation instanceof Param) {
                                 Param p = (Param) annotation;
                                 name = p.value();
-                                if (Param.pageIndex.equals(name)) {
+                                if (Param.PAGE_INDEX.equals(name)) {
                                     metadata.setIndexPosition(i);
                                 }
-                                else if (Param.pageSize.equals(name)) {
+                                else if (Param.PAGE_SIZE.equals(name)) {
                                     metadata.setSizePosition(i);
                                 }
                                 metadata.setParamName(i, name);

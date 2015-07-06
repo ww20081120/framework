@@ -21,6 +21,7 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
+
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.log.core.TransLoggerService;
@@ -34,7 +35,7 @@ import com.fccfc.framework.log.core.TransManager;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年7月1日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.log.core.filter <br>
  */
 public class SqlLogFilter extends FilterEventAdapter {

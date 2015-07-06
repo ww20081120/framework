@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2015年6月30日 <br>
- * @since V7.3<br>
+ * @since V1.0<br>
  * @see com.fccfc.framework.config.api <br>
  */
 @SuppressWarnings({
@@ -53,7 +53,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public interface Iface {
@@ -117,7 +117,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public interface AsyncIface {
@@ -186,7 +186,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class Client extends org.apache.thrift.TServiceClient implements Iface {
@@ -199,7 +199,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class Factory implements org.apache.thrift.TServiceClientFactory<Client> {
@@ -458,7 +458,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class AsyncClient extends org.apache.thrift.async.TAsyncClient implements AsyncIface {
@@ -471,7 +471,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class Factory implements org.apache.thrift.async.TAsyncClientFactory<AsyncClient> {
@@ -550,7 +550,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class QueryAllConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -644,7 +644,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class QueryConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -752,7 +752,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class UpdateConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -843,7 +843,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class AddConfigCall extends org.apache.thrift.async.TAsyncMethodCall {
@@ -917,7 +917,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements
@@ -975,7 +975,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class QueryAllConfig<I extends Iface> extends
@@ -1023,7 +1023,7 @@ public class ConfigService {
              * @version 1.0<br>
              * @taskId <br>
              * @CreateDate 2015年6月30日 <br>
-             * @since V7.3<br>
+             * @since V1.0<br>
              * @see com.fccfc.framework.config.api <br>
              */
         public static class QueryConfig<I extends Iface> extends org.apache.thrift.ProcessFunction<I, QueryConfigArgs> {
@@ -1069,7 +1069,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class UpdateConfig<I extends Iface> extends
@@ -1116,7 +1116,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class AddConfig<I extends Iface> extends org.apache.thrift.ProcessFunction<I, AddConfigArgs> {
@@ -1164,7 +1164,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
@@ -1222,7 +1222,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class QueryAllConfig<I extends AsyncIface> extends
@@ -1313,7 +1313,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class QueryConfig<I extends AsyncIface> extends
@@ -1404,7 +1404,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class UpdateConfig<I extends AsyncIface> extends
@@ -1494,7 +1494,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         public static class AddConfig<I extends AsyncIface> extends
@@ -1586,7 +1586,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class QueryAllConfigArgs implements
@@ -2056,7 +2056,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigArgsStandardSchemeFactory implements SchemeFactory {
@@ -2073,7 +2073,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigArgsStandardScheme extends StandardScheme<QueryAllConfigArgs> {
@@ -2152,7 +2152,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigArgsTupleSchemeFactory implements SchemeFactory {
@@ -2169,7 +2169,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigArgsTupleScheme extends TupleScheme<QueryAllConfigArgs> {
@@ -2210,7 +2210,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class QueryAllConfigResult implements
@@ -2708,7 +2708,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigResultStandardSchemeFactory implements SchemeFactory {
@@ -2725,7 +2725,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigResultStandardScheme extends StandardScheme<QueryAllConfigResult> {
@@ -2817,7 +2817,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigResultTupleSchemeFactory implements SchemeFactory {
@@ -2834,7 +2834,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryAllConfigResultTupleScheme extends TupleScheme<QueryAllConfigResult> {
@@ -2887,7 +2887,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class QueryConfigArgs implements
@@ -3607,7 +3607,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigArgsStandardSchemeFactory implements SchemeFactory {
@@ -3624,7 +3624,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigArgsStandardScheme extends StandardScheme<QueryConfigArgs> {
@@ -3731,7 +3731,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigArgsTupleSchemeFactory implements SchemeFactory {
@@ -3748,7 +3748,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigArgsTupleScheme extends TupleScheme<QueryConfigArgs> {
@@ -3809,7 +3809,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
     public static class QueryConfigResult implements
@@ -4279,7 +4279,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigResultStandardSchemeFactory implements SchemeFactory {
@@ -4296,7 +4296,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigResultStandardScheme extends StandardScheme<QueryConfigResult> {
@@ -4375,7 +4375,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigResultTupleSchemeFactory implements SchemeFactory {
@@ -4392,7 +4392,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class QueryConfigResultTupleScheme extends TupleScheme<QueryConfigResult> {
@@ -4433,7 +4433,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class UpdateConfigArgs implements
@@ -4906,7 +4906,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigArgsStandardSchemeFactory implements SchemeFactory {
@@ -4923,7 +4923,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigArgsStandardScheme extends StandardScheme<UpdateConfigArgs> {
@@ -5003,7 +5003,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigArgsTupleSchemeFactory implements SchemeFactory {
@@ -5020,7 +5020,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigArgsTupleScheme extends TupleScheme<UpdateConfigArgs> {
@@ -5062,7 +5062,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class UpdateConfigResult implements
@@ -5085,8 +5085,7 @@ public class ConfigService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
             /**
              * BY_NAME
              */
@@ -5401,7 +5400,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigResultStandardSchemeFactory implements SchemeFactory {
@@ -5418,7 +5417,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigResultStandardScheme extends StandardScheme<UpdateConfigResult> {
@@ -5483,7 +5482,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigResultTupleSchemeFactory implements SchemeFactory {
@@ -5500,7 +5499,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class UpdateConfigResultTupleScheme extends TupleScheme<UpdateConfigResult> {
@@ -5528,7 +5527,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class AddConfigArgs implements org.apache.thrift.TBase<AddConfigArgs, AddConfigArgs._Fields>,
@@ -6000,7 +5999,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigArgsStandardSchemeFactory implements SchemeFactory {
@@ -6017,7 +6016,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigArgsStandardScheme extends StandardScheme<AddConfigArgs> {
@@ -6097,7 +6096,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigArgsTupleSchemeFactory implements SchemeFactory {
@@ -6114,7 +6113,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigArgsTupleScheme extends TupleScheme<AddConfigArgs> {
@@ -6156,7 +6155,7 @@ public class ConfigService {
      * @version 1.0<br>
      * @taskId <br>
      * @CreateDate 2015年6月30日 <br>
-     * @since V7.3<br>
+     * @since V1.0<br>
      * @see com.fccfc.framework.config.api <br>
      */
     public static class AddConfigResult implements
@@ -6179,8 +6178,7 @@ public class ConfigService {
         }
 
         /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-        public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-;
+        public enum _Fields implements org.apache.thrift.TFieldIdEnum {;
             /**
              * BY_NAME
              */
@@ -6495,7 +6493,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigResultStandardSchemeFactory implements SchemeFactory {
@@ -6512,7 +6510,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigResultStandardScheme extends StandardScheme<AddConfigResult> {
@@ -6577,7 +6575,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigResultTupleSchemeFactory implements SchemeFactory {
@@ -6594,7 +6592,7 @@ public class ConfigService {
          * @version 1.0<br>
          * @taskId <br>
          * @CreateDate 2015年6月30日 <br>
-         * @since V7.3<br>
+         * @since V1.0<br>
          * @see com.fccfc.framework.config.api <br>
          */
         private static class AddConfigResultTupleScheme extends TupleScheme<AddConfigResult> {
