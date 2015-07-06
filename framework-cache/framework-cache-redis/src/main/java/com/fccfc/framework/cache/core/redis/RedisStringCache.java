@@ -5,12 +5,12 @@ package com.fccfc.framework.cache.core.redis;
 
 import java.util.Map;
 
+import redis.clients.jedis.Jedis;
 
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.IStringCache;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
-import redis.clients.jedis.Jedis;
 
 /**
  * <Description> <br>
