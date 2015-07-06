@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import ognl.Ognl;
+
 import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.GlobalConstants;
@@ -26,8 +28,6 @@ import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.db.core.config.DataParam;
 import com.fccfc.framework.db.core.config.ParamMetadata;
 import com.fccfc.framework.db.core.executor.ISqlExcutor;
-
-import ognl.Ognl;
 
 /**
  * <Description> <br>
