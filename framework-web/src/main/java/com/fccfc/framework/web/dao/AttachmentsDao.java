@@ -8,7 +8,7 @@ import com.fccfc.framework.db.core.annotation.Dao;
 import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.db.core.annotation.Sql;
 import com.fccfc.framework.db.hibernate.IGenericBaseDao;
-import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
+import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 
 /**
  * <Description> <br>

@@ -4,7 +4,7 @@
 package com.fccfc.framework.web.service;
 
 import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
+import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 
 /**
  * <Description> <br>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fccfc.framework.common.FrameworkException;
 import com.fccfc.framework.common.utils.bean.JsonUtil;
-import com.fccfc.framework.web.service.ConfigService;
+import com.fccfc.framework.web.service.ConfigurationService;
 
 /**
  * 参数配置Controller
@@ -24,10 +24,10 @@ import com.fccfc.framework.web.service.ConfigService;
 public class ConfigController {
 
     /**
-     * configService
+     * configurationService
      */
     @Resource
-    private ConfigService configService;
+    private ConfigurationService configurationService;
 
     /**
      * 
@@ -41,18 +41,18 @@ public class ConfigController {
      */
     public String listConfigItems(HttpServletRequest request) throws FrameworkException {
         // 查询所有配置项目录
-        List<Map<String, Object>> configItems = configService.queryConfigCatalogs();
+        List<Map<String, Object>> configItems = configurationService.queryConfigCatalogs();
         String data = JsonUtil.writeObj2JSON(configItems);
 
         // 查询所有模块
-        List<Map<String, Object>> modules = configService.queryModules();
+        List<Map<String, Object>> modules = configurationService.queryModules();
         String moduleData = JsonUtil.writeObj2JSON(modules);
 
         // 查询输入方式
-        List<Map<String, Object>> inputTypes = configService.queryInputTypes();
+        List<Map<String, Object>> inputTypes = configurationService.queryInputTypes();
 
         // 查询数据类型
-        List<Map<String, Object>> dataTypes = configService.queryDataTypes();
+        List<Map<String, Object>> dataTypes = configurationService.queryDataTypes();
 
         request.setAttribute("data", data);
         request.setAttribute("moduleData", moduleData);
@@ -77,7 +77,7 @@ public class ConfigController {
         String directory = request.getParameter("directory");
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("directory", directory);
-        return JsonUtil.writeObj2JSON(configService.queryConfigItems(paramMap));
+        return JsonUtil.writeObj2JSON(configurationService.queryConfigItems(paramMap));
     }
 
     /**
@@ -110,7 +110,7 @@ public class ConfigController {
         paramMap.put("vasiable", vasiable);
         paramMap.put("remark", remark);
         paramMap.put("configCode", configCode);
-        configService.addConfigItem(paramMap);
+        configurationService.addConfigItem(paramMap);
         return "";
     }
 
@@ -129,7 +129,7 @@ public class ConfigController {
     public String queryParams(HttpServletRequest request) throws FrameworkException {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("itemId", request.getParameter("itemId"));
-        List<Map<String, Object>> params = configService.queryParams(paramMap);
+        List<Map<String, Object>> params = configurationService.queryParams(paramMap);
         return JsonUtil.writeObj2JSON(params);
     }
 
@@ -193,7 +193,7 @@ public class ConfigController {
             default:
                 break;
         }
-        configService.addParam(paramMap);
+        configurationService.addParam(paramMap);
         return "";
     }
 }

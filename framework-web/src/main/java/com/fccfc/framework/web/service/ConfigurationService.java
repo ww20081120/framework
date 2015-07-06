@@ -10,7 +10,7 @@ import com.fccfc.framework.common.ServiceException;
  * 
  * @author skysun'
  */
-public interface ConfigService {
+public interface ConfigurationService {
 
     /**
      * 

@@ -41,7 +41,7 @@ import com.fccfc.framework.common.utils.io.IOUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.common.utils.security.DataUtil;
 import com.fccfc.framework.config.core.Configuration;
-import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
+import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 import com.fccfc.framework.web.service.ResourceService;
 //import com.qiniu.api.auth.digest.Mac;
 //import com.qiniu.api.config.Config;
