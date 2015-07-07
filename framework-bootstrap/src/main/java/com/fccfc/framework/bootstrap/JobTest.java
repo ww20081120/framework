@@ -6,7 +6,7 @@ public class JobTest {
 		System.out.println("testJob01");
 	}
 	
-	public void testJob02() {
+	public void testJob02() { 
 		System.out.println("testJob02");
 	}
 	
