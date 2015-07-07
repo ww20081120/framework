@@ -6,7 +6,7 @@ Framework框架集成了log、cache、config、db、rpc、message、task、web�
 
 + framework-rpc 该模块是分布式的核心模块，定义了生产者与消费者，采用apache thrift协议，可以快速简单与zookeeper部署
 
-+ framework-cache 定义了缓存的获取。
++ framework-cache 定义了缓存的获取。  
 + framework-cache-core 缓存核心模块
 + framework-cache-redis 采用redis作为缓存
 + framework-cache-simple 用内存来实现缓存的，不建议生产环境使用
