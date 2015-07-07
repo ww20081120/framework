@@ -14,10 +14,9 @@
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="${service.protocol.name}" port="${service.protocol.port}" />
 
-    <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.fccfc.framework.config.api.ConfigService$Iface"
-        ref="configService" />
-    <dubbo:service interface="com.fccfc.framework.message.api.MessageService$Iface"
-        ref="messageService" />
-
+    <!-- 声明需要暴露的服务接口
+    <dubbo:service interface="com.fccfc.framework.config.api.ConfigService$Iface" ref="configService" />
+    <dubbo:service interface="com.fccfc.framework.message.api.MessageService$Iface" ref="messageService" />
+ 	-->
+    <dubbo:service interface="com.fccfc.framework.task.api.TaskService$Iface" ref="taskService" />
 </beans>
