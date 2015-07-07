@@ -58,7 +58,7 @@ public class TaskServiceTest {
      * @taskId <br>
      * @throws TException <br>
      */
-    @Test
+    @Test 
     public void testSimpleScheduleTask() throws TException {
     	Task task = new Task("task01", "com.fccfc.framework.bootstrap.JobTest", "testJob01");
     	SimpleTrigger trigger = new SimpleTrigger();
