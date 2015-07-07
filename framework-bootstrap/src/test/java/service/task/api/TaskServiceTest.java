@@ -1,4 +1,4 @@
-package com.fccfc.framework.service.task.api;
+package service.task.api;
 
 import java.util.ArrayList;
 import java.util.Date;

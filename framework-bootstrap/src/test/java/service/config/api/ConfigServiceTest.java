@@ -1,4 +1,4 @@
-package com.fccfc.framework.service.config.api;
+package service.config.api;
 
 import java.util.ArrayList;
 import java.util.List;
