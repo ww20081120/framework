@@ -1,5 +1,5 @@
 /**************************************************************************************** 
- Copyright © 2003-2012 fccfc Corporation. All rights reserved. Reproduction or       <br>
+ Copyright © 2003-2012 ZTEsoft Corporation. All rights reserved. Reproduction or       <br>
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -115,7 +114,10 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @return <br>
      * @throws UnsupportedEncodingException <br>
      */
-    private String getExceptionMsg(Exception ex) throws UnsupportedEncodingException {
+    protected String getExceptionMsg(Exception ex) throws UnsupportedEncodingException {
+    	if (ex == null) {
+    		return GlobalConstants.BLANK;
+    	}
         String result = null;
         PrintWriter writer = null;
         try {

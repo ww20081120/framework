@@ -109,9 +109,7 @@
                 read-only="false" rollback-for="Exception" />
 
             <!-- 不包含事务 -->
-            <tx:method name="addTransactionLog" propagation="NOT_SUPPORTED"
-                read-only="false" />
-            <tx:method name="addTransactionStackLog" propagation="NOT_SUPPORTED"
+            <tx:method name="end" propagation="NOT_SUPPORTED"
                 read-only="false" />
             <tx:method name="sendMessage" propagation="NOT_SUPPORTED"
                 read-only="false" />

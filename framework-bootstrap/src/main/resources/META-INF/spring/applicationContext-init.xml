@@ -21,6 +21,8 @@
                 <entry key="CACHE_MODULE" value="${cache.model}" />
                 <entry key="CACHE_REDIS_HOST" value="${cache.redis.host}" />
                 <entry key="CACHE_REDIS_PORT" value="${cache.redis.port}" />
+            	<entry key="CONACT_CHANNEL_ID" value="${contactChannel.id}" />
+				<entry key="DB_LOG_PRINT_FLAG" value="${db.log.print.flag}" />
             </map>
         </property>
     </bean>
