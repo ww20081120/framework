@@ -36,7 +36,7 @@ public interface MessageBoxDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT M.MESSAGE_ID FROM MESSAGE_BOX M WHERE M.NEXT_SEND_TIME >= :date", bean = Long.class)
+    @Sql(bean = Long.class)
     List<Long> selectMessageBox(@Param("date") Date date) throws DaoException;
 
     /**
@@ -50,7 +50,6 @@ public interface MessageBoxDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("INSERT INTO MESSAGE_ATTACHMENTS (ATTACHMENTS_ID, MESSAGE_ID) VALUES (:messageId, :attachmentId)")
     int saveMessageAttachments(@Param("messageId") long messageId, @Param("attachmentId") long attachmentId)
         throws DaoException;
 
@@ -63,9 +62,7 @@ public interface MessageBoxDao extends IGenericBaseDao {
      * @param messageId <br>
      * @return <br>
      */
-    @Sql(
-        value = "SELECT A.* FROM MESSAGE_ATTACHMENTS M, ATTACHMENTS A WHERE A.ATTACHMENTS_ID = M.ATTACHMENTS_ID AND M.MESSAGE_ID = :messageId",
-        bean = AttachmentsPojo.class)
+    @Sql(bean = AttachmentsPojo.class)
     List<AttachmentsPojo> selectMessageAttachments(@Param("messageId") long messageId);
 
 }
