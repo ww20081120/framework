@@ -102,9 +102,9 @@ public final class TransManager implements Serializable {
      * @param beginTime <br>
      */
     public void push(String id, long beginTime) {
-    	if(executeStack.isEmpty()) {
-    		stackId = id;
-    	}
+        if (executeStack.isEmpty()) {
+            stackId = id;
+        }
         executeTimeMap.put(id, beginTime);
         executeStack.push(id);
     }
@@ -194,7 +194,7 @@ public final class TransManager implements Serializable {
         this.transLoggerServices = transLoggerServices;
     }
 
-	public String getStackId() {
-		return stackId;
-	}
+    public String getStackId() {
+        return stackId;
+    }
 }

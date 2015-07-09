@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -115,9 +116,9 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @throws UnsupportedEncodingException <br>
      */
     protected String getExceptionMsg(Exception ex) throws UnsupportedEncodingException {
-    	if (ex == null) {
-    		return GlobalConstants.BLANK;
-    	}
+        if (ex == null) {
+            return GlobalConstants.BLANK;
+        }
         String result = null;
         PrintWriter writer = null;
         try {
