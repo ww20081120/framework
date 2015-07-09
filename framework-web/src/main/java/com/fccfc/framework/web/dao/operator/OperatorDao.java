@@ -6,7 +6,6 @@ package com.fccfc.framework.web.dao.operator;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.db.core.annotation.Dao;
 import com.fccfc.framework.db.core.annotation.Param;
-import com.fccfc.framework.db.core.annotation.Sql;
 import com.fccfc.framework.db.hibernate.IGenericBaseDao;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 
@@ -61,7 +60,6 @@ public interface OperatorDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("UPDATE OPERATOR O SET O.OPERATOR_CODE = :code WHERE O.OPERATOR_ID = :id")
     int updateOperatorCode(@Param("id") Integer id, @Param("code") Integer code) throws DaoException;
 
     /**
@@ -75,7 +73,6 @@ public interface OperatorDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("UPDATE OPERATOR O SET O.PASSWORD = :password WHERE O.OPERATOR_ID = :id")
     int updateOperatorPassword(@Param("id") int id, @Param("password") String password) throws DaoException;
 
     /**

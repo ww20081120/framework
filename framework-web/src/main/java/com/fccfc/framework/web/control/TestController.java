@@ -66,7 +66,7 @@ public class TestController {
      */
     @ResponseBody
     public String test2(String name) {
-        System.out.println(name);
+        //System.out.println(name);
         return name;
     }
 }
