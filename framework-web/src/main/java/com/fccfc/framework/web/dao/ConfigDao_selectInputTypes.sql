@@ -1,0 +1,1 @@
+select INPUT_TYPE, INPUT_TYPE_NAME from input_type
