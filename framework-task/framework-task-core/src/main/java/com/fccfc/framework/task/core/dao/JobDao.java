@@ -65,7 +65,6 @@ public interface JobDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("INSERT INTO TASK_TRIGGER (TASK_ID, TRIGGER_TYPE, TRIGGER_ID) VALUES (:t.taskId, :t.triggerType, :t.triggerId)")
     int insertTaskTrigger(@Param("t") TaskTriggerPojo taskTrigger) throws DaoException;
 
     /**
@@ -78,6 +77,5 @@ public interface JobDao extends IGenericBaseDao {
      * @param state <br>
      * @throws DaoException <br>
      */
-    @Sql("UPDATE TASK T SET T.TASK_STATE = :state WHERE T.TASK_ID = :taskId")
     void updateTaskState(@Param("taskId") int taskId, @Param("state") String state) throws DaoException;
 }
