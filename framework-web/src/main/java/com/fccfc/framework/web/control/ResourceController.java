@@ -5,6 +5,7 @@ package com.fccfc.framework.web.control;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,8 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.FileSystemResource;
@@ -24,6 +28,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +52,8 @@ import com.fccfc.framework.web.service.ResourceService;
 //import com.qiniu.api.auth.digest.Mac;
 //import com.qiniu.api.config.Config;
 //import com.qiniu.api.rs.PutPolicy;
+import com.github.cage.Cage;
+import com.github.cage.GCage;
 
 /**
  * <Description> <br>
@@ -56,6 +64,7 @@ import com.fccfc.framework.web.service.ResourceService;
  * @see com.fccfc.framework.web.control <br>
  */
 @Controller
+@RequestMapping("/resource")
 public class ResourceController {
 
     /**
@@ -376,5 +385,47 @@ public class ResourceController {
         }
 
         return MediaType.APPLICATION_OCTET_STREAM;
+    }
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng<br>
+     * @taskId <br>
+     * @param request <br>
+     * @param response <br>
+     * @return <br>
+     */
+    @SuppressWarnings({
+        "rawtypes", "unchecked"
+    })
+    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
+    public ResponseEntity<Resource> verifyCode(HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("image/jpeg");
+        Random r = new Random();
+        String number = String.valueOf(10000 + r.nextInt(89999));
+        HttpSession session = request.getSession();
+        session.setAttribute("CHECK_CODE", number);
+        Cage cage = new GCage();
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            cage.draw(number, os);
+        }
+        catch (IOException e) {
+        }
+        finally {
+            if (os != null) {
+                try {
+                    os.close();
+                }
+                catch (IOException e) {
+                    logger.error("OutputStream Error！");
+                }
+            }
+        }
+
+        return new ResponseEntity(org.springframework.http.HttpStatus.OK);
     }
 }
