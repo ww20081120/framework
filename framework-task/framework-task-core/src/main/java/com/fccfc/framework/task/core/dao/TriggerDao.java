@@ -98,6 +98,5 @@ public interface TriggerDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("SELECT LAST_INSERT_ID()") //未改
     int getId() throws DaoException;
 }
