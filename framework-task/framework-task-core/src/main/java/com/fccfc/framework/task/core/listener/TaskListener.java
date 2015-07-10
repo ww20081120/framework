@@ -62,7 +62,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_COMPLETE);
             }
             logger.debug("Task[{0}] Complete", taskId);
@@ -82,7 +82,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_ACQUIRED);
             }
             logger.debug("Task[{0}] Complete", taskId);
@@ -102,7 +102,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_BLOCKED);
             }
             logger.debug("Task[{0}] Complete", taskId);
@@ -122,7 +122,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
             logger.debug("Task[{0}] vetoJobExecution", taskId);
@@ -152,7 +152,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
             logger.debug("Task[{0}] jobExecutionVetoed", taskId);
@@ -172,7 +172,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_ACQUIRED);
             }
             logger.debug("Task[{0}] jobToBeExecuted", taskId);
@@ -192,7 +192,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_COMPLETE);
             }
             logger.debug("Task[{0}] jobWasExecuted", taskId);
@@ -240,7 +240,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_PAUSED);
             }
         }
@@ -269,7 +269,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
         }
@@ -307,7 +307,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.deleteById(TaskPojo.class, taskId);
             }
         }
@@ -327,7 +327,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_PAUSED);
             }
         }
@@ -356,7 +356,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
+                taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
         }
