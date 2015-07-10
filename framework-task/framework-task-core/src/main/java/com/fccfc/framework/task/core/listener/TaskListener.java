@@ -121,7 +121,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
         try {
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
-            if (taskId != null) {
+            if (taskId != null) { 
                 taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
             }
@@ -154,7 +154,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             if (taskId != null) {
                 taskDao.insertTaskHistory(taskId, -1);
                 taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
-            }
+            } 
             logger.debug("Task[{0}] jobExecutionVetoed", taskId);
         }
         catch (Exception e) {
