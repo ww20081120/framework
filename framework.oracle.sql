@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/11 11:00:30                           */
+/* Created on:     2015/7/11 11:05:38                           */
 /*==============================================================*/
 
 
@@ -1000,15 +1000,18 @@ comment on table QRTZ_TRIGGERS is
 '存储已配置的 Trigger 的信息';
 
 /*==============================================================*/
-/* Table: "RESOURCE"                                            */
+/* Table: RESOURCES                                             */
 /*==============================================================*/
-create table "RESOURCE" 
+create table RESOURCES 
 (
    RESOURCE_ID          NUMBER(6)            not null,
    MODULE_CODE          VARCHAR2(10),
    RESOURCE_TYPE        CHAR(1)              not null,
-   constraint PK_RESOURCE primary key (RESOURCE_ID)
+   constraint PK_RESOURCES primary key (RESOURCE_ID)
 );
+
+comment on table RESOURCES is
+'资源表';
 
 /*==============================================================*/
 /* Table: ROLE                                                  */
@@ -1271,7 +1274,7 @@ alter table DIRECTORY
 
 alter table MENU
    add constraint FK_MENU_FK_MENU_R_RESOURCE foreign key (RESOURCE_ID)
-      references "RESOURCE" (RESOURCE_ID);
+      references RESOURCES (RESOURCE_ID);
 
 alter table MENU
    add constraint FK_MENU_FK_RESOUR_MENU foreign key (PARENT_RESOURCE_ID)
@@ -1311,7 +1314,7 @@ alter table OPERATE_LOG
 
 alter table OPERATOR_RESOURCE
    add constraint FK_OPERATOR_FK_OPERAT_RESOURCE foreign key (RESOURCE_ID)
-      references "RESOURCE" (RESOURCE_ID);
+      references RESOURCES (RESOURCE_ID);
 
 alter table OPERATOR_RESOURCE
    add constraint FK_OPERATOR_OPERATOR__OPERATOR foreign key (OPERATOR_ID)
@@ -1337,7 +1340,7 @@ alter table QRTZ_TRIGGERS
    add constraint FK_QRTZ_TRI_QRTZ_JOB foreign key (SCHED_NAME, JOB_NAME, JOB_GROUP)
       references QRTZ_JOB_DETAILS (SCHED_NAME, JOB_NAME, JOB_GROUP);
 
-alter table "RESOURCE"
+alter table RESOURCES
    add constraint FK_RESOURCE_FK_RESOUR_MODULE foreign key (MODULE_CODE)
       references MODULE (MODULE_CODE);
 
@@ -1347,7 +1350,7 @@ alter table ROLE
 
 alter table ROLE_RESOURCE
    add constraint FK_ROLE_RES_FK_ROLE_R_RESOURCE foreign key (RESOURCE_ID)
-      references "RESOURCE" (RESOURCE_ID);
+      references RESOURCES (RESOURCE_ID);
 
 alter table ROLE_RESOURCE
    add constraint FK_ROLE_RES_ROLE_ID_R_ROLE foreign key (ROLE_ID)
@@ -1383,5 +1386,5 @@ alter table URL_RESOURCE
 
 alter table URL_RESOURCE
    add constraint FK_URL_RESO_FK_URL_RE_RESOURCE foreign key (RESOURCE_ID)
-      references "RESOURCE" (RESOURCE_ID);
+      references RESOURCES (RESOURCE_ID);
 
