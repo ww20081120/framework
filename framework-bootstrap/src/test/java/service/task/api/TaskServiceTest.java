@@ -1,8 +1,6 @@
 package service.task.api;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -60,7 +58,12 @@ public class TaskServiceTest {
      */
     @Test 
     public void testSimpleScheduleTask() throws TException {
-    	Task task = new Task("task01", "com.fccfc.framework.bootstrap.JobTest", "testJob01");
+    	Task task = new Task();
+    	task.setTaskId(1001);
+    	task.setTaskName("task01");
+    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setMethod("testJob01");
+    	
     	SimpleTrigger trigger = new SimpleTrigger();
     	trigger.setTriggerId(1001);
     	trigger.setTriggerName("simpleTrigger01");
@@ -73,6 +76,7 @@ public class TaskServiceTest {
     	trigger.setExecuteInterval(10);	// 间隔时间
     	trigger.setIntervalUnit("ss");	// 间隔单位
     	trigger.setTimes(10000);		// 执行次数
+    	
     	iface.simpleScheduleTask(task, trigger);
     }
     
@@ -85,16 +89,15 @@ public class TaskServiceTest {
      */
     @Test
     public void testCronScheduleTask() throws TException{
-    	List<Task> tasks = new ArrayList<Task>();
-    	tasks.add(new Task("task01", "com.fccfc.framework.bootstrap.JobTest", "testJob01"));
-    	tasks.add(new Task("task02", "com.fccfc.framework.bootstrap.JobTest", "testJob02"));
-    	tasks.add(new Task("task03", "com.fccfc.framework.bootstrap.JobTest", "testJob03"));
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setMethod("testJob03");
     	
     	CronTrigger trigger = new CronTrigger("cronTrigger", "0/10 * * * * ?");
     	
-    	for (Task tmpTask : tasks) {
-			iface.cronScheduleTask(tmpTask, trigger);
-		}
+		iface.cronScheduleTask(task, trigger);
     }
     
     /**
@@ -106,7 +109,12 @@ public class TaskServiceTest {
      */
     @Test
     public void testPause() throws TException{
-    	Task task = new Task("task01", "com.fccfc.framework.bootstrap.JobTest", "testJob01");
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setMethod("testJob03");
+    	
     	iface.pause(task);
     }
     
@@ -119,7 +127,12 @@ public class TaskServiceTest {
      */
     @Test
     public void testResume() throws TException {
-    	Task task = new Task("task01", "com.fccfc.framework.bootstrap.JobTest", "testJob01");
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setMethod("testJob03");
+    	
     	iface.resume(task);
     }
     
@@ -132,7 +145,12 @@ public class TaskServiceTest {
      */
     @Test
     public void testRemove() throws TException {
-    	Task task = new Task("task01", "com.fccfc.framework.bootstrap.JobTest", "testJob01");
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setMethod("testJob03");
+    	
     	iface.remove(task);
     }
 }
