@@ -57,4 +57,6 @@ public interface CacheConstant {
 
     /** 区域 */
     String AREA = "/AREA";
+    
+    String DICTIONARY_DATA = "/DICTIONARY_DATA";
 }
