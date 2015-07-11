@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/10 21:46:05                           */
+/* Created on:     2015/7/11 11:00:30                           */
 /*==============================================================*/
 
 
@@ -582,6 +582,9 @@ create table DIRECTORY
    constraint PK_DIRECTORY primary key (DIRECTORY_CODE)
 );
 
+comment on column DIRECTORY.DIRECTORY_CODE is
+'目录代码';
+
 /*==============================================================*/
 /* Table: EVENT                                                 */
 /*==============================================================*/
@@ -603,7 +606,7 @@ create table MENU
    PARENT_RESOURCE_ID   NUMBER(4),
    SEQ                  NUMBER(4)            not null,
    MENU_NAME            VARCHAR2(20)         not null,
-   URL                  VARCGAR2(120)        not null,
+   URL                  VARCHAR2(120)        not null,
    IS_LEAF              CHAR(1)              not null,
    ICON_URL             VARCHAR2(120),
    constraint PK_MENU primary key (RESOURCE_ID)
