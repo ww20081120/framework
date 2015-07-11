@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/11 11:05:38                           */
+/* Created on:     2015/7/11 14:23:17                           */
 /*==============================================================*/
 
 
@@ -187,6 +187,33 @@ create table ACCOUNT
    constraint PK_ACCOUNT primary key (ACCOUNT_ID)
 );
 
+comment on column ACCOUNT.ACCOUNT_ID is
+'账号标识';
+
+comment on column ACCOUNT.ACCOUNT_VALUE is
+'账号值';
+
+comment on column ACCOUNT.ACCOUNT_TYPE is
+'账号类型';
+
+comment on column ACCOUNT.OPERATOR_ID is
+'操作员标识';
+
+comment on column ACCOUNT.CREATE_TIME is
+'创建时间';
+
+comment on column ACCOUNT.STATE is
+'状态';
+
+comment on column ACCOUNT.STATE_TIME is
+'状态更新时间';
+
+comment on column ACCOUNT.EXT1 is
+'扩展属性1';
+
+comment on column ACCOUNT.EXT2 is
+'扩展属性2';
+
 /*==============================================================*/
 /* Table: ADMIN                                                 */
 /*==============================================================*/
@@ -204,6 +231,33 @@ create table ADMIN
    constraint PK_ADMIN primary key (ADMIN_ID)
 );
 
+comment on column ADMIN.ADMIN_ID is
+'管理员标识';
+
+comment on column ADMIN.ADMIN_NAME is
+'管理员名称';
+
+comment on column ADMIN.CREATED_TIME is
+'创建日期';
+
+comment on column ADMIN.STATE is
+'状态';
+
+comment on column ADMIN.STATE_DATE is
+'状态日期';
+
+comment on column ADMIN.EMAIL is
+'电子邮件';
+
+comment on column ADMIN.PHONE is
+'电话';
+
+comment on column ADMIN.OPERATOR_ID is
+'操作员标识';
+
+comment on column ADMIN.ADDRESS is
+'地址';
+
 /*==============================================================*/
 /* Table: ADMIN_ATTR                                            */
 /*==============================================================*/
@@ -215,6 +269,18 @@ create table ADMIN_ATTR
    CREATE_TIME          DATE                 not null,
    constraint PK_ADMIN_ATTR primary key (ADMIN_ID, ATTR_ID)
 );
+
+comment on column ADMIN_ATTR.ADMIN_ID is
+'管理员标识';
+
+comment on column ADMIN_ATTR.ATTR_ID is
+'属性标识';
+
+comment on column ADMIN_ATTR.VALUE is
+'属性值';
+
+comment on column ADMIN_ATTR.CREATE_TIME is
+'创建时间';
 
 /*==============================================================*/
 /* Table: ADMIN_ATTR_HISTORY                                    */
@@ -230,6 +296,27 @@ create table ADMIN_ATTR_HISTORY
    UPDATE_OPRATOR_ID    NUMBER(8),
    constraint PK_ADMIN_ATTR_HISTORY primary key (ADMIN_ID, ATTR_ID, SEQ)
 );
+
+comment on column ADMIN_ATTR_HISTORY.ADMIN_ID is
+'管理员标识';
+
+comment on column ADMIN_ATTR_HISTORY.ATTR_ID is
+'属性标识';
+
+comment on column ADMIN_ATTR_HISTORY.SEQ is
+'序列';
+
+comment on column ADMIN_ATTR_HISTORY.VALUE is
+'属性值';
+
+comment on column ADMIN_ATTR_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column ADMIN_ATTR_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column ADMIN_ATTR_HISTORY.UPDATE_OPRATOR_ID is
+'修改人标识';
 
 /*==============================================================*/
 /* Table: ADMIN_HISTORY                                         */
@@ -250,6 +337,39 @@ create table ADMIN_HISTORY
    constraint PK_ADMIN_HISTORY primary key (ADMIN_ID, SEQ)
 );
 
+comment on column ADMIN_HISTORY.ADMIN_ID is
+'管理员标识';
+
+comment on column ADMIN_HISTORY.SEQ is
+'序列';
+
+comment on column ADMIN_HISTORY.ADMIN_NAME is
+'管理员名称';
+
+comment on column ADMIN_HISTORY.CREATED_TIME is
+'创建日期';
+
+comment on column ADMIN_HISTORY.STATE is
+'状态';
+
+comment on column ADMIN_HISTORY.STATE_DATE is
+'状态日期';
+
+comment on column ADMIN_HISTORY.EMAIL is
+'电子邮件';
+
+comment on column ADMIN_HISTORY.PHONE is
+'电话';
+
+comment on column ADMIN_HISTORY.ADDRESS is
+'地址';
+
+comment on column ADMIN_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column ADMIN_HISTORY.UPDATE_OPERATOR_ID is
+'修改人标识';
+
 /*==============================================================*/
 /* Table: ADMIN_ROLE                                            */
 /*==============================================================*/
@@ -260,6 +380,15 @@ create table ADMIN_ROLE
    CREATE_TIME          DATE                 not null,
    constraint PK_ADMIN_ROLE primary key (ADMIN_ID, ROLE_ID)
 );
+
+comment on column ADMIN_ROLE.ADMIN_ID is
+'管理员标识';
+
+comment on column ADMIN_ROLE.ROLE_ID is
+'角色标识';
+
+comment on column ADMIN_ROLE.CREATE_TIME is
+'创建时间';
 
 /*==============================================================*/
 /* Table: AREA                                                  */
@@ -275,6 +404,24 @@ create table AREA
    constraint PK_AREA primary key (AREA_ID)
 );
 
+comment on column AREA.AREA_ID is
+'区域标识';
+
+comment on column AREA.PARENT_AREA_ID is
+'父区域标识';
+
+comment on column AREA.AREA_TYPE is
+'区域类型';
+
+comment on column AREA.AREA_NAME is
+'区域名称';
+
+comment on column AREA.AREA_CODE is
+'区域编码';
+
+comment on column AREA.REMARK is
+'备注';
+
 /*==============================================================*/
 /* Table: AREA_RANGE                                            */
 /*==============================================================*/
@@ -286,6 +433,18 @@ create table AREA_RANGE
    LATITUDE             VARCHAR2(20)         not null,
    constraint PK_AREA_RANGE primary key (AREA_ID, SEQ)
 );
+
+comment on column AREA_RANGE.AREA_ID is
+'区域标识';
+
+comment on column AREA_RANGE.SEQ is
+'序列';
+
+comment on column AREA_RANGE.LONGITUDE is
+'经度';
+
+comment on column AREA_RANGE.LATITUDE is
+'纬度';
 
 /*==============================================================*/
 /* Table: ATTACHMENTS                                           */
@@ -307,6 +466,42 @@ create table ATTACHMENTS
    constraint PK_ATTACHMENTS primary key (ATTACHMENTS_ID)
 );
 
+comment on column ATTACHMENTS.ATTACHMENTS_ID is
+'附件标识';
+
+comment on column ATTACHMENTS.ATTACHMENTS_TYPE is
+'附件类型';
+
+comment on column ATTACHMENTS.ATTACHMENTS_NAME is
+'附件文件名';
+
+comment on column ATTACHMENTS.IS_REMOTE is
+'是否为远程文件';
+
+comment on column ATTACHMENTS.FILE_SIZE is
+'文件大小';
+
+comment on column ATTACHMENTS.FILE_PATH is
+'文件路径';
+
+comment on column ATTACHMENTS.DOWNLOADS_NUM is
+'下载次数';
+
+comment on column ATTACHMENTS.IS_PICTURE is
+'是否是图片';
+
+comment on column ATTACHMENTS.IS_THUMB is
+'是否生成缩略图';
+
+comment on column ATTACHMENTS.THUMB_PATH is
+'缩略图地址';
+
+comment on column ATTACHMENTS.CREATE_TIME is
+'创建时间';
+
+comment on column ATTACHMENTS.EXP_TIME is
+'失效时间';
+
 /*==============================================================*/
 /* Table: ATTR                                                  */
 /*==============================================================*/
@@ -326,6 +521,39 @@ create table ATTR
    constraint PK_ATTR primary key (ATTR_ID)
 );
 
+comment on column ATTR.ATTR_ID is
+'属性标识';
+
+comment on column ATTR.ATTR_NAME is
+'名称';
+
+comment on column ATTR.ATTR_TYPE is
+'属性类型';
+
+comment on column ATTR.PARENT_ATTR_ID is
+'父属性标识';
+
+comment on column ATTR.ATTR_CODE is
+'属性代码';
+
+comment on column ATTR.VISIBLE is
+'是否可见';
+
+comment on column ATTR.INSTANTIATABLE is
+'是否可实例化';
+
+comment on column ATTR.DEFAULT_VALUE is
+'缺省值';
+
+comment on column ATTR.INPUT_TYPE is
+'输入方式';
+
+comment on column ATTR.DATA_TYPE is
+'数据类型';
+
+comment on column ATTR.VALUE_SCRIPT is
+'取值校验规则';
+
 /*==============================================================*/
 /* Table: ATTR_VALUE                                            */
 /*==============================================================*/
@@ -338,6 +566,21 @@ create table ATTR_VALUE
    LINK_ATTR_ID         NUMBER(6),
    constraint PK_ATTR_VALUE primary key (ATTR_ID, ATTR_VALUE_ID)
 );
+
+comment on column ATTR_VALUE.ATTR_ID is
+'属性标识';
+
+comment on column ATTR_VALUE.ATTR_VALUE_ID is
+'属性值标识';
+
+comment on column ATTR_VALUE.VALUE_MARK is
+'取值说明';
+
+comment on column ATTR_VALUE.VALUE is
+'取值';
+
+comment on column ATTR_VALUE.LINK_ATTR_ID is
+'联动属性标识';
 
 /*==============================================================*/
 /* Table: CONFIG_ITEM                                           */
@@ -354,6 +597,30 @@ create table CONFIG_ITEM
    REMARK               VARCHAR2(255),
    constraint PK_CONFIG_ITEM primary key (CONFIG_ITEM_ID)
 );
+
+comment on column CONFIG_ITEM.CONFIG_ITEM_ID is
+'配置项标识';
+
+comment on column CONFIG_ITEM.MODULE_CODE is
+'模块代码';
+
+comment on column CONFIG_ITEM.DIRECTORY_CODE is
+'目录代码';
+
+comment on column CONFIG_ITEM.CONFIG_ITEM_CODE is
+'配置项代码';
+
+comment on column CONFIG_ITEM.CONFIG_ITEM_NAME is
+'配置项名称';
+
+comment on column CONFIG_ITEM.IS_VISIABLE is
+'是否可见';
+
+comment on column CONFIG_ITEM.UPDATE_TIME is
+'更新时间';
+
+comment on column CONFIG_ITEM.REMARK is
+'备注';
 
 /*==============================================================*/
 /* Table: CONFIG_ITEM_HISTORY                                   */
@@ -374,6 +641,39 @@ create table CONFIG_ITEM_HISTORY
    constraint PK_CONFIG_ITEM_HISTORY primary key (CONFIG_ITEM_ID, SEQ)
 );
 
+comment on column CONFIG_ITEM_HISTORY.CONFIG_ITEM_ID is
+'配置项标识';
+
+comment on column CONFIG_ITEM_HISTORY.SEQ is
+'序列号';
+
+comment on column CONFIG_ITEM_HISTORY.MODULE_CODE is
+'模块代码';
+
+comment on column CONFIG_ITEM_HISTORY.DIRECTORY_CODE is
+'目录代码';
+
+comment on column CONFIG_ITEM_HISTORY.CONFIG_ITEM_CODE is
+'配置项代码';
+
+comment on column CONFIG_ITEM_HISTORY.CONFIG_ITEM_NAME is
+'配置项名称';
+
+comment on column CONFIG_ITEM_HISTORY.IS_VISIABLE is
+'是否可见';
+
+comment on column CONFIG_ITEM_HISTORY.UPDATE_TIME is
+'更新时间';
+
+comment on column CONFIG_ITEM_HISTORY.REMARK is
+'备注';
+
+comment on column CONFIG_ITEM_HISTORY.OPERATOR_ID is
+'操作员标识';
+
+comment on column CONFIG_ITEM_HISTORY.CHANNEL_ID is
+'渠道标识';
+
 /*==============================================================*/
 /* Table: CONFIG_ITEM_PARAM                                     */
 /*==============================================================*/
@@ -391,6 +691,36 @@ create table CONFIG_ITEM_PARAM
    REMARK               VARCHAR2(255),
    constraint PK_CONFIG_ITEM_PARAM primary key (CONFIG_ITEM_ID, PARAM_CODE)
 );
+
+comment on column CONFIG_ITEM_PARAM.CONFIG_ITEM_ID is
+'配置项标识';
+
+comment on column CONFIG_ITEM_PARAM.PARAM_CODE is
+'参数编码';
+
+comment on column CONFIG_ITEM_PARAM.PARAM_NAME is
+'参数名称';
+
+comment on column CONFIG_ITEM_PARAM.PARAM_VALUE is
+'参数取值';
+
+comment on column CONFIG_ITEM_PARAM.DEFAULT_PARAM_VALUE is
+'缺省值';
+
+comment on column CONFIG_ITEM_PARAM.DATA_TYPE is
+'数据类型';
+
+comment on column CONFIG_ITEM_PARAM.INPUT_TYPE is
+'输入方式';
+
+comment on column CONFIG_ITEM_PARAM.VALUE_SCRIPT is
+'取值校验规则';
+
+comment on column CONFIG_ITEM_PARAM.UPDATE_TIME is
+'更新时间';
+
+comment on column CONFIG_ITEM_PARAM.REMARK is
+'备注';
 
 /*==============================================================*/
 /* Table: CONFIG_ITEM_PARAM_HISTORY                             */
@@ -413,6 +743,45 @@ create table CONFIG_ITEM_PARAM_HISTORY
    constraint PK_CONFIG_ITEM_PARAM_HISTORY primary key (CONFIG_ITEM_ID, PARAM_CODE, SEQ)
 );
 
+comment on column CONFIG_ITEM_PARAM_HISTORY.CONFIG_ITEM_ID is
+'配置项标识';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.PARAM_CODE is
+'参数编码';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.SEQ is
+'序列号';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.PARAM_NAME is
+'参数名称';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.PARAM_VALUE is
+'参数取值';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.DEFAULT_PARAM_VALUE is
+'缺省值';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.DATA_TYPE is
+'数据类型';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.INPUT_TYPE is
+'输入方式';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.VALUE_SCRIPT is
+'取值校验规则';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.UPDATE_TIME is
+'更新时间';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.REMARK is
+'备注';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.OPERATOR_ID is
+'操作员标识';
+
+comment on column CONFIG_ITEM_PARAM_HISTORY.CHANNEL_ID is
+'渠道标识';
+
 /*==============================================================*/
 /* Table: CONFIG_ITEM_PARAM_VALUE                               */
 /*==============================================================*/
@@ -427,6 +796,24 @@ create table CONFIG_ITEM_PARAM_VALUE
    constraint PK_CONFIG_ITEM_PARAM_VALUE primary key (CONFIG_ITEM_ID, PARAM_CODE, PARAM_VALUE_ID)
 );
 
+comment on column CONFIG_ITEM_PARAM_VALUE.CONFIG_ITEM_ID is
+'配置项标识';
+
+comment on column CONFIG_ITEM_PARAM_VALUE.PARAM_CODE is
+'参数编码';
+
+comment on column CONFIG_ITEM_PARAM_VALUE.PARAM_VALUE_ID is
+'参数取值标识';
+
+comment on column CONFIG_ITEM_PARAM_VALUE.VALUE_MARK is
+'取值说明';
+
+comment on column CONFIG_ITEM_PARAM_VALUE.VALUE is
+'取值';
+
+comment on column CONFIG_ITEM_PARAM_VALUE.REMARK is
+'备注';
+
 /*==============================================================*/
 /* Table: CONTACT_CHANNEL                                       */
 /*==============================================================*/
@@ -438,6 +825,18 @@ create table CONTACT_CHANNEL
    REMARK               VARCHAR2(120),
    constraint PK_CONTACT_CHANNEL primary key (CONTACT_CHANNEL_ID)
 );
+
+comment on column CONTACT_CHANNEL.CONTACT_CHANNEL_ID is
+'接触渠道';
+
+comment on column CONTACT_CHANNEL.CHANNEL_TYPE is
+'渠道类型';
+
+comment on column CONTACT_CHANNEL.CONTACT_CHANNEL_NAME is
+'名称';
+
+comment on column CONTACT_CHANNEL.REMARK is
+'说明';
 
 /*==============================================================*/
 /* Table: CRON_TRIGGER                                          */
@@ -451,6 +850,21 @@ create table CRON_TRIGGER
    OPERATOR_ID          NUMBER(8),
    constraint PK_CRON_TRIGGER primary key (TRIGGER_ID)
 );
+
+comment on column CRON_TRIGGER.TRIGGER_ID is
+'触发器标识';
+
+comment on column CRON_TRIGGER.TRIGGER_NAME is
+'触发器名称';
+
+comment on column CRON_TRIGGER.CRON_EXPRESSION is
+'CRON表达式';
+
+comment on column CRON_TRIGGER.CREATE_TIME is
+'创建时间';
+
+comment on column CRON_TRIGGER.OPERATOR_ID is
+'创建人标识';
 
 /*==============================================================*/
 /* Table: CRON_TRIGGER_HISTORY                                  */
@@ -468,6 +882,30 @@ create table CRON_TRIGGER_HISTORY
    constraint PK_CRON_TRIGGER_HISTORY primary key (TRIGGER_ID, SEQ)
 );
 
+comment on column CRON_TRIGGER_HISTORY.TRIGGER_ID is
+'触发器标识';
+
+comment on column CRON_TRIGGER_HISTORY.SEQ is
+'序列号';
+
+comment on column CRON_TRIGGER_HISTORY.TRIGGER_NAME is
+'触发器名称';
+
+comment on column CRON_TRIGGER_HISTORY.CRON_EXPRESSION is
+'CRON表达式';
+
+comment on column CRON_TRIGGER_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column CRON_TRIGGER_HISTORY.OPERATOR_ID is
+'创建人标识';
+
+comment on column CRON_TRIGGER_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column CRON_TRIGGER_HISTORY.UPDATE_OPERATOR_ID is
+'修改人标识';
+
 /*==============================================================*/
 /* Table: DICTIONARY                                            */
 /*==============================================================*/
@@ -482,6 +920,15 @@ create table DICTIONARY
 comment on table DICTIONARY is
 '数据字典表';
 
+comment on column DICTIONARY.DICT_CODE is
+'字典代码';
+
+comment on column DICTIONARY.DICT_NAME is
+'字典名称';
+
+comment on column DICTIONARY.REMARK is
+'备注';
+
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('CHANNEL_TYPE', '渠道类型', '渠道类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('AREA_TYPE', '区域类型', '区域类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('DATA_TYPE', '数据类型', '数据类型');
@@ -493,6 +940,8 @@ INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('MESSAGE_TYPE', '�
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('OPERATOR_TYPE', '操作员类型', '操作员类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('ACCOUNT_TYPE', '账号类型', '账号类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('RESOURCE_TYPE', '资源类型', '资源类型');
+INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('EVENT_TYPE', '事件类型', '事件类型');
+
 
 
 
@@ -513,6 +962,24 @@ create table DICTIONARY_DATA
 
 comment on table DICTIONARY_DATA is
 '字典数据表';
+
+comment on column DICTIONARY_DATA.DICT_DATA_ID is
+'字典数据表标识';
+
+comment on column DICTIONARY_DATA.DICT_CODE is
+'字典代码';
+
+comment on column DICTIONARY_DATA.DICT_DATA_NAME is
+'字典数据名';
+
+comment on column DICTIONARY_DATA.DICT_DATA_VALUE is
+'字典数据值';
+
+comment on column DICTIONARY_DATA.IS_FIXED is
+'是否固定';
+
+comment on column DICTIONARY_DATA.IS_CANCEL is
+'是否可以删除';
 
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (1, 'CHANNEL_TYPE', 'Http消息', '01', 'N', 'N');
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (2, 'CHANNEL_TYPE', 'WebSocket消息', '02', 'N', 'N');
@@ -570,6 +1037,9 @@ INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (45, 'ACCOUNT_TYPE', '腾讯QQ账号', 'TQ', 'N', 'N');
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (46, 'ACCOUNT_TYPE', '腾讯微信账号', 'TW', 'N', 'N');
 
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (47, 'EVENT_TYPE', '操作事件', 'O', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (48, 'EVENT_TYPE', '积分事件', 'I', 'N', 'N');
+
 /*==============================================================*/
 /* Table: DIRECTORY                                             */
 /*==============================================================*/
@@ -585,17 +1055,42 @@ create table DIRECTORY
 comment on column DIRECTORY.DIRECTORY_CODE is
 '目录代码';
 
+comment on column DIRECTORY.DIRECTORY_NAME is
+'目录名称';
+
+comment on column DIRECTORY.PARENT_DIRECTORY_CODE is
+'父目录代码';
+
+comment on column DIRECTORY.REMARK is
+'说明';
+
 /*==============================================================*/
 /* Table: EVENT                                                 */
 /*==============================================================*/
 create table EVENT 
 (
    EVENT_ID             NUMBER(4)            not null,
+   EVENT_TYPE           CHAR(1)              not null,
    PARAMS_NAME          VARCHAR2(120),
    EVENT_NAME           VARCHAR2(20)         not null,
    REMARK               VARCHAR2(120),
    constraint PK_EVENT primary key (EVENT_ID)
 );
+
+comment on column EVENT.EVENT_ID is
+'事件标识';
+
+comment on column EVENT.EVENT_TYPE is
+'事件类型';
+
+comment on column EVENT.PARAMS_NAME is
+'参数名';
+
+comment on column EVENT.EVENT_NAME is
+'事件名称';
+
+comment on column EVENT.REMARK is
+'备注';
 
 /*==============================================================*/
 /* Table: MENU                                                  */
@@ -612,6 +1107,27 @@ create table MENU
    constraint PK_MENU primary key (RESOURCE_ID)
 );
 
+comment on column MENU.RESOURCE_ID is
+'菜单标识';
+
+comment on column MENU.PARENT_RESOURCE_ID is
+'父菜单标识';
+
+comment on column MENU.SEQ is
+'序列';
+
+comment on column MENU.MENU_NAME is
+'菜单名称';
+
+comment on column MENU.URL is
+'访问地址';
+
+comment on column MENU.IS_LEAF is
+'是否为叶节点';
+
+comment on column MENU.ICON_URL is
+'图标URL';
+
 /*==============================================================*/
 /* Table: MENU_URL_RESOURCE                                     */
 /*==============================================================*/
@@ -624,6 +1140,12 @@ create table MENU_URL_RESOURCE
 comment on table MENU_URL_RESOURCE is
 '菜单关联哪些权限';
 
+comment on column MENU_URL_RESOURCE.RESOURCE_ID is
+'菜单标识';
+
+comment on column MENU_URL_RESOURCE.URL_RESOURCE_ID is
+'URL_资源标识';
+
 /*==============================================================*/
 /* Table: MESSAGE_ATTACHMENTS                                   */
 /*==============================================================*/
@@ -633,6 +1155,12 @@ create table MESSAGE_ATTACHMENTS
    MESSAGE_ID           NUMBER(10)           not null,
    constraint PK_MESSAGE_ATTACHMENTS primary key (ATTACHMENTS_ID, MESSAGE_ID)
 );
+
+comment on column MESSAGE_ATTACHMENTS.ATTACHMENTS_ID is
+'附件标识';
+
+comment on column MESSAGE_ATTACHMENTS.MESSAGE_ID is
+'消息标识';
 
 /*==============================================================*/
 /* Table: MESSAGE_BOX                                           */
@@ -653,6 +1181,42 @@ create table MESSAGE_BOX
    EXTEND_ATTRS         CLOB,
    constraint PK_MESSAGE_BOX primary key (MESSAGE_ID)
 );
+
+comment on column MESSAGE_BOX.MESSAGE_ID is
+'消息标识';
+
+comment on column MESSAGE_BOX.RECEIVERS is
+'收件人';
+
+comment on column MESSAGE_BOX.SENDER is
+'发件人';
+
+comment on column MESSAGE_BOX.MESSAGE_TEMPLATE_ID is
+'消息模板标识';
+
+comment on column MESSAGE_BOX.SUBJECT is
+'标题';
+
+comment on column MESSAGE_BOX.CONTENT is
+'内容';
+
+comment on column MESSAGE_BOX.ATTACHMENTS_NUM is
+'附件数量';
+
+comment on column MESSAGE_BOX.CREATE_TIME is
+'创建时间';
+
+comment on column MESSAGE_BOX.SEND_TIME is
+'最后一次发送时间';
+
+comment on column MESSAGE_BOX.NEXT_SEND_TIME is
+'下一次发送时间';
+
+comment on column MESSAGE_BOX.SEND_TIMES is
+'发送次数';
+
+comment on column MESSAGE_BOX.EXTEND_ATTRS is
+'扩展参数';
 
 /*==============================================================*/
 /* Table: MESSAGE_HISTORY                                       */
@@ -676,6 +1240,48 @@ create table MESSAGE_HISTORY
    constraint PK_MESSAGE_HISTORY primary key (MESSAGE_ID)
 );
 
+comment on column MESSAGE_HISTORY.MESSAGE_ID is
+'消息标识';
+
+comment on column MESSAGE_HISTORY.RECEIVERS is
+'收件人';
+
+comment on column MESSAGE_HISTORY.SENDER is
+'发件人';
+
+comment on column MESSAGE_HISTORY.MESSAGE_TYPE is
+'消息类型';
+
+comment on column MESSAGE_HISTORY.MESSAGE_TEMPLATE_ID is
+'消息模板标识';
+
+comment on column MESSAGE_HISTORY.SUBJECT is
+'标题';
+
+comment on column MESSAGE_HISTORY.CONTENT is
+'内容';
+
+comment on column MESSAGE_HISTORY.ATTACHMENTS_NUM is
+'附件数量';
+
+comment on column MESSAGE_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column MESSAGE_HISTORY.SEND_TIME is
+'最后一次发送时间';
+
+comment on column MESSAGE_HISTORY.SEND_TIMES is
+'发送次数';
+
+comment on column MESSAGE_HISTORY.RESULT is
+'发送结果';
+
+comment on column MESSAGE_HISTORY.EXP_DATE is
+'失效时间';
+
+comment on column MESSAGE_HISTORY.EXTEND_ATTRS is
+'扩展参数';
+
 /*==============================================================*/
 /* Table: MESSAGE_TEMPLATE                                      */
 /*==============================================================*/
@@ -697,6 +1303,45 @@ create table MESSAGE_TEMPLATE
    constraint PK_MESSAGE_TEMPLATE primary key (MESSAGE_TEMPLATE_ID)
 );
 
+comment on column MESSAGE_TEMPLATE.MESSAGE_TEMPLATE_ID is
+'消息模板标识';
+
+comment on column MESSAGE_TEMPLATE.MESSAGE_TEMPLATE_CODE is
+'消息模板代码';
+
+comment on column MESSAGE_TEMPLATE.DIRECTORY_CODE is
+'目录代码';
+
+comment on column MESSAGE_TEMPLATE.NAME is
+'名称';
+
+comment on column MESSAGE_TEMPLATE.TEMPLATE is
+'模板';
+
+comment on column MESSAGE_TEMPLATE.STATE is
+'状态';
+
+comment on column MESSAGE_TEMPLATE.CONTACT_CHANNEL_IDS is
+'接触渠到';
+
+comment on column MESSAGE_TEMPLATE.STATE_TIME is
+'状态时间';
+
+comment on column MESSAGE_TEMPLATE.DELAY is
+'延迟时间(秒)';
+
+comment on column MESSAGE_TEMPLATE.RESEND_TIMES is
+'失败重发次数';
+
+comment on column MESSAGE_TEMPLATE.SAVE_HISTORY is
+'是否保留历史记录';
+
+comment on column MESSAGE_TEMPLATE.SAVE_DAY is
+'保留天数';
+
+comment on column MESSAGE_TEMPLATE.CREATE_TIME is
+'创建时间';
+
 /*==============================================================*/
 /* Table: MODULE                                                */
 /*==============================================================*/
@@ -707,6 +1352,15 @@ create table MODULE
    MODULE_NAME          VARCHAR2(20)         not null,
    constraint PK_MODULE primary key (MODULE_CODE)
 );
+
+comment on column MODULE.MODULE_CODE is
+'业务模块代码';
+
+comment on column MODULE.PARENT_MODULE_CODE is
+'父业务模块编码';
+
+comment on column MODULE.MODULE_NAME is
+'业务模块名称';
 
 INSERT INTO MODULE (MODULE_CODE,PARENT_MODULE_CODE,MODULE_NAME) VALUES ('COMMON',NULL,'公共模块');
 INSERT INTO MODULE (MODULE_CODE,PARENT_MODULE_CODE,MODULE_NAME) VALUES ('PORTAL','COMMON','系统门户');
@@ -730,6 +1384,27 @@ create table OPERATE_LOG
 comment on table OPERATE_LOG is
 '记录用户的操作';
 
+comment on column OPERATE_LOG.OPERATE_LOG_ID is
+'操作日志标识';
+
+comment on column OPERATE_LOG.EVENT_ID is
+'事件标识';
+
+comment on column OPERATE_LOG.MODULE_CODE is
+'业务模块代码';
+
+comment on column OPERATE_LOG.IP is
+'IP地址';
+
+comment on column OPERATE_LOG.CREATE_TIME is
+'创建时间';
+
+comment on column OPERATE_LOG.OPERATOR_ID is
+'操作员标识';
+
+comment on column OPERATE_LOG.PARAMS_VALUE is
+'参数';
+
 /*==============================================================*/
 /* Table: OPERATOR                                              */
 /*==============================================================*/
@@ -751,6 +1426,48 @@ create table OPERATOR
    LAST_LOGIN_DATE      DATE,
    constraint PK_OPERATOR primary key (OPERATOR_ID)
 );
+
+comment on column OPERATOR.OPERATOR_ID is
+'操作员标识';
+
+comment on column OPERATOR.OPERATOR_TYPE is
+'操作员类型';
+
+comment on column OPERATOR.OPERATOR_CODE is
+'操作员代码';
+
+comment on column OPERATOR.USER_NAME is
+'登录名称';
+
+comment on column OPERATOR.PASSWORD is
+'登录密码';
+
+comment on column OPERATOR.CREATE_DATE is
+'创建时间';
+
+comment on column OPERATOR.STATE is
+'状态';
+
+comment on column OPERATOR.STATE_DATE is
+'状态日期';
+
+comment on column OPERATOR.IS_LOCKED is
+'是否锁定';
+
+comment on column OPERATOR.PWD_EXP_DATE is
+'密码过期时间';
+
+comment on column OPERATOR.LOGIN_FAIL is
+'登录失败次数';
+
+comment on column OPERATOR.REGIST_IP is
+'注册IP';
+
+comment on column OPERATOR.LAST_IP is
+'最后访问IP';
+
+comment on column OPERATOR.LAST_LOGIN_DATE is
+'最后登录时间';
 
 /*==============================================================*/
 /* Table: OPERATOR_HISTORY                                      */
@@ -777,6 +1494,57 @@ create table OPERATOR_HISTORY
    constraint PK_OPERATOR_HISTORY primary key (OPERATOR_ID, SEQ)
 );
 
+comment on column OPERATOR_HISTORY.OPERATOR_ID is
+'操作员标识';
+
+comment on column OPERATOR_HISTORY.SEQ is
+'序列';
+
+comment on column OPERATOR_HISTORY.OPERATOR_TYPE is
+'操作员类型';
+
+comment on column OPERATOR_HISTORY.OPERATOR_CODE is
+'操作员代码';
+
+comment on column OPERATOR_HISTORY.USER_NAME is
+'登录名称';
+
+comment on column OPERATOR_HISTORY.PASSWORD is
+'登录密码';
+
+comment on column OPERATOR_HISTORY.CREATE_DATE is
+'创建时间';
+
+comment on column OPERATOR_HISTORY.STATE is
+'状态';
+
+comment on column OPERATOR_HISTORY.STATE_DATE is
+'状态日期';
+
+comment on column OPERATOR_HISTORY.IS_LOCKED is
+'是否锁定';
+
+comment on column OPERATOR_HISTORY.PWD_EXP_DATE is
+'密码过期时间';
+
+comment on column OPERATOR_HISTORY.LOGIN_FAIL is
+'登录失败次数';
+
+comment on column OPERATOR_HISTORY.REGIST_IP is
+'注册IP';
+
+comment on column OPERATOR_HISTORY.LAST_IP is
+'最后访问IP';
+
+comment on column OPERATOR_HISTORY.LAST_LOGIN_DATE is
+'最后登录时间';
+
+comment on column OPERATOR_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column OPERATOR_HISTORY.UPDATE_OPERATOR_ID is
+'修改操作员标识';
+
 /*==============================================================*/
 /* Table: OPERATOR_RESOURCE                                     */
 /*==============================================================*/
@@ -787,6 +1555,15 @@ create table OPERATOR_RESOURCE
    RESOURCE_TYPE        NUMBER(1)            not null,
    constraint PK_OPERATOR_RESOURCE primary key (OPERATOR_ID, RESOURCE_ID, RESOURCE_TYPE)
 );
+
+comment on column OPERATOR_RESOURCE.OPERATOR_ID is
+'操作员标识';
+
+comment on column OPERATOR_RESOURCE.RESOURCE_ID is
+'资源标识';
+
+comment on column OPERATOR_RESOURCE.RESOURCE_TYPE is
+'资源类型';
 
 /*==============================================================*/
 /* Table: OPERATOR_ROLE_HISTORY                                 */
@@ -801,6 +1578,24 @@ create table OPERATOR_ROLE_HISTORY
    UPDATE_OPERATOR_ID   NUMBER(8),
    constraint PK_OPERATOR_ROLE_HISTORY primary key (OPERATOR_ID, ROLE_ID, SEQ)
 );
+
+comment on column OPERATOR_ROLE_HISTORY.OPERATOR_ID is
+'操作员标识';
+
+comment on column OPERATOR_ROLE_HISTORY.ROLE_ID is
+'角色标识';
+
+comment on column OPERATOR_ROLE_HISTORY.SEQ is
+'序列';
+
+comment on column OPERATOR_ROLE_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column OPERATOR_ROLE_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column OPERATOR_ROLE_HISTORY.UPDATE_OPERATOR_ID is
+'修改人标识';
 
 /*==============================================================*/
 /* Table: QRTZ_BLOB_TRIGGERS                                    */
@@ -817,6 +1612,18 @@ create table QRTZ_BLOB_TRIGGERS
 comment on table QRTZ_BLOB_TRIGGERS is
 'Trigger 作为 Blob 类型存储(用于 Quartz 用户用 JDBC 创建他们自己定制的 Trigger 类型，JobStore 并不知道如何存储实例的时候)';
 
+comment on column QRTZ_BLOB_TRIGGERS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_BLOB_TRIGGERS.TRIGGER_NAME is
+'触发器名称';
+
+comment on column QRTZ_BLOB_TRIGGERS.TRIGGER_GROUP is
+'触发器组';
+
+comment on column QRTZ_BLOB_TRIGGERS.BLOB_DATA is
+'BLOB_DATA';
+
 /*==============================================================*/
 /* Table: QRTZ_CALENDARS                                        */
 /*==============================================================*/
@@ -830,6 +1637,15 @@ create table QRTZ_CALENDARS
 
 comment on table QRTZ_CALENDARS is
 '以 Blob 类型存储 Quartz 的 Calendar 信息';
+
+comment on column QRTZ_CALENDARS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_CALENDARS.CALENDAR_NAME is
+'日历名称';
+
+comment on column QRTZ_CALENDARS.CALENDAR is
+'CALENDAR';
 
 /*==============================================================*/
 /* Table: QRTZ_CRON_TRIGGERS                                    */
@@ -846,6 +1662,21 @@ create table QRTZ_CRON_TRIGGERS
 
 comment on table QRTZ_CRON_TRIGGERS is
 '存储 Cron Trigger，包括 Cron 表达式和时区信息';
+
+comment on column QRTZ_CRON_TRIGGERS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_CRON_TRIGGERS.TRIGGER_NAME is
+'触发器名称';
+
+comment on column QRTZ_CRON_TRIGGERS.TRIGGER_GROUP is
+'触发器组';
+
+comment on column QRTZ_CRON_TRIGGERS.CRON_EXPRESSION is
+'表达式';
+
+comment on column QRTZ_CRON_TRIGGERS.TIME_ZONE_ID is
+'时区Id';
 
 /*==============================================================*/
 /* Table: QRTZ_FIRED_TRIGGERS                                   */
@@ -871,6 +1702,45 @@ create table QRTZ_FIRED_TRIGGERS
 comment on table QRTZ_FIRED_TRIGGERS is
 '存储与已触发的 Trigger 相关的状态信息，以及相联 Job 的执行信息';
 
+comment on column QRTZ_FIRED_TRIGGERS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_FIRED_TRIGGERS.ENTRY_ID is
+'ENTRY_ID';
+
+comment on column QRTZ_FIRED_TRIGGERS.TRIGGER_NAME is
+'触发器名称';
+
+comment on column QRTZ_FIRED_TRIGGERS.TRIGGER_GROUP is
+'触发器组';
+
+comment on column QRTZ_FIRED_TRIGGERS.INSTANCE_NAME is
+'实例名';
+
+comment on column QRTZ_FIRED_TRIGGERS.FIRED_TIME is
+'FIRED_TIME';
+
+comment on column QRTZ_FIRED_TRIGGERS.SCHED_TIME is
+'SCHED_TIME';
+
+comment on column QRTZ_FIRED_TRIGGERS.PRIORITY is
+'PRIORITY';
+
+comment on column QRTZ_FIRED_TRIGGERS.STATE is
+'STATE';
+
+comment on column QRTZ_FIRED_TRIGGERS.JOB_NAME is
+'JOB_NAME';
+
+comment on column QRTZ_FIRED_TRIGGERS.JOB_GROUP is
+'JOB_GROUP';
+
+comment on column QRTZ_FIRED_TRIGGERS.IS_NONCONCURRENT is
+'IS_NONCONCURRENT';
+
+comment on column QRTZ_FIRED_TRIGGERS.REQUESTS_RECOVERY is
+'REQUESTS_RECOVERY';
+
 /*==============================================================*/
 /* Table: QRTZ_JOB_DETAILS                                      */
 /*==============================================================*/
@@ -892,6 +1762,36 @@ create table QRTZ_JOB_DETAILS
 comment on table QRTZ_JOB_DETAILS is
 '存储每一个已配置的 Job 的详细信息';
 
+comment on column QRTZ_JOB_DETAILS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_JOB_DETAILS.JOB_NAME is
+'任务名称';
+
+comment on column QRTZ_JOB_DETAILS.JOB_GROUP is
+'任务组名称';
+
+comment on column QRTZ_JOB_DETAILS.DESCRIPTION is
+'描述';
+
+comment on column QRTZ_JOB_DETAILS.JOB_CLASS_NAME is
+'JOB的类名';
+
+comment on column QRTZ_JOB_DETAILS.IS_DURABLE is
+'IS_DURABLE';
+
+comment on column QRTZ_JOB_DETAILS.IS_NONCONCURRENT is
+'IS_NONCONCURRENT';
+
+comment on column QRTZ_JOB_DETAILS.IS_UPDATE_DATA is
+'是否更新数据';
+
+comment on column QRTZ_JOB_DETAILS.REQUESTS_RECOVERY is
+'可恢复标记';
+
+comment on column QRTZ_JOB_DETAILS.JOB_DATA is
+'JOB_DATA';
+
 /*==============================================================*/
 /* Table: QRTZ_LOCKS                                            */
 /*==============================================================*/
@@ -905,6 +1805,12 @@ create table QRTZ_LOCKS
 comment on table QRTZ_LOCKS is
 '存储程序的非观锁的信息(假如使用了悲观锁)';
 
+comment on column QRTZ_LOCKS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_LOCKS.LOCK_NAME is
+'锁名';
+
 /*==============================================================*/
 /* Table: QRTZ_PAUSED_TRIGGER_GRPS                              */
 /*==============================================================*/
@@ -917,6 +1823,12 @@ create table QRTZ_PAUSED_TRIGGER_GRPS
 
 comment on table QRTZ_PAUSED_TRIGGER_GRPS is
 '存储已暂停的 Trigger 组的信息';
+
+comment on column QRTZ_PAUSED_TRIGGER_GRPS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_PAUSED_TRIGGER_GRPS.TRIGGER_GROUP is
+'触发器组';
 
 /*==============================================================*/
 /* Table: QRTZ_SCHEDULER_STATE                                  */
@@ -932,6 +1844,18 @@ create table QRTZ_SCHEDULER_STATE
 
 comment on table QRTZ_SCHEDULER_STATE is
 '存储少量的有关 Scheduler 的状态信息，和别的 Scheduler 实例(假如是用于一个集群中)';
+
+comment on column QRTZ_SCHEDULER_STATE.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_SCHEDULER_STATE.INSTANCE_NAME is
+'实例名称';
+
+comment on column QRTZ_SCHEDULER_STATE.LAST_CHECKIN_TIME is
+'LAST_CHECKIN_TIME';
+
+comment on column QRTZ_SCHEDULER_STATE.CHECKIN_INTERVAL is
+'CHECKIN_INTERVAL';
 
 /*==============================================================*/
 /* Table: QRTZ_SIMPLE_TRIGGERS                                  */
@@ -949,6 +1873,24 @@ create table QRTZ_SIMPLE_TRIGGERS
 
 comment on table QRTZ_SIMPLE_TRIGGERS is
 ' 存储简单的 Trigger，包括重复次数，间隔，以及已触的次数';
+
+comment on column QRTZ_SIMPLE_TRIGGERS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_SIMPLE_TRIGGERS.TRIGGER_NAME is
+'触发器名称';
+
+comment on column QRTZ_SIMPLE_TRIGGERS.TRIGGER_GROUP is
+'触发器组';
+
+comment on column QRTZ_SIMPLE_TRIGGERS.REPEAT_COUNT is
+'REPEAT_COUNT';
+
+comment on column QRTZ_SIMPLE_TRIGGERS.REPEAT_INTERVAL is
+'REPEAT_INTERVAL';
+
+comment on column QRTZ_SIMPLE_TRIGGERS.TIMES_TRIGGERED is
+'TIMES_TRIGGERED';
 
 /*==============================================================*/
 /* Table: QRTZ_SIMPROP_TRIGGERS                                 */
@@ -971,6 +1913,48 @@ create table QRTZ_SIMPROP_TRIGGERS
    BOOL_PROP_2          VARCHAR2(1),
    constraint PK_QRTZ_SIMPROP_TRIGGERS primary key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
 );
+
+comment on column QRTZ_SIMPROP_TRIGGERS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.TRIGGER_NAME is
+'触发器名称';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.TRIGGER_GROUP is
+'触发器组';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.STR_PROP_1 is
+'STR_PROP_1';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.STR_PROP_2 is
+'STR_PROP_2';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.STR_PROP_3 is
+'STR_PROP_3';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.INT_PROP_1 is
+'INT_PROP_1';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.INT_PROP_2 is
+'INT_PROP_2';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.LONG_PROP_1 is
+'LONG_PROP_1';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.LONG_PROP_2 is
+'LONG_PROP_2';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.DEC_PROP_1 is
+'DEC_PROP_1';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.DEC_PROP_2 is
+'DEC_PROP_2';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.BOOL_PROP_1 is
+'BOOL_PROP_1';
+
+comment on column QRTZ_SIMPROP_TRIGGERS.BOOL_PROP_2 is
+'BOOL_PROP_2';
 
 /*==============================================================*/
 /* Table: QRTZ_TRIGGERS                                         */
@@ -999,6 +1983,54 @@ create table QRTZ_TRIGGERS
 comment on table QRTZ_TRIGGERS is
 '存储已配置的 Trigger 的信息';
 
+comment on column QRTZ_TRIGGERS.SCHED_NAME is
+'调度名称';
+
+comment on column QRTZ_TRIGGERS.TRIGGER_NAME is
+'触发器名称';
+
+comment on column QRTZ_TRIGGERS.TRIGGER_GROUP is
+'触发器组';
+
+comment on column QRTZ_TRIGGERS.JOB_NAME is
+'任务名称';
+
+comment on column QRTZ_TRIGGERS.JOB_GROUP is
+'任务组';
+
+comment on column QRTZ_TRIGGERS.DESCRIPTION is
+'描述';
+
+comment on column QRTZ_TRIGGERS.NEXT_FIRE_TIME is
+'NEXT_FIRE_TIME';
+
+comment on column QRTZ_TRIGGERS.PREV_FIRE_TIME is
+'PREV_FIRE_TIME';
+
+comment on column QRTZ_TRIGGERS.PRIORITY is
+'PRIORITY';
+
+comment on column QRTZ_TRIGGERS.TRIGGER_STATE is
+'TRIGGER_STATE';
+
+comment on column QRTZ_TRIGGERS.TRIGGER_TYPE is
+'TRIGGER_TYPE';
+
+comment on column QRTZ_TRIGGERS.START_TIME is
+'START_TIME';
+
+comment on column QRTZ_TRIGGERS.END_TIME is
+'END_TIME';
+
+comment on column QRTZ_TRIGGERS.CALENDAR_NAME is
+'CALENDAR_NAME';
+
+comment on column QRTZ_TRIGGERS.MISFIRE_INSTR is
+'MISFIRE_INSTR';
+
+comment on column QRTZ_TRIGGERS.JOB_DATA is
+'JOB_DATA';
+
 /*==============================================================*/
 /* Table: RESOURCES                                             */
 /*==============================================================*/
@@ -1013,6 +2045,15 @@ create table RESOURCES
 comment on table RESOURCES is
 '资源表';
 
+comment on column RESOURCES.RESOURCE_ID is
+'资源标识';
+
+comment on column RESOURCES.MODULE_CODE is
+'业务模块代码';
+
+comment on column RESOURCES.RESOURCE_TYPE is
+'资源类型';
+
 /*==============================================================*/
 /* Table: ROLE                                                  */
 /*==============================================================*/
@@ -1025,6 +2066,21 @@ create table ROLE
    OPERATOR_ID          NUMBER(8),
    constraint PK_ROLE primary key (ROLE_ID)
 );
+
+comment on column ROLE.ROLE_ID is
+'角色标识';
+
+comment on column ROLE.MODULE_CODE is
+'业务模块代码';
+
+comment on column ROLE.ROLE_NAME is
+'角色名称';
+
+comment on column ROLE.CREATE_TIME is
+'创建时间';
+
+comment on column ROLE.OPERATOR_ID is
+'创建人标识';
 
 /*==============================================================*/
 /* Table: ROLE_HISTORY                                          */
@@ -1041,6 +2097,27 @@ create table ROLE_HISTORY
    constraint PK_ROLE_HISTORY primary key (ROLE_ID, SEQ)
 );
 
+comment on column ROLE_HISTORY.ROLE_ID is
+'角色标识';
+
+comment on column ROLE_HISTORY.SEQ is
+'序列';
+
+comment on column ROLE_HISTORY.ROLE_NAME is
+'角色名称';
+
+comment on column ROLE_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column ROLE_HISTORY.OPERATOR_ID is
+'创建人标识';
+
+comment on column ROLE_HISTORY.UPDATE_TIME is
+'更新时间';
+
+comment on column ROLE_HISTORY.UPDATE_OPERATOR_ID is
+'更新人标识';
+
 /*==============================================================*/
 /* Table: ROLE_RESOURCE                                         */
 /*==============================================================*/
@@ -1051,6 +2128,15 @@ create table ROLE_RESOURCE
    RESOURCE_TYPE        NUMBER(1)            not null,
    constraint PK_ROLE_RESOURCE primary key (ROLE_ID, RESOURCE_ID, RESOURCE_TYPE)
 );
+
+comment on column ROLE_RESOURCE.ROLE_ID is
+'角色标识';
+
+comment on column ROLE_RESOURCE.RESOURCE_ID is
+'资源标识';
+
+comment on column ROLE_RESOURCE.RESOURCE_TYPE is
+'资源类型';
 
 /*==============================================================*/
 /* Table: SEND_RECORD                                           */
@@ -1064,6 +2150,21 @@ create table SEND_RECORD
    RESULT               VARCHAR2(255)        not null,
    constraint PK_SEND_RECORD primary key (SEND_RECORD_ID)
 );
+
+comment on column SEND_RECORD.SEND_RECORD_ID is
+'发送记录标识';
+
+comment on column SEND_RECORD.MESSAGE_ID is
+'消息标识';
+
+comment on column SEND_RECORD.CONTACT_CHANNEL_ID is
+'接触渠到';
+
+comment on column SEND_RECORD.SEND_TIME is
+'发送时间';
+
+comment on column SEND_RECORD.RESULT is
+'发送结果';
 
 /*==============================================================*/
 /* Table: SIMPLE_TRIGGER                                        */
@@ -1081,6 +2182,33 @@ create table SIMPLE_TRIGGER
    OPERATOR_ID          NUMBER(8),
    constraint PK_SIMPLE_TRIGGER primary key (TRIGGER_ID)
 );
+
+comment on column SIMPLE_TRIGGER.TRIGGER_ID is
+'触发器标识';
+
+comment on column SIMPLE_TRIGGER.TRIGGER_NAME is
+'触发器名称';
+
+comment on column SIMPLE_TRIGGER.BEGIN_TIME is
+'开始时间';
+
+comment on column SIMPLE_TRIGGER.END_TIME is
+'结束时间';
+
+comment on column SIMPLE_TRIGGER.TIMES is
+'执行次数';
+
+comment on column SIMPLE_TRIGGER.EXECUTE_INTERVAL is
+'执行间隔';
+
+comment on column SIMPLE_TRIGGER.INTERVAL_UNIT is
+'间隔单位';
+
+comment on column SIMPLE_TRIGGER.CREATE_TIME is
+'创建时间';
+
+comment on column SIMPLE_TRIGGER.OPERATOR_ID is
+'创建人标识';
 
 /*==============================================================*/
 /* Table: SIMPLE_TRIGGER_HISTORY                                */
@@ -1102,6 +2230,42 @@ create table SIMPLE_TRIGGER_HISTORY
    constraint PK_SIMPLE_TRIGGER_HISTORY primary key (TRIGGER_ID, SEQ)
 );
 
+comment on column SIMPLE_TRIGGER_HISTORY.TRIGGER_ID is
+'触发器标识';
+
+comment on column SIMPLE_TRIGGER_HISTORY.SEQ is
+'序列号';
+
+comment on column SIMPLE_TRIGGER_HISTORY.TRIGGER_NAME is
+'触发器名称';
+
+comment on column SIMPLE_TRIGGER_HISTORY.BEGIN_TIME is
+'开始时间';
+
+comment on column SIMPLE_TRIGGER_HISTORY.END_TIME is
+'结束时间';
+
+comment on column SIMPLE_TRIGGER_HISTORY.TIMES is
+'执行次数';
+
+comment on column SIMPLE_TRIGGER_HISTORY.EXECUTE_INTERVAL is
+'执行间隔';
+
+comment on column SIMPLE_TRIGGER_HISTORY.INTERVAL_UNIT is
+'间隔单位';
+
+comment on column SIMPLE_TRIGGER_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column SIMPLE_TRIGGER_HISTORY.OPERATOR_ID is
+'创建人标识';
+
+comment on column SIMPLE_TRIGGER_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column SIMPLE_TRIGGER_HISTORY.UPDATE_OPERATOR_ID is
+'修改人标识';
+
 /*==============================================================*/
 /* Table: TASK                                                  */
 /*==============================================================*/
@@ -1122,6 +2286,42 @@ create table TASK
    constraint PK_TASK primary key (TASK_ID),
    constraint AK_KEY_2_TASK unique (TASK_NAME)
 );
+
+comment on column TASK.TASK_ID is
+'任务标识';
+
+comment on column TASK.TASK_NAME is
+'任务名称';
+
+comment on column TASK.CLASS_NAME is
+'执行类名';
+
+comment on column TASK.METHOD is
+'方法名';
+
+comment on column TASK.MODULE_CODE is
+'业务模块代码';
+
+comment on column TASK.PRIORITY is
+'优先级';
+
+comment on column TASK.IS_CONCURRENT is
+'是否并发';
+
+comment on column TASK.TASK_STATE is
+'任务状态';
+
+comment on column TASK.LAST_EXECUTE_TIME is
+'上次执行时间';
+
+comment on column TASK.NEXT_EXCUTE_DATE is
+'下次执行时间';
+
+comment on column TASK.OPERATOR_ID is
+'创建人标识';
+
+comment on column TASK.CREATE_TIME is
+'创建时间';
 
 /*==============================================================*/
 /* Table: TASK_HISTORY                                          */
@@ -1146,6 +2346,51 @@ create table TASK_HISTORY
    constraint PK_TASK_HISTORY primary key (TASK_ID, SEQ)
 );
 
+comment on column TASK_HISTORY.TASK_ID is
+'任务标识';
+
+comment on column TASK_HISTORY.SEQ is
+'序列号';
+
+comment on column TASK_HISTORY.TASK_NAME is
+'任务名称';
+
+comment on column TASK_HISTORY.CLASS_NAME is
+'执行类名';
+
+comment on column TASK_HISTORY.METHOD is
+'方法名';
+
+comment on column TASK_HISTORY.MODULE_CODE is
+'业务模块代码';
+
+comment on column TASK_HISTORY.PRIORITY is
+'优先级';
+
+comment on column TASK_HISTORY.IS_CONCURRENT is
+'是否并发';
+
+comment on column TASK_HISTORY.TASK_STATE is
+'任务状态';
+
+comment on column TASK_HISTORY.LAST_EXECUTE_TIME is
+'上次执行时间';
+
+comment on column TASK_HISTORY.NEXT_EXCUTE_DATE is
+'下次执行时间';
+
+comment on column TASK_HISTORY.OPERATOR_ID is
+'创建人标识';
+
+comment on column TASK_HISTORY.CREATE_TIME is
+'创建时间';
+
+comment on column TASK_HISTORY.UPDATE_TIME is
+'修改时间';
+
+comment on column TASK_HISTORY.UPDATE_OPERATOR_ID is
+'修改人标识';
+
 /*==============================================================*/
 /* Table: TASK_TRIGGER                                          */
 /*==============================================================*/
@@ -1156,6 +2401,15 @@ create table TASK_TRIGGER
    TRIGGER_ID           NUMBER(8)            not null,
    constraint PK_TASK_TRIGGER primary key (TASK_ID, TRIGGER_TYPE, TRIGGER_ID)
 );
+
+comment on column TASK_TRIGGER.TASK_ID is
+'任务标识';
+
+comment on column TASK_TRIGGER.TRIGGER_TYPE is
+'触发器类型';
+
+comment on column TASK_TRIGGER.TRIGGER_ID is
+'触发器标识';
 
 /*==============================================================*/
 /* Table: TRANS_LOG                                             */
@@ -1174,6 +2428,36 @@ create table TRANS_LOG
    CONTACT_CHANNEL_ID   NUMBER(2),
    constraint PK_TRANS_LOG primary key (TRANS_ID)
 );
+
+comment on column TRANS_LOG.TRANS_ID is
+'事务标识';
+
+comment on column TRANS_LOG.MODULE_CODE is
+'业务模块标识';
+
+comment on column TRANS_LOG.BEGIN_TIME is
+'开始时间';
+
+comment on column TRANS_LOG.END_TIME is
+'结束时间';
+
+comment on column TRANS_LOG.CONSUME_TIME is
+'执行时间(毫秒)';
+
+comment on column TRANS_LOG.INPUT_PARAM is
+'入参';
+
+comment on column TRANS_LOG.OUTPUT_PARAM is
+'出参';
+
+comment on column TRANS_LOG.SQL_LOG is
+'SQL日志';
+
+comment on column TRANS_LOG.EXCEPTION_LOG is
+'异常信息';
+
+comment on column TRANS_LOG.CONTACT_CHANNEL_ID is
+'接触渠到';
 
 /*==============================================================*/
 /* Table: TRANS_LOG_STACK                                       */
@@ -1194,6 +2478,39 @@ create table TRANS_LOG_STACK
    constraint PK_TRANS_LOG_STACK primary key (STACK_ID)
 );
 
+comment on column TRANS_LOG_STACK.STACK_ID is
+'栈标识';
+
+comment on column TRANS_LOG_STACK.SEQ is
+'序列';
+
+comment on column TRANS_LOG_STACK.TRANS_ID is
+'事务标识';
+
+comment on column TRANS_LOG_STACK.PARENT_STACK_ID is
+'父栈标识';
+
+comment on column TRANS_LOG_STACK.METHOD is
+'方法标识';
+
+comment on column TRANS_LOG_STACK.BEGIN_TIME is
+'开始时间';
+
+comment on column TRANS_LOG_STACK.END_TIME is
+'结束时间';
+
+comment on column TRANS_LOG_STACK.CONSUME_TIME is
+'执行时间（毫秒）';
+
+comment on column TRANS_LOG_STACK.INPUT_PARAM is
+'入参';
+
+comment on column TRANS_LOG_STACK.OUTPUT_PARAM is
+'出参';
+
+comment on column TRANS_LOG_STACK.IS_SUCCESS is
+'是否成功';
+
 /*==============================================================*/
 /* Table: URL_RESOURCE                                          */
 /*==============================================================*/
@@ -1203,10 +2520,28 @@ create table URL_RESOURCE
    DIRECTORY_CODE       VARCHAR2(20)         not null,
    RESOURCE_NAME        VARCHAR2(60)         not null,
    URL                  VARCHAR2(120)        not null,
-   EVENT_ID             NUMBER(4)            not null,
+   EVENT_ID             VARCHAR2(20)         not null,
    REMARK               VARCHAR2(255),
    constraint PK_URL_RESOURCE primary key (RESOURCE_ID)
 );
+
+comment on column URL_RESOURCE.RESOURCE_ID is
+'资源标识';
+
+comment on column URL_RESOURCE.DIRECTORY_CODE is
+'目录代码';
+
+comment on column URL_RESOURCE.RESOURCE_NAME is
+'资源名称';
+
+comment on column URL_RESOURCE.URL is
+'URL';
+
+comment on column URL_RESOURCE.EVENT_ID is
+'触发事件';
+
+comment on column URL_RESOURCE.REMARK is
+'描述';
 
 alter table ACCOUNT
    add constraint FK_ACCOUNT_OPERATOR__OPERATOR foreign key (OPERATOR_ID)
