@@ -84,11 +84,11 @@ public class ConfigItemInitialization implements Initialization {
             CacheHelper.setStringCache(new SimpleStringCache(map));
         }
 
-//        Configuration.setConfigService(configService);
-//        Configuration.setCache(params);
-//        Configuration.setAllModules(configurationService.selectAllModule());
+        Configuration.setConfigService(configService);
+        Configuration.setCache(params);
+        Configuration.setAllModules(configurationService.selectAllModule());
 
-        //Configuration.reloadCache();
+        Configuration.reloadCache();
         
         DictionaryHelper.setdictDataService(dictionaryDataService);
       
