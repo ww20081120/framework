@@ -4,6 +4,7 @@
 package com.fccfc.framework.web.service.impl;
 
 import java.io.File;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -16,7 +17,9 @@ import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
+import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 import com.fccfc.framework.web.dao.AttachmentsDao;
+import com.fccfc.framework.web.dao.UrlResourceDao;
 import com.fccfc.framework.web.service.ResourceService;
 
 /**
@@ -42,6 +45,12 @@ public class ResourceServiceImpl implements ResourceService {
      */
     @Resource
     private AttachmentsDao attachmentsDao;
+
+    /**
+     * urlResourceDao
+     */
+    @Resource
+    private UrlResourceDao urlResourceDao;
 
     /*
      * (non-Javadoc)
@@ -93,14 +102,31 @@ public class ResourceServiceImpl implements ResourceService {
 
     /*
      * (non-Javadoc)
-     * @see
-     * com.fccfc.framework.web.service.ResourceService#saveAttachment(com.fccfc.framework.core.bean.resource.AttachmentsPojo
-     * )
+     * @see com.fccfc.framework.web.service.ResourceService#saveAttachment(com.fccfc
+     * .framework.core.bean.resource.AttachmentsPojo )
      */
     @Override
     public void saveAttachment(AttachmentsPojo attachments) throws ServiceException {
         try {
             attachmentsDao.save(attachments);
+        }
+        catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    /***
+     * Description: <br>
+     * 
+     * @author bai.wenlong<br>
+     * @taskId <br>
+     * @return List<UrlResourcePojo> <br>
+     * @throws ServiceException <br>
+     */
+    @Override
+    public List<UrlResourcePojo> selectResource() throws ServiceException {
+        try {
+            return urlResourceDao.selectList(UrlResourcePojo.class);
         }
         catch (DaoException e) {
             throw new ServiceException(e);

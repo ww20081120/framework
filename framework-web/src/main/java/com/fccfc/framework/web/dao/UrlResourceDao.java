@@ -9,6 +9,7 @@ import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.db.core.annotation.Dao;
 import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.db.core.annotation.Sql;
+import com.fccfc.framework.db.hibernate.IGenericBaseDao;
 
 /**
  * <Description> <br>
@@ -21,12 +22,11 @@ import com.fccfc.framework.db.core.annotation.Sql;
  * @see com.fccfc.framework.web.dao <br>
  */
 @Dao
-public interface UrlResourceDao {
+public interface UrlResourceDao extends IGenericBaseDao {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param moduleCode <br>
@@ -37,9 +37,8 @@ public interface UrlResourceDao {
     List<String> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param moduleCode <br>

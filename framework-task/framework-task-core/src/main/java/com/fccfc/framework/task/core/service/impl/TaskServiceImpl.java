@@ -23,6 +23,7 @@ import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.task.api.CronTrigger;
 import com.fccfc.framework.task.api.SimpleTrigger;
 import com.fccfc.framework.task.api.Task;

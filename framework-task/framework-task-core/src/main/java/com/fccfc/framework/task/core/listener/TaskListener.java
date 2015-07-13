@@ -44,7 +44,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      */
     @Resource
     private JobService jobService;
-
+    
     /**
      * scheduler
      */
@@ -62,7 +62,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_COMPLETE);
+            	jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_COMPLETE);
             }
             logger.debug("Task[{0}] Complete", taskId);
         }
@@ -81,7 +81,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_ACQUIRED);
+            	jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_ACQUIRED);
             }
             logger.debug("Task[{0}] Complete", taskId);
         }
@@ -118,7 +118,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
         try {
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
-            if (taskId != null) {
+            if (taskId != null) { 
                 jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
             }
             logger.debug("Task[{0}] vetoJobExecution", taskId);
@@ -148,8 +148,9 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
-            }
+            	jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
+                
+            } 
             logger.debug("Task[{0}] jobExecutionVetoed", taskId);
         }
         catch (Exception e) {
@@ -233,7 +234,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_PAUSED);
+            	jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_PAUSED);
             }
         }
         catch (Exception e) {
@@ -298,7 +299,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndDeleteTaskById(taskId, -1, TaskPojo.class);
+            	jobService.insertTaskHisAndDeleteTaskById(taskId, -1, TaskPojo.class);
             }
         }
         catch (Exception e) {
@@ -317,7 +318,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_PAUSED);
+            	jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_PAUSED);
             }
         }
         catch (Exception e) {
@@ -345,7 +346,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
+            	jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
             }
         }
         catch (Exception e) {

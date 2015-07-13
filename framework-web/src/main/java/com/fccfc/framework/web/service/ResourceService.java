@@ -3,8 +3,11 @@
  */
 package com.fccfc.framework.web.service;
 
+import java.util.List;
+
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
+import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 
 /**
  * <Description> <br>
@@ -17,9 +20,8 @@ import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 public interface ResourceService {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param resourceId <br>
@@ -30,13 +32,23 @@ public interface ResourceService {
     AttachmentsPojo downloadResource(int resourceId, boolean isThumb) throws ServiceException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param attachments <br>
      * @throws ServiceException <br>
      */
     void saveAttachment(AttachmentsPojo attachments) throws ServiceException;
+
+    /***
+     * Description: <br>
+     * 
+     * @author bai.wenlong<br>
+     * @taskId <br>
+     * @return List<UrlResourcePojo> <br>
+     * @throws ServiceException <br>
+     */
+    List<UrlResourcePojo> selectResource() throws ServiceException;
+
 }
