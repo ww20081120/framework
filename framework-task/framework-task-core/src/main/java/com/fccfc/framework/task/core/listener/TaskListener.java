@@ -22,7 +22,7 @@ import org.quartz.TriggerListener;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.task.core.TaskConstants;
 import com.fccfc.framework.task.core.bean.TaskPojo;
-import com.fccfc.framework.task.core.dao.JobDao;
+import com.fccfc.framework.task.core.service.impl.JobService;
 
 /**
  * <Description> <br>
@@ -40,10 +40,10 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
     private static Logger logger = new Logger(TaskListener.class);
 
     /**
-     * taskDao
+     * jobService
      */
     @Resource
-    private JobDao taskDao;
+    private JobService jobService;
 
     /**
      * scheduler
@@ -62,8 +62,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_COMPLETE);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_COMPLETE);
             }
             logger.debug("Task[{0}] Complete", taskId);
         }
@@ -82,8 +81,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_ACQUIRED);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_ACQUIRED);
             }
             logger.debug("Task[{0}] Complete", taskId);
         }
@@ -102,8 +100,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_BLOCKED);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_BLOCKED);
             }
             logger.debug("Task[{0}] Complete", taskId);
         }
@@ -122,8 +119,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
             }
             logger.debug("Task[{0}] vetoJobExecution", taskId);
         }
@@ -152,8 +148,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
             }
             logger.debug("Task[{0}] jobExecutionVetoed", taskId);
         }
@@ -172,8 +167,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_ACQUIRED);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_ACQUIRED);
             }
             logger.debug("Task[{0}] jobToBeExecuted", taskId);
         }
@@ -192,8 +186,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_COMPLETE);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_COMPLETE);
             }
             logger.debug("Task[{0}] jobWasExecuted", taskId);
         }
@@ -240,8 +233,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_PAUSED);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_PAUSED);
             }
         }
         catch (Exception e) {
@@ -269,8 +261,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = trigger.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
             }
         }
         catch (Exception e) {
@@ -307,8 +298,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.deleteById(TaskPojo.class, taskId);
+                jobService.insertTaskHisAndDeleteTaskById(taskId, -1, TaskPojo.class);
             }
         }
         catch (Exception e) {
@@ -327,8 +317,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_PAUSED);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_PAUSED);
             }
         }
         catch (Exception e) {
@@ -356,8 +345,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                taskDao.insertTaskHistory(taskId, null);
-                taskDao.updateTaskState(taskId, TaskPojo.TASK_STATE_WAITING);
+                jobService.insertTaskHisAndTaskState(taskId, -1, TaskPojo.TASK_STATE_WAITING);
             }
         }
         catch (Exception e) {

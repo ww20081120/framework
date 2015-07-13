@@ -29,12 +29,12 @@ public @interface Param {
     /**
      * pageSize
      */
-    String pageSize = DaoConstants.PAGE_SIZE;
+    String PAGE_SIZE = DaoConstants.PAGE_SIZE;
 
     /**
      * pageIndex
      */
-    String pageIndex = DaoConstants.PAGE_INDEX;
+    String PAGE_INDEX = DaoConstants.PAGE_INDEX;
 
     /**
      * 

@@ -19,6 +19,7 @@ import com.fccfc.framework.common.InitializationException;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.api.ConfigService;
 import com.fccfc.framework.config.core.service.ConfigurationService;
+import com.fccfc.framework.config.core.service.DictionaryDataService;
 
 /**
  * <Description> <br>
@@ -47,6 +48,12 @@ public class ConfigItemInitialization implements Initialization {
      */
     @Resource
     private ConfigurationService configurationService;
+    
+    /**
+     * dictionaryDataService
+     */
+    @Resource
+    private DictionaryDataService dictionaryDataService;
 
     /**
      * configService
@@ -82,6 +89,10 @@ public class ConfigItemInitialization implements Initialization {
         Configuration.setAllModules(configurationService.selectAllModule());
 
         Configuration.reloadCache();
+        
+        DictionaryHelper.setdictDataService(dictionaryDataService);
+      
+        DictionaryHelper.reloadCache(); // 加载字典数据
         logger.debug("---------------end ConfigItem int ------------------");
     }
 

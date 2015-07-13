@@ -38,7 +38,7 @@ public interface TransLogDao extends IGenericBaseDao {
      * @throws DaoException <br>
      */
     @Sql(bean = TransLogPojo.class)
-    List<TransLogPojo> listTransLog(@Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize)
+    List<TransLogPojo> listTransLog(@Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize)
         throws DaoException;
 
     /**
@@ -50,7 +50,7 @@ public interface TransLogDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT COUNT(*) FROM TRANS_LOG", bean = Integer.class)
+    @Sql(bean = Integer.class)
     int getTransLogListSize() throws DaoException;
 
     /**
@@ -63,10 +63,7 @@ public interface TransLogDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(
-        value = "SELECT STACK_ID, SEQ, TRANS_ID, PARENT_STACK_ID, METHOD, BEGIN_TIME, END_TIME, CONSUME_TIME FROM TRANS_LOG_STACK "
-              + " WHERE TRANS_ID = :transId",
-        bean = TransLogStackPojo.class)
+    @Sql(bean = TransLogStackPojo.class)
     List<TransLogStackPojo> listTransLogStack(@Param("transId") String transId) throws DaoException;
 
     /**
@@ -80,8 +77,7 @@ public interface TransLogDao extends IGenericBaseDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT * FROM TRANS_LOG_STACK WHERE TRANS_ID = :transId AND STACK_ID = :stackId",
-        bean = TransLogStackPojo.class)
+    @Sql(bean = TransLogStackPojo.class)
     TransLogStackPojo getTransLogStackPojo(@Param("transId") String transId, @Param("stackId") String stackId)
         throws DaoException;
 }

@@ -23,7 +23,7 @@ public class TestObject {
      * @taskId <br> <br>
      */
     public void test() {
-        System.out.println("这是测试类");
+        //System.out.println("这是测试类");
     }
 
 }

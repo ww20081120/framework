@@ -390,5 +390,4 @@ public class TaskServiceImpl implements TaskService.Iface {
     public void setTaskListener(TaskListener taskListener) {
         this.taskListener = taskListener;
     }
-
 }

@@ -36,7 +36,7 @@ public interface ConfigItemDao extends IGenericBaseDao {
      */
     @Sql(bean = ConfigItemPojo.class)
     List<ConfigItemPojo> selectConfigItemList(@Param("configItem") ConfigItemPojo configItemPojo,
-        @Param(Param.pageIndex) int pageIndex, @Param(Param.pageSize) int pageSize) throws DaoException;
+        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
 
     /**
      * 

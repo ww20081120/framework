@@ -8,6 +8,9 @@
     <dubbo:application name="framework-bootstrap-client" />
     <dubbo:registry address="zookeeper://127.0.0.1:2181" />
     <dubbo:consumer timeout="5000" />
-    <dubbo:reference id="configService"
-        interface="com.fccfc.framework.config.api.ConfigService$Iface" />
+    
+    <!--  -->
+    <dubbo:reference id="configService" interface="com.fccfc.framework.config.api.ConfigService$Iface" />
+    
+    <dubbo:reference id="taskService" interface="com.fccfc.framework.task.api.TaskService$Iface" />
 </beans>

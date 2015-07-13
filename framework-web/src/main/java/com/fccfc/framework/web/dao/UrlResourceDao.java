@@ -33,7 +33,7 @@ public interface UrlResourceDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT U.EXECUTE_CLASS FROM URL_RESOURCE U WHERE U.MODULE_CODE IN (:moduleCode)", bean = String.class)
+    @Sql(bean = String.class)
     List<String> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
 
     /**
@@ -48,7 +48,6 @@ public interface UrlResourceDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("SELECT U.URL FROM URL_RESOURCE U WHERE U.MODULE_CODE IN (:moduleCode) AND U.EXECUTE_CLASS = :class AND U.EXECUTE_METHOD = :method")
     String selectUrlByClassAndName(@Param("moduleCode") List<String> moduleCode, @Param("class") String clazz,
         @Param("method") String method) throws DaoException;
 }

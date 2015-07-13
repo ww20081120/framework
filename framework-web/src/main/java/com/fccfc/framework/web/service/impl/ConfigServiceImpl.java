@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.dao.ConfigDao;
-import com.fccfc.framework.web.service.ConfigService;
+import com.fccfc.framework.web.service.ConfigurationService;
 
 /**
  * 参数配置Service 实现类
@@ -18,7 +18,7 @@ import com.fccfc.framework.web.service.ConfigService;
  * @author skysun
  */
 @Service
-public class ConfigServiceImpl implements ConfigService {
+public class ConfigServiceImpl implements ConfigurationService {
 
     /**
      * configDao

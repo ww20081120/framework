@@ -15,6 +15,7 @@ import com.fccfc.framework.common.utils.bean.JsonUtil;
 import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.message.api.Attachment;
 import com.fccfc.framework.message.core.service.MessageExcutor;
+
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.ITemplate;
 import com.gexin.rp.sdk.base.impl.ListMessage;
@@ -22,6 +23,9 @@ import com.gexin.rp.sdk.base.impl.SingleMessage;
 import com.gexin.rp.sdk.base.impl.Target;
 import com.gexin.rp.sdk.http.IGtPush;
 import com.gexin.rp.sdk.template.TransmissionTemplate;
+
+
+
 
 /**
  * <Description> <br>

@@ -15,7 +15,7 @@ import com.fccfc.framework.common.utils.io.ImageUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.db.core.DaoException;
-import com.fccfc.framework.web.bean.resource.AttachmentsPojo;
+import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 import com.fccfc.framework.web.dao.AttachmentsDao;
 import com.fccfc.framework.web.service.ResourceService;
 

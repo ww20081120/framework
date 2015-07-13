@@ -1,0 +1,22 @@
+insert into config_item_param
+  (CONFIG_ITEM_ID,
+   PARAM_CODE,
+   PARAM_NAME,
+   PARAM_VALUE,
+   DEFAULT_PARAM_VALUE,
+   DATA_TYPE,
+   INPUT_TYPE,
+   VALUE_SCRIPT,
+   UPDATE_TIME,
+   REMARK)
+VALUES
+  (:itemId,
+   :paramCode,
+   :paramName,
+   :paramValue,
+   :defaultValue,
+   :dataType,
+   :inputType,
+   :valueScript,
+   sysdate,
+   :paramRemark)

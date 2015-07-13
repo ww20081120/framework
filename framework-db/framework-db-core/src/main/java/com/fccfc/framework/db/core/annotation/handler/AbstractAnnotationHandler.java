@@ -218,10 +218,10 @@ public class AbstractAnnotationHandler {
                             if (annotation instanceof Param) {
                                 Param p = (Param) annotation;
                                 name = p.value();
-                                if (Param.pageIndex.equals(name)) {
+                                if (Param.PAGE_INDEX.equals(name)) {
                                     metadata.setIndexPosition(i);
                                 }
-                                else if (Param.pageSize.equals(name)) {
+                                else if (Param.PAGE_SIZE.equals(name)) {
                                     metadata.setSizePosition(i);
                                 }
                                 metadata.setParamName(i, name);

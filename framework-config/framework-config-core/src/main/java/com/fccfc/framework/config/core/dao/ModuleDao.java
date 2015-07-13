@@ -32,6 +32,6 @@ public interface ModuleDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT * FROM MODULE", bean = ModulePojo.class)
+    @Sql(bean = ModulePojo.class)
     List<ModulePojo> selectAllModule() throws DaoException;
 }

@@ -17,7 +17,7 @@ import java.util.Stack;
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年11月22日 <br>
- * @since V1.0<br>
+ * @since V7.3<br>
  * @see com.fccfc.framework.core.threadlocal <br>
  */
 public final class TransManager implements Serializable {
@@ -46,6 +46,11 @@ public final class TransManager implements Serializable {
      * 日志栈
      */
     private Stack<String> executeStack;
+    
+    /***
+     * stactId
+     */
+    private String stackId;
 
     /**
      * executeTimeMap
@@ -56,7 +61,7 @@ public final class TransManager implements Serializable {
      * transLoggerServices
      */
     private List<TransLoggerService> transLoggerServices;
-
+    
     /**
      * 私有构造, 不需要外部实例化
      */
@@ -97,6 +102,9 @@ public final class TransManager implements Serializable {
      * @param beginTime <br>
      */
     public void push(String id, long beginTime) {
+        if (executeStack.isEmpty()) {
+            stackId = id;
+        }
         executeTimeMap.put(id, beginTime);
         executeStack.push(id);
     }
@@ -171,6 +179,7 @@ public final class TransManager implements Serializable {
         seq = 0;
         error = false;
         timeout = false;
+        stackId = null;
     }
 
     public Set<String> getIdSet() {
@@ -183,5 +192,9 @@ public final class TransManager implements Serializable {
 
     public void setTransLoggerServices(List<TransLoggerService> transLoggerServices) {
         this.transLoggerServices = transLoggerServices;
+    }
+
+    public String getStackId() {
+        return stackId;
     }
 }

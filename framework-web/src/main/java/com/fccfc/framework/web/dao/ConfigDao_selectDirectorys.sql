@@ -1,0 +1,1 @@
+select DIRECTOR_CODE, DIRECTOR_NAME from directory

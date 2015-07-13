@@ -35,8 +35,8 @@ public interface AreaDao {
      * @throws DaoException <br>
      */
     @Sql(bean = AreaPojo.class)
-    List<AreaPojo> selectAreaList(@Param("area") AreaPojo area, @Param(Param.pageIndex) Integer pageIndex,
-        @Param(Param.pageSize) Integer pageSize) throws DaoException;
+    List<AreaPojo> selectAreaList(@Param("area") AreaPojo area, @Param(Param.PAGE_INDEX) Integer pageIndex,
+        @Param(Param.PAGE_SIZE) Integer pageSize) throws DaoException;
 
     /**
      * 

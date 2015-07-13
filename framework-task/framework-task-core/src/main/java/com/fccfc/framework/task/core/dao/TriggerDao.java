@@ -73,7 +73,7 @@ public interface TriggerDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT T.* FROM CRON_TRIGGER T WHERE T.TRIGGER_ID = :id", bean = CronTriggerPojo.class)
+    @Sql(bean = CronTriggerPojo.class)
     CronTriggerPojo getCronTriggerById(@Param("id") int triggerId) throws DaoException;
 
     /**
@@ -86,7 +86,7 @@ public interface TriggerDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql(value = "SELECT T.* FROM SIMPLE_TRIGGER t WHERE T.TRIGGER_ID = :id", bean = CronTriggerPojo.class)
+    @Sql(bean = CronTriggerPojo.class)
     SimpleTriggerPojo getSimpleTriggerById(@Param("id") int triggerId) throws DaoException;
 
     /**
@@ -98,6 +98,5 @@ public interface TriggerDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    @Sql("SELECT LAST_INSERT_ID()")
     int getId() throws DaoException;
 }
