@@ -1,9 +1,8 @@
 package com.fccfc.framework.task.core.service.impl;
 
-
 /**
- * <Description> <br> 
- *  
+ * <Description> <br>
+ * 
  * @author shao.dinghui<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -12,26 +11,26 @@ package com.fccfc.framework.task.core.service.impl;
  * @see com.fccfc.framework.task.core.service.impl <br>
  */
 public interface JobService {
-	
-	/**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param taskId
-	 * @param operatorId
-	 * @param state <br>
-	 */
-	public void insertTaskHisAndTaskState(int taskId, int operatorId, String state);
-	
-	/**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param taskId
-	 * @param operatorId
-	 * @param clz <br>
-	 */
-	public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId, Class clz);
+
+    /**
+     * Description: <br>
+     * 
+     * @author liu.baiyang<br>
+     * @taskId <br>
+     * @param taskId <br>
+     * @param operatorId <br>
+     * @param state <br>
+     */
+    public void insertTaskHisAndTaskState(int taskId, int operatorId, String state);
+
+    /**
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param taskId <br>
+     * @param operatorId <br>
+     * @param clz <br>
+     */
+    public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId, Class clz);
 }
