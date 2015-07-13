@@ -42,9 +42,8 @@ public final class WebUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -55,9 +54,8 @@ public final class WebUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -78,9 +76,8 @@ public final class WebUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param attrCode <br>
@@ -95,9 +92,8 @@ public final class WebUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param attrCode <br>
@@ -136,5 +132,24 @@ public final class WebUtil {
             }
         }
         return testOperMap;
+    }
+
+    /***
+     * Description: <br>
+     * 
+     * @author bai.wenlong<br>
+     * @taskId <br>
+     * @param request <br>
+     * @return String <br>
+     */
+    public static String getRemoteIP(HttpServletRequest request) {
+        String ip = "";
+        if (request.getHeader("x-forwarded-for") == null) {
+            ip = request.getRemoteAddr();
+        }
+        else {
+            ip = request.getHeader("x-forwarded-for");
+        }
+        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
     }
 }

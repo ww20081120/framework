@@ -43,17 +43,9 @@ public class UrlResourcePojo extends BaseEntity {
     @Column(name = "URL")
     private String url;
 
-    /** EXECUTE_CLASS */
-    @Column(name = "EXECUTE_CLASS")
-    private String executeClass;
-
-    /** EXECUTE_METHOD */
-    @Column(name = "EXECUTE_METHOD")
-    private String executeMethod;
-
-    /** MODULE_CODE */
-    @Column(name = "MODULE_CODE")
-    private String moduleCode;
+    /** EVENT_ID */
+    @Column(name = "EVENT_ID")
+    private String eventId;
 
     /** REMARK */
     @Column(name = "REMARK")
@@ -91,36 +83,20 @@ public class UrlResourcePojo extends BaseEntity {
         this.url = url;
     }
 
-    public String getExecuteClass() {
-        return this.executeClass;
-    }
-
-    public void setExecuteClass(String executeClass) {
-        this.executeClass = executeClass;
-    }
-
-    public String getExecuteMethod() {
-        return this.executeMethod;
-    }
-
-    public void setExecuteMethod(String executeMethod) {
-        this.executeMethod = executeMethod;
-    }
-
-    public String getModuleCode() {
-        return this.moduleCode;
-    }
-
-    public void setModuleCode(String moduleCode) {
-        this.moduleCode = moduleCode;
-    }
-
     public String getRemark() {
         return this.remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
 }

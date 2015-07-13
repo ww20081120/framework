@@ -158,9 +158,8 @@ public class ResourceController {
     // }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param resourceId <br>
@@ -197,9 +196,8 @@ public class ResourceController {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param request <br>
@@ -273,9 +271,8 @@ public class ResourceController {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param fileType <br>
@@ -302,9 +299,8 @@ public class ResourceController {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param fileName <br>
@@ -342,9 +338,8 @@ public class ResourceController {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -368,9 +363,8 @@ public class ResourceController {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -386,11 +380,10 @@ public class ResourceController {
 
         return MediaType.APPLICATION_OCTET_STREAM;
     }
-    
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng<br>
      * @taskId <br>
      * @param request <br>
@@ -414,6 +407,7 @@ public class ResourceController {
             cage.draw(number, os);
         }
         catch (IOException e) {
+            logger.debug(e.getLocalizedMessage());
         }
         finally {
             if (os != null) {

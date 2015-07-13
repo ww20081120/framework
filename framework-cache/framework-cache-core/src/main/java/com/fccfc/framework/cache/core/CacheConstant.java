@@ -57,4 +57,10 @@ public interface CacheConstant {
 
     /** 区域 */
     String AREA = "/AREA";
+    
+    /**路径*/
+    String URL = "URL";
+    
+    /**事件*/
+    String EVENT = "EVENT";
 }
