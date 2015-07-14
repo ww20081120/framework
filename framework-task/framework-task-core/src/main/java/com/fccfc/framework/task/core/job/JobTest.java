@@ -5,18 +5,26 @@
  ****************************************************************************************/
 package com.fccfc.framework.task.core.job;
 
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.PersistJobDataAfterExecution;
-
-/**
- * <Description> <br>
- * 
+/** 
+ * <Description> <br> 
+ *  
  * @author 王伟 <br>
  * @version 1.0 <br>
  * @CreateDate 2014年11月7日 <br>
  * @see com.fccfc.framework.task.core.job <br>
  */
-@PersistJobDataAfterExecution
-@DisallowConcurrentExecution
-public class SynchronizedJobExcutor extends JobExcutor {
+public class JobTest {
+
+	public void testJob01() {
+		System.out.println("testJob01");
+	}
+	
+	public void testJob02() { 
+		System.out.println("testJob02");
+	}
+	
+	public void testJob03() {
+		System.out.println("testJob03");
+	}  
+
 }
