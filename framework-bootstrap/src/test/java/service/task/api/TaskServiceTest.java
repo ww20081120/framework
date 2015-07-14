@@ -61,7 +61,7 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1001);
     	task.setTaskName("task01");
-    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob01");
     	
     	SimpleTrigger trigger = new SimpleTrigger();
@@ -92,10 +92,21 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1003);
     	task.setTaskName("task03");
-    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setModuleCode("TASK");
+    	task.setTaskState("A");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob03");
+    	task.setCreateTime(new Date().getTime());
+    	task.setOperatorId(-1);
+    	task.setPriority(5);
     	
-    	CronTrigger trigger = new CronTrigger("cronTrigger", "0/10 * * * * ?");
+    	CronTrigger trigger = new CronTrigger();
+    	trigger.setTriggerId(1003);
+    	trigger.setTriggerName("Trigger1003");
+    	trigger.setCreateTime(new Date().getTime());
+    	trigger.setOperatorId(-1);
+    	trigger.setTriggerType((short)1);
+    	trigger.setCronExpression("0/10 * * * * ?");
     	
 		iface.cronScheduleTask(task, trigger);
     }
@@ -112,7 +123,7 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1003);
     	task.setTaskName("task03");
-    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob03");
     	
     	iface.pause(task);
@@ -130,7 +141,7 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1003);
     	task.setTaskName("task03");
-    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob03");
     	
     	iface.resume(task);
@@ -148,7 +159,7 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1003);
     	task.setTaskName("task03");
-    	task.setClassName("com.fccfc.framework.bootstrap.JobTest");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob03");
     	
     	iface.remove(task);

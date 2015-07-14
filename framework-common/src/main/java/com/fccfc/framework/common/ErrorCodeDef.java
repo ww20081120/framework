@@ -217,4 +217,9 @@ public interface ErrorCodeDef {
      * 不支持的日志类型
      */
     int UNSPORT_LOGGER_TYPE = 20020;
+    
+    /**
+     * 保存任务失败
+     */
+    int SAVE_TASK_OR_TASK_TRIGGER_ERROR = 20021;
 }

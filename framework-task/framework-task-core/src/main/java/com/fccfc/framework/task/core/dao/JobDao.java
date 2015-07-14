@@ -43,6 +43,17 @@ public interface JobDao extends IGenericBaseDao {
         @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
 
     /**
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param taskTrigger
+	 * @return
+	 * @throws DaoException <br>
+	 */
+	int insertTask(@Param("t") TaskPojo taskPojo) throws DaoException;
+    
+    /**
      * 
      * Description: <br> 
      *  

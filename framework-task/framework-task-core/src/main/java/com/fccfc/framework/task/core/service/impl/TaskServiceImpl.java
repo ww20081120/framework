@@ -32,6 +32,7 @@ import com.fccfc.framework.task.core.TaskConstants;
 import com.fccfc.framework.task.core.bean.CronTriggerPojo;
 import com.fccfc.framework.task.core.bean.SimpleTriggerPojo;
 import com.fccfc.framework.task.core.bean.TaskPojo;
+import com.fccfc.framework.task.core.bean.TaskTriggerPojo;
 import com.fccfc.framework.task.core.bean.TriggerPojo;
 import com.fccfc.framework.task.core.dao.JobDao;
 import com.fccfc.framework.task.core.dao.TriggerDao;
@@ -167,6 +168,10 @@ public class TaskServiceImpl implements TaskService.Iface {
             }
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
+                // 将数据添加到TASK和SIMPLE_TRIGGER表中
+                saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
+                // 将数据保存到SIMPLE_TRIGGER表中
+                triggerDao.saveOrUpdateSimpleTrigger(simpleTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -231,6 +236,10 @@ public class TaskServiceImpl implements TaskService.Iface {
             }
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
+                // 将数据添加到TASK和TASK_TRIGGER表中
+                saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
+                // 将数据保存到CRON_TRIGGER表中
+                triggerDao.saveOrUpdateCronTrigger(cronTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -387,7 +396,42 @@ public class TaskServiceImpl implements TaskService.Iface {
         dataMap.put(TaskConstants.TASK_ID, taskPojo.getTaskId());
         return detail;
     }
-
+    
+    /**
+     * Description: <br> 
+     *  
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param taskPojo
+     * @param taskTriggerPojo <br>
+     * @throws ServiceException 
+     */
+    private void saveTaskAndTaskTrigger(TaskPojo taskPojo, TaskTriggerPojo taskTriggerPojo) throws ServiceException {
+    	try {
+    		jobDao.insertTask(taskPojo);
+    		jobDao.insertTaskTrigger(taskTriggerPojo);
+		} 
+    	catch (DaoException e) {
+			throw new ServiceException(ErrorCodeDef.SAVE_TASK_OR_TASK_TRIGGER_ERROR, "保存Task相关信息失败", e);
+		}
+    }
+    
+    /**
+     * Description: <br> 
+     *  
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param cronTriggerPojo
+     * @return <br>
+     */
+    private TaskTriggerPojo trigger2taskTrigger(TriggerPojo triggerPojo, int taskId) {
+    	TaskTriggerPojo pojo = new TaskTriggerPojo();
+    	pojo.setTaskId(taskId);
+    	pojo.setTriggerId(triggerPojo.getTriggerId());
+    	pojo.setTriggerType(triggerPojo.getTriggerType());
+    	return pojo;
+    }
+    
     public void setTaskListener(TaskListener taskListener) {
         this.taskListener = taskListener;
     }
