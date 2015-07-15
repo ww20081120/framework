@@ -49,7 +49,7 @@ public interface TriggerDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    int saveOrUpdateCronTrigger(@Param("trigger") CronTriggerPojo trigger) throws DaoException;
+    int saveCronTrigger(@Param("t") CronTriggerPojo trigger) throws DaoException;
 
     /**
      * 
@@ -61,7 +61,7 @@ public interface TriggerDao {
      * @return <br>
      * @throws DaoException <br>
      */
-    int saveOrUpdateSimpleTrigger(@Param("trigger") SimpleTriggerPojo trigger) throws DaoException;
+    int saveSimpleTrigger(@Param("t") SimpleTriggerPojo trigger) throws DaoException;
 
     /**
      * 

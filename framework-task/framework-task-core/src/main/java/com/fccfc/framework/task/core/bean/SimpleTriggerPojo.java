@@ -56,7 +56,7 @@ public class SimpleTriggerPojo extends TriggerPojo {
         this.setTriggerName(trigger.getTriggerName());
         this.setCreateTime(CommonUtil.getDate(trigger.getCreateTime()));
         this.setOperatorId(trigger.getOperatorId());
-        this.setTriggerType((int) trigger.getTriggerType());
+        this.setTriggerType(trigger.getTriggerType());
         this.beginTime = CommonUtil.getDate(trigger.getBeginTime());
         this.endTime = CommonUtil.getDate(trigger.getEndTime());
         this.times = trigger.getTimes();

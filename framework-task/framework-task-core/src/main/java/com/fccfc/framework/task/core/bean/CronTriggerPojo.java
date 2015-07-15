@@ -36,7 +36,7 @@ public class CronTriggerPojo extends TriggerPojo {
         this.setTriggerName(trigger.getTriggerName());
         this.setCreateTime(CommonUtil.getDate(trigger.getCreateTime()));
         this.setOperatorId(trigger.getOperatorId());
-        this.setTriggerType((int) trigger.getTriggerType());
+        this.setTriggerType(trigger.getTriggerType());
         this.cronExpression = trigger.getCronExpression();
     }
 

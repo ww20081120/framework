@@ -171,7 +171,7 @@ public class TaskServiceImpl implements TaskService.Iface {
                 // 将数据添加到TASK和SIMPLE_TRIGGER表中
                 saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到SIMPLE_TRIGGER表中
-                triggerDao.saveOrUpdateSimpleTrigger(simpleTriggerPojo);
+                triggerDao.saveSimpleTrigger(simpleTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -239,7 +239,7 @@ public class TaskServiceImpl implements TaskService.Iface {
                 // 将数据添加到TASK和TASK_TRIGGER表中
                 saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到CRON_TRIGGER表中
-                triggerDao.saveOrUpdateCronTrigger(cronTriggerPojo);
+                triggerDao.saveCronTrigger(cronTriggerPojo);
             }
         }
         catch (Exception e) {

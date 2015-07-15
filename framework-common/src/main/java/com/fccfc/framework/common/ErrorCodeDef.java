@@ -213,13 +213,18 @@ public interface ErrorCodeDef {
     /** 密码和验证码不能同时为空 */
     int VERIFY_CODE_IS_NULL_20019 = 20019;
 
-    /**
-     * 不支持的日志类型
-     */
+    /** 不支持的日志类型*/
     int UNSPORT_LOGGER_TYPE = 20020;
     
-    /**
-     * 保存任务失败
-     */
+    /** 保存任务失败*/
     int SAVE_TASK_OR_TASK_TRIGGER_ERROR = 20021;
+    
+    /** 向redis中保存数据失败 */
+    int PUT_VALUE_ERROR_20022 = 20022;
+    
+    /** 获取redis中数据失败*/
+    int GET_VALUE_ERROR_20023 = 20023;
+    
+    /** 删除redis中数据失败*/
+    int REMOVE_VALUE_ERROR_20024 = 20024;
 }

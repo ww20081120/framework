@@ -52,7 +52,7 @@ public class TriggerPojo extends BaseEntity {
      * triggerType
      */
     @Transient
-    private Integer triggerType;
+    private String triggerType;
 
     public Integer getTriggerId() {
         return triggerId;
@@ -86,11 +86,11 @@ public class TriggerPojo extends BaseEntity {
         this.operatorId = operatorId;
     }
 
-    public Integer getTriggerType() {
-        return triggerType;
-    }
+	public String getTriggerType() {
+		return triggerType;
+	}
 
-    public void setTriggerType(Integer triggerType) {
-        this.triggerType = triggerType;
-    }
+	public void setTriggerType(String triggerType) {
+		this.triggerType = triggerType;
+	}
 }

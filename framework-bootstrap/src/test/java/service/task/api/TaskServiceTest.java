@@ -105,7 +105,7 @@ public class TaskServiceTest {
     	trigger.setTriggerName("Trigger1003");
     	trigger.setCreateTime(new Date().getTime());
     	trigger.setOperatorId(-1);
-    	trigger.setTriggerType((short)1);
+    	trigger.setTriggerType("2");	// 要想能暂停TriggerType必须设置为2
     	trigger.setCronExpression("0/10 * * * * ?");
     	
 		iface.cronScheduleTask(task, trigger);
@@ -146,8 +146,13 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1003);
     	task.setTaskName("task03");
+    	task.setModuleCode("TASK");
+    	task.setTaskState("A");
     	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob03");
+    	task.setCreateTime(new Date().getTime());
+    	task.setOperatorId(-1);
+    	task.setPriority(5);
     	
     	iface.resume(task);
     }

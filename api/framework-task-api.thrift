@@ -22,7 +22,7 @@ struct SimpleTrigger {
 2: required string triggerName;
 3: optional i64 createTime;
 4: optional i32 operatorId;
-5: optional i16 triggerType;
+5: optional string triggerType;
 6: optional i64 beginTime;
 7: optional i64 endTime;
 8: optional i32 times;
@@ -36,7 +36,7 @@ struct CronTrigger {
 2: required string triggerName;
 3: optional i64 createTime;
 4: optional i32 operatorId;
-5: optional i16 triggerType;
+5: optional string triggerType;
 6: required string cronExpression;
 }
 

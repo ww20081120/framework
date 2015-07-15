@@ -2,6 +2,7 @@ package com.fccfc.framework.task.core.service.impl;
 
 import java.util.List;
 
+import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
 
 /**
@@ -24,8 +25,9 @@ public interface RedisCacheService {
 	 * @param nodeName
 	 * @param key
 	 * @param object <br>
+	 * @throws ServiceException 
 	 */
-	public void putDataToRedis(String nodeName, String key, Object object);
+	public void putDataToRedis(String nodeName, String key, Object object) throws ServiceException;
 	
 	/**
 	 * Description: <br> 
@@ -34,25 +36,41 @@ public interface RedisCacheService {
 	 * @taskId <br>
 	 * @param nodeName
 	 * @param key
-	 * @return <br>
+	 * @return
+	 * @throws ServiceException <br>
 	 */
-	public Object getDataFromRedis(String nodeName, String key);
-	
-	/**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br> <br>
-	 */
-	public void clear();
+	public Object getDataFromRedis(String nodeName, String key) throws ServiceException;
 	
 	/**
 	 * Description: <br> 
 	 *  
 	 * @author shao.dinghui<br>
 	 * @taskId <br>
-	 * @param num	取出的数据量
-	 * @return <br>
+	 * @param nodeName
+	 * @throws ServiceException <br>
 	 */
-	public List<ChangeNotifRedisPojo> getChangeNotifRedis(int num);
+	public void removeByNodeName(String nodeName) throws ServiceException;
+	
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param num
+	 * @return
+	 * @throws ServiceException <br>
+	 */
+	public List<ChangeNotifRedisPojo> getChangeNotifRedis(int num) throws ServiceException;
+	
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param code
+	 * @return
+	 * @throws ServiceException <br>
+	 */
+	public int getConfigNum(String code);
+
 }

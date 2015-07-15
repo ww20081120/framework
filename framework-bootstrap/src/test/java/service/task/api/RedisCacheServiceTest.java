@@ -30,7 +30,7 @@ import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({
-    "classpath:/META-INF/spring/*.xml"
+	"classpath:/META-INF/spring/*.xml"
 })
 public class RedisCacheServiceTest {
 	
@@ -62,15 +62,18 @@ public class RedisCacheServiceTest {
     	trigger.setTriggerName("Trigger1003");
     	trigger.setCreateTime(new Date().getTime());
     	trigger.setOperatorId(-1);
-    	trigger.setTriggerType((short)1);
+    	trigger.setTriggerType("2");
     	trigger.setCronExpression("0/10 * * * * ?");
     	
 		iface.cronScheduleTask(task, trigger);
 	}
 	
 	/**
-	 * Description: 执行的时候要去掉@RunWith(SpringJUnit4ClassRunner.class)...<br> 
-	 *  
+	 * Description: 执行的时候要去掉<br> 
+		@RunWith(SpringJUnit4ClassRunner.class)
+		@ContextConfiguration({
+			"classpath:/META-INF/spring/*.xml"
+		})
 	 * @author shao.dinghui<br>
 	 * @throws CacheException 
 	 * @taskId <br> <br>
@@ -78,7 +81,7 @@ public class RedisCacheServiceTest {
 	@Test
 	public void testGetDataFromRedis() throws CacheException {
 		ICache cache = new RedisCache("127.0.0.1", 6379);
-		ChangeNotifRedisPojo pojo = (ChangeNotifRedisPojo)cache.getValue("nodeName", "key3");
+		ChangeNotifRedisPojo pojo = (ChangeNotifRedisPojo)cache.getValue("nodeName", "key5");
 		
 		System.out.println(pojo.getChangeNotifId());
 		System.out.println(pojo.getActionType());
@@ -86,11 +89,4 @@ public class RedisCacheServiceTest {
 		System.out.println(pojo.getTableName());
 		System.out.println(pojo.getCreatedDate());
 	}
-	
-	@Test
-    public void putValue() throws CacheException {
-		ICache cache = new RedisCache("127.0.0.1", 6379);
-		String str = "Hello Redis";
-        cache.putValue("nodeName", "key01", str);
-    }
 }

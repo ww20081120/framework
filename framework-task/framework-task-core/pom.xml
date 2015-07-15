@@ -27,6 +27,11 @@
 			<version>${parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-config-core</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>${quartz.version}</version>
