@@ -43,8 +43,8 @@ public class TestCache {
      */
     @Before
     public void init() {
-        cache = new RedisCache("112.124.36.185", 6379);
-        stringCache = new RedisStringCache("112.124.36.185", 6379);
+        cache = new RedisCache("127.0.0.1", 6379);
+        stringCache = new RedisStringCache("127.0.0.1", 6379);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TestCache {
      */
     @Test
     public void getNode() throws CacheException {
-
+    	
     }
 
     /**
@@ -67,7 +67,7 @@ public class TestCache {
      * @throws CacheException <br>
      */
     public void putNode() throws CacheException {
-
+    	
     }
 
     /**
@@ -77,7 +77,7 @@ public class TestCache {
      * @throws CacheException <br>
      */
     public void removeNode() throws CacheException {
-
+    	
     }
 
     /**

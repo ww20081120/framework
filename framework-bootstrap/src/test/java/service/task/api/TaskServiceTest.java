@@ -123,8 +123,13 @@ public class TaskServiceTest {
     	Task task = new Task();
     	task.setTaskId(1003);
     	task.setTaskName("task03");
+    	task.setModuleCode("TASK");
+    	task.setTaskState("A");
     	task.setClassName("com.fccfc.framework.task.core.job.JobTest");
     	task.setMethod("testJob03");
+    	task.setCreateTime(new Date().getTime());
+    	task.setOperatorId(-1);
+    	task.setPriority(5);
     	
     	iface.pause(task);
     }
