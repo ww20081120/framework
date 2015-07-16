@@ -3,6 +3,8 @@
  */
 package com.fccfc.framework.web.service;
 
+import java.util.Map;
+
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 
@@ -19,9 +21,8 @@ import com.fccfc.framework.web.bean.operator.OperatorPojo;
 public interface OperatorService {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param id <br>
@@ -32,9 +33,8 @@ public interface OperatorService {
     OperatorPojo getOperator(Integer id, Integer code) throws ServiceException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -45,9 +45,8 @@ public interface OperatorService {
     OperatorPojo getOperatorByAccount(String type, String username) throws ServiceException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -60,23 +59,20 @@ public interface OperatorService {
 
     /**
      * 
-     * Description: <br> 
+     * Description: login<br> 
      *  
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param type <br>
-     * @param username <br>
-     * @param password <br>
-     * @param ip <br>
-     * @return <br>
+     * @param operator operator
+     * @param loginIp loginIp
+     * @param extendParam extendParam
      * @throws ServiceException <br>
      */
-    OperatorPojo login(String type, String username, String password, String ip) throws ServiceException;
+    void login(OperatorPojo operator, String loginIp, Map<String, Object> extendParam) throws ServiceException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param username <br>
@@ -91,9 +87,8 @@ public interface OperatorService {
         throws ServiceException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param id <br>
@@ -104,9 +99,8 @@ public interface OperatorService {
     int updateOperatorCode(int id, int code) throws ServiceException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param operator <br>
@@ -114,4 +108,14 @@ public interface OperatorService {
      * @throws ServiceException <br>
      */
     void updatePassword(OperatorPojo operator, String password) throws ServiceException;
+    
+    /**
+     * Description: 校验验证码<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param verifyCode verifyCode
+     * @return <br>
+     */
+    boolean checkVerifyCode(String verifyCode);
 }

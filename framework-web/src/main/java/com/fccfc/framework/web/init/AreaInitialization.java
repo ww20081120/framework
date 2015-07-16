@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.web.interceptor;
+package com.fccfc.framework.web.init;
 
 import java.util.ArrayList;
 import java.util.HashMap;

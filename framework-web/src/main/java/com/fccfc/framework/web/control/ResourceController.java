@@ -13,11 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.FileSystemResource;
@@ -48,6 +46,8 @@ import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.common.utils.security.DataUtil;
 import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
+import com.fccfc.framework.web.WebConstant;
+import com.fccfc.framework.web.WebUtil;
 import com.fccfc.framework.web.service.ResourceService;
 //import com.qiniu.api.auth.digest.Mac;
 //import com.qiniu.api.config.Config;
@@ -137,26 +137,6 @@ public class ResourceController {
         meidaTypes.put("file", MediaType.APPLICATION_OCTET_STREAM);
     }
 
-    // @ResponseBody
-    // public Map<String, Object> upToken() throws FrameworkException {
-    // Config.ACCESS_KEY = Configuration.getString("QINIU.ACCESS_KEY");
-    // Config.SECRET_KEY = Configuration.getString("QINIU.SECRET_KEY");
-    // Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
-    // // 请确保该bucket已经存在
-    // String bucketName = Configuration.getString("QINIU.BUCKET_NAME");
-    // PutPolicy putPolicy = new PutPolicy(bucketName);
-    // Map<String, Object> result = new HashMap<String, Object>();
-    // try {
-    // String uptoken = putPolicy.token(mac);
-    // result.put("uploadToken", uptoken);
-    // }
-    // catch (Exception e) {
-    // throw new ServiceException(ErrorCodeDef.QI_NIU_UP_TOKEN_ERROR_20018, e);
-    // }
-    // result.put("uploadUrl", Configuration.getString("QINIU.UPLOAD_DOMAIN"));
-    // return result;
-    // }
-
     /**
      * Description: <br>
      * 
@@ -169,8 +149,9 @@ public class ResourceController {
      * @throws Exception <br>
      */
     @ResponseBody
-    public ResponseEntity<Resource> download(@RequestParam("mediaId") Integer resourceId, @RequestParam(
-        value = "isThumb", required = false) String isThumb, @RequestHeader HttpHeaders reqHeader) throws Exception {
+    public ResponseEntity<Resource> download(@RequestParam("mediaId") Integer resourceId,
+        @RequestParam(value = "isThumb", required = false) String isThumb, @RequestHeader HttpHeaders reqHeader)
+            throws Exception {
         Assert.notNull(resourceId, "资源标识不能为空");
         AttachmentsPojo attachment = resourceService.downloadResource(resourceId, "1".equals(isThumb));
         HttpHeaders httpHeader = new HttpHeaders();
@@ -390,24 +371,21 @@ public class ResourceController {
      * @param response <br>
      * @return <br>
      */
-    @SuppressWarnings({
-        "rawtypes", "unchecked"
-    })
+    @ResponseBody
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
-    public ResponseEntity<Resource> verifyCode(HttpServletRequest request, HttpServletResponse response) {
+    public void verifyCode(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("image/jpeg");
-        Random r = new Random();
-        String number = String.valueOf(10000 + r.nextInt(89999));
-        HttpSession session = request.getSession();
-        session.setAttribute("CHECK_CODE", number);
+        String verifyCode = CommonUtil.getRandomChar(5);
+
         Cage cage = new GCage();
         OutputStream os = null;
         try {
             os = response.getOutputStream();
-            cage.draw(number, os);
+            cage.draw(verifyCode, os);
+            WebUtil.setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
         }
         catch (IOException e) {
-            logger.debug(e.getLocalizedMessage());
+            logger.warn(e.getMessage(), e);
         }
         finally {
             if (os != null) {
@@ -415,11 +393,9 @@ public class ResourceController {
                     os.close();
                 }
                 catch (IOException e) {
-                    logger.error("OutputStream Error！");
+                    logger.error("OutputStream Error！", e);
                 }
             }
         }
-
-        return new ResponseEntity(org.springframework.http.HttpStatus.OK);
     }
 }
