@@ -416,7 +416,7 @@ public class DBTable2JavaBean extends JFrame {
         if ("TINYINT".equals(type) || "INTEGER".equals(type) || "INT".equals(type)) {
             return "Integer";
         }
-        else if ("LONG".equals(type) ||"NUMBERS".equals(type) || "BIGINT".equals(type)) {
+        else if ("LONG".equals(type) ||"NUMBER".equals(type) || "BIGINT".equals(type)) {
             return "Long";
         }
         else if ("FLOAT".equals(type) || "DOUBLE".equals(type)) {
