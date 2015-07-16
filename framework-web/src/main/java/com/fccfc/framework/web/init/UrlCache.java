@@ -1,4 +1,4 @@
-package com.fccfc.framework.web.cache;
+package com.fccfc.framework.web.init;
 
 import java.util.List;
 

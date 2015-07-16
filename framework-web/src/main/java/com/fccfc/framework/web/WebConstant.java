@@ -26,6 +26,12 @@ public interface WebConstant {
 
     /** session保存的operator信息 */
     String SESSION_OPERATOR = "__SESSION_OPERATOR";
+    
+    /** session保存的验证码信息 */
+    String SESSION_VERIFY_CODE = "__SESSION_VERIFY_CODE";
+    
+    /** 扩展参数列表*/
+    String SESSION_EXTEND_PARAMS = "__SESSION_EXTEND_PARAMS";
 
     /** CONTEXT_PATH */
     String CONTEXT_PATH = "CONTEXT_PATH";

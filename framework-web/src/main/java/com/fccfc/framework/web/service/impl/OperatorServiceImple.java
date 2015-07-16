@@ -4,6 +4,8 @@
 package com.fccfc.framework.web.service.impl;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -19,6 +21,8 @@ import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.UtilException;
 import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.web.WebConstant;
+import com.fccfc.framework.web.WebUtil;
 import com.fccfc.framework.web.bean.operator.AccountPojo;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 import com.fccfc.framework.web.dao.operator.AccountDao;
@@ -80,9 +84,8 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param username <br>
@@ -139,9 +142,8 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param id <br>
@@ -160,9 +162,8 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -173,25 +174,31 @@ public class OperatorServiceImple implements OperatorService {
      * @throws ServiceException <br>
      */
     @Override
-    public OperatorPojo login(String type, String username, String password, String ip) throws ServiceException {
-        OperatorPojo operator = checkOperator(type, username, password);
-
+    public void login(OperatorPojo operator, String loginIp, Map<String, Object> extendParams) throws ServiceException {
         try {
             operatorDao.insertOperatorHistory(operator.getOperatorId(), operator.getOperatorId());
-            operator.setLastIp(ip);
+            operator.setLastIp(loginIp);
             operator.setLastLoginDate(new Date());
             operatorDao.update(operator);
+
+            WebUtil.setAttribute(WebConstant.SESSION_OPERATOR, operator);
+            if (CommonUtil.isNotEmpty(extendParams)) {
+                StringBuilder sb = new StringBuilder();
+                for (Entry<String, Object> entry : extendParams.entrySet()) {
+                    sb.append(entry.getKey()).append(GlobalConstants.SPLITOR);
+                    WebUtil.setAttribute(entry.getKey(), entry.getValue());
+                }
+                WebUtil.setAttribute(WebConstant.SESSION_EXTEND_PARAMS, sb.toString());
+            }
         }
         catch (DaoException e) {
             throw new ServiceException(e);
         }
-        return operator;
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -210,9 +217,8 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -250,9 +256,8 @@ public class OperatorServiceImple implements OperatorService {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param operator <br>
@@ -273,6 +278,21 @@ public class OperatorServiceImple implements OperatorService {
         catch (DaoException e) {
             throw new ServiceException(e);
         }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param verifyCode
+     * @return <br>
+     */
+    @Override
+    public boolean checkVerifyCode(String verifyCode) {
+        boolean result = StringUtils.equals((String) WebUtil.getAttribute(WebConstant.SESSION_VERIFY_CODE), verifyCode);
+        WebUtil.removeAttribute(WebConstant.SESSION_VERIFY_CODE);
+        return result;
     }
 
 }

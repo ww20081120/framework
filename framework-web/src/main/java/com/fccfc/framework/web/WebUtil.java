@@ -31,11 +31,6 @@ import com.fccfc.framework.web.bean.operator.OperatorPojo;
 public final class WebUtil {
 
     /**
-     * 测试账号MAP
-     */
-    public static Map<String, String> testOperMap = null;
-
-    /**
      * 默认构造函数
      */
     private WebUtil() {
@@ -113,25 +108,19 @@ public final class WebUtil {
     }
 
     /**
-     * 获取测试账号
+     * 删除属性值 Description: <br>
      * 
-     * @return <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param code <br>
      */
-    public static Map<String, String> getTestOperMap() {
-        if (null != testOperMap) {
-            return testOperMap;
+    public static void removeAttribute(String code) {
+        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
+        if (requestAttr instanceof ServletRequestAttributes) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
+            request.removeAttribute(code);
+            request.getSession().removeAttribute(code);
         }
-
-        testOperMap = new HashMap<String, String>();
-        String operators = Configuration.getString("OPERATOR.TEST_OPERATOR");
-        if (CommonUtil.isNotEmpty(operators)) {
-            String[] operatorArr = operators.split(GlobalConstants.SPLITOR);
-            for (String value : operatorArr) {
-                testOperMap.put(value.split(GlobalConstants.EQUAL_SPLITER)[0],
-                    value.split(GlobalConstants.EQUAL_SPLITER)[1]);
-            }
-        }
-        return testOperMap;
     }
 
     /***
