@@ -58,9 +58,8 @@ public interface OperatorService {
     OperatorPojo checkOperator(String type, String username, String password) throws ServiceException;
 
     /**
+     * Description: login<br>
      * 
-     * Description: login<br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param operator operator
@@ -69,6 +68,15 @@ public interface OperatorService {
      * @throws ServiceException <br>
      */
     void login(OperatorPojo operator, String loginIp, Map<String, Object> extendParam) throws ServiceException;
+
+    /**
+     * Description: 登出<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws ServiceException <br>
+     */
+    void logout();
 
     /**
      * Description: <br>
@@ -108,14 +116,14 @@ public interface OperatorService {
      * @throws ServiceException <br>
      */
     void updatePassword(OperatorPojo operator, String password) throws ServiceException;
-    
+
     /**
-     * Description: 校验验证码<br> 
-     *  
+     * Description: 校验验证码<br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param verifyCode verifyCode
      * @return <br>
      */
-    boolean checkVerifyCode(String verifyCode);
+    void checkVerifyCode(String verifyCode) throws ServiceException;
 }

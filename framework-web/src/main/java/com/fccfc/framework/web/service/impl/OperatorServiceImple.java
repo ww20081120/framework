@@ -289,10 +289,36 @@ public class OperatorServiceImple implements OperatorService {
      * @return <br>
      */
     @Override
-    public boolean checkVerifyCode(String verifyCode) {
-        boolean result = StringUtils.equals((String) WebUtil.getAttribute(WebConstant.SESSION_VERIFY_CODE), verifyCode);
+    public void checkVerifyCode(String verifyCode) throws ServiceException {
+        if (CommonUtil.isEmpty(verifyCode)) {
+            throw new ServiceException(ErrorCodeDef.VERIFY_CODE_ERROR, "验证码不能为空");
+        }
+
+        if (!StringUtils.equalsIgnoreCase((String) WebUtil.getAttribute(WebConstant.SESSION_VERIFY_CODE), verifyCode)) {
+            throw new ServiceException(ErrorCodeDef.VERIFY_CODE_ERROR, "验证码不正确");
+        }
+
         WebUtil.removeAttribute(WebConstant.SESSION_VERIFY_CODE);
-        return result;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws ServiceException <br>
+     */
+    @Override
+    public void logout() {
+        WebUtil.removeAttribute(WebConstant.SESSION_OPERATOR);
+        String extendParams = (String) WebUtil.getAttribute(WebConstant.SESSION_EXTEND_PARAMS);
+        if (CommonUtil.isNotEmpty(extendParams)) {
+            WebUtil.removeAttribute(WebConstant.SESSION_EXTEND_PARAMS);
+            String[] params = StringUtils.split(extendParams, GlobalConstants.SPLITOR);
+            for (String key : params) {
+                WebUtil.removeAttribute(key);
+            }
+        }
     }
 
 }

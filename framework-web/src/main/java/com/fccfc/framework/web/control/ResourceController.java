@@ -375,7 +375,7 @@ public class ResourceController {
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
     public void verifyCode(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("image/jpeg");
-        String verifyCode = CommonUtil.getRandomChar(5);
+        String verifyCode = CommonUtil.getRandomNumber(5);
 
         Cage cage = new GCage();
         OutputStream os = null;

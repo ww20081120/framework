@@ -227,4 +227,7 @@ public interface ErrorCodeDef {
     
     /** 删除redis中数据失败*/
     int REMOVE_VALUE_ERROR_20024 = 20024;
+    
+    /** 验证码错误*/
+    int VERIFY_CODE_ERROR = 20025;
 }
