@@ -15,7 +15,7 @@ import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
  * @since V1.0<br>
  * @see com.fccfc.framework.task.core.service.impl <br>
  */
-public interface RedisCacheService {
+public interface NotifRedisService {
 	
 	/**
 	 * Description: <br> 

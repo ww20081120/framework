@@ -16,14 +16,14 @@ import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
 import com.fccfc.framework.task.core.dao.RedisCacheDao;
 
 @Service
-public class RedisCacheServiceImpl implements RedisCacheService {
+public class NotifRedisServiceImpl implements NotifRedisService {
 	
 	private RedisCache redisCache = null;
 	
 	@Resource
 	private RedisCacheDao redisCacheDao;
 	
-	public RedisCacheServiceImpl() {
+	public NotifRedisServiceImpl() {
 		redisCache = new RedisCache("127.0.0.1", 6379);
 	}
 	
