@@ -20,7 +20,7 @@
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-core</artifactId>
 			<version>${parent.version}</version>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-sh</artifactId>
