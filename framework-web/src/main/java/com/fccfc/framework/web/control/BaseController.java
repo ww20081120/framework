@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.AssertException;
 import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.web.WebConstant;
 
 /**
@@ -65,10 +66,10 @@ public abstract class BaseController {
      * @taskId 660560 <br>
      * @param param 参数名
      * @return <br>
-     * @throws AssertException
      */
-    protected String getParameter(String param) throws AssertException {
-        return getParameter(param, null);
+    protected String getParameter(String param) {
+        String value = getRequest().getParameter(param);
+        return StringUtils.trim(value);
     }
 
     /**
@@ -93,10 +94,30 @@ public abstract class BaseController {
      * @taskId <br>
      * @param param param
      * @return <br>
-     * @throws AssertException
      */
-    protected Long getLongParameter(String param) throws AssertException {
-        return getLongParameter(param, null);
+    protected Long getLongParameter(String param) {
+        String value = getParameter(param);
+        return CommonUtil.isEmpty(value) ? null : Long.valueOf(value);
+    }
+
+    protected Integer getIntegerParameter(String param, String errMsg) throws AssertException {
+        String value = getParameter(param, errMsg);
+        return CommonUtil.isEmpty(value) ? null : Integer.valueOf(value);
+    }
+
+    protected Integer getIntegerParameter(String param) {
+        String value = getParameter(param);
+        return CommonUtil.isEmpty(value) ? null : Integer.valueOf(value);
+    }
+
+    protected int getPageIndex() {
+        Integer pageIndex = getIntegerParameter(Param.PAGE_INDEX);
+        return (pageIndex == null || pageIndex < 1) ? 1 : pageIndex;
+    }
+
+    protected int getPageSize() {
+        Integer pageSize = getIntegerParameter(Param.PAGE_SIZE);
+        return (pageSize == null || pageSize < 5) ? 10 : pageSize;
     }
 
     protected ModelAndView success(String message, String redirectUrl, Map<String, String> param) {
