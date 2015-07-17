@@ -1,5 +1,7 @@
 package com.fccfc.framework.task.core.service.impl;
 
+import com.fccfc.framework.common.ServiceException;
+
 
 /**
  * <Description> <br> 
@@ -22,7 +24,7 @@ public interface JobService {
 	 * @param operatorId
 	 * @param state <br>
 	 */
-	public void insertTaskHisAndTaskState(int taskId, int operatorId, String state);
+	public void insertTaskHisAndTaskState(int taskId, int operatorId, String state) throws ServiceException ;
 	
 	/**
 	 * Description: <br> 
@@ -33,5 +35,5 @@ public interface JobService {
 	 * @param operatorId
 	 * @param clz <br>
 	 */
-	public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId, Class clz);
+	public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId, Class clz) throws ServiceException ;
 }

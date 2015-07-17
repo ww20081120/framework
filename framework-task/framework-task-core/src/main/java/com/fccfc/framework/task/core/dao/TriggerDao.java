@@ -52,6 +52,16 @@ public interface TriggerDao {
     int saveCronTrigger(@Param("t") CronTriggerPojo trigger) throws DaoException;
 
     /**
+     * Description: <br> 
+     *  
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param triggerId
+     * @throws DaoException <br>
+     */
+    void delCronTrigger(@Param("triggerId") int triggerId) throws DaoException;
+    
+    /**
      * 
      * Description: <br> 
      *  

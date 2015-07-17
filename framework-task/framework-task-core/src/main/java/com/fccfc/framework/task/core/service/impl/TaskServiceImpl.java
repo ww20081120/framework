@@ -12,7 +12,6 @@ import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.ListenerManager;
 import org.quartz.Scheduler;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
@@ -38,7 +37,6 @@ import com.fccfc.framework.task.core.dao.JobDao;
 import com.fccfc.framework.task.core.dao.TriggerDao;
 import com.fccfc.framework.task.core.job.JobExcutor;
 import com.fccfc.framework.task.core.job.SynchronizedJobExcutor;
-import com.fccfc.framework.task.core.listener.TaskListener;
 
 /**
  * <Description> <br>
@@ -71,12 +69,16 @@ public class TaskServiceImpl implements TaskService.Iface {
     private Scheduler scheduler;
     
     /**
-     * taskListener
-     */
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @throws TException <br>
+	 */ 
 //    @Resource
 //    private TaskListener taskListener;
 
-    /*
+	/*
      * (non-Javadoc)
      * @see com.fccfc.framework.api.task.TaskService#scheduleAllTask()
      */
@@ -111,16 +113,15 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param task <br>
-     * @param simpleTrigger <br>
-     * @throws TException <br>
-     */
-    @Override
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param task
+	 * @param simpleTrigger
+	 * @throws TException <br>
+	 */ 
+	@Override
     public void simpleScheduleTask(Task task, SimpleTrigger simpleTrigger) throws TException {
         try {
             schedule(new TaskPojo(task), new SimpleTriggerPojo(simpleTrigger));
@@ -180,16 +181,15 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param task <br>
-     * @param cronTrigger <br>
-     * @throws TException <br>
-     */
-    @Override
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param task
+	 * @param cronTrigger
+	 * @throws TException <br>
+	 */ 
+	@Override
     public void cronScheduleTask(Task task, CronTrigger cronTrigger) throws TException {
         try {
             schedule(new TaskPojo(task), new CronTriggerPojo(cronTrigger));
@@ -248,14 +248,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param task <br>
-     * @throws TException <br>
-     */
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param task
+	 * @throws TException <br>
+	 */ 
     @Override
     public void pause(Task task) throws TException {
         try {
@@ -290,14 +289,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param task <br>
-     * @throws TException <br>
-     */
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param task
+	 * @throws TException <br>
+	 */ 
     @Override
     public void resume(Task task) throws TException {
         try {
@@ -332,15 +330,14 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param task <br>
-     * @throws TException <br>
-     */
-    @Override
+	 * Description: <br> 
+	 *  
+	 * @author shao.dinghui<br>
+	 * @taskId <br>
+	 * @param task
+	 * @throws TException <br>
+	 */ 
+	@Override
     public void remove(Task task) throws TException {
         try {
             remove(new TaskPojo(task));
@@ -368,6 +365,10 @@ public class TaskServiceImpl implements TaskService.Iface {
                     key = new TriggerKey(trigger.getTriggerName(), taskPojo.getTaskName());
                     scheduler.resumeTrigger(key);
                     scheduler.unscheduleJob(key);
+                    // 删除TASK相关信息
+                    jobDao.delTaskTrigger(taskPojo.getTaskId());
+                    jobDao.delTask(taskPojo.getTaskId());
+                    triggerDao.delCronTrigger(trigger.getTriggerId());
                 }
             }
         }

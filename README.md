@@ -3,7 +3,7 @@ Framework框架说明
 Framework框架集成了log、cache、config、db、rpc、message、task、web，每块都以模块形式组织，可以根据项目需要获取模块。
 
 + framework-common 定义公用的常量、工具类等
-
+ 
 + framework-rpc 该模块是分布式的核心模块，定义了生产者与消费者，采用apache thrift协议，可以快速简单与zookeeper部署
 
 + framework-cache 定义了缓存的获取。  

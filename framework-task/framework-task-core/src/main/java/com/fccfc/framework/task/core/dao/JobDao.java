@@ -79,6 +79,26 @@ public interface JobDao extends IGenericBaseDao {
     int insertTaskTrigger(@Param("t") TaskTriggerPojo taskTrigger) throws DaoException;
 
     /**
+     * Description: <br> 
+     *  
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param taskId
+     * @throws DaoException <br>
+     */
+    void delTaskTrigger(@Param("taskId") int taskId) throws DaoException;
+    
+    /**
+     * Description: <br> 
+     *  
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param taskId
+     * @throws DaoException <br>
+     */
+    void delTask(@Param("taskId") int taskId) throws DaoException;
+    
+    /**
      * 
      * Description: <br> 
      *  

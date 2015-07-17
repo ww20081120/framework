@@ -65,7 +65,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
         TransManager manager = TransManager.getInstance();
         try {
             boolean printFlag = Configuration.getBoolean("DB_LOG_PRINT_FLAG");
-            if (printFlag) {
+            if (manager.isError() || manager.isTimeout() || printFlag) {
                 // 插入数据,TRANS_LOG
                 saveTransLog(stackId, beginTime, endTime, consumeTime, returnValue, e);
 

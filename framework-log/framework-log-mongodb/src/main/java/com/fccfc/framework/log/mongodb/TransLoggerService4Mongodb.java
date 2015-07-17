@@ -59,7 +59,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
 
         try {
             boolean printFlag = Configuration.getBoolean("DB_LOG_PRINT_FLAG");
-            if (printFlag) {
+            if (manager.isError() || manager.isTimeout() || printFlag) {
                 // 插入数据
                 saveData(manager, beginTime, endTime, consumeTime, returnValue, e);
 
