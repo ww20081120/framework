@@ -69,17 +69,75 @@ public class RedisCacheServiceTest {
 	}
 	
 	/**
-	 * Description: 执行的时候要去掉<br> 
-		@RunWith(SpringJUnit4ClassRunner.class)
-		@ContextConfiguration({
-			"classpath:/META-INF/spring/*.xml"
-		})
-	 * @author shao.dinghui<br>
-	 * @throws CacheException 
-	 * @taskId <br> <br>
-	 */
-	@Test
-	public void testGetDataFromRedis() throws CacheException {
+     * Description: 暂停任务<br> 
+     *  
+     * @author shao.dinghui<br>
+     * @throws TException 
+     * @taskId <br> <br>
+     */
+    @Test
+    public void testPause() throws TException{
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setModuleCode("TASK");
+    	task.setTaskState("A");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobRedisCache");
+    	task.setMethod("jobPutDataToRedis");
+    	task.setCreateTime(new Date().getTime());
+    	task.setOperatorId(-1);
+    	task.setPriority(5);
+    	
+    	iface.pause(task);
+    }
+    
+    /**
+     * Description: 恢复任务<br> 
+     *  
+     * @author shao.dinghui<br>
+     * @throws TException 
+     * @taskId <br> <br>
+     */
+    @Test
+    public void testResume() throws TException {
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setModuleCode("TASK");
+    	task.setTaskState("A");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobRedisCache");
+    	task.setMethod("jobPutDataToRedis");
+    	task.setCreateTime(new Date().getTime());
+    	task.setOperatorId(-1);
+    	task.setPriority(5);
+    	
+    	iface.resume(task);
+    }
+    
+    /**
+     * Description: 移除任务<br> 
+     *  
+     * @author shao.dinghui<br>
+     * @throws TException 
+     * @taskId <br> <br>
+     */
+    @Test
+    public void testRemove() throws TException {
+    	Task task = new Task();
+    	task.setTaskId(1003);
+    	task.setTaskName("task03");
+    	task.setModuleCode("TASK");
+    	task.setTaskState("A");
+    	task.setClassName("com.fccfc.framework.task.core.job.JobRedisCache");
+    	task.setMethod("jobPutDataToRedis");
+    	task.setCreateTime(new Date().getTime());
+    	task.setOperatorId(-1);
+    	task.setPriority(5);
+    	
+    	iface.remove(task);
+    }
+	
+	public static void main(String[] args) throws CacheException {
 		ICache cache = new RedisCache("127.0.0.1", 6379);
 		ChangeNotifRedisPojo pojo = (ChangeNotifRedisPojo)cache.getValue("nodeName", "key5");
 		

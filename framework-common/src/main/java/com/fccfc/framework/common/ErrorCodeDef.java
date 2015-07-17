@@ -230,4 +230,10 @@ public interface ErrorCodeDef {
     
     /** 验证码错误*/
     int VERIFY_CODE_ERROR = 20025;
+    
+    /** 保存TASK历史记录失败*/
+    int SAVE_HIS_ERROR_20026 = 20026;
+    
+    /** 删除TASK相关信息失败*/
+    int DEL_TASK_ERROR_20027 = 20027;
 }
