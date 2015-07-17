@@ -73,8 +73,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     /**
      * taskListener
      */
-    @Resource
-    private TaskListener taskListener;
+//    @Resource
+//    private TaskListener taskListener;
 
     /*
      * (non-Javadoc)
@@ -156,12 +156,12 @@ public class TaskServiceImpl implements TaskService.Iface {
             Trigger trigger = TriggerBuilder.newTrigger().startAt(simpleTriggerPojo.getBeginTime())
                 .endAt(simpleTriggerPojo.getEndTime()).withIdentity(triggerKey).withSchedule(builder).build();
 
-            if (taskListener != null) {
-                ListenerManager listenerManager = scheduler.getListenerManager();
-                listenerManager.addJobListener(taskListener);
-                listenerManager.addTriggerListener(taskListener);
-                listenerManager.addSchedulerListener(taskListener);
-            }
+//            if (taskListener != null) {
+//                ListenerManager listenerManager = scheduler.getListenerManager();
+//                listenerManager.addJobListener(taskListener);
+//                listenerManager.addTriggerListener(taskListener);
+//                listenerManager.addSchedulerListener(taskListener);
+//            }
 
             if (scheduler.checkExists(triggerKey)) {
                 scheduler.rescheduleJob(triggerKey, trigger);
@@ -224,12 +224,12 @@ public class TaskServiceImpl implements TaskService.Iface {
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(cronScheduleBuiler)
                 .build();
 
-            if (taskListener != null) {
-                ListenerManager listenerManager = scheduler.getListenerManager();
-                listenerManager.addJobListener(taskListener);
-                listenerManager.addTriggerListener(taskListener);
-                listenerManager.addSchedulerListener(taskListener);
-            }
+//            if (taskListener != null) {
+//                ListenerManager listenerManager = scheduler.getListenerManager();
+//                listenerManager.addJobListener(taskListener);
+//                listenerManager.addTriggerListener(taskListener);
+//                listenerManager.addSchedulerListener(taskListener);
+//            }
 
             if (scheduler.checkExists(triggerKey)) {
                 scheduler.rescheduleJob(triggerKey, trigger);
@@ -432,7 +432,7 @@ public class TaskServiceImpl implements TaskService.Iface {
     	return pojo;
     }
     
-    public void setTaskListener(TaskListener taskListener) {
-        this.taskListener = taskListener;
-    }
+//    public void setTaskListener(TaskListener taskListener) {
+//        this.taskListener = taskListener;
+//    }
 }
