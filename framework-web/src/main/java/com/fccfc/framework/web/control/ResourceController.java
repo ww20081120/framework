@@ -149,6 +149,7 @@ public class ResourceController {
      * @throws Exception <br>
      */
     @ResponseBody
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
     public ResponseEntity<Resource> download(@RequestParam("mediaId") Integer resourceId,
         @RequestParam(value = "isThumb", required = false) String isThumb, @RequestHeader HttpHeaders reqHeader)
             throws Exception {
@@ -186,6 +187,7 @@ public class ResourceController {
      * @throws FrameworkException <br>
      */
     @ResponseBody
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public Map<String, Object> upload(HttpServletRequest request) throws FrameworkException {
         if (!(request instanceof MultipartHttpServletRequest)) {
             throw new ServiceException(ErrorCodeDef.FILE_NOT_FIND_20013, "未找到上传的文件");
