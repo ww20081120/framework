@@ -51,6 +51,10 @@ public class UrlResourcePojo extends BaseEntity {
     @Column(name = "REMARK")
     private String remark;
 
+    /** METHOD */
+    @Column(name = "METHOD")
+    private String method;
+
     public Integer getResourceId() {
         return this.resourceId;
     }
@@ -99,4 +103,11 @@ public class UrlResourcePojo extends BaseEntity {
         this.eventId = eventId;
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 }

@@ -59,10 +59,10 @@ public interface CacheConstant {
     String AREA = "/AREA";
     
     /**路径*/
-    String URL = "URL";
+    String URL = "/URL_RESOURCE";
     
     /**事件*/
-    String EVENT = "EVENT";
+    String EVENT = "/EVENT";
     
     /**字典表*/
     String DICTIONARY_DATA = "/DICTIONARY_DATA";

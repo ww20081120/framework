@@ -1,6 +1,8 @@
 package com.fccfc.framework.web.init;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheHelper;
-import com.fccfc.framework.common.utils.bean.JsonUtil;
 import com.fccfc.framework.web.bean.event.EventPojo;
 import com.fccfc.framework.web.service.EventService;
 
@@ -44,11 +45,11 @@ public class EventCache implements InitializingBean {
         logger.debug("loading event cache start...");
         List<EventPojo> eventPojoList = eventService.selectList();
         if (eventPojoList != null && !eventPojoList.isEmpty()) {
+            Map<String, Object> map = new HashMap<String, Object>();
             for (EventPojo eventPojo : eventPojoList) {
-                String data = JsonUtil.writeObj2JSON(eventPojo);
-                CacheHelper.getStringCache().putValue(CacheConstant.EVENT, eventPojo.getEventId(), data);
-
+                map.put(eventPojo.getEventId(), eventPojo);
             }
+            CacheHelper.getCache().putNode(CacheConstant.EVENT, map);
         }
         logger.debug("loading event cache end...");
 

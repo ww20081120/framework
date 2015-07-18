@@ -1,6 +1,8 @@
 package com.fccfc.framework.web.init;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheHelper;
-import com.fccfc.framework.common.utils.bean.JsonUtil;
 import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 import com.fccfc.framework.web.service.ResourceService;
 
@@ -44,11 +45,11 @@ public class UrlCache implements InitializingBean {
         logger.debug("loading url resource cache start...");
         List<UrlResourcePojo> urlResourcePojoList = resourceService.selectResource();
         if (urlResourcePojoList != null && !urlResourcePojoList.isEmpty()) {
+            Map<String, Object> urlResourceMap = new HashMap<String, Object>();
             for (UrlResourcePojo urlResourcePojo : urlResourcePojoList) {
-                String data = JsonUtil.writeObj2JSON(urlResourcePojo);
-                CacheHelper.getStringCache().putValue(CacheConstant.URL, urlResourcePojo.getUrl(), data);
-
+                urlResourceMap.put(urlResourcePojo.getUrl(), urlResourcePojo);
             }
+            CacheHelper.getCache().putNode(CacheConstant.URL, urlResourceMap);
         }
         logger.debug("loading url resource cache end...");
 
