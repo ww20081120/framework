@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/11 14:34:03                           */
+/* Created on:     2015/7/18 17:36:02                           */
 /*==============================================================*/
 
 
@@ -51,6 +51,8 @@ start with 1000
  minvalue 1
 nocycle
  cache 20;
+
+create sequence SEQ_CHANGE_NOTIF_REDIS;
 
 create sequence SEQ_CONFIG_ITEM
 increment by 1
@@ -221,6 +223,8 @@ create table ADMIN
 (
    ADMIN_ID             NUMBER(6)            not null,
    ADMIN_NAME           VARCHAR2(60)         not null,
+   HEAD_IMG             NUMBER(10),
+   GENER                CHAR(1),
    CREATED_TIME         DATE                 not null,
    STATE                CHAR(1)              not null,
    STATE_DATE           DATE                 not null,
@@ -581,6 +585,34 @@ comment on column ATTR_VALUE.VALUE is
 
 comment on column ATTR_VALUE.LINK_ATTR_ID is
 '联动属性标识';
+
+/*==============================================================*/
+/* Table: CHANGE_NOTIF_REDIS                                    */
+/*==============================================================*/
+create table CHANGE_NOTIF_REDIS 
+(
+   "change_notif_id"    NUMBER(12)           not null,
+   "table_name"         VARCHAR(60)          not null,
+   "key_value"          VARCHAR(60)          not null,
+   "created_date"       DATE                 not null,
+   "action_type"        CHAR(1),
+   constraint PK_CHANGE_NOTIF_REDIS primary key ("change_notif_id")
+);
+
+comment on column CHANGE_NOTIF_REDIS."change_notif_id" is
+'主键';
+
+comment on column CHANGE_NOTIF_REDIS."table_name" is
+'更新记录表名称';
+
+comment on column CHANGE_NOTIF_REDIS."key_value" is
+'更新记录主键';
+
+comment on column CHANGE_NOTIF_REDIS."created_date" is
+'创建时间';
+
+comment on column CHANGE_NOTIF_REDIS."action_type" is
+'操作类型';
 
 /*==============================================================*/
 /* Table: CONFIG_ITEM                                           */
@@ -2520,6 +2552,7 @@ create table URL_RESOURCE
    DIRECTORY_CODE       VARCHAR2(20)         not null,
    RESOURCE_NAME        VARCHAR2(60)         not null,
    URL                  VARCHAR2(120)        not null,
+   METHOD               VARCHAR2(8),
    EVENT_ID             VARCHAR2(20)         not null,
    REMARK               VARCHAR2(255),
    constraint PK_URL_RESOURCE primary key (RESOURCE_ID)
