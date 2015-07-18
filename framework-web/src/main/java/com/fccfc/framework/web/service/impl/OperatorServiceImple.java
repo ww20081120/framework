@@ -22,12 +22,12 @@ import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.UtilException;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.WebConstant;
-import com.fccfc.framework.web.WebUtil;
 import com.fccfc.framework.web.bean.operator.AccountPojo;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 import com.fccfc.framework.web.dao.operator.AccountDao;
 import com.fccfc.framework.web.dao.operator.OperatorDao;
 import com.fccfc.framework.web.service.OperatorService;
+import com.fccfc.framework.web.utils.WebUtil;
 
 /**
  * <Description> <br>

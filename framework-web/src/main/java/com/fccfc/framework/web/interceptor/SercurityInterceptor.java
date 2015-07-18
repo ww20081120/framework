@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.fccfc.framework.web.WebUtil;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
+import com.fccfc.framework.web.utils.WebUtil;
 
 /**
  * SercurityInterceptor

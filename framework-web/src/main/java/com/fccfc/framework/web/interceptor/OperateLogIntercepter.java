@@ -15,9 +15,9 @@ import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.date.DateUtil;
 import com.fccfc.framework.config.core.Configuration;
-import com.fccfc.framework.web.WebUtil;
 import com.fccfc.framework.web.bean.operator.OperateLogPojo;
 import com.fccfc.framework.web.service.OperateLogService;
+import com.fccfc.framework.web.utils.WebUtil;
 
 /***
  * <Description> <br>
