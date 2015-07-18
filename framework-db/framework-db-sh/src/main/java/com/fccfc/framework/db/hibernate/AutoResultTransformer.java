@@ -44,6 +44,7 @@ public class AutoResultTransformer implements ResultTransformer {
 
     /**
      * 默认构造函数
+     * 
      * @param resultClass <br>
      */
     public AutoResultTransformer(Class<?> resultClass) {
@@ -55,9 +56,8 @@ public class AutoResultTransformer implements ResultTransformer {
     }
 
     /**
-     *  结果转换时，HIBERNATE调用此方法
-     * Description: <br> 
-     *  
+     * 结果转换时，HIBERNATE调用此方法 Description: <br>
+     * 
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param tuple <br>
@@ -84,8 +84,10 @@ public class AutoResultTransformer implements ResultTransformer {
             BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(result);
 
             for (int i = 0; i < aliases.length; i++) {
-                String property = BeanUtil.toCamelCase(aliases[i]);
-                wrapper.setPropertyValue(property, tuple[i]);
+                if (!"ROWNUM_".equals(aliases[i])) {
+                    String property = BeanUtil.toCamelCase(aliases[i]);
+                    wrapper.setPropertyValue(property, tuple[i]);
+                }
             }
         }
         catch (Exception e) {
@@ -96,9 +98,8 @@ public class AutoResultTransformer implements ResultTransformer {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param clazz <br>
@@ -142,6 +143,7 @@ public class AutoResultTransformer implements ResultTransformer {
 
     /**
      * transformList
+     * 
      * @param collection <br>
      * @see org.hibernate.transform.ResultTransformer#transformList(java.util.List)
      * @return <br>

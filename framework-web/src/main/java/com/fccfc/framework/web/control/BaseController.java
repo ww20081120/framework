@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.AssertException;
 import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.web.WebConstant;
 
 /**
@@ -111,12 +110,12 @@ public abstract class BaseController {
     }
 
     protected int getPageIndex() {
-        Integer pageIndex = getIntegerParameter(Param.PAGE_INDEX);
+        Integer pageIndex = getIntegerParameter("index");
         return (pageIndex == null || pageIndex < 1) ? 1 : pageIndex;
     }
 
     protected int getPageSize() {
-        Integer pageSize = getIntegerParameter(Param.PAGE_SIZE);
+        Integer pageSize = getIntegerParameter("size");
         return (pageSize == null || pageSize < 5) ? 10 : pageSize;
     }
 

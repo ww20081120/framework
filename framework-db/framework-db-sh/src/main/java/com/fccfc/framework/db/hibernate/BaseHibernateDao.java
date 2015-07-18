@@ -24,6 +24,7 @@ import com.fccfc.framework.db.core.BaseEntity;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.db.core.config.DataParam;
 import com.fccfc.framework.db.core.executor.ISqlExcutor;
+import com.fccfc.framework.db.core.utils.PagerList;
 
 /**
  * <Description> <br>
@@ -42,6 +43,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * (non-Javadoc)
      * @see com.fccfc.framework.dao.support.SqlExcutor#query(java.lang.String, java.util.Map)
      */
+    @SuppressWarnings({
+        "rawtypes", "unchecked"
+    })
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
         try {
@@ -57,13 +61,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             // step1:设置参数
             setParamMap(param.getParamMap(), query);
 
-            // step2:设置分页
-            if (param.getPageIndex() != -1 && param.getPageSize() != -1) {
-                query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
-                query.setMaxResults(param.getPageSize());
-            }
-
-            // step3:设置返回值类型
+            // step2:设置返回值类型
             final Object callBack = param.getCallback();
             if (callBack != null && callBack instanceof ResultTransformer) {
                 query.setResultTransformer((ResultTransformer) callBack);
@@ -79,8 +77,34 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 query.setResultTransformer(new AutoResultTransformer(beanType));
             }
 
-            return List.class.isAssignableFrom(param.getReturnType()) || Object.class.equals(param.getReturnType()) ? query
-                .list() : query.uniqueResult();
+            boolean isPager = false;
+            PagerList resultList = null;
+
+            // step3:设置分页
+            if (param.getPageIndex() != -1 && param.getPageSize() != -1
+                && List.class.isAssignableFrom(param.getReturnType())) {
+                query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
+                query.setMaxResults(param.getPageSize());
+
+                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(*) FROM (" + sql + ")");
+                setParamMap(param.getParamMap(), countQuery);
+                resultList = new PagerList();
+                resultList.setPageIndex(param.getPageIndex());
+                resultList.setPageSize(param.getPageSize());
+                resultList.setTotalCount(Long.valueOf(countQuery.uniqueResult().toString()));
+                isPager = true;
+            }
+
+            if (isPager) {
+                resultList.addAll(query.list());
+                return resultList;
+            }
+            else if (List.class.isAssignableFrom(param.getReturnType())) {
+                return query.list();
+            }
+            else {
+               return query.uniqueResult();
+            }
         }
         catch (Exception e) {
             throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, "执行查询语句失败", e);
@@ -88,9 +112,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param paramMap <br>
