@@ -116,7 +116,7 @@ public abstract class BaseController {
 
     protected int getPageSize() {
         Integer pageSize = getIntegerParameter("size");
-        return (pageSize == null || pageSize < 5) ? 10 : pageSize;
+        return (pageSize == null || pageSize < 5 || pageSize > 100) ? 10 : pageSize;
     }
 
     protected ModelAndView success(String message, String redirectUrl, Map<String, String> param) {
