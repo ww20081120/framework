@@ -5,9 +5,13 @@
  ****************************************************************************************/
 package com.fccfc.framework.web.utils;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.date.DateUtil;
+import com.fccfc.framework.config.core.DictionaryHelper;
 
 /**
  * <Description> <br>
@@ -53,5 +57,13 @@ public class VelocityTool {
             sb.deleteCharAt(from + 1);
         }
         return sb.toString();
+    }
+    
+    public String format(Date date, String formatStr){
+        return DateUtil.date2String(date, formatStr);
+    }
+    
+    public String getDictionary(String dictCode, String data){
+        return DictionaryHelper.getString(dictCode, data);
     }
 }

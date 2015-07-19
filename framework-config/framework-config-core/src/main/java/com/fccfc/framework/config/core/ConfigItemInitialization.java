@@ -91,7 +91,6 @@ public class ConfigItemInitialization implements Initialization {
         Configuration.reloadCache();
         
         DictionaryHelper.setdictDataService(dictionaryDataService);
-        
         DictionaryHelper.reloadCache(); // 加载字典数据
         logger.debug("---------------end ConfigItem int ------------------");
     }
