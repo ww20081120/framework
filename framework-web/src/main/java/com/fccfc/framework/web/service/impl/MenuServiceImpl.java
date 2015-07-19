@@ -24,7 +24,7 @@ import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.WebConstant;
 import com.fccfc.framework.web.bean.resource.MenuPojo;
-import com.fccfc.framework.web.dao.MenuDao;
+import com.fccfc.framework.web.dao.resource.MenuDao;
 import com.fccfc.framework.web.service.MenuService;
 
 /**

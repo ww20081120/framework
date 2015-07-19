@@ -1,1 +1,0 @@
-select MODULE_CODE, MODULE_NAME from module

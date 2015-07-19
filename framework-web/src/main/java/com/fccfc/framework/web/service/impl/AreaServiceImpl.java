@@ -16,7 +16,7 @@ import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.bean.area.AreaPojo;
-import com.fccfc.framework.web.dao.AreaDao;
+import com.fccfc.framework.web.dao.area.AreaDao;
 import com.fccfc.framework.web.service.AreaService;
 
 /**

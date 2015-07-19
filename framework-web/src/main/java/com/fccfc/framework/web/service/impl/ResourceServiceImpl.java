@@ -19,7 +19,7 @@ import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 import com.fccfc.framework.web.dao.AttachmentsDao;
-import com.fccfc.framework.web.dao.UrlResourceDao;
+import com.fccfc.framework.web.dao.resource.UrlResourceDao;
 import com.fccfc.framework.web.service.ResourceService;
 
 /**
