@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/18 17:36:02                           */
+/* Created on:     2015/7/19 11:54:38                           */
 /*==============================================================*/
 
 
@@ -1584,7 +1584,7 @@ create table OPERATOR_RESOURCE
 (
    OPERATOR_ID          NUMBER(8)            not null,
    RESOURCE_ID          NUMBER(6)            not null,
-   RESOURCE_TYPE        NUMBER(1)            not null,
+   RESOURCE_TYPE        CHAR(1)              not null,
    constraint PK_OPERATOR_RESOURCE primary key (OPERATOR_ID, RESOURCE_ID, RESOURCE_TYPE)
 );
 
@@ -2157,7 +2157,7 @@ create table ROLE_RESOURCE
 (
    ROLE_ID              NUMBER(4)            not null,
    RESOURCE_ID          NUMBER(6)            not null,
-   RESOURCE_TYPE        NUMBER(1)            not null,
+   RESOURCE_TYPE        CHAR(1)              not null,
    constraint PK_ROLE_RESOURCE primary key (ROLE_ID, RESOURCE_ID, RESOURCE_TYPE)
 );
 
