@@ -34,6 +34,15 @@ import com.fccfc.framework.web.WebConstant;
  */
 public abstract class BaseController {
 
+    /** 分页最大数 */
+    private static final int MAX_PAGE_SIZE = 100;
+
+    /** 分页最小数 */
+    private static final int MIN_PAGE_SIZE = 5;
+
+    /** 默认页大小 */
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
     /** 成功跳转页面 */
     private static String successPage = "error/page500";
 
@@ -116,7 +125,8 @@ public abstract class BaseController {
 
     protected int getPageSize() {
         Integer pageSize = getIntegerParameter("size");
-        return (pageSize == null || pageSize < 5 || pageSize > 100) ? 10 : pageSize;
+        return (pageSize == null || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) ? DEFAULT_PAGE_SIZE
+            : pageSize;
     }
 
     protected ModelAndView success(String message, String redirectUrl, Map<String, String> param) {
