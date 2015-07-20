@@ -11,13 +11,14 @@
 	<properties>
 		<jackson.version>2.1.0</jackson.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
+		<commons-fileupload.version>1.3</commons-fileupload.version>
 	</properties>
 	<dependencies>
-	    <dependency>
-            <groupId>com.github.cage</groupId>
-            <artifactId>cage</artifactId>
-            <version>1.0</version>
-        </dependency>
+		<dependency>
+			<groupId>com.github.cage</groupId>
+			<artifactId>cage</artifactId>
+			<version>1.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-config-core</artifactId>
@@ -62,6 +63,11 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload.version}</version>
 		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.qiniu</groupId> -->
