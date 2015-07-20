@@ -86,7 +86,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
                 query.setMaxResults(param.getPageSize());
 
-                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(*) FROM (" + sql + ") AS QUERY_DATA__");
+                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(*) FROM (" + sql + ") QUERY_DATA__");
                 setParamMap(param.getParamMap(), countQuery);
                 resultList = new PagerList();
                 resultList.setPageIndex(param.getPageIndex());
