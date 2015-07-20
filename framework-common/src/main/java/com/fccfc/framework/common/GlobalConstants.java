@@ -23,10 +23,10 @@ public interface GlobalConstants {
 
     /** SQL语句分隔符 */
     String SQL_SPLITOR = ";";
-    
-    /**  等号分隔符*/
+
+    /** 等号分隔符 */
     String EQUAL_SPLITER = "=";
-    
+
     /** 下划线 */
     char UNDERLINE = '_';
 
@@ -36,6 +36,9 @@ public interface GlobalConstants {
     /** 默认编码 */
     String DEFAULT_CHARSET = "utf-8";
 
+    /** 默认语言 */
+    String DEFAULT_LANGUAGE = "zh_CN";
+
     /** NULL */
     String NULL = "NULL";
 
@@ -44,5 +47,5 @@ public interface GlobalConstants {
 
     /** NO */
     String NO = "N";
-    
+
 }

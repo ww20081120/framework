@@ -61,6 +61,7 @@ public final class Configuration {
 
     /**
      * 获取模块代码
+     * 
      * @param modelCode <br>
      * @return 模块代码
      */
@@ -84,9 +85,8 @@ public final class Configuration {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param key <br>
@@ -127,6 +127,21 @@ public final class Configuration {
     }
 
     /**
+     * 
+     * Description: 根据key获取配置值：字符串类型 <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key key
+     * @param defaultValue 默认值
+     * @return 值<br>
+     */
+    public static String getString(String key, String defaultValue) {
+        String value = getString(key);
+        return CommonUtil.isEmpty(value) ? defaultValue : value;
+    }
+
+    /**
      * 根据key获取配置值：布尔型
      * 
      * @param key key
@@ -161,9 +176,8 @@ public final class Configuration {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param allModules <br>
@@ -177,9 +191,8 @@ public final class Configuration {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @throws ServiceException <br>
