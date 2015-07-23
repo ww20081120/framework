@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
@@ -127,9 +128,8 @@ public final class Configuration {
     }
 
     /**
+     * Description: 根据key获取配置值：字符串类型 <br>
      * 
-     * Description: 根据key获取配置值：字符串类型 <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param key key
@@ -216,5 +216,26 @@ public final class Configuration {
 
     public static void setConfigService(ConfigService.Iface configService) {
         Configuration.configService = configService;
+    }
+
+    /**
+     * 
+     * Description: 匹配配置项中是否含有matchValue<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param matchValue
+     * @return <br>
+     */
+    public static boolean match(String key, String matchValue) {
+        boolean ismatch = false;
+        String value = getString(key);
+        if (CommonUtil.isNotEmpty(value) && CommonUtil.isNotEmpty(matchValue)) {
+            ismatch = new StringBuilder().append(GlobalConstants.SPLITOR).append(value).append(GlobalConstants.SPLITOR)
+                .indexOf(new StringBuilder().append(GlobalConstants.SPLITOR).append(matchValue)
+                    .append(GlobalConstants.SPLITOR).toString()) != -1;
+        }
+        return ismatch;
     }
 }

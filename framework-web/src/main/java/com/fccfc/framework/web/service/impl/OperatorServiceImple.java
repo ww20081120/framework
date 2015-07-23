@@ -20,6 +20,7 @@ import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.UtilException;
+import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.web.WebConstant;
 import com.fccfc.framework.web.bean.operator.AccountPojo;
@@ -114,7 +115,7 @@ public class OperatorServiceImple implements OperatorService {
             operator.setRegistIp(registIp);
             operator.setState("A");
             operator.setStateDate(currentDate);
-            if (",A,B,C,M,".indexOf("," + accountType + ",") != -1) {
+            if (Configuration.match("SYSTEM.OWN_ACCT_TYPE", accountType)) {
                 operator.setUserName(username);
                 if (CommonUtil.isNotEmpty(password)) {
                     operator.setPassword(CommonUtil.md5(password));
@@ -235,7 +236,7 @@ public class OperatorServiceImple implements OperatorService {
         }
         // 自有类型账号需要校验密码
         try {
-            if (CommonUtil.isNotEmpty(operator.getPassword()) && ",A,B,C,M,".indexOf("," + type + ",") != -1
+            if (CommonUtil.isNotEmpty(operator.getPassword()) && Configuration.match("SYSTEM.OWN_ACCT_TYPE", type)
                 && !StringUtils.equals(CommonUtil.md5(password), operator.getPassword())) {
                 throw new ServiceException(ErrorCodeDef.USER_NAME_OR_PASSWORD_ERROR_20002, "用户名或密码错误");
             }
