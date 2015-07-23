@@ -48,4 +48,10 @@ public interface GlobalConstants {
     /** NO */
     String NO = "N";
 
+    /** POST */
+    String METHOD_POST = "POST";
+
+    /** GET */
+    String METHOD_GET = "GET";
+
 }
