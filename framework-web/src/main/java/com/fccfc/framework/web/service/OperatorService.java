@@ -6,6 +6,7 @@ package com.fccfc.framework.web.service;
 import java.util.Map;
 
 import com.fccfc.framework.common.ServiceException;
+import com.fccfc.framework.web.bean.operator.AccountPojo;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 
 /**
@@ -93,7 +94,21 @@ public interface OperatorService {
      */
     OperatorPojo addOperator(String username, String password, String accountType, String operatorType, String registIp)
         throws ServiceException;
-
+    
+    /**
+     * 
+     * Description: 添加账户<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param accountType
+     * @param username
+     * @param operatorId
+     * @return
+     * @throws ServiceException <br>
+     */
+    AccountPojo addAccount(String accountType, String username, int operatorId) throws ServiceException;
+    
     /**
      * Description: <br>
      * 

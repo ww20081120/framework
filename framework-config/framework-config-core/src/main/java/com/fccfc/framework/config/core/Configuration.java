@@ -170,6 +170,21 @@ public final class Configuration {
     public static long getLong(String key) {
         return Long.valueOf(getString(key));
     }
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param defaultValue
+     * @return <br>
+     */
+    public static long getLong(String key, Long defaultValue) {
+        String value = getString(key);
+        return CommonUtil.isEmpty(value) ? defaultValue : Long.valueOf(value);
+    }
 
     public static void setCache(Map<String, String> cache) {
         Configuration.cache = cache;

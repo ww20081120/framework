@@ -123,14 +123,7 @@ public class OperatorServiceImple implements OperatorService {
             }
             operatorDao.save(operator);
 
-            AccountPojo account = new AccountPojo();
-            account.setAccountType(accountType);
-            account.setAccountValue(username);
-            account.setCreateTime(currentDate);
-            account.setOperatorId(operator.getOperatorId());
-            account.setState("A");
-            account.setStateTime(currentDate);
-            accountDao.save(account);
+            addAccount(accountType, username, operator.getOperatorId());
 
             return operator;
         }
@@ -140,6 +133,36 @@ public class OperatorServiceImple implements OperatorService {
         catch (UtilException e) {
             throw new ServiceException(e);
         }
+    }
+    
+    /**
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param accountType
+     * @param username
+     * @param operatorId
+     * @return
+     * @throws ServiceException <br>
+     */ 
+    @Override
+    public AccountPojo addAccount(String accountType, String username, int operatorId) throws ServiceException {
+        AccountPojo account = new AccountPojo();
+        account.setAccountType(accountType);
+        account.setAccountValue(username);
+        Date currentDate = new Date();
+        account.setCreateTime(currentDate);
+        account.setOperatorId(operatorId);
+        account.setState("A");
+        account.setStateTime(currentDate);
+        try {
+            accountDao.save(account);
+        }
+        catch (DaoException e) {
+           throw new ServiceException(e);
+        }
+        return account;
     }
 
     /**
