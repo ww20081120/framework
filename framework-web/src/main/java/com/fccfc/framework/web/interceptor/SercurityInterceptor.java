@@ -56,9 +56,11 @@ public class SercurityInterceptor extends HandlerInterceptorAdapter {
             List<UrlResourcePojo> permissionList = (List<UrlResourcePojo>) WebUtil
                 .getAttribute(WebConstant.SESSION_PERMISSIONS);
             String url = request.getRequestURI().substring(request.getContextPath().length());
+            String method = request.getMethod();
             if (CommonUtil.isNotEmpty(permissionList)) {
                 for (UrlResourcePojo resource : permissionList) {
-                    if (matcher.match(resource.getUrl(), url)) {
+                    if (matcher.match(resource.getUrl(), url) && (CommonUtil.isEmpty(resource.getMethod())
+                        || resource.getMethod().equalsIgnoreCase(method))) {
                         return true;
                     }
                 }
