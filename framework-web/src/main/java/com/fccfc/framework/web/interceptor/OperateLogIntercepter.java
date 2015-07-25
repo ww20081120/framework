@@ -63,8 +63,9 @@ public class OperateLogIntercepter extends HandlerInterceptorAdapter {
         UrlResourcePojo urlResource = (UrlResourcePojo) CacheHelper.getCache().getValue(CacheConstant.URL, realPath);
         OperateLogPojo operateLogPojo = null;
         String eventType = Configuration.getString("EVENT_TYPE");
-        if (urlResource != null && (CommonUtil.isEmpty(urlResource.getMethod())
-            || StringUtils.equalsIgnoreCase(urlResource.getMethod(), request.getMethod()))) {
+        if (urlResource != null && CommonUtil.isNotEmpty(urlResource.getEventId())
+            && (CommonUtil.isEmpty(urlResource.getMethod())
+                || StringUtils.equalsIgnoreCase(urlResource.getMethod(), request.getMethod()))) {
             String[] eventIdArr = StringUtils.split(urlResource.getEventId(), GlobalConstants.SPLITOR);
             Date now = new Date(DateUtil.getCurrentTime());
             String moduleCode = Configuration.getString(CacheConstant.LOCAL_MODULE_CODE);
