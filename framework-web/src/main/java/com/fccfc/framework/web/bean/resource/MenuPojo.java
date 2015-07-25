@@ -1,11 +1,14 @@
 package com.fccfc.framework.web.bean.resource;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 import com.fccfc.framework.db.core.BaseEntity;
 
@@ -28,8 +31,8 @@ public class MenuPojo extends BaseEntity {
 
     /** RESOURCE_ID */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MENU")
-    @SequenceGenerator(name = "SEQ_MENU", sequenceName = "SEQ_MENU")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESOURCE_ID")
+    @SequenceGenerator(name = "SEQ_RESOURCE_ID", sequenceName = "SEQ_RESOURCE_ID")
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RESOURCE_ID")
     private Long resourceId;
@@ -57,6 +60,9 @@ public class MenuPojo extends BaseEntity {
     /** ICON_URL */
     @Column(name = "ICON_URL")
     private String iconUrl;
+    
+    @Transient
+    private List<MenuPojo> childrenMenu;
 
     public Long getResourceId() {
         return this.resourceId;
@@ -114,4 +120,11 @@ public class MenuPojo extends BaseEntity {
         this.iconUrl = iconUrl;
     }
 
+    public List<MenuPojo> getChildrenMenu() {
+        return childrenMenu;
+    }
+
+    public void setChildrenMenu(List<MenuPojo> childrenMenu) {
+        this.childrenMenu = childrenMenu;
+    }
 }

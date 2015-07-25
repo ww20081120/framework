@@ -32,6 +32,9 @@ public interface WebConstant {
     
     /** 扩展参数列表*/
     String SESSION_EXTEND_PARAMS = "__SESSION_EXTEND_PARAMS";
+    
+    /** session中保存的权限*/
+    String SESSION_PERMISSIONS = "SESSION_PERMISSIONS__";
 
     /** CONTEXT_PATH */
     String CONTEXT_PATH = "CONTEXT_PATH";

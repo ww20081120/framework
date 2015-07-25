@@ -28,8 +28,8 @@ public class UrlResourcePojo extends BaseEntity {
 
     /** RESOURCE_ID */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MENU")
-    @SequenceGenerator(name = "SEQ_MENU", sequenceName = "SEQ_MENU")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESOURCE_ID")
+    @SequenceGenerator(name = "SEQ_RESOURCE_ID", sequenceName = "SEQ_RESOURCE_ID")
     @Column(name = "RESOURCE_ID")
     private Long resourceId;
 
