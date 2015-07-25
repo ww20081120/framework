@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/25 14:23:26                           */
+/* Created on:     2015/7/25 17:56:29                           */
 /*==============================================================*/
 
 
@@ -805,14 +805,16 @@ comment on column CONFIG_ITEM_PARAM_HISTORY.CHANNEL_ID is
 /*==============================================================*/
 create table CONFIG_ITEM_PARAM_VALUE 
 (
+   PARAM_VALUE_ID       NUMBER(4)            not null,
    CONFIG_ITEM_ID       NUMBER(6)            not null,
    PARAM_CODE           VARCHAR2(120)        not null,
-   PARAM_VALUE_ID       NUMBER(4)            not null,
    VALUE_MARK           VARCHAR2(20)         not null,
    VALUE                VARCHAR2(60),
-   REMARK               VARCHAR2(255),
-   constraint PK_CONFIG_ITEM_PARAM_VALUE primary key (CONFIG_ITEM_ID, PARAM_CODE, PARAM_VALUE_ID)
+   constraint PK_CONFIG_ITEM_PARAM_VALUE primary key (PARAM_VALUE_ID)
 );
+
+comment on column CONFIG_ITEM_PARAM_VALUE.PARAM_VALUE_ID is
+'参数取值标识';
 
 comment on column CONFIG_ITEM_PARAM_VALUE.CONFIG_ITEM_ID is
 '配置项标识';
@@ -820,17 +822,11 @@ comment on column CONFIG_ITEM_PARAM_VALUE.CONFIG_ITEM_ID is
 comment on column CONFIG_ITEM_PARAM_VALUE.PARAM_CODE is
 '参数编码';
 
-comment on column CONFIG_ITEM_PARAM_VALUE.PARAM_VALUE_ID is
-'参数取值标识';
-
 comment on column CONFIG_ITEM_PARAM_VALUE.VALUE_MARK is
 '取值说明';
 
 comment on column CONFIG_ITEM_PARAM_VALUE.VALUE is
 '取值';
-
-comment on column CONFIG_ITEM_PARAM_VALUE.REMARK is
-'备注';
 
 /*==============================================================*/
 /* Table: CONTACT_CHANNEL                                       */
@@ -2539,7 +2535,7 @@ create table URL_RESOURCE
    RESOURCE_NAME        VARCHAR2(60)         not null,
    URL                  VARCHAR2(120)        not null,
    METHOD               VARCHAR2(8),
-   EVENT_ID             VARCHAR2(20)         not null,
+   EVENT_ID             VARCHAR2(20),
    REMARK               VARCHAR2(255),
    constraint PK_URL_RESOURCE primary key (RESOURCE_ID)
 );
