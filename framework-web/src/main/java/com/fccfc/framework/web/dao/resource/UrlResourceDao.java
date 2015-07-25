@@ -10,6 +10,7 @@ import com.fccfc.framework.db.core.annotation.Dao;
 import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.db.core.annotation.Sql;
 import com.fccfc.framework.db.hibernate.IGenericBaseDao;
+import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 
 /**
  * <Description> <br>
@@ -35,6 +36,11 @@ public interface UrlResourceDao extends IGenericBaseDao {
      */
     @Sql(bean = String.class)
     List<String> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
+    
+    @Sql(bean = UrlResourcePojo.class)
+    List<UrlResourcePojo> selectUrlResourceByPermision(@Param("operateId") Integer operateId,
+        @Param("moduleCode") List<String> moduleCode) throws DaoException;
+
 
     /**
      * Description: <br>

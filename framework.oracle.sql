@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/19 11:54:38                           */
+/* Created on:     2015/7/25 14:23:26                           */
 /*==============================================================*/
 
 
@@ -78,14 +78,6 @@ start with 1000
 nocycle
  cache 20;
 
-create sequence SEQ_MENU
-increment by 1
-start with 1000
- maxvalue 99999999999
- minvalue 1
-nocycle
- cache 20;
-
 create sequence SEQ_MESSAGE_BOX
 increment by 1
 start with 1000
@@ -124,6 +116,8 @@ start with 1000
  minvalue 1
  cache 20;
 
+create sequence SEQ_RESOURCE_ID;
+
 create sequence SEQ_ROLE
 increment by 1
 start with 1000
@@ -133,14 +127,6 @@ nocycle
  cache 20;
 
 create sequence SEQ_SIMPLE_TRIGGER
-increment by 1
-start with 1000
- maxvalue 99999999999
- minvalue 1
-nocycle
- cache 20;
-
-create sequence SEQ_URL_RESOURCE
 increment by 1
 start with 1000
  maxvalue 99999999999
@@ -612,7 +598,7 @@ comment on column CHANGE_NOTIF_REDIS."created_date" is
 '创建时间';
 
 comment on column CHANGE_NOTIF_REDIS."action_type" is
-'操作类型';
+'操作类型 (A:新增 D:删除 M:修改)';
 
 /*==============================================================*/
 /* Table: CONFIG_ITEM                                           */

@@ -25,9 +25,8 @@ import com.fccfc.framework.web.bean.resource.MenuPojo;
 public interface MenuDao {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param moduleCode <br>
@@ -39,8 +38,22 @@ public interface MenuDao {
 
     /**
      * 
-     * Description: <br> 
+     * Description: 根据权限查询菜单<br> 
      *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param operateId
+     * @param moduleCode
+     * @return
+     * @throws DaoException <br>
+     */
+    @Sql(bean = MenuPojo.class)
+    List<MenuPojo> selectMenuByPermision(@Param("operateId") Integer operateId,
+        @Param("moduleCode") List<String> moduleCode) throws DaoException;
+
+    /**
+     * Description: <br>
+     * 
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param moduleCode <br>

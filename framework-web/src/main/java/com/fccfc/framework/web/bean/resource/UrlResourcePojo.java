@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 import com.fccfc.framework.db.core.BaseEntity;
 
@@ -13,9 +14,9 @@ import com.fccfc.framework.db.core.BaseEntity;
  * 
  * @author 工具生成<br>
  * @version 1.0<br>
- * @CreateDate 2014年11月26日 <br>
+ * @CreateDate 2015年07月25日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.api.bean.common.bean.BaseEntity <br>
+ * @see com.fccfc.framework.api.bean.BaseEntity <br>
  */
 @Entity(name = "URL_RESOURCE")
 public class UrlResourcePojo extends BaseEntity {
@@ -27,9 +28,10 @@ public class UrlResourcePojo extends BaseEntity {
 
     /** RESOURCE_ID */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MENU")
+    @SequenceGenerator(name = "SEQ_MENU", sequenceName = "SEQ_MENU")
     @Column(name = "RESOURCE_ID")
-    private Integer resourceId;
+    private Long resourceId;
 
     /** DIRECTORY_CODE */
     @Column(name = "DIRECTORY_CODE")
@@ -43,6 +45,10 @@ public class UrlResourcePojo extends BaseEntity {
     @Column(name = "URL")
     private String url;
 
+    /** METHOD */
+    @Column(name = "METHOD")
+    private String method;
+
     /** EVENT_ID */
     @Column(name = "EVENT_ID")
     private String eventId;
@@ -51,15 +57,11 @@ public class UrlResourcePojo extends BaseEntity {
     @Column(name = "REMARK")
     private String remark;
 
-    /** METHOD */
-    @Column(name = "METHOD")
-    private String method;
-
-    public Integer getResourceId() {
+    public Long getResourceId() {
         return this.resourceId;
     }
 
-    public void setResourceId(Integer resourceId) {
+    public void setResourceId(Long resourceId) {
         this.resourceId = resourceId;
     }
 
@@ -87,6 +89,22 @@ public class UrlResourcePojo extends BaseEntity {
         this.url = url;
     }
 
+    public String getMethod() {
+        return this.method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getEventId() {
+        return this.eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
     public String getRemark() {
         return this.remark;
     }
@@ -95,19 +113,4 @@ public class UrlResourcePojo extends BaseEntity {
         this.remark = remark;
     }
 
-    public String getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
 }

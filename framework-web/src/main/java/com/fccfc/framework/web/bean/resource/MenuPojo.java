@@ -1,13 +1,11 @@
 package com.fccfc.framework.web.bean.resource;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.SequenceGenerator;
 
 import com.fccfc.framework.db.core.BaseEntity;
 
@@ -16,83 +14,72 @@ import com.fccfc.framework.db.core.BaseEntity;
  * 
  * @author 工具生成<br>
  * @version 1.0<br>
- * @CreateDate 2014年11月25日 <br>
+ * @CreateDate 2015年07月25日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.api.bean.common.bean.BaseEntity <br>
+ * @see com.fccfc.framework.api.bean.BaseEntity <br>
  */
 @Entity(name = "MENU")
 public class MenuPojo extends BaseEntity {
-
-    /** 叶子 */
-    public static final String LEAF = "Y";
 
     /**
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
 
-    /** MENU_ID */
+    /** RESOURCE_ID */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MENU_ID")
-    private Integer menuId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MENU")
+    @SequenceGenerator(name = "SEQ_MENU", sequenceName = "SEQ_MENU")
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "RESOURCE_ID")
+    private Long resourceId;
 
-    /** MODULE_CODE */
-    @Column(name = "MODULE_CODE")
-    private String moduleCode;
+    /** PARENT_RESOURCE_ID */
+    @Column(name = "PARENT_RESOURCE_ID")
+    private Long parentResourceId;
+
+    /** SEQ */
+    @Column(name = "SEQ")
+    private Long seq;
 
     /** MENU_NAME */
     @Column(name = "MENU_NAME")
     private String menuName;
 
-    /** PARENT_ID */
-    @Column(name = "PARENT_ID")
-    private Integer parentId;
+    /** URL */
+    @Column(name = "URL")
+    private String url;
 
     /** IS_LEAF */
     @Column(name = "IS_LEAF")
     private String isLeaf;
 
-    /** RESOURCE_ID */
-    @Column(name = "RESOURCE_ID")
-    private Integer resourceId;
-
-    /** RESOURCE_ITEM_ID */
-    @Column(name = "RESOURCE_ITEM_ID")
-    private Integer resourceItemId;
-
     /** ICON_URL */
     @Column(name = "ICON_URL")
     private String iconUrl;
 
-    /** ICON_URL */
-    @Column(name = "SEQ")
-    private Integer seq;
-
-    /**
-     * url
-     */
-    @Transient
-    private String url;
-
-    /** children */
-    @Transient
-    private List<MenuPojo> childrenMenu;
-
-    public Integer getMenuId() {
-        return this.menuId;
+    public Long getResourceId() {
+        return this.resourceId;
     }
 
-    public void setMenuId(Integer menuId) {
-        this.menuId = menuId;
+    public void setResourceId(Long resourceId) {
+        this.resourceId = resourceId;
     }
 
-    public String getModuleCode() {
-        return this.moduleCode;
+    public Long getParentResourceId() {
+        return this.parentResourceId;
     }
 
-    public void setModuleCode(String moduleCode) {
-        this.moduleCode = moduleCode;
+    public void setParentResourceId(Long parentResourceId) {
+        this.parentResourceId = parentResourceId;
+    }
+
+    public Long getSeq() {
+        return this.seq;
+    }
+
+    public void setSeq(Long seq) {
+        this.seq = seq;
     }
 
     public String getMenuName() {
@@ -103,12 +90,12 @@ public class MenuPojo extends BaseEntity {
         this.menuName = menuName;
     }
 
-    public Integer getParentId() {
-        return this.parentId;
+    public String getUrl() {
+        return this.url;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getIsLeaf() {
@@ -119,22 +106,6 @@ public class MenuPojo extends BaseEntity {
         this.isLeaf = isLeaf;
     }
 
-    public Integer getResourceId() {
-        return this.resourceId;
-    }
-
-    public void setResourceId(Integer resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public Integer getResourceItemId() {
-        return this.resourceItemId;
-    }
-
-    public void setResourceItemId(Integer resourceItemId) {
-        this.resourceItemId = resourceItemId;
-    }
-
     public String getIconUrl() {
         return this.iconUrl;
     }
@@ -143,47 +114,4 @@ public class MenuPojo extends BaseEntity {
         this.iconUrl = iconUrl;
     }
 
-    public List<MenuPojo> getChildrenMenu() {
-        return childrenMenu;
-    }
-
-    public void setChildrenMenu(List<MenuPojo> childrenMenu) {
-        this.childrenMenu = childrenMenu;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Integer getSeq() {
-        return seq;
-    }
-
-    public void setSeq(Integer seq) {
-        this.seq = seq;
-    }
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param menuList <br>
-     * @return <br>
-     */
-    public boolean contain(List<MenuPojo> menuList) {
-        if (menuList != null && menuList.size() > 0) {
-            for (MenuPojo menu : menuList) {
-                if (menu.getMenuId().equals(this.getMenuId())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }
