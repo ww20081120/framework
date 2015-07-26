@@ -47,14 +47,14 @@ public class StartupServlet extends org.springframework.web.servlet.DispatcherSe
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
+        context = config.getServletContext();
         super.init(config);
         applicationContext = super.getWebApplicationContext();
-        context = super.getServletContext();
-        System.out.println(new StringBuilder().append("\n***************************************").append('\n')
-            .append("*            ").append(ManagementFactory.getRuntimeMXBean().getName()).append("               *")
-            .append('\n').append("*            ").append(Configuration.get(CacheConstant.LOCAL_MODULE_CODE))
-            .append("模块启动成功！").append("                  *").append('\n')
-            .append("***************************************"));
+        System.out.println(
+            new StringBuilder().append("\n***************************************").append('\n').append("*            ")
+                .append(ManagementFactory.getRuntimeMXBean().getName()).append("               *").append('\n')
+                .append("*            ").append(Configuration.get(CacheConstant.LOCAL_MODULE_CODE)).append("模块启动成功！")
+                .append("                  *").append('\n').append("***************************************"));
 
     }
 
