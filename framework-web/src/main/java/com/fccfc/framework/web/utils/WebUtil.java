@@ -5,15 +5,22 @@
  ****************************************************************************************/
 package com.fccfc.framework.web.utils;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.web.WebConstant;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
+import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
+import com.fccfc.framework.web.init.StartupServlet;
 
 /**
  * <Description> <br>
@@ -24,6 +31,8 @@ import com.fccfc.framework.web.bean.operator.OperatorPojo;
  * @see com.fccfc.framework.web <br>
  */
 public final class WebUtil {
+
+    private static AntPathMatcher matcher = new AntPathMatcher();
 
     /**
      * 默认构造函数
@@ -102,6 +111,12 @@ public final class WebUtil {
         return obj;
     }
 
+    @SuppressWarnings("unchecked")
+    public static boolean hasPermission(Integer resourceId) {
+        Set<Integer> permissions = (Set<Integer>) getAttribute(WebConstant.SESSION_PERMISSIONS);
+        return CommonUtil.isEmpty(permissions) ? false : permissions.contains(resourceId);
+    }
+
     /**
      * 删除属性值 Description: <br>
      * 
@@ -135,5 +150,23 @@ public final class WebUtil {
             ip = request.getHeader("x-forwarded-for");
         }
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static UrlResourcePojo urlMatch(HttpServletRequest request) {
+        List<UrlResourcePojo> permissionList = (List<UrlResourcePojo>) StartupServlet.getContext()
+            .getAttribute(WebConstant.APPLICATION_URL);
+        if (CommonUtil.isNotEmpty(permissionList)) {
+            String url = request.getRequestURI().substring(request.getContextPath().length());
+            String method = request.getMethod();
+            for (UrlResourcePojo resource : permissionList) {
+                if (matcher.match(resource.getUrl(), url)
+                    && (CommonUtil.isEmpty(resource.getMethod()) || resource.getMethod().equalsIgnoreCase(method))) {
+                    return resource;
+                }
+            }
+        }
+
+        return null;
     }
 }

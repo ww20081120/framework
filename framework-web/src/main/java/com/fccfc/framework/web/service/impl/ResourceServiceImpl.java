@@ -17,8 +17,10 @@ import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
+import com.fccfc.framework.web.bean.resource.MenuPojo;
 import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 import com.fccfc.framework.web.dao.AttachmentsDao;
+import com.fccfc.framework.web.dao.resource.MenuDao;
 import com.fccfc.framework.web.dao.resource.UrlResourceDao;
 import com.fccfc.framework.web.service.ResourceService;
 
@@ -52,6 +54,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Resource
     private UrlResourceDao urlResourceDao;
 
+    @Resource
+    private MenuDao menuDao;
+
     /*
      * (non-Javadoc)
      * @see com.fccfc.framework.web.service.ResourceService#downloadResource(int)
@@ -74,8 +79,8 @@ public class ResourceServiceImpl implements ResourceService {
 
             if (isThumb && "Y".equals(pojo.getIsPicture())) {
                 if (!"Y".equals(pojo.getIsThumb())) {
-                    thumbPath = new StringBuilder(pojo.getFilePath()).insert(pojo.getFilePath().lastIndexOf("."),
-                        "_thumb").toString();
+                    thumbPath = new StringBuilder(pojo.getFilePath())
+                        .insert(pojo.getFilePath().lastIndexOf("."), "_thumb").toString();
 
                     try {
                         ImageUtil.pictureZoom(resourcePath + pojo.getFilePath(), resourcePath + thumbPath);
@@ -115,18 +120,39 @@ public class ResourceServiceImpl implements ResourceService {
         }
     }
 
-    /***
+    /**
      * Description: <br>
      * 
-     * @author bai.wenlong<br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @return List<UrlResourcePojo> <br>
+     * @param modules
+     * @return
      * @throws ServiceException <br>
      */
     @Override
-    public List<UrlResourcePojo> selectResource() throws ServiceException {
+    public List<MenuPojo> queryMenu(List<String> modules) throws ServiceException {
         try {
-            return urlResourceDao.selectList(UrlResourcePojo.class);
+            return menuDao.selectAllMenu(modules);
+        }
+        catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param modules
+     * @return
+     * @throws ServiceException <br>
+     */
+    @Override
+    public List<UrlResourcePojo> queryUrlResource(List<String> modules) throws ServiceException {
+
+        try {
+            return urlResourceDao.selectAllModuleUrlResource(modules);
         }
         catch (DaoException e) {
             throw new ServiceException(e);

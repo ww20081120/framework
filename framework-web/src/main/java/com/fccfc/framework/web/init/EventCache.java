@@ -7,10 +7,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
 
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.Initialization;
 import com.fccfc.framework.web.bean.event.EventPojo;
 import com.fccfc.framework.web.service.EventService;
 
@@ -24,7 +24,7 @@ import com.fccfc.framework.web.service.EventService;
  * @since V6.11<br>
  * @see com.fccfc.framework.web.cache <br>
  */
-public class EventCache implements InitializingBean {
+public class EventCache implements Initialization {
 
     /** logger */
     private Logger logger = Logger.getLogger(EventCache.class);
@@ -53,6 +53,18 @@ public class EventCache implements InitializingBean {
         }
         logger.debug("loading event cache end...");
 
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws Exception <br>
+     */
+    @Override
+    public void destroy() throws Exception {
+        CacheHelper.getCache().removeNode(CacheConstant.EVENT);
     }
 
 }

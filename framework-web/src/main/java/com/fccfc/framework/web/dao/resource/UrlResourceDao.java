@@ -26,33 +26,31 @@ import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 public interface UrlResourceDao extends IGenericBaseDao {
 
     /**
-     * Description: <br>
+     * Description: selectAllModuleUrlResource<br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param moduleCode <br>
-     * @return <br>
+     * @param moduleCode
+     * @return
      * @throws DaoException <br>
      */
-    @Sql(bean = String.class)
-    List<String> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
-    
+    @Sql(bean = UrlResourcePojo.class)
+    List<UrlResourcePojo> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
+
+    /**
+     * Description: selectUrlResourceByPermision<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param operateId
+     * @param moduleCode
+     * @return
+     * @throws DaoException <br>
+     */
     @Sql(bean = UrlResourcePojo.class)
     List<UrlResourcePojo> selectUrlResourceByPermision(@Param("operateId") Integer operateId,
         @Param("moduleCode") List<String> moduleCode) throws DaoException;
-
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param moduleCode <br>
-     * @param clazz <br>
-     * @param method <br>
-     * @return <br>
-     * @throws DaoException <br>
-     */
-    String selectUrlByClassAndName(@Param("moduleCode") List<String> moduleCode, @Param("class") String clazz,
-        @Param("method") String method) throws DaoException;
+    
+    List<Integer> selectResourceIdByPermission(@Param("operateId") Integer operateId,
+        @Param("moduleCode") List<String> moduleCode) throws DaoException;
 }

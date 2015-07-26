@@ -35,6 +35,12 @@ public interface WebConstant {
     
     /** session中保存的权限*/
     String SESSION_PERMISSIONS = "SESSION_PERMISSIONS__";
+    
+    /** url*/
+    String APPLICATION_URL = "APPLICATION_URL__";
+    
+    /** menu*/
+    String APPLICATION_MENU = "APPLICATION_MENU__";
 
     /** CONTEXT_PATH */
     String CONTEXT_PATH = "CONTEXT_PATH";

@@ -55,21 +55,16 @@ public class OperateLogIntercepter extends HandlerInterceptorAdapter {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
         throws Exception {
         logger.debug("record operate log start...");
-        String contextPath = request.getContextPath();
         // 获取当前请求路径
-        String path = request.getRequestURI();
-        String realPath = path.substring(contextPath.length());
         // 获取当前路径对应的缓存中路径资源
-        UrlResourcePojo urlResource = (UrlResourcePojo) CacheHelper.getCache().getValue(CacheConstant.URL, realPath);
-        OperateLogPojo operateLogPojo = null;
+        UrlResourcePojo urlResource = WebUtil.urlMatch(request);
         String eventType = Configuration.getString("EVENT_TYPE");
-        if (urlResource != null && CommonUtil.isNotEmpty(urlResource.getEventId())
-            && (CommonUtil.isEmpty(urlResource.getMethod())
-                || StringUtils.equalsIgnoreCase(urlResource.getMethod(), request.getMethod()))) {
+        if (urlResource != null && CommonUtil.isNotEmpty(urlResource.getEventId())) {
             String[] eventIdArr = StringUtils.split(urlResource.getEventId(), GlobalConstants.SPLITOR);
             Date now = new Date(DateUtil.getCurrentTime());
             String moduleCode = Configuration.getString(CacheConstant.LOCAL_MODULE_CODE);
             // 事件可能有多个，是以","分隔的，多个则插多条记录
+            OperateLogPojo operateLogPojo = null;
             for (String eventId : eventIdArr) {
                 // 查询缓存，判断当前事件是否需要记录操作日志
                 EventPojo event = (EventPojo) CacheHelper.getCache().getValue(CacheConstant.EVENT, eventId);

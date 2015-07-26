@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
+import com.fccfc.framework.web.bean.resource.MenuPojo;
 import com.fccfc.framework.web.bean.resource.UrlResourcePojo;
 
 /**
@@ -41,14 +42,28 @@ public interface ResourceService {
      */
     void saveAttachment(AttachmentsPojo attachments) throws ServiceException;
 
-    /***
-     * Description: <br>
+    /**
      * 
-     * @author bai.wenlong<br>
+     * Description: queryMenu<br> 
+     *  
+     * @author 王伟<br>
      * @taskId <br>
-     * @return List<UrlResourcePojo> <br>
+     * @param modules
+     * @return
      * @throws ServiceException <br>
      */
-    List<UrlResourcePojo> selectResource() throws ServiceException;
+    List<MenuPojo> queryMenu(List<String> modules) throws ServiceException;
+    
+    /**
+     * 
+     * Description: queryUrlResource<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param modules
+     * @return
+     * @throws ServiceException <br>
+     */
+    List<UrlResourcePojo> queryUrlResource(List<String> modules) throws ServiceException;
 
 }
