@@ -58,12 +58,27 @@ public class VelocityTool {
         }
         return sb.toString();
     }
-    
-    public String format(Date date, String formatStr){
+
+    public String format(Date date, String formatStr) {
         return DateUtil.date2String(date, formatStr);
     }
-    
-    public String getDictionary(String dictCode, String data){
+
+    public String getDictionary(String dictCode, String data) {
         return DictionaryHelper.getString(dictCode, data);
+    }
+
+    public boolean hasPermission(Object resourceCode) {
+        return WebUtil.hasPermission(resourceCode);
+    }
+
+    public Object getAttribute(String key, HttpServletRequest request) {
+        Object value = request.getAttribute(key);
+        if (value == null) {
+            value = request.getSession().getAttribute(key);
+            if (value == null) {
+                value = request.getServletContext().getAttribute(key);
+            }
+        }
+        return value;
     }
 }
