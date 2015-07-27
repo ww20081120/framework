@@ -170,11 +170,10 @@ public final class Configuration {
     public static long getLong(String key) {
         return Long.valueOf(getString(key));
     }
-    
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param key
@@ -219,7 +218,9 @@ public final class Configuration {
             if (CommonUtil.isNotEmpty(configs)) {
                 Map<String, String> cacheMap = new HashMap<String, String>();
                 for (Config conf : configs) {
-                    cacheMap.put(conf.getConfigItemCode() + "." + conf.getParamCode(), conf.getParamValue());
+                    if (CommonUtil.isNotEmpty(conf.getParamValue())) {
+                        cacheMap.put(conf.getConfigItemCode() + "." + conf.getParamCode(), conf.getParamValue());
+                    }
                 }
                 CacheHelper.getStringCache().putNode(CacheConstant.CACHE_KEY_CONFIGITEM, cacheMap);
             }
@@ -234,9 +235,8 @@ public final class Configuration {
     }
 
     /**
+     * Description: 匹配配置项中是否含有matchValue<br>
      * 
-     * Description: 匹配配置项中是否含有matchValue<br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param key

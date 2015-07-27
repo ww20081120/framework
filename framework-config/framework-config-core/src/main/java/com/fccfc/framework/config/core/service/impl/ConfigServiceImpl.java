@@ -48,7 +48,9 @@ public class ConfigServiceImpl implements ConfigService.Iface {
                 config.setConfigItemCode(CommonUtil.getString(map.get("CONFIG_ITEM_CODE")));
                 config.setModuleCode(CommonUtil.getString(map.get("MODULE_CODE")));
                 config.setParamCode(CommonUtil.getString(map.get("PARAM_CODE")));
-                config.setParamValue(CommonUtil.getString(map.get("PARAM_VALUE")));
+                String value = CommonUtil.getString(map.get("PARAM_VALUE"));
+                config.setParamValue(
+                    CommonUtil.isNotEmpty(value) ? value : CommonUtil.getString(map.get("DEFAULT_PARAM_VALUE")));
                 configList.add(config);
             }
         }
