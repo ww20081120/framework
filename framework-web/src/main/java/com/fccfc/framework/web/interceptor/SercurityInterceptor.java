@@ -46,7 +46,7 @@ public class SercurityInterceptor extends HandlerInterceptorAdapter {
 
         if (validatePermission) {
             UrlResourcePojo permission = WebUtil.urlMatch(request);
-            if (permission != null && WebUtil.hasPermission(permission.getResourceId().intValue())) {
+            if (permission != null && WebUtil.hasPermission(permission.getResourceId())) {
                 return true;
             }
             response.sendRedirect(request.getContextPath() + noPermissionUrl);

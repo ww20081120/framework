@@ -112,9 +112,9 @@ public final class WebUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static boolean hasPermission(Integer resourceId) {
-        Set<Integer> permissions = (Set<Integer>) getAttribute(WebConstant.SESSION_PERMISSIONS);
-        return CommonUtil.isEmpty(permissions) ? false : permissions.contains(resourceId);
+    public static boolean hasPermission(Object resourceId) {
+        Set<String> permissions = (Set<String>) getAttribute(WebConstant.SESSION_PERMISSIONS);
+        return CommonUtil.isEmpty(permissions) ? false : permissions.contains(resourceId.toString());
     }
 
     /**
