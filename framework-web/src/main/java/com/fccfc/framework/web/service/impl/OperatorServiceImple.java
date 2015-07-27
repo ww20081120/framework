@@ -200,7 +200,7 @@ public class OperatorServiceImple implements OperatorService {
     @Override
     public void login(OperatorPojo operator, String loginIp, Map<String, Object> extendParams) throws ServiceException {
         try {
-            operatorDao.insertOperatorHistory(operator.getOperatorId(), operator.getOperatorId());
+            //operatorDao.insertOperatorHistory(operator.getOperatorId(), operator.getOperatorId());
             operator.setLastIp(loginIp);
             operator.setLastLoginDate(new Date());
             operatorDao.update(operator);
