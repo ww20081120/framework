@@ -50,7 +50,8 @@ public interface UrlResourceDao extends IGenericBaseDao {
     @Sql(bean = UrlResourcePojo.class)
     List<UrlResourcePojo> selectUrlResourceByPermision(@Param("operateId") Integer operateId,
         @Param("moduleCode") List<String> moduleCode) throws DaoException;
-    
+
+    @Sql(bean = Integer.class)
     List<Integer> selectResourceIdByPermission(@Param("operateId") Integer operateId,
         @Param("moduleCode") List<String> moduleCode) throws DaoException;
 }

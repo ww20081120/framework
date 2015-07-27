@@ -8,9 +8,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -134,10 +139,10 @@ public class OperatorServiceImple implements OperatorService {
             throw new ServiceException(e);
         }
     }
-    
+
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param accountType
@@ -145,7 +150,7 @@ public class OperatorServiceImple implements OperatorService {
      * @param operatorId
      * @return
      * @throws ServiceException <br>
-     */ 
+     */
     @Override
     public AccountPojo addAccount(String accountType, String username, int operatorId) throws ServiceException {
         AccountPojo account = new AccountPojo();
@@ -160,7 +165,7 @@ public class OperatorServiceImple implements OperatorService {
             accountDao.save(account);
         }
         catch (DaoException e) {
-           throw new ServiceException(e);
+            throw new ServiceException(e);
         }
         return account;
     }
@@ -200,7 +205,7 @@ public class OperatorServiceImple implements OperatorService {
     @Override
     public void login(OperatorPojo operator, String loginIp, Map<String, Object> extendParams) throws ServiceException {
         try {
-            //operatorDao.insertOperatorHistory(operator.getOperatorId(), operator.getOperatorId());
+            // operatorDao.insertOperatorHistory(operator.getOperatorId(), operator.getOperatorId());
             operator.setLastIp(loginIp);
             operator.setLastLoginDate(new Date());
             operatorDao.update(operator);
@@ -334,15 +339,20 @@ public class OperatorServiceImple implements OperatorService {
      */
     @Override
     public void logout() {
-        WebUtil.removeAttribute(WebConstant.SESSION_OPERATOR);
-        String extendParams = (String) WebUtil.getAttribute(WebConstant.SESSION_EXTEND_PARAMS);
-        if (CommonUtil.isNotEmpty(extendParams)) {
-            WebUtil.removeAttribute(WebConstant.SESSION_EXTEND_PARAMS);
-            String[] params = StringUtils.split(extendParams, GlobalConstants.SPLITOR);
-            for (String key : params) {
-                WebUtil.removeAttribute(key);
+        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
+        if (requestAttr instanceof ServletRequestAttributes) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
+            HttpSession session = request.getSession();
+            session.removeAttribute(WebConstant.SESSION_OPERATOR);
+            String extendParams = (String) session.getAttribute(WebConstant.SESSION_EXTEND_PARAMS);
+            if (CommonUtil.isNotEmpty(extendParams)) {
+                session.removeAttribute(WebConstant.SESSION_EXTEND_PARAMS);
+                String[] params = StringUtils.split(extendParams, GlobalConstants.SPLITOR);
+                for (String key : params) {
+                    session.removeAttribute(key);
+                }
             }
+            session.invalidate();
         }
     }
-
 }
