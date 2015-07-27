@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/25 17:56:29                           */
+/* Created on:     2015/7/27 18:34:55                           */
 /*==============================================================*/
 
 
@@ -359,26 +359,6 @@ comment on column ADMIN_HISTORY.UPDATE_TIME is
 
 comment on column ADMIN_HISTORY.UPDATE_OPERATOR_ID is
 '修改人标识';
-
-/*==============================================================*/
-/* Table: ADMIN_ROLE                                            */
-/*==============================================================*/
-create table ADMIN_ROLE 
-(
-   ADMIN_ID             NUMBER(8)            not null,
-   ROLE_ID              NUMBER(4)            not null,
-   CREATE_TIME          DATE                 not null,
-   constraint PK_ADMIN_ROLE primary key (ADMIN_ID, ROLE_ID)
-);
-
-comment on column ADMIN_ROLE.ADMIN_ID is
-'管理员标识';
-
-comment on column ADMIN_ROLE.ROLE_ID is
-'角色标识';
-
-comment on column ADMIN_ROLE.CREATE_TIME is
-'创建时间';
 
 /*==============================================================*/
 /* Table: AREA                                                  */
@@ -955,6 +935,7 @@ INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('OPERATOR_TYPE', '
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('ACCOUNT_TYPE', '账号类型', '账号类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('RESOURCE_TYPE', '资源类型', '资源类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('EVENT_TYPE', '事件类型', '事件类型');
+INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('STATE', '状态', '状态');
 
 
 
@@ -1053,6 +1034,16 @@ INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_
 
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (47, 'EVENT_TYPE', '操作事件', 'O', 'N', 'N');
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (48, 'EVENT_TYPE', '积分事件', 'I', 'N', 'N');
+
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (49, 'STATE', '初始状态', 'I', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (50, 'STATE', '等待状态', 'W', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (51, 'STATE', '暂停状态', 'P', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (52, 'STATE', '正常状态', 'A', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (53, 'STATE', '阻塞状态', 'B', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (54, 'STATE', '错误状态', 'E', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (55, 'STATE', '完成状态', 'C', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (56, 'STATE', '锁定状态', 'L', 'N', 'N');
+INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (57, 'STATE', '删除状态', 'X', 'N', 'N');
 
 /*==============================================================*/
 /* Table: DIRECTORY                                             */
@@ -1427,6 +1418,7 @@ create table OPERATOR
    OPERATOR_ID          NUMBER(8)            not null,
    OPERATOR_TYPE        CHAR(1)              not null,
    OPERATOR_CODE        NUMBER(10),
+   ROLE_ID              NUMBER(6),
    USER_NAME            VARCHAR2(60),
    PASSWORD             VARCHAR2(60),
    CREATE_DATE          DATE                 not null,
@@ -1490,8 +1482,9 @@ create table OPERATOR_HISTORY
 (
    OPERATOR_ID          NUMBER(8)            not null,
    SEQ                  NUMBER(8)            not null,
+   ROLE_ID              NUMBER(6),
    OPERATOR_TYPE        CHAR(1)              not null,
-   OPERATOR_CODE        VARCHAR2(10)         not null,
+   OPERATOR_CODE        VARCHAR2(10),
    USER_NAME            VARCHAR2(60),
    PASSWORD             VARCHAR2(60),
    CREATE_DATE          DATE                 not null,
@@ -1580,12 +1573,32 @@ comment on column OPERATOR_RESOURCE.RESOURCE_TYPE is
 '资源类型';
 
 /*==============================================================*/
+/* Table: OPERATOR_ROLE                                         */
+/*==============================================================*/
+create table OPERATOR_ROLE 
+(
+   ROLE_ID              NUMBER(4)            not null,
+   OPERATOR_ID          NUMBER(8)            not null,
+   CREATE_TIME          DATE                 not null,
+   constraint PK_OPERATOR_ROLE primary key (ROLE_ID, OPERATOR_ID)
+);
+
+comment on column OPERATOR_ROLE.ROLE_ID is
+'角色标识';
+
+comment on column OPERATOR_ROLE.OPERATOR_ID is
+'操作员标识';
+
+comment on column OPERATOR_ROLE.CREATE_TIME is
+'创建时间';
+
+/*==============================================================*/
 /* Table: OPERATOR_ROLE_HISTORY                                 */
 /*==============================================================*/
 create table OPERATOR_ROLE_HISTORY 
 (
    OPERATOR_ID          NUMBER(8)            not null,
-   ROLE_ID              NUMBER(4)            not null,
+   ROLE_ID              NUMBER(6)            not null,
    SEQ                  NUMBER(4)            not null,
    CREATE_TIME          DATE                 not null,
    UPDATE_TIME          DATE                 not null,
@@ -2574,14 +2587,6 @@ alter table ADMIN_ATTR
    add constraint FK_ADMIN_AT_ATTR_ID_A_ATTR foreign key (ATTR_ID)
       references ATTR (ATTR_ID);
 
-alter table ADMIN_ROLE
-   add constraint FK_ADMIN_RO_ADMIN_ID__ADMIN foreign key (ADMIN_ID)
-      references ADMIN (ADMIN_ID);
-
-alter table ADMIN_ROLE
-   add constraint FK_ADMIN_RO_ROLE_ID_A_ROLE foreign key (ROLE_ID)
-      references ROLE (ROLE_ID);
-
 alter table AREA
    add constraint FK_AREA_AREA_ID_A_AREA foreign key (PARENT_AREA_ID)
       references AREA (AREA_ID);
@@ -2662,6 +2667,10 @@ alter table OPERATE_LOG
    add constraint FK_OPERATE__FK_OPERAT_MODULE foreign key (MODULE_CODE)
       references MODULE (MODULE_CODE);
 
+alter table OPERATOR
+   add constraint FK_OPERATOR_FK_OPERAT_ROLE foreign key (ROLE_ID)
+      references ROLE (ROLE_ID);
+
 alter table OPERATOR_RESOURCE
    add constraint FK_OPERATOR_FK_OPERAT_RESOURCE foreign key (RESOURCE_ID)
       references RESOURCES (RESOURCE_ID);
@@ -2669,6 +2678,14 @@ alter table OPERATOR_RESOURCE
 alter table OPERATOR_RESOURCE
    add constraint FK_OPERATOR_OPERATOR__OPERATOR foreign key (OPERATOR_ID)
       references OPERATOR (OPERATOR_ID);
+
+alter table OPERATOR_ROLE
+   add constraint FK_OPERATOR_ADMIN_ID__OPERATOR foreign key (OPERATOR_ID)
+      references OPERATOR (OPERATOR_ID);
+
+alter table OPERATOR_ROLE
+   add constraint FK_OPERATOR_ROLE_ID_A_ROLE foreign key (ROLE_ID)
+      references ROLE (ROLE_ID);
 
 alter table QRTZ_BLOB_TRIGGERS
    add constraint FK_QRTZ_BLO_QRTZ_TRI foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
