@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -56,7 +55,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
             }
         }
         catch (CacheException e) {
-            logger.warn(e);
+            logger.warn("缓存保存失败", e);
         }
     }
 
@@ -78,7 +77,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
             }
         }
         catch (CacheException e) {
-            logger.warn(e);
+            logger.warn("return更新缓存失败", e);
         }
     }
 
@@ -101,14 +100,13 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
             }
         }
         catch (Exception ex) {
-            logger.warn(ex);
+            logger.warn("更新缓存失败", ex);
         }
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param ex <br>
@@ -136,9 +134,8 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param stackId <br>
@@ -151,7 +148,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                 stackId + "_SQL_" + TransManager.getInstance().getSeq(), sql);
         }
         catch (CacheException e) {
-            logger.warn(e);
+            logger.warn("缓存sql失败", e);
         }
     }
 
@@ -167,7 +164,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                     cache.removeValue(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i);
                 }
                 catch (Exception e) {
-                    logger.warn(e);
+                    logger.warn("删除cache日志失败", e);
                 }
             }
         }
@@ -177,7 +174,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                 cache.removeValue(CacheConstant.CACHE_LOGS, key);
             }
             catch (CacheException ex) {
-                logger.warn(ex);
+                logger.warn("删除cache日志失败2", ex);
             }
         }
     }
