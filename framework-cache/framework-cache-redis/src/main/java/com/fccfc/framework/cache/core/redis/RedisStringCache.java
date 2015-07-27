@@ -5,12 +5,13 @@ package com.fccfc.framework.cache.core.redis;
 
 import java.util.Map;
 
-import redis.clients.jedis.Jedis;
-
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.IStringCache;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * <Description> <br>
@@ -25,18 +26,19 @@ import com.fccfc.framework.common.utils.CommonUtil;
 
 public class RedisStringCache implements IStringCache {
 
-    /**
-     * 缓存
-     */
-    private Jedis jedis;
+    private String host;
+
+    private int port;
 
     /**
      * RedisStringCache
+     * 
      * @param host <br>
      * @param port <br>
      */
     public RedisStringCache(String host, int port) {
-        jedis = new Jedis(host, port);
+        this.host = host;
+        this.port = port;
     }
 
     /*
@@ -45,11 +47,18 @@ public class RedisStringCache implements IStringCache {
      */
     @Override
     public Map<String, String> getNode(String nodeName) throws CacheException {
+        JedisPool pool = null;
+        Jedis jedis = null;
         try {
+            pool = RedisConnectionPool.getPool(host, port);
+            jedis = pool.getResource();
             return jedis.hgetAll(nodeName);
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        }
+        finally {
+            RedisConnectionPool.returnResource(pool, jedis);
         }
     }
 
@@ -60,11 +69,18 @@ public class RedisStringCache implements IStringCache {
     @Override
     public void putNode(String nodeName, Map<String, String> node) throws CacheException {
         if (CommonUtil.isNotEmpty(node)) {
+            JedisPool pool = null;
+            Jedis jedis = null;
             try {
+                pool = RedisConnectionPool.getPool(host, port);
+                jedis = pool.getResource();
                 jedis.hmset(nodeName, node);
             }
             catch (Exception e) {
                 throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            }
+            finally {
+                RedisConnectionPool.returnResource(pool, jedis);
             }
         }
     }
@@ -75,12 +91,19 @@ public class RedisStringCache implements IStringCache {
      */
     @Override
     public boolean removeNode(String nodeName) throws CacheException {
+        JedisPool pool = null;
+        Jedis jedis = null;
         try {
+            pool = RedisConnectionPool.getPool(host, port);
+            jedis = pool.getResource();
             jedis.del(nodeName);
             return true;
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        }
+        finally {
+            RedisConnectionPool.returnResource(pool, jedis);
         }
     }
 
@@ -90,11 +113,18 @@ public class RedisStringCache implements IStringCache {
      */
     @Override
     public String getValue(String nodeName, String key) throws CacheException {
+        JedisPool pool = null;
+        Jedis jedis = null;
         try {
+            pool = RedisConnectionPool.getPool(host, port);
+            jedis = pool.getResource();
             return jedis.hget(nodeName, key);
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        }
+        finally {
+            RedisConnectionPool.returnResource(pool, jedis);
         }
     }
 
@@ -105,7 +135,11 @@ public class RedisStringCache implements IStringCache {
     @Override
     public void putValue(String nodeName, String key, String t) throws CacheException {
 
+        JedisPool pool = null;
+        Jedis jedis = null;
         try {
+            pool = RedisConnectionPool.getPool(host, port);
+            jedis = pool.getResource();
             if (CommonUtil.isNotEmpty(t)) {
                 jedis.hset(nodeName, key, t);
             }
@@ -115,6 +149,9 @@ public class RedisStringCache implements IStringCache {
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        }
+        finally {
+            RedisConnectionPool.returnResource(pool, jedis);
         }
 
     }
@@ -135,11 +172,18 @@ public class RedisStringCache implements IStringCache {
      */
     @Override
     public void removeValue(String nodeName, String key) throws CacheException {
+        JedisPool pool = null;
+        Jedis jedis = null;
         try {
+            pool = RedisConnectionPool.getPool(host, port);
+            jedis = pool.getResource();
             jedis.hdel(nodeName, key);
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        }
+        finally {
+            RedisConnectionPool.returnResource(pool, jedis);
         }
     }
 
@@ -149,11 +193,18 @@ public class RedisStringCache implements IStringCache {
      */
     @Override
     public void clean() throws CacheException {
+        JedisPool pool = null;
+        Jedis jedis = null;
         try {
+            pool = RedisConnectionPool.getPool(host, port);
+            jedis = pool.getResource();
             jedis.flushAll();
         }
         catch (Exception e) {
             throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        }
+        finally {
+            RedisConnectionPool.returnResource(pool, jedis);
         }
     }
 
