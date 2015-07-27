@@ -69,7 +69,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             else if (param.getBeanType().equals(Map.class)) {
                 query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
             }
-            else if (Serializable.class.isAssignableFrom(param.getBeanType())) {
+            else {
                 Class<?> beanType = param.getBeanType();
                 if (Serializable.class.equals(beanType)) {
                     beanType = param.getReturnType();
@@ -103,7 +103,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 return query.list();
             }
             else {
-               return query.uniqueResult();
+                return query.uniqueResult();
             }
         }
         catch (Exception e) {
