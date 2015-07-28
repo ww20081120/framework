@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.date.DateUtil;
+import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.config.core.DictionaryHelper;
 
 /**
@@ -65,6 +66,10 @@ public class VelocityTool {
 
     public String getDictionary(String dictCode, String data) {
         return DictionaryHelper.getString(dictCode, data);
+    }
+
+    public String getConfig(String code) {
+        return Configuration.getString(code);
     }
 
     public boolean hasPermission(Object resourceCode) {
