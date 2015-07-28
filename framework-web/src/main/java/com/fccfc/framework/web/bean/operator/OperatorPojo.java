@@ -51,6 +51,10 @@ public class OperatorPojo extends BaseEntity {
     @Column(name = "OPERATOR_CODE")
     private Integer operatorCode;
 
+    /** 默认角色 */
+    @Column(name = "ROLE_ID")
+    private Integer roleId;
+
     /** USER_NAME */
     @Column(name = "USER_NAME")
     private String userName;
@@ -206,4 +210,13 @@ public class OperatorPojo extends BaseEntity {
     public void setLastLoginDate(java.util.Date lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
     }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
 }

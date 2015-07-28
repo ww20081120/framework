@@ -35,19 +35,4 @@ public interface MenuDao {
      */
     @Sql(bean = MenuPojo.class)
     List<MenuPojo> selectAllMenu(@Param("moduleCode") List<String> moduleCode) throws DaoException;
-
-    /**
-     * 
-     * Description: 根据权限查询菜单<br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param operateId
-     * @param moduleCode
-     * @return
-     * @throws DaoException <br>
-     */
-    @Sql(bean = MenuPojo.class)
-    List<MenuPojo> selectMenuByPermision(@Param("operateId") Integer operateId,
-        @Param("moduleCode") List<String> moduleCode) throws DaoException;
 }

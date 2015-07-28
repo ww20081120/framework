@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/27 18:34:55                           */
+/* Created on:     2015/7/28 10:39:55                           */
 /*==============================================================*/
 
 
@@ -935,7 +935,6 @@ INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('OPERATOR_TYPE', '
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('ACCOUNT_TYPE', '账号类型', '账号类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('RESOURCE_TYPE', '资源类型', '资源类型');
 INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('EVENT_TYPE', '事件类型', '事件类型');
-INSERT INTO DICTIONARY (DICT_CODE, DICT_NAME, REMARK) VALUES ('STATE', '状态', '状态');
 
 
 
@@ -1034,16 +1033,6 @@ INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_
 
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (47, 'EVENT_TYPE', '操作事件', 'O', 'N', 'N');
 INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (48, 'EVENT_TYPE', '积分事件', 'I', 'N', 'N');
-
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (49, 'STATE', '初始状态', 'I', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (50, 'STATE', '等待状态', 'W', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (51, 'STATE', '暂停状态', 'P', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (52, 'STATE', '正常状态', 'A', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (53, 'STATE', '阻塞状态', 'B', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (54, 'STATE', '错误状态', 'E', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (55, 'STATE', '完成状态', 'C', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (56, 'STATE', '锁定状态', 'L', 'N', 'N');
-INSERT INTO DICTIONARY_DATA (DICT_DATA_ID, DICT_CODE, DICT_DATA_NAME, DICT_DATA_VALUE, IS_FIXED, IS_CANCEL) VALUES (57, 'STATE', '删除状态', 'X', 'N', 'N');
 
 /*==============================================================*/
 /* Table: DIRECTORY                                             */
@@ -2090,7 +2079,6 @@ create table ROLE
    MODULE_CODE          VARCHAR2(10)         not null,
    ROLE_NAME            VARCHAR2(60)         not null,
    CREATE_TIME          DATE                 not null,
-   OPERATOR_ID          NUMBER(8),
    constraint PK_ROLE primary key (ROLE_ID)
 );
 
@@ -2105,9 +2093,6 @@ comment on column ROLE.ROLE_NAME is
 
 comment on column ROLE.CREATE_TIME is
 '创建时间';
-
-comment on column ROLE.OPERATOR_ID is
-'创建人标识';
 
 /*==============================================================*/
 /* Table: ROLE_HISTORY                                          */

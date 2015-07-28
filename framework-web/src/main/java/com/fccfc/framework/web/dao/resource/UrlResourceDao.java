@@ -37,20 +37,6 @@ public interface UrlResourceDao extends IGenericBaseDao {
     @Sql(bean = UrlResourcePojo.class)
     List<UrlResourcePojo> selectAllModuleUrlResource(@Param("moduleCode") List<String> moduleCode) throws DaoException;
 
-    /**
-     * Description: selectUrlResourceByPermision<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param operateId
-     * @param moduleCode
-     * @return
-     * @throws DaoException <br>
-     */
-    @Sql(bean = UrlResourcePojo.class)
-    List<UrlResourcePojo> selectUrlResourceByPermision(@Param("operateId") Integer operateId,
-        @Param("moduleCode") List<String> moduleCode) throws DaoException;
-
     @Sql(bean = Integer.class)
     List<Integer> selectResourceIdByPermission(@Param("operateId") Integer operateId,
         @Param("moduleCode") List<String> moduleCode) throws DaoException;
