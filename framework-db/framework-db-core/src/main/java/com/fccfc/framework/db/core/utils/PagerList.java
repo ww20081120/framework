@@ -43,7 +43,8 @@ public class PagerList<E> extends CopyOnWriteArrayList<E> {
             return 0;
         }
         else {
-            return (int) (totalCount / pageSize + 1);
+            //return (int) (totalCount / pageSize + 1);
+        	return (int) (totalCount % pageSize == 0 ? (totalCount / pageSize) : (totalCount / pageSize + 1));
         }
     }
 
