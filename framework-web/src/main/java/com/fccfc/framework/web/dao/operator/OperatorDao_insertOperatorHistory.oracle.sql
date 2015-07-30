@@ -11,6 +11,7 @@ INSERT INTO OPERATOR_HISTORY SELECT
         ),
         0
     ) + 1 AS SEQ,
+    O.ROLE_ID,
     O.OPERATOR_TYPE,
     O.OPERATOR_CODE,
     O.USER_NAME,
