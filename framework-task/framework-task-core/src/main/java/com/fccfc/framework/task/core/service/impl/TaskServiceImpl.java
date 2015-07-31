@@ -37,6 +37,7 @@ import com.fccfc.framework.task.core.dao.JobDao;
 import com.fccfc.framework.task.core.dao.TriggerDao;
 import com.fccfc.framework.task.core.job.JobExcutor;
 import com.fccfc.framework.task.core.job.SynchronizedJobExcutor;
+import com.fccfc.framework.task.core.listener.TaskListener;
 
 /**
  * <Description> <br>
@@ -75,8 +76,8 @@ public class TaskServiceImpl implements TaskService.Iface {
 	 * @taskId <br>
 	 * @throws TException <br>
 	 */ 
-//    @Resource
-//    private TaskListener taskListener;
+    @Resource
+    private TaskListener taskListener;
 
 	/*
      * (non-Javadoc)
@@ -170,9 +171,9 @@ public class TaskServiceImpl implements TaskService.Iface {
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
                 // 将数据添加到TASK和SIMPLE_TRIGGER表中
-                saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
+                //saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到SIMPLE_TRIGGER表中
-                triggerDao.saveSimpleTrigger(simpleTriggerPojo);
+                //triggerDao.saveSimpleTrigger(simpleTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -237,9 +238,9 @@ public class TaskServiceImpl implements TaskService.Iface {
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
                 // 将数据添加到TASK和TASK_TRIGGER表中
-                saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
+                //saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到CRON_TRIGGER表中
-                triggerDao.saveCronTrigger(cronTriggerPojo);
+                //triggerDao.saveCronTrigger(cronTriggerPojo);
             }
         }
         catch (Exception e) {
