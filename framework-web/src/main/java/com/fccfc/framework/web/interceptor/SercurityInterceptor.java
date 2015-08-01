@@ -49,7 +49,7 @@ public class SercurityInterceptor extends HandlerInterceptorAdapter {
             if (permission != null && WebUtil.hasPermission(permission.getResourceId())) {
                 return true;
             }
-            response.sendRedirect(request.getContextPath() + noPermissionUrl);
+            request.getRequestDispatcher(noPermissionUrl).forward(request, response);
             return false;
         }
         return true;
