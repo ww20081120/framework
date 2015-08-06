@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/7/28 10:39:55                           */
+/* Created on:     2015/8/6 9:37:59                             */
 /*==============================================================*/
 
 
@@ -52,7 +52,12 @@ start with 1000
 nocycle
  cache 20;
 
-create sequence SEQ_CHANGE_NOTIF_REDIS;
+create sequence SEQ_CHANGE_NOTIF_REDIS
+increment by 1
+start with 1
+ maxvalue 99999999999
+ minvalue 1
+ cache 20;
 
 create sequence SEQ_CONFIG_ITEM
 increment by 1
@@ -421,7 +426,7 @@ comment on column AREA_RANGE.LATITUDE is
 /*==============================================================*/
 create table ATTACHMENTS 
 (
-   ATTACHMENTS_ID       NUMBER(6)            not null,
+   ATTACHMENTS_ID       NUMBER(10)           not null,
    ATTACHMENTS_TYPE     VARCHAR2(20)         not null,
    ATTACHMENTS_NAME     VARCHAR2(60)         not null,
    IS_REMOTE            CHAR(1)              not null,
@@ -557,27 +562,27 @@ comment on column ATTR_VALUE.LINK_ATTR_ID is
 /*==============================================================*/
 create table CHANGE_NOTIF_REDIS 
 (
-   "change_notif_id"    NUMBER(12)           not null,
-   "table_name"         VARCHAR(60)          not null,
-   "key_value"          VARCHAR(60)          not null,
-   "created_date"       DATE                 not null,
-   "action_type"        CHAR(1),
-   constraint PK_CHANGE_NOTIF_REDIS primary key ("change_notif_id")
+   CHANGE_NOTIF_ID      NUMBER(12)           not null,
+   TABLE_NAME           VARCHAR(60)          not null,
+   KEY_VALUE            VARCHAR(60)          not null,
+   CREATED_DATE         DATE                 not null,
+   ACTION_TYPE          CHAR(1),
+   constraint PK_CHANGE_NOTIF_REDIS primary key (CHANGE_NOTIF_ID)
 );
 
-comment on column CHANGE_NOTIF_REDIS."change_notif_id" is
+comment on column CHANGE_NOTIF_REDIS.CHANGE_NOTIF_ID is
 '主键';
 
-comment on column CHANGE_NOTIF_REDIS."table_name" is
-'更新记录表名称';
+comment on column CHANGE_NOTIF_REDIS.TABLE_NAME is
+'表名';
 
-comment on column CHANGE_NOTIF_REDIS."key_value" is
+comment on column CHANGE_NOTIF_REDIS.KEY_VALUE is
 '更新记录主键';
 
-comment on column CHANGE_NOTIF_REDIS."created_date" is
+comment on column CHANGE_NOTIF_REDIS.CREATED_DATE is
 '创建时间';
 
-comment on column CHANGE_NOTIF_REDIS."action_type" is
+comment on column CHANGE_NOTIF_REDIS.ACTION_TYPE is
 '操作类型 (A:新增 D:删除 M:修改)';
 
 /*==============================================================*/
@@ -2048,6 +2053,28 @@ comment on column QRTZ_TRIGGERS.JOB_DATA is
 'JOB_DATA';
 
 /*==============================================================*/
+/* Table: RECEIVE_BOX                                           */
+/*==============================================================*/
+create table RECEIVE_BOX 
+(
+   MESSAGE_ID           NUMBER(10)           not null,
+   RECEIVE              VARCHAR2(120)        not null,
+   SENDER               VARCHAR(120),
+   MESSAGE_TYPE         CHAR(1)              not null,
+   TITLE                VARCHAR2(120),
+   IS_READ              CHAR(1)              not null,
+   RECEIVE_TIME         DATE                 not null,
+   READ_TIME            DATE,
+   constraint PK_RECEIVE_BOX primary key (MESSAGE_ID)
+);
+
+comment on table RECEIVE_BOX is
+'收件箱';
+
+comment on column RECEIVE_BOX.MESSAGE_ID is
+'消息标识';
+
+/*==============================================================*/
 /* Table: RESOURCES                                             */
 /*==============================================================*/
 create table RESOURCES 
@@ -2079,6 +2106,7 @@ create table ROLE
    MODULE_CODE          VARCHAR2(10)         not null,
    ROLE_NAME            VARCHAR2(60)         not null,
    CREATE_TIME          DATE                 not null,
+   OPERATOR_ID          NUMBER(8),
    constraint PK_ROLE primary key (ROLE_ID)
 );
 
@@ -2093,6 +2121,9 @@ comment on column ROLE.ROLE_NAME is
 
 comment on column ROLE.CREATE_TIME is
 '创建时间';
+
+comment on column ROLE.OPERATOR_ID is
+'创建人标识';
 
 /*==============================================================*/
 /* Table: ROLE_HISTORY                                          */
@@ -2691,6 +2722,10 @@ alter table QRTZ_SIMPROP_TRIGGERS
 alter table QRTZ_TRIGGERS
    add constraint FK_QRTZ_TRI_QRTZ_JOB foreign key (SCHED_NAME, JOB_NAME, JOB_GROUP)
       references QRTZ_JOB_DETAILS (SCHED_NAME, JOB_NAME, JOB_GROUP);
+
+alter table RECEIVE_BOX
+   add constraint FK_RECEIVE__REFERENCE_MESSAGE_ foreign key (MESSAGE_ID)
+      references MESSAGE_HISTORY (MESSAGE_ID);
 
 alter table RESOURCES
    add constraint FK_RESOURCE_FK_RESOUR_MODULE foreign key (MODULE_CODE)
