@@ -327,7 +327,7 @@ public class ResourceController {
      * @param type <br>
      * @return <br>
      */
-    private String getType(String type) {
+    public String getType(String type) {
         String tempType = "," + type + ",";
 
         if (",xml,html,json,css,js,txt,".indexOf(tempType) != -1) {
@@ -398,5 +398,20 @@ public class ResourceController {
                 }
             }
         }
+    }
+    public Map<String, String> getContentTypes() {
+        return contentTypes;
+    }
+
+    public void setContentTypes(Map<String, String> contentTypes) {
+        this.contentTypes = contentTypes;
+    }
+
+    public Map<String, MediaType> getMeidaTypes() {
+        return meidaTypes;
+    }
+
+    public void setMeidaTypes(Map<String, MediaType> meidaTypes) {
+        this.meidaTypes = meidaTypes;
     }
 }
