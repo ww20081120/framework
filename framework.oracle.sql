@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/8/6 9:37:59                             */
+/* Created on:     2015/8/8 11:05:59                            */
 /*==============================================================*/
 
 
@@ -574,7 +574,7 @@ comment on column CHANGE_NOTIF_REDIS.CHANGE_NOTIF_ID is
 '主键';
 
 comment on column CHANGE_NOTIF_REDIS.TABLE_NAME is
-'表名';
+'更新记录名';
 
 comment on column CHANGE_NOTIF_REDIS.KEY_VALUE is
 '更新记录主键';
