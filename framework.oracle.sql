@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/8/8 11:05:59                            */
+/* Created on:     2015/8/10 9:47:44                            */
 /*==============================================================*/
 
 
@@ -1132,8 +1132,11 @@ comment on column MENU.ICON_URL is
 /*==============================================================*/
 create table MENU_URL_RESOURCE 
 (
-   RESOURCE_ID          NUMBER(6),
-   URL_RESOURCE_ID      NUMBER(6)
+   RESOURCE_ID          NUMBER(6)            not null,
+   URL_RESOURCE_ID      NUMBER(6)            not null,
+   ALLOW_SHOW           CHAR(1)              not null,
+   IS_SELECT            CHAR(1)              not null,
+   constraint PK_MENU_URL_RESOURCE primary key (RESOURCE_ID, URL_RESOURCE_ID)
 );
 
 comment on table MENU_URL_RESOURCE is
