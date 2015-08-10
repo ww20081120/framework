@@ -26,6 +26,11 @@ import com.fccfc.framework.common.utils.UtilException;
 
 public final class DataUtil {
 
+    /**默认构造
+     */
+    private DataUtil(){
+    }
+
     /**
      * 16位字符串数组
      */
@@ -80,9 +85,8 @@ public final class DataUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param content <br>
@@ -99,9 +103,8 @@ public final class DataUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param content <br>
