@@ -3,7 +3,9 @@
  */
 package com.fccfc.framework.common.utils.io;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -66,7 +68,14 @@ public final class HttpClientUtil {
                 throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}",
                     statusCode);
             }
-            body = method.getResponseBodyAsString();
+            //body = method.getResponseBodyAsString();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));  
+            StringBuffer stringBuffer = new StringBuffer();  
+            String str = "";  
+            while((str = reader.readLine())!=null){  
+                stringBuffer.append(str);  
+            }  
+            body = stringBuffer.toString();  
             method.releaseConnection();
         }
         catch (Exception e) {
