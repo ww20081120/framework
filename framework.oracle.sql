@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/8/10 9:47:44                            */
+/* Created on:     2015/8/11 11:11:01                           */
 /*==============================================================*/
 
 
@@ -117,6 +117,13 @@ nocycle;
 create sequence SEQ_OPERATOR
 increment by 1
 start with 1000
+ maxvalue 99999999999
+ minvalue 1
+ cache 20;
+
+create sequence SEQ_REDIS_REFRESH_RULE
+increment by 1
+start with 1
  maxvalue 99999999999
  minvalue 1
  cache 20;
@@ -2076,6 +2083,36 @@ comment on table RECEIVE_BOX is
 
 comment on column RECEIVE_BOX.MESSAGE_ID is
 '消息标识';
+
+/*==============================================================*/
+/* Table: REDIS_REFRESH_RULE                                    */
+/*==============================================================*/
+create table REDIS_REFRESH_RULE 
+(
+   REDIS_REFRESH_RULE_ID NUMBER(12)           not null,
+   TABLE_NAME           VARCHAR(60)          not null,
+   REFRESH_RULE_TYPE    CHAR(1)              not null,
+   REFRESH_KEY          VARCHAR(60)          not null,
+   CREATED_DATE         DATE                 not null,
+   constraint PK_REDIS_REFRESH_RULE primary key (REDIS_REFRESH_RULE_ID)
+);
+
+comment on column REDIS_REFRESH_RULE.REDIS_REFRESH_RULE_ID is
+'主键';
+
+comment on column REDIS_REFRESH_RULE.TABLE_NAME is
+'名称';
+
+comment on column REDIS_REFRESH_RULE.REFRESH_RULE_TYPE is
+'D:刷新key拼装规则为REFRESH
+S:刷新key拼装规则为REFRESH+TABLE.NAME主键
+C:刷新key拼装规则自定义';
+
+comment on column REDIS_REFRESH_RULE.REFRESH_KEY is
+'操作类型 (A:新增 D:删除 M:修改)';
+
+comment on column REDIS_REFRESH_RULE.CREATED_DATE is
+'创建时间';
 
 /*==============================================================*/
 /* Table: RESOURCES                                             */
