@@ -53,6 +53,11 @@ public class VelocityTool {
         else {
             sb.append("&size=").append(pageSize);
         }
+        from = sb.indexOf("toLast=");
+        if (from != -1) {
+            sb.replace(from - 1, sb.indexOf("&", from), "");
+        }
+
         from = sb.indexOf("?&");
         if (from != -1) {
             sb.deleteCharAt(from + 1);
@@ -81,7 +86,7 @@ public class VelocityTool {
         if (value == null) {
             value = request.getSession().getAttribute(key);
             if (value == null) {
-                value = request.getServletContext().getAttribute(key);
+                value = request.getSession().getServletContext().getAttribute(key);
             }
         }
         return value;
