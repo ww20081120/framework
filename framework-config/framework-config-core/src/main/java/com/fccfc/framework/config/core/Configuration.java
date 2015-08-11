@@ -97,16 +97,6 @@ public final class Configuration {
         String value = cache == null ? null : cache.get(key);
         if (value == null) {
             try {
-                String cacheTime = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_KEY_CONFIGITEM,
-                    CacheConstant.CONFIG_CACHE_TIME);
-                if (CommonUtil.isEmpty(cacheTime)
-                    || (Long.valueOf(cacheTime) + CACHE_TIME > System.currentTimeMillis())) {
-                    logger.info("开始重新加载配置项");
-                    reloadCache();
-                    CacheHelper.getStringCache().putValue(CacheConstant.CACHE_KEY_CONFIGITEM,
-                        CacheConstant.CONFIG_CACHE_TIME, String.valueOf(System.currentTimeMillis()));
-                    logger.info("重新加载配置项结束");
-                }
                 value = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_KEY_CONFIGITEM, key);
             }
             catch (Exception e) {
