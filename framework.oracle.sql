@@ -5,7 +5,7 @@
 
 
 create sequence SEQ_ACCOUNT
-increment by 1
+increment by 1 
 start with 1000
  maxvalue 99999999999
  minvalue 1
