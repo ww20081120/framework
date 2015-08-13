@@ -5,10 +5,11 @@
  ****************************************************************************************/
 package com.fccfc.framework.log.core;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Arrays;
 
 import com.alibaba.fastjson.JSONObject;
@@ -111,26 +112,36 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @taskId <br>
      * @param ex <br>
      * @return <br>
-     * @throws UnsupportedEncodingException <br>
+     * @throws IOException
      */
-    protected String getExceptionMsg(Exception ex) throws UnsupportedEncodingException {
+    protected static String getExceptionMsg(Exception ex) throws IOException {
         if (ex == null) {
             return GlobalConstants.BLANK;
         }
-        String result = null;
-        PrintWriter writer = null;
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        StringBuilder sb = new StringBuilder();
         try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            writer = new PrintWriter(new OutputStreamWriter(out, GlobalConstants.DEFAULT_CHARSET));
-            ex.printStackTrace(writer);
-            result = out.toString(GlobalConstants.DEFAULT_CHARSET);
-        }
-        finally {
-            if (writer != null) {
-                writer.close();
+            ex.printStackTrace(pw);
+            pw.flush();
+            LineNumberReader reader = new LineNumberReader(new StringReader(sw.toString()));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n\t");
             }
         }
-        return result;
+        finally {
+            if (sw != null) {
+                sw.close();
+            }
+
+            if (pw != null) {
+                pw.close();
+            }
+        }
+
+        return sb.toString();
     }
 
     /**
