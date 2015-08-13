@@ -1,11 +1,11 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/8/11 11:11:01                           */
+/* Created on:     2015/8/13 14:05:44                           */
 /*==============================================================*/
 
 
 create sequence SEQ_ACCOUNT
-increment by 1 
+increment by 1
 start with 1000
  maxvalue 99999999999
  minvalue 1
@@ -128,7 +128,13 @@ start with 1
  minvalue 1
  cache 20;
 
-create sequence SEQ_RESOURCE_ID;
+create sequence SEQ_RESOURCE_ID
+increment by 1
+start with 1000
+ maxvalue 99999999999
+ minvalue 20
+nocycle
+ cache 20;
 
 create sequence SEQ_ROLE
 increment by 1
@@ -2092,6 +2098,7 @@ create table REDIS_REFRESH_RULE
    REDIS_REFRESH_RULE_ID NUMBER(12)           not null,
    TABLE_NAME           VARCHAR(60)          not null,
    REFRESH_RULE_TYPE    CHAR(1)              not null,
+   REFRESH_NODE_NAME    VARCHAR(60),
    REFRESH_KEY          VARCHAR(60)          not null,
    CREATED_DATE         DATE                 not null,
    constraint PK_REDIS_REFRESH_RULE primary key (REDIS_REFRESH_RULE_ID)
