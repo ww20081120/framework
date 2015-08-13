@@ -66,6 +66,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * ParamMetadata
+     * 
      * @param size <br>
      */
     public ParamMetadata(int size) {
@@ -74,6 +75,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * getIndexPosition
+     * 
      * @return <br>
      */
     public int getIndexPosition() {
@@ -82,6 +84,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * setIndexPosition
+     * 
      * @param indexPosition <br>
      */
     public void setIndexPosition(int indexPosition) {
@@ -90,6 +93,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * getSizePosition
+     * 
      * @return the sizePosition
      */
     public int getSizePosition() {
@@ -98,6 +102,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * setSizePosition
+     * 
      * @param sizePosition <br>
      */
     public void setSizePosition(int sizePosition) {
@@ -106,6 +111,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * getParamNames
+     * 
      * @return the paramNames <br>
      */
     public String[] getParamNames() {
@@ -114,6 +120,7 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * setParamName
+     * 
      * @param index <br>
      * @param name <br>
      */
@@ -152,4 +159,9 @@ public class ParamMetadata extends BaseEntity {
     public void setDbId(String dbId) {
         this.dbId = dbId;
     }
+
+    public void setParamNames(String[] paramNames) {
+        this.paramNames = paramNames;
+    }
+
 }
