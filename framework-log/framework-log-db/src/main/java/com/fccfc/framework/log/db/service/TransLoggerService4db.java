@@ -3,6 +3,7 @@
  */
 package com.fccfc.framework.log.db.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,7 +14,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -87,7 +87,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
      * @throws CacheException <br>
      * @throws DaoException <br>
      * @taskId <br>
-     * <br>
+     *         <br>
      */
     private void saveTransLogStack(TransManager manager) throws CacheException, DaoException {
         Set<String> keySet = manager.getIdSet();
@@ -100,8 +100,8 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
             transLogStackPojo.setStackId(stackId);
             transLogStackPojo.setSeq(seq);
             transLogStackPojo.setTransId(manager.getStackId());
-            JSONObject logJson = (JSONObject) JSONObject.parse(CacheHelper.getStringCache().getValue(
-                CacheConstant.CACHE_LOGS, stackId));
+            JSONObject logJson = (JSONObject) JSONObject
+                .parse(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId));
             transLogStackPojo.setMethod(logJson.getString("method"));
             transLogStackPojo.setParentStackId(logJson.getString("parentStackId"));
             transLogStackPojo.setBeginTime(new Date(logJson.getLong("beginTime")));
@@ -132,7 +132,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
      * @throws UnsupportedEncodingException <br>
      */
     private void saveTransLog(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue,
-        Exception e) throws DaoException, CacheException, UnsupportedEncodingException {
+        Exception e) throws DaoException, CacheException, IOException {
         TransLogPojo transLogPojo = new TransLogPojo();
         transLogPojo.setTransId(TransManager.getInstance().getStackId());
         Date beginDate = new Date(beginTime);
@@ -157,8 +157,8 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
         transLogPojo.setContactChannelId(Integer.valueOf(contactChannelId));
 
         // 输入参数
-        JSONObject inputParam = (JSONObject) JSONObject.parse(CacheHelper.getStringCache().getValue(
-            CacheConstant.CACHE_LOGS, stackId));
+        JSONObject inputParam = (JSONObject) JSONObject
+            .parse(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId));
         transLogPojo.setInputParam(inputParam.getString("params"));
 
         // 输出参数
