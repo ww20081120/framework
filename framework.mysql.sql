@@ -1,6 +1,6 @@
-﻿/*==============================================================*/
+/*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/7/19 11:49:35                           */
+/* Created on:     2015/8/14 10:59:53                           */
 /*==============================================================*/
 
 
@@ -22,7 +22,7 @@ create table ACCOUNT
 );
 
 /*==============================================================*/
-/* Table: ADMIN                                                  */
+/* Table: ADMIN                                                 */
 /*==============================================================*/
 create table ADMIN
 (
@@ -84,17 +84,6 @@ create table ADMIN_HISTORY
    UPDATE_TIME          datetime not null comment '修改时间',
    UPDATE_OPERATOR_ID   integer(8) comment '修改人标识',
    primary key (ADMIN_ID, SEQ)
-);
-
-/*==============================================================*/
-/* Table: ADMIN_ROLE                                            */
-/*==============================================================*/
-create table ADMIN_ROLE
-(
-   ADMIN_ID             integer(8) not null comment '管理员标识',
-   ROLE_ID              integer(4) not null comment '角色标识',
-   CREATE_TIME          datetime not null comment '创建时间',
-   primary key (ADMIN_ID, ROLE_ID)
 );
 
 /*==============================================================*/
@@ -467,8 +456,11 @@ create table MENU
 /*==============================================================*/
 create table MENU_URL_RESOURCE
 (
-   RESOURCE_ID          integer(6) comment '菜单标识',
-   URL_RESOURCE_ID      integer(6) comment 'URL_资源标识'
+   RESOURCE_ID          integer(6) not null comment '菜单标识',
+   URL_RESOURCE_ID      integer(6) not null comment 'URL_资源标识',
+   ALLOW_SHOW           char(1) not null,
+   IS_SELECT            char(1) not null,
+   primary key (RESOURCE_ID, URL_RESOURCE_ID)
 );
 
 alter table MENU_URL_RESOURCE comment '菜单关联哪些权限';
@@ -583,7 +575,7 @@ alter table OPERATE_LOG comment '记录用户的操作';
 /*==============================================================*/
 create table OPERATOR
 (
-   OPERATOR_ID          integer(8) not null auto_increment comment '操作员标识',
+   OPERATOR_ID          integer(8) not null comment '操作员标识',
    OPERATOR_TYPE        char(1) not null comment '操作员类型',
    OPERATOR_CODE        integer(8) comment '操作员代码',
    USER_NAME            varchar(60) comment '登录名称',
@@ -593,10 +585,11 @@ create table OPERATOR
    STATE_DATE           datetime not null comment '状态日期',
    IS_LOCKED            char(1) not null comment '是否锁定',
    PWD_EXP_DATE         datetime comment '密码过期时间',
-   LOGIN_FAIL           integer(4) not null comment '登录失败次数',
    REGIST_IP            varchar(16) comment '注册IP',
    LAST_IP              varchar(16) comment '最后访问IP',
    LAST_LOGIN_DATE      datetime comment '最后登录时间',
+   ROLE_ID              integer(6),
+   LOGIN_FAIL           integer(4) not null,
    primary key (OPERATOR_ID)
 );
 
@@ -634,6 +627,17 @@ create table OPERATOR_RESOURCE
    RESOURCE_ID          integer(6) not null comment '资源标识',
    RESOURCE_TYPE        char(1) not null comment '资源类型',
    primary key (OPERATOR_ID, RESOURCE_ID, RESOURCE_TYPE)
+);
+
+/*==============================================================*/
+/* Table: OPERATOR_ROLE                                         */
+/*==============================================================*/
+create table OPERATOR_ROLE
+(
+   ROLE_ID              integer(4) not null comment '角色标识',
+   OPERATOR_ID          integer(8) not null comment '操作员标识',
+   CREATE_TIME          datetime not null comment '创建时间',
+   primary key (ROLE_ID, OPERATOR_ID)
 );
 
 /*==============================================================*/
@@ -856,7 +860,7 @@ alter table RESOURCES comment '资源表';
 create table ROLE
 (
    ROLE_ID              integer(6) not null auto_increment comment '角色标识',
-   MODULE_CODE          varchar(10) not null comment '业务模块代码',
+   MODULE_CODE          varchar(10) comment '业务模块代码',
    ROLE_NAME            varchar(60) not null comment '角色名称',
    CREATE_TIME          datetime not null comment '创建时间',
    OPERATOR_ID          integer(8) comment '创建人标识',
@@ -1058,12 +1062,6 @@ alter table ADMIN_ATTR add constraint FK_ADMIN_ID_ADMIN_ATTR_ADMIN_ID foreign ke
 alter table ADMIN_ATTR add constraint FK_ATTR_ID_ADMIN_ATTR_ATTR_ID foreign key (ATTR_ID)
       references ATTR (ATTR_ID) on delete restrict on update restrict;
 
-alter table ADMIN_ROLE add constraint FK_ADMIN_ID_ADMIN_ROLE_ADMIN_ID foreign key (ADMIN_ID)
-      references ADMIN (ADMIN_ID) on delete restrict on update restrict;
-
-alter table ADMIN_ROLE add constraint FK_ROLE_ID_ADMIN_ROLE_ROLE_ID foreign key (ROLE_ID)
-      references ROLE (ROLE_ID) on delete restrict on update restrict;
-
 alter table AREA add constraint FK_AREA_ID_AREA_PARENT_AREA_ID foreign key (PARENT_AREA_ID)
       references AREA (AREA_ID) on delete restrict on update restrict;
 
@@ -1124,11 +1122,20 @@ alter table OPERATE_LOG add constraint FK_FK_OPERATE_LOG_EVENT foreign key (EVEN
 alter table OPERATE_LOG add constraint FK_FK_OPERATE_LOG_MODULE foreign key (MODULE_CODE)
       references MODULE (MODULE_CODE) on delete restrict on update restrict;
 
+alter table OPERATOR add constraint FK_FK_OPERATOR_ROLE_ID foreign key (ROLE_ID)
+      references ROLE (ROLE_ID) on delete restrict on update restrict;
+
 alter table OPERATOR_RESOURCE add constraint FK_FK_OPERATOR_RESOURCE_RESOURCE foreign key (RESOURCE_ID)
       references RESOURCES (RESOURCE_ID) on delete restrict on update restrict;
 
 alter table OPERATOR_RESOURCE add constraint FK_OPERATOR_ID_OPERATOR_RESOURCE_OPERATOR_ID foreign key (OPERATOR_ID)
       references OPERATOR (OPERATOR_ID) on delete restrict on update restrict;
+
+alter table OPERATOR_ROLE add constraint FK_ADMIN_ID_ADMIN_ROLE_ADMIN_ID foreign key (OPERATOR_ID)
+      references OPERATOR (OPERATOR_ID) on delete restrict on update restrict;
+
+alter table OPERATOR_ROLE add constraint FK_ROLE_ID_ADMIN_ROLE_ROLE_ID foreign key (ROLE_ID)
+      references ROLE (ROLE_ID) on delete restrict on update restrict;
 
 alter table QRTZ_BLOB_TRIGGERS add constraint FK_QRTZ_BLO_QRTZ_TRI foreign key (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP)
       references QRTZ_TRIGGERS (SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP);
