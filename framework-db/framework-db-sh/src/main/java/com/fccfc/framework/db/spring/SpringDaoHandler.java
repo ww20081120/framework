@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
+import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.db.core.annotation.handler.DaoHandler;
 
 /**
@@ -22,10 +23,11 @@ import com.fccfc.framework.db.core.annotation.handler.DaoHandler;
  */
 public class SpringDaoHandler extends DaoHandler implements MethodInterceptor {
 
+    private static Logger logger = new Logger(SpringDaoHandler.class);
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param invocation <br>
@@ -36,7 +38,13 @@ public class SpringDaoHandler extends DaoHandler implements MethodInterceptor {
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Method method = invocation.getMethod();
         Object[] args = invocation.getArguments();
-        return super.invoke(invocation.getThis(), method, args);
+        try {
+            return super.invoke(invocation.getThis(), method, args);
+        }
+        catch (Exception e) {
+            logger.error(e);
+            throw e;
+        }
     }
 
 }
