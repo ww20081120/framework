@@ -71,7 +71,7 @@ public class OperateLogIntercepter extends HandlerInterceptorAdapter {
                 // 不是和配置项中的一至，不需要记录操作日志
                 if (StringUtils.equals(eventType, event.getEventType())) {
                     operateLogPojo = new OperateLogPojo();
-                    operateLogPojo.setEventId(eventId);
+                    operateLogPojo.setEventId(Integer.valueOf(eventId));
                     operateLogPojo.setIp(WebUtil.getRemoteIP(request));
                     operateLogPojo.setCreateTime(now);
                     operateLogPojo.setParamsValue(getParams(request, event));
