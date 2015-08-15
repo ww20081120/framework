@@ -35,7 +35,7 @@ public class OperateLogPojo extends BaseEntity {
 
     /** EVENT_ID */
     @Column(name = "EVENT_ID")
-    private String eventId;
+    private Integer eventId;
 
     /** MODULE_CODE */
     @Column(name = "MODULE_CODE")
@@ -65,11 +65,11 @@ public class OperateLogPojo extends BaseEntity {
         this.operateLogId = operateLogId;
     }
 
-    public String getEventId() {
-        return this.eventId;
+    public Integer getEventId() {
+        return eventId;
     }
 
-    public void setEventId(String eventId) {
+    public void setEventId(Integer eventId) {
         this.eventId = eventId;
     }
 
