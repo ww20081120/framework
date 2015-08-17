@@ -110,7 +110,8 @@ public class ResourceController {
         contentTypes.put("application/x-javascript", "js");
         contentTypes.put("text/css", "css");
         contentTypes.put("application/json", "json");
-
+        contentTypes.put("image/pjpeg", "jpg");
+        contentTypes.put("image/x-png", "png");
         contentTypes.put("application/x-jpg", "jpg");
         contentTypes.put("image/jpeg", "jpg");
         contentTypes.put("image/jpg", "jpg");
