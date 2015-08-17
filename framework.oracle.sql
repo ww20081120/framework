@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/8/13 14:05:44                           */
+/* Created on:     2015/8/17 19:32:58                           */
 /*==============================================================*/
 
 
@@ -118,6 +118,13 @@ create sequence SEQ_OPERATOR
 increment by 1
 start with 1000
  maxvalue 99999999999
+ minvalue 1
+ cache 20;
+
+create sequence SEQ_RECEIVE_BOX
+increment by 1
+start with 1000
+ maxvalue 999999999999
  minvalue 1
  cache 20;
 
@@ -1242,7 +1249,7 @@ create table MESSAGE_HISTORY
    RECEIVERS            CLOB                 not null,
    SENDER               VARCHAR2(120),
    MESSAGE_TYPE         CHAR(1)              not null,
-   MESSAGE_TEMPLATE_ID  NUMBER(4)            not null,
+   MESSAGE_TEMPLATE_ID  NUMBER(4),
    SUBJECT              VARCHAR2(120),
    CONTENT              CLOB,
    ATTACHMENTS_NUM      NUMBER(3)            not null,
@@ -2073,6 +2080,7 @@ comment on column QRTZ_TRIGGERS.JOB_DATA is
 /*==============================================================*/
 create table RECEIVE_BOX 
 (
+   RECEIVE_BOX_ID       NUMBER(12)           not null,
    MESSAGE_ID           NUMBER(10)           not null,
    RECEIVE              VARCHAR2(120)        not null,
    SENDER               VARCHAR(120),
@@ -2081,7 +2089,7 @@ create table RECEIVE_BOX
    IS_READ              CHAR(1)              not null,
    RECEIVE_TIME         DATE                 not null,
    READ_TIME            DATE,
-   constraint PK_RECEIVE_BOX primary key (MESSAGE_ID)
+   constraint PK_RECEIVE_BOX primary key (RECEIVE_BOX_ID)
 );
 
 comment on table RECEIVE_BOX is
