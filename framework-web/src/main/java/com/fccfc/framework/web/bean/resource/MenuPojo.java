@@ -60,9 +60,12 @@ public class MenuPojo extends BaseEntity {
     /** ICON_URL */
     @Column(name = "ICON_URL")
     private String iconUrl;
-    
+
     @Transient
     private List<MenuPojo> childrenMenu;
+
+    @Transient
+    private String moduleCode;
 
     public Long getResourceId() {
         return this.resourceId;
@@ -127,4 +130,13 @@ public class MenuPojo extends BaseEntity {
     public void setChildrenMenu(List<MenuPojo> childrenMenu) {
         this.childrenMenu = childrenMenu;
     }
+
+    public String getModuleCode() {
+        return moduleCode;
+    }
+
+    public void setModuleCode(String moduleCode) {
+        this.moduleCode = moduleCode;
+    }
+
 }
