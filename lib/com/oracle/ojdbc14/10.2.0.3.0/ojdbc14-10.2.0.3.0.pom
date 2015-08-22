@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.oracle</groupId>
+	<artifactId>ojdbc14</artifactId>
+	<version>10.2.0.3.0</version>
+
+	<name>Oracle JDBC Driver</name>
+	<description>Oracle JDBC driver classes for use with JDK1.4</description>
+	<url>http://www.oracle.com/technology/software/tech/java/sqlj_jdbc/index.html</url>
+	
+	<licenses>
+		<license>
+			<name>Oracle Technology Network Development and Distribution License Terms</name>
+			<url>http://www.oracle.com/technology/software/htdocs/distlic.html</url>
+		</license>
+	</licenses>
+	
+	<organization>
+		<name>Oracle Corporation</name>
+		<url>http://www.oracle.com</url>
+	</organization>
+	
+</project>
