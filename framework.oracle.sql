@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/8/17 19:32:58                           */
+/* Created on:     2015/8/22 11:54:45                           */
 /*==============================================================*/
 
 
@@ -2103,7 +2103,7 @@ comment on column RECEIVE_BOX.MESSAGE_ID is
 /*==============================================================*/
 create table REDIS_REFRESH_RULE 
 (
-   REDIS_REFRESH_RULE_ID NUMBER(12)           not null,
+   REDIS_REFRESH_RULE_ID NUMBER(6)            not null,
    TABLE_NAME           VARCHAR(60)          not null,
    REFRESH_RULE_TYPE    CHAR(1)              not null,
    REFRESH_NODE_NAME    VARCHAR(60),
