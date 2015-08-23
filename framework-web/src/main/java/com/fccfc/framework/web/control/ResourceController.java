@@ -166,7 +166,7 @@ public class ResourceController {
             attachment = resourceService.downloadResource(resourceId, "1".equals(isThumb));
         }
         catch (Exception e) {
-            logger.warn(e.getMessage(), e);
+            logger.warn(e.getMessage());
             if (noImageArr == null) {
                 noImageArr = DataUtil.base64Decode(NO_IMAGE);
             }
