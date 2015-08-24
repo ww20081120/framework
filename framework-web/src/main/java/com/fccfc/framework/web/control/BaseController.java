@@ -138,8 +138,7 @@ public abstract class BaseController {
         return new ModelAndView(successPage, map);
     }
 
-    protected ModelAndView fail(String errMessage, List<String> errReminds, String redirectUrl,
-        Map<String, String> param) {
+    protected ModelAndView fail(String errMessage, String redirectUrl, Map<String, String> param) {
         ModelMap map = new ModelMap();
         map.put("errMsg", errMessage);
         map.put("url", redirectUrl);
