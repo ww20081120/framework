@@ -5,9 +5,9 @@
  ****************************************************************************************/
 package com.fccfc.framework.task.core.job;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟 <br>
  * @version 1.0 <br>
  * @CreateDate 2014年11月7日 <br>
@@ -15,16 +15,37 @@ package com.fccfc.framework.task.core.job;
  */
 public class JobTest {
 
-	public void testJob01() {
-		System.out.println("testJob01");
-	}
-	
-	public void testJob02() { 
-		System.out.println("testJob02");
-	}
-	
-	public void testJob03() {
-		System.out.println("testJob03");
-	}  
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
+    public void testJob01() {
+        System.out.println("testJob01");
+    }
+
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
+    public void testJob02() {
+        System.out.println("testJob02");
+    }
+
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br> <br>
+     */
+    public void testJob03() {
+        System.out.println("testJob03");
+    }
 
 }

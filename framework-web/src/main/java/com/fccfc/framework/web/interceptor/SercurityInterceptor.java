@@ -19,10 +19,19 @@ import com.fccfc.framework.web.utils.WebUtil;
  */
 public class SercurityInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     * loginUrl
+     */
     private String loginUrl = "/login";
 
+    /**
+     * noPermissionUrl
+     */
     private String noPermissionUrl = "/error/nopermission";
 
+    /**
+     * validatePermission
+     */
     private boolean validatePermission;
 
     /**

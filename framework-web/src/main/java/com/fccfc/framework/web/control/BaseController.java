@@ -57,7 +57,7 @@ public abstract class BaseController {
      * @param param 参数名
      * @param errMsg 当该值不为空时，校验参数值是否为空，如果为空的话抛出异常
      * @return 参数值<br>
-     * @throws AssertException
+     * @throws AssertException <br>
      */
     protected String getParameter(String param, String errMsg) throws AssertException {
         String value = getRequest().getParameter(param);
@@ -85,10 +85,10 @@ public abstract class BaseController {
      * 
      * @author wang.wei297<br>
      * @taskId <br>
-     * @param param param
-     * @param errMsg errMsg
+     * @param param param <br>
+     * @param errMsg errMsg <br>
      * @return <br>
-     * @throws AssertException
+     * @throws AssertException <br>
      */
     protected Long getLongParameter(String param, String errMsg) throws AssertException {
         String value = getParameter(param, errMsg);
@@ -108,27 +108,74 @@ public abstract class BaseController {
         return CommonUtil.isEmpty(value) ? null : Long.valueOf(value);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param param <br>
+     * @param errMsg <br>
+     * @return <br>
+     * @throws AssertException <br>
+     */
     protected Integer getIntegerParameter(String param, String errMsg) throws AssertException {
         String value = getParameter(param, errMsg);
         return CommonUtil.isEmpty(value) ? null : Integer.valueOf(value);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param param <br>
+     * @return <br>
+     */
     protected Integer getIntegerParameter(String param) {
         String value = getParameter(param);
         return CommonUtil.isEmpty(value) ? null : Integer.valueOf(value);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     protected int getPageIndex() {
         Integer pageIndex = getIntegerParameter("index");
         return (pageIndex == null || pageIndex < 1) ? 1 : pageIndex;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     protected int getPageSize() {
         Integer pageSize = getIntegerParameter("size");
         return (pageSize == null || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) ? DEFAULT_PAGE_SIZE
             : pageSize;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param message <br>
+     * @param redirectUrl <br>
+     * @param param <br>
+     * @return <br>
+     */
     protected ModelAndView success(String message, String redirectUrl, Map<String, String> param) {
         ModelMap map = new ModelMap();
         map.put("success", true);
@@ -138,6 +185,18 @@ public abstract class BaseController {
         return new ModelAndView(successPage, map);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param errMessage <br>
+     * @param errReminds <br>
+     * @param redirectUrl <br>
+     * @param param <br>
+     * @return <br>
+     */
     protected ModelAndView fail(String errMessage, List<String> errReminds, String redirectUrl,
         Map<String, String> param) {
         ModelMap map = new ModelMap();

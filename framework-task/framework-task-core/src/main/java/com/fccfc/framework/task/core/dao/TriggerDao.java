@@ -56,7 +56,7 @@ public interface TriggerDao {
      *  
      * @author shao.dinghui<br>
      * @taskId <br>
-     * @param triggerId
+     * @param triggerId <br>
      * @throws DaoException <br>
      */
     void delCronTrigger(@Param("triggerId") int triggerId) throws DaoException;

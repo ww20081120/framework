@@ -5,16 +5,11 @@
  ****************************************************************************************/
 package com.fccfc.framework.db.hibernate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Proxy;
 import java.sql.Clob;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-
-import oracle.sql.CLOB;
 
 import org.hibernate.engine.jdbc.SerializableClobProxy;
 import org.hibernate.transform.ResultTransformer;
@@ -95,9 +90,9 @@ public class AutoResultTransformer implements ResultTransformer {
             for (int i = 0; i < aliases.length; i++) {
                 if (!"ROWNUM_".equals(aliases[i])) {
                     String property = BeanUtil.toCamelCase(aliases[i]);
-                    if(tuple[i] instanceof Clob){
+                    if (tuple[i] instanceof Clob) {
                         // clob转成String
-                        SerializableClobProxy  proxy = (SerializableClobProxy)Proxy.getInvocationHandler(tuple[i]);
+                        SerializableClobProxy  proxy = (SerializableClobProxy) Proxy.getInvocationHandler(tuple[i]);
                         Clob clob = proxy.getWrappedClob();
                         Reader inStreamDoc = clob.getCharacterStream();   
                         char[] tempDoc = new char[(int) clob.length()];   

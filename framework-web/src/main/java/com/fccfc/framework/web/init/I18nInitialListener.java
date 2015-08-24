@@ -33,7 +33,7 @@ public class I18nInitialListener implements HttpSessionListener {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param se <br>
+     * @param event <br>
      */
     @Override
     public void sessionCreated(HttpSessionEvent event) {

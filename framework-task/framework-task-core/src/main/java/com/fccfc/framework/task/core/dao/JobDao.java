@@ -27,9 +27,8 @@ import com.fccfc.framework.task.core.bean.TaskTriggerPojo;
 public interface JobDao extends IGenericBaseDao {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -43,20 +42,19 @@ public interface JobDao extends IGenericBaseDao {
         @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
 
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param taskTrigger
-	 * @return
-	 * @throws DaoException <br>
-	 */
-	int insertTask(@Param("t") TaskPojo taskPojo) throws DaoException;
-    
-    /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param taskPojo <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
+    int insertTask(@Param("t") TaskPojo taskPojo) throws DaoException;
+
+    /**
+     * Description: <br>
+     * 
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskId <br>
@@ -67,9 +65,8 @@ public interface JobDao extends IGenericBaseDao {
     int insertTaskHistory(@Param("taskId") int taskId, @Param("operatorId") Integer operatorId) throws DaoException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskTrigger <br>
@@ -79,29 +76,28 @@ public interface JobDao extends IGenericBaseDao {
     int insertTaskTrigger(@Param("t") TaskTriggerPojo taskTrigger) throws DaoException;
 
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author shao.dinghui<br>
      * @taskId <br>
-     * @param taskId
+     * @param taskId <br>
      * @throws DaoException <br>
      */
     void delTaskTrigger(@Param("taskId") int taskId) throws DaoException;
-    
+
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author shao.dinghui<br>
      * @taskId <br>
-     * @param taskId
+     * @param taskId <br>
      * @throws DaoException <br>
      */
     void delTask(@Param("taskId") int taskId) throws DaoException;
-    
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskId <br>

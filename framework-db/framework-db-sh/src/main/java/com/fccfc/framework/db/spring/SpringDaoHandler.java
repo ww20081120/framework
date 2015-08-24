@@ -23,6 +23,9 @@ import com.fccfc.framework.db.core.annotation.handler.DaoHandler;
  */
 public class SpringDaoHandler extends DaoHandler implements MethodInterceptor {
 
+    /**
+     * logger
+     */
     private static Logger logger = new Logger(SpringDaoHandler.class);
 
     /**

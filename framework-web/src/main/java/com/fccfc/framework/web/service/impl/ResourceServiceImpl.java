@@ -54,6 +54,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Resource
     private UrlResourceDao urlResourceDao;
 
+    /**
+     * menuDao
+     */
     @Resource
     private MenuDao menuDao;
 
@@ -125,8 +128,8 @@ public class ResourceServiceImpl implements ResourceService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param modules
-     * @return
+     * @param modules <br>
+     * @return <br>
      * @throws ServiceException <br>
      */
     @Override
@@ -144,8 +147,8 @@ public class ResourceServiceImpl implements ResourceService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param modules
-     * @return
+     * @param modules <br>
+     * @return <br>
      * @throws ServiceException <br>
      */
     @Override

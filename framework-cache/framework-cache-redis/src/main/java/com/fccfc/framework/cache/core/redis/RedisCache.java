@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 import com.fccfc.framework.cache.core.AbstractCache;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * <Description> <br>
@@ -33,8 +33,14 @@ public class RedisCache extends AbstractCache {
      */
     public static final String CACHE_MODEL = "REDIS";
 
+    /**
+     * 主机
+     */
     private String host;
 
+    /**
+     * 端口号
+     */
     private int port;
 
     /**

@@ -50,36 +50,36 @@ import com.fccfc.framework.task.core.listener.TaskListener;
  * @see com.fccfc.framework.task.core.listener <br>
  */
 public class TaskServiceImpl implements TaskService.Iface {
-    
+
     /**
      * jobDao
      */
     @Resource
     private JobDao jobDao;
-    
+
     /**
      * triggerDao
      */
     @Resource
     private TriggerDao triggerDao;
-    
+
     /**
      * scheduler
      */
     @Resource
     private Scheduler scheduler;
-    
+
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @throws TException <br>
-	 */ 
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @throws TException <br>
+     */
     @Resource
     private TaskListener taskListener;
 
-	/*
+    /*
      * (non-Javadoc)
      * @see com.fccfc.framework.api.task.TaskService#scheduleAllTask()
      */
@@ -114,15 +114,15 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param task
-	 * @param simpleTrigger
-	 * @throws TException <br>
-	 */ 
-	@Override
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param task <br>
+     * @param simpleTrigger <br>
+     * @throws TException <br>
+     */
+    @Override
     public void simpleScheduleTask(Task task, SimpleTrigger simpleTrigger) throws TException {
         try {
             schedule(new TaskPojo(task), new SimpleTriggerPojo(simpleTrigger));
@@ -134,9 +134,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -158,12 +157,12 @@ public class TaskServiceImpl implements TaskService.Iface {
             Trigger trigger = TriggerBuilder.newTrigger().startAt(simpleTriggerPojo.getBeginTime())
                 .endAt(simpleTriggerPojo.getEndTime()).withIdentity(triggerKey).withSchedule(builder).build();
 
-//            if (taskListener != null) {
-//                ListenerManager listenerManager = scheduler.getListenerManager();
-//                listenerManager.addJobListener(taskListener);
-//                listenerManager.addTriggerListener(taskListener);
-//                listenerManager.addSchedulerListener(taskListener);
-//            }
+            // if (taskListener != null) {
+            // ListenerManager listenerManager = scheduler.getListenerManager();
+            // listenerManager.addJobListener(taskListener);
+            // listenerManager.addTriggerListener(taskListener);
+            // listenerManager.addSchedulerListener(taskListener);
+            // }
 
             if (scheduler.checkExists(triggerKey)) {
                 scheduler.rescheduleJob(triggerKey, trigger);
@@ -171,9 +170,9 @@ public class TaskServiceImpl implements TaskService.Iface {
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
                 // 将数据添加到TASK和SIMPLE_TRIGGER表中
-                //saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
+                // saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到SIMPLE_TRIGGER表中
-                //triggerDao.saveSimpleTrigger(simpleTriggerPojo);
+                // triggerDao.saveSimpleTrigger(simpleTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -182,15 +181,15 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param task
-	 * @param cronTrigger
-	 * @throws TException <br>
-	 */ 
-	@Override
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param task <br>
+     * @param cronTrigger <br>
+     * @throws TException <br>
+     */
+    @Override
     public void cronScheduleTask(Task task, CronTrigger cronTrigger) throws TException {
         try {
             schedule(new TaskPojo(task), new CronTriggerPojo(cronTrigger));
@@ -201,9 +200,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -225,12 +223,12 @@ public class TaskServiceImpl implements TaskService.Iface {
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(cronScheduleBuiler)
                 .build();
 
-//            if (taskListener != null) {
-//                ListenerManager listenerManager = scheduler.getListenerManager();
-//                listenerManager.addJobListener(taskListener);
-//                listenerManager.addTriggerListener(taskListener);
-//                listenerManager.addSchedulerListener(taskListener);
-//            }
+            // if (taskListener != null) {
+            // ListenerManager listenerManager = scheduler.getListenerManager();
+            // listenerManager.addJobListener(taskListener);
+            // listenerManager.addTriggerListener(taskListener);
+            // listenerManager.addSchedulerListener(taskListener);
+            // }
 
             if (scheduler.checkExists(triggerKey)) {
                 scheduler.rescheduleJob(triggerKey, trigger);
@@ -238,9 +236,9 @@ public class TaskServiceImpl implements TaskService.Iface {
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
                 // 将数据添加到TASK和TASK_TRIGGER表中
-                //saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
+                // saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到CRON_TRIGGER表中
-                //triggerDao.saveCronTrigger(cronTriggerPojo);
+                // triggerDao.saveCronTrigger(cronTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -249,13 +247,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param task
-	 * @throws TException <br>
-	 */ 
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param task <br>
+     * @throws TException <br>
+     */
     @Override
     public void pause(Task task) throws TException {
         try {
@@ -267,9 +265,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -290,13 +287,13 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param task
-	 * @throws TException <br>
-	 */ 
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param task <br>
+     * @throws TException <br>
+     */
     @Override
     public void resume(Task task) throws TException {
         try {
@@ -308,9 +305,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -331,14 +327,14 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
-	 * Description: <br> 
-	 *  
-	 * @author shao.dinghui<br>
-	 * @taskId <br>
-	 * @param task
-	 * @throws TException <br>
-	 */ 
-	@Override
+     * Description: <br>
+     * 
+     * @author shao.dinghui<br>
+     * @taskId <br>
+     * @param task <br>
+     * @throws TException <br>
+     */
+    @Override
     public void remove(Task task) throws TException {
         try {
             remove(new TaskPojo(task));
@@ -349,9 +345,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -379,9 +374,8 @@ public class TaskServiceImpl implements TaskService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param taskPojo <br>
@@ -398,43 +392,43 @@ public class TaskServiceImpl implements TaskService.Iface {
         dataMap.put(TaskConstants.TASK_ID, taskPojo.getTaskId());
         return detail;
     }
-    
+
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author shao.dinghui<br>
      * @taskId <br>
-     * @param taskPojo
+     * @param taskPojo <br>
      * @param taskTriggerPojo <br>
-     * @throws ServiceException 
+     * @throws ServiceException <br>
      */
     private void saveTaskAndTaskTrigger(TaskPojo taskPojo, TaskTriggerPojo taskTriggerPojo) throws ServiceException {
-    	try {
-    		jobDao.insertTask(taskPojo);
-    		jobDao.insertTaskTrigger(taskTriggerPojo);
-		} 
-    	catch (DaoException e) {
-			throw new ServiceException(ErrorCodeDef.SAVE_TASK_OR_TASK_TRIGGER_ERROR, "保存Task相关信息失败", e);
-		}
+        try {
+            jobDao.insertTask(taskPojo);
+            jobDao.insertTaskTrigger(taskTriggerPojo);
+        }
+        catch (DaoException e) {
+            throw new ServiceException(ErrorCodeDef.SAVE_TASK_OR_TASK_TRIGGER_ERROR, "保存Task相关信息失败", e);
+        }
     }
-    
+
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author shao.dinghui<br>
-     * @taskId <br>
-     * @param cronTriggerPojo
+     * @param triggerPojo <br>
+     * @param taskId <br>
      * @return <br>
      */
     private TaskTriggerPojo trigger2taskTrigger(TriggerPojo triggerPojo, int taskId) {
-    	TaskTriggerPojo pojo = new TaskTriggerPojo();
-    	pojo.setTaskId(taskId);
-    	pojo.setTriggerId(triggerPojo.getTriggerId());
-    	pojo.setTriggerType(triggerPojo.getTriggerType());
-    	return pojo;
+        TaskTriggerPojo pojo = new TaskTriggerPojo();
+        pojo.setTaskId(taskId);
+        pojo.setTriggerId(triggerPojo.getTriggerId());
+        pojo.setTriggerType(triggerPojo.getTriggerType());
+        return pojo;
     }
-    
-//    public void setTaskListener(TaskListener taskListener) {
-//        this.taskListener = taskListener;
-//    }
+
+    // public void setTaskListener(TaskListener taskListener) {
+    // this.taskListener = taskListener;
+    // }
 }

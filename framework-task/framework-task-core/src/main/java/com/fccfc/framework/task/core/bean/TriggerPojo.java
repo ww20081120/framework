@@ -86,11 +86,11 @@ public class TriggerPojo extends BaseEntity {
         this.operatorId = operatorId;
     }
 
-	public String getTriggerType() {
-		return triggerType;
-	}
+    public String getTriggerType() {
+        return triggerType;
+    }
 
-	public void setTriggerType(String triggerType) {
-		this.triggerType = triggerType;
-	}
+    public void setTriggerType(String triggerType) {
+        this.triggerType = triggerType;
+    }
 }

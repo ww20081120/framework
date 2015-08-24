@@ -21,8 +21,21 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class RedisConnectionPool {
 
+    /**
+     * pool
+     */
     private static JedisPool pool = null;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author wang wei <br>
+     * @taskId <br>
+     * @param ip <br>
+     * @param port <br>
+     * @return <br>
+     */
     public static JedisPool getPool(String ip, int port) {
         if (pool == null) {
             JedisPoolConfig config = new JedisPoolConfig();
@@ -41,6 +54,15 @@ public class RedisConnectionPool {
         return pool;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author wang wei <br>
+     * @taskId <br>
+     * @param pool <br>
+     * @param redis <br>
+     */
     public static void returnResource(JedisPool pool, Jedis redis) {
         if (redis != null) {
             pool.returnResource(redis);

@@ -75,7 +75,6 @@ public interface OperatorService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @throws ServiceException <br>
      */
     void logout();
 
@@ -101,10 +100,10 @@ public interface OperatorService {
      *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param accountType
-     * @param username
-     * @param operatorId
-     * @return
+     * @param accountType <br>
+     * @param username <br>
+     * @param operatorId <br>
+     * @return <br>
      * @throws ServiceException <br>
      */
     AccountPojo addAccount(String accountType, String username, int operatorId) throws ServiceException;
@@ -137,8 +136,8 @@ public interface OperatorService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param verifyCode verifyCode
-     * @return <br>
+     * @param verifyCode <br>
+     * @throws ServiceException <br>
      */
     void checkVerifyCode(String verifyCode) throws ServiceException;
 }

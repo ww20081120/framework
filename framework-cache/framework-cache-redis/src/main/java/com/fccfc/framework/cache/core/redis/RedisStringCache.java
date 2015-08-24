@@ -5,13 +5,13 @@ package com.fccfc.framework.cache.core.redis;
 
 import java.util.Map;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.IStringCache;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * <Description> <br>
@@ -26,8 +26,14 @@ import redis.clients.jedis.JedisPool;
 
 public class RedisStringCache implements IStringCache {
 
+    /**
+     * host
+     */
     private String host;
 
+    /**
+     * port
+     */
     private int port;
 
     /**

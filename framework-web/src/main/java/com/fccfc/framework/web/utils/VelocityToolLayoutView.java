@@ -33,10 +33,10 @@ public class VelocityToolLayoutView extends VelocityLayoutView {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param arg0
-     * @param arg1
-     * @param arg2
-     * @return
+     * @param model <br>
+     * @param request <br>
+     * @param response <br>
+     * @return <br>
      * @throws Exception <br>
      */
     @Override

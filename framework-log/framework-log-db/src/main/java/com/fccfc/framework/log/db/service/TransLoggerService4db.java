@@ -4,7 +4,6 @@
 package com.fccfc.framework.log.db.service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -14,6 +13,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -129,7 +129,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
      * @param e <br>
      * @throws DaoException <br>
      * @throws CacheException <br>
-     * @throws UnsupportedEncodingException <br>
+     * @throws IOException <br>
      */
     private void saveTransLog(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue,
         Exception e) throws DaoException, CacheException, IOException {

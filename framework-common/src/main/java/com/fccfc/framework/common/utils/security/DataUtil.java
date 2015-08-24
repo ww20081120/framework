@@ -28,7 +28,7 @@ public final class DataUtil {
 
     /**默认构造
      */
-    private DataUtil(){
+    private DataUtil() {
     }
 
     /**

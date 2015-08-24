@@ -32,6 +32,9 @@ import com.fccfc.framework.web.init.StartupServlet;
  */
 public final class WebUtil {
 
+    /**
+     * matcher
+     */
     private static AntPathMatcher matcher = new AntPathMatcher();
 
     /**
@@ -111,6 +114,15 @@ public final class WebUtil {
         return obj;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param resourceId <br>
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
     public static boolean hasPermission(Object resourceId) {
         Set<String> permissions = (Set<String>) getAttribute(WebConstant.SESSION_PERMISSIONS);
@@ -152,6 +164,15 @@ public final class WebUtil {
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
     public static UrlResourcePojo urlMatch(HttpServletRequest request) {
         List<UrlResourcePojo> permissionList = (List<UrlResourcePojo>) StartupServlet.getContext()

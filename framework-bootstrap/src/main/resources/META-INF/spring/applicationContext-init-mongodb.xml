@@ -11,18 +11,18 @@
           http://www.springframework.org/schema/beans  
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<mongo:mongo host="${mongodb.ip}" port="${mongodb.port}">
-<!-- 		<mongo:options connections-per-host="${mongodb.connectionsPerHost}" -->
-<!-- 	threads-allowed-to-block-for-connection-multiplier="${mongodb.threadsAllowedToBlockForConnectionMultiplier}" -->
-<!-- 	auto-connect-retry="true" />   -->
-		</mongo:mongo>
+    <mongo:mongo host="${mongodb.ip}" port="${mongodb.port}">
+<!--        <mongo:options connections-per-host="${mongodb.connectionsPerHost}" -->
+<!--    threads-allowed-to-block-for-connection-multiplier="${mongodb.threadsAllowedToBlockForConnectionMultiplier}" -->
+<!--    auto-connect-retry="true" />   -->
+        </mongo:mongo>
 
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg ref="mongo" />
-		<constructor-arg name="databaseName" value="${mongodb.dbName}" />
-	</bean>
-	<bean id="logRepository"
-		class="com.fccfc.framework.log.mongodb.repositoryimpl.LogRepository">
-		<property name="mongoTemplate" ref="mongoTemplate"></property>
-	</bean>  
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongo" />
+        <constructor-arg name="databaseName" value="${mongodb.dbName}" />
+    </bean>
+    <bean id="logRepository"
+        class="com.fccfc.framework.log.mongodb.repositoryimpl.LogRepository">
+        <property name="mongoTemplate" ref="mongoTemplate"></property>
+    </bean>  
  </beans> 

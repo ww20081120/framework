@@ -48,8 +48,8 @@ public interface ResourceService {
      *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param modules
-     * @return
+     * @param modules <br>
+     * @return <br>
      * @throws ServiceException <br>
      */
     List<MenuPojo> queryMenu(List<String> modules) throws ServiceException;
@@ -60,8 +60,8 @@ public interface ResourceService {
      *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param modules
-     * @return
+     * @param modules <br>
+     * @return <br>
      * @throws ServiceException <br>
      */
     List<UrlResourcePojo> queryUrlResource(List<String> modules) throws ServiceException;

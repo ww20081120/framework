@@ -27,6 +27,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.utils.CommonUtil;
@@ -72,7 +73,7 @@ public final class HttpClientUtil {
             BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));  
             StringBuffer stringBuffer = new StringBuffer();  
             String str = "";  
-            while((str = reader.readLine())!=null){  
+            while ((str = reader.readLine()) != null) {
                 stringBuffer.append(str);  
             }  
             body = stringBuffer.toString();  
@@ -86,10 +87,34 @@ public final class HttpClientUtil {
         return body;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param url <br>
+     * @param json <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
     public static String post(String url, JSONObject json) throws UtilException {
         return post(null, url, "application/json", json.toJSONString());
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param sslContext <br>
+     * @param url <br>
+     * @param contentType <br>
+     * @param content <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
     @SuppressWarnings({
         "deprecation"
     })

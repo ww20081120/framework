@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -112,7 +113,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @taskId <br>
      * @param ex <br>
      * @return <br>
-     * @throws IOException
+     * @throws IOException <br>
      */
     protected String getExceptionMsg(Exception ex) throws IOException {
         if (ex == null) {

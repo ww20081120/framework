@@ -16,6 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @CreateDate 2015年7月17日 <br>
  * @since V1.0<br>
  * @see com.fccfc.framework.db.core.utils <br>
+ * @param <E> <br>
  */
 public class PagerList<E> extends CopyOnWriteArrayList<E> {
 
@@ -24,27 +25,53 @@ public class PagerList<E> extends CopyOnWriteArrayList<E> {
      */
     private static final long serialVersionUID = 5591930350150260403L;
 
+    /**
+     * 页数
+     */
     private int pageIndex = -1;
 
+    /**
+     * 每页数量
+     */
     private int pageSize = -1;
 
+    /**
+     * 总数
+     */
     private long totalCount = 0;
 
-    public boolean hasNextPage(){
-        if(totalCount <= 0 || pageIndex <= 0 || pageSize <= 0){
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public boolean hasNextPage() {
+        if (totalCount <= 0 || pageIndex <= 0 || pageSize <= 0) {
             return false;
-        } else {
+        }
+        else {
             return totalCount > pageIndex * (pageSize + 1);
         }
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getTotalPage() {
         if (totalCount < 0 || pageSize < 1) {
             return 0;
         }
         else {
             //return (int) (totalCount / pageSize + 1);
-        	return (int) (totalCount % pageSize == 0 ? (totalCount / pageSize) : (totalCount / pageSize + 1));
+            return (int) (totalCount % pageSize == 0 ? (totalCount / pageSize) : (totalCount / pageSize + 1));
         }
     }
 

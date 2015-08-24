@@ -33,8 +33,14 @@ public class StartupServlet extends org.springframework.web.servlet.DispatcherSe
      */
     private static final long serialVersionUID = 6364903462514241142L;
 
+    /**
+     * context
+     */
     private static ServletContext context;
 
+    /**
+     * applicationContext
+     */
     private static ApplicationContext applicationContext;
 
     /**
@@ -42,7 +48,7 @@ public class StartupServlet extends org.springframework.web.servlet.DispatcherSe
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param config
+     * @param config <br>
      * @throws ServletException <br>
      */
     @Override

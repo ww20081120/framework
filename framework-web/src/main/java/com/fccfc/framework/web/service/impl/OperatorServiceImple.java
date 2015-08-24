@@ -145,10 +145,10 @@ public class OperatorServiceImple implements OperatorService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param accountType
-     * @param username
-     * @param operatorId
-     * @return
+     * @param accountType <br>
+     * @param username <br>
+     * @param operatorId <br>
+     * @return <br>
      * @throws ServiceException <br>
      */
     @Override
@@ -195,11 +195,9 @@ public class OperatorServiceImple implements OperatorService {
      * 
      * @author yang.zhipeng <br>
      * @taskId <br>
-     * @param type <br>
-     * @param username <br>
-     * @param password <br>
-     * @param ip <br>
-     * @return <br>
+     * @param operator <br>
+     * @param loginIp <br>
+     * @param extendParams <br>
      * @throws ServiceException <br>
      */
     @Override
@@ -314,8 +312,8 @@ public class OperatorServiceImple implements OperatorService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param verifyCode
-     * @return <br>
+     * @param verifyCode <br>
+     * @throws ServiceException <br>
      */
     @Override
     public void checkVerifyCode(String verifyCode) throws ServiceException {
@@ -335,7 +333,6 @@ public class OperatorServiceImple implements OperatorService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @throws ServiceException <br>
      */
     @Override
     public void logout() {

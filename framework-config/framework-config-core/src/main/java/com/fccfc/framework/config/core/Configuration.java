@@ -166,8 +166,8 @@ public final class Configuration {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param key
-     * @param defaultValue
+     * @param key <br>
+     * @param defaultValue <br>
      * @return <br>
      */
     public static long getLong(String key, Long defaultValue) {
@@ -229,8 +229,8 @@ public final class Configuration {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param key
-     * @param matchValue
+     * @param key <br>
+     * @param matchValue <br>
      * @return <br>
      */
     public static boolean match(String key, String matchValue) {

@@ -61,9 +61,15 @@ public class MenuPojo extends BaseEntity {
     @Column(name = "ICON_URL")
     private String iconUrl;
 
+    /**
+     * childrenMenu
+     */
     @Transient
     private List<MenuPojo> childrenMenu;
 
+    /**
+     * moduleCode
+     */
     @Transient
     private String moduleCode;
 

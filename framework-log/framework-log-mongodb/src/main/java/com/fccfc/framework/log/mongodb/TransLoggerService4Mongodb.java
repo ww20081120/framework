@@ -4,7 +4,6 @@
 package com.fccfc.framework.log.mongodb;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -14,6 +13,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -83,7 +83,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
      * @param returnValue <br>
      * @param e <br>
      * @throws CacheException <br>
-     * @throws UnsupportedEncodingException <br>
+     * @throws IOException <br>
      */
     private void saveData(TransManager manager, long beginTime, long endTime, long consumeTime, Object returnValue,
         Exception e) throws CacheException, IOException {

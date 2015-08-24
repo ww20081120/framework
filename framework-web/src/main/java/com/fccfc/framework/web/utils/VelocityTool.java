@@ -26,6 +26,17 @@ import com.fccfc.framework.config.core.DictionaryHelper;
  */
 public class VelocityTool {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param request <br>
+     * @param pageIndex <br>
+     * @param pageSize <br>
+     * @return <br>
+     */
     public String getPagerUrl(HttpServletRequest request, int pageIndex, int pageSize) {
         StringBuilder sb = new StringBuilder(request.getRequestURL());
         sb.append("?");
@@ -65,22 +76,70 @@ public class VelocityTool {
         return sb.toString();
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param date <br>
+     * @param formatStr <br>
+     * @return <br>
+     */
     public String format(Date date, String formatStr) {
         return DateUtil.date2String(date, formatStr);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param dictCode <br>
+     * @param data <br>
+     * @return <br>
+     */
     public String getDictionary(String dictCode, String data) {
         return DictionaryHelper.getString(dictCode, data);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param code <br>
+     * @return <br>
+     */
     public String getConfig(String code) {
         return Configuration.getString(code);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param resourceCode <br>
+     * @return <br>
+     */
     public boolean hasPermission(Object resourceCode) {
         return WebUtil.hasPermission(resourceCode);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param key <br>
+     * @param request <br>
+     * @return <br>
+     */
     public Object getAttribute(String key, HttpServletRequest request) {
         Object value = request.getAttribute(key);
         if (value == null) {

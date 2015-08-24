@@ -40,16 +40,16 @@ public class TaskTriggerPojo extends BaseEntity {
     public void setTaskId(Integer taskId) {
         this.taskId = taskId;
     }
-    
+
     public String getTriggerType() {
-		return triggerType;
-	}
+        return triggerType;
+    }
 
-	public void setTriggerType(String triggerType) {
-		this.triggerType = triggerType;
-	}
+    public void setTriggerType(String triggerType) {
+        this.triggerType = triggerType;
+    }
 
-	public Integer getTriggerId() {
+    public Integer getTriggerId() {
         return this.triggerId;
     }
 

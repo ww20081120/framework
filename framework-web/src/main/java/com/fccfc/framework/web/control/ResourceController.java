@@ -33,6 +33,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.github.cage.Cage;
+import com.github.cage.GCage;
+
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.FrameworkException;
 import com.fccfc.framework.common.GlobalConstants;
@@ -51,8 +54,6 @@ import com.fccfc.framework.web.service.ResourceService;
 //import com.qiniu.api.auth.digest.Mac;
 //import com.qiniu.api.config.Config;
 //import com.qiniu.api.rs.PutPolicy;
-import com.github.cage.Cage;
-import com.github.cage.GCage;
 
 /**
  * <Description> <br>
@@ -71,6 +72,9 @@ public class ResourceController {
      */
     private static final String NO_IMAGE = "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";
 
+    /**
+     * noImageArr
+     */
     private static byte[] noImageArr;
 
     /**
@@ -152,6 +156,7 @@ public class ResourceController {
      * @param resourceId <br>
      * @param isThumb <br>
      * @param reqHeader <br>
+     * @param response <br>
      * @return <br>
      * @throws Exception <br>
      */
@@ -390,7 +395,6 @@ public class ResourceController {
      * @taskId <br>
      * @param request <br>
      * @param response <br>
-     * @return <br>
      */
     @ResponseBody
     @RequestMapping(value = "/verifyCode", method = RequestMethod.GET)
