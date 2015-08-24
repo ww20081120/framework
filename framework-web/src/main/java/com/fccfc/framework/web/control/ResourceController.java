@@ -51,6 +51,7 @@ import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.message.core.bean.AttachmentsPojo;
 import com.fccfc.framework.web.WebConstant;
 import com.fccfc.framework.web.service.ResourceService;
+import com.fccfc.framework.web.utils.WebUtil;
 //import com.qiniu.api.auth.digest.Mac;
 //import com.qiniu.api.config.Config;
 //import com.qiniu.api.rs.PutPolicy;
@@ -405,9 +406,9 @@ public class ResourceController {
         Cage cage = new GCage();
         OutputStream os = null;
         try {
+        	WebUtil.setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
             os = response.getOutputStream();
             cage.draw(verifyCode, os);
-            request.getSession().setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
         }
         catch (IOException e) {
             logger.warn(e.getMessage(), e);
