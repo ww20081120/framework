@@ -406,7 +406,7 @@ public class ResourceController {
         Cage cage = new GCage();
         OutputStream os = null;
         try {
-        	WebUtil.setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
+            WebUtil.setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
             os = response.getOutputStream();
             cage.draw(verifyCode, os);
         }

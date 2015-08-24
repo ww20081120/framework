@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.fccfc.framework.web.control;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -192,13 +191,11 @@ public abstract class BaseController {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param errMessage <br>
-     * @param errReminds <br>
      * @param redirectUrl <br>
      * @param param <br>
      * @return <br>
      */
-    protected ModelAndView fail(String errMessage, List<String> errReminds, String redirectUrl,
-        Map<String, String> param) {
+    protected ModelAndView fail(String errMessage, String redirectUrl, Map<String, String> param) {
         ModelMap map = new ModelMap();
         map.put("errMsg", errMessage);
         map.put("url", redirectUrl);
