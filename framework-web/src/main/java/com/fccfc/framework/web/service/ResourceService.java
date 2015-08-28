@@ -66,4 +66,15 @@ public interface ResourceService {
      */
     List<UrlResourcePojo> queryUrlResource(List<String> modules) throws ServiceException;
 
+    /**
+     * queryResourceByfilePath
+     * Description: <br> 
+     *  
+     * @author XXX<br>
+     * @taskId <br>
+     * @param filePath filePath
+     * @return AttachmentsPojo
+     * @throws ServiceException <br>
+     */
+    AttachmentsPojo queryResourceByfilePath(String filePath) throws ServiceException;
 }

@@ -161,4 +161,27 @@ public class ResourceServiceImpl implements ResourceService {
             throw new ServiceException(e);
         }
     }
+    
+    
+    /**
+     * queryResourceByfilePath
+     * Description: <br> 
+     *  
+     * @author XXX<br>
+     * @taskId <br>
+     * @param filePath filePath
+     * @return AttachmentsPojo
+     * @throws ServiceException <br>
+     */
+    public AttachmentsPojo queryResourceByfilePath(String filePath) throws ServiceException {
+        
+        try {
+            return  attachmentsDao.queryAttachmentsByFilePath(filePath);
+        }
+        catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        
+    }
+
 }

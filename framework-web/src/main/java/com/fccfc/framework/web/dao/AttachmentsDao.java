@@ -46,4 +46,17 @@ public interface AttachmentsDao extends IGenericBaseDao {
      * @throws DaoException <br>
      */
     int updateAttachments(@Param("id") int attachmentId, @Param("thumbPath") String thumbPath) throws DaoException;
+
+    /**
+     * queryAttachmentsByFilePath
+     * Description: <br> 
+     *  
+     * @author XXX<br>
+     * @taskId <br>
+     * @param filePath filePath
+     * @return AttachmentsPojo
+     * @throws DaoException <br>
+     */
+    AttachmentsPojo queryAttachmentsByFilePath(@Param("filePath") String filePath) throws DaoException;
+
 }
