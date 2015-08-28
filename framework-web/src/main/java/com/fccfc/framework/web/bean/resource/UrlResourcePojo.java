@@ -57,6 +57,10 @@ public class UrlResourcePojo extends BaseEntity {
     @Column(name = "REMARK")
     private String remark;
 
+    /** IS_SELECT */
+    @Column(name = "IS_SELECT")
+    private String isSelect;
+
     public Long getResourceId() {
         return this.resourceId;
     }
@@ -111,6 +115,14 @@ public class UrlResourcePojo extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getIsSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(String isSelect) {
+        this.isSelect = isSelect;
     }
 
 }
