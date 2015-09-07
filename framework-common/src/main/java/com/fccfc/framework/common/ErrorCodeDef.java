@@ -236,4 +236,7 @@ public interface ErrorCodeDef {
     
     /** 删除TASK相关信息失败*/
     int DEL_TASK_ERROR_20027 = 20027;
+    
+    /** 上传图片最大宽度超出*/
+    int IMAGE_WIDTH_ERROR_20028 = 20028;
 }
