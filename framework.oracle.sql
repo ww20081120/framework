@@ -1119,7 +1119,7 @@ create table MENU
    RESOURCE_ID          NUMBER(6)            not null,
    PARENT_RESOURCE_ID   NUMBER(4),
    SEQ                  NUMBER(4)            not null,
-   MENU_NAME            VARCHAR2(20)         not null,
+   MENU_NAME            VARCHAR2(60)         not null,
    URL                  VARCHAR2(120)        not null,
    IS_LEAF              CHAR(1)              not null,
    ICON_URL             VARCHAR2(120),
