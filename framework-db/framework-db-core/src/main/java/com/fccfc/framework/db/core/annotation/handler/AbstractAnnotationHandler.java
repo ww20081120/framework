@@ -167,8 +167,9 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
-            metadata = daoConfig.isCache() ? (ParamMetadata) CacheHelper.getCache().getValue(
-                CacheConstant.SQL_PARAM_DIR, key) : null;
+            // TODO: 序列化有问题，待解决
+            //metadata = daoConfig.isCache() ? (ParamMetadata) CacheHelper.getCache().getValue(
+            //    CacheConstant.SQL_PARAM_DIR, key) : null;
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
