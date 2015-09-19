@@ -91,8 +91,8 @@ public interface OperatorService {
      * @return <br>
      * @throws ServiceException <br>
      */
-    OperatorPojo addOperator(String username, String password, String accountType, String operatorType, String registIp)
-        throws ServiceException;
+    OperatorPojo addOperator(String username, String password, String accountType, String operatorType, String registIp, Integer roleId)
+        throws  ServiceException;
     
     /**
      * 

@@ -4,7 +4,10 @@
 package com.fccfc.framework.web.service.impl;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.annotation.Resource;
@@ -32,6 +35,7 @@ import com.fccfc.framework.web.bean.operator.AccountPojo;
 import com.fccfc.framework.web.bean.operator.OperatorPojo;
 import com.fccfc.framework.web.dao.operator.AccountDao;
 import com.fccfc.framework.web.dao.operator.OperatorDao;
+import com.fccfc.framework.web.dao.resource.UrlResourceDao;
 import com.fccfc.framework.web.service.OperatorService;
 import com.fccfc.framework.web.utils.WebUtil;
 
@@ -60,6 +64,9 @@ public class OperatorServiceImple implements OperatorService {
     @Resource
     private AccountDao accountDao;
 
+    @Resource
+    private UrlResourceDao urlResourceDao;
+    
     /*
      * (non-Javadoc)
      * @see com.fccfc.framework.api.operator.OperatorService#getOperator(java.lang.Integer, java.lang.String)
@@ -104,7 +111,7 @@ public class OperatorServiceImple implements OperatorService {
      */
     @Override
     public OperatorPojo addOperator(String username, String password, String accountType, String operatorType,
-        String registIp) throws ServiceException {
+        String registIp, Integer roleId) throws ServiceException {
         try {
             OperatorPojo operator = operatorDao.getOperatorByAccount(username, accountType);
             if (operator != null) {
@@ -120,6 +127,7 @@ public class OperatorServiceImple implements OperatorService {
             operator.setRegistIp(registIp);
             operator.setState("A");
             operator.setStateDate(currentDate);
+            operator.setRoleId(roleId);
             if (Configuration.match("SYSTEM.OWN_ACCT_TYPE", accountType)) {
                 operator.setUserName(username);
                 if (CommonUtil.isNotEmpty(password)) {
@@ -209,6 +217,7 @@ public class OperatorServiceImple implements OperatorService {
             operatorDao.update(operator);
 
             WebUtil.setAttribute(WebConstant.SESSION_OPERATOR, operator);
+            WebUtil.setAttribute(WebConstant.SESSION_PERMISSIONS, selectPermission(operator.getOperatorId()));
             if (CommonUtil.isNotEmpty(extendParams)) {
                 StringBuilder sb = new StringBuilder();
                 for (Entry<String, Object> entry : extendParams.entrySet()) {
@@ -223,6 +232,32 @@ public class OperatorServiceImple implements OperatorService {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param oeratorId
+     * @return
+     * @throws ServiceException <br>
+     */
+    public Set<String> selectPermission(Integer operatorId) throws ServiceException {
+        Set<String> permissions = new HashSet<String>();
+        try {
+            List<String> moduleCodeSet = Configuration.getModuleCode();
+
+            List<Integer> permissionList = urlResourceDao.selectResourceIdByPermission(operatorId, moduleCodeSet);
+            if (CommonUtil.isNotEmpty(permissionList)) {
+                for (Integer id : permissionList) {
+                    permissions.add(String.valueOf(id));
+                }
+            }
+        }
+        catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return permissions;
+    }
     /**
      * Description: <br>
      * 
