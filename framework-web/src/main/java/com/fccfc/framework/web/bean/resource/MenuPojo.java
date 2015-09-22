@@ -32,7 +32,7 @@ public class MenuPojo extends BaseEntity {
     /** RESOURCE_ID */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RESOURCE_ID")
-    @SequenceGenerator(name = "SEQ_RESOURCE_ID", sequenceName = "SEQ_RESOURCE_ID")
+    @SequenceGenerator(name = "SEQ_RESOURCE_ID", sequenceName = "SEQ_RESOURCE_ID", allocationSize = 1)
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RESOURCE_ID")
     private Long resourceId;

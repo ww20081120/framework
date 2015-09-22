@@ -38,7 +38,7 @@ public class OperatorPojo extends BaseEntity {
     /** OPERATOR_ID */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_OPERATOR")
-    @SequenceGenerator(name = "SEQ_OPERATOR", sequenceName = "SEQ_OPERATOR")
+    @SequenceGenerator(name = "SEQ_OPERATOR", sequenceName = "SEQ_OPERATOR", allocationSize = 1)
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OPERATOR_ID")
     private Integer operatorId;
