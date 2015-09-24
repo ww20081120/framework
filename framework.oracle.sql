@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/9/9 17:04:38                            */
+/* Created on:     2015/9/24 9:43:52                            */
 /*==============================================================*/
 
 
@@ -458,6 +458,7 @@ create table ATTACHMENTS
    THUMB_PATH           VARCHAR2(255),
    CREATE_TIME          DATE                 not null,
    EXP_TIME             DATE,
+   UPDATE_TIME          VARCHAR2(14),
    constraint PK_ATTACHMENTS primary key (ATTACHMENTS_ID)
 );
 
@@ -496,6 +497,9 @@ comment on column ATTACHMENTS.CREATE_TIME is
 
 comment on column ATTACHMENTS.EXP_TIME is
 '失效时间';
+
+comment on column ATTACHMENTS.UPDATE_TIME is
+'更新时间';
 
 /*==============================================================*/
 /* Table: ATTR                                                  */

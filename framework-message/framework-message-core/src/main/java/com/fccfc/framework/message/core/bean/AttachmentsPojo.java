@@ -78,6 +78,10 @@ public class AttachmentsPojo extends BaseEntity {
     @Column(name = "EXP_TIME")
     private java.util.Date expTime;
 
+    /** UPDATE_TIME */
+    @Column(name = "UPDATE_TIME")
+    private String updateTime;
+
     public Long getAttachmentsId() {
         return attachmentsId;
     }
@@ -172,6 +176,14 @@ public class AttachmentsPojo extends BaseEntity {
 
     public void setExpTime(java.util.Date expTime) {
         this.expTime = expTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
 }

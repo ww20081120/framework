@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/8/18 10:33:52                           */
+/* Created on:     2015/9/24 9:47:43                            */
 /*==============================================================*/
 
 
@@ -129,6 +129,7 @@ create table ATTACHMENTS
    THUMB_PATH           varchar(255) comment '缩略图地址',
    CREATE_TIME          datetime not null comment '创建时间',
    EXP_TIME             datetime comment '失效时间',
+   UPDATE_TIME          VARCHAR(14),
    primary key (ATTACHMENTS_ID)
 );
 
