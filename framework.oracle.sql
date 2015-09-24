@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 11g                           */
-/* Created on:     2015/9/24 9:43:52                            */
+/* Created on:     2015/9/24 10:29:57                           */
 /*==============================================================*/
 
 
@@ -1580,8 +1580,7 @@ create table OPERATOR_RESOURCE
 (
    OPERATOR_ID          NUMBER(8)            not null,
    RESOURCE_ID          NUMBER(6)            not null,
-   RESOURCE_TYPE        CHAR(1)              not null,
-   constraint PK_OPERATOR_RESOURCE primary key (OPERATOR_ID, RESOURCE_ID, RESOURCE_TYPE)
+   constraint PK_OPERATOR_RESOURCE primary key (OPERATOR_ID, RESOURCE_ID)
 );
 
 comment on column OPERATOR_RESOURCE.OPERATOR_ID is
@@ -1589,9 +1588,6 @@ comment on column OPERATOR_RESOURCE.OPERATOR_ID is
 
 comment on column OPERATOR_RESOURCE.RESOURCE_ID is
 '资源标识';
-
-comment on column OPERATOR_RESOURCE.RESOURCE_TYPE is
-'资源类型';
 
 /*==============================================================*/
 /* Table: OPERATOR_ROLE                                         */
@@ -2166,6 +2162,7 @@ create table ROLE
    ROLE_NAME            VARCHAR2(60)         not null,
    CREATE_TIME          DATE                 not null,
    OPERATOR_ID          NUMBER(8),
+   EXT                  VARCHAR2(120),
    constraint PK_ROLE primary key (ROLE_ID)
 );
 
@@ -2227,8 +2224,7 @@ create table ROLE_RESOURCE
 (
    ROLE_ID              NUMBER(4)            not null,
    RESOURCE_ID          NUMBER(6)            not null,
-   RESOURCE_TYPE        CHAR(1)              not null,
-   constraint PK_ROLE_RESOURCE primary key (ROLE_ID, RESOURCE_ID, RESOURCE_TYPE)
+   constraint PK_ROLE_RESOURCE primary key (ROLE_ID, RESOURCE_ID)
 );
 
 comment on column ROLE_RESOURCE.ROLE_ID is
@@ -2236,9 +2232,6 @@ comment on column ROLE_RESOURCE.ROLE_ID is
 
 comment on column ROLE_RESOURCE.RESOURCE_ID is
 '资源标识';
-
-comment on column ROLE_RESOURCE.RESOURCE_TYPE is
-'资源类型';
 
 /*==============================================================*/
 /* Table: SEND_RECORD                                           */

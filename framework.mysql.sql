@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2015/9/24 9:47:43                            */
+/* Created on:     2015/9/24 10:29:36                           */
 /*==============================================================*/
 
 
@@ -129,7 +129,7 @@ create table ATTACHMENTS
    THUMB_PATH           varchar(255) comment '缩略图地址',
    CREATE_TIME          datetime not null comment '创建时间',
    EXP_TIME             datetime comment '失效时间',
-   UPDATE_TIME          VARCHAR(14),
+   UPDATE_TIME          VARCHAR(14) comment '更新时间',
    primary key (ATTACHMENTS_ID)
 );
 
@@ -626,8 +626,7 @@ create table OPERATOR_RESOURCE
 (
    OPERATOR_ID          integer(8) not null comment '操作员标识',
    RESOURCE_ID          integer(6) not null comment '资源标识',
-   RESOURCE_TYPE        char(1) not null comment '资源类型',
-   primary key (OPERATOR_ID, RESOURCE_ID, RESOURCE_TYPE)
+   primary key (OPERATOR_ID, RESOURCE_ID)
 );
 
 /*==============================================================*/
@@ -865,6 +864,7 @@ create table ROLE
    ROLE_NAME            varchar(60) not null comment '角色名称',
    CREATE_TIME          datetime not null comment '创建时间',
    OPERATOR_ID          integer(8) comment '创建人标识',
+   EXT                  varchar(120),
    primary key (ROLE_ID)
 );
 
@@ -890,8 +890,7 @@ create table ROLE_RESOURCE
 (
    ROLE_ID              integer(4) not null comment '角色标识',
    RESOURCE_ID          integer(8) not null comment '资源标识',
-   RESOURCE_TYPE        CHAR(1) not null comment '资源类型',
-   primary key (ROLE_ID, RESOURCE_ID, RESOURCE_TYPE)
+   primary key (ROLE_ID, RESOURCE_ID)
 );
 
 /*==============================================================*/
