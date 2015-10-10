@@ -28,9 +28,9 @@ public class AttachmentsPojo extends BaseEntity {
 
     /** ATTACHMENTS_ID */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ATTACHMENTS")
-    @SequenceGenerator(name = "SEQ_ATTACHMENTS", sequenceName = "SEQ_ATTACHMENTS", allocationSize = 1)
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ATTACHMENTS")
+//    @SequenceGenerator(name = "SEQ_ATTACHMENTS", sequenceName = "SEQ_ATTACHMENTS", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ATTACHMENTS_ID")
     private Long attachmentsId;
 

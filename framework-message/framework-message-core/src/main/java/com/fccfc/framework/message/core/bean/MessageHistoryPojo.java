@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -28,8 +29,9 @@ public class MessageHistoryPojo extends BaseEntity {
 
     /** MESSAGE_ID */
     @Id
-    @GeneratedValue(generator = "assignedGenerator")
-    @GenericGenerator(name = "assignedGenerator", strategy = "assigned")
+//    @GeneratedValue(generator = "assignedGenerator")
+//    @GenericGenerator(name = "assignedGenerator", strategy = "assigned")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MESSAGE_ID")
     private Long messageId;
 
