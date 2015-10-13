@@ -69,6 +69,11 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>${commons-fileupload.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.10-FINAL</version>
+		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>com.qiniu</groupId> -->
 		<!-- <artifactId>sdk</artifactId> -->
