@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.fccfc</groupId>
 	<artifactId>framework</artifactId>
-	<version>${framework.version}</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>pom</packaging> 
 	<name>${project.artifactId}</name>
 	<description>框架</description>
@@ -20,7 +20,6 @@
 		<module>framework-bootstrap</module>
 	</modules>
 	<properties>
-		<framework.version>0.2-SNAPSHOT</framework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 		<junit.version>4.10</junit.version>

@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.fccfc</groupId>
     <artifactId>framework</artifactId>
-    <version>${framework.version}</version>
+    <version>0.2-SNAPSHOT</version>
   </parent>
   <artifactId>framework-cache</artifactId>
   <packaging>pom</packaging>
