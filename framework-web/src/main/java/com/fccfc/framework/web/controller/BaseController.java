@@ -146,7 +146,7 @@ public abstract class BaseController {
      * @return <br>
      */
     protected int getPageIndex() {
-        Integer pageIndex = getIntegerParameter("index");
+        Integer pageIndex = getIntegerParameter("page");
         return (pageIndex == null || pageIndex < 1) ? 1 : pageIndex;
     }
 
@@ -159,7 +159,7 @@ public abstract class BaseController {
      * @return <br>
      */
     protected int getPageSize() {
-        Integer pageSize = getIntegerParameter("size");
+        Integer pageSize = getIntegerParameter("pageSize");
         return (pageSize == null || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) ? DEFAULT_PAGE_SIZE
             : pageSize;
     }

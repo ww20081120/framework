@@ -16,6 +16,7 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 
 import com.fccfc.framework.common.ErrorCodeDef;
+import com.fccfc.framework.common.GlobalConstants;
 
 /**
  * <Description> <br>
@@ -231,9 +232,8 @@ public final class CommonUtil {
     }
 
     /**
+     * Description:getDate <br>
      * 
-     * Description:getDate <br> 
-     *  
      * @author 王伟 <br>
      * @param time <br
      * @return <br>
@@ -280,5 +280,38 @@ public final class CommonUtil {
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.SYSTEM_ERROR_10001);
         }
+    }
+
+    /**
+     * Description: 从拼接的字符串中获取id数组<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param idStr
+     * @param splitor
+     * @return <br>
+     */
+    public static final int[] splitId(String idStr, String splitor) {
+        int[] ids = null;
+        if (CommonUtil.isNotEmpty(idStr)) {
+            String[] strs = StringUtils.split(idStr, splitor);
+            ids = new int[strs.length];
+            for (int i = 0; i < strs.length; i++) {
+                ids[i] = Integer.valueOf(strs[i]);
+            }
+        }
+        return ids;
+    }
+
+    /**
+     * Description: 从拼接的字符串中获取id数组<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param idStr
+     * @return <br>
+     */
+    public static final int[] splitId(String idStr) {
+        return splitId(idStr, GlobalConstants.SPLITOR);
     }
 }
