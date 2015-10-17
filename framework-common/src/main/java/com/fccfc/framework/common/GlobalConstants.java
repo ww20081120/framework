@@ -54,4 +54,7 @@ public interface GlobalConstants {
     /** GET */
     String METHOD_GET = "GET";
 
+    /** 百分号 */
+    String PERCENT = "%";
+
 }
