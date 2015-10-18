@@ -291,11 +291,11 @@ public final class CommonUtil {
      * @param splitor
      * @return <br>
      */
-    public static final int[] splitId(String idStr, String splitor) {
-        int[] ids = null;
+    public static final Integer[] splitId(String idStr, String splitor) {
+        Integer[] ids = null;
         if (CommonUtil.isNotEmpty(idStr)) {
             String[] strs = StringUtils.split(idStr, splitor);
-            ids = new int[strs.length];
+            ids = new Integer[strs.length];
             for (int i = 0; i < strs.length; i++) {
                 ids[i] = Integer.valueOf(strs[i]);
             }
@@ -311,7 +311,7 @@ public final class CommonUtil {
      * @param idStr
      * @return <br>
      */
-    public static final int[] splitId(String idStr) {
+    public static final Integer[] splitId(String idStr) {
         return splitId(idStr, GlobalConstants.SPLITOR);
     }
 }
