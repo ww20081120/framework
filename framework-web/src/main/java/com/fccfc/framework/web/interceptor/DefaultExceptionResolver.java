@@ -54,7 +54,7 @@ public class DefaultExceptionResolver implements HandlerExceptionResolver {
             }
         }
 
-        ModelAndView result = new ModelAndView("error/page500");
+        ModelAndView result = new ModelAndView("common/page500");
         result.addObject("exception", ex);
         return result;
     }
