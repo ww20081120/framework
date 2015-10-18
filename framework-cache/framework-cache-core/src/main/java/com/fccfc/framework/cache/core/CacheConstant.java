@@ -66,5 +66,10 @@ public interface CacheConstant {
     
     /**字典表*/
     String DICTIONARY_DATA = "/DICTIONARY_DATA";
+    
+    /**
+     * MODULE_DATA
+     */
+    String MODULE_DATA = "/MODULE_DATA";
 
 }
