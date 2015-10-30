@@ -302,6 +302,18 @@ public final class CommonUtil {
         }
         return ids;
     }
+    
+    public static final Long[] splitIdsByLong(String idStr, String splitor) {
+        Long[] ids = null;
+        if (CommonUtil.isNotEmpty(idStr)) {
+            String[] strs = StringUtils.split(idStr, splitor);
+            ids = new Long[strs.length];
+            for (int i = 0; i < strs.length; i++) {
+                ids[i] = Long.valueOf(strs[i]);
+            }
+        }
+        return ids;
+    }
 
     /**
      * Description: 从拼接的字符串中获取id数组<br>

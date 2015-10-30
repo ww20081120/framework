@@ -9,27 +9,27 @@ import com.fccfc.framework.config.core.bean.ModulePojo;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.db.core.annotation.Dao;
 import com.fccfc.framework.db.core.annotation.Sql;
+import com.fccfc.framework.db.hibernate.IGenericBaseDao;
 
 /**
- * <Description> <br>
+ * 业务模块 <Description> <br>
  * 
- * @author 王伟<br>
+ * @author 胡攀<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2014年11月26日 <br>
+ * @CreateDate 2015年10月20日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.core.config.dao <br>
+ * @see com.fccfc.framework.config.core.dao <br>
  */
 @Dao
-public interface ModuleDao {
+public interface ModuleDao extends IGenericBaseDao {
 
     /**
+     * 查询所有的业务模块 Description: <br>
      * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
+     * @author 胡攀<br>
      * @taskId <br>
-     * @return <br>
+     * @return
      * @throws DaoException <br>
      */
     @Sql(bean = ModulePojo.class)
