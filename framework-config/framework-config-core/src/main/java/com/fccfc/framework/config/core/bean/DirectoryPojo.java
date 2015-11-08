@@ -27,7 +27,7 @@ public class DirectoryPojo extends BaseEntity {
 
     /** DIRECTORY_CODE */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DIRECTORY_CODE")
     private String directoryCode;
 
