@@ -36,11 +36,6 @@ import com.fccfc.framework.config.core.bean.ModulePojo;
 public final class Configuration {
 
     /**
-     * CACHE_TIME
-     */
-    private static final long CACHE_TIME = 3600 * 1000;
-
-    /**
      * logger
      */
     private static Logger logger = new Logger(Configuration.class);
