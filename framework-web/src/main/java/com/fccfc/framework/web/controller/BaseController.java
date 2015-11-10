@@ -29,7 +29,7 @@ import com.fccfc.framework.web.WebConstant;
  * @taskId 660560<br>
  * @CreateDate 2015年4月23日 <br>
  * @since V7.3<br>
- * @see com.ztesoft.zsmart.bss.seecom.webcare.control <br>
+ * @see com.fccfc.framework.web.controller <br>
  */
 public abstract class BaseController {
 
@@ -41,12 +41,6 @@ public abstract class BaseController {
 
     /** 默认页大小 */
     private static final int DEFAULT_PAGE_SIZE = 10;
-
-    /** 成功跳转页面 */
-    private static String successPage = "error/page500";
-
-    /** 失败跳转页面 */
-    private static String errorPage = "error/page500";
 
     /**
      * Description: 获取参数<br>
@@ -162,49 +156,6 @@ public abstract class BaseController {
         Integer pageSize = getIntegerParameter("pageSize");
         return (pageSize == null || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) ? DEFAULT_PAGE_SIZE
             : pageSize;
-    }
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param message <br>
-     * @param redirectUrl <br>
-     * @param param <br>
-     * @return <br>
-     */
-    protected ModelAndView success(String message, String redirectUrl, Map<String, String> param) {
-        ModelMap map = new ModelMap();
-        map.put("success", true);
-        map.put("message", message);
-        map.put("url", redirectUrl);
-        map.put("paramMap", param);
-        return new ModelAndView(successPage, map);
-    }
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param errMessage <br>
-     * @param redirectUrl <br>
-     * @param param <br>
-     * @return <br>
-     */
-    protected ModelAndView fail(String errMessage, String redirectUrl, Map<String, String> param) {
-        ModelMap map = new ModelMap();
-        map.put("errMsg", errMessage);
-        map.put("url", redirectUrl);
-
-        if (param != null) {
-            map.put(WebConstant.PAGE_NOT_REDIRECT, param.remove(WebConstant.PAGE_NOT_REDIRECT));
-        }
-        map.put("paramMap", param);
-        return new ModelAndView(errorPage, map);
     }
 
     /**
