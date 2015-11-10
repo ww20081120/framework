@@ -252,6 +252,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         try {
             Session session = sessionFactory.getCurrentSession();
             session.update(entity);
+            session.flush();
         }
         catch (Exception e) {
             logger.error(e);
@@ -268,6 +269,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         try {
             Session session = sessionFactory.getCurrentSession();
             session.delete(entity);
+            session.flush();
         }
         catch (Exception e) {
             logger.error(e);
