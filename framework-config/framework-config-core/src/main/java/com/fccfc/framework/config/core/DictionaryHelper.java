@@ -1,5 +1,6 @@
 package com.fccfc.framework.config.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,14 @@ import org.apache.commons.lang.StringUtils;
  */
 public final class DictionaryHelper {
     /**
-     * configurationService
-     */
-    private static DictionaryDataService dictionaryDataService;
-
-    /**
      * logger
      */
     private static Logger logger = new Logger(DictionaryHelper.class);
+
+    /**
+     * configurationService
+     */
+    private static DictionaryDataService dictionaryDataService;
 
     /**
      * Description: <br>
@@ -84,21 +85,26 @@ public final class DictionaryHelper {
      * @param dictCode - 字典代码
      * @return 返回字典数据集合
      */
-    public static Map<String, String> getMap(String dictCode) {
-        Map<String, String> dictDataMap = new HashMap<String, String>();
+    public static List<Map<String, String>> getMap(String dictCode) {
+        List<Map<String, String>> dictDataList = new ArrayList<Map<String, String>>();
         try {
             String key = dictCode + GlobalConstants.SPLITOR;
             Map<String, String> cache = CacheHelper.getStringCache().getNode(CacheConstant.DICTIONARY_DATA);
+
+            Map<String, String> dictDataMap = null;
             for (Map.Entry<String, String> entry : cache.entrySet()) {
                 String entryKey = entry.getKey();
                 if(entryKey.contains(key)){
-                    dictDataMap.put(StringUtils.split(entryKey, GlobalConstants.SPLITOR)[1], entry.getValue());
+                    dictDataMap = new HashMap<String, String>();
+                    dictDataMap.put("key", StringUtils.split(entryKey, GlobalConstants.SPLITOR)[1]);
+                    dictDataMap.put("value", entry.getValue());
+                    dictDataList.add(dictDataMap);
                 }
             }
         } catch (Exception e) {
             logger.warn(e, "get cache error. key is [{0}]", dictCode);
         }
-        return dictDataMap;
+        return dictDataList;
     }
 
     /**
