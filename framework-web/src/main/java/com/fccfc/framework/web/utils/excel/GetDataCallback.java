@@ -3,7 +3,7 @@ package com.fccfc.framework.web.utils.excel;
 import java.util.List;
 
 /**
- * Created by 14080554 on 2015/7/8 0008.
+ * Created by wk on 2015/9/17 0013.
  */
 public interface GetDataCallback {
     List invoke(int currentPage, int pageSize);
