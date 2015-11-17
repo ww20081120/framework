@@ -165,7 +165,7 @@ public abstract class BaseController {
      * @taskId 660560<br>
      * @return <br>
      */
-    private HttpServletRequest getRequest() {
+    protected HttpServletRequest getRequest() {
         RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
         return ((ServletRequestAttributes) requestAttr).getRequest();
     }
