@@ -7,18 +7,18 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.fccfc.framework.cache.core.CacheException;
-import com.fccfc.framework.cache.core.redis.RedisCache;
+import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
 import com.fccfc.framework.task.core.dao.RedisCacheDao;
+import com.fccfc.framework.task.core.service.NotifyCacheService;
 
 /**
+ * <Description> <br>
  * 
- * <Description> <br> 
- *  
  * @author yang.zhipeng <br>
  * @version 1.0<br>
  * @taskId <br>
@@ -27,12 +27,7 @@ import com.fccfc.framework.task.core.dao.RedisCacheDao;
  * @see com.fccfc.framework.task.core.service.impl <br>
  */
 @Service
-public class NotifRedisServiceImpl implements NotifRedisService {
-
-    /**
-     * redisCache
-     */
-    private RedisCache redisCache = null;
+public class NotifyCacheServiceImpl implements NotifyCacheService {
 
     /**
      * redisCacheDao
@@ -43,8 +38,7 @@ public class NotifRedisServiceImpl implements NotifRedisService {
     /**
      * NotifRedisServiceImpl
      */
-    public NotifRedisServiceImpl() {
-        redisCache = new RedisCache("127.0.0.1", 6379);
+    public NotifyCacheServiceImpl() {
     }
 
     /**
@@ -60,7 +54,7 @@ public class NotifRedisServiceImpl implements NotifRedisService {
     @Override
     public void putDataToRedis(String nodeName, String key, Object object) throws ServiceException {
         try {
-            redisCache.putValue(nodeName, key, object);
+            CacheHelper.getCache().putValue(nodeName, key, object);
         }
         catch (CacheException e) {
             throw new ServiceException(ErrorCodeDef.PUT_VALUE_ERROR_20022, "向redis中保存数据失败", e);
@@ -81,7 +75,7 @@ public class NotifRedisServiceImpl implements NotifRedisService {
     public Object getDataFromRedis(String nodeName, String key) throws ServiceException {
         Object obj = null;
         try {
-            obj = redisCache.getValue(nodeName, key);
+            obj = CacheHelper.getCache().getValue(nodeName, key);
         }
         catch (CacheException e) {
             throw new ServiceException(ErrorCodeDef.GET_VALUE_ERROR_20023, "获取redis中数据失败", e);
@@ -100,7 +94,7 @@ public class NotifRedisServiceImpl implements NotifRedisService {
     @Override
     public void removeByNodeName(String nodeName) throws ServiceException {
         try {
-            redisCache.removeNode(nodeName);
+            CacheHelper.getCache().removeNode(nodeName);
         }
         catch (CacheException e) {
             throw new ServiceException(ErrorCodeDef.REMOVE_VALUE_ERROR_20024, "删除redis中数据失败", e);

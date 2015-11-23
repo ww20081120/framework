@@ -1,4 +1,4 @@
-package com.fccfc.framework.task.core.service.impl;
+package com.fccfc.framework.task.core.service;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
  * @since V1.0<br>
  * @see com.fccfc.framework.task.core.service.impl <br>
  */
-public interface NotifRedisService {
+public interface NotifyCacheService {
 
     /**
      * Description: <br>

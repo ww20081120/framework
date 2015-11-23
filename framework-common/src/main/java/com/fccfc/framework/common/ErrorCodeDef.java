@@ -155,6 +155,9 @@ public interface ErrorCodeDef {
     /** 执行所有任务失败 */
     int EXECUTE_ALL_TAKS_ERROR = 10043;
 
+    /** 不支持的方法 */
+    int UNSPORT_METHOD_ERROR = 10045;
+
     /************************************************************************************
      * ---------------------------------用户错误区域 必须大于20000的5位数-------------------------------------------
      ************************************************************************************/
@@ -213,30 +216,30 @@ public interface ErrorCodeDef {
     /** 密码和验证码不能同时为空 */
     int VERIFY_CODE_IS_NULL_20019 = 20019;
 
-    /** 不支持的日志类型*/
+    /** 不支持的日志类型 */
     int UNSPORT_LOGGER_TYPE = 20020;
-    
-    /** 保存任务失败*/
+
+    /** 保存任务失败 */
     int SAVE_TASK_OR_TASK_TRIGGER_ERROR = 20021;
-    
+
     /** 向redis中保存数据失败 */
     int PUT_VALUE_ERROR_20022 = 20022;
-    
-    /** 获取redis中数据失败*/
+
+    /** 获取redis中数据失败 */
     int GET_VALUE_ERROR_20023 = 20023;
-    
-    /** 删除redis中数据失败*/
+
+    /** 删除redis中数据失败 */
     int REMOVE_VALUE_ERROR_20024 = 20024;
-    
-    /** 验证码错误*/
+
+    /** 验证码错误 */
     int VERIFY_CODE_ERROR = 20025;
-    
-    /** 保存TASK历史记录失败*/
+
+    /** 保存TASK历史记录失败 */
     int SAVE_HIS_ERROR_20026 = 20026;
-    
-    /** 删除TASK相关信息失败*/
+
+    /** 删除TASK相关信息失败 */
     int DEL_TASK_ERROR_20027 = 20027;
-    
-    /** 上传图片最大宽度超出*/
+
+    /** 上传图片最大宽度超出 */
     int IMAGE_WIDTH_ERROR_20028 = 20028;
 }

@@ -12,6 +12,7 @@ import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.ListenerManager;
 import org.quartz.Scheduler;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
@@ -157,12 +158,12 @@ public class TaskServiceImpl implements TaskService.Iface {
             Trigger trigger = TriggerBuilder.newTrigger().startAt(simpleTriggerPojo.getBeginTime())
                 .endAt(simpleTriggerPojo.getEndTime()).withIdentity(triggerKey).withSchedule(builder).build();
 
-            // if (taskListener != null) {
-            // ListenerManager listenerManager = scheduler.getListenerManager();
-            // listenerManager.addJobListener(taskListener);
-            // listenerManager.addTriggerListener(taskListener);
-            // listenerManager.addSchedulerListener(taskListener);
-            // }
+             if (taskListener != null) {
+             ListenerManager listenerManager = scheduler.getListenerManager();
+             listenerManager.addJobListener(taskListener);
+             listenerManager.addTriggerListener(taskListener);
+             listenerManager.addSchedulerListener(taskListener);
+             }
 
             if (scheduler.checkExists(triggerKey)) {
                 scheduler.rescheduleJob(triggerKey, trigger);
@@ -170,9 +171,9 @@ public class TaskServiceImpl implements TaskService.Iface {
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
                 // 将数据添加到TASK和SIMPLE_TRIGGER表中
-                // saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
+                saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(simpleTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到SIMPLE_TRIGGER表中
-                // triggerDao.saveSimpleTrigger(simpleTriggerPojo);
+                triggerDao.saveSimpleTrigger(simpleTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -217,18 +218,18 @@ public class TaskServiceImpl implements TaskService.Iface {
 
             TriggerKey triggerKey = new TriggerKey(cronTriggerPojo.getTriggerName(), taskPojo.getTaskName());
 
-            CronScheduleBuilder cronScheduleBuiler = CronScheduleBuilder.cronSchedule(cronTriggerPojo
-                .getCronExpression());
+            CronScheduleBuilder cronScheduleBuiler = CronScheduleBuilder
+                .cronSchedule(cronTriggerPojo.getCronExpression());
 
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity(triggerKey).withSchedule(cronScheduleBuiler)
                 .build();
 
-            // if (taskListener != null) {
-            // ListenerManager listenerManager = scheduler.getListenerManager();
-            // listenerManager.addJobListener(taskListener);
-            // listenerManager.addTriggerListener(taskListener);
-            // listenerManager.addSchedulerListener(taskListener);
-            // }
+            if (taskListener != null) {
+                ListenerManager listenerManager = scheduler.getListenerManager();
+                listenerManager.addJobListener(taskListener);
+                listenerManager.addTriggerListener(taskListener);
+                listenerManager.addSchedulerListener(taskListener);
+            }
 
             if (scheduler.checkExists(triggerKey)) {
                 scheduler.rescheduleJob(triggerKey, trigger);
@@ -236,9 +237,9 @@ public class TaskServiceImpl implements TaskService.Iface {
             else {
                 scheduler.scheduleJob(jobDetail, trigger);
                 // 将数据添加到TASK和TASK_TRIGGER表中
-                // saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
+                saveTaskAndTaskTrigger(taskPojo, this.trigger2taskTrigger(cronTriggerPojo, taskPojo.getTaskId()));
                 // 将数据保存到CRON_TRIGGER表中
-                // triggerDao.saveCronTrigger(cronTriggerPojo);
+                triggerDao.saveCronTrigger(cronTriggerPojo);
             }
         }
         catch (Exception e) {
@@ -428,7 +429,7 @@ public class TaskServiceImpl implements TaskService.Iface {
         return pojo;
     }
 
-    // public void setTaskListener(TaskListener taskListener) {
-    // this.taskListener = taskListener;
-    // }
+    public void setTaskListener(TaskListener taskListener) {
+        this.taskListener = taskListener;
+    }
 }

@@ -22,7 +22,7 @@ import org.quartz.TriggerListener;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.task.core.TaskConstants;
 import com.fccfc.framework.task.core.bean.TaskPojo;
-import com.fccfc.framework.task.core.service.impl.JobService;
+import com.fccfc.framework.task.core.service.JobService;
 
 /**
  * <Description> <br>
@@ -57,7 +57,8 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
      * org.quartz.Trigger.CompletedExecutionInstruction)
      */
     @Override
-    public void triggerComplete(Trigger trigger, JobExecutionContext context, CompletedExecutionInstruction instruction) {
+    public void triggerComplete(Trigger trigger, JobExecutionContext context,
+        CompletedExecutionInstruction instruction) {
         try {
             JobDataMap dataMap = context.getMergedJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
@@ -299,7 +300,7 @@ public class TaskListener implements JobListener, TriggerListener, SchedulerList
             JobDataMap dataMap = jobDetail.getJobDataMap();
             Integer taskId = dataMap.getInt(TaskConstants.TASK_ID);
             if (taskId != null) {
-                jobService.insertTaskHisAndDeleteTaskById(taskId, -1, TaskPojo.class);
+                jobService.insertTaskHisAndDeleteTaskById(taskId, -1);
             }
         }
         catch (Exception e) {

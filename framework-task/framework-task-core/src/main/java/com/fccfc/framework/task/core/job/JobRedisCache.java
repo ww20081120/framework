@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
-import com.fccfc.framework.task.core.service.impl.NotifRedisService;
+import com.fccfc.framework.task.core.service.NotifyCacheService;
 
 /**
  * <Description> <br>
@@ -23,7 +23,7 @@ public class JobRedisCache {
      * redisCacheService
      */
     @Resource
-    private NotifRedisService redisCacheService;
+    private NotifyCacheService redisCacheService;
 
     /**
      * NODE_NAME

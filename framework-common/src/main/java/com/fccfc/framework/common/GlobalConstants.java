@@ -18,6 +18,9 @@ public interface GlobalConstants {
     /** 分隔符 */
     String SPLITOR = ",";
 
+    /** 分隔符 */
+    String PARAM_SPLITOR = "&";
+
     /** 路径分割符 */
     String PATH_SPLITOR = "/";
 

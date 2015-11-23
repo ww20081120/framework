@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-
 import com.fccfc.framework.cache.core.AbstractCache;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
+
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 /**
  * <Description> <br>
@@ -33,15 +33,8 @@ public class RedisCache extends AbstractCache {
      */
     public static final String CACHE_MODEL = "REDIS";
 
-    /**
-     * 主机
-     */
-    private String host;
-
-    /**
-     * 端口号
-     */
-    private int port;
+    /** redisAddress */
+    private String redisAddress = null;
 
     /**
      * RedisCache
@@ -49,19 +42,18 @@ public class RedisCache extends AbstractCache {
      * @param host <br>
      * @param port <br>
      */
-    public RedisCache(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public RedisCache(String address) {
+        this.redisAddress = address;
     }
 
     @Override
     public Map<String, Object> getNode(String nodeName) throws CacheException {
         byte[] bNodeName = nodeName.getBytes();
         Map<String, Object> map = null;
-        JedisPool pool = null;
-        Jedis jedis = null;
+        ShardedJedisPool pool = null;
+        ShardedJedis jedis = null;
         try {
-            pool = RedisConnectionPool.getPool(host, port);
+            pool = RedisConnectionPool.getPool(redisAddress);
             jedis = pool.getResource();
             Map<byte[], byte[]> hmap = jedis.hgetAll(bNodeName);
             if (CommonUtil.isNotEmpty(hmap)) {
@@ -79,11 +71,11 @@ public class RedisCache extends AbstractCache {
 
     @Override
     public void putNode(String nodeName, Map<String, Object> node) throws CacheException {
-        JedisPool pool = null;
-        Jedis jedis = null;
+        ShardedJedisPool pool = null;
+        ShardedJedis jedis = null;
         try {
             if (CommonUtil.isNotEmpty(node)) {
-                pool = RedisConnectionPool.getPool(host, port);
+                pool = RedisConnectionPool.getPool(redisAddress);
                 jedis = pool.getResource();
                 Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
                 for (Entry<String, Object> entry : node.entrySet()) {
@@ -105,10 +97,10 @@ public class RedisCache extends AbstractCache {
 
     @Override
     public boolean removeNode(String nodeName) throws CacheException {
-        JedisPool pool = null;
-        Jedis jedis = null;
+        ShardedJedisPool pool = null;
+        ShardedJedis jedis = null;
         try {
-            pool = RedisConnectionPool.getPool(host, port);
+            pool = RedisConnectionPool.getPool(redisAddress);
             jedis = pool.getResource();
             jedis.del(nodeName.getBytes());
             return true;
@@ -123,10 +115,10 @@ public class RedisCache extends AbstractCache {
 
     @Override
     public Object getValue(String nodeName, String key) throws CacheException {
-        JedisPool pool = null;
-        Jedis jedis = null;
+        ShardedJedisPool pool = null;
+        ShardedJedis jedis = null;
         try {
-            pool = RedisConnectionPool.getPool(host, port);
+            pool = RedisConnectionPool.getPool(redisAddress);
             jedis = pool.getResource();
             byte[] data = jedis.hget(nodeName.getBytes(), key.getBytes());
             return unserial(data);
@@ -141,10 +133,10 @@ public class RedisCache extends AbstractCache {
 
     @Override
     public void putValue(String nodeName, String key, Object t) throws CacheException {
-        JedisPool pool = null;
-        Jedis jedis = null;
+        ShardedJedisPool pool = null;
+        ShardedJedis jedis = null;
         try {
-            pool = RedisConnectionPool.getPool(host, port);
+            pool = RedisConnectionPool.getPool(redisAddress);
             jedis = pool.getResource();
             byte[] data = serial(t);
             if (data != null && data.length > 0) {
@@ -169,10 +161,10 @@ public class RedisCache extends AbstractCache {
 
     @Override
     public void removeValue(String nodeName, String key) throws CacheException {
-        JedisPool pool = null;
-        Jedis jedis = null;
+        ShardedJedisPool pool = null;
+        ShardedJedis jedis = null;
         try {
-            pool = RedisConnectionPool.getPool(host, port);
+            pool = RedisConnectionPool.getPool(redisAddress);
             jedis = pool.getResource();
             jedis.hdel(nodeName.getBytes(), key.getBytes());
         }
@@ -186,19 +178,7 @@ public class RedisCache extends AbstractCache {
 
     @Override
     public void clean() throws CacheException {
-        JedisPool pool = null;
-        Jedis jedis = null;
-        try {
-            pool = RedisConnectionPool.getPool(host, port);
-            jedis = pool.getResource();
-            jedis.flushAll();
-        }
-        catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, e);
-        }
-        finally {
-            RedisConnectionPool.returnResource(pool, jedis);
-        }
+        throw new CacheException(ErrorCodeDef.UNSPORT_METHOD_ERROR, "该方法未被实现");
     }
 
 }

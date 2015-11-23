@@ -46,7 +46,7 @@ public class RedisCacheServiceTest {
      * @author shao.dinghui<br>
      * @throws TException <br>
      * @taskId <br>
-     * <br>
+     *         <br>
      */
     @Test
     public void testPutDataToRedis() throws TException {
@@ -78,7 +78,7 @@ public class RedisCacheServiceTest {
      * @author shao.dinghui<br>
      * @throws TException <br>
      * @taskId <br>
-     * <br>
+     *         <br>
      */
     @Test
     public void testPause() throws TException {
@@ -102,7 +102,7 @@ public class RedisCacheServiceTest {
      * @author shao.dinghui<br>
      * @throws TException <br>
      * @taskId <br>
-     * <br>
+     *         <br>
      */
     @Test
     public void testResume() throws TException {
@@ -126,7 +126,7 @@ public class RedisCacheServiceTest {
      * @author shao.dinghui<br>
      * @throws TException <br>
      * @taskId <br>
-     * <br>
+     *         <br>
      */
     @Test
     public void testRemove() throws TException {
@@ -153,7 +153,7 @@ public class RedisCacheServiceTest {
      * @throws CacheException <br>
      */
     public static void main(String[] args) throws CacheException {
-        ICache cache = new RedisCache("127.0.0.1", 6379);
+        ICache cache = new RedisCache("127.0.0.1:6379");
         ChangeNotifRedisPojo pojo = (ChangeNotifRedisPojo) cache.getValue("nodeName", "key5");
 
         // System.out.println(pojo.getChangeNotifId());

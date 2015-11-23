@@ -5,9 +5,16 @@
  ****************************************************************************************/
 package com.fccfc.framework.cache.core.redis;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fccfc.framework.common.utils.io.ProtocolUtil;
+import com.fccfc.framework.common.utils.io.ProtocolUtil.Address;
+
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisShardInfo;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
 /**
  * <Description> <br>
@@ -20,24 +27,27 @@ import redis.clients.jedis.JedisPoolConfig;
  * @see com.fccfc.framework.cache.core.redis <br>
  */
 public class RedisConnectionPool {
-
     /**
      * pool
      */
-    private static JedisPool pool = null;
-
+    private static ShardedJedisPool pool = null;
+    private static String address = null;
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author wang wei <br>
      * @taskId <br>
      * @param ip <br>
      * @param port <br>
      * @return <br>
      */
-    public static JedisPool getPool(String ip, int port) {
-        if (pool == null) {
+    public static ShardedJedisPool getPool(String redisAddress) {
+        if (pool == null || !redisAddress.equals(address)) {
+            Address[] addresses = ProtocolUtil.parseAddress(redisAddress);
+            List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
+            for (Address addr : addresses) {
+                shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
+            }
             JedisPoolConfig config = new JedisPoolConfig();
             // 控制一个pool可分配多少个jedis实例，通过pool.getResource()来获取；
             // 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
@@ -49,24 +59,21 @@ public class RedisConnectionPool {
             // config.setMaxWait(1000 * 100);
             // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
             config.setTestOnBorrow(true);
-            pool = new JedisPool(config, ip, port);
+            pool = new ShardedJedisPool(config, shards);
         }
         return pool;
     }
-
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author wang wei <br>
      * @taskId <br>
      * @param pool <br>
      * @param redis <br>
      */
-    public static void returnResource(JedisPool pool, Jedis redis) {
+    public static void returnResource(ShardedJedisPool pool, ShardedJedis redis) {
         if (redis != null) {
             pool.returnResource(redis);
         }
     }
-
 }

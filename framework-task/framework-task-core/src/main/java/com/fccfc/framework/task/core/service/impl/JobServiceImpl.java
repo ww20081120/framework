@@ -7,12 +7,13 @@ import org.springframework.stereotype.Service;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.db.core.DaoException;
+import com.fccfc.framework.task.core.bean.TaskPojo;
 import com.fccfc.framework.task.core.dao.JobDao;
+import com.fccfc.framework.task.core.service.JobService;
 
 /**
+ * <Description> <br>
  * 
- * <Description> <br> 
- *  
  * @author yang.zhipeng <br>
  * @version 1.0<br>
  * @taskId <br>
@@ -61,10 +62,11 @@ public class JobServiceImpl implements JobService {
      * @throws ServiceException <br>
      */
     @Override
-    public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId, Class clz) throws ServiceException {
+    public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId)
+        throws ServiceException {
         try {
             jobDao.insertTaskHistory(taskId, -1);
-            jobDao.deleteById(clz, taskId);
+            jobDao.deleteById(TaskPojo.class, taskId);
         }
         catch (DaoException e) {
             throw new ServiceException(ErrorCodeDef.SAVE_HIS_ERROR_20026, "保存TASK历史记录失败", e);

@@ -1,4 +1,4 @@
-package com.fccfc.framework.task.core.service.impl;
+package com.fccfc.framework.task.core.service;
 
 import com.fccfc.framework.common.ServiceException;
 
@@ -33,8 +33,8 @@ public interface JobService {
      * @taskId <br>
      * @param taskId <br>
      * @param operatorId <br>
-     * @param clz <br>
      * @throws ServiceException <br>
      */
-    public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId, Class clz) throws ServiceException;
+    public void insertTaskHisAndDeleteTaskById(int taskId, int operatorId)
+        throws ServiceException;
 }

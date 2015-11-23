@@ -54,7 +54,7 @@ public class ConfigItemInitialization implements Initialization {
      */
     @Resource
     private ConfigService.Iface configService;
-    
+
     /**
      * dictionaryDataService
      */
@@ -73,10 +73,9 @@ public class ConfigItemInitialization implements Initialization {
         logger.debug("---------------begin ConfigItem init ------------------");
 
         if (RedisCache.CACHE_MODEL.equals(params.get("CACHE_MODULE"))) {
-            String host = params.get("CACHE_REDIS_HOST");
-            Integer port = Integer.valueOf(params.get("CACHE_REDIS_PORT"));
-            CacheHelper.setCache(new RedisCache(host, port));
-            CacheHelper.setStringCache(new RedisStringCache(host, port));
+            String address = params.get("CACHE_REDIS_ADDRESS");
+            CacheHelper.setCache(new RedisCache(address));
+            CacheHelper.setStringCache(new RedisStringCache(address));
         }
         else {
             Map map = new ConcurrentHashMap();
@@ -89,7 +88,7 @@ public class ConfigItemInitialization implements Initialization {
         Configuration.setAllModules(configurationService.selectAllModule());
 
         Configuration.reloadCache();
-        
+
         DictionaryHelper.setdictDataService(dictionaryDataService);
         DictionaryHelper.reloadCache(); // 加载字典数据
         logger.debug("---------------end ConfigItem int ------------------");

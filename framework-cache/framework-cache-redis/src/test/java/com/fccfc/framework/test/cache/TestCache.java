@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.ICache;
 import com.fccfc.framework.cache.core.IStringCache;
@@ -35,29 +34,28 @@ public class TestCache {
     private IStringCache stringCache;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Before
     public void init() {
-        cache = new RedisCache("127.0.0.1", 6379);
-        stringCache = new RedisStringCache("127.0.0.1", 6379);
+        cache = new RedisCache("127.0.0.1:6379");
+        stringCache = new RedisStringCache("127.0.0.1:6379");
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @throws CacheException <br>
      */
     @Test
     public void getNode() throws CacheException {
-    	
+
     }
 
     /**
@@ -67,7 +65,7 @@ public class TestCache {
      * @throws CacheException <br>
      */
     public void putNode() throws CacheException {
-    	
+
     }
 
     /**
@@ -77,13 +75,12 @@ public class TestCache {
      * @throws CacheException <br>
      */
     public void removeNode() throws CacheException {
-    	
+
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @throws CacheException <br>
@@ -95,9 +92,8 @@ public class TestCache {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @throws CacheException <br>
