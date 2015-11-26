@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><templates><template autoinsert="false" context="settercomment_context" deleted="false" description="Comment for setter method" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.settercomment" name="settercomment">/**
+ * Description: &lt;br&gt;
+ *  
+ * @author 王伟&lt;br&gt;
+ * @taskId &lt;br&gt;
+ * @param ${param} &lt;br&gt;
+ */ </template><template autoinsert="false" context="overridecomment_context" deleted="false" description="Comment for overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.overridecomment" name="overridecomment">/**
+ * Description: &lt;br&gt; 
+ *  
+ * @author 王伟&lt;br&gt;
+ * @taskId &lt;br&gt;
+ * ${tags} &lt;br&gt;
+ */ </template><template autoinsert="false" context="gettercomment_context" deleted="false" description="Comment for getter method" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.gettercomment" name="gettercomment">/**
+ * Description: &lt;br&gt;
+ *  
+ * @author 王伟&lt;br&gt;
+ * @taskId &lt;br&gt;
+ * @return ${bare_field_name} &lt;br&gt;
+ */ </template><template autoinsert="false" context="fieldcomment_context" deleted="false" description="Comment for fields" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.fieldcomment" name="fieldcomment">/**
+ * ${field} &lt;br&gt;
+ */</template><template autoinsert="false" context="delegatecomment_context" deleted="false" description="Comment for delegate methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.delegatecomment" name="delegatecomment">/**
+ * Description: &lt;br&gt; 
+ *  
+ * @author 王伟&lt;br&gt;
+ * @taskId &lt;br&gt;
+ * ${tags} &lt;br&gt;
+ */ </template><template autoinsert="false" context="typecomment_context" deleted="false" description="Comment for created types" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.typecomment" name="typecomment">/** 
+ * &lt;Description&gt; &lt;br&gt; 
+ *  
+ * @author 王伟&lt;br&gt;
+ * @version 1.0&lt;br&gt;
+ * @taskId &lt;br&gt;
+ * @CreateDate ${date} &lt;br&gt;
+ * @since V1.0&lt;br&gt;
+ * @see ${package_name} &lt;br&gt;
+ */</template><template autoinsert="false" context="constructorcomment_context" deleted="false" description="Comment for created constructors" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.constructorcomment" name="constructorcomment">/** 
+ * ${tags} 
+ */ </template><template autoinsert="false" context="methodcomment_context" deleted="false" description="Comment for non-overriding methods" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.methodcomment" name="methodcomment">/**
+ * Description: &lt;br&gt; 
+ *  
+ * @author 王伟&lt;br&gt;
+ * @taskId &lt;br&gt;
+ * ${tags} &lt;br&gt;
+ */ </template><template autoinsert="false" context="filecomment_context" deleted="false" description="Comment for created Java files" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.filecomment" name="filecomment">/**************************************************************************************** 
+ Copyright © 2003-2012 fccfc Corporation. All rights reserved. Reproduction or       &lt;br&gt;
+ transmission in whole or in part, in any form or by any means, electronic, mechanical &lt;br&gt;
+ or otherwise, is prohibited without the prior written consent of the copyright owner. &lt;br&gt;
+ ****************************************************************************************/</template></templates>
