@@ -12,7 +12,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.fccfc</groupId>
-			<artifactId>framework-config-core</artifactId>
+			<artifactId>framework-db-core</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
 	</dependencies>

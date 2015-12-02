@@ -15,5 +15,10 @@
 			<artifactId>framework-log-core</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fccfc</groupId>
+			<artifactId>framework-db-sh</artifactId>
+			<version>${parent.version}</version>
+		</dependency>
 	</dependencies>
 </project>

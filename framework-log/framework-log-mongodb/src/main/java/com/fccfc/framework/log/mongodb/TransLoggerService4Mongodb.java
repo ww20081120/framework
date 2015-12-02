@@ -16,8 +16,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
+import com.fccfc.framework.common.utils.PropertyHolder;
 import com.fccfc.framework.common.utils.logger.Logger;
-import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.log.core.AbstractTransLoggerService;
 import com.fccfc.framework.log.core.TransManager;
 import com.fccfc.framework.log.mongodb.model.TransLog;
@@ -57,7 +57,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         TransManager manager = TransManager.getInstance();
 
         try {
-            boolean printFlag = Configuration.getBoolean("DB_LOG_PRINT_FLAG");
+            boolean printFlag = PropertyHolder.getBooleanProperty("log.trans.db.print");
             if (manager.isError() || manager.isTimeout() || printFlag) {
                 // 插入数据
                 saveData(manager, beginTime, endTime, consumeTime, returnValue, e);
@@ -106,7 +106,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         transLogPojo.setSqlLog(sqlSb.toString());
 
         // 渠道标示comtachChannelId
-        String contactChannelId = Configuration.getString("CONACT_CHANNEL_ID");
+        String contactChannelId = PropertyHolder.getProperty("contact.channel.id");
         transLogPojo.setContactChannelId(Integer.valueOf(contactChannelId));
 
         // 输入参数
@@ -120,7 +120,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         }
 
         // 模块编码
-        String moduleCode = Configuration.getString("MODULE_CODE");
+        String moduleCode = PropertyHolder.getProperty("project.code");
         transLogPojo.setModuleCode(moduleCode);
         // 堆栈信息
         Set<String> keySet = manager.getIdSet();
