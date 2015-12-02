@@ -17,6 +17,11 @@ package com.fccfc.framework.cache.core;
 public interface CacheConstant {
 
     /**
+     * 默认缓存目录
+     */
+    String DEFAULT_CACHE_DIR = "/";
+
+    /**
      * 缓存模式:redis
      */
     String CACHE_MODEL_REDIS = "REDIS";
@@ -44,7 +49,7 @@ public interface CacheConstant {
     String COMMON_DIR = "/COMMON_DIR";
 
     /** 模块代码 */
-    String LOCAL_MODULE_CODE = "MODULE_CODE";
+    String MODULE_CODE = "project.code";
 
     /** 缓存时间 */
     String CONFIG_CACHE_TIME = "CONFIG_CACHE_TIME";
@@ -57,16 +62,16 @@ public interface CacheConstant {
 
     /** 区域 */
     String AREA = "/AREA";
-    
-    /**路径*/
+
+    /** 路径 */
     String URL = "/URL_RESOURCE";
-    
-    /**事件*/
+
+    /** 事件 */
     String EVENT = "/EVENT";
-    
-    /**字典表*/
+
+    /** 字典表 */
     String DICTIONARY_DATA = "/DICTIONARY_DATA";
-    
+
     /**
      * MODULE_DATA
      */

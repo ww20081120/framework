@@ -21,7 +21,7 @@
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
+		<jdk.version>1.8</jdk.version>
 		<junit.version>4.10</junit.version>
 		<spring.version>4.1.1.RELEASE</spring.version>
 	</properties>

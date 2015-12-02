@@ -19,6 +19,15 @@ import java.util.Map;
 public interface ICache {
 
     /**
+     * Description: 获取cache模式 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    String getCacheModel();
+
+    /**
      * Description: 获取节点<br>
      * 
      * @author 王伟 <br>
@@ -26,7 +35,20 @@ public interface ICache {
      * @throws CacheException <br>
      * @return <br>
      */
-    Map<String, Object> getNode(String nodeName) throws CacheException;
+    default Map<String, String> getNode(String nodeName) throws CacheException {
+        return getNode(String.class, nodeName);
+    };
+
+    /**
+     * Description: 获取节点<br>
+     * 
+     * @author 王伟<br>
+     * @param clazz 数据类型
+     * @param nodeName 节点名称
+     * @return 缓存数据
+     * @throws CacheException <br>
+     */
+    <T> Map<String, T> getNode(Class<T> clazz, String nodeName) throws CacheException;
 
     /**
      * Description: putNode<br>
@@ -36,7 +58,7 @@ public interface ICache {
      * @param node <br>
      * @throws CacheException <br>
      */
-    void putNode(String nodeName, Map<String, Object> node) throws CacheException;
+    <T> void putNode(String nodeName, Map<String, T> node) throws CacheException;
 
     /**
      * Description: removeNode<br>
@@ -57,7 +79,21 @@ public interface ICache {
      * @throws CacheException <br>
      * @return <br>
      */
-    Object getValue(String nodeName, String key) throws CacheException;
+    default String getValue(String nodeName, String key) throws CacheException {
+        return getValue(String.class, nodeName, key);
+    };
+
+    /**
+     * Description: 获取数据<br>
+     * 
+     * @author 王伟<br>
+     * @param clazz 数据类型
+     * @param nodeName 节点名称
+     * @param key 缓存的key
+     * @return 返回类型
+     * @throws CacheException <br>
+     */
+    <T> T getValue(Class<T> clazz, String nodeName, String key) throws CacheException;
 
     /**
      * Description: putValue<br>
@@ -68,7 +104,7 @@ public interface ICache {
      * @param t <br>
      * @throws CacheException <br>
      */
-    void putValue(String nodeName, String key, Object t) throws CacheException;
+    <T> void putValue(String nodeName, String key, T t) throws CacheException;
 
     /**
      * Description: updateValue<br>
@@ -79,7 +115,14 @@ public interface ICache {
      * @param t <br>
      * @throws CacheException <br>
      */
-    void updateValue(String nodeName, String key, Object t) throws CacheException;
+    default <T> void updateValue(String nodeName, String key, T t) throws CacheException {
+        if (t == null) {
+            removeValue(nodeName, key);
+        }
+        else {
+            putValue(nodeName, key, t);
+        }
+    }
 
     /**
      * Description: removeValue<br>

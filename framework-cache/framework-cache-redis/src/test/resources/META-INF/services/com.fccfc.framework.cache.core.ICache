@@ -1,0 +1,3 @@
+com.fccfc.framework.cache.core.redis.RedisCache
+com.fccfc.framework.cache.core.redis.ClusterRedisCache
+com.fccfc.framework.cache.core.redis.ShardedRedisCache

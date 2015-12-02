@@ -78,17 +78,17 @@ public class Startup {
         paramMap = OptionParser.parse(Startup.class, args);
 
         logger.info("====================>准备加载Spring配置文件<====================");
-        ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(StringUtils.split(paramMap
-            .get("xmlPath")));
+        ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(
+            StringUtils.split(paramMap.get("xmlPath")));
         context = ac;
         ac.start();
         logger.info("====================>Spring配置文件加载完毕<====================");
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("*         ").append(ManagementFactory.getRuntimeMXBean().getName()).append("        *")
-            .append('\n').append("*            ").append(Configuration.get(CacheConstant.LOCAL_MODULE_CODE))
-            .append("模块启动成功！").append("                                   *").append('\n').append("*    ")
-            .append("关闭地址为:UDP://").append(paramMap.get("host")).append(':').append(paramMap.get("port"))
-            .append("      *").append('\n').append("***************************************"));
+            .append('\n').append("*            ").append(Configuration.get(CacheConstant.MODULE_CODE)).append("模块启动成功！")
+            .append("                                   *").append('\n').append("*    ").append("关闭地址为:UDP://")
+            .append(paramMap.get("host")).append(':').append(paramMap.get("port")).append("      *").append('\n')
+            .append("***************************************"));
 
         startShutdownServer();
 
@@ -97,17 +97,17 @@ public class Startup {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     private static void startShutdownServer() {
         DatagramSocket server = null;
         try {
-            server = new DatagramSocket(new InetSocketAddress(paramMap.get("host"), Integer.valueOf(paramMap
-                .get("port"))));
+            server = new DatagramSocket(
+                new InetSocketAddress(paramMap.get("host"), Integer.valueOf(paramMap.get("port"))));
             boolean flag = true;
 
             byte[] buffer = new byte[128];
@@ -117,7 +117,7 @@ public class Startup {
                 server.receive(packet);
 
                 String data = new String(packet.getData(), 0, packet.getLength(), GlobalConstants.DEFAULT_CHARSET);
-                if (StringUtils.equals(Configuration.getString(CacheConstant.LOCAL_MODULE_CODE), data)) {
+                if (StringUtils.equals(Configuration.getString(CacheConstant.MODULE_CODE), data)) {
                     flag = false;
                     System.out.println("接收到关闭服务端请求");
                 }

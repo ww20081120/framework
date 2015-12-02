@@ -49,5 +49,5 @@ public interface ConfigItemDao extends IGenericBaseDao {
      * @throws DaoException <br>
      */
     @Sql(bean = Map.class)
-    List<Map<String, Object>> selectAll(@Param("moduleList") List<String> moduleList) throws DaoException;
+    List<Map<String, Object>> selectAll(@Param("moduleCode") String moduleCode) throws DaoException;
 }

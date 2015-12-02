@@ -5,7 +5,12 @@
  ****************************************************************************************/
 package com.fccfc.framework.cache.core;
 
+import java.util.ServiceLoader;
+
+import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.utils.Assert;
+import com.fccfc.framework.common.utils.PropertyHolder;
 
 /**
  * <Description> <br>
@@ -20,23 +25,26 @@ public final class CacheHelper {
     /** cache */
     private static ICache cache;
 
-    /** stringCache */
-    private static IStringCache stringCache;
+    public static ICache getCache() throws CacheException {
 
-    public static ICache getCache() {
+        if (cache == null) {
+            String cacheModel = PropertyHolder.getProperty("cache.model");
+            Assert.notEmpty(cacheModel, "未配置缓存模式 cache.model");
+
+            ServiceLoader<ICache> serviceLoader = ServiceLoader.load(ICache.class);
+            for (ICache c : serviceLoader) {
+                if (cacheModel.equals(c.getCacheModel())) {
+                    cache = c;
+                    break;
+                }
+            }
+
+            if (cache == null) {
+                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "未找到缓存实现类 或者 cache.model 配置不正确");
+            }
+        }
+
         return cache;
-    }
-
-    public static void setCache(ICache cache) {
-        CacheHelper.cache = cache;
-    }
-
-    public static IStringCache getStringCache() {
-        return stringCache;
-    }
-
-    public static void setStringCache(IStringCache stringCache) {
-        CacheHelper.stringCache = stringCache;
     }
 
     /**

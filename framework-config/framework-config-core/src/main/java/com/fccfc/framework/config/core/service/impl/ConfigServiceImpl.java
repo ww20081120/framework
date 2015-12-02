@@ -14,7 +14,6 @@ import org.apache.thrift.TException;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.config.api.Config;
 import com.fccfc.framework.config.api.ConfigService;
-import com.fccfc.framework.config.core.Configuration;
 import com.fccfc.framework.config.core.dao.ConfigItemDao;
 import com.fccfc.framework.db.core.DaoException;
 
@@ -42,7 +41,7 @@ public class ConfigServiceImpl implements ConfigService.Iface {
     public List<Config> queryAllConfig(String moduleCode) throws TException {
         List<Config> configList = new ArrayList<Config>();
         try {
-            List<Map<String, Object>> list = configItemDao.selectAll(Configuration.getModuleCode(moduleCode));
+            List<Map<String, Object>> list = configItemDao.selectAll(moduleCode);
             for (Map<String, Object> map : list) {
                 Config config = new Config();
                 config.setConfigItemCode(CommonUtil.getString(map.get("CONFIG_ITEM_CODE")));

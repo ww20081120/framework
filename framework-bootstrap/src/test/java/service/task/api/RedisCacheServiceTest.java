@@ -10,13 +10,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fccfc.framework.cache.core.CacheException;
-import com.fccfc.framework.cache.core.ICache;
-import com.fccfc.framework.cache.core.redis.RedisCache;
 import com.fccfc.framework.task.api.CronTrigger;
 import com.fccfc.framework.task.api.Task;
 import com.fccfc.framework.task.api.TaskService;
-import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
 
 /**
  * <Description> <br>
@@ -142,24 +138,5 @@ public class RedisCacheServiceTest {
         task.setPriority(5);
 
         iface.remove(task);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author wang wei <br>
-     * @taskId <br>
-     * @param args <br>
-     * @throws CacheException <br>
-     */
-    public static void main(String[] args) throws CacheException {
-        ICache cache = new RedisCache("127.0.0.1:6379");
-        ChangeNotifRedisPojo pojo = (ChangeNotifRedisPojo) cache.getValue("nodeName", "key5");
-
-        // System.out.println(pojo.getChangeNotifId());
-        // System.out.println(pojo.getActionType());
-        // System.out.println(pojo.getKeyValue());
-        // System.out.println(pojo.getTableName());
-        // System.out.println(pojo.getCreatedDate());
     }
 }

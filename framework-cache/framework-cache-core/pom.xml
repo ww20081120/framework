@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>framework-cache-core</artifactId>
 	<properties>
-		<kryo.version>2.16</kryo.version>
+		<protostuff.version>1.3.8</protostuff.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -17,9 +17,14 @@
 			<version>${parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.esotericsoftware.kryo</groupId>
-			<artifactId>kryo</artifactId>
-			<version>${kryo.version}</version>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>${protostuff.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>${protostuff.version}</version>
 		</dependency>
 	</dependencies>
 </project>

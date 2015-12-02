@@ -159,6 +159,7 @@ public class AbstractAnnotationHandler {
 
     /**
      * ParamMetadata
+     * 
      * @param method <br>
      * @return <br>
      * @throws InitializationException <br>
@@ -167,9 +168,8 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
-            // TODO: 序列化有问题，待解决
-            //metadata = daoConfig.isCache() ? (ParamMetadata) CacheHelper.getCache().getValue(
-            //    CacheConstant.SQL_PARAM_DIR, key) : null;
+            metadata = daoConfig.isCache()
+                ? CacheHelper.getCache().getValue(ParamMetadata.class, CacheConstant.SQL_PARAM_DIR, key) : null;
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -273,8 +273,7 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         String templateSql = null;
         try {
-            templateSql = daoConfig.isCache() ? CacheHelper.getStringCache().getValue(CacheConstant.SQL_DIR, key)
-                : null;
+            templateSql = daoConfig.isCache() ? CacheHelper.getCache().getValue(CacheConstant.SQL_DIR, key) : null;
             if (CommonUtil.isEmpty(templateSql)) {
                 String path = null;
 
@@ -289,7 +288,7 @@ public class AbstractAnnotationHandler {
                     templateSql = checkSqlPath(method, path);
                 }
                 if (daoConfig.isCache()) {
-                    CacheHelper.getStringCache().putValue(CacheConstant.SQL_DIR, key, templateSql);
+                    CacheHelper.getCache().putValue(CacheConstant.SQL_DIR, key, templateSql);
                 }
             }
         }
@@ -301,6 +300,7 @@ public class AbstractAnnotationHandler {
 
     /**
      * DaoConfig
+     * 
      * @return the daoConfig
      */
     public DaoConfig getDaoConfig() {
@@ -309,6 +309,7 @@ public class AbstractAnnotationHandler {
 
     /**
      * setDaoConfig
+     * 
      * @param daoConfig the daoConfig to set
      */
     public void setDaoConfig(DaoConfig daoConfig) {

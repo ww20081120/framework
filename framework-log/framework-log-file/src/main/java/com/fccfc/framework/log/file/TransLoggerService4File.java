@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
-import com.fccfc.framework.cache.core.IStringCache;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.log.core.AbstractTransLoggerService;
 import com.fccfc.framework.log.core.TransManager;
@@ -37,11 +36,10 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e) {
         TransManager manager = TransManager.getInstance();
-        IStringCache cache = CacheHelper.getStringCache();
         try {
             for (String key : manager.getIdSet()) {
                 if (manager.isError() || manager.isTimeout()) {
-                    logger.warn(cache.getValue(CacheConstant.CACHE_LOGS, key));
+                    logger.warn(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, key));
                 }
 
             }

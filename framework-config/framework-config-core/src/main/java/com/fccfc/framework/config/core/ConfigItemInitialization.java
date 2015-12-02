@@ -3,16 +3,8 @@
  */
 package com.fccfc.framework.config.core;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.Resource;
 
-import com.fccfc.framework.cache.core.CacheHelper;
-import com.fccfc.framework.cache.core.redis.RedisCache;
-import com.fccfc.framework.cache.core.redis.RedisStringCache;
-import com.fccfc.framework.cache.simple.SimpleCache;
-import com.fccfc.framework.cache.simple.SimpleStringCache;
 import com.fccfc.framework.common.FrameworkException;
 import com.fccfc.framework.common.Initialization;
 import com.fccfc.framework.common.InitializationException;
@@ -39,11 +31,6 @@ public class ConfigItemInitialization implements Initialization {
     private static Logger logger = new Logger(ConfigItemInitialization.class);
 
     /**
-     * params
-     */
-    private Map<String, String> params;
-
-    /**
      * configurationService
      */
     @Resource
@@ -61,32 +48,11 @@ public class ConfigItemInitialization implements Initialization {
     @Resource
     private DictionaryDataService dictionaryDataService;
 
-    /*
-     * (non-Javadoc)
-     * @see com.fccfc.framework.core.Initialization#init()
-     */
-    @SuppressWarnings({
-        "rawtypes", "unchecked"
-    })
     @Override
     public void afterPropertiesSet() throws FrameworkException {
         logger.debug("---------------begin ConfigItem init ------------------");
 
-        if (RedisCache.CACHE_MODEL.equals(params.get("CACHE_MODULE"))) {
-            String address = params.get("CACHE_REDIS_ADDRESS");
-            CacheHelper.setCache(new RedisCache(address));
-            CacheHelper.setStringCache(new RedisStringCache(address));
-        }
-        else {
-            Map map = new ConcurrentHashMap();
-            CacheHelper.setCache(new SimpleCache(map));
-            CacheHelper.setStringCache(new SimpleStringCache(map));
-        }
-
         Configuration.setConfigService(configService);
-        Configuration.setCache(params);
-        Configuration.setAllModules(configurationService.selectAllModule());
-
         Configuration.reloadCache();
 
         DictionaryHelper.setdictDataService(dictionaryDataService);
@@ -101,10 +67,5 @@ public class ConfigItemInitialization implements Initialization {
     @Override
     public void destroy() throws InitializationException {
         logger.debug("---------------ConfigItem destory ------------------");
-        params.clear();
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
     }
 }

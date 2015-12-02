@@ -3,11 +3,9 @@
  */
 package com.fccfc.framework.config.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -17,10 +15,10 @@ import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.PropertyHolder;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.api.Config;
 import com.fccfc.framework.config.api.ConfigService;
-import com.fccfc.framework.config.core.bean.ModulePojo;
 
 /**
  * <Description> <br>
@@ -41,43 +39,12 @@ public final class Configuration {
     private static Logger logger = new Logger(Configuration.class);
 
     /**
-     * cache
-     */
-    private static Map<String, String> cache;
-
-    /**
-     * allModules
-     */
-    private static Map<String, ModulePojo> allModules;
-
-    /**
      * configService
      */
     private static ConfigService.Iface configService;
 
-    /**
-     * 获取模块代码
-     * 
-     * @param modelCode <br>
-     * @return 模块代码
-     */
-    public static List<String> getModuleCode(String modelCode) {
-        List<String> moduleCodeList = new ArrayList<String>();
-        while (CommonUtil.isNotEmpty(modelCode)) {
-            ModulePojo module = allModules.get(modelCode);
-            if (module != null) {
-                moduleCodeList.add(module.getModuleCode());
-                modelCode = module.getParentModuleCode();
-            }
-            else {
-                modelCode = null;
-            }
-        }
-        return moduleCodeList;
-    }
-
-    public static List<String> getModuleCode() {
-        return getModuleCode(cache.get(CacheConstant.LOCAL_MODULE_CODE));
+    public static String getModuleCode() {
+        return getString(CacheConstant.MODULE_CODE);
     }
 
     /**
@@ -89,10 +56,10 @@ public final class Configuration {
      * @return <br>
      */
     public static Object get(String key) {
-        String value = cache == null ? null : cache.get(key);
+        String value = PropertyHolder.getProperty(key);
         if (value == null) {
             try {
-                value = CacheHelper.getStringCache().getValue(CacheConstant.CACHE_KEY_CONFIGITEM, key);
+                value = CacheHelper.getCache().getValue(CacheConstant.CACHE_KEY_CONFIGITEM, key);
             }
             catch (Exception e) {
                 logger.warn(e, "get cache error. key is [{0}]", key);
@@ -170,25 +137,6 @@ public final class Configuration {
         return CommonUtil.isEmpty(value) ? defaultValue : Long.valueOf(value);
     }
 
-    public static void setCache(Map<String, String> cache) {
-        Configuration.cache = cache;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param allModules <br>
-     */
-    public static void setAllModules(List<ModulePojo> allModules) {
-        Map<String, ModulePojo> map = new ConcurrentHashMap<String, ModulePojo>();
-        for (ModulePojo pojo : allModules) {
-            map.put(pojo.getModuleCode(), pojo);
-        }
-        Configuration.allModules = map;
-    }
-
     /**
      * Description: <br>
      * 
@@ -197,7 +145,7 @@ public final class Configuration {
      * @throws ServiceException <br>
      */
     public static void reloadCache() throws ServiceException {
-        String moduleCode = cache.get(CacheConstant.LOCAL_MODULE_CODE);
+        String moduleCode = getString(CacheConstant.MODULE_CODE);
         try {
             List<Config> configs = configService.queryAllConfig(moduleCode);
             if (CommonUtil.isNotEmpty(configs)) {
@@ -207,7 +155,7 @@ public final class Configuration {
                         cacheMap.put(conf.getConfigItemCode() + "." + conf.getParamCode(), conf.getParamValue());
                     }
                 }
-                CacheHelper.getStringCache().putNode(CacheConstant.CACHE_KEY_CONFIGITEM, cacheMap);
+                CacheHelper.getCache().putNode(CacheConstant.CACHE_KEY_CONFIGITEM, cacheMap);
             }
         }
         catch (Exception e) {
