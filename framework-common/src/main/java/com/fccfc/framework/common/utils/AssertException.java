@@ -6,6 +6,7 @@
 package com.fccfc.framework.common.utils;
 
 import com.fccfc.framework.common.FrameworkException;
+import com.fccfc.framework.common.FrameworkRumtimeException;
 
 /**
  * <Description> <br>
@@ -15,7 +16,7 @@ import com.fccfc.framework.common.FrameworkException;
  * @CreateDate 2014年11月7日 <br>
  * @see com.fccfc.framework.core.utils <br>
  */
-public class AssertException extends FrameworkException {
+public class AssertException extends FrameworkRumtimeException {
 
     /**
      * serialVersionUID <br>
@@ -24,6 +25,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param exception <br>
      */
     public AssertException(FrameworkException exception) {
@@ -32,6 +34,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param code <br>
      * @param msg <br>
      * @param params <br>
@@ -42,6 +45,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -53,6 +57,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -63,6 +68,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param code <br>
      * @param msg <br>
      */
@@ -72,6 +78,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param code <br>
      * @param arg0 <br>
      */
@@ -81,6 +88,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param code <br>
      */
     public AssertException(int code) {
@@ -89,6 +97,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param arg0 <br>
      * @param arg1 <br>
      * @param params <br>
@@ -99,6 +108,7 @@ public class AssertException extends FrameworkException {
 
     /**
      * 默认构造函数
+     * 
      * @param arg0 <br>
      * @param exception <br>
      */

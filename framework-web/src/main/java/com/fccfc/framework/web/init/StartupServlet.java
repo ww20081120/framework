@@ -56,11 +56,10 @@ public class StartupServlet extends org.springframework.web.servlet.DispatcherSe
         context = config.getServletContext();
         super.init(config);
         applicationContext = super.getWebApplicationContext();
-        System.out.println(
-            new StringBuilder().append("\n***************************************").append('\n').append("*            ")
-                .append(ManagementFactory.getRuntimeMXBean().getName()).append("               *").append('\n')
-                .append("*            ").append(Configuration.get(CacheConstant.LOCAL_MODULE_CODE)).append("模块启动成功！")
-                .append("                  *").append('\n').append("***************************************"));
+        System.out.println(new StringBuilder().append("\n***************************************").append('\n')
+            .append("*            ").append(ManagementFactory.getRuntimeMXBean().getName()).append("               *")
+            .append('\n').append("*            ").append(Configuration.get(CacheConstant.MODULE_CODE)).append("模块启动成功！")
+            .append("                  *").append('\n').append("***************************************"));
 
     }
 

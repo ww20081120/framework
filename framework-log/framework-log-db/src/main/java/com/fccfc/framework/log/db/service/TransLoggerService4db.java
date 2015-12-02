@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
@@ -101,7 +100,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
             transLogStackPojo.setSeq(seq);
             transLogStackPojo.setTransId(manager.getStackId());
             JSONObject logJson = (JSONObject) JSONObject
-                .parse(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId));
+                .parse(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, stackId));
             transLogStackPojo.setMethod(logJson.getString("method"));
             transLogStackPojo.setParentStackId(logJson.getString("parentStackId"));
             transLogStackPojo.setBeginTime(new Date(logJson.getLong("beginTime")));
@@ -147,7 +146,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
         int seq = TransManager.getInstance().getSeq();
         StringBuffer sqlSb = new StringBuffer();
         for (int i = 0; i < seq; i++) {
-            sqlSb.append(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i));
+            sqlSb.append(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i));
             sqlSb.append("\n");
         }
         transLogPojo.setSqlLog(sqlSb.toString());
@@ -158,7 +157,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
 
         // 输入参数
         JSONObject inputParam = (JSONObject) JSONObject
-            .parse(CacheHelper.getStringCache().getValue(CacheConstant.CACHE_LOGS, stackId));
+            .parse(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, stackId));
         transLogPojo.setInputParam(inputParam.getString("params"));
 
         // 输出参数

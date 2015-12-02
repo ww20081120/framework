@@ -3,7 +3,7 @@
  */
 package com.fccfc.framework.config.core.service;
 
-import java.util.List;
+import java.util.Map;
 
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.config.core.bean.ModulePojo;
@@ -19,15 +19,14 @@ import com.fccfc.framework.config.core.bean.ModulePojo;
  * @see com.fccfc.framework.core.config <br>
  */
 public interface ConfigurationService {
-    
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
      * @throws ServiceException <br>
      */
-    List<ModulePojo> selectAllModule() throws ServiceException;
+    Map<String, ModulePojo> selectAllModule() throws ServiceException;
 }

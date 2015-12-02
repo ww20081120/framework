@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ErrorCodeDef;
@@ -14,7 +16,6 @@ import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.core.bean.DictionaryDataPojo;
 import com.fccfc.framework.config.core.service.DictionaryDataService;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * <Description> <br>
@@ -51,11 +52,12 @@ public final class DictionaryHelper {
                 Map<String, String> cacheMap = new HashMap<String, String>();
                 for (DictionaryDataPojo dictData : dictionaryDatas) {
                     cacheMap.put(dictData.getDictCode() + GlobalConstants.SPLITOR + dictData.getDictDataValue(),
-                            dictData.getDictDataName());
+                        dictData.getDictDataName());
                 }
-                CacheHelper.getStringCache().putNode(CacheConstant.DICTIONARY_DATA, cacheMap);
+                CacheHelper.getCache().putNode(CacheConstant.DICTIONARY_DATA, cacheMap);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, e);
         }
     }
@@ -64,7 +66,7 @@ public final class DictionaryHelper {
      * Description: 根据key获取字典数据：字符串类型<br>
      *
      * @param dictCode <br>
-     * @param data     <br>
+     * @param data <br>
      * @return <br>
      * @author liu.baiyang<br>
      * @taskId <br>
@@ -73,8 +75,9 @@ public final class DictionaryHelper {
         String value = null;
         String key = dictCode + GlobalConstants.SPLITOR + data;
         try {
-            value = CacheHelper.getStringCache().getValue(CacheConstant.DICTIONARY_DATA, key);
-        } catch (Exception e) {
+            value = CacheHelper.getCache().getValue(CacheConstant.DICTIONARY_DATA, key);
+        }
+        catch (Exception e) {
             logger.warn(e, "get cache error. key is [{0}]", key);
         }
         return CommonUtil.isEmpty(value) ? data : value;
@@ -82,6 +85,7 @@ public final class DictionaryHelper {
 
     /**
      * 从缓存中获取字典数据集合
+     * 
      * @param dictCode - 字典代码
      * @return 返回字典数据集合
      */
@@ -89,19 +93,20 @@ public final class DictionaryHelper {
         List<Map<String, String>> dictDataList = new ArrayList<Map<String, String>>();
         try {
             String key = dictCode + GlobalConstants.SPLITOR;
-            Map<String, String> cache = CacheHelper.getStringCache().getNode(CacheConstant.DICTIONARY_DATA);
+            Map<String, String> cache = CacheHelper.getCache().getNode(CacheConstant.DICTIONARY_DATA);
 
             Map<String, String> dictDataMap = null;
             for (Map.Entry<String, String> entry : cache.entrySet()) {
                 String entryKey = entry.getKey();
-                if(entryKey.contains(key)){
+                if (entryKey.contains(key)) {
                     dictDataMap = new HashMap<String, String>();
                     dictDataMap.put("key", StringUtils.split(entryKey, GlobalConstants.SPLITOR)[1]);
                     dictDataMap.put("value", entry.getValue());
                     dictDataList.add(dictDataMap);
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             logger.warn(e, "get cache error. key is [{0}]", dictCode);
         }
         return dictDataList;

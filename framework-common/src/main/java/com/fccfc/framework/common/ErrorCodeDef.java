@@ -242,4 +242,10 @@ public interface ErrorCodeDef {
 
     /** 上传图片最大宽度超出 */
     int IMAGE_WIDTH_ERROR_20028 = 20028;
+
+    /** 序列化失败 */
+    int SERIALIZE_ERROR = 20029;
+    
+    /** 反序列化失败 */
+    int UNSERIALIZE_ERROR = 20030;
 }

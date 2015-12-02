@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.fccfc.framework.cache.simple;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,23 +28,29 @@ public class SimpleCache implements ICache {
     public static final String CACHE_MODEL = "SIMPLE";
 
     /** cachesMap */
-    private Map<String, Map<String, Object>> cachesMap;
+    private Map<String, Map<String, ?>> cachesMap;
 
     /**
      * SimpleCache
+     * 
      * @param cachesMap <br>
      */
-    public SimpleCache(Map<String, Map<String, Object>> cachesMap) {
-        this.cachesMap = cachesMap;
+    public SimpleCache() {
+        this.cachesMap = new HashMap<String, Map<String, ?>>();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.fccfc.framework.cache.core.ICache#getNode(java.lang.String)
+    /**
+     * Description: 获取节点<br>
+     * 
+     * @author 王伟<br>
+     * @param clazz 数据类型
+     * @param nodeName 节点名称
+     * @return 缓存数据
+     * @throws CacheException <br>
      */
-    @Override
-    public Map<String, Object> getNode(String nodeName) throws CacheException {
-        return cachesMap.get(nodeName);
+    @SuppressWarnings("unchecked")
+    public <T> Map<String, T> getNode(Class<T> clazz, String nodeName) {
+        return (Map<String, T>) cachesMap.get(nodeName);
     }
 
     /*
@@ -51,7 +58,7 @@ public class SimpleCache implements ICache {
      * @see com.fccfc.framework.cache.core.ICache#putNode(java.lang.String, java.util.Map)
      */
     @Override
-    public void putNode(String nodeName, Map<String, Object> node) throws CacheException {
+    public <T> void putNode(String nodeName, Map<String, T> node) {
         cachesMap.put(nodeName, node);
     }
 
@@ -60,7 +67,7 @@ public class SimpleCache implements ICache {
      * @see com.fccfc.framework.cache.core.ICache#removeNode(java.lang.String)
      */
     @Override
-    public boolean removeNode(String nodeName) throws CacheException {
+    public boolean removeNode(String nodeName) {
         cachesMap.remove(nodeName);
         return true;
     }
@@ -70,8 +77,8 @@ public class SimpleCache implements ICache {
      * @see com.fccfc.framework.cache.core.ICache#getValue(java.lang.String, java.lang.String)
      */
     @Override
-    public Object getValue(String nodeName, String key) throws CacheException {
-        Map<String, Object> node = getNode(nodeName);
+    public <T> T getValue(Class<T> clazz, String nodeName, String key) {
+        Map<String, T> node = getNode(clazz, nodeName);
         return node == null ? null : node.get(key);
     }
 
@@ -79,11 +86,12 @@ public class SimpleCache implements ICache {
      * (non-Javadoc)
      * @see com.fccfc.framework.cache.core.ICache#putValue(java.lang.String, java.lang.String, java.lang.Object)
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public void putValue(String nodeName, String key, Object t) throws CacheException {
-        Map<String, Object> node = getNode(nodeName);
+    public <T> void putValue(String nodeName, String key, T t) {
+        Map<String, T> node = (Map<String, T>) getNode(t.getClass(), nodeName);
         if (node == null) {
-            node = new ConcurrentHashMap<String, Object>();
+            node = new ConcurrentHashMap<String, T>();
             putNode(nodeName, node);
         }
         node.put(key, t);
@@ -104,12 +112,10 @@ public class SimpleCache implements ICache {
      */
     @Override
     public void removeValue(String nodeName, String key) throws CacheException {
-        Map<String, Object> node = getNode(nodeName);
-        if (node == null) {
-            node = new ConcurrentHashMap<String, Object>();
-            putNode(nodeName, node);
+        Map<String, ?> node = cachesMap.get(nodeName);
+        if (node != null) {
+            node.remove(key);
         }
-        node.remove(key);
     }
 
     /*
@@ -119,6 +125,18 @@ public class SimpleCache implements ICache {
     @Override
     public void clean() throws CacheException {
         cachesMap.clear();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getCacheModel() {
+        return CACHE_MODEL;
     }
 
 }
