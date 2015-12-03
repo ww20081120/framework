@@ -15,6 +15,7 @@ import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.util.SerializationUtil;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.CommonUtil;
+import com.fccfc.framework.common.utils.PropertyHolder;
 import com.fccfc.framework.common.utils.UtilException;
 import com.fccfc.framework.common.utils.io.ProtocolUtil.Address;
 
@@ -42,12 +43,15 @@ public class ShardedRedisCache extends AbstractRedisCache {
     private ShardedJedisPool shardedPool;
 
     public ShardedRedisCache() {
-        Address[] addresses = getAddresses();
-        List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
-        for (Address addr : addresses) {
-            shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
+        String cacheModel = PropertyHolder.getProperty("cache.model");
+        if (CACHE_MODEL.equals(cacheModel)) {
+            Address[] addresses = getAddresses();
+            List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
+            for (Address addr : addresses) {
+                shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
+            }
+            shardedPool = new ShardedJedisPool(getConfig(), shards);
         }
-        shardedPool = new ShardedJedisPool(getConfig(), shards);
     }
 
     /**

@@ -41,15 +41,18 @@ public class ClusterRedisCache extends AbstractRedisCache {
     private BinaryJedisCluster cluster;
 
     public ClusterRedisCache() {
-        Address[] addresses = getAddresses();
-        Set<HostAndPort> readSet = new HashSet<HostAndPort>();
-        for (Address addr : addresses) {
-            HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
-            readSet.add(hostAndPort);
+        String cacheModel = PropertyHolder.getProperty("cache.model");
+        if (CACHE_MODEL.equals(cacheModel)) {
+            Address[] addresses = getAddresses();
+            Set<HostAndPort> readSet = new HashSet<HostAndPort>();
+            for (Address addr : addresses) {
+                HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
+                readSet.add(hostAndPort);
+            }
+            cluster = new BinaryJedisCluster(readSet,
+                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                PropertyHolder.getIntProperty("cache.redis.cluster.max.redirections", 10));
         }
-        cluster = new BinaryJedisCluster(readSet,
-            PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-            PropertyHolder.getIntProperty("cache.redis.cluster.max.redirections", 10));
     }
 
     /**
