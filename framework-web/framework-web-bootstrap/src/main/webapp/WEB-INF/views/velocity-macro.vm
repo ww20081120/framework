@@ -1,0 +1,31 @@
+#macro(pager $pojoList)
+#set($totalPage=$pojoList.getTotalPage())
+<ul class="pagination pagination-sm no-margin pull-right">
+	#if($pojoList.pageIndex > 1)
+		#set($prev=$pojoList.pageIndex - 1)
+		<li><a href="$util.getPagerUrl($request,$prev,$pojoList.pageSize)">&laquo;</a></li>
+	#end
+	#set($index_1=$pojoList.pageIndex - 2) #set($index_2=$pojoList.pageIndex - 1) #set($index_3=$pojoList.pageIndex) #set($index_4=$pojoList.pageIndex + 1) #set($index_5=$pojoList.pageIndex + 2)
+	#if($index_1 > 1)
+		<li><a href="$util.getPagerUrl($request,1,$pojoList.pageSize)">1</a></li>
+		#if($index_1 > 2)
+		 <li><a href="javascript:">...</a></li>
+		#end
+	#end
+	#foreach($i in [$index_1,$index_2,$index_3,$index_4,$index_5])
+		#if($i >= 1 && $i <= $totalPage)
+		<li><a href="$util.getPagerUrl($request,$i,$pojoList.pageSize)">$i</a></li>
+		#end
+	#end
+	#if($index_5 < $totalPage)
+		#if($index_5 < $totalPage - 1)
+		 <li><a href="javascript:">...</a></li>
+		#end
+		<li><a href="$util.getPagerUrl($request,$totalPage,$pojoList.pageSize)">$totalPage</a></li>
+	#end
+	#if($pojoList.pageIndex < $totalPage)
+	#set($next=$pojoList.pageIndex + 1)
+	<li><a href="$util.getPagerUrl($request,$next,$pojoList.pageSize)">&raquo;</a></li>
+	#end
+</ul>
+#end

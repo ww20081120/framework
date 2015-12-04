@@ -1,0 +1,31 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["function/modUrl"])
+<div class="col-xs-12 navbar-text">
+	<form id="modForm" action="$!context.contextPath/url/modifyUrl" method="post">
+		<input type="hidden" name="e" value="page.fresh.urlGrid">
+		<input type="hidden" name="functionId" value="$!{functionId}">
+		<input id="resourceId" type="hidden" name="resourceId" value="$!urlResourcePojo.resourceId">
+		<div class="form-group">
+			<label for="resourceName">URL资源名称</label>
+			<input type="text" class="form-control" id="resourceName" name="resourceName" value="$!urlResourcePojo.resourceName"
+				   required data-required-msg="URL资源名称不能为空"
+				   unique data-unique-msg="URL资源名称已存在，请重新输入" data-unique-url="$!context.contextPath/url/checkName" data-unique-id="$!urlResourcePojo.resourceId"
+				placeholder="请输入URL资源名称">
+		</div>
+		<div class="form-group">
+			<label for="url">URL资源地址</label>
+			<input type="text" class="form-control" id="url" name="url" value="$!urlResourcePojo.url" required data-required-msg="URL资源地址不能为空"
+				placeholder="请输入URL资源地址">
+		</div>
+		<div class="form-group">
+			<label for="method">方法名称</label>
+			<input type="text" class="form-control" id="method" name="method" value="$!urlResourcePojo.method" required data-required-msg="方法名称不能为空"
+				placeholder="请输入方法名称">
+		</div>
+		<div class="form-group">
+			<label for="eventId">事件</label>
+			<input type="text" class="form-control" id="eventId" name="eventId" value="$!urlResourcePojo.eventId" placeholder="请输入事件">
+		</div>
+		<button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+	</form>
+</div>

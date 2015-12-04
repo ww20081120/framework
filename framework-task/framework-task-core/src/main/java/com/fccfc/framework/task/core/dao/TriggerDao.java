@@ -98,15 +98,4 @@ public interface TriggerDao {
      */
     @Sql(bean = CronTriggerPojo.class)
     SimpleTriggerPojo getSimpleTriggerById(@Param("id") int triggerId) throws DaoException;
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @return <br>
-     * @throws DaoException <br>
-     */
-    int getId() throws DaoException;
 }

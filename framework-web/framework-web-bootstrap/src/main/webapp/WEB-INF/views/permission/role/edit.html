@@ -1,0 +1,46 @@
+#set($layout = "layout/emptyContent.html") #set($js =
+["permission/role/edit"]) #set($libs=["require","kendo"])
+<script type="text/javascript">
+	var PERMISSIONS =  $!util.toJson($!resources);
+	var moduleCodeSel =  "$!role.moduleCode";
+</script>
+
+<div class="row">
+	<div class="col-xs-12 ">
+		<form id="modifyForm" action="$!context.contextPath/role/modify"
+			method="post">
+			<input type="hidden" name="e" value="page.fresh">  <input
+				type="hidden" name="rule" value=""> <input
+				type="hidden" name="resources" value="">
+				<input
+				type="hidden" name="roleId" value="$!role.roleId">
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="roleName" >角色名称</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="roleName" value="$!role.roleName"
+						name="roleName" style="width: 100%;" required
+						data-required-msg="角色名称不能为空" placeholder="请输入角色名称">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="moduleCode">所属模块</label>
+				<div class="col-sm-10">
+					<input style="width: 100%;" id="moduleCode" name="moduleCode" required/>
+				</div>
+			</div>
+			<div class="form-group">
+				<ul id="resourcestab" class="nav nav-tabs">
+				</ul>
+				<div id="resourcescontent" class="tab-content"></div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="buttons-wrap">
+	<label class="control-label col-sm-5" for="moduleCode"></label>
+	<div class="col-sm-7">
+		<button id="submitBtn" type="button" class="btn btn-small btn-primary">
+			<span class="glyphicon glyphicon-saved"></span>保存
+		</button>
+	</div>
+</div>

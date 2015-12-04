@@ -20,7 +20,7 @@ import com.gexin.rp.sdk.template.TransmissionTemplate;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.bean.JsonUtil;
-import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.config.core.ConfigHelper;
 import com.fccfc.framework.message.api.Attachment;
 import com.fccfc.framework.message.core.service.MessageExcutor;
 
@@ -71,8 +71,8 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
      */
     private ITemplate getTemplate(String content) {
         TransmissionTemplate template = new TransmissionTemplate();
-        template.setAppId(Configuration.getString("GETUI.APP_ID"));
-        template.setAppkey(Configuration.getString("GETUI.APP_KEY"));
+        template.setAppId(ConfigHelper.getString("GETUI.APP_ID"));
+        template.setAppkey(ConfigHelper.getString("GETUI.APP_KEY"));
         // 透传消息设置，1为强制启动应用，客户端接收到消息后就会立即启动应用；2为等待应用启动
         template.setTransmissionType(2);
         template.setTransmissionContent(content);
@@ -89,9 +89,9 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
      * @throws IOException <br>
      */
     private IGtPush getGetPush() throws IOException {
-        String host = Configuration.getString("GETUI.HOST");
-        String appKey = Configuration.getString("GETUI.APP_KEY");
-        String masterSecret = Configuration.getString("GETUI.MASTER_SECRET");
+        String host = ConfigHelper.getString("GETUI.HOST");
+        String appKey = ConfigHelper.getString("GETUI.APP_KEY");
+        String masterSecret = ConfigHelper.getString("GETUI.MASTER_SECRET");
         IGtPush push = new IGtPush(host, appKey, masterSecret);
         push.connect();
         return push;
@@ -120,7 +120,7 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
         // 配置推送目标
         List<Target> targets = new ArrayList<Target>();
         Target target = null;
-        String appid = Configuration.getString("GETUI.APP_ID");
+        String appid = ConfigHelper.getString("GETUI.APP_ID");
         for (String receiver : receivers) {
             target = new Target();
             target.setAppId(appid);
@@ -156,7 +156,7 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
         message.setPushNetWorkType(0); // 判断是否客户端是否wifi环境下推送，1为在WIFI环境下，0为不限制网络环境。
 
         Target target = new Target();
-        target.setAppId(Configuration.getString("GETUI.APP_ID"));
+        target.setAppId(ConfigHelper.getString("GETUI.APP_ID"));
         target.setClientId(receiver);
         // 用户别名推送，cid和用户别名只能2者选其一
         // String alias = "个";

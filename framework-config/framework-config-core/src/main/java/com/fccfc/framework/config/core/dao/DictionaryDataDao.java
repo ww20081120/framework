@@ -5,7 +5,9 @@ import java.util.List;
 import com.fccfc.framework.config.core.bean.DictionaryDataPojo;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.db.core.annotation.Dao;
+import com.fccfc.framework.db.core.annotation.Param;
 import com.fccfc.framework.db.core.annotation.Sql;
+
 /**
  * <Description> <br>
  * 
@@ -22,10 +24,14 @@ public interface DictionaryDataDao {
      * Description: <br>
      * 
      * @author liu.baiyang<br>
+     * @param dictCode
      * @taskId <br>
      * @return <br>
      * @throws DaoException <br>
      */
     @Sql(bean = DictionaryDataPojo.class)
-    List<DictionaryDataPojo> selectAlldictData() throws DaoException;
+    List<DictionaryDataPojo> selectAlldictData(@Param("dictCode") String dictCode) throws DaoException;
+
+    DictionaryDataPojo selectDictData(@Param("dictCode") String dictCode, @Param("value") String value)
+        throws DaoException;
 }

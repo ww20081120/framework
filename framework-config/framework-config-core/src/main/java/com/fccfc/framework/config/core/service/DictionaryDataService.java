@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.config.core.bean.DictionaryDataPojo;
+
 /**
  * <Description> <br>
  * 
@@ -23,5 +24,7 @@ public interface DictionaryDataService {
      * @return <br>
      * @throws ServiceException <br>
      */
-    List<DictionaryDataPojo> qryAlldictData() throws ServiceException;
+    List<DictionaryDataPojo> qryAlldictData(String dictCode) throws ServiceException;
+
+    String queryDictData(String dictCode, String value) throws ServiceException;
 }

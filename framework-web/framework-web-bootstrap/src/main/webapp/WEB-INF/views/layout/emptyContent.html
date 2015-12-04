@@ -1,0 +1,17 @@
+#set($isEmpty="empty")
+<!DOCTYPE html>
+<html>
+    #parse("layout/header.vm")
+    <body class="skin-blue">
+        <!-- header logo: style can be found in header.less -->
+     
+        <div class="wrapper row-offcanvas row-offcanvas-left">
+        	  <!--内容开始 -->
+                 <section class="content">
+               		$screen_content
+               	 </section>
+               <!-- 内容体结束 -->
+        </div><!-- ./wrapper -->
+	#parse("layout/footer.vm")
+    </body>
+</html>

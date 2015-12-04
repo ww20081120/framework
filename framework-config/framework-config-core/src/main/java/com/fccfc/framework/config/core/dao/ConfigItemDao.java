@@ -28,6 +28,7 @@ public interface ConfigItemDao extends IGenericBaseDao {
 
     /**
      * selectConfigItemList
+     * 
      * @param configItemPojo <br>
      * @param pageIndex <br>
      * @param pageSize <br>
@@ -39,9 +40,8 @@ public interface ConfigItemDao extends IGenericBaseDao {
         @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param moduleList <br>
@@ -50,4 +50,7 @@ public interface ConfigItemDao extends IGenericBaseDao {
      */
     @Sql(bean = Map.class)
     List<Map<String, Object>> selectAll(@Param("moduleCode") String moduleCode) throws DaoException;
+
+    ConfigItemPojo selectConfigItem(@Param("moduleCode") String moduleCode,
+        @Param("configItemCode") String configItemCode, @Param("paramCode") String paramCode) throws DaoException;
 }

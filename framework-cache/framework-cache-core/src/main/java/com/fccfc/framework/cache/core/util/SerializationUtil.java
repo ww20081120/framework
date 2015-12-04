@@ -5,6 +5,14 @@
  ****************************************************************************************/
 package com.fccfc.framework.cache.core.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Collection;
+import java.util.Map;
+
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.utils.UtilException;
 
@@ -43,13 +51,83 @@ public final class SerializationUtil {
     public static <T> byte[] serial(T obj) throws UtilException {
         byte[] result = null;
         if (obj != null && !(obj instanceof Void)) {
-            Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
-            LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
-            try {
-                result = ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+
+            if (obj instanceof Collection || obj instanceof Map) {
+                result = jdkSerial(obj);
             }
-            catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
+            else {
+                Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
+                LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
+                try {
+                    result = ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+                }
+                catch (Exception e) {
+                    throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param obj <br>
+     * @return <br>
+     */
+    public static byte[] jdkSerial(Object obj) throws UtilException {
+        byte[] bytes = null;
+        ObjectOutputStream out = null;
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            out = new ObjectOutputStream(byteArrayOutputStream);
+            out.writeObject(obj);
+            out.flush();
+            bytes = byteArrayOutputStream.toByteArray();
+        }
+        catch (IOException e) {
+            throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, "序列化错误", e);
+        }
+        finally {
+            if (out != null) {
+                try {
+                    out.close();
+                }
+                catch (IOException e) {
+                    throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, "序列化错误", e);
+                }
+            }
+        }
+        return bytes;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param data <br>
+     * @return <br>
+     * @throws UtilException UtilException
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T unserial(Class<T> clazz, byte[] data) throws UtilException {
+        T result = null;
+        if (data != null && data.length > 0) {
+            if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
+                result = (T) jdkUnserial(data);
+            }
+            else {
+                Schema<T> schema = RuntimeSchema.getSchema(clazz);
+                try {
+                    result = clazz.newInstance();
+                    ProtostuffIOUtil.mergeFrom(data, result, schema);
+                }
+                catch (Exception e) {
+                    throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
+                }
             }
         }
         return result;
@@ -62,20 +140,32 @@ public final class SerializationUtil {
      * @taskId <br>
      * @param data <br>
      * @return <br>
-     * @throws UtilException UtilException
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
-    public static <T> T unserial(Class<T> clazz, byte[] data) throws UtilException {
-        T result = null;
+    public static Object jdkUnserial(byte[] data) throws UtilException {
+        Object result = null;
         if (data != null && data.length > 0) {
-            Schema<T> schema = RuntimeSchema.getSchema(clazz);
+            ObjectInputStream in = null;
             try {
-                result = clazz.newInstance();
-                ProtostuffIOUtil.mergeFrom(data, result, schema);
+                in = new ObjectInputStream(new ByteArrayInputStream(data));
+                result = in.readObject();
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
+                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, "反序列化异常", e);
+            }
+            finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    }
+                    catch (IOException e) {
+                        throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, "反序列化异常");
+                    }
+                }
             }
         }
         return result;
     }
+
 }

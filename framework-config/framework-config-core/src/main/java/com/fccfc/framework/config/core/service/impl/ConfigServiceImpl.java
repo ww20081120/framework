@@ -11,9 +11,13 @@ import javax.annotation.Resource;
 
 import org.apache.thrift.TException;
 
+import com.fccfc.framework.cache.core.CacheConstant;
+import com.fccfc.framework.cache.core.annotation.Cache;
+import com.fccfc.framework.cache.core.annotation.CacheKey;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.config.api.Config;
 import com.fccfc.framework.config.api.ConfigService;
+import com.fccfc.framework.config.core.bean.ConfigItemPojo;
 import com.fccfc.framework.config.core.dao.ConfigItemDao;
 import com.fccfc.framework.db.core.DaoException;
 
@@ -65,7 +69,19 @@ public class ConfigServiceImpl implements ConfigService.Iface {
      * java.lang.String)
      */
     @Override
-    public String queryConfig(String moduleCode, String configItemCode, String paramCode) throws TException {
+    @Cache(node = CacheConstant.CACHE_KEY_CONFIGITEM)
+    public String queryConfig(@CacheKey String moduleCode, @CacheKey String configItemCode, @CacheKey String paramCode)
+        throws TException {
+        try {
+            ConfigItemPojo config = configItemDao.selectConfigItem(moduleCode, configItemCode, paramCode);
+            if (config != null) {
+                return CommonUtil.isEmpty(config.getParamValue()) ? config.getDefaultParamValue()
+                    : config.getParamValue();
+            }
+        }
+        catch (DaoException e) {
+            throw new TException(e);
+        }
         return null;
     }
 

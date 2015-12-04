@@ -1,0 +1,39 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["org/modify"])
+
+<div class="col-xs-12 navbar-text">
+
+    <form id="addForm" action="$!context.contextPath/org/modify" method="post">
+        <input type="hidden" name="e" value="page.fresh.orgTree">
+        <input id="orgId" type="hidden" name="orgId" value="$!{orgPojo.orgId}">
+
+        <div class="form-group">
+            <label style="margin-right: 30px;">父级组织</label>
+            #if($!parentOrgName) $!{parentOrgName} #else 根结点 #end
+        </div>
+        <div class="form-group">
+            <label for="orgCode">组织代码</label>
+            <input type="text" class="form-control" id="orgCode" name="orgCode" value="$!{orgPojo.orgCode}"
+                   required data-required-msg="组织代码不能为空"
+                   unique data-unique-msg="组织代码已存在，请重新输入"
+                   data-unique-url="$!context.contextPath/org/checkCode"
+                   data-unique-id="orgId"
+                   placeholder="请输入组织代码">
+        </div>
+        <div class="form-group">
+            <label for="orgName">组织名称</label>
+            <input type="text" class="form-control" id="orgName" name="orgName" value="$!{orgPojo.orgName}"
+                   required data-required-msg="组织名称不能为空"
+                   unique data-unique-msg="组织名称已存在，请重新输入"
+                   data-unique-url="$!context.contextPath/org/checkName"
+                   data-unique-id="orgId"
+                   placeholder="请输入组织名称">
+        </div>
+
+        <!--<div class="form-group">-->
+        <!--<label for="ownerArea">归属区域</label>-->
+        <!--<select class="form-control" id="ownerArea" name="ownerArea" value="$!{orgPojo.ownerArea}"  style="width: 100%;"></select>-->
+        <!--</div>-->
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+</div>

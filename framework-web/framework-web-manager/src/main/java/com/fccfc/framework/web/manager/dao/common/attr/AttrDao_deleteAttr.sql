@@ -1,0 +1,2 @@
+DELETE FROM ATTR 
+WHERE ATTR_ID in :attrIds

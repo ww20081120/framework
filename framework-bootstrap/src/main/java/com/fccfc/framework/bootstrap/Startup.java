@@ -21,7 +21,7 @@ import com.fccfc.framework.bootstrap.utils.cmd.OptionParser;
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.utils.logger.Logger;
-import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.config.core.ConfigHelper;
 
 /**
  * <Description> <br>
@@ -85,7 +85,7 @@ public class Startup {
         logger.info("====================>Spring配置文件加载完毕<====================");
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("*         ").append(ManagementFactory.getRuntimeMXBean().getName()).append("        *")
-            .append('\n').append("*            ").append(Configuration.get(CacheConstant.MODULE_CODE)).append("模块启动成功！")
+            .append('\n').append("*            ").append(ConfigHelper.getModuleCode()).append("模块启动成功！")
             .append("                                   *").append('\n').append("*    ").append("关闭地址为:UDP://")
             .append(paramMap.get("host")).append(':').append(paramMap.get("port")).append("      *").append('\n')
             .append("***************************************"));
@@ -117,7 +117,7 @@ public class Startup {
                 server.receive(packet);
 
                 String data = new String(packet.getData(), 0, packet.getLength(), GlobalConstants.DEFAULT_CHARSET);
-                if (StringUtils.equals(Configuration.getString(CacheConstant.MODULE_CODE), data)) {
+                if (StringUtils.equals(ConfigHelper.getString(CacheConstant.MODULE_CODE), data)) {
                     flag = false;
                     System.out.println("接收到关闭服务端请求");
                 }

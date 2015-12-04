@@ -1,0 +1,37 @@
+#set($layout="layout/emptyContent.html")
+#set($js=["menu/modBtn"])
+
+<div class="col-xs-12 navbar-text">
+    <form id="addForm" action="$!context.contextPath/menu/modify" method="post">
+        <input type="hidden" name="e" value="page.fresh.menuBtnGrid">
+        <input id="resourceId" type="hidden" name="resourceId" value="$!{menuPojo.resourceId}">
+        <input id="selectFunctionId" type="hidden" value="$!{menuPojo.functionId}">
+        <div class="form-group">
+            <label>归属模块</label>
+            $!menuPojo.moduleName
+        </div>
+        <div class="form-group">
+            <label>父菜单</label>
+            #if($!menuPojo.parentMenuName) $!{menuPojo.parentMenuName} #else 根菜单 #end
+        </div>
+
+        <div class="form-group">
+            <label for="menuName">菜单名称</label>
+            <input type="text" class="form-control" id="menuName" name="menuName" value="$!menuPojo.menuName"
+                   required data-required-msg="菜单名称不能为空"
+                   unique data-unique-url="$!context.contextPath/menu/checkName" data-unique-msg="菜单名称已存在，请重新输入"
+                   data-unique-id="resourceId"
+                   placeholder="请输入菜单名称">
+        </div>
+        <div class="form-group">
+            <label for="menuName">关联功能</label>
+            <select class="form-control" data-placeholder="请选择功能" id="functionId" name="functionId" style="width: 95%;" value="$!menuPojo.functionId"
+                    required data-required-msg="关联功能不能为空"></select>
+        </div>
+        <div class="form-group">
+            <label for="menuName">图片URL</label>
+            <input type="text" class="form-control" id="iconUrl" name="iconUrl" value="$!menuPojo.iconUrl" placeholder="请输入图片URL">
+        </div>
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+</div>

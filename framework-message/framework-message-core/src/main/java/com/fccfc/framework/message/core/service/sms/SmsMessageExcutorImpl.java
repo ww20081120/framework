@@ -18,7 +18,7 @@ import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.security.DataUtil;
-import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.config.core.ConfigHelper;
 import com.fccfc.framework.message.api.Attachment;
 import com.fccfc.framework.message.core.service.MessageExcutor;
 
@@ -89,9 +89,9 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
      * @throws Exception <br>
      */
     private String getSendUrl(String content, String receives) throws Exception {
-        String url = Configuration.getString("SMS.SMS_URL");
-        String username = Configuration.getString("SMS.SMS_USERNAME");
-        String password = Configuration.getString("SMS.SMS_PASSWORD");
+        String url = ConfigHelper.getString("SMS.SMS_URL");
+        String username = ConfigHelper.getString("SMS.SMS_USERNAME");
+        String password = ConfigHelper.getString("SMS.SMS_PASSWORD");
 
         url = StringUtils.replace(url, "${username}", username);
         url = StringUtils.replace(url, "${password}", DataUtil.md5(password));

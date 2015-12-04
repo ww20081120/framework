@@ -1,0 +1,30 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["org/duty/add"])
+
+<script id="selectTemplate" type="text/x-kendo-template">
+    <select class="form-control" data-placeholder="请选择角色" id="#= id #" name="#= name #" style="width: 95%;"></select>
+</script>
+
+<div class="col-xs-12 navbar-text">
+
+    <form id="addForm" action="$!context.contextPath/duty/add" method="post">
+        <input type="hidden" name="e" value="page.fresh.dutyGrid">
+        <input type="hidden" name="orgId" value="$!{orgId}">
+        <div class="form-group">
+            <label style="margin-right: 30px;">归属组织</label> $!{orgName}
+        </div>
+        <div class="form-group">
+            <label for="dutyName">岗位名称</label>
+            <input type="text" class="form-control" id="dutyName" name="dutyName"
+                   required data-required-msg="岗位名称不能为空"
+                   unique data-unique-msg="岗位名称已存在，请重新输入" data-unique-url="$!context.contextPath/duty/checkName"
+                   placeholder="请输入岗位名称">
+        </div>
+        <div class="form-group">
+            <label >角色</label>
+            <div id="tabstrip"></div>
+        </div>
+
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+</div>

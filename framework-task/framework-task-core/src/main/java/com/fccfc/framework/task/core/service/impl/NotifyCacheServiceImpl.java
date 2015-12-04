@@ -10,7 +10,7 @@ import com.fccfc.framework.cache.core.CacheException;
 import com.fccfc.framework.cache.core.CacheHelper;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.config.core.ConfigHelper;
 import com.fccfc.framework.db.core.DaoException;
 import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
 import com.fccfc.framework.task.core.dao.RedisCacheDao;
@@ -132,6 +132,6 @@ public class NotifyCacheServiceImpl implements NotifyCacheService {
      */
     @Override
     public int getConfigNum(String code) {
-        return Configuration.getInt(code);
+        return ConfigHelper.getInt(code);
     }
 }

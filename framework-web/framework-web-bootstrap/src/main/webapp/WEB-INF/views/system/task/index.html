@@ -1,0 +1,44 @@
+#set($libs=["require","kendo"])
+#set($js=["task/index"]) 
+#set($title="任务管理<small>可以新增、删除、修改、导入、导出、暂停、运行消息模版</small>")
+
+<script id="addTask" type="text/x-kendo-template">
+    <button class="btn btn-default" id="addBtn" data-title="新增任务" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="deleteTask" type="text/x-kendo-template">
+    <button class="btn btn-default" id="deleteBtn"><i class="icon-trash"></i>删除</button>
+</script>
+<script id="modifyTask" type="text/x-kendo-template">
+    <button class="btn btn-default" data-title="修改任务" id="modBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="exportTask" type="text/x-kendo-template">
+	<button class="btn btn-default" id="exportBtn"><i class="icon-download"></i> 导出</button>
+</script>
+<script id="importTask" type="text/x-kendo-template">
+    <button class="btn btn-default"  data-title="导入任务" id="importBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="playTask" type="text/x-kendo-template">
+    <button class="btn btn-default"  data-title="运行任务" id="playTaskBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="pauseTask" type="text/x-kendo-template">
+    <button class="btn btn-default"  data-title="暂停任务" id="pauseTaskBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<div class="row">
+     <div class="col-xs-12">
+         <div id="taskDataTable"></div>
+     </div>
+ </div>
+
+<div class="modal fade" id="optionDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 600px; height: 610px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <iframe allowtransparency="true" width="100%" style="border: none" height="100%" scrolling="yes" seamless="seamless"></iframe>
+        </div>
+    </div>
+</div>

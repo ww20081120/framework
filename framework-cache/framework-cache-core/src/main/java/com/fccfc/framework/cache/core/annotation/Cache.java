@@ -30,4 +30,6 @@ public @interface Cache {
     String node();
 
     String key() default GlobalConstants.BLANK;
+
+    CacheType type() default CacheType.KEY_VALUE;
 }

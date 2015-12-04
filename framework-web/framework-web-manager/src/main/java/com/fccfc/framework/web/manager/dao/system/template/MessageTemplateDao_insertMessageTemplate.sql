@@ -1,0 +1,23 @@
+INSERT INTO MESSAGE_TEMPLATE
+            (MESSAGE_TEMPLATE_CODE,
+             NAME,
+             TEMPLATE,
+             STATE,
+             CONTACT_CHANNEL_IDS,
+             STATE_TIME,
+             DELAY,
+             RESEND_TIMES,
+             SAVE_HISTORY,
+             SAVE_DAY,
+             CREATE_TIME)
+VALUES      (:pojo.messageTemplateCode,
+             :pojo.name,
+             :pojo.template,
+             :pojo.state,
+             :pojo.contactChannelIds,
+             sysdate(),
+             :pojo.delay,
+             :pojo.resendTimes,
+             :pojo.saveHistory,
+             :pojo.saveDay,
+             sysdate())

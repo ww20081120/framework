@@ -1,0 +1,35 @@
+#set($layout="layout/emptyContent.html")
+#set($js=["menu/addMenu"])
+
+<div class="col-xs-12 navbar-text">
+    <form id="addForm" action="$!context.contextPath/menu/addMenu" method="post">
+        <input type="hidden" name="e" value="page.fresh.menuTree">
+        <input type="hidden" name="parentResourceId" value="$!{parentResourceId}">
+        <input type="hidden" name="moduleCode" value="$!{moduleCode}">
+        <div class="form-group">
+            <label>归属模块</label>
+            $!moduleName
+        </div>
+        <div class="form-group">
+            <label>父菜单</label>
+            #if($!parentMenuName) $!{parentMenuName} #else 根菜单 #end
+        </div>
+
+        <div class="form-group">
+            <label for="menuName">菜单名称</label>
+            <input type="text" class="form-control" id="menuName" name="menuName"
+                   required data-required-msg="菜单名称不能为空"
+                   unique data-unique-url="$!context.contextPath/menu/checkName" data-unique-msg="菜单名称已存在，请重新输入"
+                   placeholder="请输入菜单名称">
+        </div>
+        <div class="form-group">
+            <label for="menuName">访问URL</label>
+            <input type="text" class="form-control" id="url" name="url" placeholder="请输入访问URL">
+        </div>
+        <div class="form-group">
+            <label for="menuName">图片URL</label>
+            <input type="text" class="form-control" id="iconUrl" name="iconUrl" placeholder="请输入图片URL">
+        </div>
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+</div>

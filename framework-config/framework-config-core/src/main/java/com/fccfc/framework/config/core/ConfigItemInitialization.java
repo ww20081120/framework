@@ -10,7 +10,6 @@ import com.fccfc.framework.common.Initialization;
 import com.fccfc.framework.common.InitializationException;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.api.ConfigService;
-import com.fccfc.framework.config.core.service.ConfigurationService;
 import com.fccfc.framework.config.core.service.DictionaryDataService;
 
 /**
@@ -31,12 +30,6 @@ public class ConfigItemInitialization implements Initialization {
     private static Logger logger = new Logger(ConfigItemInitialization.class);
 
     /**
-     * configurationService
-     */
-    @Resource
-    private ConfigurationService configurationService;
-
-    /**
      * configService
      */
     @Resource
@@ -51,12 +44,8 @@ public class ConfigItemInitialization implements Initialization {
     @Override
     public void afterPropertiesSet() throws FrameworkException {
         logger.debug("---------------begin ConfigItem init ------------------");
-
-        Configuration.setConfigService(configService);
-        Configuration.reloadCache();
-
-        DictionaryHelper.setdictDataService(dictionaryDataService);
-        DictionaryHelper.reloadCache(); // 加载字典数据
+        ConfigHelper.setConfigService(configService);
+        ConfigHelper.setDictionaryDataService(dictionaryDataService);
         logger.debug("---------------end ConfigItem int ------------------");
     }
 

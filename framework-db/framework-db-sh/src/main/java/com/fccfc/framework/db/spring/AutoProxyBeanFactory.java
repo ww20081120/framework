@@ -44,9 +44,8 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     private SQLHandler handler;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param beanFactory <br>
@@ -54,6 +53,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        logger.info("*************************Dao注入列表***************************");
         try {
             for (String pack : packagesToScan) {
                 if (CommonUtil.isNotEmpty(pack)) {
@@ -62,21 +62,24 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                     for (Class<?> clazz : clazzSet) {
                         if (clazz.isAnnotationPresent(Dao.class)) {
                             className = clazz.getName();
-                            logger.info("----->before set dao class[{0}]", className);
                             String beanName = CommonUtil.lowerCaseFirstChar(clazz.getSimpleName());
-                            if (!beanFactory.containsBean(beanName)) {
-                                // 此处不缓存SQL
-                                // handler.invoke(clazz);
-
-                                // 单独加载一个接口的代理类
-                                ProxyFactoryBean factoryBean = new ProxyFactoryBean();
-                                factoryBean.setBeanFactory(beanFactory);
-                                factoryBean.setInterfaces(clazz);
-                                factoryBean.setInterceptorNames(interceptors);
-                                beanFactory.registerSingleton(beanName, factoryBean);
-                                logger.info("Interface [{0}] init name is [{1}]", clazz.getName(), beanName);
+                            if (beanFactory.containsBean(beanName)) {
+                                beanName = className;
+                                if (beanFactory.containsBean(beanName)) {
+                                    continue;
+                                }
                             }
-                            logger.info("----->success set dao class[{0}]", className);
+
+                            // 此处不缓存SQL
+                            handler.invoke(clazz);
+
+                            // 单独加载一个接口的代理类
+                            ProxyFactoryBean factoryBean = new ProxyFactoryBean();
+                            factoryBean.setBeanFactory(beanFactory);
+                            factoryBean.setInterfaces(clazz);
+                            factoryBean.setInterceptorNames(interceptors);
+                            beanFactory.registerSingleton(beanName, factoryBean);
+                            logger.info("    success create interface [{0}] with name {1}", className, beanName);
                         }
                     }
                 }
@@ -85,6 +88,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         catch (Exception e) {
             logger.error("------->自动扫描jar包失败", e);
         }
+        logger.info("***********************************************************");
     }
 
     public void setPackagesToScan(List<String> packagesToScan) {

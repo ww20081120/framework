@@ -1,0 +1,272 @@
+#set($js=["jqwidgets/jqxcore", "jqwidgets/jqxtree", "jqwidgets/jqxsplitter", "jqwidgets/jqxbuttons",
+"jqwidgets/jqxpanel", "jqwidgets/jqxlistbox", "jqwidgets/jqxexpander", "jqwidgets/jqxscrollbar"])
+#set($css=["jqwidgets/styles/jqx.base"])
+#set($title="组织架构 <small>可以新增、删除、修改组织架构</small>")
+
+<div class="row" id="row">
+    <div class="col-xs-12">
+
+        <div class="box">
+            <form id="queryForm" action="$!context.contextPath/" method="post">
+                <div class="box-header">
+                    <h3 class="box-title">组织架构</h3>
+
+                    <div class="box-tools">
+                        <div class="input-group group-g">
+                            <input id="queryInput" type="text" name="queryStr"
+                                   class="form-control pull-right" style="width: 300px;" value="$!queryStr"
+                                   placeholder="请输入需要查询的组织构架名"/>
+
+                            <div class="input-group-btn group-bts">
+                                <button type="submit" id="searchBtn" class="btn btn-flat">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div id='jqxWidget'>
+                <div id="mainSplitter">
+                    <div>
+                        <div style="border: none;" id="feedExpander">
+                            <div class="jqx-hideborder">组织架构</div>
+                            <div class="jqx-hideborder jqx-hidescrollbars">
+                                <div class="jqx-hideborder" id='jqxTree'>
+                                    <ul>
+                                        <li item-expanded='true' id="t1">
+                                            <!--<img style='float: left; margin-right: 5px;' src='../../images/contactsIcon.png'/>-->
+                                            <span item-title="true">News and Blogs</span>
+                                            <ul>
+                                                <li>
+                                                    <!--<img style='float: left; margin-right: 5px;' src='../../images/favorites.png'/>-->
+                                                    <span item-title="true">Favorites</span>
+                                                    <ul>
+                                                        <li>
+                                                            <!--<img style='float: left; margin-right: 5px;' src='../../images/folder.png'/>-->
+                                                            <span item-title="true">ScienceDaily</span></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <!--<img style='float: left; margin-right: 5px;' src='../../images/folder.png'/>-->
+                                                    <span item-title="true">Geek.com</span></li>
+                                                <li>
+                                                    <!--<img style='float: left; margin-right: 5px;' src='../../images/folder.png'/>-->
+                                                    <span item-title="true">CNN.com</span></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="contentSplitter">
+                            <div class="feed-item-list-container" id="feedUpperPanel">
+                                <div class="jqx-hideborder" id="feedListExpander">
+                                    <div class="jqx-hideborder" id="feedHeader">岗位管理</div>
+                                    <div class="jqx-hideborder jqx-hidescrollbars">
+                                        <div class="jqx-hideborder" id="feedListContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="feedContentArea">
+                                <div class="jqx-hideborder" id="feedContentExpander">
+                                    <div class="jqx-hideborder" id="feedItemHeader">管理员</div>
+                                    <div class="jqx-hideborder jqx-hidescrollbars">
+                                        <div class="jqx-hideborder" id="feedItemContent">
+                                            Select a news item to see it's content
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+<div class="modal fade" id="optionDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <iframe id="loginFrame" id="optionDialogContent" allowtransparency="true" scrolling="yes"
+                    seamless="seamless"></iframe>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var rss = (function ($) {
+
+            var createWidgets = function () {
+
+                $('#mainSplitter').jqxSplitter({
+                    width: '100%',
+                    height: 445,
+                    panels: [{size: 200, min: 100}, {min: 200, size: 400}]
+                });
+
+                $('#contentSplitter').jqxSplitter({
+                    width: '100%',
+                    height: '100%',
+                    orientation: 'horizontal',
+                    panels: [{size: 200, min: 100, collapsible: false}, {min: 100, collapsible: true}]
+                });
+
+                $("#feedExpander").jqxExpander({
+                    toggleMode: 'none',
+                    showArrow: false,
+                    width: "100%",
+                    height: "100%",
+                    initContent: function () {
+                        $('#jqxTree').jqxTree({height: '100%', width: '100%'});
+                    }
+                });
+
+                $("#feedContentExpander").jqxExpander({
+                    toggleMode: 'none',
+                    showArrow: false,
+                    width: "100%",
+                    height: "100%",
+                    initContent: function () {
+                        $('#feedItemContent').jqxPanel({width: '100%', height: '100%'});
+                    }
+                });
+
+                $("#feedListExpander").jqxExpander({
+                    toggleMode: 'none', showArrow: false, width: "100%", height: "100%", initContent: function () {
+                        $('#feedListContainer').jqxListBox({source: ['1'], width: '100%', height: '100%'});
+                    }
+                });
+            };
+
+            var addEventListeners = function () {
+                $('#jqxTree').on('select', function (event) {
+                    var item = $('#jqxTree').jqxTree('getItem', event.args.element);
+                    getFeed(config.feeds[item.label]);
+
+                });
+
+                $('#feedListContainer').on('select', function (event) {
+                    loadContent(event.args.index);
+                });
+            };
+
+
+            var getFeed = function (feed) {
+                config.currentFeed = feed;
+                feed = config.dataDir + '/' + feed + '.' + config.format;
+                loadFeed(feed);
+            };
+
+
+            var loadFeed = function (feed, callback) {
+                $.ajax({
+                    'dataType': 'json',
+                    'url': feed,
+                    success: function (data) {
+                        var channel = data.rss.channel;
+                        config.currentFeedContent = channel.item;
+                        displayFeedList(config.currentFeedContent);
+                        displayFeedHeader(channel.title);
+                        selectFirst();
+                    }
+
+                });
+
+            };
+
+
+            var selectFirst = function () {
+                $('#feedListContainer').jqxListBox('selectIndex', 0);
+                loadContent(0);
+            };
+
+
+            var displayFeedHeader = function (header) {
+                $("#feedListExpander").jqxExpander('setHeaderContent', header);
+            };
+
+
+            var displayFeedList = function (items) {
+                var headers = getHeaders(items);
+                config.feedListContainer.jqxListBox('source', headers);
+            };
+
+
+            var getHeaders = function (items) {
+                var headers = [], header;
+                for (var i = 0; i < items.length; i += 1) {
+                    header = items[i].title;
+                    headers.push(header);
+                }
+                return headers;
+            };
+
+
+            var loadContent = function (index) {
+
+                var item = config.currentFeedContent[index];
+
+                if (item != null) {
+
+                    config.feedItemContent.jqxPanel('clearcontent');
+
+                    config.feedItemContent.jqxPanel('prepend', '<div style="padding: 1px;"><span>' + item.description + '</span></div>');
+
+                    addContentHeaderData(item);
+
+                    config.selectedIndex = index;
+
+                }
+
+            };
+
+
+            var addContentHeaderData = function (item) {
+                var link = $('<a style="white-space: nowrap; margin-left: 15px;" target="_blank">Source</a>'),
+                        date = $('<div style="white-space: nowrap; margin-left: 30px;">' + item.pubDate + '</div>');
+                container = $('<table height="100%"><tr><td></td><td></td></tr></table>');
+                link[0].href = item.link;
+                config.feedItemHeader.empty();
+                config.feedItemHeader.append(container);
+                container.find('td:first').append(link);
+                container.find('td:last').append(date);
+                $("#feedContentExpander").jqxExpander('setHeaderContent', container[0].outerHTML);
+            };
+
+            var dataDir = 'data';
+
+            var config = {
+                feeds: {'CNN.com': 'cnn', 'Geek.com': 'geek', 'ScienceDaily': 'sciencedaily'},
+                format: 'txt',
+                dataDir: dataDir,
+                feedTree: $('#jqxTree'),
+                feedListContainer: $('#feedListContainer'),
+                feedItemContent: $('#feedItemContent'),
+                feedItemHeader: $('#feedItemHeader'),
+                feedUpperPanel: $('#feedUpperPanel'),
+                feedHeader: $('#feedHeader'),
+                feedContentArea: $('#feedContentArea'),
+                selectedIndex: -1,
+                currentFeed: '',
+                currentFeedContent: {}
+            };
+            return {
+                init: function () {
+                    createWidgets();
+                    addEventListeners();
+                    getFeed('sciencedaily');
+                }
+            }
+        }(jQuery));
+
+        rss.init();
+    });
+</script>

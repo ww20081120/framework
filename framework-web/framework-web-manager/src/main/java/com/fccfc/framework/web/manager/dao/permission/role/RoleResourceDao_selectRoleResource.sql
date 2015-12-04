@@ -1,0 +1,6 @@
+SELECT R.ROLE_ID, R.RESOURCE_ID, R.RESOURCE_TYPE
+FROM ROLE_RESOURCE R
+WHERE R.ROLE_ID = :roleId
+#if($resourceType)
+AND RESOURCE_TYPE = :resourceType
+#end

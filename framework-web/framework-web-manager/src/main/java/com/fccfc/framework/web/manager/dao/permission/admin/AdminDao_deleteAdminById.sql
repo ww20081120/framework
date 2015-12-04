@@ -1,0 +1,3 @@
+UPDATE ADMIN 
+SET STATE=:state 
+WHERE ADMIN_ID IN (:ids)

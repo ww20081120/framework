@@ -1,0 +1,76 @@
+#set($js=["common/attr/attr","common/attr/attrValue"])
+#set($libs=["require","kendo"])
+#set($title="属性管理<small>配置属性数据</small>")
+<script id="addAttrTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="addAttrBtn" data-title="新增属性" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="deleteAttrTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="deleteAttrBtn"><i class="icon-trash"></i> 删除</button>
+</script>
+<script id="modifyAttrTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="modifyAttrBtn"> <i class="icon-trash"></i> 修改</button>
+</script>
+<script id="afterModifyAttrTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" style="display:none" id="afterModifyAttrBtn" data-title="修改属性" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog"></button>
+</script>
+<script id="importAttrTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="importAttrBtn" data-title="导入属性" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="exportAttrTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="exportAttrBtn"><i class="icon-download"></i> 导出</button>
+</script>
+<script id="addAttrValueTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="addAttrValueBtn" data-title="新增属性值" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="deleteAttrValueTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="deleteAttrValueBtn"><i class="icon-trash"></i> 删除</button>
+</script>
+<script id="modifyAttrValueTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="modifyAttrValueBtn" data-title="修改属性值" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="importAttrValueTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="importAttrValueBtn" data-title="导入属性值" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="exportAttrValueTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="exportAttrValueBtn"><i class="icon-download"></i> 导出</button>
+</script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-header">
+            <i class="fa fa-inbox"></i>
+            <h3 class="box-title">属性</h3>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="attrTable"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="box-header">
+            <i class="fa fa-inbox"></i>
+            <h3 class="box-title">属性值</h3>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="attrValueTable"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="optionDialog" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px; height: 400px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <iframe allowtransparency="true" width="100%" style="border: none"
+                height="100%" scrolling="yes" seamless="seamless"></iframe>
+        </div>
+    </div>
+</div>

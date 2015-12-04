@@ -1,0 +1,66 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["configitem/modifyConfigItemParam"])
+
+<div class="col-xs-12 navbar-text">
+    <form id="modifyForm" action="$!context.contextPath/config/modifyConfigItemParam" method="post">
+        <input type="hidden" name="e" value="page.fresh.paramGrid">
+        <input type="hidden" name="configItemId" value="$!configItemParamPojo.configItemId">
+        <input type="hidden" id="oldDataType" value="$!configItemParamPojo.dataType">
+        <input type="hidden" id="oldInputType" value="$!configItemParamPojo.inputType">
+        <input type="hidden" name="oldConfigItemId" value="$!configItemParamPojo.configItemId">
+        <input type="hidden" name="oldParamCode" value="$!configItemParamPojo.paramCode">
+        <input type="hidden" name="oldParamName" value="$!configItemParamPojo.paramName">
+        <input type="hidden" name="oldParamValue" value="$!configItemParamPojo.paramValue">
+        <input type="hidden" name="oldDefaultParamValue" value="$!configItemParamPojo.defaultParamValue">
+        <input type="hidden" name="oldDataType" value="$!configItemParamPojo.dataType">
+        <input type="hidden" name="oldInputType" value="$!configItemParamPojo.inputType">
+        <input type="hidden" name="oldValueScript" value="$!configItemParamPojo.valueScript">
+        <input type="hidden" name="oldUpdateTime" value="$!configItemParamPojo.updateTime">
+        <input type="hidden" name="oldRemark" value="$!configItemParamPojo.remark">
+        <div class="form-group">
+            <label for="paramCode">参数编码</label>
+            <input type="text" class="form-control" id="paramCode" name="paramCode"
+                   required data-required-msg="参数编码不能为空" value="$!configItemParamPojo.paramCode"
+                   unique data-unique-msg="参数编码已存在，请重新输入" data-unique-url="$!context.contextPath/config/checkParamCode?oldParamCode=$!configItemParamPojo.paramCode"
+                placeholder="请输入参数编码">
+        </div>
+        <div class="form-group">
+            <label for="paramName">参数名称</label>
+            <input type="text" class="form-control" id="paramName" name="paramName"
+                   required data-required-msg="参数名称不能为空" value="$!configItemParamPojo.paramName"
+                placeholder="请输入参数名称">
+        </div>
+        <div class="form-group">
+            <label for="paramValue">参数取值</label>
+            <input type="text" class="form-control" id="paramValue" name="paramValue"
+                   value="$!configItemParamPojo.paramValue"
+                placeholder="请输入参数取值">
+        </div>
+        <div class="form-group">
+            <label for="defaultParamValue">缺省值</label>
+            <input type="text" class="form-control" id="defaultParamValue" name="defaultParamValue"
+                   value="$!configItemParamPojo.defaultParamValue"
+                placeholder="请输入缺省值">
+        </div>
+        <div class="form-group">
+            <label for="dataType">数据类型</label>
+            <select class="form-control" id="dataType" name="dataType" style="width: 95%;" required  data-required-msg="数据类型不能为空"></select>
+        </div>
+        <div class="form-group">
+            <label for="inputType">输入方式</label>
+            <select class="form-control" id="inputType" name="inputType" style="width: 95%;" required  data-required-msg="输入方式不能为空"></select>
+        </div>
+        <div class="form-group">
+            <label for="valueScript">取值校验规则</label>
+            <textarea class="textarea" id="valueScript" name="valueScript" placeholder="请输入取值校验规则"
+                      style="width: 100%; height: 80px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">$!configItemParamPojo.valueScript</textarea>
+        </div>
+        <div class="form-group">
+            <label for="remark">备注</label>
+            <textarea class="textarea" id="remark" name="remark" placeholder="请输入备注"
+                      style="width: 100%; height: 80px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">$!configItemParamPojo.remark</textarea>
+        </div>
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+
+</div>

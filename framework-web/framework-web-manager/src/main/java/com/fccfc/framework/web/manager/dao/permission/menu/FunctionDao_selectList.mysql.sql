@@ -1,0 +1,14 @@
+SELECT 	F.FUNCTION_ID, 
+		F.DIRECTORY_CODE, 
+		F.FUNCTION_NAME, 
+		F.CREATE_TIME, 
+		F.REMARK,
+		(SELECT D.DIRECTORY_NAME from DIRECTORY D where D.DIRECTORY_CODE = F.DIRECTORY_CODE) as DIRECTORY_NAME
+FROM FUNCTION F
+WHERE 1 = 1
+#if($directoryCode)
+AND F.DIRECTORY_CODE = :directoryCode
+#end
+#if($functionName && $functionName !='' )
+AND F.FUNCTION_NAME LIKE CONCAT('%',:functionName,'%')
+#end

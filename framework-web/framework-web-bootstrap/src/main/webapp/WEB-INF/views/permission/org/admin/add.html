@@ -1,0 +1,81 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["org/admin/add"])
+
+<div class="col-xs-12 navbar-text">
+
+    <form id="addForm" action="$!context.contextPath/admin/saveAdmin" method="post">
+        <input type="hidden" name="e" value="page.fresh.adminGrid">
+        <input type="hidden" name="dutyId" value="$!{dutyId}">
+        <div class="form-group">
+            <label for="username">用户名</label> <input type="text"
+                class="form-control" id="username" name="username" required data-required-msg="用户名不能为空"
+                pattern="[a-zA-Z][a-zA-Z0-9_]{2,8}"
+                placeholder="请输入用户名"
+                data-pattern-msg="请输入数字、字母或下划线开头的用户名"
+                min="2" max="8"
+                unique data-unique-msg="用户名已存在，请重新输入" data-unique-url="$!context.contextPath/admin/checkOperatorName"
+                >
+        </div>
+        <div class="form-group">
+            <label for="pwd">密码</label> <input type="password"
+                pattern="[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,14}"
+                class="form-control" id="pwd" name="pwd"  required data-required-msg="密码不能为空" data-pattern-msg="密码格式不正确"
+                placeholder="请输入密码"
+                min="6" max="14"
+                >
+        </div>
+        <div class="form-group" id="conf">
+            <label for="confpwd">确认密码</label> <input type="password"
+                class="form-control" id="confpwd" name="confpwd" required data-required-msg="确认密码不能为空" compare data-compare-msg="二次输入密码不正确" data-compare-id = "pwd"
+                placeholder="请输入确认密码"
+                min="6" max="14"
+                >
+        </div>
+        <div class="form-group">
+            <label for="name">管理员姓名</label> <input type="text"
+                pattern="[\da-zA-Z\u4E00-\u9FA5]{1,10}"
+                class="form-control" id="name" name="name" required data-required-msg="管理员姓名不能为空"
+                data-pattern-msg="请输入1-10位中文、字母、数字"
+                max="8" min="2"
+                unique data-unique-msg="管理员姓名已存在，请重新输入" data-unique-url="$!context.contextPath/admin/checkAdminName"
+                placeholder="请输入管理员姓名">
+        </div>
+        <div class="form-group">
+            <label for="gener">性别</label>
+            <select class="form-control" id="gener" name="gener" style="width: 100%;" required  data-required-msg="性别不能为空">
+                <option value="O" selected="selected" >保密</option>
+                <option value="M"  >男</option>
+                <option value="F"  >女</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="phone">联系电话</label> <input type="text"
+                pattern="[1][3578][0-9]{9}"
+                class="form-control" id="phone" name="phone"
+                data-pattern-msg="号码输入不正确"
+                placeholder="请输入联系电话"
+
+                >
+        </div>
+        <div class="form-group">
+            <label for="email">电子邮箱</label> <input type="text"
+            pattern="\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                class="form-control" id="email" name="email"
+                data-pattern-msg="邮箱格式错误"
+                placeholder="请输入邮箱"
+                >
+        </div>
+        <div class="form-group">
+            <label for="address">联系地址</label> <input type="text"
+                class="form-control" id="address" name="address"
+                placeholder="请输入联系地址"
+                >
+        </div>
+        <div class="form-group">
+            <label for="imgId">上传头像</label> <input type="file"
+                class="form-control" id="imgId" name="imgId"
+                >
+        </div>
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+</div>

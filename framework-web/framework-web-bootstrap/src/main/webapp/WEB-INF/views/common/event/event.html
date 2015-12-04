@@ -1,0 +1,39 @@
+#set($libs=["require","kendo"])
+#set($js=["event/event"]) 
+#set($title="事件管理<small>可以新增、删除、修改事件信息</small>")
+
+<script id="addEventTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="addEventBtn" data-title="新增" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="deleteEventTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="deleteEventBtn"><i class="icon-trash"></i>删除</button>
+</script>
+<script id="modifyEventTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" data-title="修改事件信息" id="modBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="importTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="importBtn" data-title="导入" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog"><i class="icon-upload-alt" /> 导入</button>
+</script>
+<script id="exportTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="Btn"><i class="icon-download-alt" /></i> 导出</button>
+</script>
+
+<div class="row">
+     <div class="col-xs-12">
+         <div id="eventDataTable"></div>
+     </div>
+ </div>
+ 
+ <div class="modal fade" id="optionDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px; height: 600px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <iframe allowtransparency="true" width="100%" style="border: none" height="100%" scrolling="yes" seamless="seamless"></iframe>
+        </div>
+    </div>
+</div>

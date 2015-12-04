@@ -1,0 +1,27 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["configitem/addConfigItemParamValue"])
+
+<div class="col-xs-12 navbar-text">
+    <form id="addForm" action="$!context.contextPath/config/addConfigItemParamValue" method="post">
+        <input type="hidden" name="configItemId" value="$!{configItemId}">
+        <input type="hidden" name="paramCode" value="$!{paramCode}">
+        <div class="form-group">
+            <label for="valueMark">取值说明</label>
+            <input type="text" class="form-control" id="valueMark" name="valueMark"
+                   required data-required-msg="取值说明不能为空"
+                placeholder="请输入取值说明">
+        </div>
+        <div class="form-group">
+            <label for="value">取值</label>
+            <input type="text" class="form-control" id="value" name="value"
+                placeholder="请输入取值">
+        </div>
+        <div class="form-group">
+            <label for="remark">备注</label>
+            <textarea class="textarea" id="remark" name="remark" placeholder="请输入备注"
+                      style="width: 100%; height: 80px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+        </div>
+        <button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+    </form>
+
+</div>

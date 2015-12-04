@@ -1,0 +1,4 @@
+SELECT *
+  FROM TASK A
+ WHERE A.TASK_ID IN :taskIds
+   AND A.TASK_STATE IN :taskStates

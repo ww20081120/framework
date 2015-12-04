@@ -1,0 +1,24 @@
+#set($layout = "layout/emptyContent.html")
+#set($js = ["org/admin/modpwd"])
+<div class="col-xs-12 navbar-text">
+	<form id="modpwdForm" action="$!context.contextPath/admin/modpassword" method="post">
+		<input type="hidden" name="e" value="page.fresh">
+		<input type="text"  id="adminId" value="$!adminId" name="adminId"  hidden="hidden" />
+		<div class="form-group">
+			<label>请输入新密码</label> <input type="password"
+			pattern="[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{6,14}"
+				class="form-control" id="new_password" name="new_password" required data-required-msg="新密码不能为空"
+				data-pattern-msg="密码格式不正确"
+				placeholder="请输入请输入新密码">
+		</div>
+
+		<div class="form-group">
+			<label>请确认密码</label> <input type="password"
+				class="form-control" id="confpwd" name="confpwd" 
+				required data-required-msg="确认密码不能为空" compare data-compare-msg="二次输入密码不正确" data-compare-id = "new_password"
+				placeholder="请输入请确认密码">
+		</div>
+		<button id="submitBtn" type="button" class="btn btn-primary btn-lg">保存</button>
+	</form>
+
+</div>

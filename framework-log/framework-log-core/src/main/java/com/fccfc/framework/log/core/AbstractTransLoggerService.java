@@ -71,7 +71,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                 JSONObject json = JSONObject.parseObject(data);
                 json.put("endTime", endTime);
                 json.put("consumeTime", consumeTime);
-                json.put("returnValue", returnValue == null ? "" : returnValue.toString());
+                json.put("returnValue", returnValue == null ? "" : returnValue);
                 json.put("result", 0);
                 CacheHelper.getCache().updateValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
             }

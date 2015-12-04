@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.fccfc.framework.db.core.BaseEntity;
 
@@ -58,6 +59,12 @@ public class ConfigItemPojo extends BaseEntity {
     /** REMARK */
     @Column(name = "REMARK")
     private String remark;
+
+    @Transient
+    private String paramValue;
+
+    @Transient
+    private String defaultParamValue;
 
     public Integer getConfigItemId() {
         return this.configItemId;
@@ -122,4 +129,49 @@ public class ConfigItemPojo extends BaseEntity {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return paramValue <br>
+     */
+    public String getParamValue() {
+        return paramValue;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param paramValue <br>
+     */
+    public void setParamValue(String paramValue) {
+        this.paramValue = paramValue;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return defaultParamValue <br>
+     */
+    public String getDefaultParamValue() {
+        return defaultParamValue;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param defaultParamValue <br>
+     */
+    public void setDefaultParamValue(String defaultParamValue) {
+        this.defaultParamValue = defaultParamValue;
+    }
+
 }

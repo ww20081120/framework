@@ -1,0 +1,53 @@
+#set($layout="layout/empty.html")
+#set($libs=["require", "kendo"])
+<!DOCTYPE html>
+<html>
+#parse("layout/header.vm")
+
+<body>
+	<section class="content">
+	    <div class="error-page"  style="margin-top: 50px;">
+	        <div class="error-content" style="width: 100%; text-align: center;">
+	            <h3>#if($!message) $!message #end</h3>
+				<p><strong id="time">10</strong>秒后页面即将跳转，你也可以点此处 <a href="javascript:" id="redirectBtn">立即跳转</a></p>
+	        </div>
+	    </div>
+	</section>
+
+	<div style="width: 60%; margin: 0 auto 0 auto;">
+		<div id="progress-bar" style="height: 8px;"></div>
+	</div>
+
+	#parse("layout/footer.vm")
+	<script type="text/javascript">
+		(function ($) {
+			var _path = '../assets/lib/kendoUI/js/',
+				p_progressbar = _path + 'kendo.progressbar.js',
+				closeDialog = function(){
+					//$(window.top.document).find("#optionDialog").data('bs.modal').close();
+				};
+
+			require([p_progressbar], function () {
+				var pb = $("#progress-bar").kendoProgressBar({
+					orientation: "horizontal",
+					showStatus: false,
+					animation: false
+				}).data("kendoProgressBar");
+
+				var interval = setInterval(function () {
+					if (pb.value() < 100) {
+						pb.value(pb.value() + 10);
+						$("#time").text(eval($("#time").text() - 1));
+					} else {
+						clearInterval(interval);
+						closeDialog();
+					}
+				}, 1000);
+			});
+			$("#redirectBtn").click(closeDialog);
+
+		})(jQuery);
+
+	</script>
+</body>
+</html>

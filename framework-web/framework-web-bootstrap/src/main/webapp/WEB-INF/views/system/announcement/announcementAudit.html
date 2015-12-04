@@ -1,0 +1,25 @@
+#set($layout="layout/emptyContent.html")
+#set($js=["announcement/announcementManager"])
+#set($libs=["require", "kendo"])
+
+<div class="row">
+    <div class="col-xs-12 box box-solid">
+        <div class="box-body">
+            <form id="addForm" action="$!context.contextPath/announcement/auditAnnouncement" method="post">
+                <input type="hidden" name="ids" value="$!{ids}">
+                <div class="form-group">
+					<label>请审核:</label>
+					<select class="form-control" id="isAudit" name="isAudit" style="width:100%;"> $!{ids}
+						<option value="Y">审核通过</option> 	
+						<option value="N">审核不通过</option> 
+					</select>
+				</div>
+				<div class="form-group">
+                    <label for="comments">备注</label>
+                    <input type="text" class="form-control" id="comments" name="comments" required data-required-msg="备注不能为空" placeholder="请输入备注">
+                </div>
+                <button id="submitBtn" type="button" class="btn btn-primary btn-lg">提交审核结果</button>
+            </form>
+        </div>
+    </div>
+</div>

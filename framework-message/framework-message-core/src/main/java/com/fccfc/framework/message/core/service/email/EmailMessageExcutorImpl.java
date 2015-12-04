@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.config.core.Configuration;
+import com.fccfc.framework.config.core.ConfigHelper;
 import com.fccfc.framework.message.api.Attachment;
 import com.fccfc.framework.message.core.service.MessageExcutor;
 
@@ -47,9 +47,9 @@ public class EmailMessageExcutorImpl implements MessageExcutor {
     @Override
     public String sendMessage(String title, String content, String sender, String[] receiver,
         List<Attachment> attachments) throws ServiceException {
-        String host = Configuration.getString("EMAIL.EMAIL_HOST");
-        String username = Configuration.getString("EMAIL.EMAIL_USERNAME");
-        String password = Configuration.getString("EMAIL.EMAIL_PASSWORD");
+        String host = ConfigHelper.getString("EMAIL.EMAIL_HOST");
+        String username = ConfigHelper.getString("EMAIL.EMAIL_USERNAME");
+        String password = ConfigHelper.getString("EMAIL.EMAIL_PASSWORD");
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");

@@ -1,0 +1,38 @@
+#set($libs=["require","kendo"])
+#set($js=["template/index"]) 
+#set($title="消息模版管理<small>可以新增、删除、修改、导入、导出消息模版</small>")
+
+<script id="addMessageTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="addBtn" data-title="新增信息模版" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="deleteMessageTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" id="deleteBtn"><i class="icon-trash"></i>删除</button>
+</script>
+<script id="modifyMessageTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default" data-title="修改信息模版" id="modBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<script id="exportTemplate" type="text/x-kendo-template">
+	<button class="btn btn-default" id="exportBtn"><i class="icon-download"></i> 导出</button>
+</script>
+<script id="importMessageTemplate" type="text/x-kendo-template">
+    <button class="btn btn-default"  data-title="导入信息模版" id="importBtn" data-src="#= url #" data-toggle="modal" data-target="\\#optionDialog">#= name #</button>
+</script>
+<div class="row">
+     <div class="col-xs-12">
+         <div id="messageTemplateDataTable"></div>
+     </div>
+ </div>
+
+<div class="modal fade" id="optionDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 600px; height: 390px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <iframe allowtransparency="true" width="100%" style="border: none" height="100%" scrolling="yes" seamless="seamless"></iframe>
+        </div>
+    </div>
+</div>

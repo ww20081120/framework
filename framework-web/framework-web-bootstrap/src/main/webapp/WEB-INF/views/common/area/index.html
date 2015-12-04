@@ -1,0 +1,91 @@
+#set($libs=["require", "kendo"])
+#set($js=["common/area/index","common/area/areaDetail"]) #set($title="区域管理
+<small>可以新增、删除、修改区域</small>
+")
+
+<div class="row">
+	<div class="col-md-4 col-sm-4">
+
+		<div class="box-header">
+			<i class="fa fa-inbox"></i>
+			<h3 class="box-title">区域</h3>
+		</div>
+
+		<div>
+			<button class="btn btn-default btn-xs" id="behind" data-title="添加区域"
+				data-src="$!context.contextPath/area/toAdd" data-toggle="modal"
+				data-target="#optionDialog">
+				<i class="icon-plus"></i> 添加根区域
+			</button>
+			<button class="btn btn-default btn-xs" id="sub" data-title="添加区域"
+				data-src="$!context.contextPath/area/toAdd" data-toggle="modal"
+				data-target="#optionDialog">
+				<i class="icon-plus"></i> 添加子区域
+			</button>
+			<button class="btn btn-default btn-xs" id="modify" data-title="修改区域"
+				data-src="$!context.contextPath/area/toModify" data-toggle="modal"
+				data-target="#optionDialog">
+				<i class="icon-edit"></i> 修改
+			</button>
+			<button class="btn btn-default btn-xs" id="remove"
+				data-src="$!context.contextPath/area/remove">
+				<i class="icon-trash"></i>删除
+			</button>
+			<button class="btn btn-default btn-xs" id="exportArea"
+				data-src="$!context.contextPath/area/exportArea">
+				<i class="icon-trash"></i>导出
+			</button>
+			<button class="btn btn-default btn-xs" id="importArea"
+				data-src="$!context.contextPath/area/importArea">
+				<i class="icon-trash"></i>导入
+			</button>
+		</div>
+
+		<div style="margin-top: 15px;">
+			<div class="demo-section k-header">
+				<div id="treeview"></div>
+			</div>
+			<script id="treeview-template" type="text/kendo-ui-template">
+                                #: item.text #
+                                <!--<a class='k-icon k-denied' href='\#'></a>-->
+                                <!--<a class='k-icon k-add' href='\#'></a>-->
+                            </script>
+		</div>
+
+	</div>
+
+	<div class="col-md-8 col-sm-8">
+
+		<div class="box-header">
+			<i class="fa fa-inbox"></i>
+			<h3 class="box-title">区域信息</h3>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div id="dutyDataTable"></div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+
+<!--  -->
+<div class="modal fade" id="optionDialog" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="width: 600px; height: 410px;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<iframe allowtransparency="true" width="100%" style="border: none"
+				height="100%" scrolling="yes" seamless="seamless"></iframe>
+		</div>
+	</div>
+</div>

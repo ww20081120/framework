@@ -1,0 +1,19 @@
+SELECT  M.RESOURCE_ID, 
+		M.PARENT_RESOURCE_ID, 
+		M.MODULE_CODE, 
+		M.FUNCTION_ID, 
+		M.SEQ, 
+		M.MENU_NAME, 
+		M.URL, 
+		M.IS_LEAF, 
+		M.ICON_URL,
+		M.TYPE
+FROM MENU M
+WHERE 1=1
+#if($type)
+	AND M.TYPE = :type
+#end
+#if($moduleCodes)
+	AND M.MODULE_CODE = :moduleCode
+#end
+ORDER BY M.PARENT_RESOURCE_ID ASC, M.SEQ ASC
