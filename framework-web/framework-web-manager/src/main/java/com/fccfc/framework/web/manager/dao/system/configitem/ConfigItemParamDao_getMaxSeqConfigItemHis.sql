@@ -1,6 +1,0 @@
-SELECT IFNULL
-(
-    (SELECT MAX(SEQ) + 1
-      FROM CONFIG_ITEM_HISTORY 
-     WHERE CONFIG_ITEM_ID = :configItemId), 1
-);

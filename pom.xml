@@ -13,7 +13,6 @@
 		<module>framework-cache</module>
 		<module>framework-rpc</module>
 		<module>framework-task</module>
-		<module>framework-web</module>
 		<module>framework-message</module>
 		<module>framework-log</module>
 		<module>framework-config</module>
