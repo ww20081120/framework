@@ -3,7 +3,6 @@
  */
 package com.fccfc.framework.cache.core.annotation;
 
-import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -34,5 +33,5 @@ public @interface Cache {
 
     CacheType type() default CacheType.KEY_VALUE;
 
-    Class<?> bean() default Serializable.class;
+    Class<?> bean() default String.class;
 }
