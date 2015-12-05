@@ -82,7 +82,7 @@ public class CacheAdvice implements MethodInterceptor {
                 throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
             }
             else {
-                result = CacheHelper.getCache().getNode(returnType, cache.node());
+                result = CacheHelper.getCache().getNode(cache.bean(), cache.node());
                 if (result == null) {
 
                     result = invocation.proceed();
