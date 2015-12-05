@@ -10,7 +10,12 @@ import java.lang.management.ManagementFactory;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
@@ -20,6 +25,8 @@ import com.fccfc.framework.bootstrap.utils.cmd.Option;
 import com.fccfc.framework.bootstrap.utils.cmd.OptionParser;
 import com.fccfc.framework.cache.core.CacheConstant;
 import com.fccfc.framework.common.GlobalConstants;
+import com.fccfc.framework.common.StartupListener;
+import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.core.ConfigHelper;
 
@@ -66,6 +73,8 @@ public class Startup {
      */
     private static Map<String, String> paramMap = null;
 
+    private static List<StartupListener> listenerList = null;
+
     /**
      * Description: <br>
      * 
@@ -73,7 +82,7 @@ public class Startup {
      * @param args <br>
      * @throws IOException <br>
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         paramMap = OptionParser.parse(Startup.class, args);
 
@@ -83,6 +92,29 @@ public class Startup {
         context = ac;
         ac.start();
         logger.info("====================>Spring配置文件加载完毕<====================");
+
+        ServiceLoader<StartupListener> loader = ServiceLoader.load(StartupListener.class);
+        if (loader != null) {
+            listenerList = new ArrayList<StartupListener>();
+            for (StartupListener listener : loader) {
+                listenerList.add(listener);
+            }
+
+            Collections.sort(listenerList, new Comparator<StartupListener>() {
+                @Override
+                public int compare(StartupListener o1, StartupListener o2) {
+                    return o1.getOrder() - o2.getOrder();
+                }
+            });
+
+            logger.info("*********************初始化StartupListener*************************");
+            for (StartupListener listener : listenerList) {
+                listener.init(ac);
+                logger.info("   {0} 初始化成功。", listener.getClass().getName());
+            }
+            logger.info("**********************************************************");
+        }
+
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("*         ").append(ManagementFactory.getRuntimeMXBean().getName()).append("        *")
             .append('\n').append("*            ").append(ConfigHelper.getModuleCode()).append("模块启动成功！")
@@ -91,6 +123,12 @@ public class Startup {
             .append("***************************************"));
 
         startShutdownServer();
+
+        if (CommonUtil.isNotEmpty(listenerList)) {
+            for (int i = listenerList.size() - 1; i >= 0; i--) {
+                listenerList.get(i).destory();
+            }
+        }
 
         ac.close();
         logger.info("====================>系统正常停止运行<====================");

@@ -3,11 +3,10 @@
  */
 package com.fccfc.framework.config.core;
 
-import javax.annotation.Resource;
+import org.springframework.context.ApplicationContext;
 
-import com.fccfc.framework.common.FrameworkException;
-import com.fccfc.framework.common.Initialization;
-import com.fccfc.framework.common.InitializationException;
+import com.fccfc.framework.common.StartupListener;
+import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.config.api.ConfigService;
 import com.fccfc.framework.config.core.service.DictionaryDataService;
@@ -22,7 +21,7 @@ import com.fccfc.framework.config.core.service.DictionaryDataService;
  * @since V1.0<br>
  * @see com.fccfc.framework.core.config <br>
  */
-public class ConfigItemInitialization implements Initialization {
+public class ConfigItemInitialization implements StartupListener {
 
     /**
      * logger
@@ -30,31 +29,46 @@ public class ConfigItemInitialization implements Initialization {
     private static Logger logger = new Logger(ConfigItemInitialization.class);
 
     /**
-     * configService
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
      */
-    @Resource
-    private ConfigService.Iface configService;
+    @Override
+    public int getOrder() {
+        return Integer.MAX_VALUE;
+    }
 
     /**
-     * dictionaryDataService
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
      */
-    @Resource
-    private DictionaryDataService dictionaryDataService;
-
     @Override
-    public void afterPropertiesSet() throws FrameworkException {
+    public void init(ApplicationContext context) {
         logger.debug("---------------begin ConfigItem init ------------------");
+        ConfigService.Iface configService = context.getBean(ConfigService.Iface.class);
+        Assert.notNull(configService, "未设置ConfigService.Iface的实现类， 配置项不可以使用");
+        DictionaryDataService dictionaryDataService = context.getBean(DictionaryDataService.class);
+        Assert.notNull(dictionaryDataService, "未设置DictionaryDataService的实现类， 字典数据不可以使用");
+
         ConfigHelper.setConfigService(configService);
         ConfigHelper.setDictionaryDataService(dictionaryDataService);
         logger.debug("---------------end ConfigItem int ------------------");
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.fccfc.framework.core.Initialization#destory()
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
      */
     @Override
-    public void destroy() throws InitializationException {
+    public void destory() {
         logger.debug("---------------ConfigItem destory ------------------");
     }
 }
