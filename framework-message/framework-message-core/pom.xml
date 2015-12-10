@@ -19,17 +19,17 @@
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-config-api</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-config-core</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-message-api</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.mail</groupId>
