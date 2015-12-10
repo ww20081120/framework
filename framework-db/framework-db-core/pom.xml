@@ -18,17 +18,17 @@
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-cache-core</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-cache-redis</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-cache-simple</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle</groupId>

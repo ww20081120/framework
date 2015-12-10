@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-core</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

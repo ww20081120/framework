@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-cache-core</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>redis.clients</groupId>

@@ -37,7 +37,7 @@ public class ConfigItemInitialization implements StartupListener {
      */
     @Override
     public int getOrder() {
-        return Integer.MAX_VALUE;
+        return -1;
     }
 
     /**
