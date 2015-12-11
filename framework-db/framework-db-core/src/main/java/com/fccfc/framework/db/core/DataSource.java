@@ -32,6 +32,7 @@ public class DataSource extends DruidDataSource {
         if (CommonUtil.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
             password = ConfigEncryptUtils.decrypt(getAlgorithm(), password);
         }
+        super.setPassword(password);
     }
 
     public void setAlgorithm(String algorithm) {
