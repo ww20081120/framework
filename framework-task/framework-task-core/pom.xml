@@ -14,22 +14,22 @@
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-task-api</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-core</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency> 
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-db-sh</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fccfc</groupId>
 			<artifactId>framework-config-core</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
