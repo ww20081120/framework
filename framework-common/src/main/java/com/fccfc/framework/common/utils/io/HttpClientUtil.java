@@ -60,6 +60,8 @@ public final class HttpClientUtil {
         PostMethod method = new PostMethod(url);
 
         try {
+            method.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, GlobalConstants.DEFAULT_CHARSET);
+
             logger.debug("send request:" + url);
             method.setRequestBody(getPostParamArr(paramMap));
 
@@ -165,13 +167,13 @@ public final class HttpClientUtil {
         String body = null;
 
         try {
-            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-                new DefaultHttpMethodRetryHandler(3, false));
+            method.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, GlobalConstants.DEFAULT_CHARSET);
+            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+
             int statusCode = httpClient.executeMethod(method);
 
             if (statusCode != HttpStatus.SC_OK) {
-                throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}",
-                    statusCode);
+                throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}", statusCode);
             }
 
             body = method.getResponseBodyAsString();
