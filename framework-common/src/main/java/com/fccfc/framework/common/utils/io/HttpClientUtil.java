@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.fccfc.framework.common.utils.io;
 
@@ -36,7 +36,7 @@ import com.fccfc.framework.common.utils.logger.Logger;
 
 /**
  * HttpClientUtil
- * 
+ *
  * @author Administrator
  */
 public final class HttpClientUtil {
@@ -48,8 +48,8 @@ public final class HttpClientUtil {
 
     /**
      * http POST请求
-     * 
-     * @param url 链接
+     *
+     * @param url      链接
      * @param paramMap 参数
      * @return 结果
      * @throws UtilException <br>
@@ -69,67 +69,63 @@ public final class HttpClientUtil {
 
             if (statusCode != HttpStatus.SC_OK) {
                 throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}",
-                    statusCode);
+                        statusCode);
             }
             //body = method.getResponseBodyAsString();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));  
-            StringBuffer stringBuffer = new StringBuffer();  
-            String str = "";  
+            BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
+            StringBuffer stringBuffer = new StringBuffer();
+            String str = "";
             while ((str = reader.readLine()) != null) {
-                stringBuffer.append(str);  
-            }  
-            body = stringBuffer.toString();  
+                stringBuffer.append(str);
+            }
+            body = stringBuffer.toString();
             method.releaseConnection();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}", e,
-                e.getMessage());
+                    e.getMessage());
         }
 
         return body;
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param url <br>
+     * Description: <br>
+     *
+     * @param url  <br>
      * @param json <br>
      * @return <br>
      * @throws UtilException <br>
+     * @author yang.zhipeng <br>
+     * @taskId <br>
      */
     public static String post(String url, JSONObject json) throws UtilException {
         return post(null, url, "application/json", json.toJSONString());
     }
 
     /**
-     * 
-     * Description: <br> 
-     *  
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param sslContext <br>
-     * @param url <br>
+     * Description: <br>
+     *
+     * @param sslContext  <br>
+     * @param url         <br>
      * @param contentType <br>
-     * @param content <br>
+     * @param content     <br>
      * @return <br>
      * @throws UtilException <br>
+     * @author yang.zhipeng <br>
+     * @taskId <br>
      */
     @SuppressWarnings({
-        "deprecation"
+            "deprecation"
     })
     public static String post(SSLContext sslContext, String url, String contentType, String content)
-        throws UtilException {
+            throws UtilException {
         org.apache.http.client.HttpClient httpClient = null;
         if (sslContext != null) {
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[] {
-                "TLSv1"
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[]{
+                    "TLSv1"
             }, null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-        }
-        else {
+        } else {
             httpClient = HttpClients.custom().build();
         }
 
@@ -142,26 +138,28 @@ public final class HttpClientUtil {
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == HttpStatus.SC_OK) {
                 return EntityUtils.toString(response.getEntity(), GlobalConstants.DEFAULT_CHARSET);
-            }
-            else {
+            } else {
                 throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}",
-                    statusCode);
+                        statusCode);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}", e,
-                e.getMessage());
+                    e.getMessage());
         }
+    }
+
+    public static String get(String url) throws UtilException {
+        return get(url, null);
     }
 
     /**
      * http GET请求
-     * 
+     *
      * @param url 链接
      * @return 结果
      * @throws UtilException 异常
      */
-    public static String get(String url) throws UtilException {
+    public static String get(String url, Map<String, String> headParameters) throws UtilException {
         HttpClient httpClient = new HttpClient();
         GetMethod method = new GetMethod(url);
         String body = null;
@@ -170,6 +168,11 @@ public final class HttpClientUtil {
             method.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, GlobalConstants.DEFAULT_CHARSET);
             method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
 
+            if (null != headParameters) {
+                for (Map.Entry<String, String> entry : headParameters.entrySet()) {
+                    method.setRequestHeader(entry.getKey(), entry.getValue());
+                }
+            }
             int statusCode = httpClient.executeMethod(method);
 
             if (statusCode != HttpStatus.SC_OK) {
@@ -178,10 +181,9 @@ public final class HttpClientUtil {
 
             body = method.getResponseBodyAsString();
             method.releaseConnection();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}",
-                e.getMessage(), e);
+                    e.getMessage(), e);
         }
 
         return body;
@@ -189,7 +191,7 @@ public final class HttpClientUtil {
 
     /**
      * 封装post请求参数
-     * 
+     *
      * @param paramMap 参数map
      * @return 结果
      */
