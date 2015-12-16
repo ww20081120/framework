@@ -72,7 +72,7 @@ public final class HttpClientUtil {
                         statusCode);
             }
             //body = method.getResponseBodyAsString();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream(), GlobalConstants.DEFAULT_CHARSET));
             StringBuffer stringBuffer = new StringBuffer();
             String str = "";
             while ((str = reader.readLine()) != null) {
