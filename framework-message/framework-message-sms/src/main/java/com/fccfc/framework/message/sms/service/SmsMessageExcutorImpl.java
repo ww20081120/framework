@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.message.core.service.sms;
+package com.fccfc.framework.message.sms.service;
 
 import java.net.URLEncoder;
 import java.util.List;
@@ -35,6 +35,8 @@ import com.fccfc.framework.message.core.service.MessageExcutor;
 @Service
 public class SmsMessageExcutorImpl implements MessageExcutor {
 
+    private static final String CHANNEL_ID = "SMS";
+
     /*
      * (non-Javadoc)
      * @see com.fccfc.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
@@ -45,7 +47,7 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
         List<Attachment> attachments) throws ServiceException {
         HttpClient client = new HttpClient();
         client.getParams().setSoTimeout(60 * 1000); // 设置超时时间
-        client.getParams().setContentCharset("UTF-8");
+        client.getParams().setContentCharset(GlobalConstants.DEFAULT_CHARSET);
         String receives = getReceives(receiver);
 
         try {
@@ -99,5 +101,17 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
         url = StringUtils.replace(url, "${receives}", receives);
 
         return url;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getChannelId() {
+        return CHANNEL_ID;
     }
 }

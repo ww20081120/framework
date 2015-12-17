@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.message.core.service.baidu;
+package com.fccfc.framework.message.push.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -17,7 +17,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.ServiceException;
@@ -40,6 +39,8 @@ import com.fccfc.framework.message.core.service.MessageExcutor;
 @Service
 public class BaiduPushMessageExcutorImpl implements MessageExcutor {
 
+    private static final String CHANNEL_ID = "BAIDU_PUSH";
+
     /*
      * (non-Javadoc)
      * @see com.fccfc.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
@@ -58,9 +59,8 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param user_id <br>
@@ -181,5 +181,17 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
             result.put(unsort_key[i].toString(), unsort_map.get(unsort_key[i]));
         }
         return result.tailMap(result.firstKey());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getChannelId() {
+        return CHANNEL_ID;
     }
 }

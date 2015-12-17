@@ -6,8 +6,10 @@ package com.fccfc.framework.message.core.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import javax.annotation.Resource;
 
@@ -146,9 +148,8 @@ public class MessageServiceImpl implements MessageService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param template <br>
@@ -168,7 +169,7 @@ public class MessageServiceImpl implements MessageService.Iface {
             StringBuilder sb = new StringBuilder();
             for (String contactChannelId : contactChannelIds) {
                 sb.append(GlobalConstants.SQL_SPLITOR);
-                MessageExcutor excutor = messageExcutorMap.get(contactChannelId);
+                MessageExcutor excutor = getMessageExcutorMap().get(contactChannelId);
                 if (excutor == null) {
                     throw new ServiceException(ErrorCodeDef.CONTACT_CHANNEL_NOT_EXIST_20016, "发送渠道[{0}]不存在",
                         contactChannelId);
@@ -177,9 +178,8 @@ public class MessageServiceImpl implements MessageService.Iface {
                 record.setMessageId(message.getMessageId());
                 record.setContactChannelId(Integer.parseInt(contactChannelId));
                 try {
-                    String result = excutor.sendMessage(message.getSubject(), message.getContent(),
-                        message.getSender(), StringUtils.split(message.getReceivers(), GlobalConstants.SPLITOR),
-                        attachments);
+                    String result = excutor.sendMessage(message.getSubject(), message.getContent(), message.getSender(),
+                        StringUtils.split(message.getReceivers(), GlobalConstants.SPLITOR), attachments);
                     sb.append(result);
                     record.setResult(result);
                 }
@@ -225,9 +225,8 @@ public class MessageServiceImpl implements MessageService.Iface {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param template <br>
@@ -235,7 +234,8 @@ public class MessageServiceImpl implements MessageService.Iface {
      * @param result <br>
      * @throws DaoException <br>
      */
-    private void deleteMessage(MessageTemplatePojo template, MessageBoxPojo message, String result) throws DaoException {
+    private void deleteMessage(MessageTemplatePojo template, MessageBoxPojo message, String result)
+        throws DaoException {
         if (GlobalConstants.YES.equals(template.getSaveHistory())) {
             Calendar calendar = Calendar.getInstance();
 
@@ -261,12 +261,9 @@ public class MessageServiceImpl implements MessageService.Iface {
         messageBoxDao.delete(message);
     }
 
-    public void setMessageExcutorMap(Map<String, MessageExcutor> messageExcutorMap) {
-        this.messageExcutorMap = messageExcutorMap;
-    }
-
     /**
      * resendMessage
+     * 
      * @see com.fccfc.framework.api.message.MessageService#resendMessage(int)
      * @param messageId <br>
      * @throws TException <br>
@@ -303,4 +300,23 @@ public class MessageServiceImpl implements MessageService.Iface {
             throw new TException(e);
         }
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return messageExcutorMap <br>
+     */
+    public Map<String, MessageExcutor> getMessageExcutorMap() {
+        if (messageExcutorMap == null) {
+            ServiceLoader<MessageExcutor> serviceLoader = ServiceLoader.load(MessageExcutor.class);
+            messageExcutorMap = new HashMap<String, MessageExcutor>();
+            for (MessageExcutor excutor : serviceLoader) {
+                messageExcutorMap.put(excutor.getChannelId(), excutor);
+            }
+        }
+        return messageExcutorMap;
+    }
+
 }

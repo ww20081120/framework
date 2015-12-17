@@ -19,11 +19,19 @@ import com.fccfc.framework.message.api.Attachment;
  * @see com.fccfc.framework.message.service <br>
  */
 public interface MessageExcutor {
-    
+
     /**
-     * 
-     * Description: <br> 
+     * Description: 获取渠道标示 <br> 
      *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    String getChannelId();
+
+    /**
+     * Description: <br>
+     * 
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param title <br>

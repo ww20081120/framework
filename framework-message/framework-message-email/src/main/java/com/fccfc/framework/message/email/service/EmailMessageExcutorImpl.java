@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.message.core.service.email;
+package com.fccfc.framework.message.email.service;
 
 import java.util.List;
 import java.util.Properties;
@@ -38,6 +38,8 @@ import com.fccfc.framework.message.core.service.MessageExcutor;
  */
 @Service
 public class EmailMessageExcutorImpl implements MessageExcutor {
+
+    private static final String CHANNEL_ID = "EMAIL";
 
     /*
      * (non-Javadoc)
@@ -113,5 +115,17 @@ public class EmailMessageExcutorImpl implements MessageExcutor {
 
         return toAddress;
 
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getChannelId() {
+        return CHANNEL_ID;
     }
 }

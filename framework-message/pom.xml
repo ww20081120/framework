@@ -10,5 +10,8 @@
   <modules>
   	<module>framework-message-api</module>
   	<module>framework-message-core</module>
+  	<module>framework-message-email</module>
+  	<module>framework-message-push</module>
+  	<module>framework-message-sms</module>
   </modules>
 </project>
