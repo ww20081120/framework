@@ -1,4 +1,4 @@
-package com.fccfc.framework.bootstrap.utils;
+package com.fccfc.framework.db.core.utils;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
