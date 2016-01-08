@@ -121,6 +121,17 @@ public final class ConfigHelper {
     }
 
     /**
+     * 根据key获取配置值：布尔型
+     * 
+     * @param key key
+     * @return 值
+     */
+    public static boolean getBoolean(String key, boolean defaultValue) {
+        String value = getString(key);
+        return StringUtils.isEmpty(value) ? defaultValue : StringUtils.equalsIgnoreCase("true", getString(key));
+    }
+
+    /**
      * 根据key获取配置值：整型
      * 
      * @param key key
@@ -128,6 +139,17 @@ public final class ConfigHelper {
      */
     public static int getInt(String key) {
         return Integer.valueOf(getString(key));
+    }
+    
+    /**
+     * 根据key获取配置值：整型
+     * 
+     * @param key key
+     * @return 值
+     */
+    public static int getInt(String key, int defaultValue) {
+        String value = getString(key);
+        return StringUtils.isEmpty(value) ? defaultValue : Integer.valueOf(value);
     }
 
     /**
