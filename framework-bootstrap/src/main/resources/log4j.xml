@@ -14,7 +14,7 @@
 	</appender>
 
 	<appender name="debugAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/debug.log" />
+		<param name="File" value="${user.home}/log/bootstrap/debug.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -28,7 +28,7 @@
 	</appender>
 
 	<appender name="infoAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/info.log" />
+		<param name="File" value="${user.home}/log/bootstrap/info.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -42,7 +42,7 @@
 	</appender>
 
 	<appender name="errorAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/error.log" />
+		<param name="File" value="${user.home}/log/bootstrap/error.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -56,7 +56,7 @@
 	</appender>
 
 	<appender name="warnAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/warn.log" />
+		<param name="File" value="${user.home}/log/bootstrap/warn.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -70,7 +70,7 @@
 	</appender>
 
 	<appender name="sqlAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/sql.log" />
+		<param name="File" value="${user.home}/log/bootstrap/sql.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
