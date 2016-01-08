@@ -12,16 +12,4 @@
 
 	<!-- 引入属性文件 -->
 	<context:property-placeholder location="classpath:config.properties" />
-
-	<!-- 初始化配置参数 -->
-	<bean class="com.fccfc.framework.config.core.ConfigItemInitialization">
-		<property name="params">
-			<map>
-				<entry key="MODULE_CODE" value="${project.code}" />
-				<entry key="CACHE_MODULE" value="${cache.model}" />
-				<entry key="CACHE_REDIS_ADDRESS" value="${cache.redis.address}" />
-			</map>
-		</property>
-	</bean>
-
 </beans>

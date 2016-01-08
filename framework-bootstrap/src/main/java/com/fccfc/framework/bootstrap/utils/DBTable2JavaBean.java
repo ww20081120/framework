@@ -149,27 +149,25 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     private void setDefaultValue() {
         tips[0].setText("表名不填则导出所有的表");
         textFields[1].setText("com.fccfc.framework.bootstrap.bean");
         String classPath = this.getClass().getClassLoader().getResource("").getPath();
-        textFields[2]
-            .setText(StringUtils.replace(StringUtils.replace(classPath, "/framework-bootstrap/target/classes",
-                "/framework-bootstrap/src/main/java"), "/framework-bootstrap/target/test-classes",
-                "/framework-bootstrap/src/main/java"));
-        textFields[3].setText(classPath + "com/fccfc/framework/bootstrap/utils/template");
+        textFields[2].setText(StringUtils.replace(
+            StringUtils.replace(classPath, "/framework-bootstrap/target/classes", "/framework-bootstrap/src/main/java"),
+            "/framework-bootstrap/target/test-classes", "/framework-bootstrap/src/main/java"));
+        textFields[3].setText(classPath + "com/fccfc/framework/bootstrap/utils/template.vm");
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @throws Exception <br>
@@ -236,9 +234,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: 开始处理生成所有表 如果不传入表名，表示将数据库中所有表生成bean; 可以指定表名生成bean;<br>
      * 
-     * Description: 开始处理生成所有表 如果不传入表名，表示将数据库中所有表生成bean; 可以指定表名生成bean;<br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param conn <br>
@@ -266,9 +263,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description:通过 mysql的 show create table TABLE_NAME逆向生成Bean; <br>
      * 
-     * Description:通过 mysql的 show create table TABLE_NAME逆向生成Bean; <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param conn <br>
@@ -313,13 +309,12 @@ public class DBTable2JavaBean extends JFrame {
                 methods.append('\n').append(getMethodStr(field, type));
             }
 
-            IOUtil.writeFile(
-                StringUtils.replaceEach(template, new String[] {
-                    "${PACKAGE}", "${CLASSNAME}", "${CODE}", "${TABLENAME}", "${DATE}", "${ENTITY}"
-                }, new String[] {
-                    packname, className, fields.append(methods).toString(), tablename, dateFormat.format(new Date()),
-                    CommonUtil.isEmpty(pkColum) ? GlobalConstants.BLANK : "@Entity(name = \"" + tablename + "\")"
-                }), file);
+            IOUtil.writeFile(StringUtils.replaceEach(template, new String[] {
+                "${PACKAGE}", "${CLASSNAME}", "${CODE}", "${TABLENAME}", "${DATE}", "${ENTITY}"
+            }, new String[] {
+                packname, className, fields.append(methods).toString(), tablename, dateFormat.format(new Date()),
+                CommonUtil.isEmpty(pkColum) ? GlobalConstants.BLANK : "@Entity(name = \"" + tablename + "\")"
+            }), file);
             System.out.println("生成文件成功。" + file.getAbsoluteFile());
         }
         finally {
@@ -330,9 +325,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param field <br>
@@ -367,9 +361,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param src <br>
@@ -380,9 +373,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param field <br>
@@ -404,9 +396,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: mysql的类型转换到java 类型参考文章 http://hi.baidu.com/wwtvanessa/blog/item/9fe555945a07bd16d31b70cd.html<br>
      * 
-     * Description: mysql的类型转换到java 类型参考文章 http://hi.baidu.com/wwtvanessa/blog/item/9fe555945a07bd16d31b70cd.html<br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param type <br>
@@ -434,9 +425,8 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param args <br>
@@ -446,7 +436,7 @@ public class DBTable2JavaBean extends JFrame {
         try {
             final ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
                 "/META-INF/spring/applicationContext-init.xml", "/META-INF/spring/applicationContext-dao.xml",
-                "/META-INF/spring/applicationContext-remote-service.xml"
+                "/META-INF/spring/applicationContext-service.xml"
             });
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

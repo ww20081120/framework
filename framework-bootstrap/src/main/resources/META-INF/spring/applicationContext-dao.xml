@@ -63,7 +63,7 @@
         <property name="hibernateProperties">
             <props>
                 <!-- <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> -->
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.dialect">${db.hibernate.dialect}</prop>
                 <prop key="hibernate.hbm2ddl.auto">none</prop>
                 <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.format_sql">false</prop>
@@ -99,11 +99,15 @@
                 rollback-for="Exception" />
             <tx:method name="update*" propagation="REQUIRED" read-only="false"
                 rollback-for="Exception" />
+            <tx:method name="modify*" propagation="REQUIRED" read-only="false"
+                rollback-for="Exception" />
             <tx:method name="delete*" propagation="REQUIRED" read-only="false"
                 rollback-for="Exception" />
             <tx:method name="destroy*" propagation="REQUIRED"
                 read-only="false" rollback-for="Exception" />
             <tx:method name="regist" propagation="REQUIRED" read-only="false"
+                rollback-for="Exception" />
+            <tx:method name="login" propagation="REQUIRED" read-only="false"
                 rollback-for="Exception" />
             <tx:method name="getToken" propagation="REQUIRED"
                 read-only="false" rollback-for="Exception" />
