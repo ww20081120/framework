@@ -26,7 +26,6 @@ import com.fccfc.framework.common.GlobalConstants;
 @Target(ElementType.METHOD)
 public @interface Cache {
 
-    /** sql文件的位置 */
     String node();
 
     String key() default GlobalConstants.BLANK;

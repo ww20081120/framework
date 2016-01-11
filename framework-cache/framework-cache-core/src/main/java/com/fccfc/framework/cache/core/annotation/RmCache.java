@@ -19,13 +19,18 @@ import com.fccfc.framework.common.GlobalConstants;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2015年12月4日 <br>
+ * @CreateDate 2016年1月11日 <br>
  * @since V1.0<br>
  * @see com.fccfc.framework.cache.core.annotation <br>
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface CacheKey {
-    String value() default GlobalConstants.BLANK;
+@Target(ElementType.METHOD)
+public @interface RmCache {
+
+    String node();
+
+    String key() default GlobalConstants.BLANK;
+
+    CacheType type() default CacheType.KEY_VALUE;
 }
