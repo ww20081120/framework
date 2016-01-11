@@ -21,16 +21,14 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
-
 import com.fccfc.framework.common.utils.CommonUtil;
 import com.fccfc.framework.common.utils.logger.Logger;
 import com.fccfc.framework.log.core.TransLoggerService;
 import com.fccfc.framework.log.core.TransManager;
 
 /**
+ * <Description> <br>
  * 
- * <Description> <br> 
- *  
  * @author yang.zhipeng <br>
  * @version 1.0<br>
  * @taskId <br>
@@ -39,11 +37,6 @@ import com.fccfc.framework.log.core.TransManager;
  * @see com.fccfc.framework.log.core.filter <br>
  */
 public class SqlLogFilter extends FilterEventAdapter {
-
-    /**
-     * logger
-     */
-    private static Logger logger = new Logger(SqlLogFilter.class);
 
     /**
      * dataSource
@@ -62,9 +55,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param message <br>
@@ -74,9 +66,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param message <br>
@@ -86,9 +77,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param message <br>
@@ -99,9 +89,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param message <br>
@@ -111,9 +100,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param message <br>
@@ -124,9 +112,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param connection <br>
@@ -136,9 +123,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -153,9 +139,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -172,9 +157,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -188,9 +172,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -206,9 +189,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -222,9 +204,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -240,9 +221,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -256,9 +236,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -359,9 +338,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -374,9 +352,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -390,9 +367,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -414,9 +390,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -439,9 +414,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -463,9 +437,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -476,8 +449,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement,
-        String parameterName, java.util.Map<String, Class<?>> map) throws SQLException {
+    public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, String parameterName,
+        java.util.Map<String, Class<?>> map) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterName, map);
 
         if (obj instanceof ResultSetProxy) {
@@ -492,9 +465,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
@@ -504,33 +476,32 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
      */
     protected void statementPrepareAfter(PreparedStatementProxy statement) {
-        statementLog("{conn-" + statement.getConnectionProxy().getId() + ", pstmt-" + statement.getId() + "} created. ");
+        statementLog(
+            "{conn-" + statement.getConnectionProxy().getId() + ", pstmt-" + statement.getId() + "} created. ");
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
      */
     protected void statementPrepareCallAfter(CallableStatementProxy statement) {
-        statementLog("{conn-" + statement.getConnectionProxy().getId() + ", cstmt-" + statement.getId() + "} created. ");
+        statementLog(
+            "{conn-" + statement.getConnectionProxy().getId() + ", cstmt-" + statement.getId() + "} created. ");
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
@@ -546,9 +517,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
@@ -571,9 +541,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
@@ -582,9 +551,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -605,9 +573,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -627,9 +594,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param chain <br>
@@ -643,9 +609,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param statement <br>
