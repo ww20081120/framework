@@ -42,9 +42,6 @@ public interface CacheConstant {
     /** dao 参数目录 */
     String SQL_PARAM_DIR = "/SQL_PARAM";
 
-    /** 系统目录 */
-    String SYSTEM_MENU_DIR = "/SYSTEM_MENU";
-
     /** 普通字符串目录 */
     String COMMON_DIR = "/COMMON_DIR";
 

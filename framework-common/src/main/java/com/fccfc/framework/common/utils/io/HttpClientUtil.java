@@ -27,7 +27,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSONObject;
-
 import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.GlobalConstants;
 import com.fccfc.framework.common.utils.CommonUtil;
@@ -49,7 +48,7 @@ public final class HttpClientUtil {
     /**
      * http POST请求
      *
-     * @param url      链接
+     * @param url 链接
      * @param paramMap 参数
      * @return 结果
      * @throws UtilException <br>
@@ -69,10 +68,11 @@ public final class HttpClientUtil {
 
             if (statusCode != HttpStatus.SC_OK) {
                 throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}",
-                        statusCode);
+                    statusCode);
             }
-            //body = method.getResponseBodyAsString();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream(), GlobalConstants.DEFAULT_CHARSET));
+            // body = method.getResponseBodyAsString();
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(method.getResponseBodyAsStream(), GlobalConstants.DEFAULT_CHARSET));
             StringBuffer stringBuffer = new StringBuffer();
             String str = "";
             while ((str = reader.readLine()) != null) {
@@ -80,9 +80,10 @@ public final class HttpClientUtil {
             }
             body = stringBuffer.toString();
             method.releaseConnection();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}", e,
-                    e.getMessage());
+                e.getMessage());
         }
 
         return body;
@@ -91,7 +92,7 @@ public final class HttpClientUtil {
     /**
      * Description: <br>
      *
-     * @param url  <br>
+     * @param url <br>
      * @param json <br>
      * @return <br>
      * @throws UtilException <br>
@@ -105,27 +106,28 @@ public final class HttpClientUtil {
     /**
      * Description: <br>
      *
-     * @param sslContext  <br>
-     * @param url         <br>
+     * @param sslContext <br>
+     * @param url <br>
      * @param contentType <br>
-     * @param content     <br>
+     * @param content <br>
      * @return <br>
      * @throws UtilException <br>
      * @author yang.zhipeng <br>
      * @taskId <br>
      */
     @SuppressWarnings({
-            "deprecation"
+        "deprecation"
     })
     public static String post(SSLContext sslContext, String url, String contentType, String content)
-            throws UtilException {
+        throws UtilException {
         org.apache.http.client.HttpClient httpClient = null;
         if (sslContext != null) {
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[]{
-                    "TLSv1"
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext, new String[] {
+                "TLSv1"
             }, null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-        } else {
+        }
+        else {
             httpClient = HttpClients.custom().build();
         }
 
@@ -138,18 +140,24 @@ public final class HttpClientUtil {
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == HttpStatus.SC_OK) {
                 return EntityUtils.toString(response.getEntity(), GlobalConstants.DEFAULT_CHARSET);
-            } else {
-                throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}",
-                        statusCode);
             }
-        } catch (IOException e) {
+            else {
+                throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}",
+                    statusCode);
+            }
+        }
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}", e,
-                    e.getMessage());
+                e.getMessage());
         }
     }
 
     public static String get(String url) throws UtilException {
-        return get(url, null);
+        return get(url, GlobalConstants.DEFAULT_CHARSET);
+    }
+
+    public static String get(String url, String charset) throws UtilException {
+        return get(url, null, charset);
     }
 
     /**
@@ -159,14 +167,15 @@ public final class HttpClientUtil {
      * @return 结果
      * @throws UtilException 异常
      */
-    public static String get(String url, Map<String, String> headParameters) throws UtilException {
+    public static String get(String url, Map<String, String> headParameters, String charset) throws UtilException {
         HttpClient httpClient = new HttpClient();
         GetMethod method = new GetMethod(url);
         String body = null;
 
         try {
-            method.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, GlobalConstants.DEFAULT_CHARSET);
-            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(3, false));
+            method.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, charset);
+            method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                new DefaultHttpMethodRetryHandler(3, false));
 
             if (null != headParameters) {
                 for (Map.Entry<String, String> entry : headParameters.entrySet()) {
@@ -176,14 +185,16 @@ public final class HttpClientUtil {
             int statusCode = httpClient.executeMethod(method);
 
             if (statusCode != HttpStatus.SC_OK) {
-                throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}", statusCode);
+                throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, result code :${0}",
+                    statusCode);
             }
 
             body = method.getResponseBodyAsString();
             method.releaseConnection();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new UtilException(ErrorCodeDef.HTTP_REQUEST_ERROR_10035, "Http request failed, message :${0}",
-                    e.getMessage(), e);
+                e.getMessage(), e);
         }
 
         return body;
