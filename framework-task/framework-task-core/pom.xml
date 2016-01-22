@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.fccfc</groupId>
 		<artifactId>framework-task</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<version>1.0</version>
 	</parent>
 	<artifactId>framework-task-core</artifactId>
 	<properties>
