@@ -103,7 +103,7 @@ public class Startup {
             Collections.sort(listenerList, new Comparator<StartupListener>() {
                 @Override
                 public int compare(StartupListener o1, StartupListener o2) {
-                    return o1.getOrder() - o2.getOrder();
+                    return o1.getOrder().compareTo(o2.getOrder());
                 }
             });
 

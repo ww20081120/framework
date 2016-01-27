@@ -51,9 +51,6 @@ public interface CacheConstant {
     /** 缓存时间 */
     String CONFIG_CACHE_TIME = "CONFIG_CACHE_TIME";
 
-    /** 静态资源 */
-    String RESOURCE = "/RESOURCE";
-
     /** 操作员 */
     String OPERATOR = "/OPERATOR";
 
@@ -61,7 +58,7 @@ public interface CacheConstant {
     String AREA = "/AREA";
 
     /** 路径 */
-    String URL = "/URL_RESOURCE";
+    String URL_RESOURCE = "/URL_RESOURCE";
 
     /** 事件 */
     String EVENT = "/EVENT";

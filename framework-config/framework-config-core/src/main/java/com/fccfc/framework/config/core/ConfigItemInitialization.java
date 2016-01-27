@@ -36,8 +36,8 @@ public class ConfigItemInitialization implements StartupListener {
      * @return <br>
      */
     @Override
-    public int getOrder() {
-        return -1;
+    public LoadOrder getOrder() {
+        return StartupListener.LoadOrder.FIRST;
     }
 
     /**

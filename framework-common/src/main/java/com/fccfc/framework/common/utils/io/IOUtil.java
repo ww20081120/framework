@@ -5,10 +5,12 @@
  ****************************************************************************************/
 package com.fccfc.framework.common.utils.io;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -32,10 +34,31 @@ import com.fccfc.framework.common.utils.UtilException;
  */
 public final class IOUtil {
 
+    public static void copyFile(File src, File dist) throws UtilException {
+        OutputStream out = null;
+        InputStream in = null;
+        try {
+            out = new BufferedOutputStream(new FileOutputStream(dist));
+            in = new BufferedInputStream(new FileInputStream(src));
+            int len = 0;
+            byte[] temp = new byte[1024];
+            while ((len = in.read(temp)) != -1) {
+                out.write(temp, 0, len);
+            }
+            out.flush();
+        }
+        catch (Exception e) {
+            throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+        }
+        finally {
+            IOUtils.closeQuietly(out);
+            IOUtils.closeQuietly(in);
+        }
+    }
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param filePath <br>
@@ -47,9 +70,8 @@ public final class IOUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param filePath <br>
@@ -79,9 +101,8 @@ public final class IOUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param in <br>
@@ -141,9 +162,8 @@ public final class IOUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param content <br>
