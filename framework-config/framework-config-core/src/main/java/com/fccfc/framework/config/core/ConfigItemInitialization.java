@@ -5,6 +5,7 @@ package com.fccfc.framework.config.core;
 
 import org.springframework.context.ApplicationContext;
 
+import com.fccfc.framework.common.FrameworkException;
 import com.fccfc.framework.common.StartupListener;
 import com.fccfc.framework.common.utils.Assert;
 import com.fccfc.framework.common.utils.logger.Logger;
@@ -36,8 +37,8 @@ public class ConfigItemInitialization implements StartupListener {
      * @return <br>
      */
     @Override
-    public int getOrder() {
-        return -1;
+    public LoadOrder getOrder() {
+        return StartupListener.LoadOrder.FIRST;
     }
 
     /**
@@ -48,7 +49,7 @@ public class ConfigItemInitialization implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void init(ApplicationContext context) {
+    public void complete(ApplicationContext context) {
         logger.debug("---------------begin ConfigItem init ------------------");
         ConfigService.Iface configService = context.getBean(ConfigService.Iface.class);
         Assert.notNull(configService, "未设置ConfigService.Iface的实现类， 配置项不可以使用");
@@ -70,5 +71,16 @@ public class ConfigItemInitialization implements StartupListener {
     @Override
     public void destory() {
         logger.debug("---------------ConfigItem destory ------------------");
+    }
+
+    /**
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws FrameworkException <br>
+     */ 
+    @Override
+    public void init() throws FrameworkException {
     }
 }

@@ -86,13 +86,6 @@ public class Startup {
 
         paramMap = OptionParser.parse(Startup.class, args);
 
-        logger.info("====================>准备加载Spring配置文件<====================");
-        ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(
-            StringUtils.split(paramMap.get("xmlPath")));
-        context = ac;
-        ac.start();
-        logger.info("====================>Spring配置文件加载完毕<====================");
-
         ServiceLoader<StartupListener> loader = ServiceLoader.load(StartupListener.class);
         if (loader != null) {
             listenerList = new ArrayList<StartupListener>();
@@ -103,17 +96,34 @@ public class Startup {
             Collections.sort(listenerList, new Comparator<StartupListener>() {
                 @Override
                 public int compare(StartupListener o1, StartupListener o2) {
-                    return o1.getOrder() - o2.getOrder();
+                    return o1.getOrder().compareTo(o2.getOrder());
                 }
             });
+        }
 
-            logger.info("*********************初始化StartupListener*************************");
+        logger.info("*********************初始化StartupListener*************************");
+        if (CommonUtil.isNotEmpty(listenerList)) {
             for (StartupListener listener : listenerList) {
-                listener.init(ac);
+                listener.init();
+                logger.info("   {0} 初始化", listener.getClass().getName());
+            }
+        }
+
+        logger.info("====================>准备加载Spring配置文件<====================");
+        ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(
+            StringUtils.split(paramMap.get("xmlPath")));
+        context = ac;
+        ac.start();
+        logger.info("====================>Spring配置文件加载完毕<====================");
+
+        if (CommonUtil.isNotEmpty(listenerList)) {
+            for (StartupListener listener : listenerList) {
+                listener.complete(context);
                 logger.info("   {0} 初始化成功。", listener.getClass().getName());
             }
-            logger.info("**********************************************************");
         }
+
+        logger.info("**********************************************************");
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("*         ").append(ManagementFactory.getRuntimeMXBean().getName()).append("        *")
