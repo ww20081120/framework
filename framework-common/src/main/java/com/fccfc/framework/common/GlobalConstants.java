@@ -59,8 +59,11 @@ public interface GlobalConstants {
 
     /** 百分号 */
     String PERCENT = "%";
-    
-    /** 句号*/
+
+    /** 句号 */
     String PERIOD = ".";
+
+    /** 开发模式 */
+    String DEV_MODEL = "dev";
 
 }
