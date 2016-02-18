@@ -113,7 +113,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             }
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, "执行查询语句失败", e);
         }
     }
@@ -163,7 +163,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             return query.executeUpdate();
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行SQL语句失败", e);
         }
     }
@@ -186,7 +186,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             return result;
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行批量SQL语句失败", e);
         }
     }
@@ -202,7 +202,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             session.save(t);
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.SAVE_ERROR_10013, e);
         }
     }
@@ -219,7 +219,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             return (T) session.get(entityClass, id);
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.GET_BY_ID_ERROR_10014, e);
         }
     }
@@ -238,7 +238,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             return (T) executableCriteria.uniqueResult();
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.GET_BY_ENTITY_ERROR_10015, e);
         }
     }
@@ -255,7 +255,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             session.flush();
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.UPDATE_ERROR_10016, e);
         }
     }
@@ -272,7 +272,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             session.flush();
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.DELETE_ERROR_10017, e);
         }
     }
@@ -287,7 +287,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             delete(getById(entityClass, id));
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.DELETE_BY_ID_ERROR_10018, e);
         }
     }
@@ -305,7 +305,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             return executableCriteria.list();
         }
         catch (Exception e) {
-            logger.error(e);
+            logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.SELECT_LIST_ERROR_10019, e);
         }
     }
