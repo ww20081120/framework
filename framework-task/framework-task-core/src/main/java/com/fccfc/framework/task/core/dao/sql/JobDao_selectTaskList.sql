@@ -1,4 +1,4 @@
-SELECT * FROM TASK T
+SELECT * FROM T_JOB_TASK T
 #if($task)
 WHERE 1 = 1
     #if($task.taskName)

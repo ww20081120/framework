@@ -17,7 +17,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.fccfc.framework.api.bean.BaseEntity <br>
  */
-@Entity(name = "SEND_RECORD")
+@Entity(name = "T_MSG_SEND_RECORD")
 public class SendRecordPojo extends BaseEntity {
 
     /**

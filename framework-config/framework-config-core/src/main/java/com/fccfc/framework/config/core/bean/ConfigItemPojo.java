@@ -18,7 +18,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.fccfc.framework.api.bean.common.bean.BaseEntity <br>
  */
-@Entity(name = "CONFIG_ITEM")
+@Entity(name = "T_SYS_CONFIG_ITEM")
 public class ConfigItemPojo extends BaseEntity {
 
     /**

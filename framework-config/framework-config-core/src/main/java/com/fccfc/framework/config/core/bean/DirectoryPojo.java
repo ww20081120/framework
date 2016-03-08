@@ -15,7 +15,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.fccfc.framework.common.bean.BaseEntity <br>
  */
-@Entity(name = "DIRECTORY")
+@Entity(name = "T_SYS_DIRECTORY")
 public class DirectoryPojo extends BaseEntity {
 
     /**

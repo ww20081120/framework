@@ -18,7 +18,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since migu<br>
  * @see com.fccfc.framework.config.core.bean <br>
  */
-@Entity(name = "DICTIONARY_DATA")
+@Entity(name = "T_SYS_DICTIONARY_DATA")
 public class DictionaryDataPojo extends BaseEntity {
     /**
      * serialVersionUID

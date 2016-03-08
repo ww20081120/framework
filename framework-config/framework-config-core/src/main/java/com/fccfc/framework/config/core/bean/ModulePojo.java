@@ -17,7 +17,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.fccfc.framework.api.bean.common.bean.BaseEntity <br>
  */
-@Entity(name = "MODULE")
+@Entity(name = "T_SYS_MODULE")
 public class ModulePojo extends BaseEntity {
 
     /**

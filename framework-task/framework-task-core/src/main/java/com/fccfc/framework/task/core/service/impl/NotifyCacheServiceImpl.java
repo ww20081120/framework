@@ -12,9 +12,6 @@ import com.fccfc.framework.common.ErrorCodeDef;
 import com.fccfc.framework.common.ServiceException;
 import com.fccfc.framework.config.core.ConfigHelper;
 import com.fccfc.framework.db.core.DaoException;
-import com.fccfc.framework.task.core.bean.ChangeNotifRedisPojo;
-import com.fccfc.framework.task.core.dao.RedisCacheDao;
-import com.fccfc.framework.task.core.service.NotifyCacheService;
 
 /**
  * <Description> <br>

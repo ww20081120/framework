@@ -19,7 +19,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.fccfc.framework.api.bean.common.bean.BaseEntity <br>
  */
-@Entity(name = "TRANS_LOG_STACK")
+@Entity(name = "T_SYS_TRANS_LOG_STACK")
 public class TransLogStackPojo extends BaseEntity {
 
     /**

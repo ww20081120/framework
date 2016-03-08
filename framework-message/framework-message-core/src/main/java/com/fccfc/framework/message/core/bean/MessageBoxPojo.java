@@ -17,7 +17,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.fccfc.framework.api.bean.BaseEntity <br>
  */
-@Entity(name = "MESSAGE_BOX")
+@Entity(name = "T_MSG_MESSAGE_BOX")
 public class MessageBoxPojo extends BaseEntity {
 
     /**

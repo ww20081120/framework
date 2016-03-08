@@ -1,4 +1,4 @@
-INSERT INTO MESSAGE_HISTORY
+INSERT INTO T_MSG_MESSAGE_HISTORY
 VALUES
   (:history.messageId,
    :history.receivers,

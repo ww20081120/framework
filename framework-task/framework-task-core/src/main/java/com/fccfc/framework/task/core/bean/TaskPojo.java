@@ -19,7 +19,7 @@ import com.fccfc.framework.task.api.Task;
  * @since V1.0<br>
  * @see com.fccfc.framework.api.bean.BaseEntity <br>
  */
-@Entity(name = "TASK")
+@Entity(name = "T_JOB_TASK")
 public class TaskPojo extends BaseEntity {
 
     /** 正常执行状态 */
