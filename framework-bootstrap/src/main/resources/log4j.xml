@@ -13,8 +13,9 @@
 		</filter>
 	</appender>
 
-	<appender name="debugAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${user.home}/log/bootstrap/debug.log" />
+	<appender name="debugAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${project.home}/log/${project.code}/debug_" />
+		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -27,8 +28,9 @@
 		</filter>
 	</appender>
 
-	<appender name="infoAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${user.home}/log/bootstrap/info.log" />
+	<appender name="infoAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${project.home}/log/${project.code}/info_" />
+		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -41,8 +43,9 @@
 		</filter>
 	</appender>
 
-	<appender name="errorAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${user.home}/log/bootstrap/error.log" />
+	<appender name="errorAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${project.home}/log/${project.code}/error_" />
+		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -55,8 +58,9 @@
 		</filter>
 	</appender>
 
-	<appender name="warnAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${user.home}/log/bootstrap/warn.log" />
+	<appender name="warnAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${project.home}/log/${project.code}/warn_" />
+		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -69,8 +73,9 @@
 		</filter>
 	</appender>
 
-	<appender name="sqlAppender" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="${user.home}/log/bootstrap/sql.log" />
+	<appender name="sqlAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${project.home}/log/${project.code}/sql_" />
+		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
