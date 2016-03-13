@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.task.core.service.impl;
+package com.hbasesoft.framework.task.core.service.impl;
 
 import java.util.List;
 
@@ -19,26 +19,26 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 
-import com.fccfc.framework.common.ErrorCodeDef;
-import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.common.utils.Assert;
-import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.db.core.DaoException;
-import com.fccfc.framework.task.api.CronTrigger;
-import com.fccfc.framework.task.api.SimpleTrigger;
-import com.fccfc.framework.task.api.Task;
-import com.fccfc.framework.task.api.TaskService;
-import com.fccfc.framework.task.core.TaskConstants;
-import com.fccfc.framework.task.core.bean.CronTriggerPojo;
-import com.fccfc.framework.task.core.bean.SimpleTriggerPojo;
-import com.fccfc.framework.task.core.bean.TaskPojo;
-import com.fccfc.framework.task.core.bean.TaskTriggerPojo;
-import com.fccfc.framework.task.core.bean.TriggerPojo;
-import com.fccfc.framework.task.core.dao.JobDao;
-import com.fccfc.framework.task.core.dao.TriggerDao;
-import com.fccfc.framework.task.core.job.JobExcutor;
-import com.fccfc.framework.task.core.job.SynchronizedJobExcutor;
-import com.fccfc.framework.task.core.listener.TaskListener;
+import com.hbasesoft.framework.task.core.TaskConstants;
+import com.hbasesoft.framework.task.core.bean.CronTriggerPojo;
+import com.hbasesoft.framework.task.core.bean.SimpleTriggerPojo;
+import com.hbasesoft.framework.task.core.bean.TaskPojo;
+import com.hbasesoft.framework.task.core.bean.TaskTriggerPojo;
+import com.hbasesoft.framework.task.core.bean.TriggerPojo;
+import com.hbasesoft.framework.task.core.dao.JobDao;
+import com.hbasesoft.framework.task.core.dao.TriggerDao;
+import com.hbasesoft.framework.task.core.job.JobExcutor;
+import com.hbasesoft.framework.task.core.job.SynchronizedJobExcutor;
+import com.hbasesoft.framework.task.core.listener.TaskListener;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.task.api.CronTrigger;
+import com.hbasesoft.framework.task.api.SimpleTrigger;
+import com.hbasesoft.framework.task.api.Task;
+import com.hbasesoft.framework.task.api.TaskService;
 
 /**
  * <Description> <br>
@@ -48,7 +48,7 @@ import com.fccfc.framework.task.core.listener.TaskListener;
  * @taskId <br>
  * @CreateDate 2014年11月5日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.task.core.listener <br>
+ * @see com.hbasesoft.framework.task.core.listener <br>
  */
 public class TaskServiceImpl implements TaskService.Iface {
 
@@ -82,7 +82,7 @@ public class TaskServiceImpl implements TaskService.Iface {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.api.task.TaskService#scheduleAllTask()
+     * @see com.hbasesoft.framework.api.task.TaskService#scheduleAllTask()
      */
     @Override
     public void scheduleAllTask() throws TException {

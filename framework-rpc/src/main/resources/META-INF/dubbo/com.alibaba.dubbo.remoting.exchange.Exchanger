@@ -1,1 +1,1 @@
-header=com.fccfc.framework.rpc.thrift.exchange.HeaderExchanger
+header=com.hbasesoft.framework.rpc.thrift.exchange.HeaderExchanger

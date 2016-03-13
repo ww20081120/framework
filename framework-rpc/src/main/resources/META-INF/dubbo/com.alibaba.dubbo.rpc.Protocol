@@ -1,1 +1,1 @@
-thrift=com.fccfc.framework.rpc.thrift.ThriftRpcProtocol
+thrift=com.hbasesoft.framework.rpc.thrift.ThriftRpcProtocol

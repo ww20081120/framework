@@ -1,4 +1,4 @@
-namespace java com.fccfc.framework.task.api
+namespace java com.hbasesoft.framework.task.api
 
 // task 结构体
 struct Task {

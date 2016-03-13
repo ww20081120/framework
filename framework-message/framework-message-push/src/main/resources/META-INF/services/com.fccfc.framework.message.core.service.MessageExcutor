@@ -1,2 +1,2 @@
-com.fccfc.framework.message.push.service.BaiduPushMessageExcutorImpl
-com.fccfc.framework.message.push.service.GetuiPushMessageExcutorImpl
+com.hbasesoft.framework.message.push.service.BaiduPushMessageExcutorImpl
+com.hbasesoft.framework.message.push.service.GetuiPushMessageExcutorImpl

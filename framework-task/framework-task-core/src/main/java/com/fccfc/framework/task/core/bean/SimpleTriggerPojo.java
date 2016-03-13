@@ -1,9 +1,9 @@
-package com.fccfc.framework.task.core.bean;
+package com.hbasesoft.framework.task.core.bean;
 
 import javax.persistence.Column;
 
-import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.task.api.SimpleTrigger;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.task.api.SimpleTrigger;
 
 /**
  * <Description> SIMPLE_TRIGGER的Pojo<br>
@@ -12,7 +12,7 @@ import com.fccfc.framework.task.api.SimpleTrigger;
  * @version 1.0<br>
  * @CreateDate 2014年11月05日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
 public class SimpleTriggerPojo extends TriggerPojo {
 

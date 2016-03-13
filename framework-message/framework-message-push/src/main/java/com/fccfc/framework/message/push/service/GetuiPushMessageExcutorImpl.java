@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.message.push.service;
+package com.hbasesoft.framework.message.push.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,22 +9,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-/*
-import com.gexin.rp.sdk.base.IPushResult;
-import com.gexin.rp.sdk.base.ITemplate;
-import com.gexin.rp.sdk.base.impl.ListMessage;
-import com.gexin.rp.sdk.base.impl.SingleMessage;
-import com.gexin.rp.sdk.base.impl.Target;
-import com.gexin.rp.sdk.http.IGtPush;
-import com.gexin.rp.sdk.template.TransmissionTemplate;
-*/
-
-import com.fccfc.framework.common.ErrorCodeDef;
-import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.common.utils.bean.JsonUtil;
-import com.fccfc.framework.config.core.ConfigHelper;
-import com.fccfc.framework.message.api.Attachment;
-import com.fccfc.framework.message.core.service.MessageExcutor;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.bean.JsonUtil;
+import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.message.api.Attachment;
+import com.hbasesoft.framework.message.core.service.MessageExcutor;
 
 
 /**
@@ -33,7 +23,7 @@ import com.fccfc.framework.message.core.service.MessageExcutor;
  * @author 伟<br>
  * @version 1.0<br>
  * @CreateDate 2015-1-17 <br>
- * @see com.fccfc.framework.message.service.getui <br>
+ * @see com.hbasesoft.framework.message.service.getui <br>
  */
 @Service
 public class GetuiPushMessageExcutorImpl implements MessageExcutor {
@@ -42,7 +32,7 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
 
 //    /*
 //     * (non-Javadoc)
-//     * @see com.fccfc.framework.message.service.MessageExcutor#sendMessage(java.lang.String, java.lang.String,
+//     * @see com.hbasesoft.framework.message.service.MessageExcutor#sendMessage(java.lang.String, java.lang.String,
 //     * java.lang.String, java.lang.String[], java.util.List)
 //     */
 //    public String sendMessage(String title, String content, String sender, String[] receivers,

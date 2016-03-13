@@ -1,6 +1,6 @@
-package com.fccfc.framework.task.core.service;
+package com.hbasesoft.framework.task.core.service;
 
-import com.fccfc.framework.common.ServiceException;
+import com.hbasesoft.framework.common.ServiceException;
 
 /**
  * <Description> <br>
@@ -10,7 +10,7 @@ import com.fccfc.framework.common.ServiceException;
  * @taskId <br>
  * @CreateDate 2015年7月11日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.task.core.service.impl <br>
+ * @see com.hbasesoft.framework.task.core.service.impl <br>
  */
 public interface JobService {
 

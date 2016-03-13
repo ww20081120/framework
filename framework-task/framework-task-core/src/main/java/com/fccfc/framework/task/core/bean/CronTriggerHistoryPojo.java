@@ -1,8 +1,8 @@
-package com.fccfc.framework.task.core.bean;
+package com.hbasesoft.framework.task.core.bean;
 
 import javax.persistence.Column;
 
-import com.fccfc.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseEntity;
 
 /**
  * <Description> CRON_TRIGGER_HISTORY的Pojo<br>
@@ -11,7 +11,7 @@ import com.fccfc.framework.db.core.BaseEntity;
  * @version 1.0<br>
  * @CreateDate 2014年11月05日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
 
 public class CronTriggerHistoryPojo extends BaseEntity {

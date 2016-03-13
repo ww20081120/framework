@@ -42,7 +42,7 @@
  * @taskId &lt;br&gt;
  * ${tags} &lt;br&gt;
  */ </template><template autoinsert="false" context="filecomment_context" deleted="false" description="Comment for created Java files" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.filecomment" name="filecomment">/**************************************************************************************** 
- Copyright © 2003-2012 fccfc Corporation. All rights reserved. Reproduction or       &lt;br&gt;
+ Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       &lt;br&gt;
  transmission in whole or in part, in any form or by any means, electronic, mechanical &lt;br&gt;
  or otherwise, is prohibited without the prior written consent of the copyright owner. &lt;br&gt;
  ****************************************************************************************/</template></templates>

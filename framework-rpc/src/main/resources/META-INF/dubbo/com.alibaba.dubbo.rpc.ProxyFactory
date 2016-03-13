@@ -1,1 +1,1 @@
-thrift=com.fccfc.framework.rpc.thrift.proxy.ThriftProxyFactory
+thrift=com.hbasesoft.framework.rpc.thrift.proxy.ThriftProxyFactory

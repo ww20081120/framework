@@ -1,17 +1,17 @@
 /**
  * 
  */
-package com.fccfc.framework.task.core.dao;
+package com.hbasesoft.framework.task.core.dao;
 
 import java.util.List;
 
-import com.fccfc.framework.db.core.DaoException;
-import com.fccfc.framework.db.core.annotation.Dao;
-import com.fccfc.framework.db.core.annotation.Param;
-import com.fccfc.framework.db.core.annotation.Sql;
-import com.fccfc.framework.task.core.bean.CronTriggerPojo;
-import com.fccfc.framework.task.core.bean.SimpleTriggerPojo;
-import com.fccfc.framework.task.core.bean.TriggerPojo;
+import com.hbasesoft.framework.task.core.bean.CronTriggerPojo;
+import com.hbasesoft.framework.task.core.bean.SimpleTriggerPojo;
+import com.hbasesoft.framework.task.core.bean.TriggerPojo;
+import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.annotation.Dao;
+import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.annotation.Sql;
 
 /**
  * <Description> <br>
@@ -21,7 +21,7 @@ import com.fccfc.framework.task.core.bean.TriggerPojo;
  * @taskId <br>
  * @CreateDate 2014年11月5日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.task.core.dao <br>
+ * @see com.hbasesoft.framework.task.core.dao <br>
  */
 @Dao
 public interface TriggerDao {

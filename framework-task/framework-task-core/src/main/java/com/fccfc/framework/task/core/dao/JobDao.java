@@ -1,17 +1,17 @@
 /**
  * 
  */
-package com.fccfc.framework.task.core.dao;
+package com.hbasesoft.framework.task.core.dao;
 
 import java.util.List;
 
-import com.fccfc.framework.db.core.DaoException;
-import com.fccfc.framework.db.core.annotation.Dao;
-import com.fccfc.framework.db.core.annotation.Param;
-import com.fccfc.framework.db.core.annotation.Sql;
-import com.fccfc.framework.db.hibernate.IGenericBaseDao;
-import com.fccfc.framework.task.core.bean.TaskPojo;
-import com.fccfc.framework.task.core.bean.TaskTriggerPojo;
+import com.hbasesoft.framework.task.core.bean.TaskPojo;
+import com.hbasesoft.framework.task.core.bean.TaskTriggerPojo;
+import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.annotation.Dao;
+import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.annotation.Sql;
+import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
 
 /**
  * <Description> <br>
@@ -21,7 +21,7 @@ import com.fccfc.framework.task.core.bean.TaskTriggerPojo;
  * @taskId <br>
  * @CreateDate 2014年11月5日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.task.core.dao <br>
+ * @see com.hbasesoft.framework.task.core.dao <br>
  */
 @Dao
 public interface JobDao extends IGenericBaseDao {

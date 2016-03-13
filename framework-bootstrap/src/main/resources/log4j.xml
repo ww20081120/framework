@@ -14,7 +14,7 @@
 	</appender>
 
 	<appender name="debugAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/debug_" />
+		<param name="File" value="${user.home}/log/hbasesoft/debug_" />
 		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
@@ -29,7 +29,7 @@
 	</appender>
 
 	<appender name="infoAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/info_" />
+		<param name="File" value="${user.home}/log/hbasesoft/info_" />
 		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
@@ -44,7 +44,7 @@
 	</appender>
 
 	<appender name="errorAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/error_" />
+		<param name="File" value="${user.home}/log/hbasesoft/error_" />
 		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
@@ -59,7 +59,7 @@
 	</appender>
 
 	<appender name="warnAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/warn_" />
+		<param name="File" value="${user.home}/log/hbasesoft/warn_" />
 		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
@@ -74,7 +74,7 @@
 	</appender>
 
 	<appender name="sqlAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${project.home}/log/${project.code}/sql_" />
+		<param name="File" value="${user.home}/log/hbasesoft/sql_" />
 		<param name="DatePattern" value="yyyy-MM-dd'.log'" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
@@ -95,7 +95,7 @@
 	</category>
 
 	<root>
-		<level value="${project.log.level}"/>
+		<level value="debug"/>
 		<appender-ref ref="debugAppender" />
 		<appender-ref ref="infoAppender" />
 		<appender-ref ref="warnAppender" />

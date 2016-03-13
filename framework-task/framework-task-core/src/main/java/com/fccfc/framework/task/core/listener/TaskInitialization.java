@@ -1,15 +1,15 @@
 /**
  * 
  */
-package com.fccfc.framework.task.core.listener;
+package com.hbasesoft.framework.task.core.listener;
 
 import javax.annotation.Resource;
 
-import com.fccfc.framework.common.ErrorCodeDef;
-import com.fccfc.framework.common.Initialization;
-import com.fccfc.framework.common.InitializationException;
-import com.fccfc.framework.common.utils.logger.Logger;
-import com.fccfc.framework.task.api.TaskService;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.Initialization;
+import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.task.api.TaskService;
 
 /**
  * <Description> <br>
@@ -17,7 +17,7 @@ import com.fccfc.framework.task.api.TaskService;
  * @author 伟<br>
  * @version 1.0<br>
  * @CreateDate 2014-11-8 <br>
- * @see com.fccfc.framework.task.core.listener <br>
+ * @see com.hbasesoft.framework.task.core.listener <br>
  */
 public class TaskInitialization implements Initialization {
 
@@ -34,7 +34,7 @@ public class TaskInitialization implements Initialization {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.core.Initialization#init()
+     * @see com.hbasesoft.framework.core.Initialization#init()
      */
     @Override
     public void afterPropertiesSet() throws InitializationException {
@@ -50,7 +50,7 @@ public class TaskInitialization implements Initialization {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.core.Initialization#destory()
+     * @see com.hbasesoft.framework.core.Initialization#destory()
      */
     @Override
     public void destroy() throws InitializationException {

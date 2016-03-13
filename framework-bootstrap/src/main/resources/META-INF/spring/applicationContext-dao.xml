@@ -54,7 +54,7 @@
         </property>
     </bean>
 
-    <bean id="log-filter" class="com.fccfc.framework.log.core.filter.SqlLogFilter" />
+    <bean id="log-filter" class="com.hbasesoft.framework.log.core.filter.SqlLogFilter" />
 
     <!-- Hibernate sessionFactory 配置 -->
     <bean id="sessionFactory"
@@ -73,7 +73,7 @@
         <!-- 注解方式配置 -->
         <property name="packagesToScan">
             <list>
-                <value>com.fccfc.*</value>
+                <value>com.hbasesoft.*</value>
             </list>
         </property>
     </bean>
@@ -128,15 +128,15 @@
 
     <aop:config proxy-target-class="true">
         <aop:advisor advice-ref="txAdvice"
-            pointcut="execution(public * com.fccfc..*Service*.*(..))" />
+            pointcut="execution(public * com.hbasesoft..*Service*.*(..))" />
     </aop:config>
 
-    <bean id="baseHibernateDao" class="com.fccfc.framework.db.hibernate.BaseHibernateDao">
+    <bean id="baseHibernateDao" class="com.hbasesoft.framework.db.hibernate.BaseHibernateDao">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
     <!-- Dao配置 -->
-    <bean id="daoConfig" class="com.fccfc.framework.db.core.config.DaoConfig">
+    <bean id="daoConfig" class="com.hbasesoft.framework.db.core.config.DaoConfig">
         <property name="cache" value="true" />
         <property name="dbType" value="${db.type}" />
         <property name="baseDao" ref="baseHibernateDao" />
@@ -144,21 +144,21 @@
     </bean>
 
     <!-- Dao动态代理类 -->
-    <bean id="springDaoHandler" class="com.fccfc.framework.db.spring.SpringDaoHandler">
+    <bean id="springDaoHandler" class="com.hbasesoft.framework.db.spring.SpringDaoHandler">
         <property name="daoConfig" ref="daoConfig" />
         <property name="sqlExcutor" ref="baseHibernateDao" />
     </bean>
 
     <bean id="sqlHandler"
-        class="com.fccfc.framework.db.core.annotation.handler.SQLHandler">
+        class="com.hbasesoft.framework.db.core.annotation.handler.SQLHandler">
         <property name="daoConfig" ref="daoConfig" />
     </bean>
 
     <!-- 注册Dao接口 -->
-    <bean class="com.fccfc.framework.db.spring.AutoProxyBeanFactory">
+    <bean class="com.hbasesoft.framework.db.spring.AutoProxyBeanFactory">
         <property name="packagesToScan">
             <list>
-                <value>com.fccfc.*</value>
+                <value>com.hbasesoft.*</value>
             </list>
         </property>
         <property name="interceptors">

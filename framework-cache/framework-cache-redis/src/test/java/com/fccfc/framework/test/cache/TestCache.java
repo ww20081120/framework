@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.test.cache;
+package com.hbasesoft.framework.test.cache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fccfc.framework.cache.core.CacheException;
-import com.fccfc.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.cache.core.CacheException;
+import com.hbasesoft.framework.cache.core.CacheHelper;
 
 /**
  * <Description> <br>
@@ -19,7 +19,7 @@ import com.fccfc.framework.cache.core.CacheHelper;
  * @author wangwei<br>
  * @version 1.0<br>
  * @CreateDate 2015年6月21日 <br>
- * @see com.fccfc.framework.test.cache <br>
+ * @see com.hbasesoft.framework.test.cache <br>
  */
 public class TestCache {
 

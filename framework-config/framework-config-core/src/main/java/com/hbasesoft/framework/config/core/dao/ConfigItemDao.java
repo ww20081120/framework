@@ -1,0 +1,56 @@
+/**
+ * 
+ */
+package com.hbasesoft.framework.config.core.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import com.hbasesoft.framework.config.core.bean.ConfigItemPojo;
+import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.annotation.Dao;
+import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.annotation.Sql;
+import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
+
+/**
+ * <Description> <br>
+ * 
+ * @author Administrator<br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2014年11月9日 <br>
+ * @since V1.0<br>
+ * @see com.hbasesoft.framework.core.db.config <br>
+ */
+@Dao
+public interface ConfigItemDao extends IGenericBaseDao {
+
+    /**
+     * selectConfigItemList
+     * 
+     * @param configItemPojo <br>
+     * @param pageIndex <br>
+     * @param pageSize <br>
+     * @throws DaoException <br>
+     * @return <br>
+     */
+    @Sql(bean = ConfigItemPojo.class)
+    List<ConfigItemPojo> selectConfigItemList(@Param("configItem") ConfigItemPojo configItemPojo,
+        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize) throws DaoException;
+
+    /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param moduleList <br>
+     * @return <br>
+     * @throws DaoException <br>
+     */
+    @Sql(bean = Map.class)
+    List<Map<String, Object>> selectAll(@Param("moduleCode") String moduleCode) throws DaoException;
+
+    ConfigItemPojo selectConfigItem(@Param("moduleCode") String moduleCode,
+        @Param("configItemCode") String configItemCode, @Param("paramCode") String paramCode) throws DaoException;
+}

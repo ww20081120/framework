@@ -1,4 +1,0 @@
-SELECT *
-  FROM T_SYS_TRANS_LOG_STACK
- WHERE TRANS_ID = :transId
-   AND STACK_ID = :stackId

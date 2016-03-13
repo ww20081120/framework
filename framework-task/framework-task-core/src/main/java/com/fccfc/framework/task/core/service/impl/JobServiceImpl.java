@@ -1,15 +1,15 @@
-package com.fccfc.framework.task.core.service.impl;
+package com.hbasesoft.framework.task.core.service.impl;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.common.ErrorCodeDef;
-import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.db.core.DaoException;
-import com.fccfc.framework.task.core.bean.TaskPojo;
-import com.fccfc.framework.task.core.dao.JobDao;
-import com.fccfc.framework.task.core.service.JobService;
+import com.hbasesoft.framework.task.core.bean.TaskPojo;
+import com.hbasesoft.framework.task.core.dao.JobDao;
+import com.hbasesoft.framework.task.core.service.JobService;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.db.core.DaoException;
 
 /**
  * <Description> <br>
@@ -19,7 +19,7 @@ import com.fccfc.framework.task.core.service.JobService;
  * @taskId <br>
  * @CreateDate 2015年8月24日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.task.core.service.impl <br>
+ * @see com.hbasesoft.framework.task.core.service.impl <br>
  */
 @Service
 public class JobServiceImpl implements JobService {

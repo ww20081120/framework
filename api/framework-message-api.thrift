@@ -1,4 +1,4 @@
-namespace java com.fccfc.framework.message.api
+namespace java com.hbasesoft.framework.message.api
 
 // Attachment
 struct Attachment {

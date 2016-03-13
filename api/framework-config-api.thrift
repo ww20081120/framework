@@ -1,4 +1,4 @@
-namespace java com.fccfc.framework.config.api
+namespace java com.hbasesoft.framework.config.api
 
 // config 结构体
 struct Config {

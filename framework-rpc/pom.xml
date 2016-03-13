@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.fccfc</groupId>
+		<groupId>com.hbasesoft</groupId>
 		<artifactId>framework</artifactId>
 		<version>1.0</version>
 	</parent>
@@ -16,7 +16,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.fccfc</groupId>
+			<groupId>com.hbasesoft</groupId>
 			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -25,10 +25,6 @@
 			<artifactId>libthrift</artifactId>
 			<version>${thrift.version}</version>
 			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
 				<exclusion>
 					<artifactId>httpcore</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
@@ -50,6 +46,12 @@
 			<groupId>org.apache.zookeeper</groupId>
 			<artifactId>zookeeper</artifactId>
 			<version>${zookeeper.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.101tec</groupId>

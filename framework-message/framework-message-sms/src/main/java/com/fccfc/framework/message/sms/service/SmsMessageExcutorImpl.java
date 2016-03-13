@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.message.sms.service;
+package com.hbasesoft.framework.message.sms.service;
 
 import java.net.URLEncoder;
 import java.util.List;
@@ -13,14 +13,14 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.fccfc.framework.common.ErrorCodeDef;
-import com.fccfc.framework.common.GlobalConstants;
-import com.fccfc.framework.common.ServiceException;
-import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.common.utils.security.DataUtil;
-import com.fccfc.framework.config.core.ConfigHelper;
-import com.fccfc.framework.message.api.Attachment;
-import com.fccfc.framework.message.core.service.MessageExcutor;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
+import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.message.api.Attachment;
+import com.hbasesoft.framework.message.core.service.MessageExcutor;
 
 /**
  * <Description> <br>
@@ -30,7 +30,7 @@ import com.fccfc.framework.message.core.service.MessageExcutor;
  * @taskId <br>
  * @CreateDate 2014年12月10日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.message.service.sms <br>
+ * @see com.hbasesoft.framework.message.service.sms <br>
  */
 @Service
 public class SmsMessageExcutorImpl implements MessageExcutor {
@@ -39,7 +39,7 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
 
     /*
      * (non-Javadoc)
-     * @see com.fccfc.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
+     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
      * java.lang.String, java.util.List, java.util.List)
      */
     @Override

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.fccfc.framework.task.core.listener;
+package com.hbasesoft.framework.task.core.listener;
 
 import javax.annotation.Resource;
 
@@ -19,10 +19,10 @@ import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 
-import com.fccfc.framework.common.utils.logger.Logger;
-import com.fccfc.framework.task.core.TaskConstants;
-import com.fccfc.framework.task.core.bean.TaskPojo;
-import com.fccfc.framework.task.core.service.JobService;
+import com.hbasesoft.framework.task.core.TaskConstants;
+import com.hbasesoft.framework.task.core.bean.TaskPojo;
+import com.hbasesoft.framework.task.core.service.JobService;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
  * <Description> <br>
@@ -30,7 +30,7 @@ import com.fccfc.framework.task.core.service.JobService;
  * @author 伟<br>
  * @version 1.0<br>
  * @CreateDate 2014-11-8 <br>
- * @see com.fccfc.framework.task.core.listener <br>
+ * @see com.hbasesoft.framework.task.core.listener <br>
  */
 public class TaskListener implements JobListener, TriggerListener, SchedulerListener {
 

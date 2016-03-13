@@ -1,4 +1,4 @@
-package com.fccfc.framework.task.core.bean;
+package com.hbasesoft.framework.task.core.bean;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,9 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fccfc.framework.common.utils.CommonUtil;
-import com.fccfc.framework.db.core.BaseEntity;
-import com.fccfc.framework.task.api.Task;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.task.api.Task;
 
 /**
  * <Description> TASK的Pojo<br>
@@ -17,7 +17,7 @@ import com.fccfc.framework.task.api.Task;
  * @version 1.0<br>
  * @CreateDate 2014年11月05日 <br>
  * @since V1.0<br>
- * @see com.fccfc.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
 @Entity(name = "T_JOB_TASK")
 public class TaskPojo extends BaseEntity {
