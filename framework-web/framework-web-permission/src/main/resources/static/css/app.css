@@ -6147,7 +6147,11 @@ header {
     display: inline-block;
     width: 20px;
     height: 20px;
+<<<<<<< HEAD
     background-image: url("../img/icons.png");
+=======
+    background-image: url("../../assets/img/icons.png");
+>>>>>>> cfa04276dad25de64c6f40c336dcb7d2713d08e4
     vertical-align: middle;
 }
 

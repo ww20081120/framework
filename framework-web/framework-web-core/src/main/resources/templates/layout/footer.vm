@@ -13,4 +13,3 @@
 #end
 #foreach ($s in $js)
 <script type="text/babel" src="$!context.contextPath/$!{module}/js/${s}.js"></script>
-#end
