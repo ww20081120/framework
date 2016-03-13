@@ -1,0 +1,32 @@
+INSERT INTO CONFIG_ITEM_PARAM_HISTORY
+(
+    CONFIG_ITEM_ID,
+    PARAM_CODE,
+    SEQ,
+    PARAM_NAME,
+    PARAM_VALUE,
+    DEFAULT_PARAM_VALUE,
+    DATA_TYPE,
+    INPUT_TYPE,
+    VALUE_SCRIPT,
+    UPDATE_TIME,
+    REMARK,
+    OPERATOR_ID,
+    CHANNEL_ID
+)
+VALUES
+(
+    :paramHisPojo.configItemId,
+    :paramHisPojo.paramCode,
+    :paramHisPojo.seq,
+    :paramHisPojo.paramName,
+    :paramHisPojo.paramValue,
+    :paramHisPojo.defaultParamValue,
+    :paramHisPojo.dataType,
+    :paramHisPojo.inputType,
+    :paramHisPojo.valueScript,
+    CURRENT_TIMESTAMP(),
+    :paramHisPojo.remark,
+    :paramHisPojo.operatorId,
+    :paramHisPojo.channelId
+)

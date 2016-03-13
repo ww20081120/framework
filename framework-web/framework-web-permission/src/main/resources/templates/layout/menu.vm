@@ -1,0 +1,44 @@
+#macro(childrenMenu $children)
+    #if($children)
+        <ul class="nav child_menu" style="display: block;">
+        #foreach($child in $children)
+         <li>
+            <a href="#if($!child.url)$!context.contextPath$!child.url#else javascript:;#end">$!child.iconUrl $!child.menuName</a>
+            #childrenMenu($!child.childrenMenu)
+         </li>
+        #end
+        </ul>
+    #end
+#end
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+        <h3></h3>
+        <ul class="nav side-menu">
+        	#foreach($menu in $util.getMenus())
+        		#if($menu.isLeaf == 'Y')
+        		<li><a href="$!context.contextPath$!menu.url">$!menu.iconUrl $!menu.menuName</a></li>
+        		#else
+        			<li><a> $!menu.iconUrl $!menu.menuName <span class="fa fa-chevron-down"></span></a>
+		                #childrenMenu($!menu.childrenMenu)
+		            </li>
+        		#end
+        	#end
+        </ul>
+    </div>
+</div>
+<!-- /menu footer buttons -->
+<div class="sidebar-footer hidden-small">
+    <a data-toggle="tooltip" data-placement="top" title="Settings">
+        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Lock">
+        <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+    </a>
+    <a data-toggle="tooltip" data-placement="top" title="Logout">
+        <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+    </a>
+</div>
+<!-- /menu footer buttons -->

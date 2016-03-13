@@ -1,0 +1,7 @@
+SELECT
+	o.`PASSWORD`
+FROM
+	OPERATOR o
+WHERE
+	1 = 1
+AND o.OPERATOR_ID = :operatorId
