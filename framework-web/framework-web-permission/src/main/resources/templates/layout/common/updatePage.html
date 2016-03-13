@@ -1,0 +1,28 @@
+#set($layout="layout/empty.html")
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="$!context.contextPath/lib/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        #if($supportEvent)
+            window.top.jQuery(window.top.document).trigger('$!supportEvent');
+        #else
+        window.setTimeout(function(){
+            #if($url)
+                window.top.location.href = '$!context.contextPath$!url';
+        #else
+            window.top.location.href = window.top.location.href; 
+        #end
+        }, 1000);
+        #end
+    </script>
+</head>
+<body>
+<div style="text-align: center;">
+    <h1>#if($message)$!message#else操作成功!#end</h1>
+</div>
+</body>
+</html>

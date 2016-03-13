@@ -1,0 +1,75 @@
+#set($layout="layout/empty.html")
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>登录页面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="keywords"
+          content="Flat Dark Web Login Form Responsive Templates, Iphone Widget Template, Smartphone login forms,Login form, Widget Template, Responsive Templates, a Ipad 404 Templates, Flat Responsive Templates"/>
+    <link href="$!context.contextPath/lib/bootstrap-3.3.5/css/bootstrap.min.css"
+          rel='stylesheet' type='text/css'/>
+    <link href="$!context.contextPath/css/login.css"
+          rel='stylesheet' type='text/css'/>
+   <script type="text/javascript">
+   		if(window !== window.top){
+   			window.top.location.href = window.location.href;
+   		}
+   </script>
+</head>
+<body>
+<h1></h1>
+
+<div class="login-form">
+    <div class="head-info">
+        <label class="lbl-1"> </label>
+        <label class="lbl-2"> </label>
+        <label class="lbl-3"> </label>
+    </div>
+    <div class="clear"></div>
+    #if($!message)
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span  aria-hidden="true">&times;</span>
+        </button>
+        $!message
+    </div>
+    #end
+    <form action="$!context.contextPath/login" method="post">
+        <input type="text" name="account" class="text" placeholder="请输入用户名" value="$!username">
+
+        <div class="key">
+            <input type="password" name="password" placeholder="请输入密码">
+        </div>
+        <div class="verifyCode">
+        	<div class="verifyCode2">
+	           <input type="text"  style="padding: 1em 1em 1em 1em;" name="verifyCode" placeholder="请输入验证码">
+	           <img onclick="this.src='$!context.contextPath/common/resource/verifyCode?' + (new Date).getTime()"
+	                src="$!context.contextPath/common/resource/verifyCode">
+	           </img>
+            </div>
+        </div>
+        <div class="signin">
+            <input type="submit" value="登录">
+        </div>
+    </form>
+</div>
+<div class="copy-rights">
+    <p>
+        Copyright <span style="font-family: Arial">©</span> 2015 科技有限公司
+    </p>
+</div>
+
+<script type="text/javascript" src="$!context.contextPath/lib/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="$!context.contextPath/lib/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script type="application/x-javascript">
+    addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    }
+</script>
+</body>
+</html>

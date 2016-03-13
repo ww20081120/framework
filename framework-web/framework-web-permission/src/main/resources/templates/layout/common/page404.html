@@ -1,0 +1,14 @@
+#set($layout="layout/empty.html")
+<!DOCTYPE html>
+#parse("layout/header.vm")
+<body>
+<section class="content">
+    <div class="error-page" style="margin-top: 50px;">
+        <h2 class="headline text-info" style="width: 34%; float: left;"> 404</h2>
+        <div class="error-content" style="width: 65%; float: left; margin-left: 0px;">
+            <h3 style="text-align: left;"><i class="fa fa-warning text-yellow"></i>哎呀！ 找不到网页。</h3>
+            <p>我们无法找到你要找的页面。你可以点此处<a href="$!context.contextPath" target="_top">返回首页</a></p>
+        </div>
+    </div>
+</section>
+</body>

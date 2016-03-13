@@ -1,0 +1,9 @@
+SELECT R.ROLE_ID, R.MODULE_CODE, R.ROLE_NAME, R.CREATE_TIME, R.OPERATOR_ID, R.EXT
+FROM ROLE R
+WHERE 1 = 1
+#if($roleName)
+AND R.ROLE_NAME LIKE :roleName
+#end
+#if($moduleCode)
+AND R.MODULE_CODE = :moduleCode
+#end

@@ -43,15 +43,47 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.hbasesoft</groupId>
+			<artifactId>framework-web-permission</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
+			<!-- 比较常用的打包命令 mvn clean package spring-boot:repackage 只有使用下面的maven命令在cmd窗口启动， 
+				热加载才能生效，如果直接Run运行的Application是 不支持热加载的 mvn clean spring-boot:run -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<dependencies>
+					<!--引入springloaded来实现动态加载 -->
+					<dependency>
+						<groupId>org.springframework</groupId>
+						<artifactId>springloaded</artifactId>
+						<version>1.2.0.RELEASE</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- <mainClass>com.dhgate.rate.ApplicationSearch</mainClass> -->
+					<!--指定监听的端口号 -->
+					<jvmArguments>
+						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=7777
+					</jvmArguments>
+				</configuration>
 			</plugin>
 		</plugins>
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tools>
+    <data type="boolean" key="xhtml" value="true"/>
+    <data type="boolean" key="isSimple" value="true"/>
+    <data type="number" key="version" value="2.0"/>
+    <toolbox scope="request">
+    </toolbox>
+    <toolbox scope="session">
+    </toolbox>
+    <toolbox scope="application">
+        <tool key="util" class="com.hbasesoft.framework.web.permission.utils.VelocityTool"/>
+    </toolbox>
+</tools>
