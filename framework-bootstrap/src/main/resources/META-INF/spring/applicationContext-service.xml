@@ -10,12 +10,9 @@
 
 	<aop:aspectj-autoproxy />
 
-	<!-- 和本地bean一样实现服务 -->
-	<bean id="configService"
-		class="com.hbasesoft.framework.config.core.service.impl.ConfigServiceImpl" />
-
 	<!-- 缓存拦截器 -->
 	<bean id="cacheMethodInterceptor" class="com.hbasesoft.framework.cache.core.annotation.CacheAdvice" />
+	
 	<aop:config>
 		<!--切入点 -->
 		<aop:pointcut id="cachePoint"

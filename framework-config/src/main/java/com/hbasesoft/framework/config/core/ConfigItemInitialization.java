@@ -23,7 +23,6 @@ import com.hbasesoft.framework.config.core.service.DictionaryDataService;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.config <br>
  */
-@Component
 public class ConfigItemInitialization implements StartupListener {
 
     /**

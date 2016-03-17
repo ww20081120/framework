@@ -22,13 +22,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
@@ -59,7 +59,7 @@ public class DBTable2JavaBean extends JFrame {
      * filedNames
      */
     private String[] filedNames = new String[] {
-        "表名", "包名", "输出目录", "模板文件"
+        "表名", "包名", "输出目录", "模板文件", "数据库地址", "用户名", "密码"
     };
 
     /**
@@ -99,7 +99,7 @@ public class DBTable2JavaBean extends JFrame {
         setResizable(false);
         setTitle(TITLE);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(100, 100, 540, 100 + 30 * filedNames.length);
+        setBounds(100, 100, 840, 100 + 30 * filedNames.length);
 
         JPanel panel = new JPanel();
         getContentPane().add(panel, BorderLayout.CENTER);
@@ -109,16 +109,22 @@ public class DBTable2JavaBean extends JFrame {
         JTextField textField = null;
         for (int i = 0; i < filedNames.length; i++) {
             label = new JLabel(filedNames[i]);
-            label.setBounds(40, 13 + (i * 30), 50, 15);
+            label.setBounds(40, 13 + (i * 30), 80, 15);
             panel.add(label);
 
-            textField = new JTextField();
-            textField.setBounds(120, 13 + (i * 30), 250, 20);
+            if (i < filedNames.length - 1) {
+                textField = new JTextField();
+            }
+            else {
+                textField = new JPasswordField();
+            }
+
+            textField.setBounds(120, 13 + (i * 30), 450, 20);
             textFields[i] = textField;
             panel.add(textField);
 
             label = new JLabel("");
-            label.setBounds(380, 13 + (i * 30), 150, 15);
+            label.setBounds(580, 13 + (i * 30), 150, 15);
             label.setForeground(Color.RED);
             tips[i] = label;
             panel.add(label);
@@ -159,10 +165,12 @@ public class DBTable2JavaBean extends JFrame {
         tips[0].setText("表名不填则导出所有的表");
         textFields[1].setText("com.hbasesoft.framework.bootstrap.bean");
         String classPath = this.getClass().getClassLoader().getResource("").getPath();
-        textFields[2].setText(StringUtils.replace(
-            StringUtils.replace(classPath, "/framework-bootstrap/target/classes", "/framework-bootstrap/src/main/java"),
-            "/framework-bootstrap/target/test-classes", "/framework-bootstrap/src/main/java"));
-        textFields[3].setText(classPath + "com/hbasesoft/framework/bootstrap/utils/template.vm");
+        textFields[2].setText(StringUtils.replace(StringUtils.replace(classPath, "/target/classes", "/src/main/java"),
+            "/target/test-classes", "/src/main/java"));
+        textFields[3].setText(StringUtils.replace(classPath, "/target/classes", "/src/main/java") + "com/hbasesoft/framework/db/core/utils/template.vm");
+        textFields[4].setText("jdbc:mysql://ranyinfo.com:3306/web?useUnicode=true&characterEncoding=UTF-8");
+        textFields[5].setText("root");
+        textFields[6].setText("ranyinfo.com");
     }
 
     /**
@@ -178,6 +186,13 @@ public class DBTable2JavaBean extends JFrame {
         String packname = textFields[1].getText();
         String dirstr = textFields[2].getText(); // 空表示当前目录
         String tempPath = textFields[3].getText();
+        if (dataSource == null) {
+            DruidDataSource dbs = new DruidDataSource();
+            dbs.setUrl(textFields[4].getText());
+            dbs.setUsername(textFields[5].getText());
+            dbs.setPassword(textFields[6].getText());
+            dataSource = dbs;
+        }
 
         if (CommonUtil.isEmpty(tempPath) || !new File(tempPath).exists()) {
             tips[3].setText("大侠你的模板文件呢？");
@@ -223,6 +238,7 @@ public class DBTable2JavaBean extends JFrame {
 
         }
         catch (Exception e) {
+            dataSource = null;
             e.printStackTrace();
         }
         finally {
@@ -275,7 +291,8 @@ public class DBTable2JavaBean extends JFrame {
      */
     public void parseTableByShowCreate(Connection conn, String tablename, String packname, String outputdir)
         throws Exception {
-        String className = BeanUtil.toCapitalizeCamelCase(tablename) + "Pojo";
+        String className = BeanUtil.toCapitalizeCamelCase(
+            tablename.toUpperCase().startsWith("T_") ? tablename.substring(2) : tablename) + "Pojo";
         tablename = StringUtils.upperCase(tablename);
         File file = new File(outputdir + "/" + className + ".java");
         if (file.exists()) {
@@ -431,20 +448,13 @@ public class DBTable2JavaBean extends JFrame {
      * @taskId <br>
      * @param args <br>
      */
-    @SuppressWarnings("resource")
     public static void main(String[] args) {
         try {
-            final ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {
-                "/META-INF/spring/applicationContext-init.xml", "/META-INF/spring/applicationContext-dao.xml",
-                "/META-INF/spring/applicationContext-service.xml"
-            });
-
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     try {
                         DBTable2JavaBean frame = new DBTable2JavaBean();
-                        frame.dataSource = context.getBean(DataSource.class);
                         frame.setLocationRelativeTo(null);
                         frame.setVisible(true);
                     }
