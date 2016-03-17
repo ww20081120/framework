@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -59,7 +61,7 @@ public class DBTable2JavaBean extends JFrame {
      * filedNames
      */
     private String[] filedNames = new String[] {
-        "表名", "包名", "输出目录", "模板文件", "数据库地址", "用户名", "密码"
+        "表名", "包名", "输出目录", "模板文件", "数据库地址", "用户名", "密码", "加密后的密码"
     };
 
     /**
@@ -112,11 +114,11 @@ public class DBTable2JavaBean extends JFrame {
             label.setBounds(40, 13 + (i * 30), 80, 15);
             panel.add(label);
 
-            if (i < filedNames.length - 1) {
-                textField = new JTextField();
+            if (i == 6) {
+                textField = new JPasswordField();
             }
             else {
-                textField = new JPasswordField();
+                textField = new JTextField();
             }
 
             textField.setBounds(120, 13 + (i * 30), 450, 20);
@@ -146,12 +148,33 @@ public class DBTable2JavaBean extends JFrame {
         button.setBounds(145, 20 + 30 * filedNames.length, 93, 23);
         panel.add(button);
 
+        textFields[7].setEditable(false);
+        textFields[6].addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                encryptPwd();
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+        });
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 System.exit(0);
             }
         });
+    }
+
+    private void encryptPwd() {
+        textFields[7].setText("ENC(" + ConfigEncryptUtils.encrypt("PBEWithMD5AndDES", textFields[6].getText()) + ")");
     }
 
     /**
@@ -167,10 +190,12 @@ public class DBTable2JavaBean extends JFrame {
         String classPath = this.getClass().getClassLoader().getResource("").getPath();
         textFields[2].setText(StringUtils.replace(StringUtils.replace(classPath, "/target/classes", "/src/main/java"),
             "/target/test-classes", "/src/main/java"));
-        textFields[3].setText(StringUtils.replace(classPath, "/target/classes", "/src/main/java") + "com/hbasesoft/framework/db/core/utils/template.vm");
+        textFields[3].setText(StringUtils.replace(classPath, "/target/classes", "/src/main/java")
+            + "com/hbasesoft/framework/db/core/utils/template.vm");
         textFields[4].setText("jdbc:mysql://ranyinfo.com:3306/web?useUnicode=true&characterEncoding=UTF-8");
         textFields[5].setText("root");
         textFields[6].setText("ranyinfo.com");
+        encryptPwd();
     }
 
     /**
