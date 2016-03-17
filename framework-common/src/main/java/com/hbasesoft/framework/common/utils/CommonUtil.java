@@ -302,7 +302,7 @@ public final class CommonUtil {
         }
         return ids;
     }
-    
+
     public static final Long[] splitIdsByLong(String idStr, String splitor) {
         Long[] ids = null;
         if (CommonUtil.isNotEmpty(idStr)) {
@@ -325,5 +325,25 @@ public final class CommonUtil {
      */
     public static final Integer[] splitId(String idStr) {
         return splitId(idStr, GlobalConstants.SPLITOR);
+    }
+
+    /**
+     * Description: 匹配配置项中是否含有matchValue<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     * @param matchValue <br>
+     * @return <br>
+     */
+    public static boolean match(String key, String matchValue) {
+        boolean ismatch = false;
+        String value = getString(key);
+        if (CommonUtil.isNotEmpty(value) && CommonUtil.isNotEmpty(matchValue)) {
+            ismatch = new StringBuilder().append(GlobalConstants.SPLITOR).append(value).append(GlobalConstants.SPLITOR)
+                .indexOf(new StringBuilder().append(GlobalConstants.SPLITOR).append(matchValue)
+                    .append(GlobalConstants.SPLITOR).toString()) != -1;
+        }
+        return ismatch;
     }
 }

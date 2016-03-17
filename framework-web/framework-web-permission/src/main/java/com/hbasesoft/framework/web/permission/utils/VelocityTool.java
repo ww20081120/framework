@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.hbasesoft.framework.web.core.init.StartupServlet;
-import com.hbasesoft.framework.web.permission.bean.MenuPojo;
-import com.hbasesoft.framework.web.permission.service.MenuService;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.web.permission.bean.MenuPojo;
+import com.hbasesoft.framework.web.permission.service.MenuService;
 
 /**
  * <Description> <br>
@@ -120,7 +120,7 @@ public class VelocityTool {
     }
 
     public List<MenuPojo> getMenus() throws ServiceException {
-        MenuService menuService = StartupServlet.getApplicationContext().getBean(MenuService.class);
+        MenuService menuService = ContextHolder.getContext().getBean(MenuService.class);
         return menuService.queryMenu(ConfigHelper.getModuleCode());
     }
 
