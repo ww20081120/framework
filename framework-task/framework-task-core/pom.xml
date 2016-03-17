@@ -28,7 +28,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft</groupId>
-			<artifactId>framework-config-core</artifactId>
+			<artifactId>framework-config</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

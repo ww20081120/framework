@@ -1,14 +1,24 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.hbasesoft</groupId>
-    <artifactId>framework</artifactId>
-    <version>1.0</version>
-  </parent>
-  <artifactId>framework-config</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>framework-config-api</module>
-  	<module>framework-config-core</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft</groupId>
+		<artifactId>framework</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>framework-config</artifactId>
+	<properties>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.hbasesoft</groupId>
+			<artifactId>framework-db-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft</groupId>
+			<artifactId>framework-db-sh</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+	</dependencies>
 </project>

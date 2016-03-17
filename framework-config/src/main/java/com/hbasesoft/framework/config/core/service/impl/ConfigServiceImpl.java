@@ -9,16 +9,17 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.thrift.TException;
+import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.annotation.Cache;
 import com.hbasesoft.framework.cache.core.annotation.CacheKey;
+import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.config.api.Config;
-import com.hbasesoft.framework.config.api.ConfigService;
+import com.hbasesoft.framework.config.core.bean.Config;
 import com.hbasesoft.framework.config.core.bean.ConfigItemPojo;
 import com.hbasesoft.framework.config.core.dao.ConfigItemDao;
+import com.hbasesoft.framework.config.core.service.ConfigService;
 import com.hbasesoft.framework.db.core.DaoException;
 
 /**
@@ -29,7 +30,8 @@ import com.hbasesoft.framework.db.core.DaoException;
  * @CreateDate 2015年6月22日 <br>
  * @see com.hbasesoft.framework.config.core.service.impl <br>
  */
-public class ConfigServiceImpl implements ConfigService.Iface {
+@Service
+public class ConfigServiceImpl implements ConfigService {
 
     /**
      * configItemDao
@@ -42,7 +44,7 @@ public class ConfigServiceImpl implements ConfigService.Iface {
      * @see com.hbasesoft.framework.config.api.ConfigService.Iface#queryAllConfig(java.lang.String)
      */
     @Override
-    public List<Config> queryAllConfig(String moduleCode) throws TException {
+    public List<Config> queryAllConfig(String moduleCode) throws ServiceException {
         List<Config> configList = new ArrayList<Config>();
         try {
             List<Map<String, Object>> list = configItemDao.selectAll(moduleCode);
@@ -58,7 +60,7 @@ public class ConfigServiceImpl implements ConfigService.Iface {
             }
         }
         catch (DaoException e) {
-            throw new TException(e);
+            throw new ServiceException(e);
         }
         return configList;
     }
@@ -71,7 +73,7 @@ public class ConfigServiceImpl implements ConfigService.Iface {
     @Override
     @Cache(node = CacheConstant.CACHE_KEY_CONFIGITEM)
     public String queryConfig(@CacheKey String moduleCode, @CacheKey String configItemCode, @CacheKey String paramCode)
-        throws TException {
+        throws ServiceException {
         try {
             ConfigItemPojo config = configItemDao.selectConfigItem(moduleCode, configItemCode, paramCode);
             if (config != null) {
@@ -80,25 +82,9 @@ public class ConfigServiceImpl implements ConfigService.Iface {
             }
         }
         catch (DaoException e) {
-            throw new TException(e);
+            throw new ServiceException(e);
         }
         return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.config.api.ConfigService.Iface#updateConfig(com.hbasesoft.framework.config.api.Config)
-     */
-    @Override
-    public void updateConfig(Config config) throws TException {
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.config.api.ConfigService.Iface#addConfig(com.hbasesoft.framework.config.api.Config)
-     */
-    @Override
-    public void addConfig(Config config) throws TException {
     }
 
 }

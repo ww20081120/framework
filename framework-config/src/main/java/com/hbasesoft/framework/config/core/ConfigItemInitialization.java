@@ -4,12 +4,13 @@
 package com.hbasesoft.framework.config.core;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.config.api.ConfigService;
+import com.hbasesoft.framework.config.core.service.ConfigService;
 import com.hbasesoft.framework.config.core.service.DictionaryDataService;
 
 /**
@@ -22,6 +23,7 @@ import com.hbasesoft.framework.config.core.service.DictionaryDataService;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.config <br>
  */
+@Component
 public class ConfigItemInitialization implements StartupListener {
 
     /**
@@ -51,7 +53,7 @@ public class ConfigItemInitialization implements StartupListener {
     @Override
     public void complete(ApplicationContext context) {
         logger.debug("---------------begin ConfigItem init ------------------");
-        ConfigService.Iface configService = context.getBean(ConfigService.Iface.class);
+        ConfigService configService = context.getBean(ConfigService.class);
         Assert.notNull(configService, "未设置ConfigService.Iface的实现类， 配置项不可以使用");
         DictionaryDataService dictionaryDataService = context.getBean(DictionaryDataService.class);
         Assert.notNull(dictionaryDataService, "未设置DictionaryDataService的实现类， 字典数据不可以使用");
@@ -74,12 +76,12 @@ public class ConfigItemInitialization implements StartupListener {
     }
 
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @throws FrameworkException <br>
-     */ 
+     */
     @Override
     public void init() throws FrameworkException {
     }

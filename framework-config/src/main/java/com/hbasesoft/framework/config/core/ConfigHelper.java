@@ -15,8 +15,8 @@ import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.config.api.ConfigService;
 import com.hbasesoft.framework.config.core.bean.DictionaryDataPojo;
+import com.hbasesoft.framework.config.core.service.ConfigService;
 import com.hbasesoft.framework.config.core.service.DictionaryDataService;
 
 /**
@@ -40,7 +40,7 @@ public final class ConfigHelper {
     /**
      * configService
      */
-    private static ConfigService.Iface configService;
+    private static ConfigService configService;
 
     private static DictionaryDataService dictionaryDataService;
 
@@ -140,7 +140,7 @@ public final class ConfigHelper {
     public static int getInt(String key) {
         return Integer.valueOf(getString(key));
     }
-    
+
     /**
      * 根据key获取配置值：整型
      * 
@@ -176,7 +176,7 @@ public final class ConfigHelper {
         return CommonUtil.isEmpty(value) ? defaultValue : Long.valueOf(value);
     }
 
-    public static void setConfigService(ConfigService.Iface configService) {
+    public static void setConfigService(ConfigService configService) {
         ConfigHelper.configService = configService;
     }
 
