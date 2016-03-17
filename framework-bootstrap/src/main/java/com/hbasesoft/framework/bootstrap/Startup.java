@@ -33,7 +33,7 @@ import com.hbasesoft.framework.config.core.ConfigHelper;
  * @see com.hbasesoft.framework.bootstrap <br>
  */
 @EnableAutoConfiguration
-@ComponentScan(basePackages="com.hbasesoft")
+@ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
 public class Startup {
 
@@ -95,9 +95,8 @@ public class Startup {
         logger.info("**********************************************************");
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
-            .append("*         ").append(ManagementFactory.getRuntimeMXBean().getName()).append("        *")
-            .append('\n').append("*            ").append(ConfigHelper.getModuleCode()).append("模块启动成功！")
-            .append("                                   *").append('\n')
+            .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n')
+            .append("            ").append(ConfigHelper.getModuleCode()).append("模块启动成功！").append('\n')
             .append("***************************************"));
 
         if (CommonUtil.isNotEmpty(listenerList)) {
@@ -106,7 +105,7 @@ public class Startup {
             }
         }
 
-        logger.info("====================>系统正常停止运行<====================");
+        logger.info("====================>系统正常启动<====================");
     }
 
     public static ApplicationContext getContext() {
