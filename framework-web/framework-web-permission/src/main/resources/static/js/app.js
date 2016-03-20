@@ -307,11 +307,7 @@ $(function () {
 /** ******  scrollview  *********************** **/
 $(document).ready(function () {
     $('img').on('error', function () {
-<<<<<<< HEAD
         this.src = BASEPATH + '/img/headimg.jpg';
-=======
-        this.src = BASEPATH + '/assets/img/headimg.jpg';
->>>>>>> cfa04276dad25de64c6f40c336dcb7d2713d08e4
     });
     /*
      $(".scroll-view").niceScroll({

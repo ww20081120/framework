@@ -22,6 +22,7 @@
 		<module>framework-log</module>
 		<module>framework-config</module>
 		<module>framework-bootstrap</module>
+		<module>framework-web</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
