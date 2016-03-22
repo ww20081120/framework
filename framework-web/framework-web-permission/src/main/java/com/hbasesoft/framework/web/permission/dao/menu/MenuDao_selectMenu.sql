@@ -7,7 +7,7 @@ SELECT  M.RESOURCE_ID,
 		M.URL, 
 		M.IS_LEAF, 
 		M.ICON_URL
-FROM MENU M
+FROM T_MANAGER_MENU M
 WHERE 1=1
 #if($moduleCodes)
 	AND M.MODULE_CODE = :moduleCode

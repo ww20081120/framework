@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,7 @@ public class DutyController extends BaseController {
     @Resource
     private OrgService orgService;
 
+    @RequiresPermissions("duty:query")
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public Map<String, Object> list() throws FrameworkException {
@@ -61,6 +63,7 @@ public class DutyController extends BaseController {
         return result;
     }
 
+    @RequiresPermissions("duty:add")
     @RequestMapping(value = "/toAdd")
     public ModelAndView toAdd(ModelAndView modelAndView) throws FrameworkException {
         Long orgId = getLongParameter("orgId", "没有选择组织信息");
@@ -71,6 +74,7 @@ public class DutyController extends BaseController {
         return modelAndView;
     }
 
+    @RequiresPermissions("duty:add")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView add(DutyPojo dutyPojo) throws FrameworkException {
         Assert.notNull(dutyPojo, "岗位信息不存在");
@@ -80,6 +84,7 @@ public class DutyController extends BaseController {
         return success("新增岗位信息成功。");
     }
 
+    @RequiresPermissions("duty:remove")
     @ResponseBody
     @RequestMapping(value = "/remove/{dutyId}", method = RequestMethod.POST)
     public Map<String, Object> remove(@PathVariable("dutyId") Long dutyId) throws FrameworkException {
@@ -89,6 +94,7 @@ public class DutyController extends BaseController {
         return checkResult(true);
     }
 
+    @RequiresPermissions("duty:modify")
     @RequestMapping(value = "/toModify/{dutyId}")
     public String toModify(@PathVariable("dutyId") Long dutyId, ModelMap modelMap) throws FrameworkException {
         DutyPojo duty = dutyService.queryDuty(dutyId);
@@ -97,6 +103,7 @@ public class DutyController extends BaseController {
         return PAGE_MODIFY;
     }
 
+    @RequiresPermissions("duty:modify")
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public ModelAndView modify(DutyPojo dutyPojo) throws FrameworkException {
         Assert.notNull(dutyPojo, "岗位信息不存在");

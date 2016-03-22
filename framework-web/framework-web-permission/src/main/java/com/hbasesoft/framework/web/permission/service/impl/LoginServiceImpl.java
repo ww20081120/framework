@@ -7,32 +7,29 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
+import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.web.core.bean.OperatorPojo;
 import com.hbasesoft.framework.web.core.utils.WebUtil;
 import com.hbasesoft.framework.web.permission.PermissionConstant;
 import com.hbasesoft.framework.web.permission.bean.AccountPojo;
-import com.hbasesoft.framework.web.permission.bean.AdminPojo;
+import com.hbasesoft.framework.web.permission.bean.LoginResult;
 import com.hbasesoft.framework.web.permission.bean.RoleResourcePojo;
 import com.hbasesoft.framework.web.permission.dao.admin.AccountDao;
 import com.hbasesoft.framework.web.permission.dao.admin.AdminDao;
 import com.hbasesoft.framework.web.permission.dao.admin.OperatorDao;
+import com.hbasesoft.framework.web.permission.dao.duty.DutyDao;
 import com.hbasesoft.framework.web.permission.dao.role.RoleResourceDao;
-import com.hbasesoft.framework.web.permission.service.LoginResult;
 import com.hbasesoft.framework.web.permission.service.LoginService;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.config.core.ConfigHelper;
-import com.hbasesoft.framework.db.core.DaoException;
 
 /**
  * <Description> <br>
@@ -61,36 +58,24 @@ public class LoginServiceImpl implements LoginService {
     @Resource
     private RoleResourceDao roleResourceDao;
 
+    @Resource
+    private DutyDao dutyDao;
+
     @Override
-    public LoginResult login(HttpServletRequest request, String username, String password) {
+    public LoginResult login(String username, String password) {
         LoginResult result = LoginResult.LOGIN_SUCCESS;
         try {
-            AccountPojo accountPojo = queryAccountPojo(username);
-            if (null == accountPojo) {
-                logger.info("User account isn't exist. [Username = {0}].", username);
-                return LoginResult.USER_INCORRECT;
-            }
-
-            OperatorPojo operatorPojo = queryOperatorPojo(accountPojo.getOperatorId());
+            OperatorPojo operatorPojo = operatorDao.getOperatorByAccount(username, AccountPojo.ACCOUNT_TYPE_PLATFORM);
             if (null == operatorPojo) {
-                logger.info("User operator isn't exist. [Username = {0}, Operator ID = {1}].", username,
-                    accountPojo.getOperatorId());
+                logger.info("User operator isn't exist. [Username = {0}].", username);
                 return LoginResult.USER_INCORRECT;
             }
 
             // 密码正确性
-            if (!StringUtils.equals(CommonUtil.md5(password), operatorPojo.getPassword())) {
+            if (DataUtil.matchPassword(operatorPojo.getPassword(), DataUtil.encryptPassowrd(password))) {
                 logger.info("User account password incorrect. [Username = {0}].", username);
                 modifyLoginFailedNum(username, operatorPojo);
                 return LoginResult.USER_INCORRECT;
-            }
-
-            // 帐号状态
-            if (!isAdmin(username)
-                && !StringUtils.equals(PermissionConstant.STATE_AVAILABLE, operatorPojo.getState())) {
-                logger.info("User account status incorrect. [Username = {0}].", username);
-                modifyLoginFailedNum(username, operatorPojo);
-                return LoginResult.USER_STATUS_INCORRECT;
             }
 
             // 是否锁定
@@ -107,7 +92,7 @@ public class LoginServiceImpl implements LoginService {
             }
 
             // 登录OK
-            loginSuccessHandler(request, operatorPojo, accountPojo);
+            loginSuccessHandler(operatorPojo);
 
         }
         catch (Exception e) {
@@ -119,52 +104,28 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void logout() {
-        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
-        if (requestAttr instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
-            HttpSession session = request.getSession();
-            session.removeAttribute(PermissionConstant.SESSION_OPERATOR);
-            session.removeAttribute(PermissionConstant.SESSION_ADMIN);
-            session.removeAttribute(PermissionConstant.SESSION_PERMISSIONS);
-            session.removeAttribute(PermissionConstant.SESSION_PERMISSIONS_DATA);
-            session.invalidate();
-        }
+        SecurityUtils.getSubject().logout();
     }
 
-    private void loginSuccessHandler(HttpServletRequest request, OperatorPojo operatorPojo, AccountPojo accountPojo)
-        throws DaoException {
-        //
+    private void loginSuccessHandler(OperatorPojo operatorPojo) throws DaoException {
         operatorPojo.setLoginFail(0);
         operatorPojo.setIsLocked(PermissionConstant.NO);
-        operatorPojo.setLastIp(WebUtil.getRemoteIP(request));
+        operatorPojo.setLastIp(WebUtil.getRemoteIP());
         operatorPojo.setLastLoginDate(new Date());
         operatorDao.update(operatorPojo);
 
         WebUtil.setAttribute(PermissionConstant.SESSION_OPERATOR, operatorPojo);
-        WebUtil.setAttribute(PermissionConstant.SESSION_ACCOUNT, accountPojo);
-        WebUtil.setAttribute(PermissionConstant.SESSION_ADMIN, queryAdminPojo(operatorPojo.getOperatorId()));
+        WebUtil.setAttribute(PermissionConstant.SESSION_ADMIN,
+            adminDao.getAdminByOperatorId(operatorPojo.getOperatorId()));
 
-        setPermission(operatorPojo.getDutyId());
-    }
-
-    private void setPermission(Long dutyId) throws DaoException {
-        Set<String> permissions = new HashSet<String>();
-        Set<Long> dataPermissions = new HashSet<Long>();
-        List<RoleResourcePojo> permissionList = roleResourceDao.selectListRoleResourceByDutyId(dutyId,
-            ConfigHelper.getModuleCode());
-        if (CommonUtil.isNotEmpty(permissionList)) {
-            for (RoleResourcePojo resourcePojo : permissionList) {
-                String resourceId = String.valueOf(resourcePojo.getResourceId());
-                if (StringUtils.equals(RoleResourcePojo.RESOURCE_TYPE_MENU, resourcePojo.getResourceType())) {
-                    permissions.add(resourceId);
-                }
-                else if (StringUtils.equals(RoleResourcePojo.RESOURCE_TYPE_ORG, resourcePojo.getResourceType())) {
-                    dataPermissions.add(NumberUtils.toLong(resourceId));
-                }
+        Set<String> roleCodeSet = new HashSet<String>();
+        List<Long> roleIds = dutyDao.selectListDutyRole(operatorPojo.getDutyId());
+        if (CommonUtil.isNotEmpty(roleIds)) {
+            for (Long roleId : roleIds) {
+                roleCodeSet.add(roleId.toString());
             }
         }
-        WebUtil.setAttribute(PermissionConstant.SESSION_PERMISSIONS, permissions);
-        WebUtil.setAttribute(PermissionConstant.SESSION_PERMISSIONS_DATA, dataPermissions);
+        WebUtil.setAttribute(PermissionConstant.SESSION_ROLE_DATA, roleCodeSet);
     }
 
     private void modifyLoginFailedNum(String username, OperatorPojo operatorPojo) throws DaoException {
@@ -198,19 +159,31 @@ public class LoginServiceImpl implements LoginService {
         return now.compareTo(expire) > 0;
     }
 
-    private OperatorPojo queryOperatorPojo(Integer operatorId) throws DaoException {
-        return operatorDao.getById(OperatorPojo.class, operatorId);
-    }
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param dutyId
+     * @return
+     * @throws ServiceException <br>
+     */
+    @Override
+    public Set<String> queryPermissionByDutyId(Long dutyId) throws ServiceException {
+        Set<String> permissions = new HashSet<String>();
 
-    private AccountPojo queryAccountPojo(String username) throws DaoException {
-        AccountPojo paramPojo = new AccountPojo();
-        paramPojo.setAccountValue(username);
-        return accountDao.getByEntity(paramPojo);
-    }
-
-    private AdminPojo queryAdminPojo(Integer operatorId) throws DaoException {
-        AdminPojo paramPojo = new AdminPojo();
-        paramPojo.setOperatorId(operatorId);
-        return adminDao.getByEntity(paramPojo);
+        List<RoleResourcePojo> permissionList;
+        try {
+            permissionList = roleResourceDao.selectListRoleResourceByDutyId(dutyId, ConfigHelper.getModuleCode());
+            if (CommonUtil.isNotEmpty(permissionList)) {
+                for (RoleResourcePojo resourcePojo : permissionList) {
+                    permissions.add(resourcePojo.getResourceCode());
+                }
+            }
+        }
+        catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return permissions;
     }
 }

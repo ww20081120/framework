@@ -1,1 +1,0 @@
-SELECT * from ADMIN WHERE ADMIN_NAME= :name;

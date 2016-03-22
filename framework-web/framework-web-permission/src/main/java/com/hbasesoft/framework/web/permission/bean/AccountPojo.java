@@ -1,5 +1,7 @@
 package com.hbasesoft.framework.web.permission.bean;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,25 +10,16 @@ import javax.persistence.Id;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
 
-import java.util.Date;
-
-
-@Entity(name = "ACCOUNT")
+@Entity(name = "T_MANAGER_ACCOUNT")
 public class AccountPojo extends BaseEntity {
+
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 2430909211887634023L;
 
     /** 平台 */
     public static final String ACCOUNT_TYPE_PLATFORM = "P";
-
-    public static final String ACCOUNT_TYPE_MOBILE = "M";
-
-    public static final String ACCOUNT_TYPE_EMAIL = "E";
-    
-
-    
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
 
     /** ACCOUNT_ID */
     @Id

@@ -16,7 +16,7 @@ import java.util.Date;
  * @see com.hbasesoft.framework.web.manager.bean.permission <br>
  * @since V1.0<br>
  */
-@Entity(name = "ORG")
+@Entity(name = "T_MANAGER_ORG")
 public class OrgPojo extends BaseEntity {
 
     private static final long serialVersionUID = -6789259933021333230L;

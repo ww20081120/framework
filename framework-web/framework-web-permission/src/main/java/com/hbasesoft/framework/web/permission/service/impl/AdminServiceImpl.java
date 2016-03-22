@@ -10,6 +10,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
+import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.web.core.bean.OperatorPojo;
 import com.hbasesoft.framework.web.core.utils.WebUtil;
 import com.hbasesoft.framework.web.permission.PermissionConstant;
@@ -19,12 +26,6 @@ import com.hbasesoft.framework.web.permission.dao.admin.AccountDao;
 import com.hbasesoft.framework.web.permission.dao.admin.AdminDao;
 import com.hbasesoft.framework.web.permission.dao.admin.OperatorDao;
 import com.hbasesoft.framework.web.permission.service.AdminService;
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.db.core.DaoException;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -51,8 +52,9 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void addAdmin(AdminPojo adminPojo) throws ServiceException {
         try {
-            if (null != operatorDao.getOperatorByAccount(adminPojo.getOperatorPojo().getUserName())) {
-                throw new ServiceException(ErrorCodeDef.ACCOUNT_EXSIST_20004, "账号已经存在");
+            if (null != operatorDao.getOperatorByAccount(adminPojo.getOperatorPojo().getUserName(),
+                AccountPojo.ACCOUNT_TYPE_PLATFORM)) {
+                throw new ServiceException(ErrorCodeDef.ACCOUNT_EXSIST, "账号已经存在");
             }
 
             setOperator(adminPojo.getOperatorPojo());
@@ -203,21 +205,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     /** 重置密码 */
-    public void modifyPwd(String new_password, Integer adminId) {
+    public void modifyPwd(String newPassword, Integer adminId) throws ServiceException {
         try {
             AdminPojo admin = adminDao.getById(AdminPojo.class, adminId);
             logger.info("admin.getOperatorId()*****" + admin.getOperatorId());
-            operatorDao.updateOperatorPassword(admin.getOperatorId(), CommonUtil.md5(new_password));
+            operatorDao.updateOperatorPassword(admin.getOperatorId(), DataUtil.encryptPassowrd(newPassword));
             logger.info("重置密码成功");
         }
-        catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
         catch (DaoException e) {
-            e.printStackTrace();
-        }
-        catch (UtilException e) {
-            e.printStackTrace();
+            throw new ServiceException(e);
         }
     }
 
@@ -256,36 +252,32 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         catch (DaoException e) {
-            logger.error("", e);
+            logger.error(e.getMessage(), e);
         }
         return result;
     }
 
     @Override
-    public AdminPojo getOne(Integer operatorId) throws ServiceException {
-        AdminPojo admin = new AdminPojo();
+    public AdminPojo getAdminByOperatorId(Integer operatorId) throws ServiceException {
         try {
-            admin = adminDao.getOne(operatorId);
+            return adminDao.getAdminByOperatorId(operatorId);
         }
         catch (DaoException e) {
-            e.printStackTrace();
+            throw new ServiceException(e);
         }
-        return admin;
     }
 
     @Override
     public boolean checkPwd(Integer operatorId, String passwprd) throws ServiceException {
-        boolean result = false;
         try {
-            result = CommonUtil.md5(passwprd).equals(adminDao.checkPwd(operatorId));
+            return CommonUtil.md5(passwprd).equals(adminDao.checkPwd(operatorId));
         }
         catch (DaoException e) {
-            e.printStackTrace();
+            throw new ServiceException(e);
         }
         catch (UtilException e) {
-            e.printStackTrace();
+            throw new ServiceException(e);
         }
-        return result;
     }
 
 }

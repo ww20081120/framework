@@ -13,8 +13,7 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,18 +24,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.web.core.controller.BaseController;
 import com.hbasesoft.framework.web.core.utils.WebUtil;
 import com.hbasesoft.framework.web.permission.PermissionConstant;
 import com.hbasesoft.framework.web.permission.bean.RolePojo;
 import com.hbasesoft.framework.web.permission.bean.RoleResourcePojo;
 import com.hbasesoft.framework.web.permission.service.RoleManagerService;
-import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.db.core.utils.PagerList;
 
 /**
  * <Description> <br>
@@ -68,6 +66,7 @@ public class RoleManagerController extends BaseController {
      * @taskId <br>
      * @return <br>
      */
+    @RequiresPermissions("role:query")
     @RequestMapping(method = RequestMethod.GET)
     public String toRole() {
         return PAGE_INDEX;
@@ -81,6 +80,7 @@ public class RoleManagerController extends BaseController {
      * @return <br>
      * @throws ServiceException
      */
+    @RequiresPermissions("role:query")
     @ResponseBody
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     public Map<String, Object> query() throws ServiceException {
@@ -103,6 +103,7 @@ public class RoleManagerController extends BaseController {
      * @return <br>
      * @throws ServiceException
      */
+    @RequiresPermissions("role:query")
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public List<RolePojo> list() throws FrameworkException {
@@ -119,6 +120,7 @@ public class RoleManagerController extends BaseController {
      * @return
      * @throws FrameworkException <br>
      */
+    @RequiresPermissions("role:query")
     @RequestMapping(value = "/query/{roleId}", method = RequestMethod.POST)
     public ModelAndView query(@PathVariable("roleId") Integer roleId, ModelMap map) throws FrameworkException {
         Assert.notNull(roleId, "角色标识不能为空");
@@ -136,6 +138,7 @@ public class RoleManagerController extends BaseController {
      * @taskId <br>
      * @return <br>
      */
+    @RequiresPermissions("role:add")
     @RequestMapping(value = "/toAdd", method = RequestMethod.GET)
     public String toAdd() {
         return PAGE_ADD;
@@ -148,6 +151,7 @@ public class RoleManagerController extends BaseController {
      * @taskId <br>
      * @return <br>
      */
+    @RequiresPermissions("role:add")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView add() throws FrameworkException {
         String roleName = getParameter("roleName", "角色名称不能为空");
@@ -188,6 +192,7 @@ public class RoleManagerController extends BaseController {
      * @return
      * @throws FrameworkException <br>
      */
+    @RequiresPermissions("role:modify")
     @RequestMapping(value = "/toModify/{roleId}", method = RequestMethod.GET)
     public ModelAndView toModify(@PathVariable("roleId") Integer roleId, ModelMap map) throws FrameworkException {
         Assert.notNull(roleId, "角色标识不能为空");
@@ -206,6 +211,7 @@ public class RoleManagerController extends BaseController {
      * @return <br>
      * @throws FrameworkException
      */
+    @RequiresPermissions("role:modify")
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public ModelAndView modify() throws FrameworkException {
         Integer roleId = Integer.parseInt(getParameter("roleId", "角色标识不能为空"));
@@ -246,6 +252,7 @@ public class RoleManagerController extends BaseController {
      * @throws FrameworkException
      */
     @ResponseBody
+    @RequiresPermissions("role:remove")
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public Map<String, Object> remove() throws FrameworkException {
         String ids = getParameter("ids", "删除的角色标识不能为空");

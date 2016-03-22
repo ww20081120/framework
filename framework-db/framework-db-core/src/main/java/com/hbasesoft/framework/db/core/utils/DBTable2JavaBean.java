@@ -36,6 +36,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.date.DateConstants;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 
 /**
  * <Description> 此类用来将mysql的表直接生成Bean<br>
@@ -174,7 +175,7 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     private void encryptPwd() {
-        textFields[7].setText("ENC(" + ConfigEncryptUtils.encrypt("PBEWithMD5AndDES", textFields[6].getText()) + ")");
+        textFields[7].setText("ENC(" + DataUtil.encrypt(textFields[6].getText()) + ")");
     }
 
     /**

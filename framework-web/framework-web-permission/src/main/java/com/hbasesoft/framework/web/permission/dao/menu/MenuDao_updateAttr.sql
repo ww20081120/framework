@@ -1,4 +1,4 @@
-UPDATE MENU M
+UPDATE T_MANAGER_MENU M
    SET M.MENU_NAME = :pojo.menuName,
    #if($pojo.url)
 			 M.URL = :pojo.url,

@@ -2,8 +2,8 @@ package com.hbasesoft.framework.web.permission.service;
 
 import java.util.List;
 
-import com.hbasesoft.framework.web.permission.bean.AdminPojo;
 import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.web.permission.bean.AdminPojo;
 
 public interface AdminService {
 
@@ -19,7 +19,6 @@ public interface AdminService {
      *
      * @param bean
      * @throws ServiceException <br>
-     * @author XXX<br>
      * @taskId <br>
      */
     void addAdmin(AdminPojo adminPojo) throws ServiceException;
@@ -28,7 +27,6 @@ public interface AdminService {
      * Description: <br>
      *
      * @throws ServiceException
-     * @author XXX<br>
      * @taskId <br>
      *         <br>
      */
@@ -45,13 +43,13 @@ public interface AdminService {
      * @author ymy<br>
      * @taskId <br>
      */
-    void modifyPwd(String new_password, Integer adminId);
+    void modifyPwd(String newPassword, Integer adminId) throws ServiceException;
 
     boolean checkOperatorName(String operatorName);
 
     boolean checkAdminName(String adminId, String adminNam);
 
-    AdminPojo getOne(Integer operatorId) throws ServiceException;
+    AdminPojo getAdminByOperatorId(Integer operatorId) throws ServiceException;
 
     boolean checkPwd(Integer operatorId, String password) throws ServiceException;
 

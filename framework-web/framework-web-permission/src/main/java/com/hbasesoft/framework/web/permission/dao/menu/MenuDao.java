@@ -45,12 +45,10 @@ public interface MenuDao extends IGenericBaseDao {
      */
     void updateSeq(@Param("menu") MenuPojo menu) throws DaoException;
 
-    MenuPojo getById(@Param("id") Long id) throws DaoException;
-
     Long getSeq(@Param("parentResourceId") Long parentResourceId) throws DaoException;
 
     int updateAttr(@Param("pojo") MenuPojo pojo) throws DaoException;
 
-    @Sql(value = "DELETE FROM MENU WHERE RESOURCE_ID IN :ids")
+    @Sql(value = "DELETE FROM T_MANAGER_MENU WHERE RESOURCE_ID IN :ids")
     int deleteByIds(@Param("ids") Long[] ids) throws DaoException;
 }

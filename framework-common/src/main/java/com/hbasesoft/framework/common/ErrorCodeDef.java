@@ -160,40 +160,40 @@ public interface ErrorCodeDef {
 
     /** 加载模块失败 */
     int MODULE_LOADER_ERROR = 10046;
+    
+    /** 不能为空 */
+    int NOT_NULL = 10047;
+
+    /** 必须为空 */
+    int IS_NULL = 10048;
 
     /************************************************************************************
      * ---------------------------------用户错误区域 必须大于20000的5位数-------------------------------------------
      ************************************************************************************/
 
     /** access token 过期 */
-    int ACCESS_TOKEN_EXPIRED_20001 = 20001;
+    int ACCESS_TOKEN_EXPIRED = 20001;
 
     /** 用户名或密码错误 */
-    int USER_NAME_OR_PASSWORD_ERROR_20002 = 20002;
+    int USER_NAME_OR_PASSWORD_ERROR = 20002;
 
     /** 资源ID为找到 */
-    int RESOURCE_ID_ERROR_20003 = 20003;
+    int RESOURCE_ID_ERROR = 20003;
 
     /** 账号已经存在 */
-    int ACCOUNT_EXSIST_20004 = 20004;
-
-    /** 不能为空 */
-    int NOT_NULL_20005 = 20005;
-
-    /** 必须为空 */
-    int IS_NULL_20006 = 20006;
+    int ACCOUNT_EXSIST = 20004;
 
     /** 操作员不存在 */
-    int OPERATOR_NOT_EXSIST_20007 = 20007;
+    int OPERATOR_NOT_EXSIST = 20007;
 
     /** 账号已锁定 */
-    int ACCOUNT_IS_LOCK_20008 = 20008;
+    int ACCOUNT_IS_LOCK = 20008;
 
     /** 状态错误 */
-    int STATE_ERROR_20009 = 20009;
+    int STATE_ERROR = 20009;
 
     /** 不支持的媒体类型 */
-    int UNSPORT_MEDIA_TYPE_20010 = 20010;
+    int UNSPORT_MEDIA_TYPE = 20010;
 
     /** 文件大小超限 */
     int FILE_IS_TO_LARGER_20011 = 20011;

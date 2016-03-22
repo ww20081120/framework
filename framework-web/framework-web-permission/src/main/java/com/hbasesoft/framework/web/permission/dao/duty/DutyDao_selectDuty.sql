@@ -5,7 +5,7 @@ SELECT D.DUTY_ID,
        D.CREATE_TIME,
        D.EXT,
        O.ORG_NAME
-  FROM DUTY D, ORG O
+  FROM T_MANAGER_DUTY D, T_MANAGER_ORG O
   WHERE D.ORG_ID = O.ORG_ID
     AND D.STATE = 'A'
   #if($orgId)

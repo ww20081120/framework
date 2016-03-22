@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
+import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.web.core.controller.BaseController;
 import com.hbasesoft.framework.web.permission.bean.OrgPojo;
 import com.hbasesoft.framework.web.permission.service.OrgService;
-import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.utils.Assert;
 
 /**
  * <Description> <br>
@@ -44,11 +46,13 @@ public class OrgController extends BaseController {
     @Resource
     private OrgService orgService;
 
+    @RequiresPermissions("org:query")
     @RequestMapping(method = RequestMethod.GET)
     public String index() {
         return PAGE_INDEX;
     }
 
+    @RequiresPermissions("org:list")
     @ResponseBody
     @RequestMapping("/list")
     public String list() throws FrameworkException {
@@ -56,6 +60,7 @@ public class OrgController extends BaseController {
         return JSON.toJSONString(orgService.listOrg(), filter, SerializerFeature.WriteMapNullValue);
     }
 
+    @RequiresPermissions("org:add")
     @RequestMapping(value = "/toAdd")
     public ModelAndView toAdd(ModelAndView modelAndView) throws FrameworkException {
         Long parentOrgId = getLongParameter("parentOrgId");
@@ -69,6 +74,7 @@ public class OrgController extends BaseController {
         return modelAndView;
     }
 
+    @RequiresPermissions("org:add")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView add(OrgPojo orgPojo) throws FrameworkException {
         Assert.notNull(orgPojo, "组织信息不存在");
@@ -78,6 +84,7 @@ public class OrgController extends BaseController {
         return success("新增组织信息成功!");
     }
 
+    @RequiresPermissions("org:remove")
     @ResponseBody
     @RequestMapping(value = "/remove/{orgId}", method = RequestMethod.POST)
     public Map<String, Object> remove(@PathVariable("orgId") Long orgId) throws FrameworkException {
@@ -85,6 +92,7 @@ public class OrgController extends BaseController {
         return checkResult(true);
     }
 
+    @RequiresPermissions("org:modify")
     @RequestMapping(value = "/toModify/{orgId}")
     public String toModify(@PathVariable("orgId") Long orgId, ModelMap modelMap) throws FrameworkException {
         OrgPojo pojo = orgService.queryOrg(orgId);
@@ -97,6 +105,7 @@ public class OrgController extends BaseController {
         return PAGE_MODIFY;
     }
 
+    @RequiresPermissions("org:modify")
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public ModelAndView modify(OrgPojo orgPojo) throws FrameworkException {
         Assert.notNull(orgPojo, "组织信息不存在");
@@ -106,6 +115,7 @@ public class OrgController extends BaseController {
         return success("修改组织信息成功!");
     }
 
+    @RequiresAuthentication
     @ResponseBody
     @RequestMapping(value = "/checkCode/{orgCode}")
     public Map<String, Object> checkCode(@PathVariable("orgCode") String orgCode) {

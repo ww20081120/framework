@@ -26,6 +26,6 @@ public interface OrgDao extends IGenericBaseDao {
     List<OrgPojo> selectList(@Param("parentOrgId") Long parentOrgIds, @Param(Param.PAGE_INDEX) Integer pageIndex,
         @Param(Param.PAGE_SIZE) Integer pageSize) throws DaoException;
 
-    @Sql(value = "UPDATE ORG SET STATE = 'X' WHERE ORG_ID = :orgId")
+    @Sql(value = "UPDATE T_MANAGER_ORG SET STATE = 'X' WHERE ORG_ID = :orgId")
     int deleteById(@Param("orgId") Long orgId);
 }

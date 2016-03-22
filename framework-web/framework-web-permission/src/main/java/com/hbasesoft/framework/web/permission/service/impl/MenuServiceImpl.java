@@ -18,11 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
-import com.hbasesoft.framework.web.permission.PermissionConstant;
-import com.hbasesoft.framework.web.permission.bean.MenuPojo;
-import com.hbasesoft.framework.web.permission.dao.menu.MenuDao;
-import com.hbasesoft.framework.web.permission.dao.role.RoleResourceDao;
-import com.hbasesoft.framework.web.permission.service.MenuService;
 import com.hbasesoft.framework.cache.core.annotation.Cache;
 import com.hbasesoft.framework.cache.core.annotation.CacheKey;
 import com.hbasesoft.framework.cache.core.annotation.CacheType;
@@ -34,6 +29,11 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.config.core.dao.ModuleDao;
 import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.web.permission.PermissionConstant;
+import com.hbasesoft.framework.web.permission.bean.MenuPojo;
+import com.hbasesoft.framework.web.permission.dao.menu.MenuDao;
+import com.hbasesoft.framework.web.permission.dao.role.RoleResourceDao;
+import com.hbasesoft.framework.web.permission.service.MenuService;
 
 /**
  * <Description> <br>
@@ -234,7 +234,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuPojo queryById(Long resourceId) throws ServiceException {
         try {
-            return menuDao.getById(resourceId);
+            return menuDao.getById(MenuPojo.class, resourceId);
         }
         catch (DaoException e) {
             throw new ServiceException(e);

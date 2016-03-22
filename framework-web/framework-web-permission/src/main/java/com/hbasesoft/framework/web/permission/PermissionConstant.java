@@ -1,7 +1,7 @@
 package com.hbasesoft.framework.web.permission;
 
-import com.hbasesoft.framework.web.core.WebConstant;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.web.core.WebConstant;
 
 /**
  * <Description> <br>
@@ -15,11 +15,11 @@ import com.hbasesoft.framework.common.GlobalConstants;
  */
 public interface PermissionConstant extends WebConstant, GlobalConstants {
 
-    String SESSION_ACCOUNT = "SESSION_ACCOUNT__";
-
     String SESSION_ADMIN = "SESSION_ADMIN__";
 
     String SESSION_PERMISSIONS_DATA = "SESSION_PERMISSIONS_DATA__";
+
+    String SESSION_ROLE_DATA = "ROLE_DATA__";
 
     String DIRECTORY_URL = "DIR_URL";
 
