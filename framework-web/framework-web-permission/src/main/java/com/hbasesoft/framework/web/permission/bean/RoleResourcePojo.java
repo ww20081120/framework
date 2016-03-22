@@ -15,49 +15,61 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  */
 public class RoleResourcePojo extends BaseEntity {
 
-    public static final String RESOURCE_TYPE_MENU = "01";
+	public static final String RESOURCE_TYPE_MENU = "01";
 
-    public static final String RESOURCE_TYPE_ORG = "02";
+	public static final String RESOURCE_TYPE_ORG = "02";
 
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /** ROLE_ID */
-    @Column(name = "ROLE_ID")
-    private Integer roleId;
+	/** ROLE_ID */
+	@Column(name = "ROLE_ID")
+	private Integer roleId;
 
-    /** RESOURCE_ID */
-    @Column(name = "RESOURCE_ID")
-    private Integer resourceId;
+	/** RESOURCE_ID */
+	@Column(name = "RESOURCE_ID")
+	private Integer resourceId;
 
-    /** RESOURCE_TYPE */
-    @Column(name = "RESOURCE_TYPE")
-    private String resourceType;
+	/** RESOURCE_TYPE */
+	@Column(name = "RESOURCE_TYPE")
+	private String resourceType;
 
-    public Integer getRoleId() {
-        return this.roleId;
-    }
+	/** RESOURCE_TYPE */
+	@Column(name = "RESOURCE_CODE")
+	private String resourceCode;
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
+	public Integer getRoleId() {
+		return this.roleId;
+	}
 
-    public Integer getResourceId() {
-        return this.resourceId;
-    }
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
 
-    public void setResourceId(Integer resourceId) {
-        this.resourceId = resourceId;
-    }
+	public Integer getResourceId() {
+		return this.resourceId;
+	}
 
-    public String getResourceType() {
-        return this.resourceType;
-    }
+	public void setResourceId(Integer resourceId) {
+		this.resourceId = resourceId;
+	}
 
-    public void setResourceType(String resourceType) {
-        this.resourceType = resourceType;
-    }
+	public String getResourceType() {
+		return this.resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public String getResourceCode() {
+		return resourceCode;
+	}
+
+	public void setResourceCode(String resourceCode) {
+		this.resourceCode = resourceCode;
+	}
 
 }

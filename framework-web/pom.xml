@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-	    <groupId>com.hbasesoft.framework</groupId>
-	    <artifactId>framework</artifactId>
-	    <version>1.0</version>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework</artifactId>
+		<version>1.0</version>
 	</parent>
 	<artifactId>framework-web</artifactId>
 	<packaging>pom</packaging>
@@ -13,4 +13,7 @@
 		<module>framework-web-system</module>
 		<module>framework-web-permission</module>
 	</modules>
+	<properties>
+		<shiro.version>1.2.2</shiro.version>
+	</properties>
 </project>

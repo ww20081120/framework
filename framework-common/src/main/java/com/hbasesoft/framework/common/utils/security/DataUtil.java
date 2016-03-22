@@ -8,6 +8,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -26,7 +30,15 @@ import com.hbasesoft.framework.common.utils.UtilException;
 
 public final class DataUtil {
 
-    /**默认构造
+    /** password */
+    private static final String SITE_WIDE_SECRET = "hbasesoft.com";
+
+    private static final String ALGORITHM = "PBEWithMD5AndDES";
+
+    private static final PasswordEncoder encoder = new StandardPasswordEncoder(SITE_WIDE_SECRET);
+
+    /**
+     * 默认构造
      */
     private DataUtil() {
     }
@@ -119,4 +131,75 @@ public final class DataUtil {
             throw new UtilException(ErrorCodeDef.BASE64_ERROR_10037, e);
         }
     }
+
+    /**
+     * Description: 不可以解密的加密算法 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param rawPassword
+     * @return <br>
+     */
+    public static String encryptPassowrd(String rawPassword) {
+        return encoder.encode(rawPassword);
+    }
+
+    /**
+     * Description: 匹配加密的密码<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param rawPassword
+     * @param password
+     * @return <br>
+     */
+    public static boolean matchPassword(String rawPassword, String password) {
+        return encoder.matches(rawPassword, password);
+    }
+
+    /**
+     * Description: 可以解密的加密<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param algorithm
+     * @param password
+     * @return <br>
+     */
+    public static String encrypt(String password) {
+        // 加密工具
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        // 加密配置
+        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
+        config.setAlgorithm(ALGORITHM);
+        // 自己在用的时候更改此密码
+        config.setPassword(SITE_WIDE_SECRET);
+        // 应用配置
+        encryptor.setConfig(config);
+        // 加密
+        return encryptor.encrypt(password);
+    }
+
+    /**
+     * Description: 解密<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param algorithm
+     * @param password
+     * @return <br>
+     */
+    public static String decrypt(String password) {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        // 加密配置
+        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
+        config.setAlgorithm(ALGORITHM);
+        // 自己在用的时候更改此密码
+        config.setPassword(SITE_WIDE_SECRET);
+        // 应用配置
+        encryptor.setConfig(config);
+        // 解密
+        return encryptor.decrypt(password);
+    }
+
 }

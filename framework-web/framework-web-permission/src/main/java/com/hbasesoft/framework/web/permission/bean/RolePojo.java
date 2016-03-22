@@ -17,7 +17,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
-@Entity(name = "ROLE")
+@Entity(name = "T_MANAGER_ROLE")
 public class RolePojo extends BaseEntity {
 
     /**

@@ -38,5 +38,5 @@ public @interface Sql {
     /** 数据源标识 */
     String dbId() default GlobalConstants.BLANK;
 
-    String dataSource() default "datasource";
+    String dataSource() default GlobalConstants.BLANK;
 }

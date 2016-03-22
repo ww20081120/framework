@@ -283,7 +283,7 @@ public class ResourceController extends BaseController {
 
         Long size = mediaSize.get(type);
         if (size == null) {
-            throw new ServiceException(ErrorCodeDef.UNSPORT_MEDIA_TYPE_20010, "不支持的媒体类型");
+            throw new ServiceException(ErrorCodeDef.UNSPORT_MEDIA_TYPE, "不支持的媒体类型");
         }
 
         logger.info("接收到大小为{0}的文件" + fileSize);

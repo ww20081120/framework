@@ -12,7 +12,7 @@ import javax.persistence.Transient;
 import com.hbasesoft.framework.web.core.bean.OperatorPojo;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
-@Entity(name = "ADMIN")
+@Entity(name = "T_MANAGER_ADMIN")
 public class AdminPojo extends BaseEntity {
     /**
      * serialVersionUID

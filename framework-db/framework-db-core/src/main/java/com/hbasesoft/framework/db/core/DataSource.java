@@ -7,7 +7,7 @@ package com.hbasesoft.framework.db.core;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.db.core.utils.ConfigEncryptUtils;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 
 /**
  * <Description> <br>
@@ -26,24 +26,10 @@ public class DataSource extends DruidDataSource {
      */
     private static final long serialVersionUID = -4882512944369995514L;
 
-    private String algorithm;
-
     public void setPassword(String password) {
         if (CommonUtil.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
-            password = ConfigEncryptUtils.decrypt(getAlgorithm(), password.substring(4, password.length() - 1));
+            password = DataUtil.decrypt(password.substring(4, password.length() - 1));
         }
         super.setPassword(password);
     }
-
-    public void setAlgorithm(String algorithm) {
-        this.algorithm = algorithm;
-    }
-
-    public String getAlgorithm() {
-        if (CommonUtil.isEmpty(algorithm)) {
-            algorithm = "PBEWithMD5AndDES";
-        }
-        return algorithm;
-    }
-
 }

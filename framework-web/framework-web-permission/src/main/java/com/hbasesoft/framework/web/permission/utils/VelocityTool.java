@@ -18,6 +18,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.web.core.utils.WebUtil;
 import com.hbasesoft.framework.web.permission.bean.MenuPojo;
 import com.hbasesoft.framework.web.permission.service.MenuService;
 
@@ -133,15 +134,8 @@ public class VelocityTool {
      * @author yang.zhipeng <br>
      * @taskId <br>
      */
-    public Object getAttribute(String key, HttpServletRequest request) {
-        Object value = request.getAttribute(key);
-        if (value == null) {
-            value = request.getSession().getAttribute(key);
-            if (value == null) {
-                value = request.getSession().getServletContext().getAttribute(key);
-            }
-        }
-        return value;
+    public Object getAttribute(String key) {
+        return WebUtil.getAttribute(key);
     }
 
     /**

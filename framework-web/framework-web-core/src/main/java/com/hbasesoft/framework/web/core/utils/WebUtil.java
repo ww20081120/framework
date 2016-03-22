@@ -8,8 +8,9 @@ package com.hbasesoft.framework.web.core.utils;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.web.core.WebConstant;
@@ -56,11 +58,8 @@ public final class WebUtil {
      * @taskId <br>
      */
     public static void setAttribute(String attrCode, Object attrValue) {
-        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
-        if (requestAttr instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
-            request.getSession().setAttribute(attrCode, attrValue);
-        }
+        Subject subject = SecurityUtils.getSubject();
+        subject.getSession().setAttribute(attrCode, attrValue);
     }
 
     /**
@@ -72,16 +71,8 @@ public final class WebUtil {
      * @taskId <br>
      */
     public static Object getAttribute(String attrCode) {
-        Object obj = null;
-        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
-        if (requestAttr instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
-            obj = request.getAttribute(attrCode);
-            if (obj == null) {
-                obj = request.getSession().getAttribute(attrCode);
-            }
-        }
-        return obj;
+        Subject subject = SecurityUtils.getSubject();
+        return subject.getSession().getAttribute(attrCode);
     }
 
     /**
@@ -92,12 +83,8 @@ public final class WebUtil {
      * @taskId <br>
      */
     public static void removeAttribute(String code) {
-        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
-        if (requestAttr instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
-            request.removeAttribute(code);
-            request.getSession().removeAttribute(code);
-        }
+        Subject subject = SecurityUtils.getSubject();
+        subject.getSession().removeAttribute(code);
     }
 
     /***
@@ -108,15 +95,13 @@ public final class WebUtil {
      * @author bai.wenlong<br>
      * @taskId <br>
      */
-    public static String getRemoteIP(HttpServletRequest request) {
-        String ip = "";
-        if (request.getHeader("x-forwarded-for") == null) {
-            ip = request.getRemoteAddr();
+    public static String getRemoteIP() {
+        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
+        if (requestAttr instanceof ServletRequestAttributes) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
+            return request.getRemoteAddr();
         }
-        else {
-            ip = request.getHeader("x-forwarded-for");
-        }
-        return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+        return GlobalConstants.BLANK;
     }
 
     /**
@@ -139,18 +124,11 @@ public final class WebUtil {
      * @taskId <br>
      */
     public static OperatorPojo getCurrentOperator() {
-        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
-        if (requestAttr instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
-            String ip = request.getRemoteAddr();
-            HttpSession session = request.getSession();
-            OperatorPojo operator = (OperatorPojo) session.getAttribute(WebConstant.SESSION_OPERATOR);
-            if (operator != null) {
-                operator.setLastIp(ip);
-            }
-            return operator;
+        OperatorPojo operator = (OperatorPojo) getAttribute(WebConstant.SESSION_OPERATOR);
+        if (operator != null) {
+            operator.setLastIp(getRemoteIP());
         }
-        return null;
+        return operator;
     }
 
     /**

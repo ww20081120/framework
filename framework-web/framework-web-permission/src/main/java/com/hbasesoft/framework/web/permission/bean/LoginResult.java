@@ -1,4 +1,4 @@
-package com.hbasesoft.framework.web.permission.service;
+package com.hbasesoft.framework.web.permission.bean;
 
 /**
  * <Description> <br>
@@ -14,13 +14,13 @@ public enum LoginResult {
 
     LOGIN_SUCCESS(true, 10001, "登录成功"),
 
-    SYSTEM_ERROR(false, -10000, "系统异常"),
-    USER_INCORRECT(false, -10001, "用户名或密码错误"),
-    USER_STATUS_INCORRECT(false, -10002, "用户账户状态不正确"),
-    USER_PWD_EXPIRED(false, -10003, "密码已过期");
+    SYSTEM_ERROR(false, -10000, "系统异常"), USER_INCORRECT(false, -10001, "用户名或密码错误"), USER_STATUS_INCORRECT(false, -10002,
+        "用户账户状态不正确"), USER_PWD_EXPIRED(false, -10003, "密码已过期");
 
     private boolean result;
+
     private int code;
+
     private String msg;
 
     LoginResult(boolean result, int code, String msg) {

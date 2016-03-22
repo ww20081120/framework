@@ -53,14 +53,14 @@ public class ResourceServiceImpl implements ResourceService {
             String thumbPath = null;
             AttachmentsPojo pojo = attachmentsDao.selectAttachments(resourceId);
             if (pojo == null) {
-                throw new ServiceException(ErrorCodeDef.RESOURCE_ID_ERROR_20003, "未找到resourceId为{0}的资源", resourceId);
+                throw new ServiceException(ErrorCodeDef.RESOURCE_ID_ERROR, "未找到resourceId为{0}的资源", resourceId);
             }
 
             String resourcePath = ConfigHelper.getString("RESOURCE.PATH");
 
             File file = new File(resourcePath + pojo.getFilePath());
             if (!file.exists()) {
-                throw new ServiceException(ErrorCodeDef.RESOURCE_ID_ERROR_20003, "未找到resourceId为{0}的资源", resourceId);
+                throw new ServiceException(ErrorCodeDef.RESOURCE_ID_ERROR, "未找到resourceId为{0}的资源", resourceId);
             }
 
             if (isThumb && "Y".equals(pojo.getIsPicture())) {

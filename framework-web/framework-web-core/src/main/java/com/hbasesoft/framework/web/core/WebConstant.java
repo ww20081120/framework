@@ -21,9 +21,6 @@ public interface WebConstant {
     /** 树形菜单 */
     String MENU_VARIABLE_TREE = "menuList";
 
-    /** 面包屑集合 */
-    String BREAD_LINE_LIST = "breadLineList";
-
     /** session保存的operator信息 */
     String SESSION_OPERATOR = "__SESSION_OPERATOR";
 
@@ -32,9 +29,6 @@ public interface WebConstant {
 
     /** 扩展参数列表 */
     String SESSION_EXTEND_PARAMS = "__SESSION_EXTEND_PARAMS";
-
-    /** session中保存的权限 */
-    String SESSION_PERMISSIONS = "SESSION_PERMISSIONS__";
 
     /** menu */
     String APPLICATION_MENU = "APPLICATION_MENU__";
@@ -59,6 +53,6 @@ public interface WebConstant {
     String STATE_UNAVAILABLE = "X";
 
     String CONFIG_ITEM_RESOURCE_PATH = "RESOURCE.PATH";
-    
+
     String DIRECTORY_URL = "/";
 }

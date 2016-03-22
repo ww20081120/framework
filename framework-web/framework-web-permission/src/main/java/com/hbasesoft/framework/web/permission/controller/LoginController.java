@@ -4,20 +4,21 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.hbasesoft.framework.web.core.WebConstant;
-import com.hbasesoft.framework.web.core.controller.BaseController;
-import com.hbasesoft.framework.web.core.utils.WebUtil;
-import com.hbasesoft.framework.web.permission.service.LoginResult;
-import com.hbasesoft.framework.web.permission.service.LoginService;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.AssertException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.web.core.WebConstant;
+import com.hbasesoft.framework.web.core.controller.BaseController;
+import com.hbasesoft.framework.web.core.utils.WebUtil;
+import com.hbasesoft.framework.web.permission.bean.LoginResult;
+import com.hbasesoft.framework.web.permission.service.LoginService;
 
 /**
  * <Description> <br>
@@ -42,6 +43,7 @@ public class LoginController extends BaseController {
     @Resource
     private LoginService loginService;
 
+    @RequiresAuthentication
     @RequestMapping(method = RequestMethod.GET)
     public String index() {
         String homeUrl = ConfigHelper.getString("SYSTEM.HOME_PAGE_URL");
@@ -63,7 +65,7 @@ public class LoginController extends BaseController {
             String password = getParameter("password", "密码不能为空");
             checkVerifyCode(getParameter("verifyCode", "验证码不能为空"));
 
-            LoginResult result = loginService.login(request, username, password);
+            LoginResult result = loginService.login(username, password);
 
             if (result.isResult()) {
                 return HOST_PAGE;
@@ -82,6 +84,7 @@ public class LoginController extends BaseController {
         return forward;
     }
 
+    @RequiresAuthentication
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
         loginService.logout();

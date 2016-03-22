@@ -16,7 +16,7 @@ import java.util.List;
  * @see com.hbasesoft.framework.web.manager.bean.menu <br>
  * @since V1.0<br>
  */
-@Entity(name = "MENU")
+@Entity(name = "T_MANAGER_MENU")
 public class MenuPojo extends BaseEntity {
 
     /**

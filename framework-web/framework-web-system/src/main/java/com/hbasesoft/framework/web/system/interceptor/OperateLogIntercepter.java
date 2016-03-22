@@ -74,7 +74,7 @@ public class OperateLogIntercepter extends HandlerInterceptorAdapter {
                 if (null != event && StringUtils.equals(eventType, event.getEventType())) {
                     operateLogPojo = new OperateLogPojo();
                     operateLogPojo.setEventId(event.getEventId());
-                    operateLogPojo.setIp(WebUtil.getRemoteIP(request));
+                    operateLogPojo.setIp(WebUtil.getRemoteIP());
                     operateLogPojo.setCreateTime(now);
                     operateLogPojo.setParamsValue(getParams(request, event));
 

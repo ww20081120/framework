@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,14 +24,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.hbasesoft.framework.web.core.controller.BaseController;
-import com.hbasesoft.framework.web.core.service.common.ModuleService;
-import com.hbasesoft.framework.web.permission.bean.MenuPojo;
-import com.hbasesoft.framework.web.permission.service.MenuService;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.config.core.bean.ModulePojo;
+import com.hbasesoft.framework.web.core.controller.BaseController;
+import com.hbasesoft.framework.web.core.service.common.ModuleService;
+import com.hbasesoft.framework.web.permission.bean.MenuPojo;
+import com.hbasesoft.framework.web.permission.service.MenuService;
 
 /**
  * <Description> 菜单控制 <br>
@@ -61,7 +63,8 @@ public class MenuController extends BaseController {
     @Resource
     private ModuleService moduleService;
 
-    @RequestMapping()
+    @RequiresPermissions("menu:query")
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index() throws ServiceException {
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, ModulePojo> moduleMap = moduleService.selectAllModule();
@@ -69,6 +72,7 @@ public class MenuController extends BaseController {
         return new ModelAndView(PAGE_INDEX, map);
     }
 
+    @RequiresPermissions("menu:query")
     @ResponseBody
     @RequestMapping("/list")
     public String list() throws FrameworkException {
@@ -78,6 +82,7 @@ public class MenuController extends BaseController {
         return JSON.toJSONString(list, filter, SerializerFeature.WriteMapNullValue);
     }
 
+    @RequiresPermissions("menu:add")
     @RequestMapping("/toAdd")
     public ModelAndView toAdd(ModelAndView modelAndView) throws ServiceException {
         modelAndView.addObject("parentResourceId", getParameter("parentResourceId"));
@@ -88,6 +93,7 @@ public class MenuController extends BaseController {
         return modelAndView;
     }
 
+    @RequiresPermissions("menu:addBtn")
     @RequestMapping("/toAddBtn")
     public ModelAndView toAddButton(ModelAndView modelAndView) throws ServiceException {
         modelAndView.addObject("parentResourceId", getParameter("parentResourceId"));
@@ -98,18 +104,21 @@ public class MenuController extends BaseController {
         return modelAndView;
     }
 
+    @RequiresPermissions("menu:add")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView addMenu(MenuPojo menuPojo) throws FrameworkException {
         menuService.addMenu(menuPojo);
         return success("新增菜单信息成功!");
     }
 
+    @RequiresPermissions("menu:addBtn")
     @RequestMapping(value = "/addBtn", method = RequestMethod.POST)
     public ModelAndView addButton(MenuPojo menuPojo) throws FrameworkException {
 
         return success("新增菜单按钮信息成功!");
     }
 
+    @RequiresPermissions("menu:modify")
     @RequestMapping("/toModify")
     public String toModify(ModelMap modelMap) throws ServiceException {
         MenuPojo menuPojo = menuService.queryById(NumberUtils.toLong(getParameter("resourceId")));
@@ -117,6 +126,7 @@ public class MenuController extends BaseController {
         return PAGE_MODIFY;
     }
 
+    @RequiresPermissions("menu:modifyBtn")
     @RequestMapping("/toModifyBtn")
     public String toModifyBtn(ModelMap modelMap) throws ServiceException {
         MenuPojo menuPojo = menuService.queryById(NumberUtils.toLong(getParameter("resourceId")));
@@ -124,12 +134,14 @@ public class MenuController extends BaseController {
         return PAGE_MODIFY_BUTTON;
     }
 
+    @RequiresPermissions("menu:modify")
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public ModelAndView modify(MenuPojo menuPojo) throws FrameworkException {
         menuService.modifyMenu(menuPojo);
         return success("修改菜单信息成功!");
     }
 
+    @RequiresPermissions("menu:modify")
     @ResponseBody
     @RequestMapping(value = "/seq/modify", method = RequestMethod.POST)
     public ResponseEntity<?> modifySeq() throws FrameworkException {
@@ -150,6 +162,7 @@ public class MenuController extends BaseController {
         return new ResponseEntity<Object>(HttpStatus.OK);
     }
 
+    @RequiresPermissions("menu:remove")
     @ResponseBody
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public ResponseEntity<?> remove() throws FrameworkException {
@@ -158,6 +171,7 @@ public class MenuController extends BaseController {
         return new ResponseEntity<Object>(GlobalConstants.BLANK, HttpStatus.OK);
     }
 
+    @RequiresAuthentication
     @ResponseBody
     @RequestMapping(value = "/checkName")
     public boolean checkName() {

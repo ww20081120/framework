@@ -16,7 +16,7 @@ import java.util.Date;
  * @see com.hbasesoft.framework.web.manager.bean.duty <br>
  * @since V1.0<br>
  */
-@Entity(name = "DUTY")
+@Entity(name = "T_MANAGER_DUTY")
 public class DutyPojo extends BaseEntity {
 
     private static final long serialVersionUID = -4758506714440377983L;

@@ -1,6 +1,9 @@
 package com.hbasesoft.framework.web.permission.service;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
+
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.web.permission.bean.LoginResult;
 
 /**
  * <Description> <br>
@@ -14,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface LoginService {
 
-    LoginResult login(HttpServletRequest request, String username, String password);
+    LoginResult login(String username, String password);
 
     void logout();
+
+    Set<String> queryPermissionByDutyId(Long dutyId) throws ServiceException;
 }

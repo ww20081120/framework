@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
 
-@Entity(name = "OPERATOR")
+@Entity(name = "T_MANAGER_OPERATOR")
 public class OperatorPojo extends BaseEntity {
 
     public static final String OPERATOR_TYPE_ADMIN = "A";

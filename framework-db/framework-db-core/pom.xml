@@ -13,7 +13,6 @@
 		<druid.version>0.2.9</druid.version>
 		<spring-data-mongodb.version>1.7.0.RELEASE</spring-data-mongodb.version>
 		<mongo-java-driver.version>3.0.2</mongo-java-driver.version>
-		<jasypt.version>1.9.2</jasypt.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -45,12 +44,6 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>${druid.version}</version>
-		</dependency>
-		<!-- 数据库密码加密工具 -->
-		<dependency>
-			<groupId>org.jasypt</groupId>
-			<artifactId>jasypt</artifactId>
-			<version>${jasypt.version}</version>
 		</dependency>
 	</dependencies>
 </project>
