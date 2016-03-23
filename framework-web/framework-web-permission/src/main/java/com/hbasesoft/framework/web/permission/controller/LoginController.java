@@ -1,10 +1,12 @@
 package com.hbasesoft.framework.web.permission.controller;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +19,6 @@ import com.hbasesoft.framework.config.core.ConfigHelper;
 import com.hbasesoft.framework.web.core.WebConstant;
 import com.hbasesoft.framework.web.core.controller.BaseController;
 import com.hbasesoft.framework.web.core.utils.WebUtil;
-import com.hbasesoft.framework.web.permission.bean.LoginResult;
 import com.hbasesoft.framework.web.permission.service.LoginService;
 
 /**
@@ -57,31 +58,22 @@ public class LoginController extends BaseController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(HttpServletRequest request, ModelMap map) {
-        String forward = LOGIN_PAGE;
+    public String login(ModelMap map) {
         String username = null;
         try {
             username = getParameter("account", "用户名不能为空");
             String password = getParameter("password", "密码不能为空");
             checkVerifyCode(getParameter("verifyCode", "验证码不能为空"));
 
-            LoginResult result = loginService.login(username, password);
-
-            if (result.isResult()) {
-                return HOST_PAGE;
-            }
-
-            setModelMap(map, username, result.getCode(), result.getMsg());
-            if (result.getCode() == LoginResult.USER_PWD_EXPIRED.getCode()) {
-                // 预留
-                forward = LOGIN_PAGE;
-            }
+            Subject subject = SecurityUtils.getSubject();
+            subject.login(new UsernamePasswordToken(username, password));
+            return HOST_PAGE;
         }
         catch (Exception e) {
             logger.warn(e.getMessage(), e);
             setModelMap(map, username, 20025, e.getMessage());
         }
-        return forward;
+        return LOGIN_PAGE;
     }
 
     @RequiresAuthentication

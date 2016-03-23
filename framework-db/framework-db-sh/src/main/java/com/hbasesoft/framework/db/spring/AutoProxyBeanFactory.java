@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.spring;
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.aop.framework.ProxyFactoryBean;
@@ -35,7 +34,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     private static Logger logger = new Logger(AutoProxyBeanFactory.class);
 
     /** 扫描路径 */
-    private List<String> packagesToScan;
+    private String[] packagesToScan;
 
     /** interceptors */
     private String[] interceptors;
@@ -91,11 +90,11 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         logger.info("***********************************************************");
     }
 
-    public void setPackagesToScan(List<String> packagesToScan) {
+    public void setPackagesToScan(String... packagesToScan) {
         this.packagesToScan = packagesToScan;
     }
 
-    public void setInterceptors(String[] interceptors) {
+    public void setInterceptors(String... interceptors) {
         this.interceptors = interceptors;
     }
 

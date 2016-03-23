@@ -14,8 +14,8 @@
 	</appender>
 
 	<appender name="debugAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${user.home}/log/hbasesoft/debug" />
-		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
+		<param name="File" value="${user.home}/log/hbasesoft/debug.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -29,8 +29,8 @@
 	</appender>
 
 	<appender name="infoAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${user.home}/log/hbasesoft/info" />
-		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
+		<param name="File" value="${user.home}/log/hbasesoft/info.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -44,8 +44,8 @@
 	</appender>
 
 	<appender name="errorAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${user.home}/log/hbasesoft/error" />
-		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
+		<param name="File" value="${user.home}/log/hbasesoft/error.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -59,8 +59,8 @@
 	</appender>
 
 	<appender name="warnAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${user.home}/log/hbasesoft/warn" />
-		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
+		<param name="File" value="${user.home}/log/hbasesoft/warn.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
@@ -74,8 +74,8 @@
 	</appender>
 
 	<appender name="sqlAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${user.home}/log/hbasesoft/sql" />
-		<param name="DatePattern" value="'_'yyyy-MM-dd'.log'" />
+		<param name="File" value="${user.home}/log/hbasesoft/sql.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />

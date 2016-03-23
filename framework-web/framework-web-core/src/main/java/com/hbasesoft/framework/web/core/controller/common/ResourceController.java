@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.github.cage.Cage;
+import com.github.cage.GCage;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -46,8 +48,7 @@ import com.hbasesoft.framework.message.core.bean.AttachmentsPojo;
 import com.hbasesoft.framework.web.core.WebConstant;
 import com.hbasesoft.framework.web.core.controller.BaseController;
 import com.hbasesoft.framework.web.core.service.common.ResourceService;
-import com.github.cage.Cage;
-import com.github.cage.GCage;
+import com.hbasesoft.framework.web.core.utils.WebUtil;
 
 /**
  * <Description> <br>
@@ -392,7 +393,7 @@ public class ResourceController extends BaseController {
         Cage cage = new GCage();
         OutputStream os = null;
         try {
-            request.getSession().setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
+            WebUtil.setAttribute(WebConstant.SESSION_VERIFY_CODE, verifyCode);
             os = response.getOutputStream();
             cage.draw(verifyCode, os);
         }

@@ -8,11 +8,10 @@
            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd"
 	default-autowire="byName" default-lazy-init="false">
 
-	<aop:aspectj-autoproxy />
-
 	<!-- 缓存拦截器 -->
-	<bean id="cacheMethodInterceptor" class="com.hbasesoft.framework.cache.core.annotation.CacheAdvice" />
-	
+	<bean id="cacheMethodInterceptor"
+		class="com.hbasesoft.framework.cache.core.annotation.CacheAdvice" />
+
 	<aop:config>
 		<!--切入点 -->
 		<aop:pointcut id="cachePoint"
@@ -60,4 +59,5 @@
 		</property>
 		<property name="opendService" value="${log.open.logservice}" />
 	</bean>
+
 </beans>

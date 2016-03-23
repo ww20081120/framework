@@ -11,8 +11,6 @@
 		<mysql.version>5.1.33</mysql.version>
 		<oracle.version>10.2.0.3.0</oracle.version>
 		<druid.version>0.2.9</druid.version>
-		<spring-data-mongodb.version>1.7.0.RELEASE</spring-data-mongodb.version>
-		<mongo-java-driver.version>3.0.2</mongo-java-driver.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,11 +28,11 @@
 			<artifactId>framework-cache-simple</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc14</artifactId>
-			<version>${oracle.version}</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.oracle</groupId> -->
+<!-- 			<artifactId>ojdbc14</artifactId> -->
+<!-- 			<version>${oracle.version}</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

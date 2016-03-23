@@ -11,14 +11,12 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 /**
@@ -41,6 +39,7 @@ public class ShiroConfig implements ApplicationContextAware {
         return new DatabaseRealm();
     }
 
+    @Bean
     public FilterRegistrationBean registShiroFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new DelegatingFilterProxy());
@@ -65,19 +64,12 @@ public class ShiroConfig implements ApplicationContextAware {
         factoryBean.setSecurityManager(applicationContext.getBean(SecurityManager.class));
         factoryBean.setLoginUrl("/login");
         factoryBean.setSuccessUrl("/");
-        factoryBean.setUnauthorizedUrl("/403");
         return factoryBean;
     }
 
     @Bean(name = "lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor registBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
-    }
-
-    @Bean
-    @DependsOn("lifecycleBeanPostProcessor")
-    public DefaultAdvisorAutoProxyCreator registAutoProxyCreator() {
-        return new DefaultAdvisorAutoProxyCreator();
     }
 
     @Bean

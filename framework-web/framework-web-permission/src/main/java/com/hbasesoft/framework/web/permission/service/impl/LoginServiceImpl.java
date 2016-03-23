@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -42,6 +43,7 @@ import com.hbasesoft.framework.web.permission.service.LoginService;
  * @since V1.0<br>
  */
 @Service
+@Transactional
 public class LoginServiceImpl implements LoginService {
 
     private static final Logger logger = new Logger(LoginServiceImpl.class);
@@ -169,6 +171,7 @@ public class LoginServiceImpl implements LoginService {
      * @throws ServiceException <br>
      */
     @Override
+    @Transactional(readOnly = true)
     public Set<String> queryPermissionByDutyId(Long dutyId) throws ServiceException {
         Set<String> permissions = new HashSet<String>();
 

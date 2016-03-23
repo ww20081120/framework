@@ -7,8 +7,6 @@
 		<version>1.0</version>
 	</parent>
 	<artifactId>framework-log-mongodb</artifactId>
-	<properties>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
