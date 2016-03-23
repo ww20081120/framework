@@ -55,6 +55,4 @@
 
 	<!-- sql日志记录器 -->
 	<bean id="log-filter" class="com.hbasesoft.framework.log.core.filter.SqlLogFilter" />
-
-	<tx:annotation-driven transaction-manager="transactionManager" />
 </beans>

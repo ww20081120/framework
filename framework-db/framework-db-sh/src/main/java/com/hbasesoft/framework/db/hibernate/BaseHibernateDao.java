@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.EntityManagerFactory;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
@@ -42,8 +43,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     private static Logger logger = new Logger(BaseHibernateDao.class);
 
-    /** sessionFactory */
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory entityManagerFactory;
 
     /*
      * (non-Javadoc)
@@ -55,7 +55,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
 
             SQLQuery query = session.createSQLQuery(sql);
 
@@ -157,7 +157,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public int excuteSql(final String sql, final DataParam param) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             SQLQuery query = session.createSQLQuery(sql);
             setParamMap(param.getParamMap(), query);
             return query.executeUpdate();
@@ -175,7 +175,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             int[] result = new int[sqls.length];
             SQLQuery query;
             for (int i = 0; i < sqls.length; i++) {
@@ -198,7 +198,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public void save(BaseEntity t) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             session.save(t);
         }
         catch (Exception e) {
@@ -215,7 +215,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T extends BaseEntity> T getById(Class<T> entityClass, Serializable id) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             return (T) session.get(entityClass, id);
         }
         catch (Exception e) {
@@ -232,7 +232,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T extends BaseEntity> T getByEntity(T entity) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             Criteria executableCriteria = session.createCriteria(entity.getClass());
             executableCriteria.add(Example.create(entity));
             return (T) executableCriteria.uniqueResult();
@@ -250,7 +250,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public void update(BaseEntity entity) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             session.update(entity);
             session.flush();
         }
@@ -267,7 +267,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public void delete(BaseEntity entity) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             session.delete(entity);
             session.flush();
         }
@@ -300,7 +300,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T extends BaseEntity> List<T> selectList(Class<T> entityClass) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             Criteria executableCriteria = session.createCriteria(entityClass);
             return executableCriteria.list();
         }
@@ -310,11 +310,11 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
     }
 
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
+    private Session getSession() {
+        return (Session) entityManagerFactory.createEntityManager().getDelegate();
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 }

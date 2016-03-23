@@ -39,6 +39,6 @@ public interface DutyDao extends IGenericBaseDao {
     @Sql(value = "DELETE FROM T_MANAGER_DUTY_ROLE WHERE DUTY_ID IN :dutyIds")
     int deleteDutyRole(@Param("dutyIds") Long[] dutyIds) throws DaoException;
 
-    @Sql(bean = Long.class, value = "SELECT T_MANAGER_ROLE_ID FROM T_MANAGER_DUTY_ROLE WHERE DUTY_ID = :dutyId")
+    @Sql(bean = Long.class, value = "SELECT ROLE_ID FROM T_MANAGER_DUTY_ROLE WHERE DUTY_ID = :dutyId")
     List<Long> selectListDutyRole(@Param("dutyId") Long dutyId) throws DaoException;
 }
