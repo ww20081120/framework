@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -32,7 +32,7 @@ import com.hbasesoft.framework.config.core.ConfigHelper;
  * @CreateDate 2015年6月23日 <br>
  * @see com.hbasesoft.framework.bootstrap <br>
  */
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
 public class Startup {
