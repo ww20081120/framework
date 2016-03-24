@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.web.permission.config;
 
+import java.util.Properties;
+
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -18,6 +20,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 /**
  * <Description> <br>
@@ -66,6 +69,17 @@ public class ShiroConfig implements ApplicationContextAware {
         factoryBean.setSuccessUrl("/");
         factoryBean.setUnauthorizedUrl("/login");
         return factoryBean;
+    }
+
+    @Bean
+    public SimpleMappingExceptionResolver reigistExceptionResolver() {
+        SimpleMappingExceptionResolver resolver = new SimpleMappingExceptionResolver();
+        Properties properties = new Properties();
+        properties.setProperty("org.apache.shiro.authz.AuthorizationException", "/login");
+        properties.setProperty("org.apache.shiro.authz.UnauthenticatedException", "/login");
+        properties.setProperty("org.apache.struts.chain.commands.UnauthorizedActionException", "/login");
+        resolver.setExceptionMappings(properties);
+        return resolver;
     }
 
     @Bean(name = "lifecycleBeanPostProcessor")

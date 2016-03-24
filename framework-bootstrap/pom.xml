@@ -32,27 +32,6 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-message-core</artifactId>
-			<version>${project.parent.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-log4j12</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-web-permission</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-web-system</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
@@ -92,7 +71,8 @@
 					<!-- <mainClass>com.dhgate.rate.ApplicationSearch</mainClass> -->
 					<!--指定监听的端口号 -->
 					<jvmArguments>
-						-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=7777
+						-Xdebug
+						-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=7777
 					</jvmArguments>
 				</configuration>
 			</plugin>
@@ -111,15 +91,6 @@
 				<includes>
 					<include>**/*.*</include>
 				</includes>
-			</resource>
-			<!-- 设置对auto-config.properties，jdbc.properties进行过虑，即这些文件中的${key}会被替换掉为真正的值 -->
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>log4j.xml</include>
-					<include>application.properties</include>
-				</includes>
-				<filtering>true</filtering>
 			</resource>
 		</resources>
 	</build>

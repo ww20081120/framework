@@ -15,12 +15,15 @@ import java.util.ServiceLoader;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.config.core.ConfigHelper;
 
@@ -35,7 +38,7 @@ import com.hbasesoft.framework.config.core.ConfigHelper;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
-public class Startup {
+public class Startup implements EmbeddedServletContainerCustomizer {
 
     /**
      * logger
@@ -48,7 +51,7 @@ public class Startup {
     private static ApplicationContext context;
 
     private static List<StartupListener> listenerList = null;
-
+    
     /**
      * Description: <br>
      * 
@@ -110,5 +113,17 @@ public class Startup {
 
     public static ApplicationContext getContext() {
         return context;
+    }
+
+    /**
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param container <br>
+     */ 
+    @Override
+    public void customize(ConfigurableEmbeddedServletContainer container) {
+        container.setPort(PropertyHolder.getIntProperty("app.port", 8080));
     }
 }

@@ -8,7 +8,6 @@ package com.hbasesoft.framework.web.core.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,13 +43,6 @@ public class PersonalExceptionHandler {
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("message", "参数不合法");
         return new ModelAndView(ERROR_PAGE, param);
-    }
-
-    @ExceptionHandler(AuthorizationException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    String handleException(AuthorizationException exception) {
-        logger.info(exception.getMessage(), exception);
-        return "redirect:/login";
     }
 
     @ExceptionHandler(FrameworkException.class)
