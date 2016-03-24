@@ -88,7 +88,7 @@ public class DataBaseConfig implements ApplicationContextAware {
     }
 
     @Bean
-    public DaoConfig registDaoConfig(@Value("db.type") String dbType) {
+    public DaoConfig registDaoConfig(@Value("${db.type}") String dbType) {
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();

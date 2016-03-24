@@ -64,6 +64,7 @@ public class ShiroConfig implements ApplicationContextAware {
         factoryBean.setSecurityManager(applicationContext.getBean(SecurityManager.class));
         factoryBean.setLoginUrl("/login");
         factoryBean.setSuccessUrl("/");
+        factoryBean.setUnauthorizedUrl("/login");
         return factoryBean;
     }
 
