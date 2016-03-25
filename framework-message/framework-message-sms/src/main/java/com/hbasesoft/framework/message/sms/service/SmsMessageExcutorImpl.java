@@ -4,20 +4,21 @@
 package com.hbasesoft.framework.message.sms.service;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.security.DataUtil;
+import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.config.core.ConfigHelper;
 import com.hbasesoft.framework.message.api.Attachment;
 import com.hbasesoft.framework.message.core.service.MessageExcutor;
@@ -39,8 +40,8 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
-     * java.lang.String, java.util.List, java.util.List)
+     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String,
+     * java.lang.String, java.lang.String, java.util.List, java.util.List)
      */
     @Override
     public String sendMessage(String title, String content, String sender, String[] receiver,
@@ -95,12 +96,12 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
         String username = ConfigHelper.getString("SMS.SMS_USERNAME");
         String password = ConfigHelper.getString("SMS.SMS_PASSWORD");
 
-        url = StringUtils.replace(url, "${username}", username);
-        url = StringUtils.replace(url, "${password}", DataUtil.md5(password));
-        url = StringUtils.replace(url, "${content}", URLEncoder.encode(content, GlobalConstants.DEFAULT_CHARSET));
-        url = StringUtils.replace(url, "${receives}", receives);
-
-        return url;
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("username", username);
+        params.put("password", password);
+        params.put("content", URLEncoder.encode(content, GlobalConstants.DEFAULT_CHARSET));
+        params.put("receives", receives);
+        return VelocityParseFactory.parse("SMSBAO", url, params);
     }
 
     /**
