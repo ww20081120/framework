@@ -25,7 +25,6 @@ import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.config.core.ConfigHelper;
 
 /**
  * <Description> <br>
@@ -51,7 +50,7 @@ public class Startup implements EmbeddedServletContainerCustomizer {
     private static ApplicationContext context;
 
     private static List<StartupListener> listenerList = null;
-    
+
     /**
      * Description: <br>
      * 
@@ -99,7 +98,7 @@ public class Startup implements EmbeddedServletContainerCustomizer {
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n')
-            .append("            ").append(ConfigHelper.getModuleCode()).append("模块启动成功！").append('\n')
+            .append("            ").append(PropertyHolder.getProperty("project.code")).append("模块启动成功！").append('\n')
             .append("***************************************"));
 
         if (CommonUtil.isNotEmpty(listenerList)) {
@@ -116,12 +115,12 @@ public class Startup implements EmbeddedServletContainerCustomizer {
     }
 
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param container <br>
-     */ 
+     */
     @Override
     public void customize(ConfigurableEmbeddedServletContainer container) {
         container.setPort(PropertyHolder.getIntProperty("app.port", 8080));

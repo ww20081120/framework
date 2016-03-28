@@ -18,17 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-config</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-log-db</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-log-file</artifactId>
+			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
