@@ -101,11 +101,11 @@ public class Startup implements EmbeddedServletContainerCustomizer {
             .append("            ").append(PropertyHolder.getProperty("project.code")).append("模块启动成功！").append('\n')
             .append("***************************************"));
 
-        if (CommonUtil.isNotEmpty(listenerList)) {
-            for (int i = listenerList.size() - 1; i >= 0; i--) {
-                listenerList.get(i).destory();
-            }
-        }
+//        if (CommonUtil.isNotEmpty(listenerList)) {
+//            for (int i = listenerList.size() - 1; i >= 0; i--) {
+//                listenerList.get(i).destory();
+//            }
+//        }
 
         logger.info("====================>系统正常启动<====================");
     }
