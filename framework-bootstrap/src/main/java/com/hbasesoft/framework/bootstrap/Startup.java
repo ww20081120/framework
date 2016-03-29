@@ -19,6 +19,7 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.ImportResource;
 
 import com.hbasesoft.framework.common.StartupListener;
@@ -37,6 +38,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
+@EnableAspectJAutoProxy
 public class Startup implements EmbeddedServletContainerCustomizer {
 
     /**
@@ -101,11 +103,11 @@ public class Startup implements EmbeddedServletContainerCustomizer {
             .append("            ").append(PropertyHolder.getProperty("project.code")).append("模块启动成功！").append('\n')
             .append("***************************************"));
 
-//        if (CommonUtil.isNotEmpty(listenerList)) {
-//            for (int i = listenerList.size() - 1; i >= 0; i--) {
-//                listenerList.get(i).destory();
-//            }
-//        }
+        // if (CommonUtil.isNotEmpty(listenerList)) {
+        // for (int i = listenerList.size() - 1; i >= 0; i--) {
+        // listenerList.get(i).destory();
+        // }
+        // }
 
         logger.info("====================>系统正常启动<====================");
     }
