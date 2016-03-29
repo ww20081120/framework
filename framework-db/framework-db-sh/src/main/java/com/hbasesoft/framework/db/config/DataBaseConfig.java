@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -21,8 +20,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -50,10 +49,10 @@ public class DataBaseConfig implements ApplicationContextAware {
 
     private ApplicationContext context;
 
-    @Bean
-    public JpaTransactionManager registTransactonManger() {
-        JpaTransactionManager manager = new JpaTransactionManager();
-        manager.setEntityManagerFactory(context.getBean(EntityManagerFactory.class));
+    @Bean(name = "transactionManager")
+    public HibernateTransactionManager registTransactonManger(SessionFactory sessionFactory) {
+        HibernateTransactionManager manager = new HibernateTransactionManager();
+        manager.setSessionFactory(sessionFactory);
         return manager;
     }
 
