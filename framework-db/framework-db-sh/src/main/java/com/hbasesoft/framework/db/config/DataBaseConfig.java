@@ -13,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.aopalliance.intercept.MethodInterceptor;
+import org.hibernate.SessionFactory;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,8 +21,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -53,17 +54,13 @@ public class DataBaseConfig implements ApplicationContextAware {
     public JpaTransactionManager registTransactonManger() {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(context.getBean(EntityManagerFactory.class));
-        ;
         return manager;
     }
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean createEntityFactory(DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(dataSource);
-        factoryBean.setJpaVendorAdapter(context.getBean(HibernateJpaVendorAdapter.class));
-        factoryBean.setPackagesToScan(getBasePackage());
-
+    @Bean(name = "sessionFactory")
+    public LocalSessionFactoryBean createSessionFactory(DataSource dataSource) {
+        LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
+        bean.setDataSource(dataSource);
         Map<String, String> map = PropertyHolder.getProperties();
         Properties properties = new Properties();
         for (Entry<String, String> entry : map.entrySet()) {
@@ -71,8 +68,9 @@ public class DataBaseConfig implements ApplicationContextAware {
                 properties.setProperty(entry.getKey().substring(3, entry.getKey().length()), entry.getValue());
             }
         }
-        factoryBean.setJpaProperties(properties);
-        return factoryBean;
+        bean.setHibernateProperties(properties);
+        bean.setPackagesToScan(getBasePackage());
+        return bean;
     }
 
     @Bean
@@ -81,9 +79,9 @@ public class DataBaseConfig implements ApplicationContextAware {
     }
 
     @Bean
-    public BaseHibernateDao registBaseHibernateDao() {
+    public BaseHibernateDao registBaseHibernateDao(SessionFactory sessionFactory) {
         BaseHibernateDao dao = new BaseHibernateDao();
-        dao.setEntityManagerFactory(context.getBean(EntityManagerFactory.class));
+        dao.setSessionFactory(sessionFactory);
         return dao;
     }
 
