@@ -5,26 +5,17 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.web.core.utils;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheException;
-import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.web.core.WebConstant;
 import com.hbasesoft.framework.web.core.bean.OperatorPojo;
-import com.hbasesoft.framework.web.core.bean.UrlResource;
 
 /**
  * <Description> <br>
@@ -35,13 +26,6 @@ import com.hbasesoft.framework.web.core.bean.UrlResource;
  * @see com.hbasesoft.framework.web <br>
  */
 public final class WebUtil {
-
-    private static Logger logger = new Logger(WebUtil.class);
-
-    /**
-     * matcher
-     */
-    private static AntPathMatcher matcher = new AntPathMatcher();
 
     /**
      * 默认构造函数
@@ -129,35 +113,5 @@ public final class WebUtil {
             operator.setLastIp(getRemoteIP());
         }
         return operator;
-    }
-
-    /**
-     * Description: <br>
-     *
-     * @param request <br>
-     * @return <br>
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     */
-    public static UrlResource urlMatch(HttpServletRequest request) {
-
-        try {
-            Map<String, UrlResource> urlResourceMap = CacheHelper.getCache().getNode(UrlResource.class,
-                CacheConstant.URL_RESOURCE);
-
-            if (CommonUtil.isNotEmpty(urlResourceMap)) {
-                String url = request.getRequestURI().substring(request.getContextPath().length());
-                String method = request.getMethod();
-                for (UrlResource resource : urlResourceMap.values()) {
-                    if (matcher.match(resource.getUrl(), url) && resource.match(method)) {
-                        return resource;
-                    }
-                }
-            }
-        }
-        catch (CacheException e) {
-            logger.error(e.getMessage(), e);
-        }
-        return null;
     }
 }

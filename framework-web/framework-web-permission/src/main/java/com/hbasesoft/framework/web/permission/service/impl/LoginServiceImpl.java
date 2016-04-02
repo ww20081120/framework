@@ -43,7 +43,6 @@ import com.hbasesoft.framework.web.permission.service.LoginService;
  * @since V1.0<br>
  */
 @Service
-@Transactional
 public class LoginServiceImpl implements LoginService {
 
     private static final Logger logger = new Logger(LoginServiceImpl.class);

@@ -11,12 +11,14 @@ import java.util.Map;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -34,6 +36,7 @@ import ognl.OgnlException;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.cache.core.annotation <br>
  */
+@Aspect
 public class CacheAdvice implements MethodInterceptor {
 
     private static Logger logger = new Logger(CacheAdvice.class);
@@ -48,6 +51,7 @@ public class CacheAdvice implements MethodInterceptor {
      * @throws Throwable <br>
      */
     @Override
+    @Pointcut("execution(public * com.hbasesoft..*.*(..)) and !execution(public * com.hbasesoft..*Dao.*(..))")
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Object result = null;
         Class<?> returnType = invocation.getMethod().getReturnType();
@@ -78,15 +82,15 @@ public class CacheAdvice implements MethodInterceptor {
             else {
                 key += paramKey;
                 if (CommonUtil.isEmpty(key)) {
-                    throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
+                    throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
                 }
             }
 
-            result = CacheHelper.getCache().getValue(returnType, cache.node(), key);
+            result = CacheHelper.getCache().get(cache.node(), key, returnType);
             if (result == null) {
                 result = invocation.proceed();
                 if (result != null) {
-                    CacheHelper.getCache().putValue(cache.node(), key, result);
+                    CacheHelper.getCache().put(cache.node(), key, result);
                     logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]",
                         BeanUtil.getMethodSignature(invocation.getMethod()), cache.node(), key);
                 }
@@ -94,10 +98,10 @@ public class CacheAdvice implements MethodInterceptor {
 
         }
         else if (CacheType.NODE == cache.type() && !Map.class.isAssignableFrom(returnType)) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
+            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
         }
         else {
-            result = CacheHelper.getCache().getNode(cache.bean(), cache.node());
+            result = CacheHelper.getCache().get(cache.node(), cache.bean());
             if (result == null) {
 
                 result = invocation.proceed();
@@ -122,11 +126,11 @@ public class CacheAdvice implements MethodInterceptor {
             else {
                 key += paramKey;
                 if (CommonUtil.isEmpty(key)) {
-                    throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
+                    throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
                 }
             }
 
-            CacheHelper.getCache().removeValue(rmCache.node(), key);
+            CacheHelper.getCache().evict(rmCache.node(), key);
             logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]",
                 BeanUtil.getMethodSignature(invocation.getMethod()), rmCache.node(), key);
         }

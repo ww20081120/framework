@@ -11,17 +11,17 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.cache.core.CacheConstant;
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
+import com.hbasesoft.framework.config.core.ConfigHelper;
 import com.hbasesoft.framework.web.core.bean.UrlResource;
 import com.hbasesoft.framework.web.core.utils.WebUtil;
 import com.hbasesoft.framework.web.system.bean.EventPojo;
 import com.hbasesoft.framework.web.system.bean.OperateLogPojo;
 import com.hbasesoft.framework.web.system.service.EventService;
 import com.hbasesoft.framework.web.system.service.OperateLogService;
-import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.date.DateUtil;
-import com.hbasesoft.framework.config.core.ConfigHelper;
 
 /***
  * <Description> <br>
@@ -60,7 +60,7 @@ public class OperateLogIntercepter extends HandlerInterceptorAdapter {
         logger.debug("record operate log start...");
         // 获取当前请求路径
         // 获取当前路径对应的缓存中路径资源
-        UrlResource urlResource = WebUtil.urlMatch(request);
+        UrlResource urlResource = null;// WebUtil.urlMatch(request);
         String eventType = ConfigHelper.getString("EVENT_TYPE");
         if (urlResource != null && CommonUtil.isNotEmpty(urlResource.getEvents())) {
             Date now = new Date(DateUtil.getCurrentTime());

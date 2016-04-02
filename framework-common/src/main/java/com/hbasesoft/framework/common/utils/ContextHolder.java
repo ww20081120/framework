@@ -8,7 +8,7 @@ package com.hbasesoft.framework.common.utils;
 import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.common.StartupListenerAdapter;
 
 /**
  * <Description> <br>
@@ -27,7 +27,7 @@ public class ContextHolder {
         return ContextHolder.context;
     }
 
-    public static class ContextHolderListener implements StartupListener {
+    public static class ContextHolderListener extends StartupListenerAdapter {
 
         /**
          * Description: <br>
@@ -46,17 +46,6 @@ public class ContextHolder {
          * 
          * @author 王伟<br>
          * @taskId <br>
-         * @throws FrameworkException <br>
-         */
-        @Override
-        public void init() throws FrameworkException {
-        }
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
          * @param context
          * @throws FrameworkException <br>
          */
@@ -64,17 +53,5 @@ public class ContextHolder {
         public void complete(ApplicationContext context) throws FrameworkException {
             ContextHolder.context = context;
         }
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         *         <br>
-         */
-        @Override
-        public void destory() {
-        }
-
     }
 }

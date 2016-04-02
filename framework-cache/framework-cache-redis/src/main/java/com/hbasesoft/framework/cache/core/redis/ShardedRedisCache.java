@@ -11,12 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.util.SerializationUtil;
-import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
 import redis.clients.jedis.JedisShardInfo;
@@ -59,25 +56,12 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public String getCacheModel() {
-        return CACHE_MODEL;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param clazz
      * @param nodeName
      * @return
-     * @throws CacheException <br>
      */
     @Override
-    public <T> Map<String, T> getNode(Class<T> clazz, String nodeName) throws CacheException {
+    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
         ShardedJedis shardedJedis = null;
         Map<String, T> map = null;
         try {
@@ -90,11 +74,8 @@ public class ShardedRedisCache extends AbstractRedisCache {
                 }
             }
         }
-        catch (UtilException e) {
-            throw new CacheException(e);
-        }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             shardedPool.returnResourceObject(shardedJedis);
@@ -110,10 +91,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @param node
-     * @throws CacheException <br>
      */
     @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) throws CacheException {
+    public <T> void putNode(String nodeName, Map<String, T> node) {
         if (CommonUtil.isNotEmpty(node)) {
             ShardedJedis shardedJedis = null;
             Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
@@ -127,11 +107,8 @@ public class ShardedRedisCache extends AbstractRedisCache {
                 }
                 shardedJedis.hmset(nodeName.getBytes(), hmap);
             }
-            catch (UtilException e) {
-                throw new CacheException(e);
-            }
             catch (Exception e) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+                throw new RuntimeException("serial map failed!", e);
             }
             finally {
                 shardedPool.returnResourceObject(shardedJedis);
@@ -147,17 +124,16 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @return
-     * @throws CacheException <br>
      */
     @Override
-    public boolean removeNode(String nodeName) throws CacheException {
+    public boolean removeNode(String nodeName) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
             shardedJedis.del(nodeName.getBytes());
         }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             shardedPool.returnResourceObject(shardedJedis);
@@ -174,21 +150,17 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param nodeName
      * @param key
      * @return
-     * @throws CacheException <br>
      */
     @Override
-    public <T> T getValue(Class<T> clazz, String nodeName, String key) throws CacheException {
+    public <T> T get(String nodeName, String key, Class<T> clazz) {
         T value = null;
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
             value = SerializationUtil.unserial(clazz, shardedJedis.hget(nodeName.getBytes(), key.getBytes()));
         }
-        catch (UtilException e) {
-            throw new CacheException(e);
-        }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             shardedPool.returnResourceObject(shardedJedis);
@@ -204,21 +176,17 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param nodeName
      * @param key
      * @param t
-     * @throws CacheException <br>
      */
     @Override
-    public <T> void putValue(String nodeName, String key, T t) throws CacheException {
+    public <T> void put(String nodeName, String key, T t) {
         if (t != null) {
             ShardedJedis shardedJedis = null;
             try {
                 shardedJedis = shardedPool.getResource();
                 shardedJedis.hset(nodeName.getBytes(), key.getBytes(), SerializationUtil.serial(t));
             }
-            catch (UtilException e) {
-                throw new CacheException(e);
-            }
             catch (Exception e) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+                throw new RuntimeException("serial map failed!", e);
             }
             finally {
                 shardedPool.returnResourceObject(shardedJedis);
@@ -233,17 +201,16 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @param key
-     * @throws CacheException <br>
      */
     @Override
-    public void removeValue(String nodeName, String key) throws CacheException {
+    public void evict(String nodeName, String key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
             shardedJedis.hdel(nodeName.getBytes(), key.getBytes());
         }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             shardedPool.returnResourceObject(shardedJedis);
@@ -255,11 +222,100 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @throws CacheException <br>
      */
     @Override
-    public void clean() throws CacheException {
-        throw new CacheException(ErrorCodeDef.UNSPORT_METHOD_ERROR, "该方法未被实现");
+    public void clear() {
+        throw new RuntimeException("该方法未被实现");
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getName() {
+        return CACHE_MODEL;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public Object getNativeCache() {
+        return shardedPool;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param type
+     * @return <br>
+     */
+    @Override
+    public <T> T get(Object key, Class<T> type) {
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = shardedPool.getResource();
+            return SerializationUtil.unserial(type, shardedJedis.get(key.toString().getBytes()));
+        }
+        catch (Exception e) {
+            throw new RuntimeException("serial map failed!", e);
+        }
+        finally {
+            shardedPool.returnResourceObject(shardedJedis);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value <br>
+     */
+    @Override
+    public void put(Object key, Object value) {
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = shardedPool.getResource();
+            shardedJedis.set(shardedJedis.get(key.toString().getBytes()), SerializationUtil.serial(value));
+        }
+        catch (Exception e) {
+            throw new RuntimeException("serial map failed!", e);
+        }
+        finally {
+            shardedPool.returnResourceObject(shardedJedis);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
+    @Override
+    public void evict(Object key) {
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = shardedPool.getResource();
+            shardedJedis.del(key.toString().getBytes());
+        }
+        finally {
+            shardedPool.returnResourceObject(shardedJedis);
+        }
     }
 
 }

@@ -19,7 +19,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -169,7 +168,7 @@ public class AbstractAnnotationHandler {
         ParamMetadata metadata = null;
         try {
             metadata = daoConfig.isCache()
-                ? CacheHelper.getCache().getValue(ParamMetadata.class, CacheConstant.SQL_PARAM_DIR, key) : null;
+                ? CacheHelper.getCache().get(CacheConstant.SQL_PARAM_DIR, key, ParamMetadata.class) : null;
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -246,14 +245,11 @@ public class AbstractAnnotationHandler {
                         method.getName());
                 }
                 if (daoConfig.isCache()) {
-                    CacheHelper.getCache().putValue(CacheConstant.SQL_PARAM_DIR, key, metadata);
+                    CacheHelper.getCache().put(CacheConstant.SQL_PARAM_DIR, key, metadata);
                 }
             }
         }
         catch (UtilException e) {
-            throw new InitializationException(e);
-        }
-        catch (CacheException e) {
             throw new InitializationException(e);
         }
         catch (Exception e) {
@@ -273,7 +269,7 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         String templateSql = null;
         try {
-            templateSql = daoConfig.isCache() ? CacheHelper.getCache().getValue(CacheConstant.SQL_DIR, key) : null;
+            templateSql = daoConfig.isCache() ? CacheHelper.getCache().get(CacheConstant.SQL_DIR, key) : null;
             if (CommonUtil.isEmpty(templateSql)) {
                 String path = null;
 
@@ -288,12 +284,12 @@ public class AbstractAnnotationHandler {
                     templateSql = checkSqlPath(method, path);
                 }
                 if (daoConfig.isCache()) {
-                    CacheHelper.getCache().putValue(CacheConstant.SQL_DIR, key, templateSql);
+                    CacheHelper.getCache().put(CacheConstant.SQL_DIR, key, templateSql);
                 }
             }
         }
-        catch (CacheException e) {
-            throw new InitializationException(e);
+        catch (Exception e) {
+            throw new InitializationException(ErrorCodeDef.CACHE_ERROR_10002, e);
         }
         return StringUtils.trim(templateSql);
     }

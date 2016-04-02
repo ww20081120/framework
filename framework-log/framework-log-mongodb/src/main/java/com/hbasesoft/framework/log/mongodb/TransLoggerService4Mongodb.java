@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -85,7 +84,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
      * @throws IOException <br>
      */
     private void saveData(TransManager manager, long beginTime, long endTime, long consumeTime, Object returnValue,
-        Exception e) throws CacheException, IOException {
+        Exception e) throws IOException {
         logger.debug("向数据集中插入数据开始：");
         TransLog transLogPojo = new TransLog();
         transLogPojo.setTransId(manager.getStackId());
@@ -100,7 +99,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         int seq = TransManager.getInstance().getSeq();
         StringBuffer sqlSb = new StringBuffer();
         for (int i = 0; i < seq; i++) {
-            sqlSb.append(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, manager.getStackId() + "_SQL_" + i));
+            sqlSb.append(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, manager.getStackId() + "_SQL_" + i));
             sqlSb.append("\n");
         }
         transLogPojo.setSqlLog(sqlSb.toString());
@@ -111,7 +110,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
 
         // 输入参数
         JSONObject inputParam = (JSONObject) JSONObject
-            .parse(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, manager.getStackId()));
+            .parse(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, manager.getStackId()));
         transLogPojo.setInputParam(inputParam.getString("params"));
 
         // 输出参数
@@ -128,7 +127,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         List<String> stackJson = new ArrayList<String>();
         while (it.hasNext()) {
             String childrenStackId = it.next();
-            String logJson = CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, childrenStackId);
+            String logJson = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, childrenStackId);
             stackJson.add(logJson);
         }
         transLogPojo.setStackJson(stackJson);

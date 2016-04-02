@@ -14,7 +14,6 @@ import java.util.Arrays;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -43,7 +42,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
         try {
-            String data = CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, stackId);
+            String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
             if (CommonUtil.isEmpty(data)) {
                 JSONObject json = new JSONObject();
                 json.put("stackId", stackId);
@@ -51,32 +50,33 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                 json.put("beginTime", beginTime);
                 json.put("method", method);
                 json.put("params", CommonUtil.isEmpty(params) ? "" : Arrays.toString(params));
-                CacheHelper.getCache().putValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+                CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
             }
         }
-        catch (CacheException e) {
+        catch (Exception e) {
             logger.warn("缓存保存失败", e);
         }
     }
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#afterReturn(java.lang.String, long, long, java.lang.Object)
+     * @see com.hbasesoft.framework.log.core.TransLoggerService#afterReturn(java.lang.String, long, long,
+     * java.lang.Object)
      */
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, Object returnValue) {
         try {
-            String data = CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, stackId);
+            String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
             if (CommonUtil.isNotEmpty(data)) {
                 JSONObject json = JSONObject.parseObject(data);
                 json.put("endTime", endTime);
                 json.put("consumeTime", consumeTime);
                 json.put("returnValue", returnValue == null ? "" : returnValue);
                 json.put("result", 0);
-                CacheHelper.getCache().updateValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+                CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
             }
         }
-        catch (CacheException e) {
+        catch (Exception e) {
             logger.warn("return更新缓存失败", e);
         }
     }
@@ -89,14 +89,14 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, Exception e) {
         try {
-            String data = CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, stackId);
+            String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
             if (CommonUtil.isNotEmpty(data)) {
                 JSONObject json = JSONObject.parseObject(data);
                 json.put("endTime", endTime);
                 json.put("consumeTime", consumeTime);
                 json.put("exception", getExceptionMsg(e));
                 json.put("result", 1);
-                CacheHelper.getCache().updateValue(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+                CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
             }
         }
         catch (Exception ex) {
@@ -154,10 +154,10 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void sql(String stackId, String sql) {
         try {
-            CacheHelper.getCache().putValue(CacheConstant.CACHE_LOGS,
+            CacheHelper.getCache().put(CacheConstant.CACHE_LOGS,
                 stackId + "_SQL_" + TransManager.getInstance().getSeq(), sql);
         }
-        catch (CacheException e) {
+        catch (Exception e) {
             logger.warn("缓存sql失败", e);
         }
     }
@@ -169,7 +169,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         if (CommonUtil.isNotEmpty(stackId)) {
             for (int i = 0, size = manager.getSeq(); i < size; i++) {
                 try {
-                    CacheHelper.getCache().removeValue(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i);
+                    CacheHelper.getCache().evict(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i);
                 }
                 catch (Exception e) {
                     logger.warn("删除cache日志失败", e);
@@ -179,9 +179,9 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
 
         for (String key : manager.getIdSet()) {
             try {
-                CacheHelper.getCache().removeValue(CacheConstant.CACHE_LOGS, key);
+                CacheHelper.getCache().evict(CacheConstant.CACHE_LOGS, key);
             }
-            catch (CacheException ex) {
+            catch (Exception ex) {
                 logger.warn("删除cache日志失败2", ex);
             }
         }

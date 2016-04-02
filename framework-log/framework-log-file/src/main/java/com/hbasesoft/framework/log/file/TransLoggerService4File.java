@@ -6,7 +6,6 @@ package com.hbasesoft.framework.log.file;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
@@ -30,8 +29,8 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#end(java.lang.String, long, long, long, java.lang.Object,
-     * java.lang.Exception)
+     * @see com.hbasesoft.framework.log.core.TransLoggerService#end(java.lang.String, long, long, long,
+     * java.lang.Object, java.lang.Exception)
      */
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e) {
@@ -39,12 +38,12 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         try {
             for (String key : manager.getIdSet()) {
                 if (manager.isError() || manager.isTimeout()) {
-                    logger.warn(CacheHelper.getCache().getValue(CacheConstant.CACHE_LOGS, key));
+                    logger.warn(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, key));
                 }
 
             }
         }
-        catch (CacheException ex) {
+        catch (Exception ex) {
             logger.warn(ex);
         }
 

@@ -7,7 +7,6 @@ package com.hbasesoft.framework.cache.core;
 
 import java.util.ServiceLoader;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -25,7 +24,7 @@ public final class CacheHelper {
     /** cache */
     private static ICache cache;
 
-    public static ICache getCache() throws CacheException {
+    public static ICache getCache() {
 
         if (cache == null) {
             String cacheModel = PropertyHolder.getProperty("cache.model");
@@ -33,14 +32,14 @@ public final class CacheHelper {
 
             ServiceLoader<ICache> serviceLoader = ServiceLoader.load(ICache.class);
             for (ICache c : serviceLoader) {
-                if (cacheModel.equals(c.getCacheModel())) {
+                if (cacheModel.equals(c.getName())) {
                     cache = c;
                     break;
                 }
             }
 
             if (cache == null) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "未找到缓存实现类 或者 cache.model 配置不正确");
+                throw new RuntimeException("未找到缓存实现类 或者 cache.model 配置不正确");
             }
         }
 
