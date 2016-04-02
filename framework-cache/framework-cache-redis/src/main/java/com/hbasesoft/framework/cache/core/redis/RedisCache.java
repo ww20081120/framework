@@ -11,12 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.util.SerializationUtil;
-import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
 import redis.clients.jedis.Jedis;
@@ -59,25 +56,12 @@ public class RedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public String getCacheModel() {
-        return CACHE_MODEL;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param clazz
      * @param nodeName
      * @return
-     * @throws CacheException <br>
      */
     @Override
-    public <T> Map<String, T> getNode(Class<T> clazz, String nodeName) throws CacheException {
+    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
         Jedis jedis = null;
         Map<String, T> map = null;
         try {
@@ -90,11 +74,8 @@ public class RedisCache extends AbstractRedisCache {
                 }
             }
         }
-        catch (UtilException e) {
-            throw new CacheException(e);
-        }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             jedisPool.returnResourceObject(jedis);
@@ -110,10 +91,9 @@ public class RedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @param node
-     * @throws CacheException <br>
      */
     @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) throws CacheException {
+    public <T> void putNode(String nodeName, Map<String, T> node) {
         if (CommonUtil.isNotEmpty(node)) {
             Jedis jedis = null;
             Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
@@ -127,11 +107,8 @@ public class RedisCache extends AbstractRedisCache {
                 }
                 jedis.hmset(nodeName.getBytes(), hmap);
             }
-            catch (UtilException e) {
-                throw new CacheException(e);
-            }
             catch (Exception e) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+                throw new RuntimeException("serial map failed!", e);
             }
             finally {
                 jedisPool.returnResourceObject(jedis);
@@ -147,17 +124,16 @@ public class RedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @return
-     * @throws CacheException <br>
      */
     @Override
-    public boolean removeNode(String nodeName) throws CacheException {
+    public boolean removeNode(String nodeName) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             jedis.del(nodeName.getBytes());
         }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             jedisPool.returnResourceObject(jedis);
@@ -174,21 +150,17 @@ public class RedisCache extends AbstractRedisCache {
      * @param nodeName
      * @param key
      * @return
-     * @throws CacheException <br>
      */
     @Override
-    public <T> T getValue(Class<T> clazz, String nodeName, String key) throws CacheException {
+    public <T> T get(String nodeName, String key, Class<T> clazz) {
         T value = null;
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             value = SerializationUtil.unserial(clazz, jedis.hget(nodeName.getBytes(), key.getBytes()));
         }
-        catch (UtilException e) {
-            throw new CacheException(e);
-        }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             jedisPool.returnResourceObject(jedis);
@@ -204,21 +176,17 @@ public class RedisCache extends AbstractRedisCache {
      * @param nodeName
      * @param key
      * @param t
-     * @throws CacheException <br>
      */
     @Override
-    public <T> void putValue(String nodeName, String key, T t) throws CacheException {
+    public <T> void put(String nodeName, String key, T t) {
         if (t != null) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
                 jedis.hset(nodeName.getBytes(), key.getBytes(), SerializationUtil.serial(t));
             }
-            catch (UtilException e) {
-                throw new CacheException(e);
-            }
             catch (Exception e) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+                throw new RuntimeException("serial map failed!", e);
             }
             finally {
                 jedisPool.returnResourceObject(jedis);
@@ -233,17 +201,16 @@ public class RedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @param key
-     * @throws CacheException <br>
      */
     @Override
-    public void removeValue(String nodeName, String key) throws CacheException {
+    public void evict(String nodeName, String key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             jedis.hdel(nodeName.getBytes(), key.getBytes());
         }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             jedisPool.returnResourceObject(jedis);
@@ -255,17 +222,111 @@ public class RedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @throws CacheException <br>
      */
     @Override
-    public void clean() throws CacheException {
+    public void clear() {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             jedis.flushAll();
         }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
+        }
+        finally {
+            jedisPool.returnResourceObject(jedis);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getName() {
+        return CACHE_MODEL;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public Object getNativeCache() {
+        return jedisPool;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param type
+     * @return <br>
+     */
+    @Override
+    public <T> T get(Object key, Class<T> type) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            byte[] data = jedis.get(key.toString().getBytes());
+            return SerializationUtil.unserial(type, data);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("serial map failed!", e);
+        }
+        finally {
+            jedisPool.returnResourceObject(jedis);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value <br>
+     */
+    @Override
+    public void put(Object key, Object value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.set(key.toString().getBytes(), SerializationUtil.serial(value));
+        }
+        catch (Exception e) {
+            throw new RuntimeException("serial map failed!", e);
+        }
+        finally {
+            jedisPool.returnResourceObject(jedis);
+        }
+
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
+    @Override
+    public void evict(Object key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.del(key.toString().getBytes());
+        }
+        catch (Exception e) {
+            throw new RuntimeException("serial map failed!", e);
         }
         finally {
             jedisPool.returnResourceObject(jedis);

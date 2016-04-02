@@ -11,11 +11,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.hbasesoft.framework.cache.core.CacheException;
 import com.hbasesoft.framework.cache.core.redis.clients.jedis.BinaryJedisCluster;
 import com.hbasesoft.framework.cache.core.redis.clients.jedis.HostAndPort;
 import com.hbasesoft.framework.cache.core.util.SerializationUtil;
-import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
@@ -60,25 +58,13 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public String getCacheModel() {
-        return CACHE_MODEL;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param clazz
      * @param nodeName
      * @return
-     * @throws CacheException <br>
+     * @ <br>
      */
     @Override
-    public <T> Map<String, T> getNode(Class<T> clazz, String nodeName) throws CacheException {
+    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
         Map<String, T> map = null;
         try {
             Map<byte[], byte[]> hmap = cluster.hgetAllBytes(nodeName);
@@ -89,11 +75,8 @@ public class ClusterRedisCache extends AbstractRedisCache {
                 }
             }
         }
-        catch (UtilException e) {
-            throw new CacheException(e);
-        }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
 
         return map;
@@ -106,10 +89,10 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @param node
-     * @throws CacheException <br>
+     * @ <br>
      */
     @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) throws CacheException {
+    public <T> void putNode(String nodeName, Map<String, T> node) {
         if (CommonUtil.isNotEmpty(node)) {
             Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
             try {
@@ -121,11 +104,8 @@ public class ClusterRedisCache extends AbstractRedisCache {
                 }
                 cluster.hmsetBytes(nodeName, hmap);
             }
-            catch (UtilException e) {
-                throw new CacheException(e);
-            }
             catch (Exception e) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+                throw new RuntimeException("serial map failed!", e);
             }
         }
 
@@ -138,15 +118,15 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @return
-     * @throws CacheException <br>
+     * @ <br>
      */
     @Override
-    public boolean removeNode(String nodeName) throws CacheException {
+    public boolean removeNode(String nodeName) {
         try {
             cluster.del(nodeName);
         }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         return true;
     }
@@ -160,19 +140,16 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param nodeName
      * @param key
      * @return
-     * @throws CacheException <br>
+     * @ <br>
      */
     @Override
-    public <T> T getValue(Class<T> clazz, String nodeName, String key) throws CacheException {
+    public <T> T get(String nodeName, String key, Class<T> clazz) {
         T value = null;
         try {
             value = SerializationUtil.unserial(clazz, cluster.hgetBytes(nodeName, key));
         }
-        catch (UtilException e) {
-            throw new CacheException(e);
-        }
         catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+            throw new RuntimeException("serial map failed!", e);
         }
         return value;
     }
@@ -185,19 +162,16 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param nodeName
      * @param key
      * @param t
-     * @throws CacheException <br>
+     * @ <br>
      */
     @Override
-    public <T> void putValue(String nodeName, String key, T t) throws CacheException {
+    public <T> void put(String nodeName, String key, T t) {
         if (t != null) {
             try {
                 cluster.hset(nodeName, key, SerializationUtil.serial(t));
             }
-            catch (UtilException e) {
-                throw new CacheException(e);
-            }
             catch (Exception e) {
-                throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+                throw new RuntimeException("serial map failed!", e);
             }
         }
     }
@@ -209,15 +183,65 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @taskId <br>
      * @param nodeName
      * @param key
-     * @throws CacheException <br>
+     * @ <br>
      */
     @Override
-    public void removeValue(String nodeName, String key) throws CacheException {
+    public void evict(String nodeName, String key) {
+        cluster.hdel(nodeName, key);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @ <br>
+     */
+    @Override
+    public void clear() {
+        throw new RuntimeException("该方法未被实现");
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getName() {
+        return CACHE_MODEL;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public Object getNativeCache() {
+        return cluster;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param type
+     * @return <br>
+     */
+    @Override
+    public <T> T get(Object key, Class<T> type) {
         try {
-            cluster.hdel(nodeName, key);
+            return SerializationUtil.unserial(type, cluster.getBytes(key.toString()));
         }
-        catch (Exception e) {
-            throw new CacheException(ErrorCodeDef.CACHE_ERROR_10002, "serial map failed!", e);
+        catch (UtilException e) {
+            throw new RuntimeException("serial map failed!", e);
         }
     }
 
@@ -226,11 +250,29 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @throws CacheException <br>
+     * @param key
+     * @param value <br>
      */
     @Override
-    public void clean() throws CacheException {
-        throw new CacheException(ErrorCodeDef.UNSPORT_METHOD_ERROR, "该方法未被实现");
+    public void put(Object key, Object value) {
+        try {
+            cluster.set(key.toString(), SerializationUtil.serial(value));
+        }
+        catch (UtilException e) {
+            throw new RuntimeException("serial map failed!", e);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
+    @Override
+    public void evict(Object key) {
+        cluster.del(key.toString());
     }
 
 }

@@ -18,6 +18,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -37,6 +39,7 @@ import com.hbasesoft.framework.web.permission.service.LoginService;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.web.permission.config <br>
  */
+@Component
 public class DatabaseRealm extends AuthorizingRealm {
 
     /**
@@ -46,6 +49,9 @@ public class DatabaseRealm extends AuthorizingRealm {
 
     @Resource
     private LoginService loginService;
+
+    @Resource
+    private SessionFactory sessionFactory;
 
     /**
      * Description: <br>

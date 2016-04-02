@@ -38,11 +38,6 @@ public class ShiroConfig implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Bean
-    public DatabaseRealm registRealm() {
-        return new DatabaseRealm();
-    }
-
-    @Bean
     public FilterRegistrationBean registShiroFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new DelegatingFilterProxy());

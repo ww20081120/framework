@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.test.cache;
+package com.hbasesoft.framework.cache.ehcache.test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
  * <Description> <br>
@@ -61,6 +62,7 @@ public class TestCache {
      */
     @Before
     public void putNode() {
+        PropertyHolder.setProperty("cache.model", "EHCACHE");
         Map<String, Person> map = new HashMap<String, Person>();
         map.put("zhangsan", new Person("张三", 23));
         map.put("lisi", new Person("李四", 24));

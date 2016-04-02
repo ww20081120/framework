@@ -4,10 +4,9 @@
 package com.hbasesoft.framework.config.core;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.common.StartupListenerAdapter;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.config.core.service.ConfigService;
@@ -23,7 +22,7 @@ import com.hbasesoft.framework.config.core.service.DictionaryDataService;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.config <br>
  */
-public class ConfigItemInitialization implements StartupListener {
+public class ConfigItemInitialization extends StartupListenerAdapter {
 
     /**
      * logger
@@ -60,28 +59,5 @@ public class ConfigItemInitialization implements StartupListener {
         ConfigHelper.setConfigService(configService);
         ConfigHelper.setDictionaryDataService(dictionaryDataService);
         logger.debug("---------------end ConfigItem int ------------------");
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Override
-    public void destory() {
-        logger.debug("---------------ConfigItem destory ------------------");
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @throws FrameworkException <br>
-     */
-    @Override
-    public void init() throws FrameworkException {
     }
 }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.hbasesoft.framework.cache.core.CacheException;
+import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.ICache;
 
 /**
@@ -46,10 +46,11 @@ public class SimpleCache implements ICache {
      * @param clazz 数据类型
      * @param nodeName 节点名称
      * @return 缓存数据
-     * @throws CacheException <br>
+     * @ <br>
      */
     @SuppressWarnings("unchecked")
-    public <T> Map<String, T> getNode(Class<T> clazz, String nodeName) {
+    @Override
+    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
         return (Map<String, T>) cachesMap.get(nodeName);
     }
 
@@ -77,8 +78,8 @@ public class SimpleCache implements ICache {
      * @see com.hbasesoft.framework.cache.core.ICache#getValue(java.lang.String, java.lang.String)
      */
     @Override
-    public <T> T getValue(Class<T> clazz, String nodeName, String key) {
-        Map<String, T> node = getNode(clazz, nodeName);
+    public <T> T get(String nodeName, String key, Class<T> clazz) {
+        Map<String, T> node = getNode(nodeName, clazz);
         return node == null ? null : node.get(key);
     }
 
@@ -88,8 +89,8 @@ public class SimpleCache implements ICache {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> void putValue(String nodeName, String key, T t) {
-        Map<String, T> node = (Map<String, T>) getNode(t.getClass(), nodeName);
+    public <T> void put(String nodeName, String key, T t) {
+        Map<String, T> node = (Map<String, T>) getNode(nodeName, t.getClass());
         if (node == null) {
             node = new ConcurrentHashMap<String, T>();
             putNode(nodeName, node);
@@ -99,19 +100,10 @@ public class SimpleCache implements ICache {
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.cache.core.ICache#updateValue(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void updateValue(String nodeName, String key, Object t) throws CacheException {
-        putValue(nodeName, key, t);
-    }
-
-    /*
-     * (non-Javadoc)
      * @see com.hbasesoft.framework.cache.core.ICache#removeValue(java.lang.String, java.lang.String)
      */
     @Override
-    public void removeValue(String nodeName, String key) throws CacheException {
+    public void evict(String nodeName, String key) {
         Map<String, ?> node = cachesMap.get(nodeName);
         if (node != null) {
             node.remove(key);
@@ -123,7 +115,7 @@ public class SimpleCache implements ICache {
      * @see com.hbasesoft.framework.cache.core.ICache#clean()
      */
     @Override
-    public void clean() throws CacheException {
+    public void clear() {
         cachesMap.clear();
     }
 
@@ -135,8 +127,58 @@ public class SimpleCache implements ICache {
      * @return <br>
      */
     @Override
-    public String getCacheModel() {
+    public String getName() {
         return CACHE_MODEL;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public Object getNativeCache() {
+        return cachesMap;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param type
+     * @return <br>
+     */
+    @Override
+    public <T> T get(Object key, Class<T> type) {
+        return get(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), type);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value <br>
+     */
+    @Override
+    public void put(Object key, Object value) {
+        put(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), value);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
+    @Override
+    public void evict(Object key) {
+        evict(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
+    }
 }
