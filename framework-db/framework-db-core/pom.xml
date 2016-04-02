@@ -18,21 +18,11 @@
 			<artifactId>framework-cache-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-cache-redis</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-cache-simple</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.oracle</groupId> -->
-<!-- 			<artifactId>ojdbc14</artifactId> -->
-<!-- 			<version>${oracle.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.oracle</groupId> -->
+		<!-- <artifactId>ojdbc14</artifactId> -->
+		<!-- <version>${oracle.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

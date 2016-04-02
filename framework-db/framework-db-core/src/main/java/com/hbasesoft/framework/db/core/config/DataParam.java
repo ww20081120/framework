@@ -16,16 +16,16 @@ import java.util.Map;
  * @see com.hbasesoft.framework.dao.datasource <br>
  */
 public class DataParam {
-    
+
     /**
      * pageIndex
      */
-    private int pageIndex = -1;
+    private Integer pageIndex = -1;
 
     /**
      * pageSize
      */
-    private int pageSize = -1;
+    private Integer pageSize = -1;
 
     /**
      * paramMap
@@ -52,19 +52,19 @@ public class DataParam {
      */
     private String dbId;
 
-    public int getPageIndex() {
+    public Integer getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(int pageIndex) {
+    public void setPageIndex(Integer pageIndex) {
         this.pageIndex = pageIndex;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 
@@ -110,13 +110,13 @@ public class DataParam {
 
     /**
      * toString
+     * 
      * @see java.lang.Object#toString()
      * @return <br>
      */
     @Override
     public String toString() {
-        return "DataParam [pageIndex=" + pageIndex + ", pageSize=" + pageSize + ", paramMap=" + paramMap
-            + ", beanType=" + beanType + ", returnType=" + returnType + ", callback=" + callback + ", dbId=" + dbId
-            + "]";
+        return "DataParam [pageIndex=" + pageIndex + ", pageSize=" + pageSize + ", paramMap=" + paramMap + ", beanType="
+            + beanType + ", returnType=" + returnType + ", callback=" + callback + ", dbId=" + dbId + "]";
     }
 }

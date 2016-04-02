@@ -25,17 +25,17 @@ public class ParamMetadata extends BaseEntity {
     /**
      * indexPosition
      */
-    private int indexPosition = -1;
+    private Integer indexPosition = -1;
 
     /**
      * sizePosition
      */
-    private int sizePosition = -1;
+    private Integer sizePosition = -1;
 
     /**
      * callBackPosition
      */
-    private int callBackPosition = -1;
+    private Integer callBackPosition = -1;
 
     /**
      * paramNames
@@ -78,7 +78,7 @@ public class ParamMetadata extends BaseEntity {
      * 
      * @return <br>
      */
-    public int getIndexPosition() {
+    public Integer getIndexPosition() {
         return indexPosition;
     }
 
@@ -87,7 +87,7 @@ public class ParamMetadata extends BaseEntity {
      * 
      * @param indexPosition <br>
      */
-    public void setIndexPosition(int indexPosition) {
+    public void setIndexPosition(Integer indexPosition) {
         this.indexPosition = indexPosition;
     }
 
@@ -105,7 +105,7 @@ public class ParamMetadata extends BaseEntity {
      * 
      * @param sizePosition <br>
      */
-    public void setSizePosition(int sizePosition) {
+    public void setSizePosition(Integer sizePosition) {
         this.sizePosition = sizePosition;
     }
 
@@ -124,7 +124,7 @@ public class ParamMetadata extends BaseEntity {
      * @param index <br>
      * @param name <br>
      */
-    public void setParamName(int index, String name) {
+    public void setParamName(Integer index, String name) {
         this.paramNames[index] = name;
     }
 
@@ -132,7 +132,7 @@ public class ParamMetadata extends BaseEntity {
         return callBackPosition;
     }
 
-    public void setCallBackPosition(int callBackPosition) {
+    public void setCallBackPosition(Integer callBackPosition) {
         this.callBackPosition = callBackPosition;
     }
 
