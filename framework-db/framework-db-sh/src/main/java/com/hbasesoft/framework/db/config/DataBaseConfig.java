@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -70,11 +69,6 @@ public class DataBaseConfig implements ApplicationContextAware {
         bean.setHibernateProperties(properties);
         bean.setPackagesToScan(getBasePackage());
         return bean;
-    }
-
-    @Bean
-    public HibernateJpaVendorAdapter registHibernateJpaVendorAdapter() {
-        return new HibernateJpaVendorAdapter();
     }
 
     @Bean
