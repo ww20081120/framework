@@ -19,6 +19,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.TransLoggerService;
 import com.hbasesoft.framework.log.core.TransManager;
+import com.hbasesoft.framework.log.core.annotation.NoTransLog;
 
 /**
  * <Description> <br>
@@ -68,35 +69,40 @@ public class BusinessTransactionAdivce {
      * @throws FrameworkException <br>
      */
     public void before(JoinPoint point) throws FrameworkException {
-        // 开始执行时间
-        long beginTime = System.currentTimeMillis();
 
-        // 执行方法
-        String method = getMethodSignature(point);
+        NoTransLog noTransLog = point.getTarget().getClass().getAnnotation(NoTransLog.class);
+        if (noTransLog == null) {
+            // 开始执行时间
+            long beginTime = System.currentTimeMillis();
 
-        // 输入参数
-        Object[] args = point.getArgs();
+            // 执行方法
+            String method = getMethodSignature(point);
 
-        TransManager manager = TransManager.getInstance();
-        manager.setTransLoggerServices(getTransLoggerServices());
+            // 输入参数
+            Object[] args = point.getArgs();
 
-        // 深度检测
-        if (manager.getStackSize() > maxDeepLen) {
-            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030, "业务过于复杂，请简化业务");
+            TransManager manager = TransManager.getInstance();
+            manager.setTransLoggerServices(getTransLoggerServices());
+
+            // 深度检测
+            if (manager.getStackSize() > maxDeepLen) {
+                throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030, "业务过于复杂，请简化业务");
+            }
+
+            // 父id
+            String parentStackId = manager.peek();
+
+            // id
+            String stackId = UUID.randomUUID().toString();
+            manager.push(stackId, beginTime);
+
+            // 执行记录
+            List<TransLoggerService> serviceList = getTransLoggerServices();
+            for (TransLoggerService service : serviceList) {
+                service.before(stackId, parentStackId, beginTime, method, args);
+            }
         }
 
-        // 父id
-        String parentStackId = manager.peek();
-
-        // id
-        String stackId = UUID.randomUUID().toString();
-        manager.push(stackId, beginTime);
-
-        // 执行记录
-        List<TransLoggerService> serviceList = getTransLoggerServices();
-        for (TransLoggerService service : serviceList) {
-            service.before(stackId, parentStackId, beginTime, method, args);
-        }
     }
 
     /**
@@ -107,38 +113,41 @@ public class BusinessTransactionAdivce {
      * @throws ServiceException
      */
     public void afterReturning(JoinPoint point, Object returnValue) {
-        // 执行完成时间
-        long endTime = System.currentTimeMillis();
+        NoTransLog noTransLog = point.getTarget().getClass().getAnnotation(NoTransLog.class);
+        if (noTransLog == null) {
+            // 执行完成时间
+            long endTime = System.currentTimeMillis();
 
-        TransManager manager = TransManager.getInstance();
-        String stackId = manager.pop();
-        if (CommonUtil.isEmpty(stackId)) {
-            return;
-        }
-
-        long beginTime = manager.getBeginTime(stackId);
-        long consumeTime = endTime - beginTime;
-
-        if (consumeTime > maxExcuteTime) {
-            manager.setTimeout(true);
-        }
-
-        // 执行记录
-        List<TransLoggerService> serviceList = getTransLoggerServices();
-        for (TransLoggerService service : serviceList) {
-            service.afterReturn(stackId, endTime, consumeTime, returnValue);
-        }
-
-        if (manager.getStackSize() <= 0) {
-            for (TransLoggerService service : serviceList) {
-                service.end(stackId, beginTime, endTime, consumeTime, returnValue, null);
+            TransManager manager = TransManager.getInstance();
+            String stackId = manager.pop();
+            if (CommonUtil.isEmpty(stackId)) {
+                return;
             }
 
-            for (TransLoggerService service : serviceList) {
-                service.clean();
+            long beginTime = manager.getBeginTime(stackId);
+            long consumeTime = endTime - beginTime;
+
+            if (consumeTime > maxExcuteTime) {
+                manager.setTimeout(true);
             }
 
-            manager.clean();
+            // 执行记录
+            List<TransLoggerService> serviceList = getTransLoggerServices();
+            for (TransLoggerService service : serviceList) {
+                service.afterReturn(stackId, endTime, consumeTime, returnValue);
+            }
+
+            if (manager.getStackSize() <= 0) {
+                for (TransLoggerService service : serviceList) {
+                    service.end(stackId, beginTime, endTime, consumeTime, returnValue, null);
+                }
+
+                for (TransLoggerService service : serviceList) {
+                    service.clean();
+                }
+
+                manager.clean();
+            }
         }
     }
 
@@ -150,38 +159,40 @@ public class BusinessTransactionAdivce {
      * @throws ServiceException
      */
     public void afterThrowing(JoinPoint point, Exception ex) {
-        // 执行完成时间
-        long endTime = System.currentTimeMillis();
+        NoTransLog noTransLog = point.getTarget().getClass().getAnnotation(NoTransLog.class);
+        if (noTransLog == null) {
+            // 执行完成时间
+            long endTime = System.currentTimeMillis();
 
-        TransManager manager = TransManager.getInstance();
-        String stackId = manager.pop();
-        if (CommonUtil.isEmpty(stackId)) {
-            return;
-        }
-
-        long beginTime = manager.getBeginTime(stackId);
-        long consumeTime = endTime - beginTime;
-
-        manager.setError(true);
-
-        // 执行记录
-        List<TransLoggerService> serviceList = getTransLoggerServices();
-        for (TransLoggerService service : serviceList) {
-            service.afterThrow(stackId, endTime, consumeTime, ex);
-        }
-
-        if (manager.getStackSize() <= 0) {
-            for (TransLoggerService service : serviceList) {
-                service.end(stackId, beginTime, endTime, consumeTime, null, ex);
+            TransManager manager = TransManager.getInstance();
+            String stackId = manager.pop();
+            if (CommonUtil.isEmpty(stackId)) {
+                return;
             }
 
-            for (TransLoggerService service : serviceList) {
-                service.clean();
-            }
-            
-            manager.clean();
-        }
+            long beginTime = manager.getBeginTime(stackId);
+            long consumeTime = endTime - beginTime;
 
+            manager.setError(true);
+
+            // 执行记录
+            List<TransLoggerService> serviceList = getTransLoggerServices();
+            for (TransLoggerService service : serviceList) {
+                service.afterThrow(stackId, endTime, consumeTime, ex);
+            }
+
+            if (manager.getStackSize() <= 0) {
+                for (TransLoggerService service : serviceList) {
+                    service.end(stackId, beginTime, endTime, consumeTime, null, ex);
+                }
+
+                for (TransLoggerService service : serviceList) {
+                    service.clean();
+                }
+
+                manager.clean();
+            }
+        }
     }
 
     /**
@@ -207,9 +218,8 @@ public class BusinessTransactionAdivce {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
