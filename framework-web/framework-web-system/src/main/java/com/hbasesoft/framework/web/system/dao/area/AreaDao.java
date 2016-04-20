@@ -33,5 +33,11 @@ public interface AreaDao extends IGenericBaseDao {
     @Sql(bean = AreaPojo.class,
         value = "SELECT AREA_ID, PARENT_AREA_ID, AREA_TYPE, AREA_NAME, AREA_CODE, REMARK FROM AREA")
     List<AreaPojo> selectList() throws DaoException;
+    
+    @Sql(value = "SELECT AREA.SHORT_NAME FROM T_SYS_AREA AREA WHERE AREA.AREA_TYPE =2", bean = String.class)
+    List<String> queryAllByCity() throws DaoException;
+    
+    @Sql(value = "SELECT SHORT_NAME FROM T_SYS_AREA WHERE AREA_CODE =:CITY_CODE")
+    String queryCityByCode() throws DaoException;
 
 }
