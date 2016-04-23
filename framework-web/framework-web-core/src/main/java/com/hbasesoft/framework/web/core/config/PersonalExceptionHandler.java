@@ -42,6 +42,7 @@ public class PersonalExceptionHandler {
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("message", "参数不合法");
+        param.put("code", exception.getCode());
         return new ModelAndView(ERROR_PAGE, param);
     }
 
@@ -52,6 +53,7 @@ public class PersonalExceptionHandler {
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("message", exception.getMessage());
+        param.put("code", exception.getCode());
         return new ModelAndView(ERROR_PAGE, param);
     }
 
@@ -62,6 +64,7 @@ public class PersonalExceptionHandler {
 
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("message", exception.getMessage());
+        param.put("code","未知异常");
         return new ModelAndView(ERROR_PAGE, param);
     }
 
