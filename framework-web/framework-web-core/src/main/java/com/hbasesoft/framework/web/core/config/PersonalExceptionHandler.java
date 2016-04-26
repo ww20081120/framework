@@ -63,8 +63,8 @@ public class PersonalExceptionHandler {
         logger.error(exception.getMessage(), exception);
 
         Map<String, Object> param = new HashMap<String, Object>();
-        param.put("message", exception.getMessage());
-        param.put("code","未知异常");
+        param.put("message","");
+        param.put("code","系统异常");
         return new ModelAndView(ERROR_PAGE, param);
     }
 
