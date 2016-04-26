@@ -8,9 +8,7 @@
 	</parent>
 	<artifactId>framework-message-push</artifactId>
 	<properties>
-		<gexin.sdk-base.version>2.0.0.20</gexin.sdk-base.version>
-		<gexin.sdk-http.version>3.0.0.10</gexin.sdk-http.version>
-		<gexin.sdk-template.version>2.0.0.9</gexin.sdk-template.version>
+		<gexin.sdk.version>1.0</gexin.sdk.version>
 		<protobuf.version>2.6.1</protobuf.version>
 		<codehaus.jackson.version>1.9.5</codehaus.jackson.version>
 	</properties>
@@ -20,22 +18,21 @@
 			<artifactId>framework-message-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.gexin.rp</groupId>
 			<artifactId>sdk-base</artifactId>
-			<version>${gexin.sdk-base.version}</version>
+			<version>${gexin.sdk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gexin.rp</groupId>
 			<artifactId>sdk-http</artifactId>
-			<version>${gexin.sdk-http.version}</version>
+			<version>${gexin.sdk.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gexin.rp</groupId>
 			<artifactId>sdk-template</artifactId>
-			<version>${gexin.sdk-template.version}</version>
+			<version>${gexin.sdk.version}</version>
 		</dependency>
-		 -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
