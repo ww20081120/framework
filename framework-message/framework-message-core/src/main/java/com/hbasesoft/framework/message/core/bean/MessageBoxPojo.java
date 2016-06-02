@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
 
@@ -40,7 +41,7 @@ public class MessageBoxPojo extends BaseEntity {
     private String sender;
 
     /** MESSAGE_TYPE */
-    @Column(name = "MESSAGE_TYPE")
+    @Transient
     private String messageType;
 
     /** MESSAGE_TEMPLATE_ID */

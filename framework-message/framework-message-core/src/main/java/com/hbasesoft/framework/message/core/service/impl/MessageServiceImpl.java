@@ -176,7 +176,7 @@ public class MessageServiceImpl implements MessageService.Iface {
                 }
                 SendRecordPojo record = new SendRecordPojo();
                 record.setMessageId(message.getMessageId());
-                record.setContactChannelId(Integer.parseInt(contactChannelId));
+                record.setContactChannelId(contactChannelId);
                 try {
                     String result = excutor.sendMessage(message.getSubject(), message.getContent(), message.getSender(),
                         StringUtils.split(message.getReceivers(), GlobalConstants.SPLITOR), attachments);

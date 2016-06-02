@@ -37,7 +37,7 @@ public class SendRecordPojo extends BaseEntity {
 
     /** CONTACT_CHANNEL_ID */
     @Column(name = "CONTACT_CHANNEL_ID")
-    private Integer contactChannelId;
+    private String contactChannelId;
 
     /** SEND_TIME */
     @Column(name = "SEND_TIME")
@@ -63,11 +63,11 @@ public class SendRecordPojo extends BaseEntity {
         this.messageId = messageId;
     }
 
-    public Integer getContactChannelId() {
+    public String getContactChannelId() {
         return this.contactChannelId;
     }
 
-    public void setContactChannelId(Integer contactChannelId) {
+    public void setContactChannelId(String contactChannelId) {
         this.contactChannelId = contactChannelId;
     }
 
