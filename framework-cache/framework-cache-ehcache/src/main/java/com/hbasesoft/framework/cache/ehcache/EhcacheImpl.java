@@ -138,12 +138,7 @@ public class EhcacheImpl implements ICache {
      */
     @Override
     public <T> void putNode(String nodeName, Map<String, T> node) {
-        if (CommonUtil.isNotEmpty(node)) {
-            Cache cache = getCache(nodeName);
-            for (Entry<String, T> entry : node.entrySet()) {
-                cache.put(new Element(entry.getKey(), entry.getValue()));
-            }
-        }
+        putNode(nodeName, 0, node);
     }
 
     /**
@@ -209,11 +204,49 @@ public class EhcacheImpl implements ICache {
     }
 
     private Cache getCache(String nodeName) {
+        return getCache(nodeName, 0, 0);
+    }
+
+    private Cache getCache(String nodeName, long timeToLiveSeconds, long timeToIdleSeconds) {
         Cache cache = cacheManager.getCache(nodeName);
         if (cache == null) {
-            cache = new Cache(nodeName, 10, true, false, 10, 2);
+            cache = new Cache(nodeName, 0, true, false, timeToLiveSeconds, timeToIdleSeconds);
             cacheManager.addCache(cache);
         }
         return cache;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param node <br>
+     */
+    @Override
+    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
+        if (CommonUtil.isNotEmpty(node)) {
+            Cache cache = getCache(nodeName, expireTimes, 0);
+            for (Entry<String, T> entry : node.entrySet()) {
+                cache.put(new Element(entry.getKey(), entry.getValue()));
+            }
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param key
+     * @param t <br>
+     */
+    @Override
+    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+        getCache(nodeName, expireTimes, 0).put(new Element(key, t));
     }
 }

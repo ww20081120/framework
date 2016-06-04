@@ -181,4 +181,35 @@ public class SimpleCache implements ICache {
     public void evict(Object key) {
         evict(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param node <br>
+     */
+    @Override
+    @Deprecated
+    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
+        putNode(nodeName, node);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param key
+     * @param t <br>
+     */
+    @Override
+    @Deprecated
+    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+        put(key, key, t);
+    }
 }

@@ -56,6 +56,16 @@ public interface ICache extends Cache {
     <T> void putNode(String nodeName, Map<String, T> node);
 
     /**
+     * Description: putNode<br>
+     * 
+     * @author 王伟 <br>
+     * @param nodeName <br>
+     * @param expireTimes <br>
+     * @param node <br>
+     */
+    <T> void putNode(String nodeName, long expireTimes, Map<String, T> node);
+
+    /**
      * Description: removeNode<br>
      * 
      * @author 王伟 <br>
@@ -96,6 +106,17 @@ public interface ICache extends Cache {
      * @param t <br>
      */
     <T> void put(String nodeName, String key, T t);
+
+    /**
+     * Description: putValue<br>
+     * 
+     * @author 王伟 <br>
+     * @param nodeName <br>
+     * @param expireTimes <br>
+     * @param key <br>
+     * @param t <br>
+     */
+    <T> void put(String nodeName, long expireTimes, String key, T t);
 
     /**
      * Description: removeValue<br>

@@ -333,4 +333,66 @@ public class RedisCache extends AbstractRedisCache {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param node <br>
+     */
+    @Override
+    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
+        if (CommonUtil.isNotEmpty(node)) {
+            Jedis jedis = null;
+            Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
+            try {
+                jedis = jedisPool.getResource();
+                for (Entry<String, T> entry : node.entrySet()) {
+                    byte[] value = SerializationUtil.serial(entry.getValue());
+                    if (value != null) {
+                        hmap.put(entry.getKey().getBytes(), value);
+                    }
+                }
+                jedis.expire(nodeName.getBytes(), new Long(expireTimes).intValue());
+                jedis.hmset(nodeName.getBytes(), hmap);
+            }
+            catch (Exception e) {
+                throw new RuntimeException("serial map failed!", e);
+            }
+            finally {
+                jedisPool.returnResourceObject(jedis);
+            }
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param key
+     * @param t <br>
+     */
+    @Override
+    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+        if (t != null) {
+            Jedis jedis = null;
+            try {
+                jedis = jedisPool.getResource();
+                jedis.expire(nodeName.getBytes(), new Long(expireTimes).intValue());
+                jedis.hset(nodeName.getBytes(), key.getBytes(), SerializationUtil.serial(t));
+            }
+            catch (Exception e) {
+                throw new RuntimeException("serial map failed!", e);
+            }
+            finally {
+                jedisPool.returnResourceObject(jedis);
+            }
+        }
+    }
+
 }

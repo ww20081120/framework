@@ -72,6 +72,7 @@ public class CacheAdvice implements MethodInterceptor {
 
     @SuppressWarnings("unchecked")
     private Object cache(Cache cache, MethodInvocation invocation, Class<?> returnType) throws Throwable {
+        long expireTimes = cache.expireTime();
         Object result = null;
         if (CacheType.KEY_VALUE == cache.type()) {
             String key = cache.key();
@@ -90,7 +91,13 @@ public class CacheAdvice implements MethodInterceptor {
             if (result == null) {
                 result = invocation.proceed();
                 if (result != null) {
-                    CacheHelper.getCache().put(cache.node(), key, result);
+                    if (expireTimes > 0) {
+                        CacheHelper.getCache().put(cache.node(), expireTimes, key, result);
+                    }
+                    else {
+                        CacheHelper.getCache().put(cache.node(), key, result);
+                    }
+
                     logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]",
                         BeanUtil.getMethodSignature(invocation.getMethod()), cache.node(), key);
                 }
@@ -106,7 +113,14 @@ public class CacheAdvice implements MethodInterceptor {
 
                 result = invocation.proceed();
                 if (result != null) {
-                    CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
+
+                    if (expireTimes > 0) {
+                        CacheHelper.getCache().putNode(cache.node(), expireTimes, (Map<String, ?>) result);
+                    }
+                    else {
+                        CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
+                    }
+
                     logger.info("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(invocation.getMethod()),
                         cache.node());
                 }

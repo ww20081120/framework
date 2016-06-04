@@ -318,4 +318,67 @@ public class ShardedRedisCache extends AbstractRedisCache {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param node <br>
+     */
+    @Override
+    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
+        if (CommonUtil.isNotEmpty(node)) {
+            ShardedJedis shardedJedis = null;
+            Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
+            try {
+                shardedJedis = shardedPool.getResource();
+                for (Entry<String, T> entry : node.entrySet()) {
+                    byte[] value = SerializationUtil.serial(entry.getValue());
+                    if (value != null) {
+                        hmap.put(entry.getKey().getBytes(), value);
+                    }
+                }
+                shardedJedis.expire(nodeName.getBytes(), new Long(expireTimes).intValue());
+                shardedJedis.hmset(nodeName.getBytes(), hmap);
+            }
+            catch (Exception e) {
+                throw new RuntimeException("serial map failed!", e);
+            }
+            finally {
+                shardedPool.returnResourceObject(shardedJedis);
+            }
+        }
+
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param key
+     * @param t <br>
+     */
+    @Override
+    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+        if (t != null) {
+            ShardedJedis shardedJedis = null;
+            try {
+                shardedJedis = shardedPool.getResource();
+                shardedJedis.expire(nodeName.getBytes(), new Long(expireTimes).intValue());
+                shardedJedis.hset(nodeName.getBytes(), key.getBytes(), SerializationUtil.serial(t));
+            }
+            catch (Exception e) {
+                throw new RuntimeException("serial map failed!", e);
+            }
+            finally {
+                shardedPool.returnResourceObject(shardedJedis);
+            }
+        }
+    }
+
 }

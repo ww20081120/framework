@@ -33,4 +33,6 @@ public @interface Cache {
     CacheType type() default CacheType.KEY_VALUE;
 
     Class<?> bean() default String.class;
+
+    long expireTime() default 0L;
 }

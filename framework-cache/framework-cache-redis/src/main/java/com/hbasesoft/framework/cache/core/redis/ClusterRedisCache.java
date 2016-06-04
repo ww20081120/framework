@@ -275,4 +275,56 @@ public class ClusterRedisCache extends AbstractRedisCache {
         cluster.del(key.toString());
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param node <br>
+     */
+    @Override
+    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
+        if (CommonUtil.isNotEmpty(node)) {
+            Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
+            try {
+                for (Entry<String, T> entry : node.entrySet()) {
+                    byte[] value = SerializationUtil.serial(entry.getValue());
+                    if (value != null) {
+                        hmap.put(entry.getKey().getBytes(), value);
+                    }
+                }
+                cluster.expire(nodeName, new Long(expireTimes).intValue());
+                cluster.hmsetBytes(nodeName, hmap);
+            }
+            catch (Exception e) {
+                throw new RuntimeException("serial map failed!", e);
+            }
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param expireTimes
+     * @param key
+     * @param t <br>
+     */
+    @Override
+    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+        if (t != null) {
+            try {
+                cluster.expire(nodeName, new Long(expireTimes).intValue());
+                cluster.hset(nodeName, key, SerializationUtil.serial(t));
+            }
+            catch (Exception e) {
+                throw new RuntimeException("serial map failed!", e);
+            }
+        }
+    }
+
 }
