@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-message</artifactId>
-		<version>1.0</version>
+		<version>2.0</version>
 	</parent>
 	<artifactId>framework-message-email</artifactId>
 	<properties>
