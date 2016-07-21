@@ -1,3 +1,0 @@
-UPDATE ANNOUNCEMENT
-   SET STATE = :pojo.state, COMMENTS = :pojo.comments
- WHERE ANNOUNCEMENT_ID IN :ids
