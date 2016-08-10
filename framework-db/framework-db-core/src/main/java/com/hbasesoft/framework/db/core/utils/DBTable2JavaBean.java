@@ -431,7 +431,9 @@ public class DBTable2JavaBean extends JFrame {
         sb.append("    ").append("/** ").append(cmt).append(" */").append('\n');
         if (cmt.equals(pkColum)) {
             sb.append("    ").append("@Id").append('\n');
-            sb.append("    ").append("@GeneratedValue(strategy = GenerationType.IDENTITY)").append('\n');
+            sb.append("    ").append("@GeneratedValue(generator = \"paymentableGenerator\")").append('\n');
+            sb.append("    ").append("@GenericGenerator(name = \"paymentableGenerator\", strategy = \"uuid\")")
+                .append('\n');
         }
         sb.append("    ").append("@Column(name = \"").append(cmt).append("\")").append('\n');
         sb.append("    ").append("private ").append(type).append(" ").append(field).append(';').append('\n');
