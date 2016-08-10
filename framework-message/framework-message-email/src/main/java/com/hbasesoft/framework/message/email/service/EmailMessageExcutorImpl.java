@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.config.core.ConfigHelper;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.message.api.Attachment;
 import com.hbasesoft.framework.message.core.service.MessageExcutor;
 
@@ -43,15 +43,15 @@ public class EmailMessageExcutorImpl implements MessageExcutor {
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
-     * java.lang.String, java.util.List, java.util.List)
+     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String,
+     * java.lang.String, java.lang.String, java.util.List, java.util.List)
      */
     @Override
     public String sendMessage(String title, String content, String sender, String[] receiver,
         List<Attachment> attachments) throws ServiceException {
-        String host = ConfigHelper.getString("EMAIL.EMAIL_HOST");
-        String username = ConfigHelper.getString("EMAIL.EMAIL_USERNAME");
-        String password = ConfigHelper.getString("EMAIL.EMAIL_PASSWORD");
+        String host = PropertyHolder.getProperty("EMAIL.EMAIL_HOST");
+        String username = PropertyHolder.getProperty("EMAIL.EMAIL_USERNAME");
+        String password = PropertyHolder.getProperty("EMAIL.EMAIL_PASSWORD");
 
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp");

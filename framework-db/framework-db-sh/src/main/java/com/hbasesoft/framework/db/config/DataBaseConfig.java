@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -49,7 +50,7 @@ public class DataBaseConfig implements ApplicationContextAware {
     private ApplicationContext context;
 
     @Bean(name = "transactionManager")
-    public HibernateTransactionManager registTransactonManger(SessionFactory sessionFactory) {
+    public PlatformTransactionManager registTransactonManger(SessionFactory sessionFactory) {
         HibernateTransactionManager manager = new HibernateTransactionManager();
         manager.setSessionFactory(sessionFactory);
         return manager;

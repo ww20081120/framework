@@ -18,8 +18,8 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
-import com.hbasesoft.framework.config.core.ConfigHelper;
 import com.hbasesoft.framework.message.api.Attachment;
 import com.hbasesoft.framework.message.core.service.MessageExcutor;
 
@@ -92,9 +92,9 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
      * @throws Exception <br>
      */
     private String getSendUrl(String content, String receives) throws Exception {
-        String url = ConfigHelper.getString("SMS.SMS_URL");
-        String username = ConfigHelper.getString("SMS.SMS_USERNAME");
-        String password = ConfigHelper.getString("SMS.SMS_PASSWORD");
+        String url = PropertyHolder.getProperty("SMS.SMS_URL");
+        String username = PropertyHolder.getProperty("SMS.SMS_USERNAME");
+        String password = PropertyHolder.getProperty("SMS.SMS_PASSWORD");
 
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("username", username);

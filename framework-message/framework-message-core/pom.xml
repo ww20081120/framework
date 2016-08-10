@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-config</artifactId>
+			<artifactId>framework-db-sh</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

@@ -18,9 +18,6 @@
 		<module>framework-cache</module>
 		<module>framework-message</module>
 		<module>framework-log</module>
-		<module>framework-config</module>
-		<module>framework-bootstrap</module>
-		<module>framework-web</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,6 +27,11 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
