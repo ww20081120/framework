@@ -32,9 +32,15 @@ import org.springframework.core.io.ClassPathResource;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
- * 系统配置
  * 
- * @author 杨尚川
+ * <Description> 系统配置<br> 
+ *  
+ * @author 王伟<br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2016年8月11日 <br>
+ * @since V1.0<br>
+ * @see com.hbasesoft.framework.common.utils <br>
  */
 public class PropertyHolder {
     private static Logger log = new Logger(PropertyHolder.class);
@@ -79,8 +85,12 @@ public class PropertyHolder {
     }
 
     /**
-     * 本方法中的日志只能输出中文，因为APDPlatLoggerImpl中默认指定输出中文 只有配置项加载完毕，调用了指定日志输出语言方法LOG.setLocale(getLogLanguage())
-     * 之后，配置的日志输出语言才会生效
+     * 
+     * Description: 本方法中的日志只能输出中文，因为APDPlatLoggerImpl中默认指定输出中文 只有配置项加载完毕，调用了指定日志输出语言方法LOG.setLocale(getLogLanguage())
+     * 之后，配置的日志输出语言才会生效<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br> <br>
      */
     private static void init() {
         String systemConfig = "/application.properties";
