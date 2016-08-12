@@ -56,7 +56,7 @@ public class TransLogStackPojo extends BaseEntity {
 
     /** CONSUME_TIME */
     @Column(name = "CONSUME_TIME")
-    private Integer consumeTime;
+    private Long consumeTime;
 
     /** INPUT_PARAM */
     @Column(name = "INPUT_PARAM")
@@ -123,11 +123,11 @@ public class TransLogStackPojo extends BaseEntity {
         this.endTime = endTime;
     }
 
-    public Integer getConsumeTime() {
+    public Long getConsumeTime() {
         return this.consumeTime;
     }
 
-    public void setConsumeTime(Integer consumeTime) {
+    public void setConsumeTime(Long consumeTime) {
         this.consumeTime = consumeTime;
     }
 

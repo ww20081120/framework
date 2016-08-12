@@ -12,12 +12,12 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
+import com.hbasesoft.framework.log.core.TransBean;
 import com.hbasesoft.framework.log.core.TransManager;
 import com.hbasesoft.framework.log.mongodb.model.TransLog;
 import com.hbasesoft.framework.log.mongodb.repositoryimpl.LogRepository;
@@ -57,11 +57,9 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         TransManager manager = TransManager.getInstance();
 
         try {
-            boolean printFlag = PropertyHolder.getBooleanProperty("log.trans.db.print");
-            if (manager.isError() || manager.isTimeout() || printFlag) {
+            if (manager.isError() || manager.isTimeout() || alwaysLog) {
                 // 插入数据
                 saveData(manager, beginTime, endTime, consumeTime, returnValue, e);
-
             }
         }
         catch (Exception ex) {
@@ -109,10 +107,10 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
         String contactChannelId = PropertyHolder.getProperty("contact.channel.id");
         transLogPojo.setContactChannelId(Integer.valueOf(contactChannelId));
 
+        TransBean tBean = getTransBean(manager.getStackId());
+
         // 输入参数
-        JSONObject inputParam = (JSONObject) JSONObject
-            .parse(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, manager.getStackId()));
-        transLogPojo.setInputParam(inputParam.getString("params"));
+        transLogPojo.setInputParam(tBean.getParams());
 
         // 输出参数
         if (returnValue != null) {

@@ -20,6 +20,7 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
+import com.hbasesoft.framework.log.core.TransBean;
 import com.hbasesoft.framework.log.core.TransManager;
 import com.hbasesoft.framework.log.db.bean.TransLogPojo;
 import com.hbasesoft.framework.log.db.bean.TransLogStackPojo;
@@ -64,8 +65,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
         Exception e) {
         TransManager manager = TransManager.getInstance();
         try {
-            boolean printFlag = PropertyHolder.getBooleanProperty("log.trans.db.print");
-            if (manager.isError() || manager.isTimeout() || printFlag) {
+            if (manager.isError() || manager.isTimeout() || alwaysLog) {
                 // 插入数据,TRANS_LOG
                 saveTransLog(stackId, beginTime, endTime, consumeTime, returnValue, e);
 
@@ -99,16 +99,17 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
             transLogStackPojo.setStackId(stackId);
             transLogStackPojo.setSeq(seq);
             transLogStackPojo.setTransId(manager.getStackId());
-            JSONObject logJson = (JSONObject) JSONObject
-                .parse(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId));
-            transLogStackPojo.setMethod(logJson.getString("method"));
-            transLogStackPojo.setParentStackId(logJson.getString("parentStackId"));
-            transLogStackPojo.setBeginTime(new Date(logJson.getLong("beginTime")));
-            transLogStackPojo.setEndTime(new Date(logJson.getLong("endTime")));
-            transLogStackPojo.setConsumeTime(logJson.getInteger("consumeTime"));
-            transLogStackPojo.setInputParam(logJson.getString("params"));
-            transLogStackPojo.setOutputParam(logJson.getString("returnValue"));
-            transLogStackPojo.setIsSuccess("N");
+
+            TransBean tBean = getTransBean(stackId);
+
+            transLogStackPojo.setMethod(tBean.getMethod());
+            transLogStackPojo.setParentStackId(tBean.getParentStackId());
+            transLogStackPojo.setBeginTime(new Date(tBean.getBeginTime()));
+            transLogStackPojo.setEndTime(new Date(tBean.getEndTime()));
+            transLogStackPojo.setConsumeTime(tBean.getConsumeTime());
+            transLogStackPojo.setInputParam(tBean.getParams());
+            transLogStackPojo.setOutputParam(tBean.getReturnValue());
+            transLogStackPojo.setIsSuccess(tBean.getResult());
             seq++;
             transLogDao.save(transLogStackPojo);
         }

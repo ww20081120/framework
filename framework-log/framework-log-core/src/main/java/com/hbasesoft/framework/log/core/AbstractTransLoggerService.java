@@ -14,7 +14,6 @@ import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -48,13 +47,13 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         try {
             String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
             if (CommonUtil.isEmpty(data)) {
-                JSONObject json = new JSONObject();
-                json.put("stackId", stackId);
-                json.put("parentStackId", parentStackId);
-                json.put("beginTime", beginTime);
-                json.put("method", method);
-                json.put("params", CommonUtil.isEmpty(params) ? "" : Arrays.toString(params));
-                CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+                TransBean bean = new TransBean();
+                bean.setStackId(stackId);
+                bean.setParentStackId(parentStackId);
+                bean.setBeginTime(beginTime);
+                bean.setMethod(method);
+                bean.setParams(CommonUtil.isEmpty(params) ? GlobalConstants.BLANK : Arrays.toString(params));
+                putTransBean(bean);
             }
         }
         catch (Exception e) {
@@ -70,14 +69,12 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         try {
-            String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
-            if (CommonUtil.isNotEmpty(data)) {
-                JSONObject json = JSONObject.parseObject(data);
-                json.put("endTime", endTime);
-                json.put("consumeTime", consumeTime);
-                json.put("returnValue", returnValue == null ? "" : returnValue);
-                json.put("result", 0);
-                CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+            TransBean bean = getTransBean(stackId);
+            if (bean != null) {
+                bean.setEndTime(endTime);
+                bean.setConsumeTime(consumeTime);
+                bean.setReturnValue(returnValue == null ? GlobalConstants.BLANK : returnValue.toString());
+                putTransBean(bean);
             }
         }
         catch (Exception e) {
@@ -93,19 +90,26 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
         try {
-            String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
-            if (CommonUtil.isNotEmpty(data)) {
-                JSONObject json = JSONObject.parseObject(data);
-                json.put("endTime", endTime);
-                json.put("consumeTime", consumeTime);
-                json.put("exception", getExceptionMsg(e));
-                json.put("result", 1);
-                CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, stackId, json.toJSONString());
+            TransBean bean = getTransBean(stackId);
+            if (bean != null) {
+                bean.setEndTime(endTime);
+                bean.setConsumeTime(consumeTime);
+                bean.setException(getExceptionMsg(e));
+                bean.setResult("1");
+                putTransBean(bean);
             }
         }
         catch (Exception ex) {
             logger.warn("更新缓存失败", ex);
         }
+    }
+
+    protected TransBean getTransBean(String stackId) {
+        return CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId, TransBean.class);
+    }
+
+    protected void putTransBean(TransBean bean) {
+        CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, bean.getStackId(), bean);
     }
 
     /**
