@@ -125,7 +125,7 @@ public class BusinessTransactionAdivce {
             }
 
             long beginTime = manager.getBeginTime(stackId);
-            long consumeTime = endTime - beginTime;
+            long consumeTime = (endTime - beginTime) / 1000;
 
             if (consumeTime > maxExcuteTime) {
                 manager.setTimeout(true);
