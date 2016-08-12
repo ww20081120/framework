@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.aopalliance.intercept.MethodInterceptor;
@@ -22,9 +20,6 @@ import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-
-import ognl.Ognl;
-import ognl.OgnlException;
 
 /**
  * <Description> <br>
@@ -56,9 +51,13 @@ public class CacheAdvice implements MethodInterceptor {
         Object result = null;
         Class<?> returnType = invocation.getMethod().getReturnType();
         Cache cache = AnnotationUtils.findAnnotation(invocation.getMethod(), Cache.class);
+        CacheNode cacheNode = null;
         // 携带Cache注解的方法，返回类型不能为空
         if (cache != null && !Void.class.equals(returnType)) {
             result = cache(cache, invocation, returnType);
+        }
+        else if ((cacheNode = AnnotationUtils.findAnnotation(invocation.getMethod(), CacheNode.class)) != null) {
+            result = cacheNode(cacheNode, invocation, returnType);
         }
         else {
             result = invocation.proceed();
@@ -70,145 +69,79 @@ public class CacheAdvice implements MethodInterceptor {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     private Object cache(Cache cache, MethodInvocation invocation, Class<?> returnType) throws Throwable {
-        long expireTimes = cache.expireTime();
-        Object result = null;
-        if (CacheType.KEY_VALUE == cache.type()) {
-            String key = cache.key();
-            String paramKey = getCacheKey(invocation.getMethod(), invocation.getArguments());
-            if (CommonUtil.isNotEmpty(key) && CommonUtil.isNotEmpty(paramKey)) {
-                key += GlobalConstants.PERIOD + paramKey;
-            }
-            else {
-                key += paramKey;
-                if (CommonUtil.isEmpty(key)) {
-                    throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
+        String key = getCacheKey(cache.key(), invocation);
+        Object result = CacheHelper.getCache().get(cache.node(), key, returnType);
+        if (result == null) {
+            result = invocation.proceed();
+            if (result != null) {
+                long expireTimes = cache.expireTime();
+                if (expireTimes > 0) {
+                    CacheHelper.getCache().put(cache.node(), expireTimes, key, result);
                 }
-            }
-
-            result = CacheHelper.getCache().get(cache.node(), key, returnType);
-            if (result == null) {
-                result = invocation.proceed();
-                if (result != null) {
-                    if (expireTimes > 0) {
-                        CacheHelper.getCache().put(cache.node(), expireTimes, key, result);
-                    }
-                    else {
-                        CacheHelper.getCache().put(cache.node(), key, result);
-                    }
-
-                    logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]",
-                        BeanUtil.getMethodSignature(invocation.getMethod()), cache.node(), key);
+                else {
+                    CacheHelper.getCache().put(cache.node(), key, result);
                 }
-            }
 
-        }
-        else if (CacheType.NODE == cache.type() && !Map.class.isAssignableFrom(returnType)) {
-            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
-        }
-        else {
-            result = CacheHelper.getCache().get(cache.node(), cache.bean());
-            if (result == null) {
-
-                result = invocation.proceed();
-                if (result != null) {
-
-                    if (expireTimes > 0) {
-                        CacheHelper.getCache().putNode(cache.node(), expireTimes, (Map<String, ?>) result);
-                    }
-                    else {
-                        CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
-                    }
-
-                    logger.info("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(invocation.getMethod()),
-                        cache.node());
-                }
+                logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]",
+                    BeanUtil.getMethodSignature(invocation.getMethod()), cache.node(), key);
             }
         }
 
         return result;
     }
 
-    private void rmCache(RmCache rmCache, MethodInvocation invocation) throws Exception {
-        if (CacheType.KEY_VALUE == rmCache.type()) {
-            String key = rmCache.key();
-            String paramKey = getRmCacheKey(invocation.getMethod(), invocation.getArguments());
-            if (CommonUtil.isNotEmpty(key) && CommonUtil.isNotEmpty(paramKey)) {
-                key += GlobalConstants.PERIOD + paramKey;
-            }
-            else {
-                key += paramKey;
-                if (CommonUtil.isEmpty(key)) {
-                    throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
-                }
-            }
-
-            CacheHelper.getCache().evict(rmCache.node(), key);
-            logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]",
-                BeanUtil.getMethodSignature(invocation.getMethod()), rmCache.node(), key);
+    @SuppressWarnings("unchecked")
+    private Object cacheNode(CacheNode cache, MethodInvocation invocation, Class<?> returnType) throws Throwable {
+        if (!Map.class.isAssignableFrom(returnType)) {
+            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
         }
-        else {
+
+        Object result = CacheHelper.getCache().get(cache.node(), cache.bean());
+        if (result == null) {
+            result = invocation.proceed();
+            if (result != null) {
+                long expireTimes = cache.expireTime();
+                if (expireTimes > 0) {
+                    CacheHelper.getCache().putNode(cache.node(), expireTimes, (Map<String, ?>) result);
+                }
+                else {
+                    CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
+                }
+
+                logger.info("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(invocation.getMethod()),
+                    cache.node());
+            }
+        }
+
+        return null;
+    }
+
+    private void rmCache(RmCache rmCache, MethodInvocation invocation) throws Exception {
+        if (rmCache.clean()) {
             CacheHelper.getCache().removeNode(rmCache.node());
             logger.info("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(invocation.getMethod()),
                 rmCache.node());
         }
+        else {
+            String key = getCacheKey(rmCache.key(), invocation);
+            CacheHelper.getCache().evict(rmCache.node(), key);
+            logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]",
+                BeanUtil.getMethodSignature(invocation.getMethod()), rmCache.node(), key);
+        }
 
     }
 
-    private String getCacheKey(Method method, Object[] args) {
-        StringBuilder sb = new StringBuilder();
-        Annotation[][] annotations = method.getParameterAnnotations();
-        if (CommonUtil.isNotEmpty(annotations)) {
-            for (int i = 0; i < annotations.length; i++) {
-                boolean hasKey = false;
-                Annotation[] as = annotations[i];
-                if (CommonUtil.isNotEmpty(as)) {
-                    for (Annotation a : as) {
-                        if (a instanceof CacheKey) {
-                            hasKey = true;
-                            break;
-                        }
-                    }
-                }
+    private String getCacheKey(String prefix, MethodInvocation invocation) throws ServiceException {
+        Object[] args = invocation.getArguments();
 
-                if (hasKey) {
-                    if (sb.length() > 0) {
-                        sb.append(GlobalConstants.PERIOD);
-                    }
-                    sb.append(args[i]);
-                }
-            }
+        if (CommonUtil.isEmpty(args)) {
+            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
+        }
+        StringBuilder sb = new StringBuilder(prefix);
+        for (Object arg : args) {
+            sb.append(GlobalConstants.UNDERLINE).append(arg == null ? GlobalConstants.BLANK : arg);
         }
         return sb.toString();
     }
-
-    private String getRmCacheKey(Method method, Object[] args) throws OgnlException {
-        Annotation[][] annotations = method.getParameterAnnotations();
-
-        if (CommonUtil.isNotEmpty(annotations)) {
-            for (int i = 0; i < annotations.length; i++) {
-                boolean hasKey = false;
-                Annotation[] as = annotations[i];
-                CacheKey cacheKey = null;
-                if (CommonUtil.isNotEmpty(as)) {
-                    for (Annotation a : as) {
-                        if (a instanceof CacheKey) {
-                            hasKey = true;
-                            cacheKey = (CacheKey) a;
-                            break;
-                        }
-                    }
-                }
-
-                if (hasKey) {
-                    Object obj = CommonUtil.isEmpty(cacheKey.value()) ? args[i]
-                        : Ognl.getValue(cacheKey.value(), args[i]);
-                    return obj == null ? GlobalConstants.BLANK : obj.toString();
-                }
-            }
-        }
-        return GlobalConstants.BLANK;
-    }
-
 }

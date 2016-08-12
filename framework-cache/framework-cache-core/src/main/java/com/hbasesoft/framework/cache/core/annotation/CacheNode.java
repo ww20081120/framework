@@ -24,13 +24,13 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Cache {
+public @interface CacheNode {
 
     String node();
 
-    String key() default GlobalConstants.BLANK;
+    Class<?> bean();
 
-    Class<?> bean() default String.class;
+    String key() default GlobalConstants.BLANK;
 
     long expireTime() default 0L;
 }

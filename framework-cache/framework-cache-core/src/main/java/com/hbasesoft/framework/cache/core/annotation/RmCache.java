@@ -32,5 +32,5 @@ public @interface RmCache {
 
     String key() default GlobalConstants.BLANK;
 
-    CacheType type() default CacheType.KEY_VALUE;
+    boolean clean() default false;
 }
