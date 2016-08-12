@@ -27,9 +27,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param obj <br>
@@ -44,9 +43,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param obj <br>
@@ -61,9 +59,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
@@ -78,9 +75,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
@@ -95,9 +91,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param <T> <br>
@@ -113,9 +108,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param <T> <br>
@@ -131,9 +125,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
@@ -148,9 +141,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
@@ -165,9 +157,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
@@ -182,9 +173,8 @@ public final class Assert {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
@@ -195,6 +185,18 @@ public final class Assert {
     public static void isEmpty(Map<?, ?> str, String message, Object... params) throws AssertException {
         if (CommonUtil.isNotEmpty(str)) {
             throw new AssertException(ErrorCodeDef.NOT_NULL, message, params);
+        }
+    }
+
+    public static void isTrue(boolean result, String message, Object... params) {
+        if (!result) {
+            throw new AssertException(ErrorCodeDef.IS_FALSE, message, params);
+        }
+    }
+
+    public static void isFalse(boolean result, String message, Object... params) {
+        if (result) {
+            throw new AssertException(ErrorCodeDef.IS_TRUE, message, params);
         }
     }
 }
