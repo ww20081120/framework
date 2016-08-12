@@ -55,8 +55,8 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         if (alwaysLog) {
-            logger.debug("success execute method [{0}], consumeTime[{1}], returnValue[{2}]", method, stackId,
-                consumeTime, returnValue);
+            logger.debug("success execute method [{0}], statckId[{1}], consumeTime[{2}], returnValue[{3}]", method,
+                stackId, consumeTime, returnValue);
         }
         else {
             super.afterReturn(stackId, endTime, consumeTime, method, returnValue);
@@ -76,7 +76,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
         if (alwaysLog) {
-            logger.warn(e, "error execute method[0], consumeTime[{1}]", method, consumeTime);
+            logger.warn(e, "error execute method[0], statckId[{1}], consumeTime[{2}]", method, stackId, consumeTime);
         }
         else {
             super.afterThrow(stackId, endTime, consumeTime, method, e);
@@ -93,8 +93,9 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         Exception e) {
         TransManager manager = TransManager.getInstance();
         if (alwaysLog) {
-            logger.info("execute method[{0}] [{1}], consumeTime [{2}], returnValue [{3}], errorMessage [{4}]", method,
-                manager.isError() || manager.isTimeout(), consumeTime, returnValue,
+            logger.info(
+                "execute method[{0}] [{1}], statckId[{2}], consumeTime [{3}], returnValue [{4}], errorMessage [{5}]",
+                method, manager.isError() || manager.isTimeout(), stackId, consumeTime, returnValue,
                 e == null ? "NULL" : e.getMessage());
         }
         else {
