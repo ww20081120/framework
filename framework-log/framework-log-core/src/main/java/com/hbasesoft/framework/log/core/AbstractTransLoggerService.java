@@ -45,9 +45,9 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
         try {
-            String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
-            if (CommonUtil.isEmpty(data)) {
-                TransBean bean = new TransBean();
+            TransBean bean = getTransBean(stackId);
+            if (bean == null) {
+                bean = new TransBean();
                 bean.setStackId(stackId);
                 bean.setParentStackId(parentStackId);
                 bean.setBeginTime(beginTime);

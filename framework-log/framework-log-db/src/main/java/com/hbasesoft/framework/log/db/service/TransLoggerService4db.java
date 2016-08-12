@@ -13,7 +13,6 @@ import javax.annotation.Resource;
 import org.hibernate.cache.CacheException;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -156,9 +155,9 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
         transLogPojo.setContactChannelId(Integer.valueOf(contactChannelId));
 
         // 输入参数
-        JSONObject inputParam = (JSONObject) JSONObject
-            .parse(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId));
-        transLogPojo.setInputParam(inputParam.getString("params"));
+        TransBean tBean = getTransBean(stackId);
+
+        transLogPojo.setInputParam(tBean.getParams());
 
         // 输出参数
         if (returnValue != null) {

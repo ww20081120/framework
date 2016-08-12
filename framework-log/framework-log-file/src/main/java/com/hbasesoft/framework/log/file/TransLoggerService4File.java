@@ -7,8 +7,6 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
-import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
@@ -102,7 +100,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
             try {
                 for (String key : manager.getIdSet()) {
                     if (manager.isError() || manager.isTimeout()) {
-                        logger.error(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, key));
+                        logger.warn(getTransBean(key));
                     }
 
                 }
