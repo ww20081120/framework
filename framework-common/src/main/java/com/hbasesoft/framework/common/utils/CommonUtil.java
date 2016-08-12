@@ -169,7 +169,7 @@ public final class CommonUtil {
      * @return 事务ID <br>
      */
     public static String getTransactionID() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace("-", GlobalConstants.BLANK);
     }
 
     /**

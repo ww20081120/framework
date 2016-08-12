@@ -52,7 +52,8 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
      * @param e <br>
      */
     @Override
-    public void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e) {
+    public void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
+        Exception e) {
         TransManager manager = TransManager.getInstance();
 
         try {

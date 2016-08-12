@@ -14,9 +14,8 @@ package com.hbasesoft.framework.log.core;
 public interface TransLoggerService {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param stackId <br>
@@ -28,9 +27,8 @@ public interface TransLoggerService {
     void before(String stackId, String parentStackId, long beginTime, String method, Object[] params);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param stackId <br>
@@ -38,12 +36,11 @@ public interface TransLoggerService {
      * @param consumeTime <br>
      * @param returnValue <br>
      */
-    void afterReturn(String stackId, long endTime, long consumeTime, Object returnValue);
+    void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param stackId <br>
@@ -51,12 +48,11 @@ public interface TransLoggerService {
      * @param consumeTime <br>
      * @param e <br>
      */
-    void afterThrow(String stackId, long endTime, long consumeTime, Exception e);
+    void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param stackId <br>
@@ -66,12 +62,12 @@ public interface TransLoggerService {
      * @param returnValue <br>
      * @param e <br>
      */
-    void end(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue, Exception e);
+    void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
+        Exception e);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param stackId <br>
@@ -80,11 +76,13 @@ public interface TransLoggerService {
     void sql(String stackId, String sql);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     void clean();
+
+    void setAlwaysLog(boolean alwaysLog);
 }

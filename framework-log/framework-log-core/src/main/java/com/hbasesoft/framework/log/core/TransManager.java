@@ -5,7 +5,6 @@ package com.hbasesoft.framework.log.core;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -46,7 +45,7 @@ public final class TransManager implements Serializable {
      * 日志栈
      */
     private Stack<String> executeStack;
-    
+
     /***
      * stactId
      */
@@ -57,11 +56,6 @@ public final class TransManager implements Serializable {
      */
     private Map<String, Long> executeTimeMap;
 
-    /**
-     * transLoggerServices
-     */
-    private List<TransLoggerService> transLoggerServices;
-    
     /**
      * 私有构造, 不需要外部实例化
      */
@@ -93,9 +87,8 @@ public final class TransManager implements Serializable {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param id <br>
@@ -110,9 +103,8 @@ public final class TransManager implements Serializable {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -122,9 +114,8 @@ public final class TransManager implements Serializable {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -146,9 +137,8 @@ public final class TransManager implements Serializable {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param id <br>
@@ -167,11 +157,11 @@ public final class TransManager implements Serializable {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     public void clean() {
         executeStack.clear();
@@ -184,14 +174,6 @@ public final class TransManager implements Serializable {
 
     public Set<String> getIdSet() {
         return executeTimeMap.keySet();
-    }
-
-    public List<TransLoggerService> getTransLoggerServices() {
-        return transLoggerServices;
-    }
-
-    public void setTransLoggerServices(List<TransLoggerService> transLoggerServices) {
-        this.transLoggerServices = transLoggerServices;
     }
 
     public String getStackId() {

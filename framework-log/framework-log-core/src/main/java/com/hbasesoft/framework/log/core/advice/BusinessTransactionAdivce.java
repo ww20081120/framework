@@ -3,20 +3,22 @@
  */
 package com.hbasesoft.framework.log.core.advice;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.TransLoggerService;
 import com.hbasesoft.framework.log.core.TransManager;
 import com.hbasesoft.framework.log.core.annotation.NoTransLog;
@@ -31,36 +33,35 @@ import com.hbasesoft.framework.log.core.annotation.NoTransLog;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.advice <br>
  */
-
+@Aspect
+@Component
 public class BusinessTransactionAdivce {
 
-    /**
-     * logger
-     */
-    private static Logger logger = new Logger(BusinessTransactionAdivce.class);
+    @Pointcut("execution(public * com.hbasesoft..*Service*.*(..)) or "
+        + "execution(public * com.hbasesoft..*Controller*.*(..)) or "
+        + "execution(public * com.hbasesoft..*Interceptor*.*(..)) or "
+        + "execution(public * com.hbasesoft..*Excutor*.*(..)) or "
+        + "execution(public * com.hbasesoft..*Handler*.*(..))")
+    public void log() {
+    }
 
     /**
      * 栈最大深度
      */
+    @Value("${logservice.max.deep.size}")
     private int maxDeepLen;
 
     /** 最大执行时间 */
+    @Value("${logservice.max.execute.time}")
     private long maxExcuteTime;
 
-    /**
-     * 已经开启对服务
-     */
-    private String opendService;
-
-    /**
-     * serviceMap
-     */
-    private Map<String, TransLoggerService> serviceMap;
+    @Value("${logservice.aways.log}")
+    private boolean alwaysLog;
 
     /**
      * transLoggerServices
      */
-    private List<TransLoggerService> transLoggerServices;
+    private ServiceLoader<TransLoggerService> transLoggerServices;
 
     /**
      * 方法执行前拦截
@@ -68,6 +69,7 @@ public class BusinessTransactionAdivce {
      * @param point 参数
      * @throws FrameworkException <br>
      */
+    @Before("log()")
     public void before(JoinPoint point) throws FrameworkException {
 
         NoTransLog noTransLog = point.getTarget().getClass().getAnnotation(NoTransLog.class);
@@ -82,7 +84,6 @@ public class BusinessTransactionAdivce {
             Object[] args = point.getArgs();
 
             TransManager manager = TransManager.getInstance();
-            manager.setTransLoggerServices(getTransLoggerServices());
 
             // 深度检测
             if (manager.getStackSize() > maxDeepLen) {
@@ -97,8 +98,7 @@ public class BusinessTransactionAdivce {
             manager.push(stackId, beginTime);
 
             // 执行记录
-            List<TransLoggerService> serviceList = getTransLoggerServices();
-            for (TransLoggerService service : serviceList) {
+            for (TransLoggerService service : getTransLoggerServices()) {
                 service.before(stackId, parentStackId, beginTime, method, args);
             }
         }
@@ -112,6 +112,7 @@ public class BusinessTransactionAdivce {
      * @param returnValue 方法返回值
      * @throws ServiceException
      */
+    @AfterReturning(pointcut = "log()", returning = "returnValue")
     public void afterReturning(JoinPoint point, Object returnValue) {
         NoTransLog noTransLog = point.getTarget().getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
@@ -131,18 +132,20 @@ public class BusinessTransactionAdivce {
                 manager.setTimeout(true);
             }
 
+            // 执行方法
+            String method = getMethodSignature(point);
+
             // 执行记录
-            List<TransLoggerService> serviceList = getTransLoggerServices();
-            for (TransLoggerService service : serviceList) {
-                service.afterReturn(stackId, endTime, consumeTime, returnValue);
+            for (TransLoggerService service : getTransLoggerServices()) {
+                service.afterReturn(stackId, endTime, consumeTime, method, returnValue);
             }
 
             if (manager.getStackSize() <= 0) {
-                for (TransLoggerService service : serviceList) {
-                    service.end(stackId, beginTime, endTime, consumeTime, returnValue, null);
+                for (TransLoggerService service : getTransLoggerServices()) {
+                    service.end(stackId, beginTime, endTime, consumeTime, method, returnValue, null);
                 }
 
-                for (TransLoggerService service : serviceList) {
+                for (TransLoggerService service : getTransLoggerServices()) {
                     service.clean();
                 }
 
@@ -158,6 +161,7 @@ public class BusinessTransactionAdivce {
      * @param ex 异常信息
      * @throws ServiceException
      */
+    @AfterThrowing(pointcut = "log()", throwing = "ex")
     public void afterThrowing(JoinPoint point, Exception ex) {
         NoTransLog noTransLog = point.getTarget().getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
@@ -175,18 +179,20 @@ public class BusinessTransactionAdivce {
 
             manager.setError(true);
 
+            // 执行方法
+            String method = getMethodSignature(point);
+
             // 执行记录
-            List<TransLoggerService> serviceList = getTransLoggerServices();
-            for (TransLoggerService service : serviceList) {
-                service.afterThrow(stackId, endTime, consumeTime, ex);
+            for (TransLoggerService service : getTransLoggerServices()) {
+                service.afterThrow(stackId, endTime, consumeTime, method, ex);
             }
 
             if (manager.getStackSize() <= 0) {
-                for (TransLoggerService service : serviceList) {
-                    service.end(stackId, beginTime, endTime, consumeTime, null, ex);
+                for (TransLoggerService service : getTransLoggerServices()) {
+                    service.end(stackId, beginTime, endTime, consumeTime, method, null, ex);
                 }
 
-                for (TransLoggerService service : serviceList) {
+                for (TransLoggerService service : getTransLoggerServices()) {
                     service.clean();
                 }
 
@@ -224,20 +230,11 @@ public class BusinessTransactionAdivce {
      * @taskId <br>
      * @return <br>
      */
-    private List<TransLoggerService> getTransLoggerServices() {
+    private ServiceLoader<TransLoggerService> getTransLoggerServices() {
         if (transLoggerServices == null) {
-            transLoggerServices = new ArrayList<TransLoggerService>();
-            if (CommonUtil.isNotEmpty(opendService) && CommonUtil.isNotEmpty(serviceMap)) {
-                String[] serviceIds = StringUtils.split(opendService, GlobalConstants.SPLITOR);
-                for (String id : serviceIds) {
-                    TransLoggerService service = serviceMap.get(id);
-                    if (service == null) {
-                        logger.warn(new ServiceException(ErrorCodeDef.UNSPORT_LOGGER_TYPE), "不支持{0}日志类型", id);
-                    }
-                    else {
-                        transLoggerServices.add(service);
-                    }
-                }
+            transLoggerServices = ServiceLoader.load(TransLoggerService.class);
+            for (TransLoggerService transLoggerService : transLoggerServices) {
+                transLoggerService.setAlwaysLog(alwaysLog);
             }
         }
         return transLoggerServices;
@@ -245,14 +242,6 @@ public class BusinessTransactionAdivce {
 
     public void setMaxDeepLen(int maxDeepLen) {
         this.maxDeepLen = maxDeepLen;
-    }
-
-    public void setOpendService(String opendService) {
-        this.opendService = opendService;
-    }
-
-    public void setServiceMap(Map<String, TransLoggerService> serviceMap) {
-        this.serviceMap = serviceMap;
     }
 
     public void setMaxExcuteTime(long maxExcuteTime) {

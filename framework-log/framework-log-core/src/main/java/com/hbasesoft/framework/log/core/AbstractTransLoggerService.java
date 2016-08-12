@@ -34,6 +34,8 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      */
     private Logger logger = new Logger(AbstractTransLoggerService.class);
 
+    protected boolean alwaysLog;
+
     /*
      * (non-Javadoc)
      * @see com.hbasesoft.framework.log.core.TransLoggerService#before(java.lang.String, java.lang.String, long,
@@ -64,7 +66,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * java.lang.Object)
      */
     @Override
-    public void afterReturn(String stackId, long endTime, long consumeTime, Object returnValue) {
+    public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         try {
             String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
             if (CommonUtil.isNotEmpty(data)) {
@@ -87,7 +89,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * java.lang.Exception)
      */
     @Override
-    public void afterThrow(String stackId, long endTime, long consumeTime, Exception e) {
+    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
         try {
             String data = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
             if (CommonUtil.isNotEmpty(data)) {
@@ -185,5 +187,17 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                 logger.warn("删除cache日志失败2", ex);
             }
         }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param alwaysLog <br>
+     */
+    @Override
+    public void setAlwaysLog(boolean alwaysLog) {
+        this.alwaysLog = alwaysLog;
     }
 }

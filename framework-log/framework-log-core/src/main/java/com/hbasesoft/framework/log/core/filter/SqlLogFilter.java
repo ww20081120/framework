@@ -6,7 +6,7 @@ package com.hbasesoft.framework.log.core.filter;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Types;
-import java.util.List;
+import java.util.ServiceLoader;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -21,7 +21,6 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.TransLoggerService;
 import com.hbasesoft.framework.log.core.TransManager;
@@ -37,6 +36,11 @@ import com.hbasesoft.framework.log.core.TransManager;
  * @see com.hbasesoft.framework.log.core.filter <br>
  */
 public class SqlLogFilter extends FilterEventAdapter {
+
+    /**
+     * transLoggerServices
+     */
+    private ServiceLoader<TransLoggerService> transLoggerServices;
 
     /**
      * dataSource
@@ -636,11 +640,22 @@ public class SqlLogFilter extends FilterEventAdapter {
     private void saveMsg2Cache(String msg) {
         TransManager manager = TransManager.getInstance();
         String statckId = manager.peek();
-        List<TransLoggerService> serviceList = manager.getTransLoggerServices();
-        if (CommonUtil.isNotEmpty(serviceList)) {
-            for (TransLoggerService service : serviceList) {
-                service.sql(statckId, msg);
-            }
+        for (TransLoggerService service : getTransLoggerServices()) {
+            service.sql(statckId, msg);
         }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @return <br>
+     */
+    private ServiceLoader<TransLoggerService> getTransLoggerServices() {
+        if (transLoggerServices == null) {
+            transLoggerServices = ServiceLoader.load(TransLoggerService.class);
+        }
+        return transLoggerServices;
     }
 }
