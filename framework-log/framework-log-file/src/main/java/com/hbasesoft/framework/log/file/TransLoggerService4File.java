@@ -76,7 +76,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
         if (alwaysLog) {
-            logger.warn(e, "error execute method[0], statckId[{1}], consumeTime[{2}]", method, stackId, consumeTime);
+            logger.error(e, "error execute method[0], statckId[{1}], consumeTime[{2}]", method, stackId, consumeTime);
         }
         else {
             super.afterThrow(stackId, endTime, consumeTime, method, e);
@@ -93,22 +93,22 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         Exception e) {
         TransManager manager = TransManager.getInstance();
         if (alwaysLog) {
-            logger.info(
-                "execute method[{0}] [{1}], statckId[{2}], consumeTime [{3}], returnValue [{4}], errorMessage [{5}]",
+            logger.debug(
+                "execute method [{0}], result [{1}], statckId[{2}], consumeTime [{3}], return [{4}], exception [{5}]",
                 method, manager.isError() || manager.isTimeout(), stackId, consumeTime, returnValue,
-                e == null ? "NULL" : e.getMessage());
+                getExceptionMsg(e));
         }
         else {
             try {
                 for (String key : manager.getIdSet()) {
                     if (manager.isError() || manager.isTimeout()) {
-                        logger.warn(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, key));
+                        logger.error(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, key));
                     }
 
                 }
             }
             catch (Exception ex) {
-                logger.warn(ex);
+                logger.error(ex);
             }
         }
     }

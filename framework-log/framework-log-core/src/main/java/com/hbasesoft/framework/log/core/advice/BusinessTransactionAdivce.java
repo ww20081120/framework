@@ -4,7 +4,6 @@
 package com.hbasesoft.framework.log.core.advice;
 
 import java.util.ServiceLoader;
-import java.util.UUID;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -94,7 +93,7 @@ public class BusinessTransactionAdivce {
             String parentStackId = manager.peek();
 
             // id
-            String stackId = UUID.randomUUID().toString();
+            String stackId = CommonUtil.getTransactionID();
             manager.push(stackId, beginTime);
 
             // 执行记录

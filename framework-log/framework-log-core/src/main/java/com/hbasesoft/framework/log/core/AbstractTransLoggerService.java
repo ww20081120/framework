@@ -12,6 +12,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
 
+import org.apache.commons.io.IOUtils;
+
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheHelper;
@@ -115,7 +117,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @return <br>
      * @throws IOException <br>
      */
-    protected String getExceptionMsg(Exception ex) throws IOException {
+    protected String getExceptionMsg(Exception ex) {
         if (ex == null) {
             return GlobalConstants.BLANK;
         }
@@ -132,14 +134,12 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
                 sb.append(line).append("\n\t");
             }
         }
+        catch (Exception e) {
+            logger.error(e);
+        }
         finally {
-            if (sw != null) {
-                sw.close();
-            }
-
-            if (pw != null) {
-                pw.close();
-            }
+            IOUtils.closeQuietly(sw);
+            IOUtils.closeQuietly(pw);
         }
 
         return sb.toString();
