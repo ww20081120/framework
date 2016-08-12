@@ -134,7 +134,7 @@ public class MessageServiceImpl implements MessageService.Iface {
             if (template.getDelay() > 0) {
                 current.add(Calendar.SECOND, template.getDelay());
                 pojo.setNextSendTime(current.getTime());
-                messageBoxDao.update(pojo);
+                messageBoxDao.updateEntity(pojo);
             }
             else {
                 sendMessage(template, pojo, message.getAttachments());
@@ -210,7 +210,7 @@ public class MessageServiceImpl implements MessageService.Iface {
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.SECOND, template.getDelay());
                 message.setNextSendTime(calendar.getTime());
-                messageBoxDao.update(message);
+                messageBoxDao.updateEntity(message);
             }
             catch (DaoException e1) {
                 throw new ServiceException(e1);
@@ -271,10 +271,10 @@ public class MessageServiceImpl implements MessageService.Iface {
     public void resendMessage(long messageId) throws TException {
         MessageTemplatePojo template;
         try {
-            MessageBoxPojo message = messageBoxDao.getById(MessageBoxPojo.class, messageId);
+            MessageBoxPojo message = messageBoxDao.get(MessageBoxPojo.class, messageId);
             Assert.notNull(message, "消息盒子中[{0}]不存在", messageId);
 
-            template = messageTemplateDao.getById(MessageTemplatePojo.class, message.getMessageTemplateId());
+            template = messageTemplateDao.get(MessageTemplatePojo.class, message.getMessageTemplateId());
             Assert.notNull(template, "重发模板[{0}]不存在", message.getMessageTemplateId());
             List<Attachment> attachments = null;
             if (message.getAttachmentsNum() > 0) {

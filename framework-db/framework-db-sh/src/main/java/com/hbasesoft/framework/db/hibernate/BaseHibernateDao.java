@@ -14,14 +14,20 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
@@ -191,123 +197,442 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#save(java.lang.Object)
+    /**
+     * 创建Criteria对象带属性比较
+     *
+     * @param <T>
+     * @param entityClass
+     * @param criterions
+     * @return
+     */
+    private <T> Criteria createCriteria(Class<T> entityClass, Criterion... criterions) {
+        Criteria criteria = getSession().createCriteria(entityClass);
+        for (Criterion c : criterions) {
+            criteria.add(c);
+        }
+        return criteria;
+    }
+
+    /**
+     * 创建Criteria对象，有排序功能。
+     *
+     * @param <T>
+     * @param entityClass
+     * @param orderBy
+     * @param isAsc
+     * @param criterions
+     * @return
+     */
+    private <T> Criteria createCriteria(Class<T> entityClass, boolean isAsc, Criterion... criterions) {
+        Criteria criteria = createCriteria(entityClass, criterions);
+        if (isAsc) {
+            criteria.addOrder(Order.asc("asc"));
+        }
+        else {
+            criteria.addOrder(Order.desc("desc"));
+        }
+        return criteria;
+    }
+
+    private Session getSession() {
+        // 事务必须是开启的(Required)，否则获取不到
+        return sessionFactory.getCurrentSession();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity
+     * @return
+     * @throws DaoException <br>
      */
     @Override
-    public void save(BaseEntity t) throws DaoException {
+    public <T> Serializable save(T entity) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            session.save(t);
+            Serializable id = getSession().save(entity);
+            getSession().flush();
+            logger.info("保存实体成功," + entity.getClass().getName());
+            return id;
         }
         catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("保存实体异常", e);
             throw new DaoException(ErrorCodeDef.SAVE_ERROR_10013, e);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#getById(java.lang.Class, java.io.Serializable)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity
+     * @throws DaoException <br>
+     */
+    @Override
+    public <T> void delete(T entity) throws DaoException {
+        try {
+            getSession().delete(entity);
+            getSession().flush();
+            logger.info("删除成功," + entity.getClass().getName());
+        }
+        catch (RuntimeException e) {
+            logger.error("删除异常", e);
+            throw e;
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entitys
+     * @throws DaoException <br>
+     */
+    @Override
+    public <T> void batchSave(List<T> entitys) throws DaoException {
+        for (int i = 0; i < entitys.size(); i++) {
+            getSession().save(entitys.get(i));
+            if (i % 20 == 0) {
+                // 20个对象后才清理缓存，写入数据库
+                getSession().flush();
+                getSession().clear();
+            }
+        }
+        // 最后清理一下----防止大于20小于40的不保存
+        getSession().flush();
+        getSession().clear();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param class1
+     * @param id
+     * @return
+     * @throws DaoException <br>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseEntity> T getById(Class<T> entityClass, Serializable id) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            return (T) session.get(entityClass, id);
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.GET_BY_ID_ERROR_10014, e);
-        }
+    public <T> T get(Class<T> entityClass, Serializable id) throws DaoException {
+        return (T) getSession().get(entityClass, id);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#getByEntity(java.lang.Object)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityName
+     * @param id
+     * @return
+     * @throws DaoException <br>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseEntity> T getByEntity(T entity) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria executableCriteria = session.createCriteria(entity.getClass());
-            executableCriteria.add(Example.create(entity));
-            return (T) executableCriteria.uniqueResult();
+    public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException {
+        T t = (T) getSession().get(entityName, id);
+        if (t != null) {
+            getSession().flush();
         }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.GET_BY_ENTITY_ERROR_10015, e);
-        }
+        return t;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#update(java.lang.Object)
-     */
-    @Override
-    public void update(BaseEntity entity) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            session.update(entity);
-            session.flush();
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.UPDATE_ERROR_10016, e);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#delete(java.lang.Object)
-     */
-    @Override
-    public void delete(BaseEntity entity) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            session.delete(entity);
-            session.flush();
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.DELETE_ERROR_10017, e);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#deleteById(java.lang.Class, java.io.Serializable)
-     */
-    @Override
-    public <T extends BaseEntity> void deleteById(Class<T> entityClass, Serializable id) throws DaoException {
-        try {
-            delete(getById(entityClass, id));
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.DELETE_BY_ID_ERROR_10018, e);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.IGenericBaseDao#selectList(java.lang.Object)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClass
+     * @param propertyName
+     * @param value
+     * @return
+     * @throws DaoException <br>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends BaseEntity> List<T> selectList(Class<T> entityClass) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            Criteria executableCriteria = session.createCriteria(entityClass);
-            return executableCriteria.list();
+    public <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
+        Assert.notEmpty(propertyName, "属性名不能为空");
+        return (T) createCriteria(entityClass, Restrictions.eq(propertyName, value)).uniqueResult();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClass
+     * @param propertyName
+     * @param value
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
+        Assert.notEmpty(propertyName, "属性名不能为空");
+        return (List<T>) createCriteria(entityClass, Restrictions.eq(propertyName, value)).list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClass
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> loadAll(Class<T> entityClass) throws DaoException {
+        return createCriteria(entityClass).list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityName
+     * @param id
+     * @throws DaoException <br>
+     */
+    @Override
+    public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException {
+        delete(get(entityName, id));
+        getSession().flush();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entities
+     * @throws DaoException <br>
+     */
+    @Override
+    public <T> void deleteAllEntitie(Collection<T> entities) throws DaoException {
+        for (Object entity : entities) {
+            getSession().delete(entity);
+            getSession().flush();
         }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.SELECT_LIST_ERROR_10019, e);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param ids
+     * @throws DaoException <br>
+     */
+    @Override
+    public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException {
+        for (String id : ids) {
+            getSession().delete(get(entityName, id));
+            getSession().flush();
         }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pojo
+     * @throws DaoException <br>
+     */
+    @Override
+    public <T> void updateEntity(T pojo) throws DaoException {
+        getSession().update(pojo);
+        getSession().flush();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @return
+     * @throws DaoException <br>
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findByQueryString(String hql) throws DaoException {
+        Query queryObject = getSession().createQuery(hql);
+        List<T> list = queryObject.list();
+        if (list.size() > 0) {
+            getSession().flush();
+        }
+        return list;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @return
+     * @throws DaoException <br>
+     */
+    @Override
+    public int updateBySqlString(String sql) throws DaoException {
+        Query querys = getSession().createSQLQuery(sql);
+        return querys.executeUpdate();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param query
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findListbySql(String sql) throws DaoException {
+        Query querys = getSession().createSQLQuery(sql);
+        return querys.list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClass
+     * @param propertyName
+     * @param value
+     * @param isAsc
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
+        throws DaoException {
+        Assert.notEmpty(propertyName, "属性名不能为空");
+        return createCriteria(entityClass, isAsc, Restrictions.eq(propertyName, value)).list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T singleResult(String hql) throws DaoException {
+        return (T) getSession().createQuery(hql).uniqueResult();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clazz
+     * @param cq
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException {
+
+        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+
+        // 查询分页总数
+        CriteriaImpl impl = (CriteriaImpl) criteria;
+        Projection projection = impl.getProjection();
+        Long allCounts = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
+
+        criteria.setProjection(projection);
+        criteria.setFirstResult((pageIndex - 1) * pageSize);
+        criteria.setMaxResults(pageSize);
+
+        PagerList<T> resultList = new PagerList<T>();
+        resultList.setPageIndex(pageIndex);
+        resultList.setPageSize(pageSize);
+        resultList.setTotalCount(allCounts);
+
+        if (allCounts > 0) {
+            resultList.addAll(criteria.list());
+        }
+        return resultList;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param cq
+     * @param ispage
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
+        return detachedCriteria.getExecutableCriteria(getSession()).list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param param
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> findHql(String hql, Object... param) throws DaoException {
+        Query q = getSession().createQuery(hql);
+        if (param != null && param.length > 0) {
+            for (int i = 0; i < param.length; i++) {
+                q.setParameter(i, param[i]);
+            }
+        }
+        return q.list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param procedureSql
+     * @param params
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException {
+        SQLQuery sqlQuery = getSession().createSQLQuery(procedureSql);
+
+        for (int i = 0; i < params.length; i++) {
+            sqlQuery.setParameter(i, params[i]);
+        }
+        return sqlQuery.list();
     }
 
     public SessionFactory getSessionFactory() {
