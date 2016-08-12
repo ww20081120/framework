@@ -93,10 +93,8 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         Exception e) {
         TransManager manager = TransManager.getInstance();
         if (alwaysLog) {
-            logger.info(
-                "execute method[{0}] [{1}], statckId[{2}], consumeTime [{3}], returnValue [{4}], errorMessage [{5}]",
-                method, manager.isError() || manager.isTimeout(), stackId, consumeTime, returnValue,
-                e == null ? "NULL" : e.getMessage());
+            logger.info("execute method[{0}] [{1}], statckId[{2}], consumeTime [{3}]", method,
+                manager.isError() || manager.isTimeout(), stackId, consumeTime);
         }
         else {
             try {
