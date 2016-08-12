@@ -23,21 +23,11 @@ import com.hbasesoft.framework.db.core.DaoException;
  */
 public interface IGenericBaseDao {
 
-    public <T> Serializable save(T entity) throws DaoException;
+    <T> Serializable save(T entity) throws DaoException;
 
-    public <T> void delete(T entity) throws DaoException;
+    <T> void delete(T entity) throws DaoException;
 
-    public <T> void batchSave(List<T> entitys) throws DaoException;
-
-    /**
-     * 根据实体名称和主键获取实体
-     * 
-     * @param <T>
-     * @param entityName
-     * @param id
-     * @return
-     */
-    public <T> T get(Class<T> class1, Serializable id) throws DaoException;
+    <T> void batchSave(List<T> entitys) throws DaoException;
 
     /**
      * 根据实体名称和主键获取实体
@@ -47,7 +37,17 @@ public interface IGenericBaseDao {
      * @param id
      * @return
      */
-    public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException;
+    <T> T get(Class<T> class1, Serializable id) throws DaoException;
+
+    /**
+     * 根据实体名称和主键获取实体
+     * 
+     * @param <T>
+     * @param entityName
+     * @param id
+     * @return
+     */
+    <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException;
 
     /**
      * 根据实体名称和字段名称和字段值获取唯一记录
@@ -58,12 +58,12 @@ public interface IGenericBaseDao {
      * @param value
      * @return
      */
-    public <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException;
+    <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException;
 
     /**
      * 按属性查找对象列表.
      */
-    public <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException;
+    <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException;
 
     /**
      * 加载全部实体
@@ -72,7 +72,7 @@ public interface IGenericBaseDao {
      * @param entityClass
      * @return
      */
-    public <T> List<T> loadAll(final Class<T> entityClass) throws DaoException;
+    <T> List<T> loadAll(final Class<T> entityClass) throws DaoException;
 
     /**
      * 删除实体主键删除
@@ -80,7 +80,7 @@ public interface IGenericBaseDao {
      * @param <T>
      * @param entities
      */
-    public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException;
+    <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException;
 
     /**
      * 删除实体集合
@@ -88,7 +88,7 @@ public interface IGenericBaseDao {
      * @param <T>
      * @param entities
      */
-    public <T> void deleteAllEntitie(Collection<T> entities) throws DaoException;
+    <T> void deleteAllEntitie(Collection<T> entities) throws DaoException;
 
     /**
      * Description: 根据Id集合删除实体<br>
@@ -97,7 +97,7 @@ public interface IGenericBaseDao {
      * @taskId <br>
      * @param ids <br>
      */
-    public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException;
+    <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException;
 
     /**
      * 更新指定的实体
@@ -105,7 +105,7 @@ public interface IGenericBaseDao {
      * @param <T>
      * @param pojo
      */
-    public <T> void updateEntity(T pojo) throws DaoException;
+    <T> void updateEntity(T pojo) throws DaoException;
 
     /**
      * 通过hql 查询语句查找对象
@@ -114,7 +114,7 @@ public interface IGenericBaseDao {
      * @param query
      * @return
      */
-    public <T> List<T> findByQueryString(String hql) throws DaoException;
+    <T> List<T> findByQueryString(String hql) throws DaoException;
 
     /**
      * 根据sql更新
@@ -122,7 +122,7 @@ public interface IGenericBaseDao {
      * @param query
      * @return
      */
-    public int updateBySqlString(String sql) throws DaoException;
+    int updateBySqlString(String sql) throws DaoException;
 
     /**
      * 根据sql查找List
@@ -131,7 +131,7 @@ public interface IGenericBaseDao {
      * @param query
      * @return
      */
-    public <T> List<T> findListbySql(String sql) throws DaoException;
+    <T> List<T> findListbySql(String sql) throws DaoException;
 
     /**
      * 通过属性称获取实体带排序
@@ -140,10 +140,10 @@ public interface IGenericBaseDao {
      * @param clas
      * @return
      */
-    public <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
+    <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
         throws DaoException;
 
-    public <T> T singleResult(String hql) throws DaoException;
+    <T> T singleResult(String hql) throws DaoException;
 
     /**
      * cq方式分页
@@ -152,7 +152,7 @@ public interface IGenericBaseDao {
      * @param isOffset
      * @return
      */
-    public <T> List<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException;
+    <T> List<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException;
 
     /**
      * 通过cq获取全部实体
@@ -161,7 +161,9 @@ public interface IGenericBaseDao {
      * @param cq
      * @return
      */
-    public <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException;
+    <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException;
+
+    <T> T getCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException;
 
     /**
      * 通过hql 查询语句查找对象
@@ -170,7 +172,7 @@ public interface IGenericBaseDao {
      * @param query
      * @return
      */
-    public <T> List<T> findHql(String hql, Object... param) throws DaoException;
+    <T> List<T> findHql(String hql, Object... param) throws DaoException;
 
     // update-begin--Author:luobaoli Date:20150708 for：增加执行存储过程方法
     /**
@@ -180,5 +182,5 @@ public interface IGenericBaseDao {
      * @param params
      * @return
      */
-    public <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException;
+    <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException;
 }

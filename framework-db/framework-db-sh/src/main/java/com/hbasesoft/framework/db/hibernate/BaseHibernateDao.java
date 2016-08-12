@@ -642,4 +642,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param detachedCriteria
+     * @return
+     * @throws DaoException <br>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
+        return (T) detachedCriteria.getExecutableCriteria(getSession()).uniqueResult();
+    }
 }
