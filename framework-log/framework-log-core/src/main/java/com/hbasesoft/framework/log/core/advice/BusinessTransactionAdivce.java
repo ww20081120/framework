@@ -36,11 +36,13 @@ import com.hbasesoft.framework.log.core.annotation.NoTransLog;
 @Component
 public class BusinessTransactionAdivce {
 
-    @Pointcut("execution(public * com.hbasesoft..*Service*.*(..)) or "
-        + "execution(public * com.hbasesoft..*Controller*.*(..)) or "
-        + "execution(public * com.hbasesoft..*Interceptor*.*(..)) or "
-        + "execution(public * com.hbasesoft..*Excutor*.*(..)) or "
-        + "execution(public * com.hbasesoft..*Handler*.*(..))")
+    @Pointcut("execution(public * com.hbasesoft..*Service.*(..)) or "
+        + "execution(public * com.hbasesoft..*Controller.*(..)) or "
+        + "execution(public * com.hbasesoft..*Interceptor.*(..)) or "
+        + "execution(public * com.hbasesoft..*Excutor.*(..)) or "
+        + "execution(public * com.hbasesoft..*Task.*(..)) or "
+        + "execution(public * com.hbasesoft..*Job.*(..)) or "
+        + "execution(public * com.hbasesoft..*Handler.*(..))")
     public void log() {
     }
 
