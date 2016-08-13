@@ -1,10 +1,10 @@
-Framework框架说明
+Framework 2.0 框架说明
 =======
-Framework框架集成了log、cache、config、db、rpc、message、task、web，每块都以模块形式组织，可以根据项目需要获取模块。
+Framework框架集成了log、cache、db、message，每块都以模块形式组织，可以根据项目需要获取模块。
 
-+ framework-common 定义公用的常量、工具类等
++ framework-common 定义公用的常量、工具类 采用了spring-boot方式启动， 启动类为Application， 也可以支持web方式启动。
  
-+ framework-rpc 该模块是分布式的核心模块，定义了生产者与消费者，采用apache thrift协议，可以快速简单与zookeeper部署
++ 通信模块使用dubbox，定义了生产者与消费者，采用apache thrift协议，可以快速简单与zookeeper部署
 
 + framework-cache 定义了缓存的获取。  
 + framework-cache-core 缓存核心模块
@@ -28,12 +28,6 @@ Framework框架集成了log、cache、config、db、rpc、message、task、web�
 + framework-message 消息模块，支持其它模块短信、邮件、移动终端消息推送、web端桌面消息推送等功能
 + framework-message-api 远程接口
 + framework-message-core 消息的核心模块
-
-+ framework-task Job模块，支持任务的新增、启动、暂停、重试、停止、删除
-+ framework-task-api 远程接口
-+ framework-task-core Job核心模块
-
-+ framework-bootstrap 非web项目启动模块，运行 Startup启动、Shutdown关闭，关闭端口在config.properties里面配置
 
 -------
 <h2 id="framework-db">framework-db</h2>具有以下特征:
