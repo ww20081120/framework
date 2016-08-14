@@ -188,6 +188,18 @@ public final class Assert {
         }
     }
 
+    public static void equals(Object obj1, Object obj2, String message, Object... params) {
+        if ((obj1 != null && !obj1.equals(obj2)) && (obj2 != null && !obj2.equals(obj1))) {
+            throw new AssertException(ErrorCodeDef.NOT_EQUALS, message, params);
+        }
+    }
+
+    public static void notEquals(Object obj1, Object obj2, String message, Object... params) {
+        if ((obj1 != null && obj1.equals(obj2)) || (obj2 != null && obj2.equals(obj1))) {
+            throw new AssertException(ErrorCodeDef.EQUALS, message, params);
+        }
+    }
+
     public static void isTrue(boolean result, String message, Object... params) {
         if (!result) {
             throw new AssertException(ErrorCodeDef.IS_FALSE, message, params);
