@@ -5,7 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.annotation;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,10 +21,12 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
+import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
@@ -144,14 +148,34 @@ public class CacheAdvice {
 
     }
 
-    private String getCacheKey(String prefix, Method method, Object[] args) throws ServiceException {
-        if (CommonUtil.isEmpty(args)) {
+    private String getCacheKey(String template, Method method, Object[] args) throws FrameworkException {
+        if (CommonUtil.isEmpty(template) && CommonUtil.isEmpty(args)) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
         }
-        StringBuilder sb = new StringBuilder(prefix);
-        for (Object arg : args) {
-            sb.append(GlobalConstants.UNDERLINE).append(arg == null ? GlobalConstants.BLANK : arg);
+        String key;
+        if (CommonUtil.isNotEmpty(template)) {
+            Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            for (int i = 0; i < parameterAnnotations.length; i++) {
+                for (Annotation annotation : parameterAnnotations[i]) {
+                    if (annotation instanceof Key) {
+                        paramMap.put(((Key) annotation).value(), args[i]);
+                        break;
+                    }
+                }
+            }
+            key = VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap);
         }
-        return sb.toString();
+        else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < args.length; i++) {
+                if (i > 0) {
+                    sb.append(GlobalConstants.UNDERLINE);
+                }
+                sb.append(args[i] == null ? GlobalConstants.BLANK : args[i]);
+            }
+            key = sb.toString();
+        }
+        return key;
     }
 }
