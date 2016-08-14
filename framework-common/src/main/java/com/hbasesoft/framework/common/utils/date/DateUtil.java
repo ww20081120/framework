@@ -34,9 +34,8 @@ public final class DateUtil {
     private static Logger logger = new Logger(DateUtil.class);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param dateStr <br>
@@ -53,8 +52,8 @@ public final class DateUtil {
                 date = string2Date(dateStr, DateConstants.DATE_FORMAT_8);
                 break;
             case 10:
-                date = string2Date(dateStr, dateStr.indexOf("/") == -1 ? DateConstants.DATE_FORMAT_10
-                    : DateConstants.DATE_FORMAT_10_2);
+                date = string2Date(dateStr,
+                    dateStr.indexOf("/") == -1 ? DateConstants.DATE_FORMAT_10 : DateConstants.DATE_FORMAT_10_2);
                 break;
             case 11:
                 date = string2Date(dateStr, DateConstants.DATE_FORMAT_11);
@@ -63,15 +62,15 @@ public final class DateUtil {
                 date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_14);
                 break;
             case 19:
-                date = string2Date(dateStr, dateStr.indexOf("/") == -1 ? DateConstants.DATETIME_FORMAT_19
-                    : DateConstants.DATETIME_FORMAT_19_2);
+                date = string2Date(dateStr,
+                    dateStr.indexOf("/") == -1 ? DateConstants.DATETIME_FORMAT_19 : DateConstants.DATETIME_FORMAT_19_2);
                 break;
             case 21:
                 date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_21);
                 break;
             case 23:
-                date = string2Date(dateStr, dateStr.indexOf("/") == -1 ? DateConstants.DATETIME_FORMAT_23
-                    : DateConstants.DATETIME_FORMAT_23_2);
+                date = string2Date(dateStr,
+                    dateStr.indexOf("/") == -1 ? DateConstants.DATETIME_FORMAT_23 : DateConstants.DATETIME_FORMAT_23_2);
                 break;
             default:
                 throw new IllegalArgumentException(dateStr + "不支持的时间格式");
@@ -80,9 +79,8 @@ public final class DateUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param date <br>
@@ -103,9 +101,8 @@ public final class DateUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param date <br>
@@ -116,9 +113,8 @@ public final class DateUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param date <br>
@@ -135,17 +131,20 @@ public final class DateUtil {
     }
 
     public static String getCurrentTimestamp() {
-        return date2String(new Date(), DateConstants.DATETIME_FORMAT_14);
+        return date2String(getCurrentDate(), DateConstants.DATETIME_FORMAT_14);
     }
 
     public static long getCurrentTime() {
         return System.currentTimeMillis();
     }
 
+    public static Date getCurrentDate() {
+        return new Date();
+    }
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param date <br>
@@ -177,7 +176,7 @@ public final class DateUtil {
      * @return 相差天数
      */
     public static long daysBetween(Date startDate) {
-        return daysBetween(startDate, new Date());
+        return daysBetween(startDate, getCurrentDate());
     }
 
     /**
