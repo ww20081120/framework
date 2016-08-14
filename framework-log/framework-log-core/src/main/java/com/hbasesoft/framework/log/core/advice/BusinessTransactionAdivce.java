@@ -12,7 +12,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
@@ -33,16 +33,14 @@ import com.hbasesoft.framework.log.core.annotation.NoTransLog;
  * @see com.hbasesoft.framework.log.advice <br>
  */
 @Aspect
-@Component
+@Configuration
 public class BusinessTransactionAdivce {
 
     @Pointcut("execution(public * com.hbasesoft..*Service.*(..)) or "
         + "execution(public * com.hbasesoft..*Controller.*(..)) or "
         + "execution(public * com.hbasesoft..*Interceptor.*(..)) or "
-        + "execution(public * com.hbasesoft..*Excutor.*(..)) or "
-        + "execution(public * com.hbasesoft..*Task.*(..)) or "
-        + "execution(public * com.hbasesoft..*Job.*(..)) or "
-        + "execution(public * com.hbasesoft..*Handler.*(..))")
+        + "execution(public * com.hbasesoft..*Excutor.*(..)) or " + "execution(public * com.hbasesoft..*Task.*(..)) or "
+        + "execution(public * com.hbasesoft..*Job.*(..)) or " + "execution(public * com.hbasesoft..*Handler.*(..))")
     public void log() {
     }
 

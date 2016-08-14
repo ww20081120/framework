@@ -5,12 +5,16 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.annotation;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
@@ -32,48 +36,57 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @see com.hbasesoft.framework.cache.core.annotation <br>
  */
 @Aspect
-public class CacheAdvice implements MethodInterceptor {
+@Configuration
+public class CacheAdvice {
 
     private static Logger logger = new Logger(CacheAdvice.class);
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param arg0
-     * @return
-     * @throws Throwable <br>
-     */
-    @Override
-    @Pointcut("execution(public * com.hbasesoft..*.*(..)) and !execution(public * com.hbasesoft..*Dao.*(..))")
-    public Object invoke(MethodInvocation invocation) throws Throwable {
-        Object result = null;
-        Class<?> returnType = invocation.getMethod().getReturnType();
-        Cache cache = AnnotationUtils.findAnnotation(invocation.getMethod(), Cache.class);
-        CacheNode cacheNode = null;
-        // 携带Cache注解的方法，返回类型不能为空
-        if (cache != null && !Void.class.equals(returnType)) {
-            result = cache(cache, invocation, returnType);
-        }
-        else if ((cacheNode = AnnotationUtils.findAnnotation(invocation.getMethod(), CacheNode.class)) != null) {
-            result = cacheNode(cacheNode, invocation, returnType);
-        }
-        else {
-            result = invocation.proceed();
-            RmCache rmCache = AnnotationUtils.findAnnotation(invocation.getMethod(), RmCache.class);
-            if (rmCache != null) {
-                rmCache(rmCache, invocation);
-            }
-        }
-        return result;
+    @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
+    public void cache() {
     }
 
-    private Object cache(Cache cache, MethodInvocation invocation, Class<?> returnType) throws Throwable {
-        String key = getCacheKey(cache.key(), invocation);
+    @Around("cache()")
+    public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        Object result = null;
+
+        Signature sig = thisJoinPoint.getSignature();
+        if (sig instanceof MethodSignature) {
+            MethodSignature msig = (MethodSignature) sig;
+            Object target = thisJoinPoint.getTarget();
+            Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+
+            Class<?> returnType = currentMethod.getReturnType();
+            Cache cache = AnnotationUtils.findAnnotation(currentMethod, Cache.class);
+            CacheNode cacheNode = null;
+            // 携带Cache注解的方法，返回类型不能为空
+            if (cache != null && !Void.class.equals(returnType)) {
+                thisJoinPoint.getArgs();
+                result = cache(cache, thisJoinPoint, currentMethod, returnType);
+            }
+            else if ((cacheNode = AnnotationUtils.findAnnotation(currentMethod, CacheNode.class)) != null) {
+                result = cacheNode(cacheNode, thisJoinPoint, currentMethod, returnType);
+            }
+            else {
+                result = thisJoinPoint.proceed();
+                RmCache rmCache = AnnotationUtils.findAnnotation(currentMethod, RmCache.class);
+                if (rmCache != null) {
+                    rmCache(rmCache, currentMethod, thisJoinPoint.getArgs());
+                }
+            }
+            return result;
+
+        }
+        else {
+            return thisJoinPoint.proceed();
+        }
+    }
+
+    private Object cache(Cache cache, ProceedingJoinPoint thisJoinPoint, Method method, Class<?> returnType)
+        throws Throwable {
+        String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
         Object result = CacheHelper.getCache().get(cache.node(), key, returnType);
         if (result == null) {
-            result = invocation.proceed();
+            result = thisJoinPoint.proceed();
             if (result != null) {
                 long expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
@@ -83,8 +96,8 @@ public class CacheAdvice implements MethodInterceptor {
                     CacheHelper.getCache().put(cache.node(), key, result);
                 }
 
-                logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]",
-                    BeanUtil.getMethodSignature(invocation.getMethod()), cache.node(), key);
+                logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
+                    cache.node(), key);
             }
         }
 
@@ -92,14 +105,15 @@ public class CacheAdvice implements MethodInterceptor {
     }
 
     @SuppressWarnings("unchecked")
-    private Object cacheNode(CacheNode cache, MethodInvocation invocation, Class<?> returnType) throws Throwable {
+    private Object cacheNode(CacheNode cache, ProceedingJoinPoint thisJoinPoint, Method method, Class<?> returnType)
+        throws Throwable {
         if (!Map.class.isAssignableFrom(returnType)) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
         }
 
         Object result = CacheHelper.getCache().get(cache.node(), cache.bean());
         if (result == null) {
-            result = invocation.proceed();
+            result = thisJoinPoint.proceed();
             if (result != null) {
                 long expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
@@ -109,32 +123,28 @@ public class CacheAdvice implements MethodInterceptor {
                     CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
                 }
 
-                logger.info("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(invocation.getMethod()),
-                    cache.node());
+                logger.info("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(method), cache.node());
             }
         }
 
         return null;
     }
 
-    private void rmCache(RmCache rmCache, MethodInvocation invocation) throws Exception {
+    private void rmCache(RmCache rmCache, Method method, Object[] args) throws Exception {
         if (rmCache.clean()) {
             CacheHelper.getCache().removeNode(rmCache.node());
-            logger.info("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(invocation.getMethod()),
-                rmCache.node());
+            logger.info("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), rmCache.node());
         }
         else {
-            String key = getCacheKey(rmCache.key(), invocation);
+            String key = getCacheKey(rmCache.key(), method, args);
             CacheHelper.getCache().evict(rmCache.node(), key);
-            logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]",
-                BeanUtil.getMethodSignature(invocation.getMethod()), rmCache.node(), key);
+            logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
+                rmCache.node(), key);
         }
 
     }
 
-    private String getCacheKey(String prefix, MethodInvocation invocation) throws ServiceException {
-        Object[] args = invocation.getArguments();
-
+    private String getCacheKey(String prefix, Method method, Object[] args) throws ServiceException {
         if (CommonUtil.isEmpty(args)) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
         }

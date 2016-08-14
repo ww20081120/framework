@@ -30,7 +30,5 @@ public @interface Cache {
 
     String key() default GlobalConstants.BLANK;
 
-    Class<?> bean() default String.class;
-
     long expireTime() default 0L;
 }
