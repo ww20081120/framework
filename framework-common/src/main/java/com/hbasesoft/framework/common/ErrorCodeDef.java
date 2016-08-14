@@ -263,4 +263,7 @@ public interface ErrorCodeDef {
 
     /** 反序列化失败 */
     int UNSERIALIZE_ERROR = 20030;
+
+    /** 没权限 */
+    int NO_PERMISSION = 20031;
 }
