@@ -28,7 +28,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Target(ElementType.METHOD)
 public @interface RmCache {
 
-    String node();
+    String[] node();
 
     String key() default GlobalConstants.BLANK;
 

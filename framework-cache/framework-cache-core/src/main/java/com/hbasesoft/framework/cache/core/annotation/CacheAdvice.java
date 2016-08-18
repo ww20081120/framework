@@ -136,16 +136,19 @@ public class CacheAdvice {
 
     private void rmCache(RmCache rmCache, Method method, Object[] args) throws Exception {
         if (rmCache.clean()) {
-            CacheHelper.getCache().removeNode(rmCache.node());
-            logger.info("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), rmCache.node());
+            for (String node : rmCache.node()) {
+                CacheHelper.getCache().removeNode(node);
+                logger.info("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), node);
+            }
         }
         else {
             String key = getCacheKey(rmCache.key(), method, args);
-            CacheHelper.getCache().evict(rmCache.node(), key);
-            logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
-                rmCache.node(), key);
+            for (String node : rmCache.node()) {
+                CacheHelper.getCache().evict(node, key);
+                logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
+                    rmCache.node(), key);
+            }
         }
-
     }
 
     private String getCacheKey(String template, Method method, Object[] args) throws FrameworkException {

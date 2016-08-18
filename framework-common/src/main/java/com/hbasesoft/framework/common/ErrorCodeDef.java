@@ -266,4 +266,7 @@ public interface ErrorCodeDef {
 
     /** 没权限 */
     int NO_PERMISSION = 20031;
+
+    /** XML 转换失败 */
+    int XML_TRANS_ERROR = 20032;
 }
