@@ -22,7 +22,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.io.HttpClientUtil;
+import com.hbasesoft.framework.common.utils.io.HttpUtil;
 import com.hbasesoft.framework.message.api.Attachment;
 import com.hbasesoft.framework.message.core.service.MessageExcutor;
 
@@ -43,8 +43,8 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String, java.lang.String,
-     * java.lang.String, java.util.List, java.util.List)
+     * @see com.hbasesoft.framework.message.service.AbstractMessageService#sendMessage(java.lang.String,
+     * java.lang.String, java.lang.String, java.util.List, java.util.List)
      */
     @Override
     public String sendMessage(String title, String content, String sender, String[] receiver,
@@ -117,7 +117,7 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
         parameters.put("timestamp", timestamp + "");
         String sign = getSignature(url, parameters, secret);
         parameters.put("sign", sign);
-        String responseStr = HttpClientUtil.post(url, parameters);
+        String responseStr = HttpUtil.doPost(url, parameters);
         return responseStr;
     }
 

@@ -51,7 +51,7 @@ public class GetuiPushMessageExcutorImpl implements MessageExcutor {
             else {
                 result = sendListMessage(content, receivers);
             }
-            return JsonUtil.writeObj2JSON(result);
+            return JsonUtil.writeObj2Json(result);
         }
         catch (Exception e) {
             throw new ServiceException(ErrorCodeDef.GE_TUI_ERROR_10038, e);
