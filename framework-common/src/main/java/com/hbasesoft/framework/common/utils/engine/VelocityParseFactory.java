@@ -83,11 +83,11 @@ public class VelocityParseFactory {
      * @return String
      * @throws UtilException UtilException
      */
-    public static String parse(String templateName, String body, Map<String, Object> params) throws UtilException {
+    public static String parse(String templateName, String body, Map<String, ?> params) throws UtilException {
         VelocityContext context = new VelocityContext();
         context.put("dateTool", dateTool);
         if (CommonUtil.isNotEmpty(params)) {
-            for (Entry<String, Object> entry : params.entrySet()) {
+            for (Entry<String, ?> entry : params.entrySet()) {
                 context.put(entry.getKey(), entry.getValue());
             }
         }
