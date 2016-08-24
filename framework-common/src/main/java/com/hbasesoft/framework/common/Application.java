@@ -17,13 +17,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -46,11 +45,6 @@ public class Application extends WebMvcConfigurerAdapter implements EmbeddedServ
      * logger
      */
     private static Logger logger = new Logger(Application.class);
-
-    /**
-     * context
-     */
-    private static ApplicationContext context;
 
     private static List<StartupListener> listenerList = null;
 
@@ -87,7 +81,7 @@ public class Application extends WebMvcConfigurerAdapter implements EmbeddedServ
         }
 
         logger.info("====================>准备加载Spring配置文件<====================");
-        context = SpringApplication.run(Application.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         logger.info("====================>Spring配置文件加载完毕<====================");
 
         if (CommonUtil.isNotEmpty(listenerList)) {
@@ -111,10 +105,6 @@ public class Application extends WebMvcConfigurerAdapter implements EmbeddedServ
         // }
 
         logger.info("====================>系统正常启动<====================");
-    }
-
-    public static ApplicationContext getContext() {
-        return context;
     }
 
     /**
