@@ -197,7 +197,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(String url, String body, String contentType) {
-        logger.debug(">>> doPost[url = {}, body = {}]", url, body);
+        logger.debug(">>> doPost[url = {0}, body = {1}]", url, body);
         HttpPost httpPost = createHttpPost(url, body);
         if (contentType == null) {
             httpPost.setHeader("Content-type", "text/plain");
