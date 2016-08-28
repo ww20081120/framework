@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.log.core;
+package com.hbasesoft.framework.common.utils.logger;
 
 /**
  * <Description> <br>

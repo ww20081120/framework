@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.ResultTransformer;
@@ -27,6 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.db.core.ClusterDataSource;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
@@ -57,9 +56,9 @@ public class DataBaseConfig implements ApplicationContextAware {
     }
 
     @Bean(name = "sessionFactory")
-    public LocalSessionFactoryBean createSessionFactory(DataSource dataSource) {
+    public LocalSessionFactoryBean createSessionFactory() {
         LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-        bean.setDataSource(dataSource);
+        bean.setDataSource(new ClusterDataSource("master"));
         Map<String, String> map = PropertyHolder.getProperties();
         Properties properties = new Properties();
         for (Entry<String, String> entry : map.entrySet()) {
@@ -80,7 +79,7 @@ public class DataBaseConfig implements ApplicationContextAware {
     }
 
     @Bean
-    public DaoConfig registDaoConfig(@Value("${db.type}") String dbType) {
+    public DaoConfig registDaoConfig(@Value("${master.db.type}") String dbType) {
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();

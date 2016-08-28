@@ -5,9 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.security.DataUtil;
+import javax.sql.DataSource;
 
 /**
  * <Description> <br>
@@ -15,21 +13,13 @@ import com.hbasesoft.framework.common.utils.security.DataUtil;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2015年12月11日 <br>
+ * @CreateDate 2016年8月28日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core <br>
  */
-public class DataSource extends DruidDataSource {
+public interface DataSourceRegister {
 
-    /**
-     * serialVersionUID <br>
-     */
-    private static final long serialVersionUID = -4882512944369995514L;
+    String getTypeName();
 
-    public void setPassword(String password) {
-        if (CommonUtil.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
-            password = DataUtil.decrypt(password.substring(4, password.length() - 1));
-        }
-        super.setPassword(password);
-    }
+    DataSource regist();
 }

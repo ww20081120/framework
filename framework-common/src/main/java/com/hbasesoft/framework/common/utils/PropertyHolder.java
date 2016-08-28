@@ -32,9 +32,8 @@ import org.springframework.core.io.ClassPathResource;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
+ * <Description> 系统配置<br>
  * 
- * <Description> 系统配置<br> 
- *  
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -85,12 +84,12 @@ public class PropertyHolder {
     }
 
     /**
-     * 
      * Description: 本方法中的日志只能输出中文，因为APDPlatLoggerImpl中默认指定输出中文 只有配置项加载完毕，调用了指定日志输出语言方法LOG.setLocale(getLogLanguage())
-     * 之后，配置的日志输出语言才会生效<br> 
-     *  
+     * 之后，配置的日志输出语言才会生效<br>
+     * 
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     private static void init() {
         String systemConfig = "/application.properties";
@@ -142,6 +141,15 @@ public class PropertyHolder {
     public static Integer getIntProperty(String name, Integer defaultValue) {
         String value = PROPERTIES.get(name);
         return CommonUtil.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
+    }
+
+    public static Long getLongProperty(String name) {
+        return getLongProperty(name, null);
+    }
+
+    public static Long getLongProperty(String name, Long defaultValue) {
+        String value = PROPERTIES.get(name);
+        return CommonUtil.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
     }
 
     public static String getProperty(String name) {

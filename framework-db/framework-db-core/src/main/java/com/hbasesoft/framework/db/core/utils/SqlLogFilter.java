@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.log.core.filter;
+package com.hbasesoft.framework.db.core.utils;
 
 import java.sql.SQLException;
 import java.sql.Savepoint;
@@ -21,9 +21,9 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
+import com.hbasesoft.framework.common.utils.TransactionIDManager;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.log.core.TransLoggerService;
-import com.hbasesoft.framework.log.core.TransManager;
+import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
 
 /**
  * <Description> <br>
@@ -638,8 +638,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param msg <br>
      */
     private void saveMsg2Cache(String msg) {
-        TransManager manager = TransManager.getInstance();
-        String statckId = manager.peek();
+        String statckId = TransactionIDManager.getTransactionId();
         for (TransLoggerService service : getTransLoggerServices()) {
             service.sql(statckId, msg);
         }
