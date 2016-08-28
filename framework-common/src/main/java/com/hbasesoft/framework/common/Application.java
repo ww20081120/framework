@@ -38,7 +38,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy
 public class Application extends WebMvcConfigurerAdapter implements EmbeddedServletContainerCustomizer {
 
     /**
