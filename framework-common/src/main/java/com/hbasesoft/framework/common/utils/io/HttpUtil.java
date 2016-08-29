@@ -57,6 +57,7 @@ import org.apache.http.util.Args;
 import org.apache.http.util.EntityUtils;
 import org.springframework.util.MultiValueMap;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
@@ -71,11 +72,6 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 @SuppressWarnings("deprecation")
 public class HttpUtil {
     private static final Logger logger = new Logger(HttpUtil.class);
-
-    /**
-     * 默认编码
-     */
-    public static final String DEFAULT_CHARSET = "UTF-8";
 
     /**
      * 默认连接池中最大连接数
@@ -166,10 +162,14 @@ public class HttpUtil {
      * @return - 默认返回text/html
      */
     public static String doGet(String url) {
+        return doGet(url, GlobalConstants.DEFAULT_CHARSET);
+    }
+
+    public static String doGet(String url, String charset) {
         logger.debug(">>> doGet[url = {}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "text/html");
-        return doHttpRequest(httpGet, null, new DefaultStringResponseHandler());
+        return doHttpRequest(httpGet, null, new DefaultStringResponseHandler(charset));
     }
 
     /**
@@ -238,7 +238,7 @@ public class HttpUtil {
                         params.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
                     }
                 }
-                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(params, DEFAULT_CHARSET);
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(params, GlobalConstants.DEFAULT_CHARSET);
                 httpPost.setEntity(formEntity);
             }
             return httpPost;
@@ -262,7 +262,7 @@ public class HttpUtil {
         try {
             HttpPost httpPost = new HttpPost(url);
             if (StringUtils.isNotEmpty(body)) {
-                HttpEntity entity = new StringEntity(body, DEFAULT_CHARSET);
+                HttpEntity entity = new StringEntity(body, GlobalConstants.DEFAULT_CHARSET);
                 httpPost.setEntity(entity);
             }
             return httpPost;
@@ -365,12 +365,23 @@ public class HttpUtil {
      * @version 1.0
      */
     public static class DefaultStringResponseHandler implements ResponseHandler<String> {
+
+        private String charset;
+
+        public DefaultStringResponseHandler() {
+            charset = GlobalConstants.DEFAULT_CHARSET;
+        }
+
+        public DefaultStringResponseHandler(String charset) {
+            this.charset = charset;
+        }
+
         public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
             HttpEntity httpEntity = response.getEntity();
             if (httpEntity != null) {
-                return EntityUtils.toString(httpEntity, DEFAULT_CHARSET);
+                return EntityUtils.toString(httpEntity, charset);
             }
-            return DEFAULT_CHARSET;
+            return GlobalConstants.BLANK;
         }
     }
 
