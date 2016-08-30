@@ -41,7 +41,7 @@ public abstract class AbstractDataSourceRegister implements DataSourceRegister {
         DbParam dbParam = new DbParam(getTypeName());
         DruidDataSource ds = new DruidDataSource();
         ds.setDbType(dbParam.getDbType());
-
+        ds.setDriverClassName(dbParam.getDriverClassName());
         ds.setUrl(dbParam.getUrl());
         ds.setUsername(dbParam.getUsername());
         ds.setPassword(dbParam.getPassword());

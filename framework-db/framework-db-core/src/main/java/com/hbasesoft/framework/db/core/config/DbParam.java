@@ -52,6 +52,8 @@ public class DbParam extends BaseEntity {
      */
     private int initialSize = 5;
 
+    private String driverClassName;
+
     /**
      * 连接池最大使用连接数量
      */
@@ -119,7 +121,7 @@ public class DbParam extends BaseEntity {
             password = DataUtil.decrypt(password.substring(4, password.length() - 1));
         }
         this.password = password;
-
+        this.driverClassName = PropertyHolder.getProperty(prefix + ".db.driverClassName", "com.mysql.jdbc.Driver");
         this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
         this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", 5);
         this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", 100);
@@ -286,4 +288,11 @@ public class DbParam extends BaseEntity {
         this.filters = filters;
     }
 
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
+    }
 }
