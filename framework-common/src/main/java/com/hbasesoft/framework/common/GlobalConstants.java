@@ -15,55 +15,57 @@ package com.hbasesoft.framework.common;
  */
 public interface GlobalConstants {
 
-    /** 分隔符 */
-    String SPLITOR = ",";
+	/** 分隔符 */
+	String SPLITOR = ",";
 
-    /** 分隔符 */
-    String PARAM_SPLITOR = "&";
+	/** 分隔符 */
+	String PARAM_SPLITOR = "&";
 
-    /** 路径分割符 */
-    String PATH_SPLITOR = "/";
+	/** 路径分割符 */
+	String PATH_SPLITOR = "/";
 
-    /** SQL语句分隔符 */
-    String SQL_SPLITOR = ";";
+	/** SQL语句分隔符 */
+	String SQL_SPLITOR = ";";
 
-    /** 等号分隔符 */
-    String EQUAL_SPLITER = "=";
+	/** 等号分隔符 */
+	String EQUAL_SPLITER = "=";
 
-    /** 下划线 */
-    char UNDERLINE = '_';
+	/** 下划线 */
+	char UNDERLINE = '_';
 
-    /** 空白 */
-    String BLANK = "";
+	/** 空白 */
+	String BLANK = "";
 
-    /** 默认编码 */
-    String DEFAULT_CHARSET = "utf-8";
+	/** 默认编码 */
+	String DEFAULT_CHARSET = "utf-8";
 
-    /** 默认语言 */
-    String DEFAULT_LANGUAGE = "zh_CN";
+	/** 默认语言 */
+	String DEFAULT_LANGUAGE = "zh_CN";
 
-    /** NULL */
-    String NULL = "NULL";
+	/** NULL */
+	String NULL = "NULL";
 
-    /** YES */
-    String YES = "Y";
+	/** YES */
+	String YES = "Y";
 
-    /** NO */
-    String NO = "N";
+	/** NO */
+	String NO = "N";
 
-    /** POST */
-    String METHOD_POST = "POST";
+	/** POST */
+	String METHOD_POST = "POST";
 
-    /** GET */
-    String METHOD_GET = "GET";
+	/** GET */
+	String METHOD_GET = "GET";
 
-    /** 百分号 */
-    String PERCENT = "%";
+	/** 百分号 */
+	String PERCENT = "%";
 
-    /** 句号 */
-    String PERIOD = ".";
+	/** 句号 */
+	String PERIOD = ".";
 
-    /** 开发模式 */
-    String DEV_MODEL = "dev";
+	/** 开发模式 */
+	String DEV_MODEL = "dev";
+
+	String SYMBOL_REGULAR = "[\\pP\\p{Punct}]";
 
 }
