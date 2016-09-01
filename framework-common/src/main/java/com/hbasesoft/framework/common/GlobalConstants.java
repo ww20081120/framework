@@ -32,6 +32,9 @@ public interface GlobalConstants {
 
     /** 下划线 */
     char UNDERLINE = '_';
+    
+    /** 横杠 */
+    String LINE = "-";
 
     /** 空白 */
     String BLANK = "";
