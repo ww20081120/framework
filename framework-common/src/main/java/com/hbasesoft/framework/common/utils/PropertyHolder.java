@@ -27,8 +27,11 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 
+import com.hbasesoft.framework.common.Application;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
@@ -163,5 +166,20 @@ public class PropertyHolder {
 
     public static void setProperty(String name, String value) {
         PROPERTIES.put(name, value);
+    }
+
+    public static String getProjectName() {
+        String name = getProperty("project.name");
+        if (CommonUtil.isEmpty(name)) {
+            String realPath = StringUtils.replaceEach(
+                Application.class.getClassLoader().getResource(GlobalConstants.BLANK).getPath(), new String[] {
+                    "/target/classes/", "/WEB-INF/classes/"
+                }, new String[] {
+                    GlobalConstants.BLANK, GlobalConstants.BLANK
+                });
+
+            name = realPath.substring(realPath.lastIndexOf(GlobalConstants.PATH_SPLITOR));
+        }
+        return name;
     }
 }

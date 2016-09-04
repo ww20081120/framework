@@ -100,7 +100,7 @@ public class WebApplication extends SpringBootServletInitializer {
 
             System.out.println(new StringBuilder().append("\n***************************************").append('\n')
                 .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n')
-                .append("            ").append(PropertyHolder.getProperty("project.code")).append("模块启动成功！")
+                .append("         ").append(PropertyHolder.getProjectName()).append("模块启动成功！")
                 .append('\n').append("***************************************"));
 
             LOG.info("====================>系统正常启动<====================");

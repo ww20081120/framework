@@ -95,7 +95,7 @@ public class Application extends WebMvcConfigurerAdapter implements EmbeddedServ
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n')
-            .append("            ").append(PropertyHolder.getProperty("project.code")).append("模块启动成功！").append('\n')
+            .append("         ").append(PropertyHolder.getProjectName()).append("模块启动成功！").append('\n')
             .append("***************************************"));
 
         // if (CommonUtil.isNotEmpty(listenerList)) {
