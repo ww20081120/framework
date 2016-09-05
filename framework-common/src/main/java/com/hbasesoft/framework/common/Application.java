@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -39,6 +41,9 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 @ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
 @EnableAspectJAutoProxy
+@EnableAutoConfiguration(exclude = {
+    DataSourceAutoConfiguration.class
+})
 public class Application extends WebMvcConfigurerAdapter implements EmbeddedServletContainerCustomizer {
 
     /**
@@ -94,8 +99,8 @@ public class Application extends WebMvcConfigurerAdapter implements EmbeddedServ
         logger.info("**********************************************************");
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
-            .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n')
-            .append("         ").append(PropertyHolder.getProjectName()).append("模块启动成功！").append('\n')
+            .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
+            .append(PropertyHolder.getProjectName()).append("模块启动成功！").append('\n')
             .append("***************************************"));
 
         // if (CommonUtil.isNotEmpty(listenerList)) {
