@@ -166,7 +166,7 @@ public class HttpUtil {
     }
 
     public static String doGet(String url, String charset) {
-        logger.debug(">>> doGet[url = {}]", url);
+        logger.debug(">>> doGet[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "text/html");
         return doHttpRequest(httpGet, null, new DefaultStringResponseHandler(charset));
@@ -182,7 +182,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(String url, Map<String, String> paramMap) {
-        logger.debug(">>> doPost[url = {}, paramMap = {}]", url, paramMap);
+        logger.debug(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
         HttpPost httpPost = createHttpPost(url, paramMap);
         return doHttpRequest(httpPost, null, new DefaultStringResponseHandler());
     }
@@ -395,7 +395,7 @@ public class HttpUtil {
      * @return
      */
     public static String doGetDowloadFile(String absolutePath, String url) {
-        logger.debug(">>> doGetDowloadFile[url = {}]", url);
+        logger.debug(">>> doGetDowloadFile[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "image/jpeg");
         return doHttpRequest(httpGet, null, new DownFileResponseHandler(absolutePath));
