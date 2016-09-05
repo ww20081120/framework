@@ -514,6 +514,11 @@ public class HttpUtil {
         return url;
     }
 
+    public static String getRequestRelaURI(HttpServletRequest request) {
+        String url = request.getRequestURI();
+        return url.substring(request.getContextPath().length());
+    }
+
     public static String getRequestIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (CommonUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
