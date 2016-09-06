@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 
 import org.apache.commons.io.IOUtils;
 
@@ -115,6 +116,35 @@ public final class IOUtil {
         String line = null;
         try {
             reader = new BufferedReader(new InputStreamReader(in));
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        }
+        catch (Exception e) {
+            throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR_10027, e);
+        }
+        finally {
+            IOUtils.closeQuietly(reader);
+        }
+
+        return sb.toString();
+    }
+    
+    /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param in <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
+    public static String readString(Reader in) throws UtilException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = null;
+        String line = null;
+        try {
+            reader = new BufferedReader(in);
             while ((line = reader.readLine()) != null) {
                 sb.append(line).append('\n');
             }
