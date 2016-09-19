@@ -172,6 +172,13 @@ public class HttpUtil {
         return doHttpRequest(httpGet, null, new DefaultStringResponseHandler(charset));
     }
 
+    public static String doGet(CloseableHttpClient httpClient, String url, String charset) {
+        logger.debug(">>> doGet[url = {0}]", url);
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.setHeader("Content-type", "text/html");
+        return doHttpRequest(httpClient, httpGet, null, new DefaultStringResponseHandler(charset));
+    }
+
     /**
      * <p>
      * 执行Post请求
@@ -196,6 +203,21 @@ public class HttpUtil {
      * @param paramMap
      * @return
      */
+    public static String doPost(CloseableHttpClient httpClient, String url, Map<String, String> paramMap) {
+        logger.debug(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
+        HttpPost httpPost = createHttpPost(url, paramMap);
+        return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
+    }
+
+    /**
+     * <p>
+     * 执行Post请求
+     * </p>
+     * 
+     * @param url
+     * @param paramMap
+     * @return
+     */
     public static String doPost(String url, String body, String contentType) {
         logger.debug(">>> doPost[url = {0}, body = {1}]", url, body);
         HttpPost httpPost = createHttpPost(url, body);
@@ -206,6 +228,27 @@ public class HttpUtil {
             httpPost.setHeader("Content-type", contentType);
         }
         return doHttpRequest(httpPost, null, new DefaultStringResponseHandler());
+    }
+
+    /**
+     * <p>
+     * 执行Post请求
+     * </p>
+     * 
+     * @param url
+     * @param paramMap
+     * @return
+     */
+    public static String doPost(CloseableHttpClient httpClient, String url, String body, String contentType) {
+        logger.debug(">>> doPost[url = {0}, body = {1}]", url, body);
+        HttpPost httpPost = createHttpPost(url, body);
+        if (contentType == null) {
+            httpPost.setHeader("Content-type", "text/plain");
+        }
+        else {
+            httpPost.setHeader("Content-type", contentType);
+        }
+        return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
     }
 
     /**
@@ -285,6 +328,11 @@ public class HttpUtil {
      */
     public static <T> T doHttpRequest(HttpRequestBase httpMethod, HttpClientContextSetter httpClientContextSetter,
         ResponseHandler<T> responseHandler) {
+        return doHttpRequest(getHttpClient(), httpMethod, httpClientContextSetter, responseHandler);
+    }
+
+    public static <T> T doHttpRequest(CloseableHttpClient httpClient, HttpRequestBase httpMethod,
+        HttpClientContextSetter httpClientContextSetter, ResponseHandler<T> responseHandler) {
         Args.notNull(responseHandler, "Parameter 'httpMethod' can not be null!");
         Args.notNull(responseHandler, "Parameter 'responseHandler' can not be null!");
         CloseableHttpResponse response = null;
@@ -295,7 +343,7 @@ public class HttpUtil {
                 response = getHttpClient().execute(httpMethod, context);
             }
             else {
-                response = getHttpClient().execute(httpMethod);
+                response = httpClient.execute(httpMethod);
             }
             return response == null ? null : responseHandler.handleResponse(response);
         }
