@@ -88,11 +88,11 @@ public class CacheAdvice {
     private Object cache(Cache cache, ProceedingJoinPoint thisJoinPoint, Method method, Class<?> returnType)
         throws Throwable {
         String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
-        Object result = CacheHelper.getCache().get(cache.node(), key, returnType);
+        Object result = CacheHelper.getCache().get(cache.node(), key);
         if (result == null) {
             result = thisJoinPoint.proceed();
             if (result != null) {
-                long expireTimes = cache.expireTime();
+                int expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
                     CacheHelper.getCache().put(cache.node(), expireTimes, key, result);
                 }
@@ -119,7 +119,7 @@ public class CacheAdvice {
         if (result == null) {
             result = thisJoinPoint.proceed();
             if (result != null) {
-                long expireTimes = cache.expireTime();
+                int expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
                     CacheHelper.getCache().putNode(cache.node(), expireTimes, (Map<String, ?>) result);
                 }

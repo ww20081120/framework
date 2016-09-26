@@ -145,7 +145,8 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
         int seq = TransManager.getInstance().getSeq();
         StringBuffer sqlSb = new StringBuffer();
         for (int i = 0; i < seq; i++) {
-            sqlSb.append(CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i));
+            String temp = CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i);
+            sqlSb.append(temp);
             sqlSb.append("\n");
         }
         transLogPojo.setSqlLog(sqlSb.toString());

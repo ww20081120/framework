@@ -5,18 +5,14 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.redis;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import com.hbasesoft.framework.cache.core.redis.clients.jedis.BinaryJedisCluster;
 import com.hbasesoft.framework.cache.core.redis.clients.jedis.HostAndPort;
-import com.hbasesoft.framework.cache.core.util.SerializationUtil;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
 /**
@@ -51,143 +47,6 @@ public class ClusterRedisCache extends AbstractRedisCache {
                 PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
                 PropertyHolder.getIntProperty("cache.redis.cluster.max.redirections", 10));
         }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param clazz
-     * @param nodeName
-     * @return
-     * @ <br>
-     */
-    @Override
-    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
-        Map<String, T> map = null;
-        try {
-            Map<byte[], byte[]> hmap = cluster.hgetAllBytes(nodeName);
-            if (CommonUtil.isNotEmpty(hmap)) {
-                map = new HashMap<String, T>();
-                for (Entry<byte[], byte[]> entry : hmap.entrySet()) {
-                    map.put(new String(entry.getKey()), SerializationUtil.unserial(clazz, entry.getValue()));
-                }
-            }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("serial map failed!", e);
-        }
-
-        return map;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
-     * @param node
-     * @ <br>
-     */
-    @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) {
-        if (CommonUtil.isNotEmpty(node)) {
-            Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
-            try {
-                for (Entry<String, T> entry : node.entrySet()) {
-                    byte[] value = SerializationUtil.serial(entry.getValue());
-                    if (value != null) {
-                        hmap.put(entry.getKey().getBytes(), value);
-                    }
-                }
-                cluster.hmsetBytes(nodeName, hmap);
-            }
-            catch (Exception e) {
-                throw new RuntimeException("serial map failed!", e);
-            }
-        }
-
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
-     * @return
-     * @ <br>
-     */
-    @Override
-    public boolean removeNode(String nodeName) {
-        try {
-            cluster.del(nodeName);
-        }
-        catch (Exception e) {
-            throw new RuntimeException("serial map failed!", e);
-        }
-        return true;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param clazz
-     * @param nodeName
-     * @param key
-     * @return
-     * @ <br>
-     */
-    @Override
-    public <T> T get(String nodeName, String key, Class<T> clazz) {
-        T value = null;
-        try {
-            value = SerializationUtil.unserial(clazz, cluster.hgetBytes(nodeName, key));
-        }
-        catch (Exception e) {
-            throw new RuntimeException("serial map failed!", e);
-        }
-        return value;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
-     * @param key
-     * @param t
-     * @ <br>
-     */
-    @Override
-    public <T> void put(String nodeName, String key, T t) {
-        if (t != null) {
-            try {
-                cluster.hset(nodeName, key, SerializationUtil.serial(t));
-            }
-            catch (Exception e) {
-                throw new RuntimeException("serial map failed!", e);
-            }
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
-     * @param key
-     * @ <br>
-     */
-    @Override
-    public void evict(String nodeName, String key) {
-        cluster.hdel(nodeName, key);
     }
 
     /**
@@ -232,17 +91,11 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @author 王伟<br>
      * @taskId <br>
      * @param key
-     * @param type
      * @return <br>
      */
     @Override
-    public <T> T get(Object key, Class<T> type) {
-        try {
-            return SerializationUtil.unserial(type, cluster.getBytes(key.toString()));
-        }
-        catch (UtilException e) {
-            throw new RuntimeException("serial map failed!", e);
-        }
+    protected byte[] get(byte[] key) {
+        return cluster.getBytes(new String(key));
     }
 
     /**
@@ -254,13 +107,8 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    public void put(Object key, Object value) {
-        try {
-            cluster.set(key.toString(), SerializationUtil.serial(value));
-        }
-        catch (UtilException e) {
-            throw new RuntimeException("serial map failed!", e);
-        }
+    protected void put(byte[] key, byte[] value) {
+        cluster.set(new String(key), value);
     }
 
     /**
@@ -271,8 +119,8 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    public void evict(Object key) {
-        cluster.del(key.toString());
+    protected void evict(byte[] key) {
+        cluster.del(new String(key));
     }
 
     /**
@@ -280,27 +128,26 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param nodeName
-     * @param expireTimes
-     * @param node <br>
+     * @param node
+     * @return <br>
      */
     @Override
-    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
-        if (CommonUtil.isNotEmpty(node)) {
-            Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
-            try {
-                for (Entry<String, T> entry : node.entrySet()) {
-                    byte[] value = SerializationUtil.serial(entry.getValue());
-                    if (value != null) {
-                        hmap.put(entry.getKey().getBytes(), value);
-                    }
-                }
-                cluster.expire(nodeName, new Long(expireTimes).intValue());
-                cluster.hmsetBytes(nodeName, hmap);
-            }
-            catch (Exception e) {
-                throw new RuntimeException("serial map failed!", e);
-            }
+    protected Map<byte[], byte[]> getNode(byte[] node) {
+        return cluster.hgetAllBytes(new String(node));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param dataMap <br>
+     */
+    @Override
+    protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
+        if (CommonUtil.isNotEmpty(dataMap)) {
+            cluster.hmsetBytes(new String(key), dataMap);
         }
     }
 
@@ -310,21 +157,53 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     * @param expireTimes
+     * @return <br>
+     */
+    @Override
+    protected void removeNode(byte[] nodeName) {
+        cluster.del(new String(nodeName));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param key
+     * @return <br>
+     */
+    @Override
+    protected byte[] get(byte[] nodeName, byte[] key) {
+        return cluster.hgetBytes(new String(nodeName), new String(key));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
      * @param key
      * @param t <br>
      */
     @Override
-    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+    protected void put(byte[] nodeName, byte[] key, byte[] t) {
         if (t != null) {
-            try {
-                cluster.expire(nodeName, new Long(expireTimes).intValue());
-                cluster.hset(nodeName, key, SerializationUtil.serial(t));
-            }
-            catch (Exception e) {
-                throw new RuntimeException("serial map failed!", e);
-            }
+            cluster.hset(new String(nodeName), new String(key), t);
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param key <br>
+     */
+    @Override
+    protected void evict(byte[] nodeName, byte[] key) {
+        cluster.hdel(new String(nodeName), new String(key));
+    }
 }

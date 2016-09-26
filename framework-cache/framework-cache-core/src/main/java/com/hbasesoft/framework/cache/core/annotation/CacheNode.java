@@ -30,7 +30,7 @@ public @interface CacheNode {
 
     Class<?> bean();
 
-    String key() default GlobalConstants.BLANK;
+    int expireTime() default 0;
 
-    long expireTime() default 0L;
+    String key() default GlobalConstants.BLANK;
 }

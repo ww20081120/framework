@@ -30,5 +30,5 @@ public @interface Cache {
 
     String key() default GlobalConstants.BLANK;
 
-    long expireTime() default 0L;
+    int expireTime() default 0;
 }

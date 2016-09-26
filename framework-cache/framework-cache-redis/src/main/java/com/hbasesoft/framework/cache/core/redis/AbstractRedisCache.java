@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.redis;
 
-import com.hbasesoft.framework.cache.core.ICache;
+import com.hbasesoft.framework.cache.core.AbstractCache;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
@@ -23,7 +23,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.cache.core.redis <br>
  */
-public abstract class AbstractRedisCache implements ICache {
+public abstract class AbstractRedisCache extends AbstractCache {
 
     private static final String REDIS_ADDRESS = "cache.redis.address";
 

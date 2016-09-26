@@ -7,10 +7,9 @@ package com.hbasesoft.framework.cache.simple;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
+import com.hbasesoft.framework.cache.core.AbstractCache;
 import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.ICache;
 
 /**
  * <Description> <br>
@@ -20,7 +19,7 @@ import com.hbasesoft.framework.cache.core.ICache;
  * @CreateDate 2014年10月24日 <br>
  * @see com.hbasesoft.framework.core.cache.simple <br>
  */
-public class SimpleCache implements ICache {
+public class SimpleCache extends AbstractCache {
 
     /**
      * 缓存模式
@@ -28,7 +27,7 @@ public class SimpleCache implements ICache {
     public static final String CACHE_MODEL = "SIMPLE";
 
     /** cachesMap */
-    private Map<String, Map<String, ?>> cachesMap;
+    private Map<byte[], Map<byte[], byte[]>> cachesMap;
 
     /**
      * SimpleCache
@@ -36,78 +35,7 @@ public class SimpleCache implements ICache {
      * @param cachesMap <br>
      */
     public SimpleCache() {
-        this.cachesMap = new HashMap<String, Map<String, ?>>();
-    }
-
-    /**
-     * Description: 获取节点<br>
-     * 
-     * @author 王伟<br>
-     * @param clazz 数据类型
-     * @param nodeName 节点名称
-     * @return 缓存数据
-     * @ <br>
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
-        return (Map<String, T>) cachesMap.get(nodeName);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.cache.core.ICache#putNode(java.lang.String, java.util.Map)
-     */
-    @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) {
-        cachesMap.put(nodeName, node);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.cache.core.ICache#removeNode(java.lang.String)
-     */
-    @Override
-    public boolean removeNode(String nodeName) {
-        cachesMap.remove(nodeName);
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.cache.core.ICache#getValue(java.lang.String, java.lang.String)
-     */
-    @Override
-    public <T> T get(String nodeName, String key, Class<T> clazz) {
-        Map<String, T> node = getNode(nodeName, clazz);
-        return node == null ? null : node.get(key);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.cache.core.ICache#putValue(java.lang.String, java.lang.String, java.lang.Object)
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> void put(String nodeName, String key, T t) {
-        Map<String, T> node = (Map<String, T>) getNode(nodeName, t.getClass());
-        if (node == null) {
-            node = new ConcurrentHashMap<String, T>();
-            putNode(nodeName, node);
-        }
-        node.put(key, t);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.cache.core.ICache#removeValue(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void evict(String nodeName, String key) {
-        Map<String, ?> node = cachesMap.get(nodeName);
-        if (node != null) {
-            node.remove(key);
-        }
+        this.cachesMap = new HashMap<byte[], Map<byte[], byte[]>>();
     }
 
     /*
@@ -149,12 +77,11 @@ public class SimpleCache implements ICache {
      * @author 王伟<br>
      * @taskId <br>
      * @param key
-     * @param type
      * @return <br>
      */
     @Override
-    public <T> T get(Object key, Class<T> type) {
-        return get(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), type);
+    protected byte[] get(byte[] key) {
+        return get(CacheConstant.DEFAULT_CACHE_DIR.getBytes());
     }
 
     /**
@@ -166,8 +93,8 @@ public class SimpleCache implements ICache {
      * @param value <br>
      */
     @Override
-    public void put(Object key, Object value) {
-        put(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), value);
+    protected void put(byte[] key, byte[] value) {
+        put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), key, value);
     }
 
     /**
@@ -178,8 +105,8 @@ public class SimpleCache implements ICache {
      * @param key <br>
      */
     @Override
-    public void evict(Object key) {
-        evict(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
+    protected void evict(byte[] key) {
+        this.cachesMap.put(key, null);
     }
 
     /**
@@ -187,14 +114,25 @@ public class SimpleCache implements ICache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param nodeName
-     * @param expireTimes
-     * @param node <br>
+     * @param node
+     * @return <br>
      */
     @Override
-    @Deprecated
-    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
-        putNode(nodeName, node);
+    protected Map<byte[], byte[]> getNode(byte[] node) {
+        return this.cachesMap.get(node);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param dataMap <br>
+     */
+    @Override
+    protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
+        this.cachesMap.put(key, dataMap);
     }
 
     /**
@@ -203,13 +141,58 @@ public class SimpleCache implements ICache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     * @param expireTimes
+     * @return <br>
+     */
+    @Override
+    protected void removeNode(byte[] nodeName) {
+        this.cachesMap.remove(nodeName);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param key
+     * @return <br>
+     */
+    @Override
+    protected byte[] get(byte[] nodeName, byte[] key) {
+        Map<byte[], byte[]> defaultCache = this.cachesMap.get(nodeName);
+        return defaultCache == null ? null : defaultCache.get(key);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
      * @param key
      * @param t <br>
      */
     @Override
-    @Deprecated
-    public <T> void put(String nodeName, long expireTimes, String key, T t) {
-        put(key, key, t);
+    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+        Map<byte[], byte[]> defaultCache = this.cachesMap.get(nodeName);
+        if (defaultCache == null) {
+            defaultCache = new HashMap<byte[], byte[]>();
+            this.cachesMap.put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), defaultCache);
+        }
+        defaultCache.put(key, t);
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName
+     * @param key <br>
+     */
+    @Override
+    protected void evict(byte[] nodeName, byte[] key) {
+        put(nodeName, key, null);
+    }
+
 }

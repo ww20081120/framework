@@ -71,7 +71,7 @@ public class EhcacheImpl implements ICache {
 
     @Override
     public <T> T get(Object key, Class<T> type) {
-        return get(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), type);
+        return get(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
     }
 
     @Override
@@ -150,9 +150,8 @@ public class EhcacheImpl implements ICache {
      * @return <br>
      */
     @Override
-    public boolean removeNode(String nodeName) {
+    public void removeNode(String nodeName) {
         cacheManager.removeCache(nodeName);
-        return true;
     }
 
     /**
@@ -162,17 +161,13 @@ public class EhcacheImpl implements ICache {
      * @taskId <br>
      * @param nodeName
      * @param key
-     * @param type
      * @return <br>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String nodeName, String key, Class<T> type) {
+    public <T> T get(String nodeName, String key) {
         Element element = getCache(nodeName).get(key);
         Object value = (element != null ? element.getObjectValue() : null);
-        if (value != null && type != null && !type.isInstance(value)) {
-            throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
-        }
         return (T) value;
     }
 
@@ -226,7 +221,7 @@ public class EhcacheImpl implements ICache {
      * @param node <br>
      */
     @Override
-    public <T> void putNode(String nodeName, long expireTimes, Map<String, T> node) {
+    public <T> void putNode(String nodeName, int expireTimes, Map<String, T> node) {
         if (CommonUtil.isNotEmpty(node)) {
             Cache cache = getCache(nodeName, expireTimes, 0);
             for (Entry<String, T> entry : node.entrySet()) {
@@ -246,7 +241,8 @@ public class EhcacheImpl implements ICache {
      * @param t <br>
      */
     @Override
-    public <T> void put(String nodeName, long expireTimes, String key, T t) {
+    public <T> void put(String nodeName, int expireTimes, String key, T t) {
         getCache(nodeName, expireTimes, 0).put(new Element(key, t));
     }
+
 }

@@ -60,10 +60,10 @@ public interface ICache extends Cache {
      * 
      * @author 王伟 <br>
      * @param nodeName <br>
-     * @param expireTimes <br>
+     * @param seconds <br>
      * @param node <br>
      */
-    <T> void putNode(String nodeName, long expireTimes, Map<String, T> node);
+    <T> void putNode(String nodeName, int seconds, Map<String, T> node);
 
     /**
      * Description: removeNode<br>
@@ -72,7 +72,7 @@ public interface ICache extends Cache {
      * @param nodeName <br>
      * @return <br>
      */
-    boolean removeNode(String nodeName);
+    void removeNode(String nodeName);
 
     /**
      * Description: getValue<br>
@@ -82,9 +82,7 @@ public interface ICache extends Cache {
      * @param key <br>
      * @return <br>
      */
-    default String get(String nodeName, String key) {
-        return get(nodeName, key, String.class);
-    };
+    <T> T get(String nodeName, String key);
 
     /**
      * Description: 获取数据<br>
@@ -95,7 +93,10 @@ public interface ICache extends Cache {
      * @param key 缓存的key
      * @return 返回类型
      */
-    <T> T get(String nodeName, String key, Class<T> clazz);
+    @Deprecated
+    default <T> T get(String nodeName, String key, Class<T> clazz) {
+        return get(nodeName, key);
+    }
 
     /**
      * Description: putValue<br>
@@ -112,11 +113,11 @@ public interface ICache extends Cache {
      * 
      * @author 王伟 <br>
      * @param nodeName <br>
-     * @param expireTimes <br>
+     * @param seconds <br>
      * @param key <br>
      * @param t <br>
      */
-    <T> void put(String nodeName, long expireTimes, String key, T t);
+    <T> void put(String nodeName, int seconds, String key, T t);
 
     /**
      * Description: removeValue<br>

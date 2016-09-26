@@ -10,8 +10,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collection;
-import java.util.Map;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
@@ -51,20 +49,15 @@ public final class SerializationUtil {
     public static <T> byte[] serial(T obj) throws UtilException {
         byte[] result = null;
         if (obj != null && !(obj instanceof Void)) {
+            Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
+            LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
+            try {
+                result = ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+            }
+            catch (Exception e) {
+                throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
+            }
 
-            if (obj instanceof Collection || obj instanceof Map) {
-                result = jdkSerial(obj);
-            }
-            else {
-                Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
-                LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
-                try {
-                    result = ProtostuffIOUtil.toByteArray(obj, schema, buffer);
-                }
-                catch (Exception e) {
-                    throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
-                }
-            }
         }
         return result;
     }
@@ -112,22 +105,16 @@ public final class SerializationUtil {
      * @return <br>
      * @throws UtilException UtilException
      */
-    @SuppressWarnings("unchecked")
     public static <T> T unserial(Class<T> clazz, byte[] data) throws UtilException {
         T result = null;
         if (data != null && data.length > 0) {
-            if (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz)) {
-                result = (T) jdkUnserial(data);
+            Schema<T> schema = RuntimeSchema.getSchema(clazz);
+            try {
+                result = clazz.newInstance();
+                ProtostuffIOUtil.mergeFrom(data, result, schema);
             }
-            else {
-                Schema<T> schema = RuntimeSchema.getSchema(clazz);
-                try {
-                    result = clazz.newInstance();
-                    ProtostuffIOUtil.mergeFrom(data, result, schema);
-                }
-                catch (Exception e) {
-                    throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
-                }
+            catch (Exception e) {
+                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
             }
         }
         return result;
