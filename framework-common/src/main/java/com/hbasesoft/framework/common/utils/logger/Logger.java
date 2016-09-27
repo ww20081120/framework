@@ -32,6 +32,7 @@ public class Logger {
 
     /**
      * Logger
+     * 
      * @param clazz <br>
      */
     public Logger(Class<?> clazz) {
@@ -40,6 +41,7 @@ public class Logger {
 
     /**
      * Logger
+     * 
      * @param name <br>
      */
     public Logger(String name) {
@@ -50,6 +52,17 @@ public class Logger {
      * 普通异常日志
      * 
      * @param message 日志信息
+     */
+    public void error(Throwable t) {
+        logger.error(t.getMessage(), t);
+    }
+
+    /**
+     * Description: 普通异常日志<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param message <br>
      */
     public void error(Object message) {
         logger.error(message);
@@ -67,12 +80,22 @@ public class Logger {
 
     /**
      * 记录日志信息
+     * 
      * @param t <br>
      * @param message 日志信息 <br>
      * @param params 日志信息 <br>
      */
     public void error(Throwable t, String message, Object... params) {
         logger.error(CommonUtil.messageFormat(message, params));
+    }
+
+    /**
+     * 普通异常日志
+     * 
+     * @param message 日志信息
+     */
+    public void warn(Throwable t) {
+        logger.warn(t.getMessage(), t);
     }
 
     /**
@@ -96,6 +119,7 @@ public class Logger {
 
     /**
      * 记录日志信息
+     * 
      * @param t <br>
      * @param message 日志信息 <br>
      * @param params 日志信息 <br>
@@ -176,6 +200,7 @@ public class Logger {
 
     /**
      * sql日志
+     * 
      * @param t <br>
      * @param message 日志信息 <br>
      */
