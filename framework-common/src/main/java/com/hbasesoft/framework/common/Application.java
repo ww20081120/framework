@@ -21,7 +21,6 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -40,7 +39,6 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 @SpringBootApplication
 @ComponentScan(basePackages = "com.hbasesoft")
 @ImportResource("classpath*:META-INF/spring/*.xml")
-@EnableAspectJAutoProxy
 @EnableAutoConfiguration(exclude = {
     DataSourceAutoConfiguration.class
 })

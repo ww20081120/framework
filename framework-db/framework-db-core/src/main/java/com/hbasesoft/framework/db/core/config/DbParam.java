@@ -72,7 +72,7 @@ public class DbParam extends BaseEntity {
      */
     private String validationQuery = "SELECT 1";
 
-    private boolean testOnBorrow = false;
+    private boolean testOnBorrow = true;
 
     private boolean testOnReturn = false;
 
@@ -126,7 +126,7 @@ public class DbParam extends BaseEntity {
         this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", 0);
         this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", 6000000L);
         this.validationQuery = PropertyHolder.getProperty(prefix + ".db.validationQuery", "SELECT 1");
-        this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", false);
+        this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", true);
         this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".db.testOnReturn", false);
         this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".db.testWhileIdle", true);
         this.timeBetweenEvictionRunsMillis = PropertyHolder
