@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.charset.CodingErrorAction;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -484,7 +483,7 @@ public class HttpUtil {
                     Header[] headers = response.getHeaders("Content-Disposition");
                     String filename = headers[0].getValue().split("\"")[1];
                     String type = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
-                    filename = "/" + DateUtil.date2String(new Date(), "yyyyMMddHHmmss") + "." + type;
+                    filename = "/" + System.currentTimeMillis() + "." + type;
                     try {
                         IOUtil.copyFileFromInputStream(dir.getAbsolutePath() + filename, inputStream, type);
                     }
