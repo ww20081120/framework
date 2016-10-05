@@ -33,6 +33,15 @@ public class RemoteServiceException extends FrameworkException {
     /**
      * ServiceException
      * 
+     * @param exception <br>
+     */
+    public RemoteServiceException(Exception exception) {
+        super(ErrorCodeDef.SYSTEM_ERROR_10001, exception.getMessage());
+    }
+
+    /**
+     * ServiceException
+     * 
      * @param code <br>
      * @param msg <br>
      */
