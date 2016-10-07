@@ -129,7 +129,7 @@ public final class IOUtil {
 
         return sb.toString();
     }
-    
+
     /**
      * Description: <br>
      * 
@@ -168,7 +168,19 @@ public final class IOUtil {
      * @throws IOException <br>
      */
     public static String readFile(String filePath) throws IOException {
-        File file = new File(filePath);
+        return readFile(new File(filePath));
+    }
+
+    /**
+     * Description: readFile<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param file
+     * @return
+     * @throws IOException <br>
+     */
+    public static String readFile(File file) throws IOException {
         if (file.exists() && file.isFile()) {
             BufferedReader in = null;
             String line = null;

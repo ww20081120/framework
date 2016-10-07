@@ -18,6 +18,8 @@ import java.sql.ResultSetMetaData;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.sql.DataSource;
 import javax.swing.JButton;
@@ -31,6 +33,7 @@ import javax.swing.UIManager;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
@@ -186,17 +189,68 @@ public class DBTable2JavaBean extends JFrame {
      *         <br>
      */
     private void setDefaultValue() {
-        tips[0].setText("表名不填则导出所有的表");
-        textFields[1].setText("com.hbasesoft.framework.bootstrap.bean");
-        String classPath = this.getClass().getClassLoader().getResource("").getPath();
-        textFields[2].setText(StringUtils.replace(StringUtils.replace(classPath, "/target/classes", "/src/main/java"),
-            "/target/test-classes", "/src/main/java"));
-        textFields[3].setText(StringUtils.replace(classPath, "/target/classes", "/src/main/java")
-            + "com/hbasesoft/framework/db/core/utils/template.vm");
-        textFields[4].setText("jdbc:mysql://ranyinfo.com:3306/web?useUnicode=true&characterEncoding=UTF-8");
-        textFields[5].setText("root");
-        textFields[6].setText("ranyinfo.com");
+        Map<String, ?> configParam = getConfigParam();
+
+        tips[0].setText((String) configParam.get("tableNameText"));
+        textFields[1].setText((String) configParam.get("package"));
+        textFields[2].setText((String) configParam.get("dirstr"));
+        textFields[3].setText((String) configParam.get("templatePath"));
+        textFields[4].setText((String) configParam.get("jdbcUrl"));
+        textFields[5].setText((String) configParam.get("username"));
+        textFields[6].setText((String) configParam.get("password"));
         encryptPwd();
+    }
+
+    private void saveConfig() {
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("tableNameText", tips[0].getText());
+        paramMap.put("package", textFields[1].getText());
+        paramMap.put("dirstr", textFields[2].getText());
+        paramMap.put("templatePath", textFields[3].getText());
+        paramMap.put("jdbcUrl", textFields[4].getText());
+        paramMap.put("username", textFields[5].getText());
+        paramMap.put("password", textFields[6].getText());
+        String content = JSONObject.toJSONString(paramMap);
+        try {
+            IOUtil.writeFile(content,
+                new File(System.getProperties().getProperty("user.home") + "/frameworkCache/config.cfg"));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Map<String, ?> getConfigParam() {
+        File file = new File(System.getProperties().getProperty("user.home"), "frameworkCache");
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        File f = new File(file, "config.cfg");
+        if (f.exists()) {
+            try {
+                String content = IOUtil.readFile(f);
+                if (CommonUtil.isNotEmpty(content)) {
+                    return JSONObject.parseObject(content);
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("tableNameText", "表名不填则导出所有的表");
+        paramMap.put("package", "com.hbasesoft.framework.bootstrap.bean");
+        String classPath = this.getClass().getClassLoader().getResource("").getPath();
+        paramMap.put("dirstr", StringUtils.replace(StringUtils.replace(classPath, "/target/classes", "/src/main/java"),
+            "/target/test-classes", "/src/main/java"));
+        paramMap.put("templatePath", StringUtils.replace(classPath, "/target/classes", "/src/main/java")
+            + "com/hbasesoft/framework/db/core/utils/template.vm");
+        paramMap.put("jdbcUrl", "jdbc:mysql://ranyinfo.com:3306/web?useUnicode=true&characterEncoding=UTF-8");
+        paramMap.put("username", "root");
+        paramMap.put("password", "ranyinfo.com");
+        return paramMap;
     }
 
     /**
@@ -208,10 +262,13 @@ public class DBTable2JavaBean extends JFrame {
      */
     public void export() throws Exception {
 
+        saveConfig();
+
         String tablename = textFields[0].getText();
         String packname = textFields[1].getText();
         String dirstr = textFields[2].getText(); // 空表示当前目录
         String tempPath = textFields[3].getText();
+
         if (dataSource == null) {
             DruidDataSource dbs = new DruidDataSource();
             dbs.setUrl(textFields[4].getText());
