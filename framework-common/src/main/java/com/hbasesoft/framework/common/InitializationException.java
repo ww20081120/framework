@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common;
 
-
 /**
  * <Description> <br>
  * 
@@ -21,7 +20,15 @@ public class InitializationException extends FrameworkException {
     private static final long serialVersionUID = 7630275353803653896L;
 
     /**
+     * @param arg0
+     */
+    public InitializationException(Throwable arg0) {
+        super(arg0);
+    }
+
+    /**
      * InitializationException
+     * 
      * @param exception <br>
      */
     public InitializationException(FrameworkException exception) {
@@ -30,6 +37,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param code <br>
      * @param msg <br>
      * @param params <br>
@@ -40,6 +48,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -51,6 +60,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -61,6 +71,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param code <br>
      * @param msg <br>
      */
@@ -70,6 +81,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param code <br>
      * @param arg0 <br>
      */
@@ -79,6 +91,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param code <br>
      */
     public InitializationException(int code) {
@@ -87,6 +100,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param arg0 <br>
      * @param arg1 <br>
      * @param params <br>
@@ -97,6 +111,7 @@ public class InitializationException extends FrameworkException {
 
     /**
      * InitializationException
+     * 
      * @param arg0 <br>
      * @param exception <br>
      */

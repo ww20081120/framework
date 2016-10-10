@@ -7,7 +7,6 @@ package com.hbasesoft.framework.db.core;
 
 import com.hbasesoft.framework.common.FrameworkException;
 
-
 /**
  * <Description> <br>
  * 
@@ -25,6 +24,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param exception <br>
      */
     public DaoException(FrameworkException exception) {
@@ -32,7 +32,15 @@ public class DaoException extends FrameworkException {
     }
 
     /**
+     * @param arg0
+     */
+    public DaoException(Throwable arg0) {
+        super(arg0);
+    }
+
+    /**
      * DaoException
+     * 
      * @param code <br>
      * @param msg <br>
      * @param params <br>
@@ -43,6 +51,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -54,6 +63,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -64,6 +74,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param code <br>
      * @param msg <br>
      */
@@ -73,6 +84,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param code <br>
      * @param arg0 <br>
      */
@@ -82,6 +94,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param code <br>
      */
     public DaoException(int code) {
@@ -90,6 +103,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param arg0 <br>
      * @param arg1 <br>
      * @param params <br>
@@ -100,6 +114,7 @@ public class DaoException extends FrameworkException {
 
     /**
      * DaoException
+     * 
      * @param arg0 <br>
      * @param exception <br>
      */

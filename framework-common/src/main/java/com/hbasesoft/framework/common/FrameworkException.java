@@ -29,6 +29,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param code <br>
      */
     public FrameworkException(int code) {
@@ -37,6 +38,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param code <br>
      * @param msg <br>
      */
@@ -47,6 +49,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param code <br>
      * @param msg <br>
      * @param params <br>
@@ -57,14 +60,20 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param exception <br>
      */
     public FrameworkException(FrameworkException exception) {
         this(exception.code, exception);
     }
 
+    public FrameworkException(Throwable arg0) {
+        this(ErrorCodeDef.SYSTEM_ERROR_10001, arg0);
+    }
+
     /**
      * FrameworkException
+     * 
      * @param code <br>
      * @param arg0 <br>
      */
@@ -75,6 +84,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param arg0 <br>
      * @param exception <br>
      */
@@ -84,6 +94,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -95,6 +106,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param arg0 <br>
      * @param arg1 <br>
      * @param params <br>
@@ -105,6 +117,7 @@ public class FrameworkException extends Exception {
 
     /**
      * FrameworkException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>

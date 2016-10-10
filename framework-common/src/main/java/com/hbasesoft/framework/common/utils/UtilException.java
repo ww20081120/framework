@@ -24,6 +24,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param exception <br>
      */
     public UtilException(FrameworkException exception) {
@@ -32,6 +33,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param code <br>
      * @param msg <br>
      * @param params <br>
@@ -42,6 +44,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -53,6 +56,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param code <br>
      * @param arg0 <br>
      * @param arg1 <br>
@@ -63,6 +67,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param code <br>
      * @param msg <br>
      */
@@ -72,6 +77,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param code <br>
      * @param arg0 <br>
      */
@@ -81,6 +87,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param code <br>
      */
     public UtilException(int code) {
@@ -89,6 +96,7 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param arg0 <br>
      * @param arg1 <br>
      * @param params <br>
@@ -99,11 +107,19 @@ public class UtilException extends FrameworkException {
 
     /**
      * UtilException
+     * 
      * @param arg0 <br>
      * @param exception <br>
      */
     public UtilException(String arg0, FrameworkException exception) {
         super(arg0, exception);
+    }
+
+    /**
+     * @param arg0
+     */
+    public UtilException(Throwable arg0) {
+        super(arg0);
     }
 
 }
