@@ -106,7 +106,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     }
 
     protected TransBean getTransBean(String stackId) {
-        return CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId, TransBean.class);
+        return CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
     }
 
     protected void putTransBean(TransBean bean) {

@@ -5,7 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.log.core;
 
-import com.hbasesoft.framework.db.core.BaseEntity;
+import java.io.Serializable;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * <Description> <br>
@@ -17,7 +19,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.core <br>
  */
-public class TransBean extends BaseEntity {
+public class TransBean implements Serializable {
 
     /**
      * serialVersionUID <br>
@@ -124,4 +126,14 @@ public class TransBean extends BaseEntity {
         this.params = params;
     }
 
+    /**
+     * toString
+     * 
+     * @see java.lang.Object#toString()
+     * @return <br>
+     */
+    @Override
+    public String toString() {
+        return JSONObject.toJSONString(this);
+    }
 }
