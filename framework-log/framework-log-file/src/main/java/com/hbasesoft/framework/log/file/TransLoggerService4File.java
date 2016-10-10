@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
 import com.hbasesoft.framework.log.core.TransManager;
@@ -42,8 +42,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
         if (alwaysLog) {
-            logger.debug("before execute method [{0}], statckId[{1}], parentStackId[{2}], params [{3}] ", method,
-                stackId, parentStackId, CommonUtil.isEmpty(params) ? "NULL" : Arrays.toString(params));
+            logger.debug("{0}|{1}|before|{2}|{3}", stackId, parentStackId, method, Arrays.toString(params));
         }
         else {
             super.before(stackId, parentStackId, beginTime, method, params);
@@ -53,8 +52,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         if (alwaysLog) {
-            logger.debug("success execute method [{0}], statckId[{1}], consumeTime[{2}], returnValue[{3}]", method,
-                stackId, consumeTime, returnValue);
+            logger.debug("{0}|after|{1}|{2}|{3}", stackId, method, consumeTime, returnValue);
         }
         else {
             super.afterReturn(stackId, endTime, consumeTime, method, returnValue);
@@ -74,7 +72,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
         if (alwaysLog) {
-            logger.error(e, "error execute method[0], statckId[{1}], consumeTime[{2}]", method, stackId, consumeTime);
+            logger.error(e, "{0}|error|{1}|{2}", stackId, method, consumeTime, getExceptionMsg(e));
         }
         else {
             super.afterThrow(stackId, endTime, consumeTime, method, e);
@@ -91,10 +89,9 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         Exception e) {
         TransManager manager = TransManager.getInstance();
         if (alwaysLog) {
-            logger.debug(
-                "execute method [{0}], result [{1}], statckId[{2}], consumeTime [{3}], return [{4}], exception [{5}]",
-                method, manager.isError() || manager.isTimeout(), stackId, consumeTime, returnValue,
-                getExceptionMsg(e));
+            logger.debug("{0}|end|{1}|{2}|{3}|{4}|{5}", stackId, method, consumeTime,
+                manager.isError() || manager.isTimeout() ? "FAIL" : "SUCCESS", returnValue,
+                e == null ? GlobalConstants.BLANK : e.getMessage());
         }
         else {
             try {

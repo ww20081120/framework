@@ -95,7 +95,7 @@
 		<param name="MaxFileSize" value="10MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH\:mm\:ss,SSS}]%m%n" />
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH\:mm\:ss,SSS}]|%m%n" />
 		</layout>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="DEBUG" />
