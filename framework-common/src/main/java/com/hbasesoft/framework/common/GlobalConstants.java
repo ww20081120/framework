@@ -23,6 +23,9 @@ public interface GlobalConstants {
 
 	/** 路径分割符 */
 	String PATH_SPLITOR = "/";
+	
+	/** 竖线*/
+	String VERTICAL_LINE = "|";
 
 	/** SQL语句分隔符 */
 	String SQL_SPLITOR = ";";
