@@ -44,7 +44,24 @@ public final class CommonUtil {
     public static boolean isEmpty(String str) {
 	return StringUtils.isEmpty(str);
     }
-
+    
+    /**
+     * 
+     * Description: 去除首尾空格，并将null字符串转化为null对象<br> 
+     *  
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param str
+     * @return <br>
+     */
+    public static String trim(String str) {
+    	str = str == null ? null : str.trim();
+    	if ("null".equals(str)) {
+    		return null;
+    	}
+    	return str;
+	}
+    
     /**
      * Description:字符串不为NULL也不为空 <br>
      * 
