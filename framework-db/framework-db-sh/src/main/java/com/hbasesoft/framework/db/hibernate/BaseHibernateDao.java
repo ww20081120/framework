@@ -4,6 +4,9 @@
 package com.hbasesoft.framework.db.hibernate;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -53,75 +57,71 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.SqlExcutor#query(java.lang.String, java.util.Map)
+     * 
+     * @see
+     * com.hbasesoft.framework.dao.support.SqlExcutor#query(java.lang.String,
+     * java.util.Map)
      */
-    @SuppressWarnings({
-        "rawtypes", "unchecked"
-    })
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
+	try {
+	    Session session = sessionFactory.getCurrentSession();
 
-            SQLQuery query = session.createSQLQuery(sql);
+	    SQLQuery query = session.createSQLQuery(sql);
 
-            // Redis缓存序列化时不能有void返回类型，特殊处理一下
-            if (CommonUtil.isNull(param.getReturnType())) {
-                param.setReturnType(void.class);
-            }
+	    // Redis缓存序列化时不能有void返回类型，特殊处理一下
+	    if (CommonUtil.isNull(param.getReturnType())) {
+		param.setReturnType(void.class);
+	    }
 
-            // step1:设置参数
-            setParamMap(param.getParamMap(), query);
+	    // step1:设置参数
+	    setParamMap(param.getParamMap(), query);
 
-            // step2:设置返回值类型
-            final Object callBack = param.getCallback();
-            if (callBack != null && callBack instanceof ResultTransformer) {
-                query.setResultTransformer((ResultTransformer) callBack);
-            }
-            else if (param.getBeanType().equals(Map.class)) {
-                query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-            }
-            else {
-                Class<?> beanType = param.getBeanType();
-                if (Serializable.class.equals(beanType)) {
-                    beanType = param.getReturnType();
-                }
-                query.setResultTransformer(new AutoResultTransformer(beanType));
-            }
+	    // step2:设置返回值类型
+	    final Object callBack = param.getCallback();
+	    if (callBack != null && callBack instanceof ResultTransformer) {
+		query.setResultTransformer((ResultTransformer) callBack);
+	    } else if (param.getBeanType().equals(Map.class)) {
+		query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+	    } else {
+		Class<?> beanType = param.getBeanType();
+		if (Serializable.class.equals(beanType)) {
+		    beanType = param.getReturnType();
+		}
+		query.setResultTransformer(new AutoResultTransformer(beanType));
+	    }
 
-            boolean isPager = false;
-            PagerList resultList = null;
+	    boolean isPager = false;
+	    PagerList resultList = null;
 
-            // step3:设置分页
-            if (param.getPageIndex() != -1 && param.getPageSize() != -1
-                && List.class.isAssignableFrom(param.getReturnType())) {
-                query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
-                query.setMaxResults(param.getPageSize());
+	    // step3:设置分页
+	    if (param.getPageIndex() != -1 && param.getPageSize() != -1
+		    && List.class.isAssignableFrom(param.getReturnType())) {
+		query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
+		query.setMaxResults(param.getPageSize());
 
-                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(*) FROM (" + sql + ") QUERY_DATA__");
-                setParamMap(param.getParamMap(), countQuery);
-                resultList = new PagerList();
-                resultList.setPageIndex(param.getPageIndex());
-                resultList.setPageSize(param.getPageSize());
-                resultList.setTotalCount(Long.valueOf(countQuery.uniqueResult().toString()));
-                isPager = true;
-            }
+		SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(*) FROM (" + sql + ") QUERY_DATA__");
+		setParamMap(param.getParamMap(), countQuery);
+		resultList = new PagerList();
+		resultList.setPageIndex(param.getPageIndex());
+		resultList.setPageSize(param.getPageSize());
+		resultList.setTotalCount(Long.valueOf(countQuery.uniqueResult().toString()));
+		isPager = true;
+	    }
 
-            if (isPager) {
-                resultList.addAll(query.list());
-                return resultList;
-            }
-            else if (List.class.isAssignableFrom(param.getReturnType())) {
-                return query.list();
-            }
-            else {
-                return query.uniqueResult();
-            }
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, "执行查询语句失败", e);
-        }
+	    if (isPager) {
+		resultList.addAll(query.list());
+		return resultList;
+	    } else if (List.class.isAssignableFrom(param.getReturnType())) {
+		return query.list();
+	    } else {
+		return query.uniqueResult();
+	    }
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	    throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, "执行查询语句失败", e);
+	}
     }
 
     /**
@@ -129,72 +129,76 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author yang.zhipeng <br>
      * @taskId <br>
-     * @param paramMap <br>
-     * @param query <br>
-     * @throws DaoException <br>
+     * @param paramMap
+     *            <br>
+     * @param query
+     *            <br>
+     * @throws DaoException
+     *             <br>
      */
     private void setParamMap(Map<String, Object> paramMap, Query query) throws DaoException {
-        if (CommonUtil.isNotEmpty(paramMap)) {
-            for (Entry<String, Object> entry : paramMap.entrySet()) {
-                Object obj = entry.getValue();
+	if (CommonUtil.isNotEmpty(paramMap)) {
+	    for (Entry<String, Object> entry : paramMap.entrySet()) {
+		Object obj = entry.getValue();
 
-                // 这里考虑传入的参数是什么类型，不同类型使用的方法不同
-                if (obj instanceof Collection<?>) {
-                    query.setParameterList(entry.getKey(), (Collection<?>) obj);
-                }
-                else if (obj != null && obj.getClass().isArray()) {
-                    if (!(obj instanceof Object[])) {
-                        throw new DaoException(ErrorCodeDef.LIST_PARAM_ERROR_10040, "请使用包装类型的数组");
-                    }
-                    query.setParameterList(entry.getKey(), (Object[]) obj);
-                }
-                else {
-                    query.setParameter(entry.getKey(), obj);
-                }
-            }
-        }
+		// 这里考虑传入的参数是什么类型，不同类型使用的方法不同
+		if (obj instanceof Collection<?>) {
+		    query.setParameterList(entry.getKey(), (Collection<?>) obj);
+		} else if (obj != null && obj.getClass().isArray()) {
+		    if (!(obj instanceof Object[])) {
+			throw new DaoException(ErrorCodeDef.LIST_PARAM_ERROR_10040, "请使用包装类型的数组");
+		    }
+		    query.setParameterList(entry.getKey(), (Object[]) obj);
+		} else {
+		    query.setParameter(entry.getKey(), obj);
+		}
+	    }
+	}
 
     }
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.SqlExcutor#excuteSql(java.lang.String, java.util.Map)
+     * 
+     * @see com.hbasesoft.framework.dao.support.SqlExcutor#excuteSql(java.lang.
+     * String, java.util.Map)
      */
     @Override
     public int excuteSql(final String sql, final DataParam param) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            SQLQuery query = session.createSQLQuery(sql);
-            setParamMap(param.getParamMap(), query);
-            return query.executeUpdate();
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行SQL语句失败", e);
-        }
+	try {
+	    Session session = sessionFactory.getCurrentSession();
+	    SQLQuery query = session.createSQLQuery(sql);
+	    setParamMap(param.getParamMap(), query);
+	    return query.executeUpdate();
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	    throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行SQL语句失败", e);
+	}
     }
 
     /*
      * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.SqlExcutor#batchExcuteSql(java.lang.String[])
+     * 
+     * @see
+     * com.hbasesoft.framework.dao.support.SqlExcutor#batchExcuteSql(java.lang.
+     * String[])
      */
     @Override
     public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            int[] result = new int[sqls.length];
-            SQLQuery query;
-            for (int i = 0; i < sqls.length; i++) {
-                query = session.createSQLQuery(sqls[i]);
-                setParamMap(param.getParamMap(), query);
-                result[i] = query.executeUpdate();
-            }
-            return result;
-        }
-        catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行批量SQL语句失败", e);
-        }
+	try {
+	    Session session = sessionFactory.getCurrentSession();
+	    int[] result = new int[sqls.length];
+	    SQLQuery query;
+	    for (int i = 0; i < sqls.length; i++) {
+		query = session.createSQLQuery(sqls[i]);
+		setParamMap(param.getParamMap(), query);
+		result[i] = query.executeUpdate();
+	    }
+	    return result;
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
+	    throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行批量SQL语句失败", e);
+	}
     }
 
     /**
@@ -206,11 +210,11 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      */
     private <T> Criteria createCriteria(Class<T> entityClass, Criterion... criterions) {
-        Criteria criteria = getSession().createCriteria(entityClass);
-        for (Criterion c : criterions) {
-            criteria.add(c);
-        }
-        return criteria;
+	Criteria criteria = getSession().createCriteria(entityClass);
+	for (Criterion c : criterions) {
+	    criteria.add(c);
+	}
+	return criteria;
     }
 
     /**
@@ -224,19 +228,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      */
     private <T> Criteria createCriteria(Class<T> entityClass, boolean isAsc, Criterion... criterions) {
-        Criteria criteria = createCriteria(entityClass, criterions);
-        if (isAsc) {
-            criteria.addOrder(Order.asc("asc"));
-        }
-        else {
-            criteria.addOrder(Order.desc("desc"));
-        }
-        return criteria;
+	Criteria criteria = createCriteria(entityClass, criterions);
+	if (isAsc) {
+	    criteria.addOrder(Order.asc("asc"));
+	} else {
+	    criteria.addOrder(Order.desc("desc"));
+	}
+	return criteria;
     }
 
     private Session getSession() {
-        // 事务必须是开启的(Required)，否则获取不到
-        return sessionFactory.getCurrentSession();
+	// 事务必须是开启的(Required)，否则获取不到
+	return sessionFactory.getCurrentSession();
     }
 
     /**
@@ -246,20 +249,20 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param entity
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> Serializable save(T entity) throws DaoException {
-        try {
-            Serializable id = getSession().save(entity);
-            getSession().flush();
-            logger.info("保存实体成功," + entity.getClass().getName());
-            return id;
-        }
-        catch (Exception e) {
-            logger.error("保存实体异常", e);
-            throw new DaoException(ErrorCodeDef.SAVE_ERROR_10013, e);
-        }
+	try {
+	    Serializable id = getSession().save(entity);
+	    getSession().flush();
+	    logger.info("保存实体成功," + entity.getClass().getName());
+	    return id;
+	} catch (Exception e) {
+	    logger.error("保存实体异常", e);
+	    throw new DaoException(ErrorCodeDef.SAVE_ERROR_10013, e);
+	}
     }
 
     /**
@@ -268,19 +271,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @author 王伟<br>
      * @taskId <br>
      * @param entity
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> void delete(T entity) throws DaoException {
-        try {
-            getSession().delete(entity);
-            getSession().flush();
-            logger.info("删除成功," + entity.getClass().getName());
-        }
-        catch (RuntimeException e) {
-            logger.error("删除异常", e);
-            throw e;
-        }
+	try {
+	    getSession().delete(entity);
+	    getSession().flush();
+	    logger.info("删除成功," + entity.getClass().getName());
+	} catch (RuntimeException e) {
+	    logger.error("删除异常", e);
+	    throw e;
+	}
     }
 
     /**
@@ -289,21 +292,22 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @author 王伟<br>
      * @taskId <br>
      * @param entitys
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> void batchSave(List<T> entitys) throws DaoException {
-        for (int i = 0; i < entitys.size(); i++) {
-            getSession().save(entitys.get(i));
-            if (i % 20 == 0) {
-                // 20个对象后才清理缓存，写入数据库
-                getSession().flush();
-                getSession().clear();
-            }
-        }
-        // 最后清理一下----防止大于20小于40的不保存
-        getSession().flush();
-        getSession().clear();
+	for (int i = 0; i < entitys.size(); i++) {
+	    getSession().save(entitys.get(i));
+	    if (i % 20 == 0) {
+		// 20个对象后才清理缓存，写入数据库
+		getSession().flush();
+		getSession().clear();
+	    }
+	}
+	// 最后清理一下----防止大于20小于40的不保存
+	getSession().flush();
+	getSession().clear();
     }
 
     /**
@@ -314,12 +318,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param class1
      * @param id
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> entityClass, Serializable id) throws DaoException {
-        return (T) getSession().get(entityClass, id);
+	return (T) getSession().get(entityClass, id);
     }
 
     /**
@@ -330,16 +335,17 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param entityName
      * @param id
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException {
-        T t = (T) getSession().get(entityName, id);
-        if (t != null) {
-            getSession().flush();
-        }
-        return t;
+	T t = (T) getSession().get(entityName, id);
+	if (t != null) {
+	    getSession().flush();
+	}
+	return t;
     }
 
     /**
@@ -351,13 +357,14 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param propertyName
      * @param value
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
-        Assert.notEmpty(propertyName, "属性名不能为空");
-        return (T) createCriteria(entityClass, Restrictions.eq(propertyName, value)).uniqueResult();
+	Assert.notEmpty(propertyName, "属性名不能为空");
+	return (T) createCriteria(entityClass, Restrictions.eq(propertyName, value)).uniqueResult();
     }
 
     /**
@@ -369,13 +376,14 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param propertyName
      * @param value
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
-        Assert.notEmpty(propertyName, "属性名不能为空");
-        return (List<T>) createCriteria(entityClass, Restrictions.eq(propertyName, value)).list();
+	Assert.notEmpty(propertyName, "属性名不能为空");
+	return (List<T>) createCriteria(entityClass, Restrictions.eq(propertyName, value)).list();
     }
 
     /**
@@ -385,12 +393,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param entityClass
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> loadAll(Class<T> entityClass) throws DaoException {
-        return createCriteria(entityClass).list();
+	return createCriteria(entityClass).list();
     }
 
     /**
@@ -400,12 +409,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param entityName
      * @param id
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException {
-        delete(get(entityName, id));
-        getSession().flush();
+	delete(get(entityName, id));
+	getSession().flush();
     }
 
     /**
@@ -414,14 +424,15 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @author 王伟<br>
      * @taskId <br>
      * @param entities
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> void deleteAllEntitie(Collection<T> entities) throws DaoException {
-        for (Object entity : entities) {
-            getSession().delete(entity);
-            getSession().flush();
-        }
+	for (Object entity : entities) {
+	    getSession().delete(entity);
+	    getSession().flush();
+	}
     }
 
     /**
@@ -430,14 +441,15 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @author 王伟<br>
      * @taskId <br>
      * @param ids
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException {
-        for (String id : ids) {
-            getSession().delete(get(entityName, id));
-            getSession().flush();
-        }
+	for (String id : ids) {
+	    getSession().delete(get(entityName, id));
+	    getSession().flush();
+	}
     }
 
     /**
@@ -446,12 +458,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @author 王伟<br>
      * @taskId <br>
      * @param pojo
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public <T> void updateEntity(T pojo) throws DaoException {
-        getSession().update(pojo);
-        getSession().flush();
+	getSession().update(pojo);
+	getSession().flush();
     }
 
     /**
@@ -461,17 +474,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param hql
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     @SuppressWarnings("unchecked")
     public <T> List<T> findByQueryString(String hql) throws DaoException {
-        Query queryObject = getSession().createQuery(hql);
-        List<T> list = queryObject.list();
-        if (list.size() > 0) {
-            getSession().flush();
-        }
-        return list;
+	Query queryObject = getSession().createQuery(hql);
+	List<T> list = queryObject.list();
+	if (list.size() > 0) {
+	    getSession().flush();
+	}
+	return list;
     }
 
     /**
@@ -481,12 +495,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param sql
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @Override
     public int updateBySqlString(String sql) throws DaoException {
-        Query querys = getSession().createSQLQuery(sql);
-        return querys.executeUpdate();
+	Query querys = getSession().createSQLQuery(sql);
+	return querys.executeUpdate();
     }
 
     /**
@@ -496,13 +511,14 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param query
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findListbySql(String sql) throws DaoException {
-        Query querys = getSession().createSQLQuery(sql);
-        return querys.list();
+	Query querys = getSession().createSQLQuery(sql);
+	return querys.list();
     }
 
     /**
@@ -515,14 +531,15 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param value
      * @param isAsc
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
-        throws DaoException {
-        Assert.notEmpty(propertyName, "属性名不能为空");
-        return createCriteria(entityClass, isAsc, Restrictions.eq(propertyName, value)).list();
+	    throws DaoException {
+	Assert.notEmpty(propertyName, "属性名不能为空");
+	return createCriteria(entityClass, isAsc, Restrictions.eq(propertyName, value)).list();
     }
 
     /**
@@ -532,12 +549,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param hql
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T singleResult(String hql) throws DaoException {
-        return (T) getSession().createQuery(hql).uniqueResult();
+	return (T) getSession().createQuery(hql).uniqueResult();
     }
 
     /**
@@ -548,32 +566,33 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param clazz
      * @param cq
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException {
 
-        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
+	Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
 
-        // 查询分页总数
-        CriteriaImpl impl = (CriteriaImpl) criteria;
-        Projection projection = impl.getProjection();
-        Long allCounts = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
+	// 查询分页总数
+	CriteriaImpl impl = (CriteriaImpl) criteria;
+	Projection projection = impl.getProjection();
+	Long allCounts = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 
-        criteria.setProjection(projection);
-        criteria.setFirstResult((pageIndex - 1) * pageSize);
-        criteria.setMaxResults(pageSize);
+	criteria.setProjection(projection);
+	criteria.setFirstResult((pageIndex - 1) * pageSize);
+	criteria.setMaxResults(pageSize);
 
-        PagerList<T> resultList = new PagerList<T>();
-        resultList.setPageIndex(pageIndex);
-        resultList.setPageSize(pageSize);
-        resultList.setTotalCount(allCounts);
+	PagerList<T> resultList = new PagerList<T>();
+	resultList.setPageIndex(pageIndex);
+	resultList.setPageSize(pageSize);
+	resultList.setTotalCount(allCounts);
 
-        if (allCounts > 0) {
-            resultList.addAll(criteria.list());
-        }
-        return resultList;
+	if (allCounts > 0) {
+	    resultList.addAll(criteria.list());
+	}
+	return resultList;
     }
 
     /**
@@ -584,12 +603,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param cq
      * @param ispage
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
-        return detachedCriteria.getExecutableCriteria(getSession()).list();
+	return detachedCriteria.getExecutableCriteria(getSession()).list();
     }
 
     /**
@@ -600,18 +620,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param hql
      * @param param
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findHql(String hql, Object... param) throws DaoException {
-        Query q = getSession().createQuery(hql);
-        if (param != null && param.length > 0) {
-            for (int i = 0; i < param.length; i++) {
-                q.setParameter(i, param[i]);
-            }
-        }
-        return q.list();
+	Query q = getSession().createQuery(hql);
+	if (param != null && param.length > 0) {
+	    for (int i = 0; i < param.length; i++) {
+		q.setParameter(i, param[i]);
+	    }
+	}
+	return q.list();
     }
 
     /**
@@ -622,25 +643,26 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param procedureSql
      * @param params
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException {
-        SQLQuery sqlQuery = getSession().createSQLQuery(procedureSql);
+	SQLQuery sqlQuery = getSession().createSQLQuery(procedureSql);
 
-        for (int i = 0; i < params.length; i++) {
-            sqlQuery.setParameter(i, params[i]);
-        }
-        return sqlQuery.list();
+	for (int i = 0; i < params.length; i++) {
+	    sqlQuery.setParameter(i, params[i]);
+	}
+	return sqlQuery.list();
     }
 
     public SessionFactory getSessionFactory() {
-        return sessionFactory;
+	return sessionFactory;
     }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+	this.sessionFactory = sessionFactory;
     }
 
     /**
@@ -650,11 +672,48 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param detachedCriteria
      * @return
-     * @throws DaoException <br>
+     * @throws DaoException
+     *             <br>
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
-        return (T) detachedCriteria.getExecutableCriteria(getSession()).uniqueResult();
+	return (T) detachedCriteria.getExecutableCriteria(getSession()).uniqueResult();
+    }
+
+    @Override
+    public <T> void batchExecute(String sql, Collection<Object[]> objcts, int commitNumber) throws DaoException {
+	commitNumber = commitNumber == 0 ? 1000 : commitNumber;
+	Connection conn = null;
+	try {
+	    conn = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
+	    PreparedStatement stmt = conn.prepareStatement(sql);
+	    conn.setAutoCommit(false);
+	    int i = 0;
+	    for (Object[] object : objcts) {
+		i++;
+		for (int j = 0; j < object.length; j++) {
+		    stmt.setObject(j+1, object[j]);
+		}
+		 stmt.addBatch();
+		if (i % commitNumber == 0) {
+		    stmt.executeBatch();
+		    conn.commit();
+		}
+	    }
+	    stmt.executeBatch();
+	    conn.commit();
+	} catch (SQLException e) {
+	    throw new DaoException(e.getErrorCode(), e.getMessage());
+	} finally {
+	    if (conn != null) {
+		try {
+		    conn.close();
+		} catch (SQLException e) {
+		    throw new DaoException(e.getErrorCode(), e.getMessage());
+		}
+	    }
+	}
+
     }
 }

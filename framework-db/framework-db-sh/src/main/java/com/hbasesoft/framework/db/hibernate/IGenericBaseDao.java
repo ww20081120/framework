@@ -29,6 +29,8 @@ public interface IGenericBaseDao {
 
     <T> void batchSave(List<T> entitys) throws DaoException;
 
+    <T> void batchExecute(String sql, Collection<Object[]> objcts, int commitNumber) throws DaoException;
+
     /**
      * 根据实体名称和主键获取实体
      * 
@@ -95,7 +97,8 @@ public interface IGenericBaseDao {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param ids <br>
+     * @param ids
+     *            <br>
      */
     <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException;
 
@@ -141,7 +144,7 @@ public interface IGenericBaseDao {
      * @return
      */
     <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
-        throws DaoException;
+	    throws DaoException;
 
     <T> T singleResult(String hql) throws DaoException;
 
