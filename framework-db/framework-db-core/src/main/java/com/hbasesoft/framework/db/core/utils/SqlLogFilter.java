@@ -22,7 +22,7 @@ import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
 import com.hbasesoft.framework.common.utils.TransactionIDManager;
-import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
 
 /**
@@ -66,7 +66,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param message <br>
      */
     protected void connectionLog(String message) {
-        Logger.sqlInfoLog(message);
+        LoggerUtil.sqlLog(message);
     }
 
     /**
@@ -77,7 +77,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param message <br>
      */
     protected void statementLog(String message) {
-        Logger.sqlInfoLog(message);
+        LoggerUtil.sqlLog(message);
     }
 
     /**
@@ -89,7 +89,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param error <br>
      */
     protected void statementLogError(String message, Throwable error) {
-        Logger.sqlErrorLog(message, error);
+        LoggerUtil.sqlLog(message, error);
     }
 
     /**
@@ -112,7 +112,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param error <br>
      */
     protected void resultSetLogError(String message, Throwable error) {
-        Logger.sqlErrorLog(message, error);
+        LoggerUtil.sqlLog(message, error);
     }
 
     /**

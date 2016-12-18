@@ -42,7 +42,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
         if (alwaysLog) {
-            logger.debug("{0}|{1}|before|{2}|{3}", stackId, parentStackId, method, Arrays.toString(params));
+            logger.info("{0}|{1}|before|{2}|{3}", stackId, parentStackId, method, Arrays.toString(params));
         }
         else {
             super.before(stackId, parentStackId, beginTime, method, params);
@@ -52,7 +52,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         if (alwaysLog) {
-            logger.debug("{0}|after|{1}|{2}|{3}", stackId, method, consumeTime, returnValue);
+            logger.info("{0}|after|{1}|{2}|{3}", stackId, method, consumeTime, returnValue);
         }
         else {
             super.afterReturn(stackId, endTime, consumeTime, method, returnValue);
@@ -70,7 +70,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
      * @param e <br>
      */
     @Override
-    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
+    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
         if (alwaysLog) {
             logger.error(e, "{0}|error|{1}|{2}", stackId, method, consumeTime, getExceptionMsg(e));
         }
@@ -86,10 +86,10 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
      */
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Exception e) {
+        Throwable e) {
         TransManager manager = TransManager.getInstance();
         if (alwaysLog) {
-            logger.debug("{0}|end|{1}|{2}|{3}|{4}|{5}", stackId, method, consumeTime,
+            logger.info("{0}|end|{1}|{2}|{3}|{4}|{5}", stackId, method, consumeTime,
                 manager.isError() || manager.isTimeout() ? "FAIL" : "SUCCESS", returnValue,
                 e == null ? GlobalConstants.BLANK : e.getMessage());
         }

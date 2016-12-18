@@ -61,7 +61,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
      */
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Exception e) {
+        Throwable e) {
         TransManager manager = TransManager.getInstance();
         try {
             if (manager.isError() || manager.isTimeout() || alwaysLog) {
@@ -130,7 +130,7 @@ public class TransLoggerService4db extends AbstractTransLoggerService {
      * @throws IOException <br>
      */
     private void saveTransLog(String stackId, long beginTime, long endTime, long consumeTime, Object returnValue,
-        Exception e) throws DaoException, IOException {
+        Throwable e) throws DaoException, IOException {
         TransLogPojo transLogPojo = new TransLogPojo();
         transLogPojo.setTransId(TransManager.getInstance().getStackId());
         Date beginDate = new Date(beginTime);

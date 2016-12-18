@@ -10,12 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 
 import org.springframework.cache.support.SimpleValueWrapper;
 
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -243,6 +245,30 @@ public class EhcacheImpl implements ICache {
     @Override
     public <T> void put(String nodeName, int expireTimes, String key, T t) {
         getCache(nodeName, expireTimes, 0).put(new Element(key, t));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param valueLoader
+     * @return <br>
+     */
+    @Override
+    public <T> T get(Object key, Callable<T> valueLoader) {
+        T result = get(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
+        if (result == null) {
+            try {
+                result = valueLoader.call();
+                put(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), result);
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
+            }
+        }
+        return result;
     }
 
 }
