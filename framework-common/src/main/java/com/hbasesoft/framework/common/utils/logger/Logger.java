@@ -3,6 +3,8 @@
  */
 package com.hbasesoft.framework.common.utils.logger;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.hbasesoft.framework.common.utils.CommonUtil;
 
 /**
@@ -16,19 +18,9 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 public class Logger {
 
     /**
-     * sql语句日志名称，用于记录日志
-     */
-    private static final String SQL_LOG_NAME = "framework.sql.log";
-
-    /**
      * logger
      */
-    private org.apache.log4j.Logger logger;
-
-    /**
-     * sqlLoger
-     */
-    private static org.apache.log4j.Logger sqlLoger;
+    private org.apache.logging.log4j.Logger logger;
 
     /**
      * Logger
@@ -36,7 +28,7 @@ public class Logger {
      * @param clazz <br>
      */
     public Logger(Class<?> clazz) {
-        this.logger = org.apache.log4j.Logger.getLogger(clazz);
+        this.logger = LogManager.getLogger(clazz);
     }
 
     /**
@@ -45,7 +37,7 @@ public class Logger {
      * @param name <br>
      */
     public Logger(String name) {
-        this.logger = org.apache.log4j.Logger.getLogger(name);
+        this.logger = LogManager.getLogger(name);
     }
 
     /**
@@ -184,31 +176,5 @@ public class Logger {
      */
     public void info(String message, Object... params) {
         logger.info(CommonUtil.messageFormat(message, params));
-    }
-
-    /**
-     * sql日志
-     * 
-     * @param message 日志信息
-     */
-    public static void sqlInfoLog(String message) {
-        if (sqlLoger == null) {
-            sqlLoger = org.apache.log4j.Logger.getLogger(SQL_LOG_NAME);
-        }
-        sqlLoger.info(message);
-    }
-
-    /**
-     * sql日志
-     * 
-     * @param t <br>
-     * @param message 日志信息 <br>
-     */
-    public static void sqlErrorLog(String message, Throwable t) {
-        if (sqlLoger == null) {
-            sqlLoger = org.apache.log4j.Logger.getLogger(SQL_LOG_NAME);
-        }
-        sqlLoger.info(message);
-        sqlLoger.error(message, t);
     }
 }

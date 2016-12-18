@@ -116,7 +116,7 @@ public class TransLogUtil {
         }
     }
 
-    public static void afterThrowing(Object target, Method method, Exception ex) {
+    public static void afterThrowing(Object target, Method method, Throwable e) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
             // 执行完成时间
@@ -138,12 +138,12 @@ public class TransLogUtil {
 
             // 执行记录
             for (TransLoggerService service : getTransLoggerServices()) {
-                service.afterThrow(stackId, endTime, consumeTime, methodName, ex);
+                service.afterThrow(stackId, endTime, consumeTime, methodName, e);
             }
 
             if (manager.getStackSize() <= 0) {
                 for (TransLoggerService service : getTransLoggerServices()) {
-                    service.end(stackId, beginTime, endTime, consumeTime, methodName, null, ex);
+                    service.end(stackId, beginTime, endTime, consumeTime, methodName, null, e);
                 }
 
                 for (TransLoggerService service : getTransLoggerServices()) {
