@@ -53,7 +53,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
      */
     @Override
     public void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Exception e) {
+        Throwable e) {
         TransManager manager = TransManager.getInstance();
 
         try {
@@ -83,7 +83,7 @@ public class TransLoggerService4Mongodb extends AbstractTransLoggerService {
      * @throws IOException <br>
      */
     private void saveData(TransManager manager, long beginTime, long endTime, long consumeTime, Object returnValue,
-        Exception e) throws IOException {
+        Throwable e) throws IOException {
         logger.debug("向数据集中插入数据开始：");
         TransLog transLogPojo = new TransLog();
         transLogPojo.setTransId(manager.getStackId());

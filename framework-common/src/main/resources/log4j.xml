@@ -116,12 +116,11 @@
 	</category>
 
 	<root>
-		<level value="info"/>
+		<level value="debug"/>
 		<appender-ref ref="debugAppender" />
 		<appender-ref ref="infoAppender" />
 		<appender-ref ref="warnAppender" />
 		<appender-ref ref="errorAppender" />
 		<appender-ref ref="consoleAppender" />
 	</root>
-
 </log4j:configuration>

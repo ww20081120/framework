@@ -48,7 +48,7 @@ public interface TransLoggerService {
      * @param consumeTime <br>
      * @param e <br>
      */
-    void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e);
+    void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e);
 
     /**
      * Description: <br>
@@ -63,7 +63,7 @@ public interface TransLoggerService {
      * @param e <br>
      */
     void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Exception e);
+        Throwable e);
 
     /**
      * Description: <br>

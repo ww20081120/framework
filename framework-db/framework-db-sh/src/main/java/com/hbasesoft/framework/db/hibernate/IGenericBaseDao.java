@@ -186,4 +186,14 @@ public interface IGenericBaseDao {
      * @return
      */
     <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException;
+
+    /**
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity
+     * @throws DaoException <br>
+     */ 
+    <T> void saveOrUpdate(T entity) throws DaoException;
 }

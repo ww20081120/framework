@@ -89,7 +89,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * java.lang.Exception)
      */
     @Override
-    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Exception e) {
+    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
         try {
             TransBean bean = getTransBean(stackId);
             if (bean != null) {
@@ -122,7 +122,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @return <br>
      * @throws IOException <br>
      */
-    protected String getExceptionMsg(Exception ex) {
+    protected String getExceptionMsg(Throwable ex) {
         if (ex == null) {
             return GlobalConstants.BLANK;
         }
