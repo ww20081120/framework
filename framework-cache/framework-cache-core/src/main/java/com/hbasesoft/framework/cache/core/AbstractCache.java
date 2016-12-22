@@ -6,9 +6,11 @@ package com.hbasesoft.framework.cache.core;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 
 import com.hbasesoft.framework.cache.core.util.SerializationUtil;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -241,4 +243,29 @@ public abstract class AbstractCache implements ICache {
     }
 
     protected abstract void evict(byte[] nodeName, byte[] key);
+    
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param valueLoader
+     * @return <br>
+     */
+    @Override
+    public <T> T get(Object key, Callable<T> valueLoader) {
+        T result = get(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
+        if (result == null) {
+            try {
+                result = valueLoader.call();
+                put(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), result);
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
+            }
+        }
+        return result;
+    }
+
 }
