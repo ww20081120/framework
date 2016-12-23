@@ -7,8 +7,6 @@
 		<version>2.1</version>
 	</parent>
 	<artifactId>framework-db-sh</artifactId>
-	<properties>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

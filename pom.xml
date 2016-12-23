@@ -22,6 +22,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
+		<hibernate.version>4.3.11.Final</hibernate.version>
 	</properties>
 	<dependencies>
 		<dependency>
