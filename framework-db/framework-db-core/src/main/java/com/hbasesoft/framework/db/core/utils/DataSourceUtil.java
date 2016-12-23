@@ -6,11 +6,11 @@
 package com.hbasesoft.framework.db.core.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.ServiceLoader;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
@@ -29,7 +29,7 @@ import com.hbasesoft.framework.db.core.DataSourceRegister;
  */
 public final class DataSourceUtil {
 
-    private static Map<String, List<DataSource>> dataSourceMap;
+    private static Map<String, List<DataSource>> dataSourceMap = new ConcurrentHashMap<String, List<DataSource>>();
 
     private static Random random = new Random();
 
@@ -48,20 +48,20 @@ public final class DataSourceUtil {
     }
 
     private static Map<String, List<DataSource>> getDataSourceMap() {
-        if (dataSourceMap == null) {
-            ServiceLoader<DataSourceRegister> registerLoader = ServiceLoader.load(DataSourceRegister.class);
-            if (registerLoader != null) {
-                dataSourceMap = new HashMap<String, List<DataSource>>();
-                registerLoader.forEach(register -> {
-                    List<DataSource> dsList = dataSourceMap.get(register.getTypeName());
-                    if (dsList == null) {
-                        dsList = new ArrayList<DataSource>();
-                        dataSourceMap.put(register.getTypeName(), dsList);
-                    }
-                    dsList.add(register.regist());
-                });
+        synchronized (dataSourceMap) {
+            if (dataSourceMap.isEmpty()) {
+                ServiceLoader<DataSourceRegister> registerLoader = ServiceLoader.load(DataSourceRegister.class);
+                if (registerLoader != null) {
+                    registerLoader.forEach(register -> {
+                        List<DataSource> dsList = dataSourceMap.get(register.getTypeName());
+                        if (dsList == null) {
+                            dsList = new ArrayList<DataSource>();
+                            dataSourceMap.put(register.getTypeName(), dsList);
+                        }
+                        dsList.add(register.regist());
+                    });
+                }
             }
-
         }
         return dataSourceMap;
     }
