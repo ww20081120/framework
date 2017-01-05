@@ -273,4 +273,30 @@ public class ShardedRedisCache extends AbstractRedisCache {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value
+     * @param expireTime
+     * @return <br>
+     */
+    @Override
+    public boolean setnx(String key, String value, int expireTime) {
+        ShardedJedis shardedJedis = null;
+        try {
+            shardedJedis = shardedPool.getResource();
+            if (shardedJedis.setnx(key, value) - 1 == 0) {
+                shardedJedis.expire(key, expireTime);
+                return true;
+            }
+        }
+        finally {
+            shardedPool.returnResourceObject(shardedJedis);
+        }
+        return false;
+    }
+
 }

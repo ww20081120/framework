@@ -281,4 +281,30 @@ public class RedisCache extends AbstractRedisCache {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value
+     * @param expireTime
+     * @return <br>
+     */
+    @Override
+    public boolean setnx(String key, String value, int expireTime) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            if (jedis.setnx(key, value) - 1 == 0) {
+                jedis.expire(key, expireTime);
+                return true;
+            }
+        }
+        finally {
+            jedisPool.returnResourceObject(jedis);
+        }
+        return false;
+    }
+
 }

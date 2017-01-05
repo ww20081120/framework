@@ -50,4 +50,5 @@ public abstract class AbstractRedisCache extends AbstractCache {
         return ProtocolUtil.parseAddress(address);
     }
 
+    public abstract boolean setnx(String key, String value, int expireTime);
 }
