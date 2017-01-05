@@ -7,8 +7,9 @@ package com.hbasesoft.framework.cache.core.redis.lock;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -80,13 +81,9 @@ public class CacheLockAdvice {
     }
 
     private String getLockKey(String template, Method method, Object[] args) throws FrameworkException {
-        if (CommonUtil.isEmpty(template) && CommonUtil.isEmpty(args)) {
-            return GlobalConstants.BLANK;
-        }
-        String key;
-        if (CommonUtil.isNotEmpty(template)) {
+        if (CommonUtil.isNotEmpty(args)) {
             Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-            Map<String, Object> paramMap = new HashMap<String, Object>();
+            Map<String, Object> paramMap = new TreeMap<String, Object>();
             for (int i = 0; i < parameterAnnotations.length; i++) {
                 for (Annotation annotation : parameterAnnotations[i]) {
                     if (annotation instanceof Key) {
@@ -95,18 +92,22 @@ public class CacheLockAdvice {
                     }
                 }
             }
-            key = VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap);
-        }
-        else {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < args.length; i++) {
-                if (i > 0) {
-                    sb.append(GlobalConstants.UNDERLINE);
+
+            if (CommonUtil.isNotEmpty(paramMap)) {
+                StringBuilder sb = new StringBuilder();
+                if (CommonUtil.isNotEmpty(template)) {
+                    sb.append(GlobalConstants.UNDERLINE)
+                        .append(VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap));
                 }
-                sb.append(args[i] == null ? GlobalConstants.BLANK : args[i]);
+                else {
+                    for (Entry<String, Object> entry : paramMap.entrySet()) {
+                        sb.append(GlobalConstants.UNDERLINE)
+                            .append(entry.getValue() == null ? GlobalConstants.BLANK : entry.getValue());
+                    }
+                }
+                return sb.toString();
             }
-            key = sb.toString();
         }
-        return "_" + key;
+        return GlobalConstants.BLANK;
     }
 }

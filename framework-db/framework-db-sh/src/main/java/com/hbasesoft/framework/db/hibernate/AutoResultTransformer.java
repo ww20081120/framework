@@ -100,9 +100,11 @@ public class AutoResultTransformer implements ResultTransformer {
                         inStreamDoc.close();
                         tuple[i] = new String(tempDoc);
                     }
-                    else if ((Long.class.equals(resultClass) || long.class.equals(resultClass))
-                        && (tuple[i] instanceof java.sql.Timestamp || tuple[i] instanceof java.sql.Time)) {
-                        tuple[i] = DateUtil.string2Date(tuple[i].toString()).getTime();
+                    else if (tuple[i] instanceof java.sql.Timestamp || tuple[i] instanceof java.sql.Time) {
+                        Class<?> propClass = resultClass.getField(property).getType();
+                        if (Long.class.equals(propClass) || long.class.equals(propClass)) {
+                            tuple[i] = DateUtil.string2Date(tuple[i].toString()).getTime();
+                        }
                     }
                     wrapper.setPropertyValue(property, tuple[i]);
                 }
