@@ -78,7 +78,7 @@ public class Logger {
      * @param params 日志信息 <br>
      */
     public void error(Throwable t, String message, Object... params) {
-        logger.error(CommonUtil.messageFormat(message, params));
+        logger.error(CommonUtil.messageFormat(message, params), t);
     }
 
     /**
