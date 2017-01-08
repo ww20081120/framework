@@ -206,4 +206,23 @@ public class ClusterRedisCache extends AbstractRedisCache {
     protected void evict(byte[] nodeName, byte[] key) {
         cluster.hdel(new String(nodeName), new String(key));
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value
+     * @param expireTime
+     * @return <br>
+     */
+    @Override
+    public boolean setnx(String key, String value, int expireTime) {
+        if (cluster.setnx(key, value) - 1 == 0) {
+            cluster.expire(key, expireTime);
+            return true;
+        }
+        return false;
+    }
 }

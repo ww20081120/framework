@@ -179,6 +179,12 @@ public interface ErrorCodeDef {
     /** 不相等 */
     int NOT_EQUALS = 10052;
 
+    /** 获取同步锁失败 */
+    int GET_CACHE_LOCK_ERROR = 10053;
+
+    /** 缓存Key设置失败 */
+    int CACHE_KEY_ERROR = 10054;
+
     /************************************************************************************
      * ---------------------------------用户错误区域 必须大于20000的5位数-------------------------------------------
      ************************************************************************************/
@@ -269,4 +275,43 @@ public interface ErrorCodeDef {
 
     /** XML 转换失败 */
     int XML_TRANS_ERROR = 20032;
+
+    /** 缓存模式没有设置 */
+    int CACHE_MODEL_NOT_SET = 20033;
+
+    /** redis 地址没有配置 */
+    int REDIS_ADDRESS_NOT_SET = 20034;
+
+    /** 数据库链接没有设置 */
+    int DB_DATASOURCE_NOT_SET = 20035;
+
+    /** 数据库地址没有配置 */
+    int DB_URL_NOT_SET = 20036;
+
+    /** 数据库用户名没有配置 */
+    int DB_USERNAME_NOT_SET = 20037;
+
+    /** 数据库密码没有设置 */
+    int DB_PASSWORD_NOT_SET = 20038;
+
+    /** 查询的属性名是空的 */
+    int DAO_PROPERTY_IS_EMPTY = 20039;
+
+    /** ID 不能为空 */
+    int ID_IS_NULL = 20040;
+
+    /** 模版代码是空的 */
+    int TEMPLATE_CODE_IS_EMPTY = 20041;
+
+    /** 消息是空的 */
+    int MESSAGE_IS_EMPTY = 20042;
+
+    /** 未找到模版 */
+    int TEMPLATE_NOT_FOUND = 20043;
+
+    /** 接受人不存在 */
+    int RECEIVER_IS_EMPTY = 20044;
+
+    /** 缓存未配置 */
+    int CACHE_NOT_FOUND = 20045;
 }

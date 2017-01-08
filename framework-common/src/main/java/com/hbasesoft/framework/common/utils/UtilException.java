@@ -18,108 +18,54 @@ import com.hbasesoft.framework.common.FrameworkException;
 public class UtilException extends FrameworkException {
 
     /**
-     * serialVersionUID
+     * serialVersionUID <br>
      */
-    private static final long serialVersionUID = -9019614054469957536L;
+    private static final long serialVersionUID = -606867736687228572L;
 
     /**
-     * UtilException
-     * 
-     * @param exception <br>
+     * @param exception
      */
     public UtilException(FrameworkException exception) {
         super(exception);
     }
 
     /**
-     * UtilException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     * @param params <br>
+     * @param code
+     * @param params
      */
-    public UtilException(int code, String msg, Object... params) {
-        super(code, msg, params);
+    public UtilException(int code, Object... params) {
+        super(code, params);
     }
 
     /**
-     * UtilException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param code
+     * @param t
      */
-    public UtilException(int code, String arg0, Throwable arg1, Object... params) {
-        super(code, arg0, arg1, params);
+    public UtilException(int code, Throwable t) {
+        super(code, t);
     }
 
     /**
-     * UtilException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     */
-    public UtilException(int code, String arg0, Throwable arg1) {
-        super(code, arg0, arg1);
-    }
-
-    /**
-     * UtilException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     */
-    public UtilException(int code, String msg) {
-        super(code, msg);
-    }
-
-    /**
-     * UtilException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     */
-    public UtilException(int code, Throwable arg0) {
-        super(code, arg0);
-    }
-
-    /**
-     * UtilException
-     * 
-     * @param code <br>
+     * @param code
      */
     public UtilException(int code) {
         super(code);
     }
 
     /**
-     * UtilException
-     * 
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param t
+     * @param code
+     * @param params
      */
-    public UtilException(String arg0, FrameworkException arg1, Object... params) {
-        super(arg0, arg1, params);
+    public UtilException(Throwable t, int code, Object... params) {
+        super(t, code, params);
     }
 
     /**
-     * UtilException
-     * 
-     * @param arg0 <br>
-     * @param exception <br>
+     * @param t
      */
-    public UtilException(String arg0, FrameworkException exception) {
-        super(arg0, exception);
-    }
-
-    /**
-     * @param arg0
-     */
-    public UtilException(Throwable arg0) {
-        super(arg0);
+    public UtilException(Throwable t) {
+        super(t);
     }
 
 }

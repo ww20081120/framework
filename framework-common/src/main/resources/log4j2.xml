@@ -8,7 +8,7 @@
 		<property name="fullPattern">[%p][%d{HH:mm:ss,SSS}][%c]%m%n</property>
 		<property name="normalPattern">[%d{yyyy-MM-dd HH:mm:ss,SSS}][%c]%m%n
 		</property>
-		<property name="sqlPattern">[%d{yyyy-MM-dd HH:mm:ss,SSS}][%c]%m%n
+		<property name="sqlPattern">[%d{yyyy-MM-dd HH:mm:ss,SSS}]%m%n
 		</property>
 		<property name="transPattern">[%d{yyyy-MM-dd HH:mm:ss,SSS}]|%m%n
 		</property>
@@ -19,14 +19,14 @@
 			<PatternLayout pattern="${fullPattern}" />
 		</Console>
 		<RollingFile name="DebugAppender" fileName="${fileDir}/debug.log"
-			filePattern="${fileDir}/debug.%d{MM-dd-yyyy}.log.gz">
+			filePattern="${fileDir}/debug.%d{yyyyMMdd}.log.gz">
 			<ThresholdFilter level="info" onMatch="DENY"
 				onMismatch="ACCEPT" />
 			<PatternLayout pattern="${normalPattern}" />
 			<SizeBasedTriggeringPolicy size="${maxSize}" />
 		</RollingFile>
 		<RollingFile name="InfoAppender" fileName="${fileDir}/info.log"
-			filePattern="${fileDir}/info.%d{MM-dd-yyyy}.log.gz">
+			filePattern="${fileDir}/info.%d{yyyyMMdd}.log.gz">
 			<Filters>
 				<ThresholdFilter level="warn" onMatch="DENY"
 					onMismatch="NEUTRAL" />
@@ -37,7 +37,7 @@
 			<SizeBasedTriggeringPolicy size="${maxSize}" />
 		</RollingFile>
 		<RollingFile name="WarnAppender" fileName="${fileDir}/warn.log"
-			filePattern="${fileDir}/warn.%d{MM-dd-yyyy}.log.gz">
+			filePattern="${fileDir}/warn.%d{yyyyMMdd}.log.gz">
 			<Filters>
 				<ThresholdFilter level="error" onMatch="DENY"
 					onMismatch="NEUTRAL" />
@@ -48,21 +48,21 @@
 			<SizeBasedTriggeringPolicy size="${maxSize}" />
 		</RollingFile>
 		<RollingFile name="ErrorAppender" fileName="${fileDir}/error.log"
-			filePattern="${fileDir}/error.%d{MM-dd-yyyy}.log.gz">
+			filePattern="${fileDir}/error.%d{yyyyMMdd}.log.gz">
 			<ThresholdFilter level="error" onMatch="ACCEPT"
 				onMismatch="DENY" />
 			<PatternLayout pattern="${normalPattern}" />
 			<SizeBasedTriggeringPolicy size="${maxSize}" />
 		</RollingFile>
 		<RollingFile name="SqlAppender" fileName="${fileDir}/sql.log"
-			filePattern="${fileDir}/sql.%d{MM-dd-yyyy}.log.gz">
+			filePattern="${fileDir}/sql.%d{yyyyMMdd}.log.gz">
 			<ThresholdFilter level="info" onMatch="ACCEPT"
 				onMismatch="DENY" />
 			<PatternLayout pattern="${sqlPattern}" />
 			<SizeBasedTriggeringPolicy size="${maxSize}" />
 		</RollingFile>
 		<RollingFile name="TransAppender" fileName="${fileDir}/trans.log"
-			filePattern="${fileDir}/trans.%d{MM-dd-yyyy}.log.gz">
+			filePattern="${fileDir}/trans.%d{yyyyMMdd}.log.gz">
 			<ThresholdFilter level="info" onMatch="ACCEPT"
 				onMismatch="DENY" />
 			<PatternLayout pattern="${transPattern}" />

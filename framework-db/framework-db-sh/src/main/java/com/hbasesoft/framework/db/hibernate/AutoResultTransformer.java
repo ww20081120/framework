@@ -92,15 +92,20 @@ public class AutoResultTransformer implements ResultTransformer {
                     String property = BeanUtil.toCamelCase(aliases[i]);
                     if (tuple[i] instanceof Clob) {
                         // clob转成String
-                        SerializableClobProxy  proxy = (SerializableClobProxy) Proxy.getInvocationHandler(tuple[i]);
+                        SerializableClobProxy proxy = (SerializableClobProxy) Proxy.getInvocationHandler(tuple[i]);
                         Clob clob = proxy.getWrappedClob();
-                        Reader inStreamDoc = clob.getCharacterStream();   
-                        char[] tempDoc = new char[(int) clob.length()];   
-                        inStreamDoc.read(tempDoc);   
-                        inStreamDoc.close();   
-                        tuple[i] = new String(tempDoc);   
+                        Reader inStreamDoc = clob.getCharacterStream();
+                        char[] tempDoc = new char[(int) clob.length()];
+                        inStreamDoc.read(tempDoc);
+                        inStreamDoc.close();
+                        tuple[i] = new String(tempDoc);
                     }
-                    
+                    else if (tuple[i] instanceof java.sql.Timestamp || tuple[i] instanceof java.sql.Time) {
+                        Class<?> propClass = resultClass.getField(property).getType();
+                        if (Long.class.equals(propClass) || long.class.equals(propClass)) {
+                            tuple[i] = DateUtil.string2Date(tuple[i].toString()).getTime();
+                        }
+                    }
                     wrapper.setPropertyValue(property, tuple[i]);
                 }
             }
@@ -133,7 +138,12 @@ public class AutoResultTransformer implements ResultTransformer {
             return Integer.valueOf(value.toString());
         }
         else if (Long.class.equals(clazz) || long.class.equals(clazz)) {
-            return Long.valueOf(value.toString());
+            if (value instanceof java.sql.Timestamp || value instanceof java.sql.Time) {
+                return DateUtil.string2Date(value.toString()).getTime();
+            }
+            else {
+                return Long.valueOf(value.toString());
+            }
         }
         else if (Double.class.equals(clazz) || double.class.equals(clazz)) {
             return Double.valueOf(value.toString());

@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.common.utils;
 
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.FrameworkRumtimeException;
 
 /**
  * <Description> <br>
@@ -16,103 +15,57 @@ import com.hbasesoft.framework.common.FrameworkRumtimeException;
  * @CreateDate 2014年11月7日 <br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
-public class AssertException extends FrameworkRumtimeException {
+public class AssertException extends FrameworkException {
 
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 2704052920464076367L;
+    private static final long serialVersionUID = 660380252623842610L;
 
     /**
-     * 默认构造函数
-     * 
-     * @param exception <br>
+     * @param exception
      */
     public AssertException(FrameworkException exception) {
         super(exception);
     }
 
     /**
-     * 默认构造函数
-     * 
-     * @param code <br>
-     * @param msg <br>
-     * @param params <br>
+     * @param code
+     * @param params
      */
-    public AssertException(int code, String msg, Object... params) {
-        super(code, msg, params);
+    public AssertException(int code, Object... params) {
+        super(code, params);
     }
 
     /**
-     * 默认构造函数
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param code
+     * @param t
      */
-    public AssertException(int code, String arg0, Throwable arg1, Object... params) {
-        super(code, arg0, arg1, params);
+    public AssertException(int code, Throwable t) {
+        super(code, t);
     }
 
     /**
-     * 默认构造函数
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     */
-    public AssertException(int code, String arg0, Throwable arg1) {
-        super(code, arg0, arg1);
-    }
-
-    /**
-     * 默认构造函数
-     * 
-     * @param code <br>
-     * @param msg <br>
-     */
-    public AssertException(int code, String msg) {
-        super(code, msg);
-    }
-
-    /**
-     * 默认构造函数
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     */
-    public AssertException(int code, Throwable arg0) {
-        super(code, arg0);
-    }
-
-    /**
-     * 默认构造函数
-     * 
-     * @param code <br>
+     * @param code
      */
     public AssertException(int code) {
         super(code);
     }
 
     /**
-     * 默认构造函数
-     * 
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param t
+     * @param code
+     * @param params
      */
-    public AssertException(String arg0, FrameworkException arg1, Object... params) {
-        super(arg0, arg1, params);
+    public AssertException(Throwable t, int code, Object... params) {
+        super(t, code, params);
     }
 
     /**
-     * 默认构造函数
-     * 
-     * @param arg0 <br>
-     * @param exception <br>
+     * @param t
      */
-    public AssertException(String arg0, FrameworkException exception) {
-        super(arg0, exception);
+    public AssertException(Throwable t) {
+        super(t);
     }
+
 }

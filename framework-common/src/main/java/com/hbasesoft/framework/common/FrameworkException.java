@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.common;
 
-import java.text.MessageFormat;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
  * <Description> <br>
@@ -15,7 +15,7 @@ import java.text.MessageFormat;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.exception <br>
  */
-public class FrameworkException extends Exception {
+public class FrameworkException extends RuntimeException {
 
     /**
      * serialVersionUID
@@ -33,17 +33,7 @@ public class FrameworkException extends Exception {
      * @param code <br>
      */
     public FrameworkException(int code) {
-        this.code = code;
-    }
-
-    /**
-     * FrameworkException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     */
-    public FrameworkException(int code, String msg) {
-        super(msg);
+        super(PropertyHolder.getErrorMessage(code));
         this.code = code;
     }
 
@@ -54,8 +44,9 @@ public class FrameworkException extends Exception {
      * @param msg <br>
      * @param params <br>
      */
-    public FrameworkException(int code, String msg, Object... params) {
-        this(code, MessageFormat.format(msg, params));
+    public FrameworkException(int code, Object... params) {
+        super(PropertyHolder.getErrorMessage(code, params));
+        this.code = code;
     }
 
     /**
@@ -64,32 +55,13 @@ public class FrameworkException extends Exception {
      * @param exception <br>
      */
     public FrameworkException(FrameworkException exception) {
-        this(exception.code, exception);
+        super(exception);
+        this.code = exception.getCode();
     }
 
-    public FrameworkException(Throwable arg0) {
-        this(ErrorCodeDef.SYSTEM_ERROR_10001, arg0);
-    }
-
-    /**
-     * FrameworkException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     */
-    public FrameworkException(int code, Throwable arg0) {
-        super(arg0);
-        this.code = code;
-    }
-
-    /**
-     * FrameworkException
-     * 
-     * @param arg0 <br>
-     * @param exception <br>
-     */
-    public FrameworkException(String arg0, FrameworkException exception) {
-        this(exception.code, arg0, exception);
+    public FrameworkException(Throwable t) {
+        super(t);
+        this.code = ErrorCodeDef.SYSTEM_ERROR_10001;
     }
 
     /**
@@ -97,22 +69,10 @@ public class FrameworkException extends Exception {
      * 
      * @param code <br>
      * @param arg0 <br>
-     * @param arg1 <br>
      */
-    public FrameworkException(int code, String arg0, Throwable arg1) {
-        super(arg0, arg1);
+    public FrameworkException(int code, Throwable t) {
+        super(PropertyHolder.getErrorMessage(code), t);
         this.code = code;
-    }
-
-    /**
-     * FrameworkException
-     * 
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
-     */
-    public FrameworkException(String arg0, FrameworkException arg1, Object... params) {
-        this(arg1.code, MessageFormat.format(arg0, params), arg1);
     }
 
     /**
@@ -123,8 +83,9 @@ public class FrameworkException extends Exception {
      * @param arg1 <br>
      * @param params <br>
      */
-    public FrameworkException(int code, String arg0, Throwable arg1, Object... params) {
-        this(code, MessageFormat.format(arg0, params), arg1);
+    public FrameworkException(Throwable t, int code, Object... params) {
+        super(PropertyHolder.getErrorMessage(code, params), t);
+        this.code = code;
     }
 
     public int getCode() {

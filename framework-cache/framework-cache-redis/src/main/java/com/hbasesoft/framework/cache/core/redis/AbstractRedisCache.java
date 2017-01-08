@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.cache.core.redis;
 
 import com.hbasesoft.framework.cache.core.AbstractCache;
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
@@ -46,8 +47,9 @@ public abstract class AbstractRedisCache extends AbstractCache {
 
     protected Address[] getAddresses() {
         String address = PropertyHolder.getProperty(REDIS_ADDRESS);
-        Assert.notEmpty(address, "{0} 未配置", REDIS_ADDRESS);
+        Assert.notEmpty(address, ErrorCodeDef.REDIS_ADDRESS_NOT_SET, REDIS_ADDRESS);
         return ProtocolUtil.parseAddress(address);
     }
 
+    public abstract boolean setnx(String key, String value, int expireTime);
 }

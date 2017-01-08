@@ -59,7 +59,7 @@ public class SmsMessageExcutorImpl implements MessageExcutor {
             return method.getResponseBodyAsString();
         }
         catch (Exception e) {
-            throw new ServiceException(ErrorCodeDef.SMS_SEND_ERROR_10033, e.getMessage(), e);
+            throw new ServiceException(ErrorCodeDef.SMS_SEND_ERROR_10033, e);
         }
     }
 

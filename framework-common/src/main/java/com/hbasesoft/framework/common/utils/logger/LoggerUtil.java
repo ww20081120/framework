@@ -8,6 +8,8 @@ package com.hbasesoft.framework.common.utils.logger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 
 /**
@@ -36,7 +38,7 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void error(Throwable t) {
-        getLogger().error(t.getMessage(), t);
+        getLogger().error(getErrorMessage(t), t);
     }
 
     /**
@@ -57,7 +59,7 @@ public final class LoggerUtil {
      * @param t 异常
      */
     public static void error(Object message, Throwable t) {
-        getLogger().error(message, t);
+        getLogger().error(getErrorMessage(message, t), t);
     }
 
     /**
@@ -68,7 +70,7 @@ public final class LoggerUtil {
      * @param params 日志信息 <br>
      */
     public static void error(Throwable t, String message, Object... params) {
-        getLogger().error(CommonUtil.messageFormat(message, params));
+        getLogger().error(getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
     }
 
     /**
@@ -77,7 +79,7 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void warn(Throwable t) {
-        getLogger().warn(t.getMessage(), t);
+        getLogger().warn(getErrorMessage(t), t);
     }
 
     /**
@@ -96,7 +98,7 @@ public final class LoggerUtil {
      * @param t 异常
      */
     public static void warn(Object message, Throwable t) {
-        getLogger().warn(message, t);
+        getLogger().warn(getErrorMessage(message, t), t);
     }
 
     /**
@@ -107,7 +109,7 @@ public final class LoggerUtil {
      * @param params 日志信息 <br>
      */
     public static void warn(Throwable t, String message, Object... params) {
-        getLogger().warn(CommonUtil.messageFormat(message, params), t);
+        getLogger().warn(getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
     }
 
     /**
@@ -126,7 +128,7 @@ public final class LoggerUtil {
      * @param t 异常
      */
     public static void debug(Object message, Throwable t) {
-        getLogger().debug(message, t);
+        getLogger().debug(getErrorMessage(message, t), t);
     }
 
     /**
@@ -146,16 +148,6 @@ public final class LoggerUtil {
      */
     public static void info(Object message) {
         getLogger().info(message);
-    }
-
-    /**
-     * 带异常的日志信息
-     * 
-     * @param message 信息
-     * @param t 异常
-     */
-    public static void info(Object message, Throwable t) {
-        getLogger().info(message, t);
     }
 
     /**
@@ -184,7 +176,21 @@ public final class LoggerUtil {
      * @param message 日志信息 <br>
      */
     public static void sqlLog(String message, Throwable t) {
-        LogManager.getLogger(SQL_LOG_NAME).error(message, t);
+        LogManager.getLogger(SQL_LOG_NAME).error(getErrorMessage(message, t), t);
+    }
+
+    public static String getErrorMessage(Throwable t) {
+        if (t instanceof FrameworkException) {
+            return ((FrameworkException) t).getCode() + GlobalConstants.VERTICAL_LINE + t.getMessage();
+        }
+        return t.getMessage();
+    }
+
+    public static Object getErrorMessage(Object message, Throwable t) {
+        if (t instanceof FrameworkException) {
+            return ((FrameworkException) t).getCode() + GlobalConstants.VERTICAL_LINE + message;
+        }
+        return message;
     }
 
     private static Logger getLogger() {

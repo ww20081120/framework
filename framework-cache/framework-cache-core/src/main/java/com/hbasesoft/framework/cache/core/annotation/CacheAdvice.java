@@ -112,7 +112,7 @@ public class CacheAdvice {
     private Object cacheNode(CacheNode cache, ProceedingJoinPoint thisJoinPoint, Method method, Class<?> returnType)
         throws Throwable {
         if (!Map.class.isAssignableFrom(returnType)) {
-            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key，或者返回类型不是Map<String, ?> 类型");
+            throw new ServiceException(ErrorCodeDef.CACHE_KEY_ERROR);
         }
 
         Object result = CacheHelper.getCache().get(cache.node(), cache.bean());
@@ -153,7 +153,7 @@ public class CacheAdvice {
 
     private String getCacheKey(String template, Method method, Object[] args) throws FrameworkException {
         if (CommonUtil.isEmpty(template) && CommonUtil.isEmpty(args)) {
-            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002, "未设置缓存的key");
+            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002);
         }
         String key;
         if (CommonUtil.isNotEmpty(template)) {

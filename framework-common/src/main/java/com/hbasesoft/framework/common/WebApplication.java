@@ -14,7 +14,7 @@ import java.util.ServiceLoader;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -100,8 +100,8 @@ public class WebApplication extends SpringBootServletInitializer {
 
             System.out.println(new StringBuilder().append("\n***************************************").append('\n')
                 .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n')
-                .append("         ").append(PropertyHolder.getProjectName()).append("模块启动成功！")
-                .append('\n').append("***************************************"));
+                .append("         ").append(PropertyHolder.getProjectName()).append("模块启动成功！").append('\n')
+                .append("***************************************"));
 
             LOG.info("====================>系统正常启动<====================");
         }

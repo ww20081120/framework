@@ -81,7 +81,7 @@ public final class SerializationUtil {
             bytes = byteArrayOutputStream.toByteArray();
         }
         catch (IOException e) {
-            throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, "序列化错误", e);
+            throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
         }
         finally {
             if (out != null) {
@@ -89,7 +89,7 @@ public final class SerializationUtil {
                     out.close();
                 }
                 catch (IOException e) {
-                    throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, "序列化错误", e);
+                    throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
                 }
             }
         }
@@ -139,7 +139,7 @@ public final class SerializationUtil {
                 result = in.readObject();
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, "反序列化异常", e);
+                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
             }
             finally {
                 if (in != null) {
@@ -147,7 +147,7 @@ public final class SerializationUtil {
                         in.close();
                     }
                     catch (IOException e) {
-                        throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, "反序列化异常");
+                        throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR);
                     }
                 }
             }

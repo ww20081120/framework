@@ -52,7 +52,7 @@ public class TransLogUtil {
 
             // 深度检测
             if (manager.getStackSize() > maxDeepLen) {
-                throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030, "业务过于复杂，请简化业务");
+                throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
             }
 
             // 父id

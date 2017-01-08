@@ -46,7 +46,7 @@ public class Logger {
      * @param message 日志信息
      */
     public void error(Throwable t) {
-        logger.error(t.getMessage(), t);
+        logger.error(LoggerUtil.getErrorMessage(t), t);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Logger {
      * @param t 异常
      */
     public void error(Object message, Throwable t) {
-        logger.error(message, t);
+        logger.error(LoggerUtil.getErrorMessage(message, t), t);
     }
 
     /**
@@ -78,7 +78,7 @@ public class Logger {
      * @param params 日志信息 <br>
      */
     public void error(Throwable t, String message, Object... params) {
-        logger.error(CommonUtil.messageFormat(message, params));
+        logger.error(LoggerUtil.getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
     }
 
     /**
@@ -87,7 +87,7 @@ public class Logger {
      * @param message 日志信息
      */
     public void warn(Throwable t) {
-        logger.warn(t.getMessage(), t);
+        logger.warn(LoggerUtil.getErrorMessage(t), t);
     }
 
     /**
@@ -106,7 +106,7 @@ public class Logger {
      * @param t 异常
      */
     public void warn(Object message, Throwable t) {
-        logger.warn(message, t);
+        logger.warn(LoggerUtil.getErrorMessage(message, t), t);
     }
 
     /**
@@ -117,7 +117,7 @@ public class Logger {
      * @param params 日志信息 <br>
      */
     public void warn(Throwable t, String message, Object... params) {
-        logger.warn(CommonUtil.messageFormat(message, params), t);
+        logger.warn(LoggerUtil.getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
     }
 
     /**
@@ -127,16 +127,6 @@ public class Logger {
      */
     public void debug(Object message) {
         logger.debug(message);
-    }
-
-    /**
-     * 带异常的日志信息
-     * 
-     * @param message 信息
-     * @param t 异常
-     */
-    public void debug(Object message, Throwable t) {
-        logger.debug(message, t);
     }
 
     /**
@@ -156,16 +146,6 @@ public class Logger {
      */
     public void info(Object message) {
         logger.info(message);
-    }
-
-    /**
-     * 带异常的日志信息
-     * 
-     * @param message 信息
-     * @param t 异常
-     */
-    public void info(Object message, Throwable t) {
-        logger.info(message, t);
     }
 
     /**
