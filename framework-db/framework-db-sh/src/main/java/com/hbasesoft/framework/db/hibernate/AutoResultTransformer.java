@@ -100,12 +100,6 @@ public class AutoResultTransformer implements ResultTransformer {
                         inStreamDoc.close();
                         tuple[i] = new String(tempDoc);
                     }
-                    else if (tuple[i] instanceof java.sql.Timestamp || tuple[i] instanceof java.sql.Time) {
-                        Class<?> propClass = resultClass.getField(property).getType();
-                        if (Long.class.equals(propClass) || long.class.equals(propClass)) {
-                            tuple[i] = DateUtil.string2Date(tuple[i].toString()).getTime();
-                        }
-                    }
                     wrapper.setPropertyValue(property, tuple[i]);
                 }
             }
@@ -138,12 +132,7 @@ public class AutoResultTransformer implements ResultTransformer {
             return Integer.valueOf(value.toString());
         }
         else if (Long.class.equals(clazz) || long.class.equals(clazz)) {
-            if (value instanceof java.sql.Timestamp || value instanceof java.sql.Time) {
-                return DateUtil.string2Date(value.toString()).getTime();
-            }
-            else {
-                return Long.valueOf(value.toString());
-            }
+            return Long.valueOf(value.toString());
         }
         else if (Double.class.equals(clazz) || double.class.equals(clazz)) {
             return Double.valueOf(value.toString());
