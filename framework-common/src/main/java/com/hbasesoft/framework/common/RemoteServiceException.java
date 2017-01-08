@@ -26,7 +26,7 @@ public class RemoteServiceException extends FrameworkException {
      * @param exception
      */
     public RemoteServiceException(FrameworkException exception) {
-        super(exception);
+        super(exception.getCode());
     }
 
     /**
@@ -42,7 +42,7 @@ public class RemoteServiceException extends FrameworkException {
      * @param t
      */
     public RemoteServiceException(int code, Throwable t) {
-        super(code, t);
+        super(code);
     }
 
     /**
@@ -58,13 +58,13 @@ public class RemoteServiceException extends FrameworkException {
      * @param params
      */
     public RemoteServiceException(Throwable t, int code, Object... params) {
-        super(t, code, params);
+        super(code, params);
     }
 
     /**
      * @param t
      */
     public RemoteServiceException(Throwable t) {
-        super(t);
+        super(ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 }
