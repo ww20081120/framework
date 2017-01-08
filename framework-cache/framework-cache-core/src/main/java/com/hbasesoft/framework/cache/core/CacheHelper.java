@@ -7,7 +7,9 @@ package com.hbasesoft.framework.cache.core;
 
 import java.util.ServiceLoader;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
@@ -28,7 +30,7 @@ public final class CacheHelper {
 
         if (cache == null) {
             String cacheModel = PropertyHolder.getProperty("cache.model");
-            Assert.notEmpty(cacheModel, "未配置缓存模式 cache.model");
+            Assert.notEmpty(cacheModel, ErrorCodeDef.CACHE_MODEL_NOT_SET);
 
             ServiceLoader<ICache> serviceLoader = ServiceLoader.load(ICache.class);
             for (ICache c : serviceLoader) {
@@ -39,7 +41,7 @@ public final class CacheHelper {
             }
 
             if (cache == null) {
-                throw new RuntimeException("未找到缓存实现类 或者 cache.model 配置不正确");
+                throw new InitializationException(ErrorCodeDef.CACHE_NOT_FOUND);
             }
         }
 

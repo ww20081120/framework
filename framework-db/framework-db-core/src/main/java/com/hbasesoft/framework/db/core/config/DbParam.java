@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.config;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -110,11 +111,11 @@ public class DbParam extends BaseEntity {
 
     public DbParam(String prefix) {
         this.url = PropertyHolder.getProperty(prefix + ".db.url");
-        Assert.notEmpty(this.url, "{0}.db.url未配置", prefix);
+        Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET);
         this.username = PropertyHolder.getProperty(prefix + ".db.username");
-        Assert.notEmpty(this.username, "{0}.db.username未配置", prefix);
+        Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
         String password = PropertyHolder.getProperty(prefix + ".db.password");
-        Assert.notEmpty(password, "{0}.db.password未配置", prefix);
+        Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
         if (CommonUtil.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
             password = DataUtil.decrypt(password.substring(4, password.length() - 1));
         }

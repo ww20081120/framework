@@ -122,7 +122,7 @@ public class AbstractAnnotationHandler {
                     sb.replace(sb.lastIndexOf(dbType), sb.lastIndexOf(SQL_SUFFIX), GlobalConstants.BLANK);
                     sqlFileUrl = this.getClass().getClassLoader().getResource(sb.toString());
                     if (sqlFileUrl == null) {
-                        throw new InitializationException(ErrorCodeDef.INIT_SQL_ERROR_10005, "初始化sql失败，未找到{0}#{1}的sql",
+                        throw new InitializationException(ErrorCodeDef.INIT_SQL_ERROR_10005,
                             method.getDeclaringClass().getName(), method.getName());
                     }
                 }
@@ -142,7 +142,7 @@ public class AbstractAnnotationHandler {
             return sb.toString();
         }
         catch (Exception e) {
-            throw new InitializationException(ErrorCodeDef.CAN_NOT_FIND_SQL_FILE_10006, "读取sql文件失败,路径[{0}]", sqlPath);
+            throw new InitializationException(ErrorCodeDef.CAN_NOT_FIND_SQL_FILE_10006, sqlPath);
         }
         finally {
             if (reader != null) {
@@ -197,8 +197,7 @@ public class AbstractAnnotationHandler {
                         && daoConfig.getCallBackType().isAssignableFrom(typeClazz[i])) {
                         if (metadata.getCallBackPosition() != -1) {
                             throw new InitializationException(ErrorCodeDef.ERROR_RESULT_CALL_BACK_10007,
-                                "Clazz[{0}] Method[{1}]含有多个ResultCallback参数", method.getDeclaringClass().getName(),
-                                method.getName());
+                                method.getDeclaringClass().getName(), method.getName());
                         }
                         metadata.setCallBackPosition(i);
                         continue;
@@ -241,8 +240,7 @@ public class AbstractAnnotationHandler {
                 if ((metadata.getIndexPosition() == -1 && metadata.getSizePosition() != -1)
                     || (metadata.getIndexPosition() != -1 && metadata.getSizePosition() == -1)) {
                     throw new InitializationException(ErrorCodeDef.PAGE_SIZE_PAGE_INDEX_BOTH_10008,
-                        "Clazz[{0}] Method[{1}]中Pagesize 和 PageIndex 必须同时设置", method.getDeclaringClass().getName(),
-                        method.getName());
+                        method.getDeclaringClass().getName(), method.getName());
                 }
                 if (daoConfig.isCache()) {
                     CacheHelper.getCache().put(CacheConstant.SQL_PARAM_DIR, key, metadata);

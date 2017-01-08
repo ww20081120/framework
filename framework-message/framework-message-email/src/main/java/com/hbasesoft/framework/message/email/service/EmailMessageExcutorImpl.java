@@ -91,7 +91,7 @@ public class EmailMessageExcutorImpl implements MessageExcutor {
             return "SUCCESS";
         }
         catch (Exception e) {
-            throw new ServiceException(ErrorCodeDef.EMAIL_SEND_ERROR_10032, e.getMessage(), e);
+            throw new ServiceException(ErrorCodeDef.EMAIL_SEND_ERROR_10032, e);
         }
     }
 

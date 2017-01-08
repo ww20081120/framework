@@ -8,8 +8,6 @@ package com.hbasesoft.framework.common.utils;
 import java.util.Collection;
 import java.util.Map;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-
 /**
  * <Description> <br>
  * 
@@ -36,9 +34,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void notNull(Object obj, String message, Object... params) throws AssertException {
+    public static void notNull(Object obj, int errorCode, Object... params) {
         if (obj == null) {
-            throw new AssertException(ErrorCodeDef.IS_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -52,9 +50,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void isNull(Object obj, String message, Object... params) throws AssertException {
+    public static void isNull(Object obj, int errorCode, Object... params) throws AssertException {
         if (obj != null) {
-            throw new AssertException(ErrorCodeDef.NOT_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -68,9 +66,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void notEmpty(String str, String message, Object... params) throws AssertException {
+    public static void notEmpty(String str, int errorCode, Object... params) throws AssertException {
         if (CommonUtil.isEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.IS_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -84,9 +82,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void isEmpty(String str, String message, Object... params) throws AssertException {
+    public static void isEmpty(String str, int errorCode, Object... params) throws AssertException {
         if (CommonUtil.isNotEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.NOT_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -101,9 +99,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static <T> void notEmpty(T[] str, String message, Object... params) throws AssertException {
+    public static <T> void notEmpty(T[] str, int errorCode, Object... params) throws AssertException {
         if (CommonUtil.isEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.IS_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -118,9 +116,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static <T> void isEmpty(T[] str, String message, Object... params) throws AssertException {
+    public static <T> void isEmpty(T[] str, int errorCode, Object... params) throws AssertException {
         if (CommonUtil.isNotEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.NOT_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -134,9 +132,10 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void notEmpty(Collection<?> str, String message, Object... params) throws AssertException {
+    public static void notEmpty(Collection<?> str, int errorCode, Object... params)
+        throws AssertException {
         if (CommonUtil.isEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.IS_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -150,9 +149,10 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void isEmpty(Collection<?> str, String message, Object... params) throws AssertException {
+    public static void isEmpty(Collection<?> str, int errorCode, Object... params)
+        throws AssertException {
         if (CommonUtil.isNotEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.NOT_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -166,9 +166,9 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void notEmpty(Map<?, ?> str, String message, Object... params) throws AssertException {
+    public static void notEmpty(Map<?, ?> str, int errorCode, Object... params) throws AssertException {
         if (CommonUtil.isEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.IS_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
@@ -182,33 +182,33 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void isEmpty(Map<?, ?> str, String message, Object... params) throws AssertException {
+    public static void isEmpty(Map<?, ?> str, int errorCode, Object... params) throws AssertException {
         if (CommonUtil.isNotEmpty(str)) {
-            throw new AssertException(ErrorCodeDef.NOT_NULL, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
-    public static void equals(Object obj1, Object obj2, String message, Object... params) {
+    public static void equals(Object obj1, Object obj2, int errorCode, Object... params) {
         if ((obj1 != null && !obj1.equals(obj2)) && (obj2 != null && !obj2.equals(obj1))) {
-            throw new AssertException(ErrorCodeDef.NOT_EQUALS, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
-    public static void notEquals(Object obj1, Object obj2, String message, Object... params) {
+    public static void notEquals(Object obj1, Object obj2, int errorCode, Object... params) {
         if ((obj1 != null && obj1.equals(obj2)) || (obj2 != null && obj2.equals(obj1))) {
-            throw new AssertException(ErrorCodeDef.EQUALS, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
-    public static void isTrue(boolean result, String message, Object... params) {
+    public static void isTrue(boolean result, int errorCode, Object... params) {
         if (!result) {
-            throw new AssertException(ErrorCodeDef.IS_FALSE, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 
-    public static void isFalse(boolean result, String message, Object... params) {
+    public static void isFalse(boolean result, int errorCode, Object... params) {
         if (result) {
-            throw new AssertException(ErrorCodeDef.IS_TRUE, message, params);
+            throw new AssertException(errorCode, params);
         }
     }
 }

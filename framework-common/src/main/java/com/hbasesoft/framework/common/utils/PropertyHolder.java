@@ -20,13 +20,15 @@
 
 package com.hbasesoft.framework.common.utils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 
@@ -49,6 +51,8 @@ public class PropertyHolder {
 
     private static final Map<String, String> PROPERTIES = new HashMap<>();
 
+    private static final Map<String, String> ERROR_MESSAGE = new HashMap<>();
+
     static {
         init();
     }
@@ -57,32 +61,17 @@ public class PropertyHolder {
         return PROPERTIES;
     }
 
-    private static void load(InputStream inputStream, Map<String, String> map) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if ("".equals(line) || line.startsWith("#")) {
-                    continue;
-                }
-                int index = line.indexOf("=");
-                if (index == -1) {
-                    log.error("错误的配置：" + line);
-                    continue;
-                }
-                if (index > 0 && line.length() > index + 1) {
-                    String key = line.substring(0, index).trim();
-                    String value = line.substring(index + 1, line.length()).trim();
-                    map.put(key, value);
-                }
-                else {
-                    log.error("错误的配置：" + line);
-                }
+    private static void load(InputStream inputStream, Map<String, String> map) throws IOException {
+
+        try {
+            Properties properties = new Properties();
+            properties.load(new InputStreamReader(inputStream, "utf-8"));
+            for (Entry<Object, Object> entry : properties.entrySet()) {
+                map.put(entry.getKey() + GlobalConstants.BLANK, entry.getValue() + GlobalConstants.BLANK);
             }
         }
-        catch (IOException ex) {
-            log.error("配置文件加载失败:" + ex.getMessage());
-            throw new RuntimeException(ex);
+        finally {
+            IOUtils.closeQuietly(inputStream);
         }
     }
 
@@ -107,8 +96,8 @@ public class PropertyHolder {
         }
 
         String extendPropertyFiles = PROPERTIES.get("extend.property.files");
-        if (extendPropertyFiles != null && !"".equals(extendPropertyFiles.trim())) {
-            String[] files = extendPropertyFiles.trim().split(",");
+        if (CommonUtil.isNotEmpty(extendPropertyFiles)) {
+            String[] files = StringUtils.split(extendPropertyFiles, GlobalConstants.SPLITOR);
             for (String file : files) {
                 try {
                     cr = new ClassPathResource(file);
@@ -126,6 +115,49 @@ public class PropertyHolder {
             log.info("  " + propertyName + " = " + PROPERTIES.get(propertyName));
         });
         log.info("***********************************************************");
+
+        loadErrorMessage();
+    }
+
+    private static void loadErrorMessage() {
+        String systemErrorMessagePath = "/errorMessage.properties";
+        ClassPathResource cr = null;
+        try {
+            cr = new ClassPathResource(systemErrorMessagePath);
+            load(cr.getInputStream(), ERROR_MESSAGE);
+            log.info("装入系统错误码文件:" + systemErrorMessagePath);
+        }
+        catch (Exception e) {
+            log.info("装入系统错误码文件" + systemErrorMessagePath + "失败!", e);
+        }
+
+        String projectErrorMessagePath = getProjectName() + "_errorMessage.properties";
+        try {
+            cr = new ClassPathResource(projectErrorMessagePath);
+            if (cr.exists()) {
+                load(cr.getInputStream(), ERROR_MESSAGE);
+                log.info("装入项目错误码文件:" + projectErrorMessagePath);
+            }
+        }
+        catch (Exception e) {
+            log.info("装入系统错误码文件" + projectErrorMessagePath + "失败!", e);
+        }
+
+        String selfPaths = getProperty("extend.errorMessage.files");
+        if (CommonUtil.isNotEmpty(selfPaths)) {
+            String[] files = StringUtils.split(selfPaths, GlobalConstants.SPLITOR);
+            for (String file : files) {
+                try {
+                    cr = new ClassPathResource(file);
+                    load(cr.getInputStream(), ERROR_MESSAGE);
+                    log.info("装入错误码文件：" + file);
+                }
+                catch (Exception e) {
+                    log.info("装入错误码文件" + file + "失败！", e);
+                }
+            }
+        }
+
     }
 
     public static Boolean getBooleanProperty(String name) {
@@ -166,6 +198,17 @@ public class PropertyHolder {
 
     public static void setProperty(String name, String value) {
         PROPERTIES.put(name, value);
+    }
+
+    public static String getErrorMessage(int code, Object... params) {
+        String message = ERROR_MESSAGE.get(code + GlobalConstants.BLANK);
+        if (CommonUtil.isNotEmpty(message)) {
+            if (CommonUtil.isNotEmpty(params)) {
+                return CommonUtil.messageFormat(message, params);
+            }
+            return message;
+        }
+        return GlobalConstants.BLANK;
     }
 
     public static String getProjectName() {

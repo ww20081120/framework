@@ -124,7 +124,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, "执行查询语句失败", e);
+            throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, e);
         }
     }
 
@@ -148,7 +148,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 }
                 else if (obj != null && obj.getClass().isArray()) {
                     if (!(obj instanceof Object[])) {
-                        throw new DaoException(ErrorCodeDef.LIST_PARAM_ERROR_10040, "请使用包装类型的数组");
+                        throw new DaoException(ErrorCodeDef.LIST_PARAM_ERROR_10040);
                     }
                     query.setParameterList(entry.getKey(), (Object[]) obj);
                 }
@@ -174,7 +174,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行SQL语句失败", e);
+            throw new DaoException(ErrorCodeDef.EXECUTE_ERROR_10011, e);
         }
     }
 
@@ -197,7 +197,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, "执行批量SQL语句失败", e);
+            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, e);
         }
     }
 
@@ -342,6 +342,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> entityClass, Serializable id) throws DaoException {
+        Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
         return (T) getSession().get(entityClass, id);
     }
 
@@ -358,6 +359,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException {
+        Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
         T t = (T) getSession().get(entityName, id);
         if (t != null) {
             getSession().flush();
@@ -379,7 +381,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
-        Assert.notEmpty(propertyName, "属性名不能为空");
+        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
         return (T) createCriteria(entityClass, Restrictions.eq(propertyName, value)).uniqueResult();
     }
 
@@ -397,7 +399,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
-        Assert.notEmpty(propertyName, "属性名不能为空");
+        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
         return (List<T>) createCriteria(entityClass, Restrictions.eq(propertyName, value)).list();
     }
 
@@ -427,6 +429,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException {
+        Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
         delete(get(entityName, id));
         getSession().flush();
     }
@@ -457,6 +460,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException {
+        Assert.notEmpty(ids, ErrorCodeDef.ID_IS_NULL);
         for (String id : ids) {
             getSession().delete(get(entityName, id));
             getSession().flush();
@@ -544,7 +548,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
         throws DaoException {
-        Assert.notEmpty(propertyName, "属性名不能为空");
         return createCriteria(entityClass, isAsc, Restrictions.eq(propertyName, value)).list();
     }
 
@@ -705,7 +708,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             conn.commit();
         }
         catch (SQLException e) {
-            throw new DaoException(e.getErrorCode(), e.getMessage());
+            throw new DaoException(e.getErrorCode(), e);
         }
         finally {
             if (conn != null) {
@@ -713,7 +716,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                     conn.close();
                 }
                 catch (SQLException e) {
-                    throw new DaoException(e.getErrorCode(), e.getMessage());
+                    throw new DaoException(e.getErrorCode(), e);
                 }
             }
         }

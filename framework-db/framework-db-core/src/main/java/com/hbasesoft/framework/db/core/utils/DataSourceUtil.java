@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.db.core.DataSourceRegister;
 
@@ -42,7 +43,7 @@ public final class DataSourceUtil {
 
     public static DataSource getDataSource(String name) {
         List<DataSource> dsList = getDataSources(name);
-        Assert.notEmpty(dsList, "数据库链接不存在 name=[{0}]", name);
+        Assert.notEmpty(dsList, ErrorCodeDef.DB_DATASOURCE_NOT_SET, name);
         int index = random.nextInt(dsList.size());
         return dsList.get(index);
     }

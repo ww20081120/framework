@@ -53,8 +53,7 @@ public class BaiduPushMessageExcutorImpl implements MessageExcutor {
             return pushMsg(receiver[0], null, title, content);
         }
         catch (Exception e) {
-            throw new ServiceException(ErrorCodeDef.BAIDUYUN_SEND_ERROR_10034, " Baidu push failed, reason: ${0}.",
-                e.getMessage());
+            throw new ServiceException(ErrorCodeDef.BAIDUYUN_SEND_ERROR_10034, e);
         }
     }
 

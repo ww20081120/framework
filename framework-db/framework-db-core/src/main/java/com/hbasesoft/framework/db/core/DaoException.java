@@ -20,106 +20,52 @@ public class DaoException extends FrameworkException {
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 1615477208457076971L;
+    private static final long serialVersionUID = 8246373948586046129L;
 
     /**
-     * DaoException
-     * 
-     * @param exception <br>
+     * @param exception
      */
     public DaoException(FrameworkException exception) {
         super(exception);
     }
 
     /**
-     * @param arg0
+     * @param code
+     * @param params
      */
-    public DaoException(Throwable arg0) {
-        super(arg0);
+    public DaoException(int code, Object... params) {
+        super(code, params);
     }
 
     /**
-     * DaoException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     * @param params <br>
+     * @param code
+     * @param t
      */
-    public DaoException(int code, String msg, Object... params) {
-        super(code, msg, params);
+    public DaoException(int code, Throwable t) {
+        super(code, t);
     }
 
     /**
-     * DaoException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
-     */
-    public DaoException(int code, String arg0, Throwable arg1, Object... params) {
-        super(code, arg0, arg1, params);
-    }
-
-    /**
-     * DaoException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     */
-    public DaoException(int code, String arg0, Throwable arg1) {
-        super(code, arg0, arg1);
-    }
-
-    /**
-     * DaoException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     */
-    public DaoException(int code, String msg) {
-        super(code, msg);
-    }
-
-    /**
-     * DaoException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     */
-    public DaoException(int code, Throwable arg0) {
-        super(code, arg0);
-    }
-
-    /**
-     * DaoException
-     * 
-     * @param code <br>
+     * @param code
      */
     public DaoException(int code) {
         super(code);
     }
 
     /**
-     * DaoException
-     * 
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param t
+     * @param code
+     * @param params
      */
-    public DaoException(String arg0, FrameworkException arg1, Object... params) {
-        super(arg0, arg1, params);
+    public DaoException(Throwable t, int code, Object... params) {
+        super(t, code, params);
     }
 
     /**
-     * DaoException
-     * 
-     * @param arg0 <br>
-     * @param exception <br>
+     * @param t
      */
-    public DaoException(String arg0, FrameworkException exception) {
-        super(arg0, exception);
+    public DaoException(Throwable t) {
+        super(t);
     }
 
 }

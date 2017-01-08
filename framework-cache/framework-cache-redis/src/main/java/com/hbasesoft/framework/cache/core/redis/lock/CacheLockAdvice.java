@@ -64,7 +64,7 @@ public class CacheLockAdvice {
                 // 加锁
                 boolean result = lock.lock(cacheLock.timeOut(), cacheLock.expireTime());
                 if (!result) {
-                    throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, "获取锁{0}失败", lock);
+                    throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, lock);
                 }
 
                 try {

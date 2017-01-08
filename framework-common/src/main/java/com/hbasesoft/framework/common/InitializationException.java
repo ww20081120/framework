@@ -14,108 +14,56 @@ package com.hbasesoft.framework.common;
  * @see com.hbasesoft.framework.common <br>
  */
 public class InitializationException extends FrameworkException {
+
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 7630275353803653896L;
+    private static final long serialVersionUID = 3036926828687373135L;
 
     /**
-     * @param arg0
-     */
-    public InitializationException(Throwable arg0) {
-        super(arg0);
-    }
-
-    /**
-     * InitializationException
-     * 
-     * @param exception <br>
+     * @param exception
      */
     public InitializationException(FrameworkException exception) {
         super(exception);
     }
 
     /**
-     * InitializationException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     * @param params <br>
+     * @param code
+     * @param params
      */
-    public InitializationException(int code, String msg, Object... params) {
-        super(code, msg, params);
+    public InitializationException(int code, Object... params) {
+        super(code, params);
     }
 
     /**
-     * InitializationException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param code
+     * @param t
      */
-    public InitializationException(int code, String arg0, Throwable arg1, Object... params) {
-        super(code, arg0, arg1, params);
+    public InitializationException(int code, Throwable t) {
+        super(code, t);
     }
 
     /**
-     * InitializationException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     */
-    public InitializationException(int code, String arg0, Throwable arg1) {
-        super(code, arg0, arg1);
-    }
-
-    /**
-     * InitializationException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     */
-    public InitializationException(int code, String msg) {
-        super(code, msg);
-    }
-
-    /**
-     * InitializationException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     */
-    public InitializationException(int code, Throwable arg0) {
-        super(code, arg0);
-    }
-
-    /**
-     * InitializationException
-     * 
-     * @param code <br>
+     * @param code
      */
     public InitializationException(int code) {
         super(code);
     }
 
     /**
-     * InitializationException
-     * 
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param t
+     * @param code
+     * @param params
      */
-    public InitializationException(String arg0, FrameworkException arg1, Object... params) {
-        super(arg0, arg1, params);
+    public InitializationException(Throwable t, int code, Object... params) {
+        super(t, code, params);
     }
 
     /**
-     * InitializationException
-     * 
-     * @param arg0 <br>
-     * @param exception <br>
+     * @param t
      */
-    public InitializationException(String arg0, FrameworkException exception) {
-        super(arg0, exception);
+    public InitializationException(Throwable t) {
+        super(t);
     }
+
 }

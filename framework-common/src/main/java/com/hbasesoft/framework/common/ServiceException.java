@@ -19,106 +19,52 @@ public class ServiceException extends FrameworkException {
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 1615477208457076971L;
+    private static final long serialVersionUID = -8671861646248499738L;
 
     /**
-     * ServiceException
-     * 
-     * @param exception <br>
+     * @param exception
      */
     public ServiceException(FrameworkException exception) {
         super(exception);
     }
 
     /**
-     * ServiceException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     * @param params <br>
+     * @param code
+     * @param params
      */
-    public ServiceException(int code, String msg, Object... params) {
-        super(code, msg, params);
+    public ServiceException(int code, Object... params) {
+        super(code, params);
     }
 
     /**
-     * ServiceException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param code
+     * @param t
      */
-    public ServiceException(int code, String arg0, Throwable arg1, Object... params) {
-        super(code, arg0, arg1, params);
+    public ServiceException(int code, Throwable t) {
+        super(code, t);
     }
 
     /**
-     * ServiceException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     */
-    public ServiceException(int code, String arg0, Throwable arg1) {
-        super(code, arg0, arg1);
-    }
-
-    /**
-     * ServiceException
-     * 
-     * @param code <br>
-     * @param msg <br>
-     */
-    public ServiceException(int code, String msg) {
-        super(code, msg);
-    }
-
-    /**
-     * ServiceException
-     * 
-     * @param code <br>
-     * @param arg0 <br>
-     */
-    public ServiceException(int code, Throwable arg0) {
-        super(code, arg0);
-    }
-
-    /**
-     * ServiceException
-     * 
-     * @param code <br>
+     * @param code
      */
     public ServiceException(int code) {
         super(code);
     }
 
     /**
-     * ServiceException
-     * 
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param t
+     * @param code
+     * @param params
      */
-    public ServiceException(String arg0, FrameworkException arg1, Object... params) {
-        super(arg0, arg1, params);
+    public ServiceException(Throwable t, int code, Object... params) {
+        super(t, code, params);
     }
 
     /**
-     * ServiceException
-     * 
-     * @param arg0 <br>
-     * @param exception <br>
+     * @param t
      */
-    public ServiceException(String arg0, FrameworkException exception) {
-        super(arg0, exception);
-    }
-
-    /**
-     * @param arg0
-     */
-    public ServiceException(Throwable arg0) {
-        super(arg0);
+    public ServiceException(Throwable t) {
+        super(t);
     }
 
 }

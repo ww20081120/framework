@@ -90,10 +90,10 @@ public class MessageServiceImpl implements MessageService.Iface {
     @Override
     public long sendMessage(String templateCode, Message message) throws TException {
         try {
-            Assert.notEmpty(templateCode, "模板代码不能为空");
-            Assert.notNull(message, "消息不能为空");
+            Assert.notEmpty(templateCode, ErrorCodeDef.TEMPLATE_CODE_IS_EMPTY);
+            Assert.notNull(message, ErrorCodeDef.MESSAGE_IS_EMPTY);
             MessageTemplatePojo template = messageTemplateDao.getByCode(templateCode);
-            Assert.notNull(template, "模板[{0}]不存在", templateCode);
+            Assert.notNull(template, ErrorCodeDef.TEMPLATE_NOT_FOUND);
             String content = template.getTemplate();
             if (CommonUtil.isNotEmpty(content)) {
                 Map param = message.getParams();
@@ -111,7 +111,7 @@ public class MessageServiceImpl implements MessageService.Iface {
             pojo.setExtendAttrs(message.getExtendAttrs());
 
             List<String> receiverList = message.getReceivers();
-            Assert.notEmpty(receiverList, "接收人不能为空");
+            Assert.notEmpty(receiverList, ErrorCodeDef.RECEIVER_IS_EMPTY);
             StringBuilder receivers = new StringBuilder();
             for (String receiver : receiverList) {
                 receivers.append(receiver).append(GlobalConstants.SPLITOR);
@@ -162,7 +162,7 @@ public class MessageServiceImpl implements MessageService.Iface {
 
         String[] contactChannelIds = StringUtils.split(template.getContactChannelIds(), GlobalConstants.SPLITOR);
         if (CommonUtil.isEmpty(contactChannelIds)) {
-            throw new ServiceException(ErrorCodeDef.CONTACT_CHANNEL_NOT_EXIST_20016, "发送渠道不存在");
+            throw new ServiceException(ErrorCodeDef.CONTACT_CHANNEL_NOT_EXIST_20016);
         }
         try {
             message.setSendTimes(message.getSendTimes() + 1);
@@ -171,8 +171,7 @@ public class MessageServiceImpl implements MessageService.Iface {
                 sb.append(GlobalConstants.SQL_SPLITOR);
                 MessageExcutor excutor = getMessageExcutorMap().get(contactChannelId);
                 if (excutor == null) {
-                    throw new ServiceException(ErrorCodeDef.CONTACT_CHANNEL_NOT_EXIST_20016, "发送渠道[{0}]不存在",
-                        contactChannelId);
+                    throw new ServiceException(ErrorCodeDef.CONTACT_CHANNEL_NOT_EXIST_20016, contactChannelId);
                 }
                 SendRecordPojo record = new SendRecordPojo();
                 record.setMessageId(message.getMessageId());
@@ -272,10 +271,10 @@ public class MessageServiceImpl implements MessageService.Iface {
         MessageTemplatePojo template;
         try {
             MessageBoxPojo message = messageBoxDao.get(MessageBoxPojo.class, messageId);
-            Assert.notNull(message, "消息盒子中[{0}]不存在", messageId);
+            Assert.notNull(message, ErrorCodeDef.MESSAGE_IS_EMPTY, messageId);
 
             template = messageTemplateDao.get(MessageTemplatePojo.class, message.getMessageTemplateId());
-            Assert.notNull(template, "重发模板[{0}]不存在", message.getMessageTemplateId());
+            Assert.notNull(template, ErrorCodeDef.TEMPLATE_NOT_FOUND, message.getMessageTemplateId());
             List<Attachment> attachments = null;
             if (message.getAttachmentsNum() > 0) {
                 List<AttachmentsPojo> attachmentList = messageBoxDao.selectMessageAttachments(message.getMessageId());
