@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
@@ -174,6 +176,18 @@ public final class IOUtil {
     /**
      * Description: readFile<br>
      * 
+     * @author 王伟 <br>
+     * @param filePath <br>
+     * @return <br>
+     * @throws IOException <br>
+     */
+    public static <T> List<T> readFile(String filePath, LineTransfer<T> transfer) throws IOException {
+        return readFile(new File(filePath), transfer);
+    }
+
+    /**
+     * Description: readFile<br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param file
@@ -201,6 +215,30 @@ public final class IOUtil {
 
         }
         return null;
+    }
+
+    public static <T> List<T> readFile(File file, LineTransfer<T> transfer) throws IOException {
+        List<T> list = new ArrayList<T>();
+        if (file.exists() && file.isFile()) {
+            BufferedReader in = null;
+            String line = null;
+            try {
+                in = new BufferedReader(new FileReader(file));
+                while ((line = in.readLine()) != null) {
+                    T t = transfer.transfer(line);
+                    if (t != null) {
+                        list.add(t);
+                    }
+                }
+            }
+            catch (Exception e) {
+                throw new IOException(e);
+            }
+            finally {
+                IOUtils.closeQuietly(in);
+            }
+        }
+        return list;
     }
 
     /**
