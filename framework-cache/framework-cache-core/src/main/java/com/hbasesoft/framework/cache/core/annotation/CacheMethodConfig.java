@@ -25,7 +25,11 @@ import java.lang.annotation.RetentionPolicy;
 @Repeatable(CacheProxy.class)
 public @interface CacheMethodConfig {
 
-    boolean cacheAble() default true;
+    boolean cacheAble() default false;
 
-    String name();
+    String value();
+
+    String[] removeMethods() default {};
+
+    int expireTime() default 0;
 }

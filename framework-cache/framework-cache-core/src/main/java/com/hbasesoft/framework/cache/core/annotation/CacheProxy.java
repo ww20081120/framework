@@ -30,7 +30,7 @@ public @interface CacheProxy {
 
     /**
      * Description: 代理对象的名称<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
