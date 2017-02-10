@@ -101,7 +101,9 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
 
             CachePorxyInvocationHandler invocationHandler = new CachePorxyInvocationHandler(target, cacheProxy, clazz);
 
-            T proxyObj = (T) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), invocationHandler);
+            T proxyObj = (T) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.isInterface() ? new Class[] {
+                clazz
+            } : clazz.getInterfaces(), invocationHandler);
 
             LoggerUtil.info("Success cache proxy clazz[{0}].", clazz);
             return proxyObj;
