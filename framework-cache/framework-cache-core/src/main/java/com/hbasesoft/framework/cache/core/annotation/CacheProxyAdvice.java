@@ -46,9 +46,7 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
                     if (cacheProxy != null) {
                         Object value = refer(cacheProxy, method.getParameterTypes()[0]);
                         if (value != null) {
-                            method.invoke(bean, new Object[] {
-                                value
-                            });
+                            method.invoke(bean, value);
                         }
                     }
                 }
