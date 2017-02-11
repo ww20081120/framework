@@ -3,7 +3,6 @@ package com.hbasesoft.framework.cache.core.annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -11,10 +10,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.cache.core.handler.CachePorxyInvocationHandler;
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -30,8 +27,6 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Component
 public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
-
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 
@@ -44,7 +39,7 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
                 try {
                     CacheProxy cacheProxy = method.getAnnotation(CacheProxy.class);
                     if (cacheProxy != null) {
-                        Object value = refer(cacheProxy, method.getParameterTypes()[0]);
+                        Object value = CacheHelper.proxy(method.getParameterTypes()[0], cacheProxy);
                         if (value != null) {
                             method.invoke(bean, value);
                         }
@@ -66,7 +61,7 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
 
                 if (cacheProxy != null) {
 
-                    Object value = refer(cacheProxy, field.getType());
+                    Object value = CacheHelper.proxy(field.getType(), cacheProxy);
                     if (value != null) {
                         field.set(bean, value);
                     }
@@ -85,32 +80,6 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
         return bean;
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> T refer(CacheProxy cacheProxy, Class<T> clazz) {
-
-        if (Modifier.isAbstract(clazz.getModifiers())) {
-            T target = null;
-            if (CommonUtil.isNotEmpty(cacheProxy.name())) {
-                target = applicationContext.getBean(cacheProxy.name(), clazz);
-            }
-            else {
-                target = applicationContext.getBean(clazz);
-            }
-
-            Assert.notNull(target, ErrorCodeDef.PROXY_TARGET_NOT_FOUND, clazz);
-
-            CachePorxyInvocationHandler invocationHandler = new CachePorxyInvocationHandler(target, cacheProxy, clazz);
-
-            T proxyObj = (T) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.isInterface() ? new Class[] {
-                clazz
-            } : clazz.getInterfaces(), invocationHandler);
-
-            LoggerUtil.info("Success cache proxy clazz[{0}].", clazz);
-            return proxyObj;
-        }
-        return null;
-    }
-
     /**
      * Description: <br>
      * 
@@ -121,6 +90,6 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
      */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        ContextHolder.setContext(applicationContext);
     }
 }

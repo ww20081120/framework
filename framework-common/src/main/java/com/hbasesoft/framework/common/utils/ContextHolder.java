@@ -27,6 +27,10 @@ public class ContextHolder {
         return ContextHolder.context;
     }
 
+    public static void setContext(ApplicationContext context) {
+        ContextHolder.context = context;
+    }
+
     public static class ContextHolderListener extends StartupListenerAdapter {
 
         /**
