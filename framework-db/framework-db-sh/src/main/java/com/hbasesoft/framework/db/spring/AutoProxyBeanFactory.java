@@ -12,6 +12,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;

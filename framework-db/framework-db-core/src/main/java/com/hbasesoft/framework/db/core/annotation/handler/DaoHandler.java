@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-import ognl.Ognl;
-
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -29,6 +27,8 @@ import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.config.ParamMetadata;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 
+import ognl.Ognl;
+
 /**
  * <Description> <br>
  * 
@@ -42,7 +42,7 @@ import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 public class DaoHandler extends AbstractAnnotationHandler implements InvocationHandler {
 
     /**
-     *  表示以：开头的合法变量名
+     * 表示以：开头的合法变量名
      */
     private static final String REG_EX = ":[ tnx0Bfr]*[_a-zA-Z][_a-zA-Z.0-9]*";
 
@@ -62,9 +62,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
     private ISqlExcutor sqlExcutor;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param proxy <br>
@@ -77,6 +76,10 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
         // Step1:判断是否是抽象方法，如果是非抽象方法，则不执行代理拦截器
         if (proxy != null && !BeanUtil.isAbstract(method)) {
             return method.invoke(proxy, args);
+        }
+
+        if (!method.getDeclaringClass().isInterface()) {
+            return null;
         }
 
         // Step2:判断是否是genericBaseDao方法，如果是则直接执行
@@ -176,6 +179,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
 
     /**
      * executeSql
+     * 
      * @param sql <br>
      * @param param <br>
      * @return <br>
@@ -198,6 +202,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
 
     /**
      * parseSqlTemplate
+     * 
      * @param method <br>
      * @param templateSql <br>
      * @param sqlParamsMap <br>
