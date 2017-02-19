@@ -264,12 +264,15 @@ public class RedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
         if (t != null) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
                 jedis.hset(nodeName, key, t);
+                if (seconds > 0) {
+                    jedis.expire(new String(nodeName), seconds);
+                }
             }
             finally {
                 if (jedis != null) {

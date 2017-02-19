@@ -99,7 +99,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             return shardedJedis.get(key);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
 
     }
@@ -120,7 +122,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             shardedJedis.set(key, value);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
 
     }
@@ -140,7 +144,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             shardedJedis.del(key);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
     }
 
@@ -160,7 +166,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             return shardedJedis.hgetAll(node);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
     }
 
@@ -181,7 +189,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
                 shardedJedis.hmset(key, dataMap);
             }
             finally {
-                shardedPool.returnResourceObject(shardedJedis);
+                if (shardedJedis != null) {
+                    shardedJedis.close();
+                }
             }
         }
 
@@ -203,7 +213,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             shardedJedis.del(nodeName);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
     }
 
@@ -224,7 +236,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             return shardedJedis.hget(nodeName, key);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
     }
 
@@ -238,15 +252,20 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
         if (t != null) {
             ShardedJedis shardedJedis = null;
             try {
                 shardedJedis = shardedPool.getResource();
                 shardedJedis.hset(nodeName, key, t);
+                if (seconds > 0) {
+                    shardedJedis.expire(nodeName, seconds);
+                }
             }
             finally {
-                shardedPool.returnResourceObject(shardedJedis);
+                if (shardedJedis != null) {
+                    shardedJedis.close();
+                }
             }
         }
 
@@ -268,7 +287,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             shardedJedis.hdel(nodeName, key);
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
 
     }
@@ -294,7 +315,9 @@ public class ShardedRedisCache extends AbstractRedisCache {
             }
         }
         finally {
-            shardedPool.returnResourceObject(shardedJedis);
+            if (shardedJedis != null) {
+                shardedJedis.close();
+            }
         }
         return false;
     }

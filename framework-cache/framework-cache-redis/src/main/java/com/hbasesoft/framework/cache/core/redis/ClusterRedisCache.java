@@ -188,9 +188,12 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
         if (t != null) {
             cluster.hset(new String(nodeName), new String(key), t);
+            if (seconds > 0) {
+                cluster.expire(new String(nodeName), seconds);
+            }
         }
     }
 

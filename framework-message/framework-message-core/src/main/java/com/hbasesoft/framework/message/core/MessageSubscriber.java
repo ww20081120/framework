@@ -5,10 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core;
 
-import java.util.List;
-
 /**
- * <Description> 消息队列 <br>
+ * <Description> <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
@@ -17,37 +15,33 @@ import java.util.List;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core <br>
  */
-public interface MessageQueue {
+public interface MessageSubscriber {
 
     /**
-     * Description: 队尾插入<br>
+     * Description: 接收到消息 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param key
-     * @param value <br>
+     * @param data <br>
      */
-    void push(String key, byte[] value);
+    void onMessage(String channel, byte[] data);
 
     /**
-     * Description: 阻塞式获取<br>
+     * Description: 开始订阅<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param timeout
-     * @param key
-     * @return <br>
+     * @param subscribeChannels <br>
      */
-    byte[] pop(int timeout, String key);
+    void onSubscribe(String channel, int subscribeChannels);
 
     /**
-     * Description: 获取队列数据<br>
+     * Description: 取消订阅<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param key
-     * @return <br>
+     * @param subscribedChannels <br>
      */
-    List<byte[]> popList(String key);
+    void onUnsubscribe(String channel, int subscribedChannels);
 
 }
