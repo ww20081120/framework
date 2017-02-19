@@ -8,6 +8,10 @@
 	</parent>
 	<artifactId>framework-message-core</artifactId>
 	<dependencies>
-		
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 </project>

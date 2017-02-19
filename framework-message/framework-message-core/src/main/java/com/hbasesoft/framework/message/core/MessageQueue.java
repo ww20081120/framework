@@ -37,15 +37,16 @@ public interface MessageQueue {
      * @param key
      * @return <br>
      */
-    byte[] pop(String key);
+    List<byte[]> popList(String key);
 
     /**
-     * Description: 获取所有的队列数据<br>
+     * Description: 阻塞式获取<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param timeout
      * @param key
      * @return <br>
      */
-    List<byte[]> popList(String key);
+    byte[] pop(int timeout, String key);
 }
