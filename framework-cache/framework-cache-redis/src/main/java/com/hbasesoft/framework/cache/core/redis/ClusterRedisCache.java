@@ -9,11 +9,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.hbasesoft.framework.cache.core.redis.clients.jedis.BinaryJedisCluster;
-import com.hbasesoft.framework.cache.core.redis.clients.jedis.HostAndPort;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
+import com.hbasesoft.framework.util.redis.BinaryJedisCluster;
+import com.hbasesoft.framework.util.redis.HostAndPort;
 
 /**
  * <Description> <br>

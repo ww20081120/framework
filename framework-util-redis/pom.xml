@@ -6,11 +6,17 @@
 		<artifactId>framework</artifactId>
 		<version>2.3</version>
 	</parent>
-	<artifactId>framework-message</artifactId>
-	<packaging>pom</packaging>
-	<modules>
-		<module>framework-message-core</module>
-		<module>framework-message-rpc</module>
-		<module>framework-message-redis</module>
-	</modules>
+	<artifactId>framework-util-redis</artifactId>
+	<name>redis工具包</name>
+	<description>redis工具包</description>
+	<properties>
+		<jedis.version>2.6.2</jedis.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
+		</dependency>
+	</dependencies>
 </project>
