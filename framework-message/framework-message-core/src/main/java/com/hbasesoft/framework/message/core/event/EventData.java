@@ -24,4 +24,8 @@ public class EventData extends HashMap<String, Object> {
      */
     private static final long serialVersionUID = 2323769185641461392L;
 
+    public String getParameter(String key) {
+        return (String) this.get(key);
+    }
+
 }
