@@ -26,6 +26,7 @@
 		<jsch.version>0.1.53</jsch.version>
 		<jasypt.version>1.9.2</jasypt.version>
 		<cglib.version>3.2.1</cglib.version>
+		<protostuff.version>1.3.8</protostuff.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -121,6 +122,17 @@
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
 			<version>${jasypt.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>${protostuff.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>${protostuff.version}</version>
 		</dependency>
 
 		<!-- web begin Spring MVC Test Framework 需要 servlet-api 3.0 以上 -->

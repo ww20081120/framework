@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.cache.core.util;
+package com.hbasesoft.framework.common.utils.bean;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
