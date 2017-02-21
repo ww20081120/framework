@@ -19,6 +19,8 @@ import java.util.List;
  */
 public interface MessageQueue {
 
+    String getName();
+
     /**
      * Description: 队尾插入<br>
      * 

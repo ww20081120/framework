@@ -5,12 +5,8 @@
  ****************************************************************************************/
 package com.framework.message.redis;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
-
-import redis.clients.jedis.Jedis;
 
 /**
  * <Description> <br>
@@ -22,7 +18,7 @@ import redis.clients.jedis.Jedis;
  * @since V1.0<br>
  * @see com.framework.message.redis <br>
  */
-public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
+public class ClusterRedisMessageSubcriberFactory implements MessageSubcriberFactory {
 
     /**
      * Description: <br>
@@ -33,7 +29,7 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
      */
     @Override
     public String getName() {
-        return RedisClientFactory.MESSAGE_MODEL;
+        return RedisClientFactory.CLUSTER_MESSAGE_MODEL;
     }
 
     /**
@@ -46,19 +42,7 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
      */
     @Override
     public void registSubscriber(String channel, final MessageSubscriber subscriber) {
-        Jedis jedis = null;
-        try {
-            jedis = RedisClientFactory.getJedisPool().getResource();
-            jedis.subscribe(new BinaryListener(subscriber), channel.getBytes());
-        }
-        catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
-        }
-        finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+        RedisClientFactory.getBinaryJedisCluster().subscribe(new BinaryListener(subscriber), channel.getBytes());
     }
 
 }

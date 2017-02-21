@@ -6,7 +6,9 @@
 package com.framework.message.redis;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -14,6 +16,8 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
+import redis.clients.jedis.BinaryJedisCluster;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
@@ -35,6 +39,8 @@ public final class RedisClientFactory {
      */
     public static final String MESSAGE_MODEL = "REDIS";
 
+    public static final String CLUSTER_MESSAGE_MODEL = "REDIS_CLUSTER";
+
     private static final String REDIS_ADDRESS = "message.redis.address";
 
     private static final int MAX_IDLE = 5;
@@ -44,6 +50,8 @@ public final class RedisClientFactory {
     private static final boolean VALIDATE = false;
 
     private static JedisPool jedisPool;
+
+    private static BinaryJedisCluster cluster;
 
     private RedisClientFactory() {
     }
@@ -63,6 +71,23 @@ public final class RedisClientFactory {
         return jedisPool;
     }
 
+    public static BinaryJedisCluster getBinaryJedisCluster() {
+        if (cluster == null) {
+            String cacheModel = PropertyHolder.getProperty("cache.model");
+            if (CLUSTER_MESSAGE_MODEL.equals(cacheModel)) {
+                Address[] addresses = getAddresses();
+                Set<HostAndPort> readSet = new HashSet<HostAndPort>();
+                for (Address addr : addresses) {
+                    HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
+                    readSet.add(hostAndPort);
+                }
+                cluster = new BinaryJedisCluster(readSet,
+                    PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
+            }
+        }
+        return cluster;
+    }
+
     private static Address[] getAddresses() {
         String address = PropertyHolder.getProperty(REDIS_ADDRESS);
         Assert.notEmpty(address, ErrorCodeDef.REDIS_ADDRESS_NOT_SET, REDIS_ADDRESS);
@@ -79,4 +104,5 @@ public final class RedisClientFactory {
         config.setTestOnBorrow(PropertyHolder.getBooleanProperty("message.redis.testonborrow", VALIDATE));
         return config;
     }
+
 }

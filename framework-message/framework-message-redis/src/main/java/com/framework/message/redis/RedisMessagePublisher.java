@@ -22,6 +22,18 @@ import redis.clients.jedis.Jedis;
  * @see com.framework.message.redis <br>
  */
 public class RedisMessagePublisher implements MessagePublisher {
+    
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getName() {
+        return RedisClientFactory.MESSAGE_MODEL;
+    }
 
     /**
      * Description: <br>

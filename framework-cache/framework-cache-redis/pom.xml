@@ -7,16 +7,24 @@
 		<version>2.3</version>
 	</parent>
 	<artifactId>framework-cache-redis</artifactId>
+	<properties>
+		<redis.version>2.9.0</redis.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-cache-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>com.hbasesoft.framework</groupId> -->
+		<!-- <artifactId>framework-util-redis</artifactId> -->
+		<!-- <version>${project.parent.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-util-redis</artifactId>
-			<version>${project.parent.version}</version>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${redis.version}</version>
 		</dependency>
 	</dependencies>
 </project>

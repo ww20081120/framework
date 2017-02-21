@@ -16,6 +16,9 @@ package com.hbasesoft.framework.message.core;
  * @see com.hbasesoft.framework.message.core <br>
  */
 public interface MessagePublisher {
+
+    String getName();
+
     /**
      * Description: 发布<br>
      * 

@@ -10,7 +10,7 @@
 	<name>message-redis</name>
 	<description>用redis实现消息队列和订阅发布</description>
 	<properties>
-		<jedis.version>2.6.2</jedis.version>
+		<redis.version>2.9.0</redis.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -21,6 +21,7 @@
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
+			<version>${redis.version}</version>
 		</dependency>
 	</dependencies>
 </project>

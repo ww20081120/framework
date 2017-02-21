@@ -1,0 +1,2 @@
+com.framework.message.redis.ClusterRedisMessagePublisher
+com.framework.message.redis.RedisMessagePublisher

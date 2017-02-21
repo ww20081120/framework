@@ -3,7 +3,9 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.message.core;
+package com.framework.message.redis;
+
+import com.hbasesoft.framework.message.core.MessagePublisher;
 
 /**
  * <Description> <br>
@@ -13,20 +15,33 @@ package com.hbasesoft.framework.message.core;
  * @taskId <br>
  * @CreateDate 2017年2月19日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.message.core <br>
+ * @see com.framework.message.redis <br>
  */
-public interface MessageSubcriberFactory {
-
-    String getName();
+public class ClusterRedisMessagePublisher implements MessagePublisher {
 
     /**
-     * Description: 注册监听者<br>
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String getName() {
+        return RedisClientFactory.CLUSTER_MESSAGE_MODEL;
+    }
+
+    /**
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
-     * @param subscriber <br>
+     * @param data <br>
      */
-    void registSubscriber(String channel, MessageSubscriber subscriber);
+    @Override
+    public void publish(String channel, byte[] data) {
+        RedisClientFactory.getBinaryJedisCluster().publish(channel.getBytes(), data);
+    }
 
 }

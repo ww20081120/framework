@@ -185,7 +185,7 @@ public interface ErrorCodeDef {
     /** 缓存Key设置失败 */
     int CACHE_KEY_ERROR = 10054;
 
-    /** 代理目标不存在*/
+    /** 代理目标不存在 */
     int PROXY_TARGET_NOT_FOUND = 10055;
 
     /************************************************************************************
@@ -317,4 +317,10 @@ public interface ErrorCodeDef {
 
     /** 缓存未配置 */
     int CACHE_NOT_FOUND = 20045;
+
+    /** 消息模式没有设置 */
+    int MESSAGE_MODEL_NOT_SET = 20046;
+
+    /** 未找到消息中间件 */
+    int MESSAGE_MIDDLE_NOT_FOUND = 20047;
 }
