@@ -46,19 +46,21 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
      */
     @Override
     public void registSubscriber(String channel, final MessageSubscriber subscriber) {
-        Jedis jedis = null;
-        try {
-            jedis = RedisClientFactory.getJedisPool().getResource();
-            jedis.subscribe(new BinaryListener(subscriber), channel.getBytes());
-        }
-        catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
-        }
-        finally {
-            if (jedis != null) {
-                jedis.close();
+        new Thread(() -> {
+            Jedis jedis = null;
+            try {
+                jedis = RedisClientFactory.getJedisPool().getResource();
+                jedis.subscribe(new BinaryListener(subscriber), channel.getBytes());
             }
-        }
+            catch (Exception e) {
+                throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            }
+            finally {
+                if (jedis != null) {
+                    jedis.close();
+                }
+            }
+        }).start();
     }
 
 }
