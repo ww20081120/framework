@@ -34,8 +34,6 @@ import com.hbasesoft.framework.message.core.MessageQueue;
  */
 public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
-    private static final int MAX_CONSUMMER = 10000;
-
     private ThreadPoolExecutor executor;
 
     private ArrayBlockingQueue<EventConsummer> arrayBlockingQueue;
@@ -43,12 +41,13 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     private boolean flag = true;
 
     public EventHandlerStartupLinstener() {
-        int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 20);
-        int maximumPoolSize = PropertyHolder.getIntProperty("message.event.maximumPoolSize", 100);
+        int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 20); // 核心线程数
+        int maximumPoolSize = PropertyHolder.getIntProperty("message.event.maximumPoolSize", 100); // 最大线程数
         long keepAliveTime = PropertyHolder.getIntProperty("message.event.keepAliveTime", 600);
-        int threadSize = PropertyHolder.getIntProperty("message.event.handlerSize", 50);
+        int threadSize = PropertyHolder.getIntProperty("message.event.handlerSize", 15);
+        int maxConsummer = PropertyHolder.getIntProperty("message.event.maxConsummer", 10000);
 
-        arrayBlockingQueue = new ArrayBlockingQueue<EventConsummer>(MAX_CONSUMMER);
+        arrayBlockingQueue = new ArrayBlockingQueue<EventConsummer>(maxConsummer);
 
         executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS,
             new ArrayBlockingQueue<Runnable>(threadSize));
@@ -61,7 +60,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                     try {
                         while (flag) {
                             try {
-                                EventConsummer consummer = arrayBlockingQueue.poll(5, TimeUnit.SECONDS);
+                                EventConsummer consummer = arrayBlockingQueue.poll(3, TimeUnit.SECONDS);
                                 if (consummer != null) {
                                     consummer.emmit();
                                 }
@@ -119,7 +118,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                 LoggerUtil.info("start regist event[{0}] linsener", channel);
                 MessageQueue queue = MessageHelper.createMessageQueue();
                 while (flag) {
-                    byte[] data = queue.pop(5, channel);
+                    byte[] data = queue.pop(3, channel);
                     if (data != null) {
                         try {
                             EventData eventData = SerializationUtil.unserial(EventData.class, data);
