@@ -24,12 +24,51 @@ public final class EventEmmiter {
     private EventEmmiter() {
     }
 
+    /**
+     * Description: 触发事件<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event <br>
+     */
     public static void emmit(String event) {
         emmit(event, new EventData());
     }
 
+    /**
+     * Description: 触发事件<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data <br>
+     */
     public static void emmit(String event, EventData data) {
-        MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+        MessageHelper.createMessageQueue().push(event, SerializationUtil.serial(data));
         LoggerUtil.info("触发[event={0},data={1}]事件", event, data);
+    }
+
+    /**
+     * Description: 触发通知<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event <br>
+     */
+    public static void subscriber(String event) {
+        subscriber(event, new EventData());
+    }
+
+    /**
+     * Description: 触发通知<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data <br>
+     */
+    public static void subscriber(String event, EventData data) {
+        MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+        LoggerUtil.info("触发[event={0},data={1}]事件通知", event, data);
     }
 }

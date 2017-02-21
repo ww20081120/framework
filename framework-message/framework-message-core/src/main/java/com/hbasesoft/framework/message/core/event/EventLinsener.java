@@ -26,6 +26,17 @@ public interface EventLinsener extends MessageSubscriber {
     void onEmmit(String event, EventData data);
 
     /**
+     * Description: 是否为订阅消息<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    default boolean subscriber() {
+        return false;
+    }
+
+    /**
      * Description: 接收到消息 <br>
      * 
      * @author 王伟<br>
