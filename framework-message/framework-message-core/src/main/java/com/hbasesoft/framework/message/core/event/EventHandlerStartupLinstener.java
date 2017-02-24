@@ -17,7 +17,6 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListenerAdapter;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessageQueue;
@@ -121,8 +120,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                     byte[] data = queue.pop(3, channel);
                     if (data != null) {
                         try {
-                            EventData eventData = SerializationUtil.unserial(EventData.class, data);
-                            arrayBlockingQueue.put(new EventConsummer(linsener, eventData, channel));
+                            arrayBlockingQueue.put(new EventConsummer(linsener, data, channel));
                         }
                         catch (Exception e) {
                             LoggerUtil.error(e);
@@ -149,19 +147,19 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
         private EventLinsener linsener;
 
-        private EventData eventData;
+        private byte[] data;
 
         private String event;
 
-        public EventConsummer(EventLinsener linsener, EventData eventData, String event) {
+        public EventConsummer(EventLinsener linsener, byte[] data, String event) {
             this.linsener = linsener;
-            this.eventData = eventData;
+            this.data = data;
             this.event = event;
         }
 
         public void emmit() {
             try {
-                this.linsener.onEmmit(this.event, this.eventData);
+                this.linsener.onMessage(event, data);
             }
             catch (Exception e) {
                 LoggerUtil.error(e);
