@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.apache.commons.io.IOUtils;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
-
-import io.protostuff.LinkedBuffer;
-import io.protostuff.ProtostuffIOUtil;
-import io.protostuff.Schema;
-import io.protostuff.runtime.RuntimeSchema;
 
 /**
  * <Description> <br>
@@ -34,7 +34,16 @@ public final class SerializationUtil {
     /**
      * INIT_SIZE
      */
-    private static final int INIT_SIZE = 4096;
+    private static final int INIT_SIZE = 1024;
+
+    private static Kryo kryo = new Kryo();
+
+    private static Kryo getKryo(Class<?> clazz) {
+        if (!clazz.getName().startsWith("java.")) {
+            kryo.register(clazz);
+        }
+        return kryo;
+    }
 
     /**
      * Description: <br>
@@ -45,21 +54,18 @@ public final class SerializationUtil {
      * @return <br>
      * @throws UtilException UtilException
      */
-    @SuppressWarnings("unchecked")
     public static <T> byte[] serial(T obj) throws UtilException {
-        byte[] result = null;
-        if (obj != null && !(obj instanceof Void)) {
-            Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
-            LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
-            try {
-                result = ProtostuffIOUtil.toByteArray(obj, schema, buffer);
-            }
-            catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
-            }
-
+        Output out = new Output(INIT_SIZE);
+        try {
+            getKryo(obj.getClass()).writeObject(out, obj);
+            return out.toBytes();
         }
-        return result;
+        finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+
     }
 
     /**
@@ -84,14 +90,7 @@ public final class SerializationUtil {
             throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
         }
         finally {
-            if (out != null) {
-                try {
-                    out.close();
-                }
-                catch (IOException e) {
-                    throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
-                }
-            }
+            IOUtils.closeQuietly(out);
         }
         return bytes;
     }
@@ -106,18 +105,19 @@ public final class SerializationUtil {
      * @throws UtilException UtilException
      */
     public static <T> T unserial(Class<T> clazz, byte[] data) throws UtilException {
-        T result = null;
         if (data != null && data.length > 0) {
-            Schema<T> schema = RuntimeSchema.getSchema(clazz);
+            Input in = null;
             try {
-                result = clazz.newInstance();
-                ProtostuffIOUtil.mergeFrom(data, result, schema);
+                in = new Input(data);
+                return getKryo(clazz).readObject(in, clazz);
             }
-            catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
+            finally {
+                if (in != null) {
+                    in.close();
+                }
             }
         }
-        return result;
+        return null;
     }
 
     /**
@@ -154,5 +154,4 @@ public final class SerializationUtil {
         }
         return result;
     }
-
 }
