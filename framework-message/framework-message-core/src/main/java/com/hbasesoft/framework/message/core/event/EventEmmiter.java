@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
-import java.util.Arrays;
-
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
@@ -47,7 +45,6 @@ public final class EventEmmiter {
      */
     public static void emmit(String event, EventData data) {
         byte[] bdata = SerializationUtil.serial(data);
-        System.out.println(Arrays.toString(bdata));
         MessageHelper.createMessageQueue().push(event, bdata);
         LoggerUtil.info("触发[event={0},data={1}]事件", event, data);
     }
