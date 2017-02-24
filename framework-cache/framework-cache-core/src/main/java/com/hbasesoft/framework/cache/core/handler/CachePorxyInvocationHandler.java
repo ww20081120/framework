@@ -1,17 +1,17 @@
 package com.hbasesoft.framework.cache.core.handler;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.annotation.CacheMethodConfig;
 import com.hbasesoft.framework.cache.core.annotation.CacheProxy;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * <Description> <br>
@@ -35,7 +35,6 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
 
     private String nodeNamePrefix;
 
-
     public CachePorxyInvocationHandler(Object target, CacheProxy cacheProxy, Class<?> clazz) {
         this.target = target;
         this.cacheProxy = cacheProxy;
@@ -49,36 +48,31 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
             }
         }
 
-        nodeNamePrefix = new StringBuilder().append("__CACHE_PROXY_").append(clazz.getName()).append('@').append(target.hashCode()).toString();
+        nodeNamePrefix = new StringBuilder().append("__CACHE_PROXY_").append(clazz.getName()).append('@')
+            .append(target.hashCode()).toString();
 
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
         Object result = null;
         CacheMethodConfig config = cacheMethodConfigMap.get(method.getName());
-        if (!Void.class.equals(method.getAnnotatedReturnType().getType().getTypeName())) {
-            if (config != null && !config.cacheAble()) {
-                result = getAndCache(method, args, config.cacheAble(), config.expireTime());
-            } else {
-                result = CacheHelper.getCache().get(nodeNamePrefix + method.getName(), getCacheKey(method, args));
-                if (result == null) {
-                    if (config == null) {
-                        result = getAndCache(method, args, true, cacheProxy.expireTime());
-                    } else {
-                        result = getAndCache(method, args, config.cacheAble(), config.expireTime());
-                    }
-                }
-            }
-        } else {
+        if (config == null || Void.class.equals(method.getAnnotatedReturnType().getType().getTypeName())) {
             result = method.invoke(target, args);
         }
+        else {
+            if (config.cacheAble()) {
+                result = CacheHelper.getCache().get(nodeNamePrefix + method.getName(), getCacheKey(method, args));
+                if (result == null) {
+                    result = getAndCache(method, args, cacheProxy.expireTime());
+                }
+            }
 
-        if (config != null && CommonUtil.isNotEmpty(config.removeMethods())) {
-            for (String methodName : config.removeMethods()) {
-                CacheHelper.getCache().evict(nodeNamePrefix + methodName);
-                LoggerUtil.info("Success evict proxy cache [class={0}, method={1}]", clazz, methodName);
+            if (CommonUtil.isNotEmpty(config.removeMethods())) {
+                for (String methodName : config.removeMethods()) {
+                    CacheHelper.getCache().evict(nodeNamePrefix + methodName);
+                    LoggerUtil.info("Success evict proxy cache [class={0}, method={1}]", clazz, methodName);
+                }
             }
         }
         return result;
@@ -98,11 +92,14 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         return sb.toString();
     }
 
-    private Object getAndCache(Method method, Object[] args, boolean isCache, int expireTime) throws InvocationTargetException, IllegalAccessException {
+    private Object getAndCache(Method method, Object[] args, int expireTime)
+        throws InvocationTargetException, IllegalAccessException {
         Object result = method.invoke(target, args);
-        if (isCache && result != null) {
-            CacheHelper.getCache().put(nodeNamePrefix + method.getName(), expireTime, getCacheKey(method, args), result);
-            LoggerUtil.info("Success proxy cache [class={0}, method={1}, expireTime={2}]", clazz, method.getName(), expireTime);
+        if (result != null) {
+            CacheHelper.getCache().put(nodeNamePrefix + method.getName(), expireTime, getCacheKey(method, args),
+                result);
+            LoggerUtil.info("Success proxy cache [class={0}, method={1}, expireTime={2}]", clazz, method.getName(),
+                expireTime);
         }
         return result;
     }
