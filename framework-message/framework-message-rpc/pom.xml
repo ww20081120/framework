@@ -17,37 +17,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo-rpc-api</artifactId>
-			<version>${dubbo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo-rpc-default</artifactId>
-			<version>${dubbo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo-remoting-api</artifactId>
-			<version>${dubbo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo-remoting-netty</artifactId>
-			<version>${dubbo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo-config-spring</artifactId>
-			<version>${dubbo.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>dubbo-registry-zookeeper</artifactId>
+			<artifactId>dubbo</artifactId>
 			<version>${dubbo.version}</version>
 		</dependency>
 		<dependency>
