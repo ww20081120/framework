@@ -36,6 +36,8 @@ public final class SerializationUtil {
      */
     private static final int INIT_SIZE = 1024;
 
+    private static final int MAX_SIZE = 100 * INIT_SIZE;
+
     private static Kryo kryo = new Kryo();
 
     private static Kryo getKryo(Class<?> clazz) {
@@ -55,7 +57,7 @@ public final class SerializationUtil {
      * @throws UtilException UtilException
      */
     public static <T> byte[] serial(T obj) throws UtilException {
-        Output out = new Output(INIT_SIZE);
+        Output out = new Output(INIT_SIZE, MAX_SIZE);
         try {
             getKryo(obj.getClass()).writeObject(out, obj);
             return out.toBytes();
