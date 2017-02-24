@@ -44,7 +44,9 @@ public interface EventLinsener extends MessageSubscriber {
      * @param data <br>
      */
     default void onMessage(String channel, byte[] data) {
-        onEmmit(channel, SerializationUtil.unserial(EventData.class, data));
+        EventData eventData = SerializationUtil.unserial(EventData.class, data);
+        LoggerUtil.info("触发[event={0},data={1}]事件", channel, eventData);
+        onEmmit(channel, eventData);
     }
 
     /**
