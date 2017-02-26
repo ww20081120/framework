@@ -26,7 +26,7 @@
 		<jsch.version>0.1.53</jsch.version>
 		<jasypt.version>1.9.2</jasypt.version>
 		<cglib.version>3.2.1</cglib.version>
-		<kryo.version>2.24.0</kryo.version>
+		<protostuff.version>1.5.3</protostuff.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -125,9 +125,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.esotericsoftware.kryo</groupId>
-			<artifactId>kryo</artifactId>
-			<version>${kryo.version}</version>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>${protostuff.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>${protostuff.version}</version>
 		</dependency>
 
 		<!-- web begin Spring MVC Test Framework 需要 servlet-api 3.0 以上 -->
