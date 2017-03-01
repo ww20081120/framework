@@ -1,0 +1,2 @@
+com.framework.message.redis.ClusterRedisMessageQueue
+com.framework.message.redis.RedisMessageQueue

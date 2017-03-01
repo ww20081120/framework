@@ -1,0 +1,2 @@
+com.framework.message.redis.ClusterRedisMessageSubcriberFactory
+com.framework.message.redis.RedisMessageSubcriberFactory

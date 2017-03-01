@@ -1,6 +1,5 @@
 package com.hbasesoft.framework.common.utils.io;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.CodingErrorAction;
@@ -58,9 +57,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
@@ -441,11 +438,11 @@ public class HttpUtil {
      * @param paramMap
      * @return
      */
-    public static String doGetDowloadFile(String absolutePath, String url) {
+    public static void doGetDowloadFile(String absolutePath, String url) {
         logger.debug(">>> doGetDowloadFile[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "image/jpeg");
-        return doHttpRequest(httpGet, null, new DownFileResponseHandler(absolutePath));
+        doHttpRequest(httpGet, null, new DownFileResponseHandler(absolutePath));
     }
 
     /**
@@ -465,37 +462,24 @@ public class HttpUtil {
         }
 
         public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-            String str = null;
             HttpEntity httpEntity = response.getEntity();
             if (httpEntity != null) {
                 InputStream inputStream = httpEntity.getContent();
                 if (inputStream != null) {
-                    if (CommonUtil.isEmpty(absolutePath)) {
-                        absolutePath = PropertyHolder.getProperty("file.upload.path", "upload/files");
-                    }
-
-                    String path = DateUtil.getCurrentTimestamp();
-
-                    File dir = new File(absolutePath, path);
-                    if (!dir.exists()) {
-                        dir.mkdirs();
-                    }
                     Header[] headers = response.getHeaders("Content-Disposition");
                     String filename = headers[0].getValue().split("\"")[1];
                     String type = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
                     filename = "/" + System.currentTimeMillis() + "." + type;
                     try {
-                        IOUtil.copyFileFromInputStream(dir.getAbsolutePath() + filename, inputStream, type);
+                        IOUtil.copyFileFromInputStream(absolutePath, inputStream, type);
                     }
                     catch (UtilException e) {
                         throw new IOException(e);
                     }
-                    return path + filename;
-
                 }
 
             }
-            return str;
+            return "SUCCESS";
 
         }
     }

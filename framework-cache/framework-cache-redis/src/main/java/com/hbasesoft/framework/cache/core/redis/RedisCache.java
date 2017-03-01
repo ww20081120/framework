@@ -65,7 +65,9 @@ public class RedisCache extends AbstractRedisCache {
             throw new RuntimeException("serial map failed!", e);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -106,10 +108,12 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            return jedis.get(key.toString().getBytes());
+            return jedis.get(key);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -127,10 +131,12 @@ public class RedisCache extends AbstractRedisCache {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
-                jedis.set(key.toString().getBytes(), value);
+                jedis.set(key, value);
             }
             finally {
-                jedisPool.returnResourceObject(jedis);
+                if (jedis != null) {
+                    jedis.close();
+                }
             }
         }
     }
@@ -150,7 +156,9 @@ public class RedisCache extends AbstractRedisCache {
             jedis.del(key);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -170,7 +178,9 @@ public class RedisCache extends AbstractRedisCache {
             return jedis.hgetAll(node);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -191,7 +201,9 @@ public class RedisCache extends AbstractRedisCache {
                 jedis.hmset(key, dataMap);
             }
             finally {
-                jedisPool.returnResourceObject(jedis);
+                if (jedis != null) {
+                    jedis.close();
+                }
             }
         }
 
@@ -213,7 +225,9 @@ public class RedisCache extends AbstractRedisCache {
             jedis.del(nodeName);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -234,7 +248,9 @@ public class RedisCache extends AbstractRedisCache {
             return jedis.hget(nodeName, key);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -248,15 +264,20 @@ public class RedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
         if (t != null) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
                 jedis.hset(nodeName, key, t);
+                if (seconds > 0) {
+                    jedis.expire(new String(nodeName), seconds);
+                }
             }
             finally {
-                jedisPool.returnResourceObject(jedis);
+                if (jedis != null) {
+                    jedis.close();
+                }
             }
         }
     }
@@ -277,7 +298,9 @@ public class RedisCache extends AbstractRedisCache {
             jedis.hdel(nodeName, key);
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
     }
 
@@ -302,7 +325,9 @@ public class RedisCache extends AbstractRedisCache {
             }
         }
         finally {
-            jedisPool.returnResourceObject(jedis);
+            if (jedis != null) {
+                jedis.close();
+            }
         }
         return false;
     }

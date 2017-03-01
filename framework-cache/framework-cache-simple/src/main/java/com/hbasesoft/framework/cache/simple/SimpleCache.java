@@ -94,7 +94,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void put(byte[] key, byte[] value) {
-        put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), key, value);
+        put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), 0, key, value);
     }
 
     /**
@@ -173,7 +173,7 @@ public class SimpleCache extends AbstractCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
         Map<byte[], byte[]> defaultCache = this.cachesMap.get(nodeName);
         if (defaultCache == null) {
             defaultCache = new HashMap<byte[], byte[]>();
@@ -192,7 +192,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void evict(byte[] nodeName, byte[] key) {
-        put(nodeName, key, null);
+        put(nodeName, 0, key, null);
     }
 
 }

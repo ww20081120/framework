@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
-import com.hbasesoft.framework.cache.core.util.SerializationUtil;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -209,7 +209,7 @@ public abstract class AbstractCache implements ICache {
      */
     @Override
     public <T> void put(String nodeName, String key, T t) {
-        put(nodeName.getBytes(), key.getBytes(), getData(t));
+        put(nodeName.getBytes(), 0, key.getBytes(), getData(t));
     }
 
     /**
@@ -224,10 +224,10 @@ public abstract class AbstractCache implements ICache {
      */
     @Override
     public <T> void put(String nodeName, int seconds, String key, T t) {
-        put(nodeName.getBytes(), key.getBytes(), getData(seconds, t));
+        put(nodeName.getBytes(), seconds * 10, key.getBytes(), getData(seconds, t));
     }
 
-    protected abstract void put(byte[] nodeName, byte[] key, byte[] t);
+    protected abstract void put(byte[] nodeName, int seconds, byte[] key, byte[] t);
 
     /**
      * Description: <br>
@@ -243,7 +243,7 @@ public abstract class AbstractCache implements ICache {
     }
 
     protected abstract void evict(byte[] nodeName, byte[] key);
-    
+
     /**
      * Description: <br>
      * 

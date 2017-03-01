@@ -4,29 +4,14 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-message</artifactId>
-		<version>2.2</version>
+		<version>2.3</version>
 	</parent>
 	<artifactId>framework-message-core</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-db-sh</artifactId>
+			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-message-api</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka-clients</artifactId>
-			<version>0.10.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.11</artifactId>
-			<version>0.10.1.1</version>
 		</dependency>
 	</dependencies>
 </project>

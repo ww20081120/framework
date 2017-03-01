@@ -9,11 +9,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.hbasesoft.framework.cache.core.redis.clients.jedis.BinaryJedisCluster;
-import com.hbasesoft.framework.cache.core.redis.clients.jedis.HostAndPort;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
+
+import redis.clients.jedis.BinaryJedisCluster;
+import redis.clients.jedis.HostAndPort;
 
 /**
  * <Description> <br>
@@ -44,8 +45,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
                 readSet.add(hostAndPort);
             }
             cluster = new BinaryJedisCluster(readSet,
-                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                PropertyHolder.getIntProperty("cache.redis.cluster.max.redirections", 10));
+                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000));
         }
     }
 
@@ -95,7 +95,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected byte[] get(byte[] key) {
-        return cluster.getBytes(new String(key));
+        return cluster.get(key);
     }
 
     /**
@@ -108,7 +108,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected void put(byte[] key, byte[] value) {
-        cluster.set(new String(key), value);
+        cluster.set(key, value);
     }
 
     /**
@@ -120,7 +120,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected void evict(byte[] key) {
-        cluster.del(new String(key));
+        cluster.del(key);
     }
 
     /**
@@ -133,7 +133,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected Map<byte[], byte[]> getNode(byte[] node) {
-        return cluster.hgetAllBytes(new String(node));
+        return cluster.hgetAll(node);
     }
 
     /**
@@ -147,7 +147,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
     @Override
     protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
         if (CommonUtil.isNotEmpty(dataMap)) {
-            cluster.hmsetBytes(new String(key), dataMap);
+            cluster.hmset(key, dataMap);
         }
     }
 
@@ -161,7 +161,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected void removeNode(byte[] nodeName) {
-        cluster.del(new String(nodeName));
+        cluster.del(nodeName);
     }
 
     /**
@@ -175,7 +175,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected byte[] get(byte[] nodeName, byte[] key) {
-        return cluster.hgetBytes(new String(nodeName), new String(key));
+        return cluster.hget(nodeName, key);
     }
 
     /**
@@ -188,9 +188,12 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, byte[] key, byte[] t) {
+    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
         if (t != null) {
-            cluster.hset(new String(nodeName), new String(key), t);
+            cluster.hset(nodeName, key, t);
+            if (seconds > 0) {
+                cluster.expire(nodeName, seconds);
+            }
         }
     }
 
@@ -204,7 +207,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     protected void evict(byte[] nodeName, byte[] key) {
-        cluster.hdel(new String(nodeName), new String(key));
+        cluster.hdel(nodeName, key);
     }
 
     /**
@@ -219,8 +222,8 @@ public class ClusterRedisCache extends AbstractRedisCache {
      */
     @Override
     public boolean setnx(String key, String value, int expireTime) {
-        if (cluster.setnx(key, value) - 1 == 0) {
-            cluster.expire(key, expireTime);
+        if (cluster.setnx(key.getBytes(), value.getBytes()) - 1 == 0) {
+            cluster.expire(key.getBytes(), expireTime);
             return true;
         }
         return false;
