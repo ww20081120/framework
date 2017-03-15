@@ -22,13 +22,6 @@ public class ServiceException extends FrameworkException {
     private static final long serialVersionUID = -8671861646248499738L;
 
     /**
-     * @param exception
-     */
-    public ServiceException(FrameworkException exception) {
-        super(exception);
-    }
-
-    /**
      * @param code
      * @param params
      */

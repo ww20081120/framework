@@ -23,13 +23,6 @@ public class DaoException extends FrameworkException {
     private static final long serialVersionUID = 8246373948586046129L;
 
     /**
-     * @param exception
-     */
-    public DaoException(FrameworkException exception) {
-        super(exception);
-    }
-
-    /**
      * @param code
      * @param params
      */

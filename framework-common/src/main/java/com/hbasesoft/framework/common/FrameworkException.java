@@ -49,19 +49,15 @@ public class FrameworkException extends RuntimeException {
         this.code = code;
     }
 
-    /**
-     * FrameworkException
-     * 
-     * @param exception <br>
-     */
-    public FrameworkException(FrameworkException exception) {
-        super(exception);
-        this.code = exception.getCode();
-    }
-
     public FrameworkException(Throwable t) {
         super(t);
-        this.code = ErrorCodeDef.SYSTEM_ERROR_10001;
+        if (t instanceof FrameworkException) {
+            this.code = ((FrameworkException) t).getCode();
+        }
+        else {
+            this.code = ErrorCodeDef.SYSTEM_ERROR_10001;
+        }
+
     }
 
     /**

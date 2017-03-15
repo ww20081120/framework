@@ -21,13 +21,6 @@ public class InitializationException extends FrameworkException {
     private static final long serialVersionUID = 3036926828687373135L;
 
     /**
-     * @param exception
-     */
-    public InitializationException(FrameworkException exception) {
-        super(exception);
-    }
-
-    /**
      * @param code
      * @param params
      */

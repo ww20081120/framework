@@ -23,13 +23,6 @@ public class RemoteServiceException extends FrameworkException {
     private static final long serialVersionUID = -6513454148109803923L;
 
     /**
-     * @param exception
-     */
-    public RemoteServiceException(FrameworkException exception) {
-        super(exception.getCode());
-    }
-
-    /**
      * @param code
      * @param params
      */

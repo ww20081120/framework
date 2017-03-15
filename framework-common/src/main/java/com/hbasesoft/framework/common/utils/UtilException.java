@@ -23,13 +23,6 @@ public class UtilException extends FrameworkException {
     private static final long serialVersionUID = -606867736687228572L;
 
     /**
-     * @param exception
-     */
-    public UtilException(FrameworkException exception) {
-        super(exception);
-    }
-
-    /**
      * @param code
      * @param params
      */

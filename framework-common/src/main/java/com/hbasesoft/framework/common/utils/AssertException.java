@@ -23,13 +23,6 @@ public class AssertException extends FrameworkException {
     private static final long serialVersionUID = 660380252623842610L;
 
     /**
-     * @param exception
-     */
-    public AssertException(FrameworkException exception) {
-        super(exception);
-    }
-
-    /**
      * @param code
      * @param params
      */
