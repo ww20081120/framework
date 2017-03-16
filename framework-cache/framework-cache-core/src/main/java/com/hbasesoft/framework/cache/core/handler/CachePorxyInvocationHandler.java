@@ -57,7 +57,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object result = null;
         CacheMethodConfig config = cacheMethodConfigMap.get(method.getName());
-        if (config == null || config.cacheAble()
+        if (config == null || !config.cacheAble()
             || Void.class.equals(method.getAnnotatedReturnType().getType().getTypeName())) {
             result = method.invoke(target, args);
         }
