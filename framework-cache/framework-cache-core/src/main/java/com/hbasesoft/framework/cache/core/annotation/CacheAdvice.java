@@ -72,11 +72,13 @@ public class CacheAdvice {
             }
             else {
                 result = thisJoinPoint.proceed();
-                RmCache rmCache = AnnotationUtils.findAnnotation(currentMethod, RmCache.class);
-                if (rmCache != null) {
-                    rmCache(rmCache, currentMethod, thisJoinPoint.getArgs());
-                }
             }
+
+            RmCache rmCache = AnnotationUtils.findAnnotation(currentMethod, RmCache.class);
+            if (rmCache != null) {
+                rmCache(rmCache, currentMethod, thisJoinPoint.getArgs());
+            }
+
             return result;
 
         }
