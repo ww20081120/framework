@@ -8,6 +8,7 @@ package com.hbasesoft.framework.common.utils.date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -178,7 +179,53 @@ public final class DateUtil {
     public static long daysBetween(Date startDate) {
         return daysBetween(startDate, getCurrentDate());
     }
-
+    
+    /**
+     * 
+     * Description: 获取月份最后一天<br> 
+     *  
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param YrMonth
+     * @return <br>
+     */
+    public static Date getYrMonthLastDay(String YrMonth) {
+    	String date = YrMonth + "01";
+    	Date start = string2Date(date);
+    	Calendar cal=Calendar.getInstance();
+    	cal.setTime(start);
+    	cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 1);
+    	cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1);
+    	return cal.getTime();
+    }
+    
+    /**
+     * 
+     * Description: 返回beginYrMonth月末到endYrMonth月末的时间<br> 
+     *  
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param beginYrMonth
+     * @param endYrMonth
+     * @return <br>
+     */
+    public static long daysBetweenMonths(String beginYrMonth, String endYrMonth) {
+    	return daysBetween(getYrMonthLastDay(beginYrMonth), getYrMonthLastDay(endYrMonth));
+    }
+    
+    /**
+     * 
+     * Description: 返回Yrmonth月末到今天的时间<br> 
+     *  
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param YrMonth
+     * @return <br>
+     */
+    public static long daysUntilNow(String YrMonth) {
+    	return daysBetween(getYrMonthLastDay(YrMonth));
+    }
+    
     /**
      * 获取两个日期之间间隔的天数
      * 
@@ -187,6 +234,6 @@ public final class DateUtil {
      * @return 相差天数
      */
     public static long daysBetween(Date startDate, Date endDate) {
-        return (startDate.getTime() - endDate.getTime()) / (1000 * 3600 * 24);
+        return (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
     }
 }
