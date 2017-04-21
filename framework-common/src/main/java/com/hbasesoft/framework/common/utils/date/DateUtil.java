@@ -201,7 +201,24 @@ public final class DateUtil {
     
     /**
      * 
-     * Description: 返回beginYrMonth月末到endYrMonth月末的时间<br> 
+     * Description: 获取月份第一天<br> 
+     *  
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param YrMonth
+     * @return <br>
+     */
+    public static Date getYrMonthFirstDay(String YrMonth) {
+    	String date = YrMonth + "01";
+    	Date start = string2Date(date);
+    	Calendar cal=Calendar.getInstance();
+    	cal.setTime(start);
+    	return cal.getTime();
+    }
+    
+    /**
+     * 
+     * Description: 返回beginYrMonth月初到endYrMonth月末的时间<br> 
      *  
      * @author liuxianan<br>
      * @taskId <br>
@@ -210,7 +227,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static long daysBetweenMonths(String beginYrMonth, String endYrMonth) {
-    	return daysBetween(getYrMonthLastDay(beginYrMonth), getYrMonthLastDay(endYrMonth));
+    	return daysBetween(getYrMonthFirstDay(beginYrMonth), getYrMonthLastDay(endYrMonth));
     }
     
     /**
