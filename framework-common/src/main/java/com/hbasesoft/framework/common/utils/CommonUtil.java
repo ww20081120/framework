@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -398,4 +400,25 @@ public final class CommonUtil {
         }
         return "";
     }
+    
+    public static String replaceAllBlank(String str) {
+        String dest = "";
+        if (isNotEmpty(str)) {
+            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+            Matcher m = p.matcher(str);
+            dest = m.replaceAll("");
+        }
+        return dest;
+    }
+    
+    public static String replaceBlank(String str) {
+        String dest = "";
+        if (isNotEmpty(str)) {
+            Pattern p = Pattern.compile("\\s{1,*}|\t|\r|\n");
+            Matcher m = p.matcher(str);
+            dest = m.replaceAll("");
+        }
+        return dest;
+    }
+    
 }
