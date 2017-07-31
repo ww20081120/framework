@@ -162,14 +162,14 @@ public class HttpUtil {
     }
 
     public static String doGet(String url, String charset) {
-        logger.debug(">>> doGet[url = {0}]", url);
+        logger.info(">>> doGet[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "text/html");
         return doHttpRequest(httpGet, null, new DefaultStringResponseHandler(charset));
     }
 
     public static String doGet(CloseableHttpClient httpClient, String url, String charset) {
-        logger.debug(">>> doGet[url = {0}]", url);
+        logger.info(">>> doGet[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "text/html");
         return doHttpRequest(httpClient, httpGet, null, new DefaultStringResponseHandler(charset));
@@ -185,7 +185,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(String url, Map<String, String> paramMap) {
-        logger.debug(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
+        logger.info(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
         HttpPost httpPost = createHttpPost(url, paramMap);
         return doHttpRequest(httpPost, null, new DefaultStringResponseHandler());
     }
@@ -200,7 +200,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(CloseableHttpClient httpClient, String url, Map<String, String> paramMap) {
-        logger.debug(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
+        logger.info(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
         HttpPost httpPost = createHttpPost(url, paramMap);
         return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
     }
@@ -215,7 +215,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(String url, String body, String contentType) {
-        logger.debug(">>> doPost[url = {0}, body = {1}]", url, body);
+        logger.info(">>> doPost[url = {0}, body = {1}]", url, body);
         HttpPost httpPost = createHttpPost(url, body);
         if (contentType == null) {
             httpPost.setHeader("Content-type", "text/plain");
@@ -236,7 +236,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(CloseableHttpClient httpClient, String url, String body, String contentType) {
-        logger.debug(">>> doPost[url = {0}, body = {1}]", url, body);
+        logger.info(">>> doPost[url = {0}, body = {1}]", url, body);
         HttpPost httpPost = createHttpPost(url, body);
         if (contentType == null) {
             httpPost.setHeader("Content-type", "text/plain");
@@ -439,7 +439,7 @@ public class HttpUtil {
      * @return
      */
     public static void doGetDowloadFile(String absolutePath, String url) {
-        logger.debug(">>> doGetDowloadFile[url = {0}]", url);
+        logger.info(">>> doGetDowloadFile[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "image/jpeg");
         doHttpRequest(httpGet, null, new DownFileResponseHandler(absolutePath));
