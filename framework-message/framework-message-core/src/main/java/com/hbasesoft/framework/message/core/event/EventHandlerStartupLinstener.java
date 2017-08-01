@@ -91,31 +91,33 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
             lisenerExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    while (flag) {
-                        try {
-                            for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
-                                String event = entry.getKey();
-                                byte[] data = queue.pop(3, event);
-                                if (data != null) {
-                                    LoggerUtil.info("receive message by thread[{0}]", Thread.currentThread().getId());
+                    try {
+                        while (flag) {
+                            if (CommonUtil.isNotEmpty(eventLinsenerHolder)) {
+                                for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
+                                    String event = entry.getKey();
                                     try {
-                                        arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
+                                        byte[] data = queue.pop(3, event);
+                                        if (data != null) {
+                                            LoggerUtil.info("receive message by thread[{0}]",
+                                                Thread.currentThread().getId());
+                                            arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
+                                        }
                                     }
                                     catch (Exception e) {
                                         LoggerUtil.error(e);
+                                        Thread.sleep(1000);
+
                                     }
                                 }
                             }
-                        }
-                        catch (Exception e) {
-                            LoggerUtil.error(e);
-                            try {
+                            else {
                                 Thread.sleep(1000);
                             }
-                            catch (InterruptedException e1) {
-                                LoggerUtil.error(e1);
-                            }
                         }
+                    }
+                    catch (InterruptedException e) {
+                        LoggerUtil.error(e);
                     }
                 }
             });
