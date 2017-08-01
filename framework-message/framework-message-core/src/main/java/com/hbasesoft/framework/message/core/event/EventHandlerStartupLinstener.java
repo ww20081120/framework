@@ -97,6 +97,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                                 String event = entry.getKey();
                                 byte[] data = queue.pop(3, event);
                                 if (data != null) {
+                                    LoggerUtil.info("receive message by thread[{0}]", Thread.currentThread().getId());
                                     try {
                                         arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
                                     }
