@@ -8,6 +8,7 @@ package com.hbasesoft.framework.message.core.event;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +37,10 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     private ThreadPoolExecutor executor;
 
     private ArrayBlockingQueue<EventConsummer> arrayBlockingQueue;
+
+    private Map<String, EventLinsener> eventLinsenerHolder;
+
+    private ThreadPoolExecutor lisenerExecutor;
 
     private boolean flag = true;
 
@@ -76,6 +81,44 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                 }
             });
         }
+
+        eventLinsenerHolder = new ConcurrentHashMap<String, EventLinsener>();
+        lisenerExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(threadSize));
+
+        MessageQueue queue = MessageHelper.createMessageQueue();
+        for (int i = 0; i < threadSize; i++) {
+            lisenerExecutor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    while (flag) {
+                        try {
+                            for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
+                                String event = entry.getKey();
+                                byte[] data = queue.pop(3, event);
+                                if (data != null) {
+                                    try {
+                                        arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
+                                    }
+                                    catch (Exception e) {
+                                        LoggerUtil.error(e);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e) {
+                            LoggerUtil.error(e);
+                            try {
+                                Thread.sleep(1000);
+                            }
+                            catch (InterruptedException e1) {
+                                LoggerUtil.error(e1);
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -112,23 +155,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     }
 
     private void addConsummer(String channel, EventLinsener linsener) {
-        new Thread(new Runnable() {
-            public void run() {
-                LoggerUtil.info("start regist event[{0}] linsener", channel);
-                MessageQueue queue = MessageHelper.createMessageQueue();
-                while (flag) {
-                    byte[] data = queue.pop(3, channel);
-                    if (data != null) {
-                        try {
-                            arrayBlockingQueue.put(new EventConsummer(linsener, data, channel));
-                        }
-                        catch (Exception e) {
-                            LoggerUtil.error(e);
-                        }
-                    }
-                }
-            }
-        }).start();
+        eventLinsenerHolder.put(channel, linsener);
     }
 
     /**
