@@ -92,28 +92,23 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                 @Override
                 public void run() {
                     while (flag) {
-                        try {
-                            for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
-                                String event = entry.getKey();
+                        for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
+                            String event = entry.getKey();
+                            try {
                                 byte[] data = queue.pop(3, event);
                                 if (data != null) {
                                     LoggerUtil.info("receive message by thread[{0}]", Thread.currentThread().getId());
-                                    try {
-                                        arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
-                                    }
-                                    catch (Exception e) {
-                                        LoggerUtil.error(e);
-                                    }
+                                    arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
                                 }
                             }
-                        }
-                        catch (Exception e) {
-                            LoggerUtil.error(e);
-                            try {
-                                Thread.sleep(1000);
-                            }
-                            catch (InterruptedException e1) {
-                                LoggerUtil.error(e1);
+                            catch (Exception e) {
+                                LoggerUtil.error(e);
+                                try {
+                                    Thread.sleep(1000);
+                                }
+                                catch (InterruptedException e1) {
+                                    LoggerUtil.error(e1);
+                                }
                             }
                         }
                     }
