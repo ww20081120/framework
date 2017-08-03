@@ -42,8 +42,10 @@ public final class RedisClientFactory {
     public static final String CLUSTER_MESSAGE_MODEL = "REDIS_CLUSTER";
 
     private static final String REDIS_ADDRESS = "message.redis.address";
+    
+    private static final int MAX_TOTLE = 30;
 
-    private static final int MAX_IDLE = 5;
+    private static final int MAX_IDLE = 20;
 
     private static final int MAX_WAIT = 100;
 
@@ -96,12 +98,19 @@ public final class RedisClientFactory {
 
     private static JedisPoolConfig getConfig() {
         JedisPoolConfig config = new JedisPoolConfig();
+        
+        //最大连接数, 默认30个
+        config.setMaxTotal(PropertyHolder.getIntProperty("message.redis.max.total", MAX_TOTLE));
+        
         // 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
         config.setMaxIdle(PropertyHolder.getIntProperty("message.redis.max.idle", MAX_IDLE));
+        
         // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
         config.setMaxWaitMillis(1000 * PropertyHolder.getIntProperty("message.redis.max.wait", MAX_WAIT));
+        
         // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
         config.setTestOnBorrow(PropertyHolder.getBooleanProperty("message.redis.testonborrow", VALIDATE));
+        
         return config;
     }
 
