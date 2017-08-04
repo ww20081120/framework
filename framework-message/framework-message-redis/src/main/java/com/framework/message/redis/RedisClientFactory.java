@@ -43,7 +43,7 @@ public final class RedisClientFactory {
 
     private static final String REDIS_ADDRESS = "message.redis.address";
     
-    private static final int MAX_TOTLE = 30;
+    private static final int MAX_TOTLE = 1000;
 
     private static final int MAX_IDLE = 20;
 
@@ -83,8 +83,13 @@ public final class RedisClientFactory {
                     HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
                     readSet.add(hostAndPort);
                 }
+//                cluster = new BinaryJedisCluster(readSet,
+//                    PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
+                
                 cluster = new BinaryJedisCluster(readSet,
-                    PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
+                        PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000),
+                        5,
+                        getConfig());
             }
         }
         return cluster;
