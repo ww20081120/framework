@@ -6,9 +6,9 @@
 package com.framework.message.kafka;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -33,7 +33,7 @@ public final class KafkaClientFacotry {
 
     private static KafkaProducer<String, byte[]> kafkaProducer;
 
-    private static Map<String, KafkaConsumer<String, byte[]>> consumerConnectorHolder = new ConcurrentHashMap<String, KafkaConsumer<String, byte[]>>();;
+    private static ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>> threadLocalHolder = new ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>>();
 
     private KafkaClientFacotry() {
     }
@@ -57,16 +57,15 @@ public final class KafkaClientFacotry {
     }
 
     public static KafkaConsumer<String, byte[]> getKafkaConsumer(String group, String topic) {
-        synchronized (lock) {
-            KafkaConsumer<String, byte[]> consumer = consumerConnectorHolder.get(group);
-            if (consumer == null) {
-                consumer = newKafkaConsumer(group);
-                // 订阅主题列表topic
-                consumer.subscribe(Arrays.asList(topic));
-                consumerConnectorHolder.put(group, consumer);
-            }
-            return consumer;
+        Map<String, KafkaConsumer<String, byte[]>> consumerConnectorHolder = getConsumerConnectorHolder();
+        KafkaConsumer<String, byte[]> consumer = consumerConnectorHolder.get(group);
+        if (consumer == null) {
+            consumer = newKafkaConsumer(group);
+            // 订阅主题列表topic
+            consumer.subscribe(Arrays.asList(topic));
+            consumerConnectorHolder.put(group, consumer);
         }
+        return consumer;
     }
 
     private static KafkaConsumer<String, byte[]> newKafkaConsumer(String group) {
@@ -90,6 +89,15 @@ public final class KafkaClientFacotry {
         props.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
 
         return new KafkaConsumer<String, byte[]>(props);
+    }
+
+    private static Map<String, KafkaConsumer<String, byte[]>> getConsumerConnectorHolder() {
+        Map<String, KafkaConsumer<String, byte[]>> consumerConnectorHolder = threadLocalHolder.get();
+        if (consumerConnectorHolder == null) {
+            consumerConnectorHolder = new HashMap<String, KafkaConsumer<String, byte[]>>();
+            threadLocalHolder.set(consumerConnectorHolder);
+        }
+        return consumerConnectorHolder;
     }
 
 }
