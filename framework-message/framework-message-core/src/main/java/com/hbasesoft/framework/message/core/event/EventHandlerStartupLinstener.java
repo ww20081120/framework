@@ -12,6 +12,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.context.ApplicationContext;
 
@@ -44,6 +45,8 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     private ThreadPoolExecutor lisenerExecutor;
 
     private boolean flag = true;
+
+    private AtomicInteger incrementIndex;
 
     public EventHandlerStartupLinstener() {
         int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 20); // 核心线程数
@@ -88,6 +91,9 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
             new ArrayBlockingQueue<Runnable>(threadSize));
 
         MessageQueue queue = MessageHelper.createMessageQueue();
+
+        incrementIndex = new AtomicInteger(0);
+
         for (int i = 0; i < threadSize; i++) {
             lisenerExecutor.execute(new Runnable() {
                 @Override
@@ -116,7 +122,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                                 }
                             }
                             else {
-                                Thread.sleep(1000);
+                                Thread.sleep(1000 * incrementIndex.incrementAndGet());
                             }
                         }
                     }

@@ -13,6 +13,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageQueue;
 
 /**
@@ -64,15 +65,20 @@ public class KafkaMessageQueue implements MessageQueue {
      */
     @Override
     public List<byte[]> pop(int timeout, String key) {
-        KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry.getKafkaConsumer(key, key);
+        try {
+            KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry.getKafkaConsumer(key, key);
 
-        ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(timeout * 1000L);
-        if (records != null) {
-            List<byte[]> datas = new ArrayList<byte[]>();
-            for (ConsumerRecord<String, byte[]> record : records) {
-                datas.add(record.value());
+            ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(timeout * 1000L);
+            if (records != null) {
+                List<byte[]> datas = new ArrayList<byte[]>();
+                for (ConsumerRecord<String, byte[]> record : records) {
+                    datas.add(record.value());
+                }
+                return datas;
             }
-            return datas;
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e);
         }
         return null;
     }
