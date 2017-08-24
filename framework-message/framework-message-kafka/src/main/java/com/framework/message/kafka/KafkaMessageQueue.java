@@ -3,9 +3,15 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.framework.message.redis;
+package com.framework.message.kafka;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 import com.hbasesoft.framework.message.core.MessageQueue;
 
@@ -15,11 +21,11 @@ import com.hbasesoft.framework.message.core.MessageQueue;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年2月19日 <br>
+ * @CreateDate 2017年8月24日 <br>
  * @since V1.0<br>
- * @see com.framework.message.redis <br>
+ * @see com.framework.message.kafka <br>
  */
-public class ClusterRedisMessageQueue implements MessageQueue {
+public class KafkaMessageQueue implements MessageQueue {
 
     /**
      * Description: <br>
@@ -30,7 +36,7 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      */
     @Override
     public String getName() {
-        return RedisClientFactory.CLUSTER_MESSAGE_MODEL;
+        return KafkaClientFacotry.KAFKA_NAME;
     }
 
     /**
@@ -43,21 +49,8 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      */
     @Override
     public void push(String key, byte[] value) {
-        RedisClientFactory.getBinaryJedisCluster().lpush(key.getBytes(), value);
-    }
-
-    /**
-     * Description: <br>
-     * 081120
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param key
-     * @return <br>
-     */
-    @Override
-    public List<byte[]> popList(String key) {
-        return RedisClientFactory.getBinaryJedisCluster().lrange(key.getBytes(), 0, -1);
+        ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(key, value);
+        KafkaClientFacotry.getProducer().send(record);
     }
 
     /**
@@ -71,6 +64,30 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      */
     @Override
     public List<byte[]> pop(int timeout, String key) {
-        return RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
+        KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry.getKafkaConsumer(key, key);
+
+        ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(timeout * 1000L);
+        if (records != null) {
+            List<byte[]> datas = new ArrayList<byte[]>();
+            for (ConsumerRecord<String, byte[]> record : records) {
+                datas.add(record.value());
+            }
+            return datas;
+        }
+        return null;
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
+    @Override
+    public List<byte[]> popList(String key) {
+        return pop(1, key);
+    }
+
 }

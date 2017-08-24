@@ -40,7 +40,7 @@ public interface MessageQueue {
      * @param key
      * @return <br>
      */
-    byte[] pop(int timeout, String key);
+    List<byte[]> pop(int timeout, String key);
 
     /**
      * Description: 获取队列数据<br>

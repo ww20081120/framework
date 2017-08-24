@@ -42,7 +42,7 @@ public final class RedisClientFactory {
     public static final String CLUSTER_MESSAGE_MODEL = "REDIS_CLUSTER";
 
     private static final String REDIS_ADDRESS = "message.redis.address";
-    
+
     private static final int MAX_TOTLE = 1000;
 
     private static final int MAX_IDLE = 20;
@@ -55,44 +55,48 @@ public final class RedisClientFactory {
 
     private static BinaryJedisCluster cluster;
 
+    private static Object lock = new Object();
+
     private RedisClientFactory() {
     }
 
     public static JedisPool getJedisPool() {
-        if (jedisPool == null) {
-            String cacheModel = PropertyHolder.getProperty("message.model");
-            if (MESSAGE_MODEL.equals(cacheModel)) {
-                Address[] addresses = getAddresses();
-                List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
-                for (Address addr : addresses) {
-                    shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
+        synchronized (lock) {
+            if (jedisPool == null) {
+                String cacheModel = PropertyHolder.getProperty("message.model");
+                if (MESSAGE_MODEL.equals(cacheModel)) {
+                    Address[] addresses = getAddresses();
+                    List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
+                    for (Address addr : addresses) {
+                        shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
+                    }
+                    jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
                 }
-                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
             }
+            return jedisPool;
         }
-        return jedisPool;
     }
 
     public static BinaryJedisCluster getBinaryJedisCluster() {
-        if (cluster == null) {
-            String cacheModel = PropertyHolder.getProperty("cache.model");
-            if (CLUSTER_MESSAGE_MODEL.equals(cacheModel)) {
-                Address[] addresses = getAddresses();
-                Set<HostAndPort> readSet = new HashSet<HostAndPort>();
-                for (Address addr : addresses) {
-                    HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
-                    readSet.add(hostAndPort);
+        synchronized (lock) {
+            if (cluster == null) {
+                String cacheModel = PropertyHolder.getProperty("cache.model");
+                if (CLUSTER_MESSAGE_MODEL.equals(cacheModel)) {
+                    Address[] addresses = getAddresses();
+                    Set<HostAndPort> readSet = new HashSet<HostAndPort>();
+                    for (Address addr : addresses) {
+                        HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
+                        readSet.add(hostAndPort);
+                    }
+                    // cluster = new BinaryJedisCluster(readSet,
+                    // PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
+
+                    cluster = new BinaryJedisCluster(readSet,
+                        PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000), 5, getConfig());
                 }
-//                cluster = new BinaryJedisCluster(readSet,
-//                    PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
-                
-                cluster = new BinaryJedisCluster(readSet,
-                        PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000),
-                        5,
-                        getConfig());
             }
+            return cluster;
         }
-        return cluster;
     }
 
     private static Address[] getAddresses() {
@@ -103,19 +107,19 @@ public final class RedisClientFactory {
 
     private static JedisPoolConfig getConfig() {
         JedisPoolConfig config = new JedisPoolConfig();
-        
-        //最大连接数, 默认30个
+
+        // 最大连接数, 默认30个
         config.setMaxTotal(PropertyHolder.getIntProperty("message.redis.max.total", MAX_TOTLE));
-        
+
         // 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
         config.setMaxIdle(PropertyHolder.getIntProperty("message.redis.max.idle", MAX_IDLE));
-        
+
         // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
         config.setMaxWaitMillis(1000 * PropertyHolder.getIntProperty("message.redis.max.wait", MAX_WAIT));
-        
+
         // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
         config.setTestOnBorrow(PropertyHolder.getBooleanProperty("message.redis.testonborrow", VALIDATE));
-        
+
         return config;
     }
 

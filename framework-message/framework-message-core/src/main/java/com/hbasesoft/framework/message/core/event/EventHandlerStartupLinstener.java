@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -97,11 +98,14 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                                 for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
                                     String event = entry.getKey();
                                     try {
-                                        byte[] data = queue.pop(3, event);
-                                        if (data != null) {
-                                            LoggerUtil.info("receive message by thread[{0}]",
-                                                Thread.currentThread().getId());
-                                            arrayBlockingQueue.put(new EventConsummer(entry.getValue(), data, event));
+                                        List<byte[]> datas = queue.pop(3, event);
+                                        if (CommonUtil.isNotEmpty(datas)) {
+                                            for (byte[] data : datas) {
+                                                LoggerUtil.info("receive message by thread[{0}]",
+                                                    Thread.currentThread().getId());
+                                                arrayBlockingQueue
+                                                    .put(new EventConsummer(entry.getValue(), data, event));
+                                            }
                                         }
                                     }
                                     catch (Exception e) {
