@@ -11,6 +11,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
@@ -56,7 +57,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
             try {
                 subscriber.onSubscribe(channel, index);
                 KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
-                    .getKafkaConsumer(channel + Thread.currentThread().getId(), channel);
+                    .getKafkaConsumer(channel + CommonUtil.getTransactionID(), channel);
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
                         ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(3 * 1000L);
