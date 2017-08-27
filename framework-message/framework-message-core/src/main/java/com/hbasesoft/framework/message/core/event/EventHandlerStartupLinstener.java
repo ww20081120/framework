@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.context.ApplicationContext;
 
@@ -40,13 +38,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
     private ArrayBlockingQueue<EventConsummer> arrayBlockingQueue;
 
-    private Map<String, EventLinsener> eventLinsenerHolder;
-
-    private ThreadPoolExecutor lisenerExecutor;
-
     private boolean flag = true;
-
-    private AtomicInteger incrementIndex;
 
     public EventHandlerStartupLinstener() {
         int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 20); // 核心线程数
@@ -86,52 +78,6 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
             });
         }
 
-        eventLinsenerHolder = new ConcurrentHashMap<String, EventLinsener>();
-        lisenerExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(threadSize));
-
-        MessageQueue queue = MessageHelper.createMessageQueue();
-
-        incrementIndex = new AtomicInteger(0);
-
-        for (int i = 0; i < threadSize; i++) {
-            lisenerExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (flag) {
-                            if (CommonUtil.isNotEmpty(eventLinsenerHolder)) {
-                                for (Entry<String, EventLinsener> entry : eventLinsenerHolder.entrySet()) {
-                                    String event = entry.getKey();
-                                    try {
-                                        List<byte[]> datas = queue.pop(3, event);
-                                        if (CommonUtil.isNotEmpty(datas)) {
-                                            for (byte[] data : datas) {
-                                                LoggerUtil.info("receive message by thread[{0}]",
-                                                    Thread.currentThread().getId());
-                                                arrayBlockingQueue
-                                                    .put(new EventConsummer(entry.getValue(), data, event));
-                                            }
-                                        }
-                                    }
-                                    catch (Exception e) {
-                                        LoggerUtil.error(e);
-                                        Thread.sleep(1000);
-
-                                    }
-                                }
-                            }
-                            else {
-                                Thread.sleep(1000 * incrementIndex.incrementAndGet());
-                            }
-                        }
-                    }
-                    catch (InterruptedException e) {
-                        LoggerUtil.error(e);
-                    }
-                }
-            });
-        }
     }
 
     /**
@@ -167,8 +113,33 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
         MessageHelper.createMessageSubcriberFactory().registSubscriber(channel, linsener);
     }
 
-    private void addConsummer(String channel, EventLinsener linsener) {
-        eventLinsenerHolder.put(channel, linsener);
+    private void addConsummer(final String channel, final EventLinsener linsener) {
+        int coreReadSize = PropertyHolder.getIntProperty("message.event.coreConsummerSize", 3); // 核心读取线程大小
+        MessageQueue queue = MessageHelper.createMessageQueue();
+        for (int i = 0; i < coreReadSize; i++) {
+            new Thread(() -> {
+                try {
+                    while (flag) {
+                        try {
+                            List<byte[]> datas = queue.pop(3, channel);
+                            if (CommonUtil.isNotEmpty(datas)) {
+                                for (byte[] data : datas) {
+                                    LoggerUtil.info("receive message by thread[{0}]", Thread.currentThread().getId());
+                                    arrayBlockingQueue.put(new EventConsummer(linsener, data, channel));
+                                }
+                            }
+                        }
+                        catch (Exception e) {
+                            LoggerUtil.error(e);
+                            Thread.sleep(1000);
+                        }
+                    }
+                }
+                catch (InterruptedException e) {
+                    LoggerUtil.error(e);
+                }
+            }).start();
+        }
     }
 
     /**

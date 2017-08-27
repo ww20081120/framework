@@ -16,6 +16,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>dubbo</artifactId>
 			<version>${dubbo.version}</version>
