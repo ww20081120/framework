@@ -12,5 +12,6 @@
   <modules>
   	<module>framework-workflow-core</module>
   	<module>framework-workflow-file</module>
+  	<module>framework-workflow-plugin-rule</module>
   </modules>
 </project>

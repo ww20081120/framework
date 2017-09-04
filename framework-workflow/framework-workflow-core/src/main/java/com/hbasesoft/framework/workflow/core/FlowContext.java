@@ -55,7 +55,10 @@ public class FlowContext implements Serializable {
     public FlowConfig getFlowConfig() {
         return this.flowConfig;
     }
-    
+
+    public Map<String, Object> getParamMap() {
+        return this.paramMap;
+    }
 
     @Override
     public String toString() {

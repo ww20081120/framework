@@ -1,0 +1,15 @@
+{
+    "name": "demo", 
+    "version": "1.0",
+    "children": [
+        {
+            "component": "Child01Component", "condition":"flowBean.age <= 12"
+        },
+        {
+            "component": "Child02Component", "condition":"flowBean.age > 12 && flowBean.age <= 18"
+        },
+        {
+            "component": "Child03Component", "condition":"flowBean.age > 18"
+        }
+    ]
+}

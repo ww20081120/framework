@@ -35,7 +35,7 @@ public class Test02Interceptor implements FlowComponentInterceptor {
      */
     @Override
     public boolean before(FlowBean flowBean, FlowContext flowContext) {
-        System.out.println("before 02=====" + flowBean + flowContext);
+        System.out.println(flowContext.getFlowConfig().getName() + "===before 02=====" + flowBean + flowContext);
         return true;
     }
 
@@ -49,7 +49,7 @@ public class Test02Interceptor implements FlowComponentInterceptor {
      */
     @Override
     public void after(FlowBean flowBean, FlowContext flowContext) {
-        System.out.println("after 02=====" + flowBean + flowContext);
+        System.out.println(flowContext.getFlowConfig().getName() + "===after 02=====" + flowBean + flowContext);
     }
 
     /**
@@ -63,7 +63,7 @@ public class Test02Interceptor implements FlowComponentInterceptor {
      */
     @Override
     public void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
-        System.out.println("throw 02=====" + flowBean + flowContext);
+        System.out.println(flowContext.getFlowConfig().getName() + "===throw 02=====" + flowBean + flowContext);
     }
 
 }
