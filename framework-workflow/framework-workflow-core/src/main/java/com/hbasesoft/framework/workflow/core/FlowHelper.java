@@ -17,7 +17,6 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.workflow.core.config.FlowConfig;
 import com.hbasesoft.framework.workflow.core.config.FlowLoader;
@@ -34,16 +33,15 @@ import com.hbasesoft.framework.workflow.core.config.FlowLoader;
  */
 public final class FlowHelper {
 
-    private static Logger logger = new Logger("workflowLogger");
-
     private static ServiceLoader<FlowLoader> serviceLoader;
 
     private static List<FlowComponentInterceptor> interceptors;
 
+    private static List<FlowComponentInterceptor> reverseInterceptors;
+
     public static int flowStart(FlowBean bean, String flowName) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
 
-        long beginTime = System.currentTimeMillis();
         int result = ErrorCodeDef.SUCCESS;
         String transId = bean.getTransId();
         if (CommonUtil.isEmpty(transId)) {
@@ -113,7 +111,7 @@ public final class FlowHelper {
     }
 
     private static boolean before(FlowBean flowBean, FlowContext flowContext) {
-        List<FlowComponentInterceptor> interceptors = loadInterceptor();
+        List<FlowComponentInterceptor> interceptors = loadInterceptor(false);
         if (CommonUtil.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
                 if (!interceptor.before(flowBean, flowContext)) {
@@ -125,7 +123,7 @@ public final class FlowHelper {
     }
 
     private static void after(FlowBean flowBean, FlowContext flowContext) {
-        List<FlowComponentInterceptor> interceptors = loadInterceptor();
+        List<FlowComponentInterceptor> interceptors = loadInterceptor(true);
         if (CommonUtil.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
                 interceptor.after(flowBean, flowContext);
@@ -134,7 +132,7 @@ public final class FlowHelper {
     }
 
     private static void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
-        List<FlowComponentInterceptor> interceptors = loadInterceptor();
+        List<FlowComponentInterceptor> interceptors = loadInterceptor(true);
         if (CommonUtil.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
                 interceptor.error(e, flowBean, flowContext);
@@ -142,7 +140,7 @@ public final class FlowHelper {
         }
     }
 
-    private static List<FlowComponentInterceptor> loadInterceptor() {
+    private static List<FlowComponentInterceptor> loadInterceptor(boolean reverse) {
         if (CommonUtil.isEmpty(interceptors)) {
             Map<String, FlowComponentInterceptor> interceptorMap = ContextHolder.getContext()
                 .getBeansOfType(FlowComponentInterceptor.class);
@@ -155,9 +153,12 @@ public final class FlowHelper {
                 Collections.sort(interceptors, (s1, s2) -> {
                     return s1.order() - s2.order();
                 });
+                reverseInterceptors = new ArrayList<FlowComponentInterceptor>();
+                reverseInterceptors.addAll(interceptors);
+                Collections.reverse(reverseInterceptors);
             }
         }
-        return interceptors;
+        return reverse ? reverseInterceptors : interceptors;
     }
 
 }

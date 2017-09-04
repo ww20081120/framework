@@ -21,10 +21,14 @@ public interface FlowComponentInterceptor {
         return 0;
     }
 
-    boolean before(FlowBean flowBean, FlowContext flowContext);
+    default boolean before(FlowBean flowBean, FlowContext flowContext) {
+        return true;
+    }
 
-    void after(FlowBean flowBean, FlowContext flowContext);
+    default void after(FlowBean flowBean, FlowContext flowContext) {
+    }
 
-    void error(Exception e, FlowBean flowBean, FlowContext flowContext);
+    default void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    }
 
 }
