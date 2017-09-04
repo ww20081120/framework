@@ -8,6 +8,8 @@
             "children": [
             {
                 "component": "Child03Component"
+            }, {
+                "component": "Child04Component"
             }]
         },
         {

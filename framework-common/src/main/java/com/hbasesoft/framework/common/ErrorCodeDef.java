@@ -334,4 +334,9 @@ public interface ErrorCodeDef {
      * 流程组件和子流程都未配置
      */
     int FLOW_COMPONENT_INSTANCE_OR_CHILDREN_NOT_FOUND = 20050;
+
+    /**
+     * 不支持的事务类型
+     */
+    int UNSUPPORT_TRASACTION_TYPE = 20051;
 }
