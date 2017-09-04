@@ -323,4 +323,7 @@ public interface ErrorCodeDef {
 
     /** 未找到消息中间件 */
     int MESSAGE_MIDDLE_NOT_FOUND = 20047;
+
+    /** 流程未匹配 */
+    int FLOW_NOT_MATCH = 20048;
 }

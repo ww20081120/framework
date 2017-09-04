@@ -1,0 +1,19 @@
+{
+    "name": "demo", // name 不存在 取文件名
+    "version": "1.0", // 默认1.0
+    "component": "DemoComponent", // 主要元素 （非必填 component、children 有一个不能为空）
+    "errorStateRule": "A|E,C|E", // 属性，可以任意增加
+    "children": [ // 主要元素 （非必填 component、children 有一个不能为空）
+        {
+            "component": "Child01Component",
+            "children": [
+            {
+                "component": "Child03Component"
+            }]
+        },
+        {
+            "component": "Child02Component",
+            "errorStateRule": "A|E"
+        }
+    ]
+}

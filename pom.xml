@@ -18,6 +18,7 @@
 		<module>framework-cache</module>
 		<module>framework-message</module>
 		<module>framework-log</module>
+		<module>framework-workflow</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
