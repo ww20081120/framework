@@ -7,7 +7,6 @@ package com.hbasesoft.framework.workflow.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,8 +42,6 @@ public final class FlowHelper {
 
     public static int flowStart(FlowBean bean, String flowName) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
-        Assert.notEmpty(bean.getBizType(), ErrorCodeDef.NOT_NULL, "bizType");
-        Assert.notEmpty(bean.getChannel(), ErrorCodeDef.NOT_NULL, "channel");
 
         long beginTime = System.currentTimeMillis();
         int result = ErrorCodeDef.SUCCESS;
@@ -59,7 +56,7 @@ public final class FlowHelper {
         Assert.notNull(config, ErrorCodeDef.FLOW_NOT_MATCH, bean);
 
         try {
-            execute(bean, config, new HashMap<String, Object>());
+            execute(bean, new FlowContext(config));
         }
         catch (Exception e) {
             LoggerUtil.error("flow process error.", e);
@@ -69,29 +66,32 @@ public final class FlowHelper {
         return result;
     }
 
-    private static void execute(FlowBean flowBean, FlowConfig config, Map<String, Object> paramMap) throws Exception {
-        if (before(flowBean, config, paramMap)) {
+    private static void execute(FlowBean flowBean, FlowContext flowContext) throws Exception {
+        FlowConfig flowConfig = flowContext.getFlowConfig();
+        if (before(flowBean, flowContext)) {
             try {
-                FlowComponent component = config.getComponent();
+                FlowComponent component = flowConfig.getComponent();
 
                 boolean flag = true;
                 if (component != null) {
-                    flag = component.process(flowBean, paramMap);
+                    flag = component.process(flowBean, flowContext);
                 }
 
                 if (flag) {
-                    List<FlowConfig> list = config.getChildrenConfigList();
+                    List<FlowConfig> list = flowConfig.getChildrenConfigList();
                     if (CommonUtil.isNotEmpty(list)) {
                         for (FlowConfig childConfig : list) {
-                            execute(flowBean, childConfig, paramMap);
+                            flowContext.setFlowConfig(childConfig);
+                            execute(flowBean, flowContext);
                         }
                     }
                 }
-
-                after(flowBean, config, paramMap);
+                flowContext.setFlowConfig(flowConfig);
+                after(flowBean, flowContext);
             }
             catch (Exception e) {
-                error(e, flowBean, config, paramMap);
+                flowContext.setFlowConfig(flowConfig);
+                error(e, flowBean, flowContext);
                 throw e;
             }
         }
@@ -112,11 +112,11 @@ public final class FlowHelper {
         return flowConfig;
     }
 
-    private static boolean before(FlowBean flowBean, FlowConfig config, Map<String, Object> paramMap) {
+    private static boolean before(FlowBean flowBean, FlowContext flowContext) {
         List<FlowComponentInterceptor> interceptors = loadInterceptor();
         if (CommonUtil.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
-                if (!interceptor.before(flowBean, config, paramMap)) {
+                if (!interceptor.before(flowBean, flowContext)) {
                     return false;
                 }
             }
@@ -124,20 +124,20 @@ public final class FlowHelper {
         return true;
     }
 
-    private static void after(FlowBean flowBean, FlowConfig config, Map<String, Object> paramMap) {
+    private static void after(FlowBean flowBean, FlowContext flowContext) {
         List<FlowComponentInterceptor> interceptors = loadInterceptor();
         if (CommonUtil.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
-                interceptor.after(flowBean, config, paramMap);
+                interceptor.after(flowBean, flowContext);
             }
         }
     }
 
-    private static void error(Exception e, FlowBean flowBean, FlowConfig config, Map<String, Object> paramMap) {
+    private static void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
         List<FlowComponentInterceptor> interceptors = loadInterceptor();
         if (CommonUtil.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
-                interceptor.error(e, flowBean, config, paramMap);
+                interceptor.error(e, flowBean, flowContext);
             }
         }
     }

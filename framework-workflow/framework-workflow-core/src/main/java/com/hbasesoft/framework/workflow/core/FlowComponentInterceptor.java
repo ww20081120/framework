@@ -5,10 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.workflow.core;
 
-import java.util.Map;
-
-import com.hbasesoft.framework.workflow.core.config.FlowConfig;
-
 /**
  * <Description> <br>
  * 
@@ -25,10 +21,10 @@ public interface FlowComponentInterceptor {
         return 0;
     }
 
-    boolean before(FlowBean flowBean, FlowConfig flowConfig, Map<String, Object> paramMap);
+    boolean before(FlowBean flowBean, FlowContext flowContext);
 
-    void after(FlowBean flowBean, FlowConfig flowConfig, Map<String, Object> paramMap);
+    void after(FlowBean flowBean, FlowContext flowContext);
 
-    void error(Exception e, FlowBean flowBean, FlowConfig flowConfig, Map<String, Object> paramMap);
+    void error(Exception e, FlowBean flowBean, FlowContext flowContext);
 
 }

@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.workflow.core;
 
-import java.util.Map;
-
 /**
  * <Description> 流程组件<br>
  * 
@@ -27,5 +25,5 @@ public interface FlowComponent {
      * @param flowBean
      * @throws Exception <br>
      */
-    boolean process(FlowBean flowBean, Map<String, Object> paramMap) throws Exception;
+    boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception;
 }

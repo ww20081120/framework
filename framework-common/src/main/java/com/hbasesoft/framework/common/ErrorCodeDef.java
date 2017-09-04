@@ -326,4 +326,12 @@ public interface ErrorCodeDef {
 
     /** 流程未匹配 */
     int FLOW_NOT_MATCH = 20048;
+
+    /** 流程组件未找到 */
+    int FLOW_COMPONENT_NOT_FOUND = 20049;
+
+    /**
+     * 流程组件和子流程都未配置
+     */
+    int FLOW_COMPONENT_INSTANCE_OR_CHILDREN_NOT_FOUND = 20050;
 }

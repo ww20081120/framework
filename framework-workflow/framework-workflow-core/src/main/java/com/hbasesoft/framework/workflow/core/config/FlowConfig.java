@@ -36,7 +36,7 @@ public class FlowConfig implements Serializable {
 
     private FlowComponent component;
 
-    private Map<String, String> configAttrMap;
+    private Map<String, Object> configAttrMap;
 
     private List<FlowConfig> childrenConfigList;
 
@@ -56,11 +56,11 @@ public class FlowConfig implements Serializable {
         this.childrenConfigList = childrenConfigList;
     }
 
-    public Map<String, String> getConfigAttrMap() {
+    public Map<String, Object> getConfigAttrMap() {
         return configAttrMap;
     }
 
-    public void setConfigAttrMap(Map<String, String> configAttrMap) {
+    public void setConfigAttrMap(Map<String, Object> configAttrMap) {
         this.configAttrMap = configAttrMap;
     }
 
