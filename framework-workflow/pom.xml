@@ -13,5 +13,6 @@
   	<module>framework-workflow-core</module>
   	<module>framework-workflow-file</module>
   	<module>framework-workflow-plugin-rule</module>
+  	<module>framework-workflow-plugin-event</module>
   </modules>
 </project>

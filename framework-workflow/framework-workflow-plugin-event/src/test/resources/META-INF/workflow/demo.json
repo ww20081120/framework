@@ -1,0 +1,17 @@
+{
+    "name": "demo", 
+    "version": "1.0",
+    "children": [
+        {
+            "component": "Child01Component", 
+            "event":"testEvent",
+            "children": [
+            {
+                "component": "Child03Component"
+            }]
+        },
+        {
+            "component": "Child02Component"
+        }
+    ]
+}
