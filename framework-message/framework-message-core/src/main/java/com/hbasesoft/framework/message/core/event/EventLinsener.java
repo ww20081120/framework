@@ -46,7 +46,13 @@ public interface EventLinsener extends MessageSubscriber {
     default void onMessage(String channel, byte[] data) {
         EventData eventData = SerializationUtil.unserial(EventData.class, data);
         LoggerUtil.info("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().getId(), channel, eventData);
-        onEmmit(channel, eventData);
+        try {
+            onEmmit(channel, eventData);
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e);
+        }
+
     }
 
     /**
