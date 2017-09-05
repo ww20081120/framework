@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.workflow.plugin.transaction.test.component;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -48,9 +50,11 @@ public class Child02Component implements FlowComponent {
         TestFlowBean testFlowBean = (TestFlowBean) flowBean;
         DetachedCriteria criteria = DetachedCriteria.forClass(Employee.class);
         criteria.add(Restrictions.eq("name", testFlowBean.getName()));
-        Employee employee = employeeDao.getCriteriaQuery(criteria);
-        employee.setName(employee.getName() + 1);
-        employeeDao.updateEntity(employee);
+        List<Employee> employeeList = employeeDao.getListByCriteriaQuery(criteria);
+        for (Employee employee : employeeList) {
+            employee.setName(employee.getName() + 1);
+            employeeDao.updateEntity(employee);
+        }
         return true;
     }
 }

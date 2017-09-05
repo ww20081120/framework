@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.workflow.plugin.transaction.test.component;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -46,9 +48,11 @@ public class Child03Component implements FlowComponent {
     public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
         DetachedCriteria criteria = DetachedCriteria.forClass(Employee.class);
         criteria.add(Restrictions.le("age", 20));
-        Employee employee = employeeDao.getCriteriaQuery(criteria);
-        employee.setAge(employee.getAge() + 1);
-        employeeDao.updateEntity(employee);
+        List<Employee> employeeList = employeeDao.getListByCriteriaQuery(criteria);
+        for (Employee employee : employeeList) {
+            employee.setAge(employee.getAge() + 1);
+            employeeDao.updateEntity(employee);
+        }
         return true;
     }
 }
