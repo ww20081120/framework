@@ -32,11 +32,14 @@ public class FlowContext implements Serializable {
 
     private FlowConfig flowConfig;
 
+    private Map<String, Object> extendUtils;
+
     private Map<String, Object> paramMap;
 
     public FlowContext(FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
         this.paramMap = new HashMap<String, Object>();
+        this.extendUtils = new HashMap<String, Object>();
     }
 
     public void setAttribute(String key, Object value) {
@@ -52,12 +55,20 @@ public class FlowContext implements Serializable {
         this.flowConfig = flowConfig;
     }
 
+    public void addExtendUtil(String utilName, Object util) {
+        this.extendUtils.put(utilName, util);
+    }
+
     public FlowConfig getFlowConfig() {
         return this.flowConfig;
     }
 
     public Map<String, Object> getParamMap() {
         return this.paramMap;
+    }
+
+    public Map<String, Object> getExtendUtils() {
+        return this.extendUtils;
     }
 
     @Override

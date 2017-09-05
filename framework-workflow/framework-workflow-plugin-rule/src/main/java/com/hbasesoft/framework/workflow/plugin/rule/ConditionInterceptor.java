@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.workflow.plugin.rule;
 
+import java.util.Map.Entry;
+
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -54,6 +56,11 @@ public class ConditionInterceptor implements FlowComponentInterceptor {
         String condition = (String) flowContext.getFlowConfig().getConfigAttrMap().get("condition");
         if (CommonUtil.isNotEmpty(condition)) {
             Binding binding = new Binding(flowContext.getParamMap());
+            if (CommonUtil.isNotEmpty(flowContext.getExtendUtils())) {
+                for (Entry<String, Object> util : flowContext.getExtendUtils().entrySet()) {
+                    binding.setProperty(util.getKey(), util.getValue());
+                }
+            }
             binding.setProperty("flowBean", flowBean);
             GroovyShell shell = new GroovyShell(binding);
             Object value = shell.evaluate(condition);
