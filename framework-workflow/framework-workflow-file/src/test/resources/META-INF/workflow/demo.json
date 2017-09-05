@@ -1,19 +1,19 @@
 {
-    "name": "demo", 
+    "name": "demo",
     "version": "1.0",
     "component": "DemoComponent",
     "children": [
+    {
+        "component": "Child01Component",
+        "children": [
         {
-            "component": "Child01Component",
-            "children": [
-            {
-                "component": "Child03Component"
-            }, {
-                "component": "Child04Component"
-            }]
+            "component": "Child03Component"
         },
         {
-            "component": "Child02Component"
-        }
-    ]
+            "component": "Child04Component"
+        }]
+    },
+    {
+        "component": "Child02Component"
+    }]
 }

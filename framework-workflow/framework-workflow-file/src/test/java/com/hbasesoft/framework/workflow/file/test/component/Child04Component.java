@@ -7,8 +7,6 @@ package com.hbasesoft.framework.workflow.file.test.component;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponent;
 import com.hbasesoft.framework.workflow.core.FlowContext;
@@ -39,7 +37,7 @@ public class Child04Component implements FlowComponent {
     @Override
     public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
         System.out.println("----------Child04Component------");
-        throw new ServiceException(ErrorCodeDef.IS_FALSE);
+        return true;
     }
 
 }

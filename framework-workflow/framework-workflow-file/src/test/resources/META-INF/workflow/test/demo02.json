@@ -1,0 +1,24 @@
+{
+    "name": "demo02",
+    "version": "1.0",
+    "children": [
+        {
+            "component": "Child02Component",
+            "children": [
+            {
+                "component": "DemoComponent"
+            }]
+        },
+        {
+            "component": "Child01Component",
+            "children": [
+            {
+                "component": "Child03Component"
+            }]
+        },
+        {
+            "component": "Child04Component"
+        }
+
+    ]
+}

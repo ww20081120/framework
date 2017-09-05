@@ -116,7 +116,7 @@ public class JsonFileFlowLoader implements FlowLoader {
         File[] dirfiles = dir.listFiles(new FileFilter() {
             // 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
             public boolean accept(File file) {
-                return file.getName().toLowerCase().endsWith(".json");
+                return file.isDirectory() || file.getName().toLowerCase().endsWith(".json");
             }
         });
 
