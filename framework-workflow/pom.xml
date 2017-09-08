@@ -15,6 +15,5 @@
   	<module>framework-workflow-plugin-rule</module>
   	<module>framework-workflow-plugin-event</module>
   	<module>framework-workflow-plugin-transaction</module>
-  	<module>framework-workflow-plugin-tools</module>
   </modules>
 </project>
