@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hbasesoft.framework.workflow.core.config.FlowConfig;
 
 /**
@@ -69,10 +67,5 @@ public class FlowContext implements Serializable {
 
     public Map<String, Object> getExtendUtils() {
         return this.extendUtils;
-    }
-
-    @Override
-    public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss", new SerializerFeature[0]);
     }
 }
