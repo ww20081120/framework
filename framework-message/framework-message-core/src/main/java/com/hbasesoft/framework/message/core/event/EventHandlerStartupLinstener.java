@@ -36,48 +36,16 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
     private ThreadPoolExecutor executor;
 
-    private ArrayBlockingQueue<EventConsummer> arrayBlockingQueue;
-
     private boolean flag = true;
 
     public EventHandlerStartupLinstener() {
         int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 20); // 核心线程数
         int maximumPoolSize = PropertyHolder.getIntProperty("message.event.maximumPoolSize", 100); // 最大线程数
         long keepAliveTime = PropertyHolder.getIntProperty("message.event.keepAliveTime", 600);
-        int threadSize = PropertyHolder.getIntProperty("message.event.handlerSize", 15);
         int maxConsummer = PropertyHolder.getIntProperty("message.event.maxConsummer", 10000);
 
-        arrayBlockingQueue = new ArrayBlockingQueue<EventConsummer>(maxConsummer);
-
         executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS,
-            new ArrayBlockingQueue<Runnable>(threadSize));
-
-        for (int i = 0; i < threadSize; i++) {
-            executor.execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        while (flag) {
-                            try {
-                                EventConsummer consummer = arrayBlockingQueue.poll(3, TimeUnit.SECONDS);
-                                if (consummer != null) {
-                                    consummer.emmit();
-                                }
-                            }
-                            catch (InterruptedException e) {
-                                LoggerUtil.error(e);
-                                Thread.sleep(1000);
-                            }
-                        }
-                    }
-                    catch (Exception e) {
-                        LoggerUtil.error(e);
-                    }
-                }
-            });
-        }
-
+            new ArrayBlockingQueue<Runnable>(maxConsummer));
     }
 
     /**
@@ -125,7 +93,19 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                             if (CommonUtil.isNotEmpty(datas)) {
                                 for (byte[] data : datas) {
                                     LoggerUtil.info("receive message by thread[{0}]", Thread.currentThread().getId());
-                                    arrayBlockingQueue.put(new EventConsummer(linsener, data, channel));
+
+                                    executor.execute(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                linsener.onMessage(channel, data);
+                                            }
+                                            catch (Exception e) {
+                                                LoggerUtil.error(e);
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -152,31 +132,6 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     @Override
     public void destory() {
         flag = false;
-    }
-
-    private static class EventConsummer {
-
-        private EventLinsener linsener;
-
-        private byte[] data;
-
-        private String event;
-
-        public EventConsummer(EventLinsener linsener, byte[] data, String event) {
-            this.linsener = linsener;
-            this.data = data;
-            this.event = event;
-        }
-
-        public void emmit() {
-            try {
-                this.linsener.onMessage(event, data);
-            }
-            catch (Exception e) {
-                LoggerUtil.error(e);
-            }
-        }
-
     }
 
 }
