@@ -7,9 +7,10 @@ package com.hbasesoft.framework.workflow.plugin.rule;
 
 import java.util.Map.Entry;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
@@ -42,9 +43,9 @@ public class ConditionInterceptor implements FlowComponentInterceptor {
     @Override
     public boolean before(FlowBean flowBean, FlowContext flowContext) {
         String condition = (String) flowContext.getFlowConfig().getConfigAttrMap().get("condition");
-        if (CommonUtil.isNotEmpty(condition)) {
+        if (StringUtils.isNotEmpty(condition)) {
             Binding binding = new Binding(flowContext.getParamMap());
-            if (CommonUtil.isNotEmpty(flowContext.getExtendUtils())) {
+            if (MapUtils.isNotEmpty(flowContext.getExtendUtils())) {
                 for (Entry<String, Object> util : flowContext.getExtendUtils().entrySet()) {
                     binding.setProperty(util.getKey(), util.getValue());
                 }

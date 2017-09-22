@@ -5,9 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.config;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
@@ -116,7 +117,7 @@ public class DbParam extends BaseEntity {
         Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
         String password = PropertyHolder.getProperty(prefix + ".db.password");
         Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
-        if (CommonUtil.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
+        if (StringUtils.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
             password = DataUtil.decrypt(password.substring(4, password.length() - 1));
         }
         this.password = password;
@@ -161,7 +162,7 @@ public class DbParam extends BaseEntity {
     }
 
     public void setPassword(String password) {
-        if (CommonUtil.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
+        if (StringUtils.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
             password = DataUtil.decrypt(password.substring(4, password.length() - 1));
         }
         this.password = password;

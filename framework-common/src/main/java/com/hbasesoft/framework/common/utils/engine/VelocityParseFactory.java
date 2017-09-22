@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -21,7 +22,6 @@ import org.apache.velocity.tools.generic.DateTool;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
@@ -86,7 +86,7 @@ public class VelocityParseFactory {
     public static String parse(String templateName, String body, Map<String, ?> params) throws UtilException {
         VelocityContext context = new VelocityContext();
         context.put("dateTool", dateTool);
-        if (CommonUtil.isNotEmpty(params)) {
+        if (MapUtils.isNotEmpty(params)) {
             for (Entry<String, ?> entry : params.entrySet()) {
                 context.put(entry.getKey(), entry.getValue());
             }

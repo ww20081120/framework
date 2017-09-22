@@ -14,7 +14,8 @@ import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
+import org.apache.commons.collections.CollectionUtils;
+
 import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 
 /**
@@ -63,7 +64,7 @@ public class ClusterDataSource implements DataSource {
     @Override
     public void setLogWriter(PrintWriter out) throws SQLException {
         List<DataSource> dsList = DataSourceUtil.getDataSources(name);
-        if (CommonUtil.isNotEmpty(dsList)) {
+        if (CollectionUtils.isNotEmpty(dsList)) {
             for (DataSource ds : dsList) {
                 ds.setLogWriter(out);
             }
@@ -81,7 +82,7 @@ public class ClusterDataSource implements DataSource {
     @Override
     public void setLoginTimeout(int seconds) throws SQLException {
         List<DataSource> dsList = DataSourceUtil.getDataSources(name);
-        if (CommonUtil.isNotEmpty(dsList)) {
+        if (CollectionUtils.isNotEmpty(dsList)) {
             for (DataSource ds : dsList) {
                 ds.setLoginTimeout(seconds);
             }

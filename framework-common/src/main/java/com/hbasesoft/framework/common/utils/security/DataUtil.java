@@ -58,7 +58,7 @@ public final class DataUtil {
      * @throws UtilException
      * @throws UtilException 异常
      */
-    public static String md5For16(String msg) throws UtilException {
+    public static String md5For16(String msg) {
         String result = md5(msg);
         return result.substring(8, 24);
     }
@@ -71,7 +71,7 @@ public final class DataUtil {
      * @throws UtilException
      * @throws UtilException 异常
      */
-    public static String md5(String msg) throws UtilException {
+    public static String md5(String msg) {
         byte[] msgBytes = msg.getBytes();
         try {
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
@@ -105,7 +105,7 @@ public final class DataUtil {
      * @return <br>
      * @throws UtilException <br>
      */
-    public static byte[] base64Decode(String content) throws UtilException {
+    public static byte[] base64Decode(String content) {
         try {
             return Base64.decodeBase64(content.getBytes(GlobalConstants.DEFAULT_CHARSET));
         }
@@ -123,7 +123,7 @@ public final class DataUtil {
      * @return <br>
      * @throws UtilException <br>
      */
-    public static String base64Encode(byte[] content) throws UtilException {
+    public static String base64Encode(byte[] content) {
         try {
             return new String(Base64.encodeBase64(content), GlobalConstants.DEFAULT_CHARSET);
         }

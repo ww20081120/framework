@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
+import org.apache.commons.collections.MapUtils;
+
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
@@ -182,7 +183,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      */
     @Override
     protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
-        if (CommonUtil.isNotEmpty(dataMap)) {
+        if (MapUtils.isNotEmpty(dataMap)) {
             ShardedJedis shardedJedis = null;
             try {
                 shardedJedis = shardedPool.getResource();

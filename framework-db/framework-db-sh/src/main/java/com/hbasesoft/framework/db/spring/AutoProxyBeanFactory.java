@@ -7,14 +7,12 @@ package com.hbasesoft.framework.db.spring;
 
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.annotation.Dao;
@@ -57,13 +55,13 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         logger.info("*************************Dao注入列表***************************");
         try {
             for (String pack : packagesToScan) {
-                if (CommonUtil.isNotEmpty(pack)) {
+                if (StringUtils.isNotEmpty(pack)) {
                     Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
                     String className = null;
                     for (Class<?> clazz : clazzSet) {
                         if (clazz.isAnnotationPresent(Dao.class)) {
                             className = clazz.getName();
-                            String beanName = CommonUtil.lowerCaseFirstChar(clazz.getSimpleName());
+                            String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
                             if (beanFactory.containsBean(beanName)) {
                                 beanName = className;
                                 if (beanFactory.containsBean(beanName)) {

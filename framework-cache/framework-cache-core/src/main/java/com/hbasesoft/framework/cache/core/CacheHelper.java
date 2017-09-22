@@ -9,13 +9,14 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.ServiceLoader;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.hbasesoft.framework.cache.core.annotation.CacheProxy;
 import com.hbasesoft.framework.cache.core.handler.CachePorxyInvocationHandler;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -74,7 +75,7 @@ public final class CacheHelper {
 
         if (Modifier.isAbstract(clazz.getModifiers())) {
             T target = null;
-            if (CommonUtil.isNotEmpty(cacheProxy.name())) {
+            if (StringUtils.isNotEmpty(cacheProxy.name())) {
                 target = ContextHolder.getContext().getBean(cacheProxy.name(), clazz);
             }
             else {

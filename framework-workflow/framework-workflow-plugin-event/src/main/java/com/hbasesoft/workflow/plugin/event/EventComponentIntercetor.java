@@ -5,11 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.workflow.plugin.event;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.workflow.core.FlowBean;
@@ -41,7 +41,7 @@ public class EventComponentIntercetor implements FlowComponentInterceptor {
     @Override
     public boolean before(FlowBean flowBean, FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("beforeEvent");
-        if (CommonUtil.isNotEmpty(event)) {
+        if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);
@@ -61,7 +61,7 @@ public class EventComponentIntercetor implements FlowComponentInterceptor {
     @Override
     public void after(FlowBean flowBean, FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("event");
-        if (CommonUtil.isNotEmpty(event)) {
+        if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);
@@ -81,7 +81,7 @@ public class EventComponentIntercetor implements FlowComponentInterceptor {
     @Override
     public void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("errorEvent");
-        if (CommonUtil.isNotEmpty(event)) {
+        if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);

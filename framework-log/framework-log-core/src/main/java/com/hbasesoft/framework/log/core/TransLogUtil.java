@@ -8,6 +8,8 @@ package com.hbasesoft.framework.log.core;
 import java.lang.reflect.Method;
 import java.util.ServiceLoader;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -58,7 +60,7 @@ public class TransLogUtil {
             // 父id
             String parentStackId = manager.peek();
 
-            if (CommonUtil.isEmpty(parentStackId)) {
+            if (StringUtils.isEmpty(parentStackId)) {
                 parentStackId = TransactionIDManager.getTransactionId();
             }
 
@@ -81,7 +83,7 @@ public class TransLogUtil {
 
             TransManager manager = TransManager.getInstance();
             String stackId = manager.pop();
-            if (CommonUtil.isEmpty(stackId)) {
+            if (StringUtils.isEmpty(stackId)) {
                 return;
             }
 
@@ -124,7 +126,7 @@ public class TransLogUtil {
 
             TransManager manager = TransManager.getInstance();
             String stackId = manager.pop();
-            if (CommonUtil.isEmpty(stackId)) {
+            if (StringUtils.isEmpty(stackId)) {
                 return;
             }
 

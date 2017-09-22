@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
+import org.apache.commons.collections.MapUtils;
+
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
@@ -113,7 +114,7 @@ public abstract class AbstractCache implements ICache {
     public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
         Map<byte[], byte[]> dataMap = getNode(nodeName.getBytes());
         Map<String, T> map = null;
-        if (CommonUtil.isNotEmpty(dataMap)) {
+        if (MapUtils.isNotEmpty(dataMap)) {
             map = new HashMap<String, T>();
             for (Entry<byte[], byte[]> entry : dataMap.entrySet()) {
                 map.put(new String(entry.getKey()), getValue(entry.getValue()));

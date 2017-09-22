@@ -1,5 +1,13 @@
-Framework 2.0 框架说明
+Framework 3.0 框架说明
 =======
+
+### 更新说明
+版本|更新内容| 时间|修改人
+--- | --- | --- | ---
+3.0 | 1.更新了spring boot 版本至2.0 <br> 2.引入spring cloud框架 <br> 3. 重新定义了common 模块的API <br> 4. 支持 JPA  |  | 王伟
+
+### 框架介绍
+
 Framework框架集成了log、cache、db、message，每块都以模块形式组织，可以根据项目需要获取模块。
 
 + framework-common 定义公用的常量、工具类 采用了spring-boot方式启动， 启动类为Application， 也可以支持web方式启动。
@@ -30,7 +38,7 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 + framework-message-core 消息的核心模块
 
 -------
-<h2 id="framework-db">framework-db</h2>具有以下特征:
+#### <p id="framework-db">framework-db</p>具有以下特征:
 
 1. O/R mapping不用设置xml，零配置便于维护  
 2. 不需要了解JDBC的知识  
@@ -43,8 +51,11 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 9. 可以无缝集成Hibernate、Spring等第三方框架，也可以单独部署运行，适应性强。  
 
  
-###接口和SQL文件对应目录  
-#####接口文件[EmpDao.java]
+###接口和SQL文件对应目录 
+ 
+##### 接口文件[EmpDao.java]
+
+``` java
     @Dao
 	public interface EmpDao {
 
@@ -63,16 +74,20 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 	    @Sql("select count(*) from emp")
 	    int listCount(ResultTransformer transformer);
 	}
+	
+```
 
-####SQL文件[EmpDao_queryEmp.sql]  
+#####SQL文件[EmpDao_queryEmp.sql] 
+``` sql 
 	select * from emp 
 	where 1=1 
 	#if($dept) 
 		and deptno=$dept.deptno 
 	#end
+```
 
-####测试代码[test.java]
-
+##### 测试代码[test.java]
+``` java
 	@RunWith(SpringJUnit4ClassRunner.class)
 	@ContextConfiguration({
 	    "classpath:/META-INF/spring/*.xml"
@@ -95,9 +110,9 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 	        }
 	    }
 	 }
+```
 
-
-****
-###　　　　　　　　　　　　Author:王伟
-###　　　　　　　　　 E-mail:ww20081120@126.com
+---
+####　　　　　　　　　　　　Author:王伟
+####　　　　　　　　　 E-mail:[ww20081120@126.com](mail://ww20081120@126.com)
 

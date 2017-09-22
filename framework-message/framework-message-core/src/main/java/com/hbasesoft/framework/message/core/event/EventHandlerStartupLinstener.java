@@ -12,10 +12,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.StartupListenerAdapter;
+import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -32,7 +34,7 @@ import com.hbasesoft.framework.message.core.MessageQueue;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.event <br>
  */
-public class EventHandlerStartupLinstener extends StartupListenerAdapter {
+public class EventHandlerStartupLinstener implements StartupListener {
 
     private ThreadPoolExecutor executor;
 
@@ -59,7 +61,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     @Override
     public void complete(ApplicationContext context) throws FrameworkException {
         Map<String, EventLinsener> eventLinseners = context.getBeansOfType(EventLinsener.class);
-        if (CommonUtil.isNotEmpty(eventLinseners)) {
+        if (MapUtils.isNotEmpty(eventLinseners)) {
             for (Entry<String, EventLinsener> entry : eventLinseners.entrySet()) {
                 EventLinsener linsener = entry.getValue();
                 String[] events = linsener.events();
@@ -90,7 +92,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                     while (flag) {
                         try {
                             List<byte[]> datas = queue.pop(3, channel);
-                            if (CommonUtil.isNotEmpty(datas)) {
+                            if (CollectionUtils.isNotEmpty(datas)) {
                                 for (byte[] data : datas) {
                                     LoggerUtil.info("receive message by thread[{0}]", Thread.currentThread().getId());
 

@@ -96,7 +96,7 @@ public class PropertyHolder {
         }
 
         String extendPropertyFiles = PROPERTIES.get("extend.property.files");
-        if (CommonUtil.isNotEmpty(extendPropertyFiles)) {
+        if (StringUtils.isNotEmpty(extendPropertyFiles)) {
             String[] files = StringUtils.split(extendPropertyFiles, GlobalConstants.SPLITOR);
             for (String file : files) {
                 try {
@@ -144,7 +144,7 @@ public class PropertyHolder {
         }
 
         String selfPaths = getProperty("extend.errorMessage.files");
-        if (CommonUtil.isNotEmpty(selfPaths)) {
+        if (StringUtils.isNotEmpty(selfPaths)) {
             String[] files = StringUtils.split(selfPaths, GlobalConstants.SPLITOR);
             for (String file : files) {
                 try {
@@ -166,7 +166,7 @@ public class PropertyHolder {
 
     public static Boolean getBooleanProperty(String name, Boolean defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? "true".equals(value) : defaultValue;
+        return StringUtils.isNotEmpty(value) ? "true".equals(value) : defaultValue;
     }
 
     public static Integer getIntProperty(String name) {
@@ -175,7 +175,7 @@ public class PropertyHolder {
 
     public static Integer getIntProperty(String name, Integer defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
+        return StringUtils.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
     }
 
     public static Long getLongProperty(String name) {
@@ -184,7 +184,7 @@ public class PropertyHolder {
 
     public static Long getLongProperty(String name, Long defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
+        return StringUtils.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
     }
 
     public static String getProperty(String name) {
@@ -193,7 +193,7 @@ public class PropertyHolder {
 
     public static String getProperty(String name, String defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? value : defaultValue;
+        return StringUtils.isNotEmpty(value) ? value : defaultValue;
     }
 
     public static void setProperty(String name, String value) {
@@ -202,7 +202,7 @@ public class PropertyHolder {
 
     public static String getErrorMessage(int code, Object... params) {
         String message = ERROR_MESSAGE.get(code + GlobalConstants.BLANK);
-        if (CommonUtil.isNotEmpty(message)) {
+        if (StringUtils.isNotEmpty(message)) {
             if (CommonUtil.isNotEmpty(params)) {
                 return CommonUtil.messageFormat(message, params);
             }
@@ -213,7 +213,7 @@ public class PropertyHolder {
 
     public static String getProjectName() {
         String name = getProperty("project.name");
-        if (CommonUtil.isEmpty(name)) {
+        if (StringUtils.isEmpty(name)) {
             String realPath = StringUtils.replaceEach(
                 Application.class.getClassLoader().getResource(GlobalConstants.BLANK).getPath(), new String[] {
                     "/target/classes/", "/WEB-INF/classes/"

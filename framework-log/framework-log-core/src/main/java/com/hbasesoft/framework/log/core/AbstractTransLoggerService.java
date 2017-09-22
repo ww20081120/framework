@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheHelper;
@@ -173,7 +174,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     public void clean() {
         TransManager manager = TransManager.getInstance();
         String stackId = manager.peek();
-        if (CommonUtil.isNotEmpty(stackId)) {
+        if (StringUtils.isNotEmpty(stackId)) {
             for (int i = 0, size = manager.getSeq(); i < size; i++) {
                 try {
                     CacheHelper.getCache().evict(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i);

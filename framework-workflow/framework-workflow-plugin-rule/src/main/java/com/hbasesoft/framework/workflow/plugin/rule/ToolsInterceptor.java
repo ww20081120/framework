@@ -54,7 +54,7 @@ public class ToolsInterceptor implements FlowComponentInterceptor {
     @Override
     public boolean before(FlowBean flowBean, FlowContext flowContext) {
         String tools = (String) flowContext.getFlowConfig().getConfigAttrMap().get("tools");
-        if (CommonUtil.isNotEmpty(tools)) {
+        if (StringUtils.isNotEmpty(tools)) {
             String[] ts = StringUtils.split(tools, GlobalConstants.SPLITOR);
             if (CommonUtil.isNotEmpty(ts)) {
                 Map<String, Object> toolMap = flowContext.getExtendUtils();

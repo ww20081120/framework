@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.hbasesoft.framework.common.GlobalConstants;
 
 /**
@@ -31,7 +34,7 @@ public class WordFilter {
             filterMap.clear();
         }
 
-        if (CommonUtil.isNotEmpty(filterWordList)) {
+        if (CollectionUtils.isNotEmpty(filterWordList)) {
             for (String filterWord : filterWordList) {
                 char[] charArray = filterWord.trim().toCharArray();
                 int len = charArray.length;
@@ -159,7 +162,7 @@ public class WordFilter {
 
     @SuppressWarnings("unchecked")
     public String getKeyword(String statement) {
-        if (CommonUtil.isEmpty(statement)) {
+        if (StringUtils.isEmpty(statement)) {
             return statement;
         }
         char[] charArray = statement.toCharArray();

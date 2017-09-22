@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -93,9 +95,9 @@ public class CacheLockAdvice {
                 }
             }
 
-            if (CommonUtil.isNotEmpty(paramMap)) {
+            if (MapUtils.isNotEmpty(paramMap)) {
                 StringBuilder sb = new StringBuilder();
-                if (CommonUtil.isNotEmpty(template)) {
+                if (StringUtils.isNotEmpty(template)) {
                     sb.append(GlobalConstants.UNDERLINE)
                         .append(VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap));
                 }

@@ -19,13 +19,18 @@ import org.springframework.context.ApplicationContext;
  */
 public interface StartupListener {
 
-    LoadOrder getOrder();
+    default LoadOrder getOrder() {
+        return LoadOrder.LAST;
+    }
 
-    void init() throws FrameworkException;
+    default void init() {
+    }
 
-    void complete(ApplicationContext context) throws FrameworkException;
+    default void complete(ApplicationContext context) {
+    }
 
-    void destory();
+    default void destory() {
+    }
 
     static enum LoadOrder {
         FIRST, MIDDLE, LAST
