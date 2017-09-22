@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>2.4</version>
+		<version>3.0</version>
 	</parent>
 	<artifactId>framework-message</artifactId>
 	<packaging>pom</packaging>
