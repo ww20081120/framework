@@ -3,13 +3,13 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.common.test;
+package com.hbasesoft.framework.bootstrap.normal;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.hbasesoft.framework.common.Application;
+import com.hbasesoft.framework.boostrap.normal.Application;
 
 /**
  * <Description> <br>

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.hbasesoft.framework.common.Application;
+import com.hbasesoft.framework.boostrap.normal.Application;
 import com.hbasesoft.framework.workflow.core.FlowHelper;
 
 /**

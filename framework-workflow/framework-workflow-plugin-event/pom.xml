@@ -24,13 +24,19 @@
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-workflow-file</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-message-redis</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-bootstrap-normal</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

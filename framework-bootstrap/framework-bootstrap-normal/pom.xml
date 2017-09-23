@@ -3,23 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
-		<artifactId>framework-workflow</artifactId>
+		<artifactId>framework-bootstrap</artifactId>
 		<version>3.0</version>
 	</parent>
-	<artifactId>framework-workflow-file</artifactId>
-	<name>workflow-file</name>
-	<description>workflow process by file</description>
+	<artifactId>framework-bootstrap-normal</artifactId>
+	<name>bootstrap-normal</name>
+	<description>normal bootstrap, no hibernate</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-workflow-core</artifactId>
+			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-bootstrap-normal</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

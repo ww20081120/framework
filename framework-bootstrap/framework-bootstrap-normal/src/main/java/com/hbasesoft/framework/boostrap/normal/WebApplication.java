@@ -3,12 +3,14 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.common;
+package com.hbasesoft.framework.boostrap.normal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.web.context.WebApplicationContext;
+
+import com.hbasesoft.framework.common.Bootstrap;
 
 /**
  * <Description> <br>

@@ -32,7 +32,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 
-import com.hbasesoft.framework.common.Application;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
@@ -215,7 +214,7 @@ public class PropertyHolder {
         String name = getProperty("project.name");
         if (StringUtils.isEmpty(name)) {
             String realPath = StringUtils.replaceEach(
-                Application.class.getClassLoader().getResource(GlobalConstants.BLANK).getPath(), new String[] {
+                PropertyHolder.class.getClassLoader().getResource(GlobalConstants.BLANK).getPath(), new String[] {
                     "/target/classes/", "/WEB-INF/classes/"
                 }, new String[] {
                     GlobalConstants.BLANK, GlobalConstants.BLANK
