@@ -17,8 +17,8 @@ import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponent;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 import com.hbasesoft.workflow.plugin.transaction.test.TestFlowBean;
-import com.hbasesoft.workflow.plugin.transaction.test.dao.EmployeeDao;
 import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.repository.EmployeeRepository;
 
 /**
  * <Description> <br>
@@ -33,7 +33,7 @@ import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
 @Component("Child02Component")
 public class Child02Component implements FlowComponent {
     @Resource
-    private EmployeeDao employeeDao;
+    private EmployeeRepository employeeDao;
 
     /**
      * Description: <br>

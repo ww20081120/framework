@@ -7,14 +7,10 @@ package com.hbasesoft.workflow.plugin.transaction.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hbasesoft.framework.common.Application;
-import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.workflow.core.FlowHelper;
 
 /**
@@ -29,7 +25,7 @@ import com.hbasesoft.framework.workflow.core.FlowHelper;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-public class TestFlow implements ApplicationContextAware {
+public class TestFlow {
 
     @Test
     public void flowStart() {
@@ -49,16 +45,4 @@ public class TestFlow implements ApplicationContextAware {
         FlowHelper.flowStart(flowBean, "demo");
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param applicationContext
-     * @throws BeansException <br>
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ContextHolder.setContext(applicationContext);
-    }
 }

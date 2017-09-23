@@ -8,8 +8,6 @@
 	</parent>
 	<artifactId>framework-db-core</artifactId>
 	<properties>
-		<mysql.version>5.1.33</mysql.version>
-		<oracle.version>10.2.0.3.0</oracle.version>
 		<druid.version>0.2.9</druid.version>
 	</properties>
 	<dependencies>
@@ -17,16 +15,6 @@
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-cache-core</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>com.oracle</groupId> -->
-		<!-- <artifactId>ojdbc14</artifactId> -->
-		<!-- <version>${oracle.version}</version> -->
-		<!-- </dependency> -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>

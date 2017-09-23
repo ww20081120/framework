@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponent;
 import com.hbasesoft.framework.workflow.core.FlowContext;
-import com.hbasesoft.workflow.plugin.transaction.test.dao.EmployeeDao;
 import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.repository.EmployeeRepository;
 
 /**
  * <Description> <br>
@@ -32,7 +32,7 @@ import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
 @Component("Child03Component")
 public class Child03Component implements FlowComponent {
     @Resource
-    private EmployeeDao employeeDao;
+    private EmployeeRepository employeeDao;
 
     /**
      * Description: <br>

@@ -5,8 +5,9 @@ package com.hbasesoft.framework.log.db.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.hbasesoft.framework.db.core.DaoException;
-import com.hbasesoft.framework.db.core.annotation.Dao;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
@@ -23,13 +24,12 @@ import com.hbasesoft.framework.log.db.bean.TransLogStackPojo;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.dao <br>
  */
-@Dao
+@Repository
 public interface TransLogDao extends IGenericBaseDao {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param pageIndex <br>
@@ -42,9 +42,8 @@ public interface TransLogDao extends IGenericBaseDao {
         throws DaoException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -54,9 +53,8 @@ public interface TransLogDao extends IGenericBaseDao {
     int getTransLogListSize() throws DaoException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param transId <br>
@@ -67,9 +65,8 @@ public interface TransLogDao extends IGenericBaseDao {
     List<TransLogStackPojo> listTransLogStack(@Param("transId") String transId) throws DaoException;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param transId <br>
