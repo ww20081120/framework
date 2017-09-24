@@ -31,6 +31,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
+import org.yaml.snakeyaml.Yaml;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -60,8 +61,18 @@ public class PropertyHolder {
         return PROPERTIES;
     }
 
-    private static void load(InputStream inputStream, Map<String, String> map) throws IOException {
+    @SuppressWarnings("unchecked")
+    private static void loadYml(InputStream inputStream, Map<String, String> map) throws IOException {
+        try {
+            Yaml yaml = new Yaml();
+            map.putAll((Map<String, String>) yaml.load(inputStream));
+        }
+        finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+    }
 
+    private static void loadProperties(InputStream inputStream, Map<String, String> map) throws IOException {
         try {
             Properties properties = new Properties();
             properties.load(new InputStreamReader(inputStream, "utf-8"));
@@ -83,11 +94,18 @@ public class PropertyHolder {
      *         <br>
      */
     private static void init() {
-        String systemConfig = "/application.properties";
+        String systemConfig = "/application.yml";
         ClassPathResource cr = null;
         try {
             cr = new ClassPathResource(systemConfig);
-            load(cr.getInputStream(), PROPERTIES);
+            if (cr.exists()) {
+                loadYml(cr.getInputStream(), PROPERTIES);
+            }
+            else {
+                systemConfig = "/application.properties";
+                cr = new ClassPathResource(systemConfig);
+                loadProperties(cr.getInputStream(), PROPERTIES);
+            }
             log.info("装入主配置文件:" + systemConfig);
         }
         catch (Exception e) {
@@ -100,8 +118,15 @@ public class PropertyHolder {
             for (String file : files) {
                 try {
                     cr = new ClassPathResource(file);
-                    load(cr.getInputStream(), PROPERTIES);
-                    log.info("装入扩展配置文件：" + file);
+                    if (cr.exists()) {
+                        if (StringUtils.endsWith(file, "yml")) {
+                            loadYml(cr.getInputStream(), PROPERTIES);
+                        }
+                        else {
+                            loadProperties(cr.getInputStream(), PROPERTIES);
+                        }
+                        log.info("装入扩展配置文件：" + file);
+                    }
                 }
                 catch (Exception e) {
                     log.info("装入扩展配置文件" + file + "失败！", e);
@@ -123,7 +148,7 @@ public class PropertyHolder {
         ClassPathResource cr = null;
         try {
             cr = new ClassPathResource(systemErrorMessagePath);
-            load(cr.getInputStream(), ERROR_MESSAGE);
+            loadProperties(cr.getInputStream(), ERROR_MESSAGE);
             log.info("装入系统错误码文件:" + systemErrorMessagePath);
         }
         catch (Exception e) {
@@ -134,7 +159,7 @@ public class PropertyHolder {
         try {
             cr = new ClassPathResource(projectErrorMessagePath);
             if (cr.exists()) {
-                load(cr.getInputStream(), ERROR_MESSAGE);
+                loadProperties(cr.getInputStream(), ERROR_MESSAGE);
                 log.info("装入项目错误码文件:" + projectErrorMessagePath);
             }
         }
@@ -148,7 +173,7 @@ public class PropertyHolder {
             for (String file : files) {
                 try {
                     cr = new ClassPathResource(file);
-                    load(cr.getInputStream(), ERROR_MESSAGE);
+                    loadProperties(cr.getInputStream(), ERROR_MESSAGE);
                     log.info("装入错误码文件：" + file);
                 }
                 catch (Exception e) {

@@ -7,6 +7,7 @@ package com.hbasesoft.framework.db.jpa;
 
 import javax.persistence.EntityManagerFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -19,6 +20,7 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.core.ClusterDataSource;
 
 /**
@@ -38,7 +40,7 @@ public class JpaConfiguration implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
-    @Bean
+    @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(applicationContext.getBean(EntityManagerFactory.class));
@@ -50,9 +52,10 @@ public class JpaConfiguration implements ApplicationContextAware {
     public EntityManagerFactory entityManagerFactory() {
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        // vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setDatabase(Database.MYSQL);
-        vendorAdapter.setShowSql(true);
+        String dbType = StringUtils.upperCase(PropertyHolder.getProperty("master.db.type", "mysql"));
+        vendorAdapter.setDatabase(Database.valueOf(dbType));
+        vendorAdapter.setShowSql(PropertyHolder.getBooleanProperty("master.db.showSql", true));
+        vendorAdapter.setGenerateDdl(PropertyHolder.getBooleanProperty("master.db.generateDdl", false));
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
