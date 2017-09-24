@@ -28,12 +28,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.yaml.snakeyaml.Yaml;
 
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
@@ -64,11 +66,34 @@ public class PropertyHolder {
     @SuppressWarnings("unchecked")
     private static void loadYml(InputStream inputStream, Map<String, String> map) throws IOException {
         try {
+
             Yaml yaml = new Yaml();
-            map.putAll((Map<String, String>) yaml.load(inputStream));
+            HashMap<String, Object> value = yaml.loadAs(inputStream, HashMap.class);
+            if (MapUtils.isNotEmpty(value)) {
+                for (Entry<String, Object> entry : value.entrySet()) {
+                    transfer(entry.getKey(), entry.getValue(), map);
+                }
+            }
         }
         finally {
             IOUtils.closeQuietly(inputStream);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void transfer(String key, Object value, Map<String, String> map) {
+        if (value != null) {
+            if (value instanceof Map) {
+                Map<String, Object> m = (Map<String, Object>) value;
+                if (MapUtils.isNotEmpty(m)) {
+                    for (Entry<String, Object> entry : m.entrySet()) {
+                        transfer(key + GlobalConstants.PERIOD + entry.getKey(), entry.getValue(), map);
+                    }
+                }
+            }
+            else {
+                map.put(key, value.toString());
+            }
         }
     }
 
@@ -109,7 +134,8 @@ public class PropertyHolder {
             log.info("装入主配置文件:" + systemConfig);
         }
         catch (Exception e) {
-            log.info("装入主配置文件" + systemConfig + "失败!", e);
+            log.error("装入主配置文件" + systemConfig + "失败!", e);
+            throw new InitializationException(e);
         }
 
         String extendPropertyFiles = PROPERTIES.get("extend.property.files");
@@ -130,6 +156,7 @@ public class PropertyHolder {
                 }
                 catch (Exception e) {
                     log.info("装入扩展配置文件" + file + "失败！", e);
+                    throw new InitializationException(e);
                 }
             }
         }

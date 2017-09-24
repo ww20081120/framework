@@ -1,4 +1,4 @@
-app: #app configuration
+app: 
  port: 8080
 
 master: # 数据库配置
