@@ -23,7 +23,6 @@ import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -102,7 +101,7 @@ public class AbstractAnnotationHandler {
      */
     private String checkSqlPath(Method method, String path) throws InitializationException {
         StringBuilder sb = new StringBuilder();
-        if (CommonUtil.isNotEmpty(path)) {
+        if (StringUtils.isNotEmpty(path)) {
             sb.append(path);
         }
         else {
@@ -167,8 +166,7 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
-            metadata = daoConfig.isCache()
-                ? CacheHelper.getCache().get(CacheConstant.SQL_PARAM_DIR, key, ParamMetadata.class) : null;
+            metadata = daoConfig.isCache() ? CacheHelper.getCache().get(CacheConstant.SQL_PARAM_DIR, key) : null;
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -229,7 +227,7 @@ public class AbstractAnnotationHandler {
                         }
 
                         // 如果没有Param注解，还是需要自动获取变量名称
-                        if (CommonUtil.isEmpty(name)) {
+                        if (StringUtils.isEmpty(name)) {
                             if (paramNames == null) {
                                 paramNames = BeanUtil.getMethodParamNames(method);
                             }
@@ -268,7 +266,7 @@ public class AbstractAnnotationHandler {
         String templateSql = null;
         try {
             templateSql = daoConfig.isCache() ? CacheHelper.getCache().get(CacheConstant.SQL_DIR, key) : null;
-            if (CommonUtil.isEmpty(templateSql)) {
+            if (StringUtils.isEmpty(templateSql)) {
                 String path = null;
 
                 // 获取方法的SQL标签
@@ -278,7 +276,7 @@ public class AbstractAnnotationHandler {
                     path = sql.path();
                 }
 
-                if (CommonUtil.isEmpty(templateSql)) {
+                if (StringUtils.isEmpty(templateSql)) {
                     templateSql = checkSqlPath(method, path);
                 }
                 if (daoConfig.isCache()) {

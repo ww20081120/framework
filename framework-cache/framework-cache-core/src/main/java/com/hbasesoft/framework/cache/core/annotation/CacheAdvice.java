@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -154,11 +155,11 @@ public class CacheAdvice {
     }
 
     private String getCacheKey(String template, Method method, Object[] args) throws FrameworkException {
-        if (CommonUtil.isEmpty(template) && CommonUtil.isEmpty(args)) {
+        if (StringUtils.isEmpty(template) && CommonUtil.isEmpty(args)) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002);
         }
         String key;
-        if (CommonUtil.isNotEmpty(template)) {
+        if (StringUtils.isNotEmpty(template)) {
             Annotation[][] parameterAnnotations = method.getParameterAnnotations();
             Map<String, Object> paramMap = new HashMap<String, Object>();
             for (int i = 0; i < parameterAnnotations.length; i++) {

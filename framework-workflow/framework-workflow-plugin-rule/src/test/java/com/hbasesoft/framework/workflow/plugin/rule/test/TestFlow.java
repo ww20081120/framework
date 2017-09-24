@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.hbasesoft.framework.common.Application;
+import com.hbasesoft.framework.boostrap.normal.Application;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.workflow.core.FlowHelper;
 

@@ -1,0 +1,9 @@
+app: 
+ port: 8080
+
+master: # 数据库配置
+ db:
+  url: jdbc:mysql://www.hbasesoft.com:3306/fm_test?useUnicode=true&characterEncoding=UTF-8
+  username: test
+  password: test
+  type: mysql

@@ -35,7 +35,6 @@ import org.apache.commons.lang.StringUtils;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.date.DateConstants;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
@@ -230,7 +229,7 @@ public class DBTable2JavaBean extends JFrame {
         if (f.exists()) {
             try {
                 String content = IOUtil.readFile(f);
-                if (CommonUtil.isNotEmpty(content)) {
+                if (StringUtils.isNotEmpty(content)) {
                     return JSONObject.parseObject(content);
                 }
             }
@@ -277,7 +276,7 @@ public class DBTable2JavaBean extends JFrame {
             dataSource = dbs;
         }
 
-        if (CommonUtil.isEmpty(tempPath) || !new File(tempPath).exists()) {
+        if (StringUtils.isEmpty(tempPath) || !new File(tempPath).exists()) {
             tips[3].setText("大侠你的模板文件呢？");
             return;
         }
@@ -285,7 +284,7 @@ public class DBTable2JavaBean extends JFrame {
             tips[3].setText(GlobalConstants.BLANK);
         }
 
-        if (CommonUtil.isEmpty(dirstr)) {
+        if (StringUtils.isEmpty(dirstr)) {
             tips[2].setText("给你导到根目录去了");
             dirstr = GlobalConstants.BLANK;
         }
@@ -293,7 +292,7 @@ public class DBTable2JavaBean extends JFrame {
             tips[2].setText(GlobalConstants.BLANK);
         }
 
-        if (CommonUtil.isEmpty(packname)) {
+        if (StringUtils.isEmpty(packname)) {
             tips[1].setText("w靠，你居然不写包名");
             packname = GlobalConstants.BLANK;
         }
@@ -312,7 +311,7 @@ public class DBTable2JavaBean extends JFrame {
         try {
             template = IOUtil.readFile(tempPath);
             conn = dataSource.getConnection();
-            if (CommonUtil.isEmpty(tablename)) {
+            if (StringUtils.isEmpty(tablename)) {
                 parseAllTable(conn, packname, outputdir);
             }
             else {
@@ -413,7 +412,7 @@ public class DBTable2JavaBean extends JFrame {
                 "${PACKAGE}", "${CLASSNAME}", "${CODE}", "${TABLENAME}", "${DATE}", "${ENTITY}"
             }, new String[] {
                 packname, className, fields.append(methods).toString(), tablename, dateFormat.format(new Date()),
-                CommonUtil.isEmpty(pkColum) ? GlobalConstants.BLANK : "@Entity(name = \"" + tablename + "\")"
+                StringUtils.isEmpty(pkColum) ? GlobalConstants.BLANK : "@Entity(name = \"" + tablename + "\")"
             }), file);
             System.out.println("生成文件成功。" + file.getAbsoluteFile());
         }

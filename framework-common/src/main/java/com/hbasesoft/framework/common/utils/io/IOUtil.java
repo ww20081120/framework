@@ -16,7 +16,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -37,18 +36,21 @@ import com.hbasesoft.framework.common.utils.UtilException;
  */
 public final class IOUtil {
 
-    public static void copyFile(File src, File dist) throws UtilException {
+    /**
+     * Description: 复制文件<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param src
+     * @param dist <br>
+     */
+    public static void copyFile(File src, File dist) {
         OutputStream out = null;
         InputStream in = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(dist));
             in = new BufferedInputStream(new FileInputStream(src));
-            int len = 0;
-            byte[] temp = new byte[1024];
-            while ((len = in.read(temp)) != -1) {
-                out.write(temp, 0, len);
-            }
-            out.flush();
+            IOUtils.copy(in, out);
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
@@ -60,15 +62,14 @@ public final class IOUtil {
     }
 
     /**
-     * Description: <br>
+     * Description: 复制文件进流<br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param filePath <br>
+     * @param filePath
      * @param in <br>
-     * @throws UtilException <br>
      */
-    public static void copyFileFromInputStream(String filePath, InputStream in) throws UtilException {
+    public static void copyFileFromInputStream(String filePath, InputStream in) {
         copyFileFromInputStream(filePath, in, null);
     }
 
@@ -82,17 +83,11 @@ public final class IOUtil {
      * @param charset <br>
      * @throws UtilException <br>
      */
-    public static void copyFileFromInputStream(String filePath, InputStream in, String charset) throws UtilException {
+    public static void copyFileFromInputStream(String filePath, InputStream in, String charset) {
         OutputStream out = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(filePath));
-
-            int len = 0;
-            byte[] temp = new byte[1024];
-            while ((len = in.read(temp)) != -1) {
-                out.write(temp, 0, len);
-            }
-            out.flush();
+            IOUtils.copy(in, out);
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
@@ -112,24 +107,16 @@ public final class IOUtil {
      * @return <br>
      * @throws UtilException <br>
      */
-    public static String readString(InputStream in) throws UtilException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = null;
-        String line = null;
+    public static String readString(InputStream in) {
         try {
-            reader = new BufferedReader(new InputStreamReader(in));
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
+            return IOUtils.toString(in);
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR_10027, e);
         }
         finally {
-            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(in);
         }
-
-        return sb.toString();
     }
 
     /**
@@ -141,24 +128,16 @@ public final class IOUtil {
      * @return <br>
      * @throws UtilException <br>
      */
-    public static String readString(Reader in) throws UtilException {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader reader = null;
-        String line = null;
+    public static String readString(Reader in) {
         try {
-            reader = new BufferedReader(in);
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
+            return IOUtils.toString(in);
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR_10027, e);
         }
         finally {
-            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(in);
         }
-
-        return sb.toString();
     }
 
     /**
@@ -196,28 +175,12 @@ public final class IOUtil {
      */
     public static String readFile(File file) throws IOException {
         if (file.exists() && file.isFile()) {
-            BufferedReader in = null;
-            String line = null;
-            try {
-                in = new BufferedReader(new FileReader(file));
-                StringBuilder sb = new StringBuilder();
-                while ((line = in.readLine()) != null) {
-                    sb.append(line).append('\n');
-                }
-                return sb.toString();
-            }
-            catch (Exception e) {
-                throw new IOException(e);
-            }
-            finally {
-                IOUtils.closeQuietly(in);
-            }
-
+            return readString(new BufferedReader(new FileReader(file)));
         }
         return null;
     }
 
-    public static <T> List<T> readFile(File file, LineTransfer<T> transfer) throws IOException {
+    public static <T> List<T> readFile(File file, LineTransfer<T> transfer) {
         List<T> list = new ArrayList<T>();
         if (file.exists() && file.isFile()) {
             BufferedReader in = null;
@@ -232,7 +195,7 @@ public final class IOUtil {
                 }
             }
             catch (Exception e) {
-                throw new IOException(e);
+                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
             }
             finally {
                 IOUtils.closeQuietly(in);
@@ -250,7 +213,7 @@ public final class IOUtil {
      * @param file <br>
      * @throws UtilException <br>
      */
-    public static void writeFile(byte[] content, File file) throws UtilException {
+    public static void writeFile(byte[] content, File file) {
         if (file != null) {
             BufferedOutputStream out = null;
             try {
@@ -275,7 +238,7 @@ public final class IOUtil {
      * @param file <br>
      * @throws UtilException <br>
      */
-    public static void writeFile(String contents, File file) throws UtilException {
+    public static void writeFile(String contents, File file) {
         if (file != null) {
             BufferedWriter out = null;
             try {

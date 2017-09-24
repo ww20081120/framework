@@ -5,10 +5,13 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
+import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.StartupListenerAdapter;
+import com.hbasesoft.framework.common.StartupListener;
 
 /**
  * <Description> <br>
@@ -20,7 +23,8 @@ import com.hbasesoft.framework.common.StartupListenerAdapter;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils <br>
  */
-public class ContextHolder {
+@Component
+public class ContextHolder implements ApplicationContextAware {
     private static ApplicationContext context;
 
     public static ApplicationContext getContext() {
@@ -31,7 +35,7 @@ public class ContextHolder {
         ContextHolder.context = context;
     }
 
-    public static class ContextHolderListener extends StartupListenerAdapter {
+    public static class ContextHolderListener implements StartupListener {
 
         /**
          * Description: <br>
@@ -55,6 +59,21 @@ public class ContextHolder {
          */
         @Override
         public void complete(ApplicationContext context) throws FrameworkException {
+            ContextHolder.context = context;
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param arg0
+     * @throws BeansException <br>
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        if (ContextHolder.context == null) {
             ContextHolder.context = context;
         }
     }

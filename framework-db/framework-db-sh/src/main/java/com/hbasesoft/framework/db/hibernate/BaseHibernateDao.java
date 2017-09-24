@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.collections.MapUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -26,11 +27,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
@@ -70,7 +70,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             SQLQuery query = session.createSQLQuery(sql);
 
             // Redis缓存序列化时不能有void返回类型，特殊处理一下
-            if (CommonUtil.isNull(param.getReturnType())) {
+            if (param.getReturnType() == null) {
                 param.setReturnType(void.class);
             }
 
@@ -138,7 +138,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     private void setParamMap(Map<String, Object> paramMap, Query query) throws DaoException {
-        if (CommonUtil.isNotEmpty(paramMap)) {
+        if (MapUtils.isNotEmpty(paramMap)) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {
                 Object obj = entry.getValue();
 

@@ -9,16 +9,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponent;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 import com.hbasesoft.workflow.plugin.transaction.test.TestFlowBean;
-import com.hbasesoft.workflow.plugin.transaction.test.dao.EmployeeDao;
-import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.entity.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.repository.EmployeeRepository;
 
 /**
  * <Description> <br>
@@ -33,7 +31,7 @@ import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
 @Component("Child02Component")
 public class Child02Component implements FlowComponent {
     @Resource
-    private EmployeeDao employeeDao;
+    private EmployeeRepository employeeDao;
 
     /**
      * Description: <br>
@@ -48,12 +46,10 @@ public class Child02Component implements FlowComponent {
     @Override
     public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
         TestFlowBean testFlowBean = (TestFlowBean) flowBean;
-        DetachedCriteria criteria = DetachedCriteria.forClass(Employee.class);
-        criteria.add(Restrictions.eq("name", testFlowBean.getName()));
-        List<Employee> employeeList = employeeDao.getListByCriteriaQuery(criteria);
+        List<Employee> employeeList = employeeDao.findByName(testFlowBean.getName());
         for (Employee employee : employeeList) {
             employee.setName(employee.getName() + 1);
-            employeeDao.updateEntity(employee);
+            employeeDao.update(employee);
         }
         return true;
     }

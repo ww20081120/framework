@@ -12,11 +12,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.cache.support.SimpleValueWrapper;
 
 import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.ICache;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import net.sf.ehcache.Cache;
@@ -116,7 +117,7 @@ public class EhcacheImpl implements ICache {
         Cache cache = getCache(nodeName);
         List<String> keys = cache.getKeysWithExpiryCheck();
         Map<String, T> cacheMap = new HashMap<String, T>();
-        if (CommonUtil.isNotEmpty(keys)) {
+        if (CollectionUtils.isNotEmpty(keys)) {
             for (String key : keys) {
                 Element element = cache.get(key);
                 Object value = (element != null ? element.getObjectValue() : null);
@@ -224,7 +225,7 @@ public class EhcacheImpl implements ICache {
      */
     @Override
     public <T> void putNode(String nodeName, int expireTimes, Map<String, T> node) {
-        if (CommonUtil.isNotEmpty(node)) {
+        if (MapUtils.isNotEmpty(node)) {
             Cache cache = getCache(nodeName, expireTimes, 0);
             for (Entry<String, T> entry : node.entrySet()) {
                 cache.put(new Element(entry.getKey(), entry.getValue()));

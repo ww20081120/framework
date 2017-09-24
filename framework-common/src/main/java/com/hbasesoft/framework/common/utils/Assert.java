@@ -8,6 +8,11 @@ package com.hbasesoft.framework.common.utils;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * <Description> <br>
  * 
@@ -67,7 +72,7 @@ public final class Assert {
      * @throws AssertException <br>
      */
     public static void notEmpty(String str, int errorCode, Object... params) throws AssertException {
-        if (CommonUtil.isEmpty(str)) {
+        if (StringUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -83,7 +88,7 @@ public final class Assert {
      * @throws AssertException <br>
      */
     public static void isEmpty(String str, int errorCode, Object... params) throws AssertException {
-        if (CommonUtil.isNotEmpty(str)) {
+        if (StringUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -100,7 +105,7 @@ public final class Assert {
      * @throws AssertException <br>
      */
     public static <T> void notEmpty(T[] str, int errorCode, Object... params) throws AssertException {
-        if (CommonUtil.isEmpty(str)) {
+        if (ArrayUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -117,7 +122,7 @@ public final class Assert {
      * @throws AssertException <br>
      */
     public static <T> void isEmpty(T[] str, int errorCode, Object... params) throws AssertException {
-        if (CommonUtil.isNotEmpty(str)) {
+        if (!ArrayUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -132,9 +137,8 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void notEmpty(Collection<?> str, int errorCode, Object... params)
-        throws AssertException {
-        if (CommonUtil.isEmpty(str)) {
+    public static void notEmpty(Collection<?> str, int errorCode, Object... params) throws AssertException {
+        if (CollectionUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -149,9 +153,8 @@ public final class Assert {
      * @param params <br>
      * @throws AssertException <br>
      */
-    public static void isEmpty(Collection<?> str, int errorCode, Object... params)
-        throws AssertException {
-        if (CommonUtil.isNotEmpty(str)) {
+    public static void isEmpty(Collection<?> str, int errorCode, Object... params) throws AssertException {
+        if (CollectionUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -167,7 +170,7 @@ public final class Assert {
      * @throws AssertException <br>
      */
     public static void notEmpty(Map<?, ?> str, int errorCode, Object... params) throws AssertException {
-        if (CommonUtil.isEmpty(str)) {
+        if (MapUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
@@ -183,7 +186,7 @@ public final class Assert {
      * @throws AssertException <br>
      */
     public static void isEmpty(Map<?, ?> str, int errorCode, Object... params) throws AssertException {
-        if (CommonUtil.isNotEmpty(str)) {
+        if (MapUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }

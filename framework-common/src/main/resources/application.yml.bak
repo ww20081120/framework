@@ -1,0 +1,30 @@
+app: #app configuration
+ port: 8080
+
+spring: # spring configuration
+ aop:
+  auto: true
+
+master: # 数据库配置
+ db:
+  url: jdbc:mysql://192.168.1.100:3306/web?useUnicode=true&characterEncoding=UTF-8
+  username: root
+  password: ENC(Lga6mLsx9z3YHrVZB3/HOw==)
+  type: mysql
+
+cache: # 缓存配置
+ model: SIMPLE #缓存模式：SIMPLE、REDIS、REDIS_SHARED、REDIS_CLUSTER
+ redis: 
+  address: 127.0.0.1:6379 #REDIS地址 端口
+
+logservice: #性能参数
+ max:
+  deep:
+   size: 5
+  execute:
+   time: 60
+ aways: 
+  log: true
+
+logging: #日志存储配置
+ config: classpath:log4j2.xml

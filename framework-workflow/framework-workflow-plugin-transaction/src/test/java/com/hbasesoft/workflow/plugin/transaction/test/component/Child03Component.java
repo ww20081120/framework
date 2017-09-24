@@ -9,15 +9,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponent;
 import com.hbasesoft.framework.workflow.core.FlowContext;
-import com.hbasesoft.workflow.plugin.transaction.test.dao.EmployeeDao;
-import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.entity.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.repository.EmployeeRepository;
 
 /**
  * <Description> <br>
@@ -32,7 +30,7 @@ import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
 @Component("Child03Component")
 public class Child03Component implements FlowComponent {
     @Resource
-    private EmployeeDao employeeDao;
+    private EmployeeRepository employeeDao;
 
     /**
      * Description: <br>
@@ -46,12 +44,10 @@ public class Child03Component implements FlowComponent {
      */
     @Override
     public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
-        DetachedCriteria criteria = DetachedCriteria.forClass(Employee.class);
-        criteria.add(Restrictions.le("age", 20));
-        List<Employee> employeeList = employeeDao.getListByCriteriaQuery(criteria);
+        List<Employee> employeeList = employeeDao.findByAgeGreaterThan(20);
         for (Employee employee : employeeList) {
             employee.setAge(employee.getAge() + 1);
-            employeeDao.updateEntity(employee);
+            employeeDao.update(employee);
         }
         return true;
     }

@@ -10,11 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.hbasesoft.framework.boostrap.normal.Application;
 import com.hbasesoft.framework.cache.core.CacheHelper;
-import com.hbasesoft.framework.common.Application;
 
 /**
  * <Description> <br>
@@ -25,7 +25,7 @@ import com.hbasesoft.framework.common.Application;
  * @see com.hbasesoft.framework.test.cache <br>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 public class TestCache {
 
     public static class Person {

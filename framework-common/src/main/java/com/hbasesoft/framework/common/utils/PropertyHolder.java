@@ -28,12 +28,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
+import org.yaml.snakeyaml.Yaml;
 
-import com.hbasesoft.framework.common.Application;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
@@ -61,8 +63,41 @@ public class PropertyHolder {
         return PROPERTIES;
     }
 
-    private static void load(InputStream inputStream, Map<String, String> map) throws IOException {
+    @SuppressWarnings("unchecked")
+    private static void loadYml(InputStream inputStream, Map<String, String> map) throws IOException {
+        try {
 
+            Yaml yaml = new Yaml();
+            HashMap<String, Object> value = yaml.loadAs(inputStream, HashMap.class);
+            if (MapUtils.isNotEmpty(value)) {
+                for (Entry<String, Object> entry : value.entrySet()) {
+                    transfer(entry.getKey(), entry.getValue(), map);
+                }
+            }
+        }
+        finally {
+            IOUtils.closeQuietly(inputStream);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void transfer(String key, Object value, Map<String, String> map) {
+        if (value != null) {
+            if (value instanceof Map) {
+                Map<String, Object> m = (Map<String, Object>) value;
+                if (MapUtils.isNotEmpty(m)) {
+                    for (Entry<String, Object> entry : m.entrySet()) {
+                        transfer(key + GlobalConstants.PERIOD + entry.getKey(), entry.getValue(), map);
+                    }
+                }
+            }
+            else {
+                map.put(key, value.toString());
+            }
+        }
+    }
+
+    private static void loadProperties(InputStream inputStream, Map<String, String> map) throws IOException {
         try {
             Properties properties = new Properties();
             properties.load(new InputStreamReader(inputStream, "utf-8"));
@@ -84,28 +119,44 @@ public class PropertyHolder {
      *         <br>
      */
     private static void init() {
-        String systemConfig = "/application.properties";
+        String systemConfig = "/application.yml";
         ClassPathResource cr = null;
         try {
             cr = new ClassPathResource(systemConfig);
-            load(cr.getInputStream(), PROPERTIES);
+            if (cr.exists()) {
+                loadYml(cr.getInputStream(), PROPERTIES);
+            }
+            else {
+                systemConfig = "/application.properties";
+                cr = new ClassPathResource(systemConfig);
+                loadProperties(cr.getInputStream(), PROPERTIES);
+            }
             log.info("装入主配置文件:" + systemConfig);
         }
         catch (Exception e) {
-            log.info("装入主配置文件" + systemConfig + "失败!", e);
+            log.error("装入主配置文件" + systemConfig + "失败!", e);
+            throw new InitializationException(e);
         }
 
         String extendPropertyFiles = PROPERTIES.get("extend.property.files");
-        if (CommonUtil.isNotEmpty(extendPropertyFiles)) {
+        if (StringUtils.isNotEmpty(extendPropertyFiles)) {
             String[] files = StringUtils.split(extendPropertyFiles, GlobalConstants.SPLITOR);
             for (String file : files) {
                 try {
                     cr = new ClassPathResource(file);
-                    load(cr.getInputStream(), PROPERTIES);
-                    log.info("装入扩展配置文件：" + file);
+                    if (cr.exists()) {
+                        if (StringUtils.endsWith(file, "yml")) {
+                            loadYml(cr.getInputStream(), PROPERTIES);
+                        }
+                        else {
+                            loadProperties(cr.getInputStream(), PROPERTIES);
+                        }
+                        log.info("装入扩展配置文件：" + file);
+                    }
                 }
                 catch (Exception e) {
                     log.info("装入扩展配置文件" + file + "失败！", e);
+                    throw new InitializationException(e);
                 }
             }
         }
@@ -124,7 +175,7 @@ public class PropertyHolder {
         ClassPathResource cr = null;
         try {
             cr = new ClassPathResource(systemErrorMessagePath);
-            load(cr.getInputStream(), ERROR_MESSAGE);
+            loadProperties(cr.getInputStream(), ERROR_MESSAGE);
             log.info("装入系统错误码文件:" + systemErrorMessagePath);
         }
         catch (Exception e) {
@@ -135,7 +186,7 @@ public class PropertyHolder {
         try {
             cr = new ClassPathResource(projectErrorMessagePath);
             if (cr.exists()) {
-                load(cr.getInputStream(), ERROR_MESSAGE);
+                loadProperties(cr.getInputStream(), ERROR_MESSAGE);
                 log.info("装入项目错误码文件:" + projectErrorMessagePath);
             }
         }
@@ -144,12 +195,12 @@ public class PropertyHolder {
         }
 
         String selfPaths = getProperty("extend.errorMessage.files");
-        if (CommonUtil.isNotEmpty(selfPaths)) {
+        if (StringUtils.isNotEmpty(selfPaths)) {
             String[] files = StringUtils.split(selfPaths, GlobalConstants.SPLITOR);
             for (String file : files) {
                 try {
                     cr = new ClassPathResource(file);
-                    load(cr.getInputStream(), ERROR_MESSAGE);
+                    loadProperties(cr.getInputStream(), ERROR_MESSAGE);
                     log.info("装入错误码文件：" + file);
                 }
                 catch (Exception e) {
@@ -166,7 +217,7 @@ public class PropertyHolder {
 
     public static Boolean getBooleanProperty(String name, Boolean defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? "true".equals(value) : defaultValue;
+        return StringUtils.isNotEmpty(value) ? "true".equals(value) : defaultValue;
     }
 
     public static Integer getIntProperty(String name) {
@@ -175,7 +226,7 @@ public class PropertyHolder {
 
     public static Integer getIntProperty(String name, Integer defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
+        return StringUtils.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
     }
 
     public static Long getLongProperty(String name) {
@@ -184,7 +235,7 @@ public class PropertyHolder {
 
     public static Long getLongProperty(String name, Long defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
+        return StringUtils.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
     }
 
     public static String getProperty(String name) {
@@ -193,7 +244,7 @@ public class PropertyHolder {
 
     public static String getProperty(String name, String defaultValue) {
         String value = PROPERTIES.get(name);
-        return CommonUtil.isNotEmpty(value) ? value : defaultValue;
+        return StringUtils.isNotEmpty(value) ? value : defaultValue;
     }
 
     public static void setProperty(String name, String value) {
@@ -202,7 +253,7 @@ public class PropertyHolder {
 
     public static String getErrorMessage(int code, Object... params) {
         String message = ERROR_MESSAGE.get(code + GlobalConstants.BLANK);
-        if (CommonUtil.isNotEmpty(message)) {
+        if (StringUtils.isNotEmpty(message)) {
             if (CommonUtil.isNotEmpty(params)) {
                 return CommonUtil.messageFormat(message, params);
             }
@@ -213,9 +264,9 @@ public class PropertyHolder {
 
     public static String getProjectName() {
         String name = getProperty("project.name");
-        if (CommonUtil.isEmpty(name)) {
+        if (StringUtils.isEmpty(name)) {
             String realPath = StringUtils.replaceEach(
-                Application.class.getClassLoader().getResource(GlobalConstants.BLANK).getPath(), new String[] {
+                PropertyHolder.class.getClassLoader().getResource(GlobalConstants.BLANK).getPath(), new String[] {
                     "/target/classes/", "/WEB-INF/classes/"
                 }, new String[] {
                     GlobalConstants.BLANK, GlobalConstants.BLANK

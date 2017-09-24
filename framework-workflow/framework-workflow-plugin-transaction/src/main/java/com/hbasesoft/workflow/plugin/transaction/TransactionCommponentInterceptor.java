@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -18,7 +19,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
@@ -63,7 +63,7 @@ public class TransactionCommponentInterceptor implements FlowComponentIntercepto
             DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 
             String propagation = (String) configAttrMap.get("propagation");
-            if (CommonUtil.isNotEmpty(propagation)) {
+            if (StringUtils.isNotEmpty(propagation)) {
                 switch (propagation) {
                     case "PROPAGATION_REQUIRED":
                         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);

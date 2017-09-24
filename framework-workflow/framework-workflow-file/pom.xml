@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-workflow</artifactId>
-		<version>2.4</version>
+		<version>3.0</version>
 	</parent>
 	<artifactId>framework-workflow-file</artifactId>
 	<name>workflow-file</name>
@@ -14,6 +14,12 @@
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-workflow-core</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-bootstrap-normal</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

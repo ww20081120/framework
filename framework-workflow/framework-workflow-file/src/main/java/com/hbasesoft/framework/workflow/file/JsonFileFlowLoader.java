@@ -19,12 +19,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
@@ -70,7 +72,7 @@ public class JsonFileFlowLoader implements FlowLoader {
         String path = PropertyHolder.getProperty("workflow.file.dir");
         try {
             // 如果自定义了文件夹 使用文件夹内的工作流
-            if (CommonUtil.isNotEmpty(path)) {
+            if (StringUtils.isNotEmpty(path)) {
                 findFlowFile(new File(path));
             }
             else {
@@ -151,13 +153,13 @@ public class JsonFileFlowLoader implements FlowLoader {
     }
 
     private void addFlowFile(String content, String fileName) {
-        if (CommonUtil.isNotEmpty(content)) {
+        if (StringUtils.isNotEmpty(content)) {
             LoggerUtil.info("find workflow file [{0}]", fileName);
             JSONObject json = JSONObject.parseObject(content);
 
             FlowConfig config = getFlowConfig(json);
             String name = config.getName();
-            if (CommonUtil.isEmpty(name)) {
+            if (StringUtils.isEmpty(name)) {
                 name = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("."));
             }
             flowConfigHolder.put(name, config);
@@ -171,33 +173,33 @@ public class JsonFileFlowLoader implements FlowLoader {
         FlowConfig config = new FlowConfig();
 
         String component = obj.getString("component");
-        if (CommonUtil.isNotEmpty(component)) {
+        if (StringUtils.isNotEmpty(component)) {
             FlowComponent flowComponent = ContextHolder.getContext().getBean(component, FlowComponent.class);
             Assert.notNull(flowComponent, ErrorCodeDef.FLOW_COMPONENT_NOT_FOUND, component);
             config.setComponent(flowComponent);
         }
 
         String name = obj.getString("name");
-        if (CommonUtil.isEmpty(name)) {
+        if (StringUtils.isEmpty(name)) {
             name = component;
         }
         config.setName(name);
 
         String version = obj.getString("version");
-        if (CommonUtil.isEmpty(version)) {
+        if (StringUtils.isEmpty(version)) {
             version = "1.0";
         }
 
         JSONArray children = obj.getJSONArray("children");
 
-        if (CommonUtil.isNotEmpty(children)) {
+        if (CollectionUtils.isNotEmpty(children)) {
             List<FlowConfig> childConfigList = new ArrayList<FlowConfig>();
             for (int i = 0, size = children.size(); i < size; i++) {
                 childConfigList.add(getFlowConfig(children.getJSONObject(i)));
             }
             config.setChildrenConfigList(childConfigList);
         }
-        else if (CommonUtil.isEmpty(component)) {
+        else if (StringUtils.isEmpty(component)) {
             throw new InitializationException(ErrorCodeDef.FLOW_COMPONENT_INSTANCE_OR_CHILDREN_NOT_FOUND, name);
         }
 
