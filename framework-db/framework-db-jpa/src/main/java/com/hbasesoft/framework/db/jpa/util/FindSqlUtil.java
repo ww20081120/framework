@@ -69,6 +69,8 @@ public final class FindSqlUtil {
             }
         }
 
-        return IOUtil.readString(classLoader.getResourceAsStream(sb.toString()));
+        return IOUtil.readString(classLoader.getResourceAsStream(sb.toString())).replaceAll("\\n", " ")
+            .replaceAll("\\t", " ").replaceAll("\\s{1,}", " ").trim();
+
     }
 }

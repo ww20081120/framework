@@ -31,6 +31,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     List<Employee> findByAgeGreaterThan(int age);
 
     @Modifying
-    @Query("update Employee e set e.name = :#{#employee.name}, e.age = :#{#employee.age} where e.id = :#{#employee.id}")
-    int update(@Param("employee") Employee employee);
+    @Query(nativeQuery = true)
+    int update(@Param("entity") Employee employee);
 }
