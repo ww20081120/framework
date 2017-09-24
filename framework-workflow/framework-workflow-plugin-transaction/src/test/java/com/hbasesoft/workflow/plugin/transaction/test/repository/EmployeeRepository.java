@@ -5,9 +5,14 @@
  ****************************************************************************************/
 package com.hbasesoft.workflow.plugin.transaction.test.repository;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.hbasesoft.workflow.plugin.transaction.test.entity.Employee;
 
 /**
  * <Description> <br>
@@ -19,7 +24,13 @@ import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
  * @since V1.0<br>
  * @see com.hbasesoft.workflow.plugin.transaction.test.repository <br>
  */
-@Repository
-public interface EmployeeRepository extends IGenericBaseDao {
+public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
+    List<Employee> findByName(String name);
+
+    List<Employee> findByAgeGreaterThan(int age);
+
+    @Modifying
+    @Query("update Employee e set e.name = :#{#employee.name}, e.age = :#{#employee.age} where e.id = :#{#employee.id}")
+    int update(@Param("employee") Employee employee);
 }

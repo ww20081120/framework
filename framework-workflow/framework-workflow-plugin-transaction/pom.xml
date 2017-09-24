@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-db-sh</artifactId>
+			<artifactId>framework-db-jpa</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

@@ -13,7 +13,7 @@ import com.hbasesoft.framework.workflow.core.FlowBean;
 import com.hbasesoft.framework.workflow.core.FlowComponent;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 import com.hbasesoft.workflow.plugin.transaction.test.TestFlowBean;
-import com.hbasesoft.workflow.plugin.transaction.test.pojo.Employee;
+import com.hbasesoft.workflow.plugin.transaction.test.entity.Employee;
 import com.hbasesoft.workflow.plugin.transaction.test.repository.EmployeeRepository;
 
 /**
@@ -30,7 +30,7 @@ import com.hbasesoft.workflow.plugin.transaction.test.repository.EmployeeReposit
 public class Child01Component implements FlowComponent {
 
     @Resource
-    private EmployeeRepository employeeDao;
+    private EmployeeRepository employeeRepository;
 
     /**
      * Description: <br>
@@ -48,7 +48,7 @@ public class Child01Component implements FlowComponent {
         Employee employee = new Employee();
         employee.setName(testFlowBean.getName());
         employee.setAge(testFlowBean.getAge());
-        employeeDao.save(employee);
+        employeeRepository.save(employee);
         return true;
     }
 

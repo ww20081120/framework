@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.workflow.plugin.transaction.test.pojo;
+package com.hbasesoft.workflow.plugin.transaction.test.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +22,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @taskId <br>
  * @CreateDate 2017年9月5日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.workflow.plugin.transaction.test.pojo <br>
+ * @see com.hbasesoft.workflow.plugin.transaction.test.entity <br>
  */
 @Entity(name = "Employee")
 public class Employee extends BaseEntity {
