@@ -49,7 +49,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public PrintWriter getLogWriter() throws SQLException {
+    public synchronized PrintWriter getLogWriter() throws SQLException {
         return DataSourceUtil.getDataSource(this.name).getLogWriter();
     }
 
@@ -62,7 +62,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public void setLogWriter(PrintWriter out) throws SQLException {
+    public synchronized void setLogWriter(PrintWriter out) throws SQLException {
         List<DataSource> dsList = DataSourceUtil.getDataSources(name);
         if (CollectionUtils.isNotEmpty(dsList)) {
             for (DataSource ds : dsList) {
@@ -80,7 +80,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public void setLoginTimeout(int seconds) throws SQLException {
+    public synchronized void setLoginTimeout(int seconds) throws SQLException {
         List<DataSource> dsList = DataSourceUtil.getDataSources(name);
         if (CollectionUtils.isNotEmpty(dsList)) {
             for (DataSource ds : dsList) {
@@ -98,7 +98,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public int getLoginTimeout() throws SQLException {
+    public synchronized int getLoginTimeout() throws SQLException {
         return DataSourceUtil.getDataSource(this.name).getLoginTimeout();
     }
 
@@ -111,7 +111,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLFeatureNotSupportedException <br>
      */
     @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public synchronized Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return DataSourceUtil.getDataSource(this.name).getParentLogger();
     }
 
@@ -125,7 +125,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    public synchronized <T> T unwrap(Class<T> iface) throws SQLException {
         return DataSourceUtil.getDataSource(this.name).unwrap(iface);
     }
 
@@ -139,7 +139,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    public synchronized boolean isWrapperFor(Class<?> iface) throws SQLException {
         return DataSourceUtil.getDataSource(this.name).isWrapperFor(iface);
     }
 
@@ -152,7 +152,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public Connection getConnection() throws SQLException {
+    public synchronized Connection getConnection() throws SQLException {
         return DataSourceUtil.getDataSource(this.name).getConnection();
     }
 
@@ -167,7 +167,7 @@ public class ClusterDataSource implements DataSource {
      * @throws SQLException <br>
      */
     @Override
-    public Connection getConnection(String username, String password) throws SQLException {
+    public synchronized Connection getConnection(String username, String password) throws SQLException {
         return DataSourceUtil.getDataSource(this.name).getConnection(username, password);
     }
 }

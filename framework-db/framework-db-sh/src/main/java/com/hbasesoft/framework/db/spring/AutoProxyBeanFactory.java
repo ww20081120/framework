@@ -12,10 +12,10 @@ import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.stereotype.Repository;
 
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 
 /**
@@ -59,7 +59,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                     Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
                     String className = null;
                     for (Class<?> clazz : clazzSet) {
-                        if (clazz.isAnnotationPresent(Repository.class)) {
+                        if (clazz.isAnnotationPresent(Dao.class)) {
                             className = clazz.getName();
                             String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
                             if (beanFactory.containsBean(beanName)) {

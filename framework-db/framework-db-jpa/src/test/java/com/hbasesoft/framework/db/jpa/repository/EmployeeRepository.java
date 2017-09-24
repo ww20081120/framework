@@ -3,9 +3,14 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.config;
+package com.hbasesoft.framework.db.jpa.repository;
 
-import com.hbasesoft.framework.db.core.AbstractDataSourceRegister;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.hbasesoft.framework.db.jpa.entity.Employee;
 
 /**
  * <Description> <br>
@@ -13,22 +18,16 @@ import com.hbasesoft.framework.db.core.AbstractDataSourceRegister;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2016年8月29日 <br>
+ * @CreateDate 2017年9月23日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.config <br>
+ * @see com.hbasesoft.framework.db.jpa.repository <br>
  */
-public class DefaultDataSourceRegister extends AbstractDataSourceRegister {
+public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public String getTypeName() {
-        return "master";
-    }
+    Employee findByName(String name);
 
+    Employee findByNameAndAge(String name, int age);
+
+    @Query(nativeQuery = true)
+    List<Employee> queryEmployee();
 }
