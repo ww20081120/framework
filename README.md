@@ -4,7 +4,7 @@ Framework 3.0 框架说明
 ### 更新说明
 版本|更新内容| 时间|修改人
 --- | --- | --- | ---
-3.0 | 1.更新了spring boot 版本至2.0 <br> 2.引入spring cloud框架 <br> 3. 重新定义了common 模块的API <br> 4. 支持 JPA  |  | 王伟
+3.0 | 1.更新了spring boot 版本至2.0 <br> 2.引入spring cloud框架 <br> 3. 重新定义了common 模块的API <br> 4. 支持JPA <br> 5. 支持yml格式的配置文件 <br> 6. 去除dubbox，引入spring cloud框架 | 2017年9月24 | 王伟
 
 ### 框架介绍
 
