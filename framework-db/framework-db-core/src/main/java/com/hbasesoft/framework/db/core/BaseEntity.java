@@ -6,7 +6,7 @@ package com.hbasesoft.framework.db.core;
 import java.io.Serializable;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.hbasesoft.framework.common.utils.date.DateConstants;
 
 /**
  * <Description> <br>
@@ -26,11 +26,12 @@ public abstract class BaseEntity implements Serializable {
 
     /**
      * toString
+     * 
      * @see java.lang.Object#toString()
      * @return <br>
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss", new SerializerFeature[0]);
+        return JSONObject.toJSONStringWithDateFormat(this, DateConstants.DATETIME_FORMAT_19);
     }
 }

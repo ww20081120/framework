@@ -259,7 +259,7 @@ public class PropertyHolder {
             }
             return message;
         }
-        return GlobalConstants.BLANK;
+        return GlobalConstants.BLANK + code;
     }
 
     public static String getProjectName() {
