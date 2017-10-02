@@ -22,7 +22,7 @@ import com.hbasesoft.framework.common.utils.io.IOUtil;
  * @taskId <br>
  * @CreateDate 2017年9月24日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.jpa <br>
+ * @see com.hbasesoft.framework.test.db.jpa <br>
  */
 public final class FindSqlUtil {
 

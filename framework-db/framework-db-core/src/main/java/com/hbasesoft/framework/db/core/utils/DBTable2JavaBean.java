@@ -374,7 +374,7 @@ public class DBTable2JavaBean extends JFrame {
     public void parseTableByShowCreate(Connection conn, String tablename, String packname, String outputdir)
         throws Exception {
         String className = BeanUtil.toCapitalizeCamelCase(
-            tablename.toUpperCase().startsWith("T_") ? tablename.substring(2) : tablename) + "Pojo";
+            tablename.toUpperCase().startsWith("T_") ? tablename.substring(2) : tablename) + "Entity";
         tablename = StringUtils.upperCase(tablename);
         File file = new File(outputdir + "/" + className + ".java");
         if (file.exists()) {

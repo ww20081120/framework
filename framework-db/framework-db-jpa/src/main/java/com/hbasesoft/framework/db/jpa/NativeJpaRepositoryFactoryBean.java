@@ -21,7 +21,7 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
  * @taskId <br>
  * @CreateDate 2017年9月24日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.jpa <br>
+ * @see com.hbasesoft.framework.test.db.jpa <br>
  */
 public class NativeJpaRepositoryFactoryBean<R extends JpaRepository<S, ID>, S, ID extends Serializable>
     extends JpaRepositoryFactoryBean<R, S, ID> {

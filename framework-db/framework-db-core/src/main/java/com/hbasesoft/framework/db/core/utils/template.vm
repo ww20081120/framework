@@ -10,7 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
 /**
- * <Description> ${TABLENAME}的Pojo<br>
+ * <Description> ${TABLENAME}的Entity<br>
  * 
  * @author 工具生成<br>
  * @version 1.0<br>

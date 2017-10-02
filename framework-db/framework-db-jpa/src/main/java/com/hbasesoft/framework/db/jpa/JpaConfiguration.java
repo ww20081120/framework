@@ -31,7 +31,7 @@ import com.hbasesoft.framework.db.core.ClusterDataSource;
  * @taskId <br>
  * @CreateDate 2017年9月23日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.jpa <br>
+ * @see com.hbasesoft.framework.test.db.jpa <br>
  */
 @Configuration
 @EnableJpaRepositories(value = "com.hbasesoft.**/*.repository",

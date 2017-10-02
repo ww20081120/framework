@@ -25,7 +25,7 @@ import org.springframework.data.repository.query.QueryLookupStrategy.Key;
  * @taskId <br>
  * @CreateDate 2017年9月23日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.jpa <br>
+ * @see com.hbasesoft.framework.test.db.jpa <br>
  */
 public class NativeJpaRepositoryFactory extends JpaRepositoryFactory {
 

@@ -18,7 +18,7 @@
 		<module>framework-cache</module>
 		<module>framework-message</module>
 		<module>framework-log</module>
-		<module>framework-workflow</module>
+		<module>framework-rule</module>
 		<module>framework-bootstrap</module>
 	</modules>
 	<properties>
