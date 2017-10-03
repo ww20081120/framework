@@ -36,6 +36,7 @@ public class TestFlow implements ApplicationContextAware {
     public void flowStart() {
         FlowBean flowBean = new FlowBean();
         FlowHelper.flowStart(flowBean, "demo");
+
     }
 
     /**

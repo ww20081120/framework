@@ -22,8 +22,7 @@ public class TestFlowBean extends FlowBean {
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = -2567923112402001491L;
-
+    private static final long serialVersionUID = 6786454320472444610L;
     private int age;
 
     public int getAge() {

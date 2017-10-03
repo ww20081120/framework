@@ -21,7 +21,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.db.core.ClusterDataSource;
+import com.hbasesoft.framework.db.core.config.DbParam;
+import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 
 /**
  * <Description> <br>
@@ -60,7 +61,7 @@ public class JpaConfiguration implements ApplicationContextAware {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.hbasesoft.**/*.entity");
-        factory.setDataSource(new ClusterDataSource("master"));
+        factory.setDataSource(DataSourceUtil.registDataSource("master", new DbParam("master")));
         factory.afterPropertiesSet();
         return factory.getObject();
     }

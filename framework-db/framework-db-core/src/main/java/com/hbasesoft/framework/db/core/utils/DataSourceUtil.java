@@ -5,18 +5,20 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
-import java.util.Random;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.DataSourceRegister;
+import com.hbasesoft.framework.db.core.config.DbParam;
 
 /**
  * <Description> <br>
@@ -30,41 +32,77 @@ import com.hbasesoft.framework.db.core.DataSourceRegister;
  */
 public final class DataSourceUtil {
 
-    private static Map<String, List<DataSource>> dataSourceMap = new ConcurrentHashMap<String, List<DataSource>>();
+    private static Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<String, DataSource>();
 
-    private static Random random = new Random();
+    private static boolean initFlag = false;
 
     private DataSourceUtil() {
     }
 
-    public static List<DataSource> getDataSources(String name) {
+    public static DataSource getDataSource(String name) {
         return getDataSourceMap().get(name);
     }
 
-    public static DataSource getDataSource(String name) {
-        List<DataSource> dsList = getDataSources(name);
-        Assert.notEmpty(dsList, ErrorCodeDef.DB_DATASOURCE_NOT_SET, name);
-        int index = random.nextInt(dsList.size());
-        return dsList.get(index);
+    public static DataSource registDataSource(String name, DbParam dbParam) {
+        synchronized (dataSourceMap) {
+            return regist(name, dbParam);
+        }
     }
 
-    private static Map<String, List<DataSource>> getDataSourceMap() {
+    private static Map<String, DataSource> getDataSourceMap() {
         synchronized (dataSourceMap) {
-            if (dataSourceMap.isEmpty()) {
+            if (!initFlag) {
                 ServiceLoader<DataSourceRegister> registerLoader = ServiceLoader.load(DataSourceRegister.class);
                 if (registerLoader != null) {
                     registerLoader.forEach(register -> {
-                        List<DataSource> dsList = dataSourceMap.get(register.getTypeName());
-                        if (dsList == null) {
-                            dsList = new ArrayList<DataSource>();
-                            dataSourceMap.put(register.getTypeName(), dsList);
-                        }
-                        dsList.add(register.regist());
+                        regist(register.getTypeName(), new DbParam(register.getTypeName()));
                     });
+                }
+                initFlag = true;
+            }
+            return dataSourceMap;
+        }
+    }
+
+    private static DataSource regist(String name, DbParam dbParam) {
+        DataSource dataSource = dataSourceMap.get(name);
+        if (dataSource == null) {
+            DruidDataSource ds = new DruidDataSource();
+            ds.setDbType(dbParam.getDbType());
+
+            ds.setUrl(dbParam.getUrl());
+            ds.setUsername(dbParam.getUsername());
+            ds.setPassword(dbParam.getPassword());
+            ds.setInitialSize(dbParam.getInitialSize());
+            ds.setMaxActive(dbParam.getMaxActive());
+            ds.setMinIdle(dbParam.getMinIdle());
+            ds.setMaxWait(dbParam.getMaxWait());
+            ds.setValidationQuery(dbParam.getValidationQuery());
+            ds.setTestOnBorrow(dbParam.isTestOnBorrow());
+            ds.setTestOnReturn(dbParam.isTestOnReturn());
+            ds.setTestWhileIdle(dbParam.isTestWhileIdle());
+            ds.setTimeBetweenEvictionRunsMillis(dbParam.getTimeBetweenEvictionRunsMillis());
+            ds.setMinEvictableIdleTimeMillis(dbParam.getMinEvictableIdleTimeMillis());
+            ds.setRemoveAbandonedTimeout(dbParam.getRemoveAbandonedTimeout());
+            ds.setRemoveAbandoned(dbParam.isRemoveAbandoned());
+            ds.setProxyFilters(Arrays.asList(new SqlLogFilter()));
+            try {
+                ds.setFilters(dbParam.getFilters());
+                ds.init();
+                dataSourceMap.put(name, ds);
+                dataSource = ds;
+            }
+            catch (SQLException e) {
+                LoggerUtil.error(e);
+                throw new InitializationException(ErrorCodeDef.DB_DATASOURCE_NOT_SET, e);
+            }
+            finally {
+                if (ds != null) {
+                    ds.close();
                 }
             }
         }
-        return dataSourceMap;
+        return dataSource;
     }
 
 }

@@ -15,7 +15,7 @@ package com.hbasesoft.framework.db.core;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.config <br>
  */
-public class DefaultDataSourceRegister extends AbstractDataSourceRegister {
+public class DefaultDataSourceRegister implements DataSourceRegister {
 
     /**
      * Description: <br>

@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core;
 
-import javax.sql.DataSource;
-
 /**
  * <Description> <br>
  * 
@@ -20,6 +18,4 @@ import javax.sql.DataSource;
 public interface DataSourceRegister {
 
     String getTypeName();
-
-    DataSource regist();
 }

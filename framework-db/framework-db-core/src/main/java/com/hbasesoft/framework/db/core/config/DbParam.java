@@ -107,7 +107,11 @@ public class DbParam extends BaseEntity {
 
     private String filters = "stat";
 
-    public DbParam() {
+    public DbParam(String prefix, String url, String username, String password) {
+        setUrl(url);
+        setUsername(username);
+        setPassword(password);
+        init(prefix);
     }
 
     public DbParam(String prefix) {
@@ -117,11 +121,11 @@ public class DbParam extends BaseEntity {
         Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
         String password = PropertyHolder.getProperty(prefix + ".db.password");
         Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
-        if (StringUtils.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
-            password = DataUtil.decrypt(password.substring(4, password.length() - 1));
-        }
-        this.password = password;
+        setPassword(password);
+        init(prefix);
+    }
 
+    private void init(String prefix) {
         this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
         this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", 5);
         this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", 100);

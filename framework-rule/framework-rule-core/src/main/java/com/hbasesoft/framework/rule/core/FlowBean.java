@@ -8,7 +8,7 @@ package com.hbasesoft.framework.rule.core;
 import java.io.Serializable;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.hbasesoft.framework.common.utils.date.DateConstants;
 
 /**
  * <Description> 业务流程bean<br>
@@ -25,23 +25,27 @@ public class FlowBean implements Serializable {
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 6751902233623404986L;
+    private static final long serialVersionUID = 9000900333240002476L;
 
-    /**
-     * 流水号
-     */
     private String transId;
 
     public String getTransId() {
-        return transId;
+        return this.transId;
     }
 
     public void setTransId(String transId) {
         this.transId = transId;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss", new SerializerFeature[0]);
+        return JSONObject.toJSONStringWithDateFormat(this, DateConstants.DATETIME_FORMAT_19);
     }
 }
