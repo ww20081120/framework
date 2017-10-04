@@ -94,12 +94,10 @@ public final class DataSourceUtil {
             }
             catch (SQLException e) {
                 LoggerUtil.error(e);
-                throw new InitializationException(ErrorCodeDef.DB_DATASOURCE_NOT_SET, e);
-            }
-            finally {
                 if (ds != null) {
                     ds.close();
                 }
+                throw new InitializationException(ErrorCodeDef.DB_DATASOURCE_NOT_SET, e);
             }
         }
         return dataSource;
