@@ -13,8 +13,8 @@
 		<fastjson.version>1.1.39</fastjson.version>
 		<!-- 模版解析 -->
 		<ognl.version>2.6.11</ognl.version>
-		<velocity.version>1.7</velocity.version>
-		<velocity-tools.version>2.0</velocity-tools.version>
+		<velocity.version>2.0</velocity.version>
+
 		<!-- 处理图片 -->
 		<thumbnailator.version>0.4.8</thumbnailator.version>
 		<!-- //end 处理图片 -->
@@ -74,15 +74,22 @@
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
 		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>${velocity.version}</version>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-tools</artifactId>
-			<version>${velocity-tools.version}</version>
+			<artifactId>velocity-engine-core</artifactId>
+			<version>${velocity.version}</version>
 		</dependency>
 
 		<dependency>

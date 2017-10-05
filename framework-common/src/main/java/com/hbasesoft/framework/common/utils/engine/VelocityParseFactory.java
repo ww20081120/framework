@@ -18,10 +18,10 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
-import org.apache.velocity.tools.generic.DateTool;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
@@ -38,11 +38,6 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 public class VelocityParseFactory {
 
     /**
-     * dateTool
-     */
-    private static DateTool dateTool;
-
-    /**
      * properties
      */
     private static Properties properties;
@@ -53,7 +48,8 @@ public class VelocityParseFactory {
     private static Logger logger = new Logger(VelocityParseFactory.class);
 
     static {
-        dateTool = new DateTool();
+
+        // dateTool = new DateTool();
         try {
             properties = new Properties();
             properties.setProperty("runtime.log.error.stacktrace", "false");
@@ -67,6 +63,14 @@ public class VelocityParseFactory {
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
             properties.setProperty("input.encoding", GlobalConstants.DEFAULT_CHARSET);
             properties.setProperty("output.encoding", GlobalConstants.DEFAULT_CHARSET);
+
+            for (Entry<String, String> entry : PropertyHolder.getProperties().entrySet()) {
+                String key = entry.getKey();
+                if (key.startsWith("velocity.")) {
+                    properties.setProperty(key.substring(9), entry.getValue());
+                }
+            }
+
             Velocity.init(properties);
         }
         catch (Exception e) {
@@ -85,7 +89,7 @@ public class VelocityParseFactory {
      */
     public static String parse(String templateName, String body, Map<String, ?> params) throws UtilException {
         VelocityContext context = new VelocityContext();
-        context.put("dateTool", dateTool);
+        // context.put("dateTool", dateTool);
         if (MapUtils.isNotEmpty(params)) {
             for (Entry<String, ?> entry : params.entrySet()) {
                 context.put(entry.getKey(), entry.getValue());
