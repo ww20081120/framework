@@ -44,7 +44,7 @@ public class TransLogUtil {
             long beginTime = System.currentTimeMillis();
 
             // 执行方法
-            String methodName = getMethodSignature(method);
+            String methodName = getMethodSignature(target, method);
 
             TransManager manager = TransManager.getInstance();
 
@@ -95,7 +95,7 @@ public class TransLogUtil {
             }
 
             // 执行方法
-            String methodName = getMethodSignature(method);
+            String methodName = getMethodSignature(target, method);
 
             // 执行记录
             for (TransLoggerService service : getTransLoggerServices()) {
@@ -134,7 +134,7 @@ public class TransLogUtil {
             manager.setError(true);
 
             // 执行方法
-            String methodName = getMethodSignature(method);
+            String methodName = getMethodSignature(target, method);
 
             // 执行记录
             for (TransLoggerService service : getTransLoggerServices()) {
@@ -161,9 +161,10 @@ public class TransLogUtil {
      * @param point <br>
      * @return <br>
      */
-    private static String getMethodSignature(Method method) {
+    private static String getMethodSignature(Object target, Method method) {
         StringBuilder sbuf = new StringBuilder();
-        sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
+        sbuf.append(target == null ? method.getDeclaringClass().getName() : target.getClass().getName()).append('<')
+            .append(method.getName()).append('>');
         sbuf.append('(');
 
         Class<?>[] types = method.getParameterTypes();

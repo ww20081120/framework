@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.workflow.core;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.log.core.TransLogUtil;
 import com.hbasesoft.framework.workflow.core.config.FlowConfig;
 import com.hbasesoft.framework.workflow.core.config.FlowLoader;
 
@@ -38,6 +40,8 @@ public final class FlowHelper {
     private static List<FlowComponentInterceptor> interceptors;
 
     private static List<FlowComponentInterceptor> reverseInterceptors;
+
+    private static Method processMethod;
 
     public static int flowStart(FlowBean bean, String flowName) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
@@ -66,15 +70,26 @@ public final class FlowHelper {
 
     private static void execute(FlowBean flowBean, FlowContext flowContext) throws Exception {
         FlowConfig flowConfig = flowContext.getFlowConfig();
+        FlowComponent component = null;
+
+        // 执行拦截器前置拦截
         if (before(flowBean, flowContext)) {
             try {
-                FlowComponent component = flowConfig.getComponent();
 
+                // 获取流程组件，存在则执行流程组件
+                component = flowConfig.getComponent();
                 boolean flag = true;
                 if (component != null) {
+                    // 打印前置日志
+                    TransLogUtil.before(component, getMethod(), new Object[] {
+                        flowBean, flowContext
+                    });
+
+                    // 执行流程组件
                     flag = component.process(flowBean, flowContext);
                 }
 
+                // 是否执行流程组件中的子流程
                 if (flag) {
                     List<FlowConfig> list = flowConfig.getChildrenConfigList();
                     if (CommonUtil.isNotEmpty(list)) {
@@ -85,10 +100,24 @@ public final class FlowHelper {
                     }
                 }
                 flowContext.setFlowConfig(flowConfig);
+
+                if (component != null) {
+                    // 打印后置日志
+                    TransLogUtil.afterReturning(component, getMethod(), flag);
+                }
+
+                // 执行后置拦截
                 after(flowBean, flowContext);
             }
             catch (Exception e) {
                 flowContext.setFlowConfig(flowConfig);
+                if (component != null) {
+
+                    // 打印错误日志
+                    TransLogUtil.afterThrowing(component, getMethod(), e);
+                }
+
+                // 执行异常拦截
                 error(e, flowBean, flowContext);
                 throw e;
             }
@@ -159,6 +188,13 @@ public final class FlowHelper {
             }
         }
         return reverse ? reverseInterceptors : interceptors;
+    }
+
+    private static Method getMethod() throws NoSuchMethodException, SecurityException {
+        if (processMethod == null) {
+            processMethod = FlowComponent.class.getDeclaredMethod("process", FlowBean.class, FlowContext.class);
+        }
+        return processMethod;
     }
 
 }
