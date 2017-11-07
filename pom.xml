@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
-	<version>2.4</version>
+	<version>2.5</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 	<description>框架</description>
@@ -19,6 +19,7 @@
 		<module>framework-message</module>
 		<module>framework-log</module>
 		<module>framework-workflow</module>
+		<module>framework-wechat</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
