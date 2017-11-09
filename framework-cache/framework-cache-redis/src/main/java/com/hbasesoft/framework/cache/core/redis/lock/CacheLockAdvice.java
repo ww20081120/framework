@@ -22,11 +22,14 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.cache.core.annotation.CacheLock;
 import com.hbasesoft.framework.cache.core.annotation.Key;
+import com.hbasesoft.framework.cache.core.redis.ClusterRedisCache;
+import com.hbasesoft.framework.cache.core.redis.RedisCache;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 
 /**
@@ -49,34 +52,38 @@ public class CacheLockAdvice {
 
     @Around("cacheLock()")
     public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
-        Signature sig = thisJoinPoint.getSignature();
-        if (sig instanceof MethodSignature) {
-            MethodSignature msig = (MethodSignature) sig;
-            Object target = thisJoinPoint.getTarget();
-            Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+        String cacheModel = PropertyHolder.getProperty("cache.model");
+        if (RedisCache.CACHE_MODEL.equals(cacheModel) && ClusterRedisCache.CACHE_MODEL.equals(cacheModel)) {
+            Signature sig = thisJoinPoint.getSignature();
+            if (sig instanceof MethodSignature) {
+                MethodSignature msig = (MethodSignature) sig;
+                Object target = thisJoinPoint.getTarget();
+                Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
-            CacheLock cacheLock = AnnotationUtils.findAnnotation(currentMethod, CacheLock.class);
-            if (cacheLock != null) {
-                // 新建一个锁
-                RedisLock lock = new RedisLock(
-                    cacheLock.value() + getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
+                CacheLock cacheLock = AnnotationUtils.findAnnotation(currentMethod, CacheLock.class);
+                if (cacheLock != null) {
+                    // 新建一个锁
+                    RedisLock lock = new RedisLock(
+                        cacheLock.value() + getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
 
-                // 加锁
-                boolean result = lock.lock(cacheLock.timeOut(), cacheLock.expireTime());
-                if (!result) {
-                    throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, lock);
+                    // 加锁
+                    boolean result = lock.lock(cacheLock.timeOut(), cacheLock.expireTime());
+                    if (!result) {
+                        throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, lock);
+                    }
+
+                    try {
+                        // 加锁成功，执行方法
+                        return thisJoinPoint.proceed();
+                    }
+                    finally {
+                        lock.unlock();
+                    }
+
                 }
-
-                try {
-                    // 加锁成功，执行方法
-                    return thisJoinPoint.proceed();
-                }
-                finally {
-                    lock.unlock();
-                }
-
             }
         }
+
         return thisJoinPoint.proceed();
     }
 

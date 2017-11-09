@@ -7,9 +7,11 @@ package com.hbasesoft.framework.cache.simple;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.hbasesoft.framework.cache.core.AbstractCache;
 import com.hbasesoft.framework.cache.core.CacheConstant;
+import com.hbasesoft.framework.common.utils.CommonUtil;
 
 /**
  * <Description> <br>
@@ -27,7 +29,7 @@ public class SimpleCache extends AbstractCache {
     public static final String CACHE_MODEL = "SIMPLE";
 
     /** cachesMap */
-    private Map<byte[], Map<byte[], byte[]>> cachesMap;
+    private Map<String, Map<String, byte[]>> cachesMap;
 
     /**
      * SimpleCache
@@ -35,7 +37,7 @@ public class SimpleCache extends AbstractCache {
      * @param cachesMap <br>
      */
     public SimpleCache() {
-        this.cachesMap = new HashMap<byte[], Map<byte[], byte[]>>();
+        this.cachesMap = new HashMap<String, Map<String, byte[]>>();
     }
 
     /*
@@ -81,7 +83,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected byte[] get(byte[] key) {
-        return get(CacheConstant.DEFAULT_CACHE_DIR.getBytes());
+        return get(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), key);
     }
 
     /**
@@ -106,7 +108,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void evict(byte[] key) {
-        this.cachesMap.put(key, null);
+        this.cachesMap.put(new String(key), null);
     }
 
     /**
@@ -119,7 +121,14 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected Map<byte[], byte[]> getNode(byte[] node) {
-        return this.cachesMap.get(node);
+        Map<byte[], byte[]> cache = new HashMap<>();
+        Map<String, byte[]> temp = this.cachesMap.get(new String(node));
+        if (CommonUtil.isNotEmpty(temp)) {
+            for (Entry<String, byte[]> entry : temp.entrySet()) {
+                cache.put(entry.getKey().getBytes(), entry.getValue());
+            }
+        }
+        return cache;
     }
 
     /**
@@ -132,7 +141,14 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
-        this.cachesMap.put(key, dataMap);
+        Map<String, byte[]> temp = new HashMap<>();
+
+        if (CommonUtil.isNotEmpty(dataMap)) {
+            for (Entry<byte[], byte[]> entry : dataMap.entrySet()) {
+                temp.put(new String(entry.getKey()), entry.getValue());
+            }
+        }
+        this.cachesMap.put(new String(key), temp);
     }
 
     /**
@@ -145,7 +161,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void removeNode(byte[] nodeName) {
-        this.cachesMap.remove(nodeName);
+        this.cachesMap.remove(new String(nodeName));
     }
 
     /**
@@ -159,8 +175,8 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected byte[] get(byte[] nodeName, byte[] key) {
-        Map<byte[], byte[]> defaultCache = this.cachesMap.get(nodeName);
-        return defaultCache == null ? null : defaultCache.get(key);
+        Map<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
+        return defaultCache == null ? null : defaultCache.get(new String(key));
     }
 
     /**
@@ -174,12 +190,12 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
-        Map<byte[], byte[]> defaultCache = this.cachesMap.get(nodeName);
+        Map<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
         if (defaultCache == null) {
-            defaultCache = new HashMap<byte[], byte[]>();
-            this.cachesMap.put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), defaultCache);
+            defaultCache = new HashMap<String, byte[]>();
+            this.cachesMap.put(CacheConstant.DEFAULT_CACHE_DIR, defaultCache);
         }
-        defaultCache.put(key, t);
+        defaultCache.put(new String(key), t);
     }
 
     /**
