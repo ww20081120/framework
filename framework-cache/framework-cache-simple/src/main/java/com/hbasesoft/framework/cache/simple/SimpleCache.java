@@ -193,7 +193,7 @@ public class SimpleCache extends AbstractCache {
         Map<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
         if (defaultCache == null) {
             defaultCache = new HashMap<String, byte[]>();
-            this.cachesMap.put(CacheConstant.DEFAULT_CACHE_DIR, defaultCache);
+            this.cachesMap.put(new String(nodeName), defaultCache);
         }
         defaultCache.put(new String(key), t);
     }
