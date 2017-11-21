@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,6 @@ import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.wechat.CacheCodeDef;
 import com.hbasesoft.framework.wechat.ErrorCodeDef;
-import com.hbasesoft.framework.wechat.WebConstant;
 import com.hbasesoft.framework.wechat.WechatConstant;
 import com.hbasesoft.framework.wechat.WechatEventCodeDef;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
@@ -96,14 +96,14 @@ public class WechatServiceImpl implements WechatService {
      * @param content
      * @return
      * @throws ServiceException
-     * @throws VccException     <br>
+     * @throws VccException <br>
      * @author 王伟<br>
      * @taskId <br>
      */
     @Override
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    public String coreService(String accountId,String message, String imagePath, String serverPath)
-            throws ServiceException {
+    public String coreService(String accountId, String message, String imagePath, String serverPath)
+        throws ServiceException {
         LoggerUtil.info("------------微信客户端发送请求---------------------  {0}", message);
         Map<String, String> requestMap = WechatUtil.parseXml(message);
         if (CommonUtil.isEmpty(requestMap)) {
@@ -129,20 +129,20 @@ public class WechatServiceImpl implements WechatService {
 
         TextMessageResp textMessage = null;
         WechatMessageHandler handler = ContextHolder.getContext().getBean(msgType + "MessageHandler",
-                WechatMessageHandler.class);
+            WechatMessageHandler.class);
         String respMsg = null;
 
-//        if (null != openApiPushMessageHandler) {
-//            // 采用异步消息方式推送给第三方
-//            openApiPushMessageHandler.asynProcess(msgId, fromUserName, account, content, requestMap, imagePath,
-//                serverPath, message);
-//        }
+        // if (null != openApiPushMessageHandler) {
+        // // 采用异步消息方式推送给第三方
+        // openApiPushMessageHandler.asynProcess(msgId, fromUserName, account, content, requestMap, imagePath,
+        // serverPath, message);
+        // }
 
         if (handler != null) {
             try {
                 respMsg = handler.process(msgId, fromUserName, account, content, requestMap, imagePath, serverPath,
                     message);
-                //异步消息
+                // 异步消息
                 EventData data = new EventData();
                 data.put("msgId", msgId);
                 data.put("fromUserName", fromUserName);
@@ -152,57 +152,58 @@ public class WechatServiceImpl implements WechatService {
                 data.put("serverPath", serverPath);
                 data.put("accountId", accountId);
                 WechatExpandExecutor runnable = new WechatExpandExecutor(data);
-                WechatThreadPoolExecutor poolExecutor = (WechatThreadPoolExecutor)ContextHolder.getContext().getBean("wechatThreadPoolExecutor");
+                WechatThreadPoolExecutor poolExecutor = (WechatThreadPoolExecutor) ContextHolder.getContext()
+                    .getBean("wechatThreadPoolExecutor");
                 poolExecutor.execute(runnable);
-//            	WechatUtil.asyncWechatExpand(msgId, fromUserName, content,
-//            					imagePath, serverPath, message, accountId);
-//	        	for (ExpandconfigPojo expandConfig : weixinExpandconfigEntityLst) {
-//	        		expandHandler = ContextHolder.getContext().getBean(expandConfig.getClassname(),
-//	        				WechatMessageHandler.class);
-//	        		if (handler != null && expandHandler != null) {
-//	        			expandHandler.asynProcess(msgId, fromUserName, account, content, requestMap,
-//	        					imagePath, serverPath, message);
-//	        		}
-//	        	}
+                // WechatUtil.asyncWechatExpand(msgId, fromUserName, content,
+                // imagePath, serverPath, message, accountId);
+                // for (ExpandconfigPojo expandConfig : weixinExpandconfigEntityLst) {
+                // expandHandler = ContextHolder.getContext().getBean(expandConfig.getClassname(),
+                // WechatMessageHandler.class);
+                // if (handler != null && expandHandler != null) {
+                // expandHandler.asynProcess(msgId, fromUserName, account, content, requestMap,
+                // imagePath, serverPath, message);
+                // }
+                // }
 
                 List<ExpandconfigPojo> weixinExpandconfigEntityLst = CacheHelper.getCache()
-                        .get(CacheCodeDef.EXPAND_CONFIG_CACHE, CacheCodeDef.EXPAND_CONFIG_CACHE);
+                    .get(CacheCodeDef.EXPAND_CONFIG_CACHE, CacheCodeDef.EXPAND_CONFIG_CACHE);
                 if (CommonUtil.isEmpty(weixinExpandconfigEntityLst)) {
                     DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);
                     criteria.addOrder(Order.desc(ExpandconfigPojo.ORDER));
                     weixinExpandconfigEntityLst = wechatDao.getListByCriteriaQuery(criteria);
                     CacheHelper.getCache().put(CacheCodeDef.EXPAND_CONFIG_CACHE, CacheCodeDef.CONFIG_SAVE_TIME,
-                            CacheCodeDef.EXPAND_CONFIG_CACHE, weixinExpandconfigEntityLst);
+                        CacheCodeDef.EXPAND_CONFIG_CACHE, weixinExpandconfigEntityLst);
                 }
-                		
+
                 // 回复扩展
                 if (CommonUtil.isEmpty(respMsg)) {
-                   
-                    if (CommonUtil.isNotEmpty(weixinExpandconfigEntityLst)) {
-                    	
 
-                        //同步消息
-                    	WechatMessageHandler expandHandler = null;
+                    if (CommonUtil.isNotEmpty(weixinExpandconfigEntityLst)) {
+
+                        // 同步消息
+                        WechatMessageHandler expandHandler = null;
                         for (ExpandconfigPojo expandConfig : weixinExpandconfigEntityLst) {
                             expandHandler = ContextHolder.getContext().getBean(expandConfig.getClassname(),
-                                    WechatMessageHandler.class);
+                                WechatMessageHandler.class);
                             if (handler != null) {
                                 respMsg = expandHandler.process(msgId, fromUserName, account, content, requestMap,
-                                        imagePath, serverPath, message);
+                                    imagePath, serverPath, message);
                                 if (CommonUtil.isNotEmpty(respMsg)) {
                                     break;
                                 }
                             }
                         }
 
-                        if(CommonUtil.isEmpty(respMsg)){
-                        	respMsg = "success";
+                        if (CommonUtil.isEmpty(respMsg)) {
+                            respMsg = "success";
                         }
                     }
 
                 }
 
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 LoggerUtil.error("处理微信消息失败", e);
                 textMessage = new TextMessageResp();
                 textMessage.setToUserName(fromUserName);
@@ -215,7 +216,6 @@ public class WechatServiceImpl implements WechatService {
         }
         return respMsg;
     }
-
 
     /**
      * Description: <br>
@@ -233,8 +233,8 @@ public class WechatServiceImpl implements WechatService {
     public String wechatAccess(String accountId, String signature, String timestamp, String nonce, String echostr) {
 
         LoggerUtil.info(CommonUtil.messageFormat(
-                "==========> access wechat validate info [signature={0},timestamp={1},nonce={2},echostr={3}]", signature,
-                timestamp, nonce, echostr));
+            "==========> access wechat validate info [signature={0},timestamp={1},nonce={2},echostr={3}]", signature,
+            timestamp, nonce, echostr));
 
         String result = null;
         AccountPojo account = wechatDao.get(AccountPojo.class, accountId);
@@ -269,10 +269,10 @@ public class WechatServiceImpl implements WechatService {
         if (accountPojo == null) {
             accountPojo = getAccessTokenFormDb(appId);
             CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId,
-                    accountPojo);
+                accountPojo);
         }
         if (CommonUtil.isEmpty(accountPojo.getAccountaccesstoken()) || accountPojo.getAddtokentime() == null
-                || DateUtil.getCurrentTime() - accountPojo.getAddtokentime().getTime() > WechatConstant.TOKEN_TIME) {
+            || DateUtil.getCurrentTime() - accountPojo.getAddtokentime().getTime() > WechatConstant.TOKEN_TIME) {
             refreshAccessToken(appId, accountPojo.getAccountappsecret());
             accountPojo.setAccountaccesstoken(getAccessToken(appId));
         }
@@ -335,9 +335,10 @@ public class WechatServiceImpl implements WechatService {
                     wechatDao.saveOrUpdate(oc);
                 }
                 CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId,
-                        account);
+                    account);
             }
-        } else {
+        }
+        else {
             CacheHelper.getCache().put(CacheCodeDef.WX_ACCESS_TOKEN_ERROR, appId, obj.toString());
             LoggerUtil.error("获取AssessToken失败:[" + jsonStr + "]");
             throw new FrameworkException(ErrorCodeDef.APPID_SECRET_ERROR);
@@ -363,11 +364,11 @@ public class WechatServiceImpl implements WechatService {
         if (accountPojo == null) {
             accountPojo = getAccessTokenFormDb(appId);
             CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId,
-                    accountPojo);
+                accountPojo);
         }
 
         if (CommonUtil.isEmpty(accountPojo.getJsapiticket()) || accountPojo.getJsapitickettime() == null
-                || DateUtil.getCurrentTime() - accountPojo.getJsapitickettime().getTime() > WechatConstant.TOKEN_TIME) {
+            || DateUtil.getCurrentTime() - accountPojo.getJsapitickettime().getTime() > WechatConstant.TOKEN_TIME) {
             refreshJsapiTicket(accountPojo.getAccountaccesstoken());
             accountPojo.setJsapiticket(getJsApiTicket(appId));
 
@@ -407,11 +408,13 @@ public class WechatServiceImpl implements WechatService {
                 CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME,
                     account.getAccountappid(), account);
             }
-        } else {
+        }
+        else {
             LoggerUtil.error(obj.getString("errmsg"));
             if ("40001".equals(obj.getString("errcode"))) {
                 refreshAccessToken(account.getAccountappid(), account.getAccountappsecret());
-            } else {
+            }
+            else {
                 throw new FrameworkException(ErrorCodeDef.ACCESS_TOKEN_ERROR);
             }
         }
@@ -492,10 +495,38 @@ public class WechatServiceImpl implements WechatService {
             String result = HttpUtil.doPost(WechatConstant.ORDER_API, content, "text/xml");
             LoggerUtil.info("---end 发送微信支付订单result[{0}]", result);
             return XmlBeanUtil.xml2Object(result, UnifiedOrderResult.class);
-        } catch (UtilException e) {
+        }
+        catch (UtilException e) {
             LoggerUtil.error("签名校验失败", e);
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+
+        String key = "eiy7ZoAHcPdtgC4uT2AFuDNFUudAXILZ";
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("nonce_str", CommonUtil.getRandomChar(20));
+        //paramMap.put("time_expire", DateUtil.getCurrentTimestamp());
+        paramMap.put("fee_type", "CNY");
+        paramMap.put("mch_id", "1271056701");
+        paramMap.put("body", "IC卡充值");
+        paramMap.put("notify_url", "http://weixin.towngasvcc.com/vcc-wx/charge/notice/wechat");
+        paramMap.put("device_info", "WEB");
+        paramMap.put("out_trade_no", "99" + DateUtil.getCurrentTimestamp() + "0001");
+        paramMap.put("appid", "wxd4c0c0a7cd7f9ce1");
+        paramMap.put("total_fee", "7500");
+        paramMap.put("trade_type", "NATIVE");
+
+        // 签名，详见签名生成算法
+        paramMap.put("sign", WechatUtil.sign(key, paramMap));
+
+        String content = WechatUtil.map2xml(paramMap);
+        System.out.println("---begin 发送微信支付订单[" + content + "]");
+        String result = HttpUtil.doPost(WechatConstant.ORDER_API, content, "text/xml");
+        System.out.println("---end 发送微信支付订单result[" + result + "]");
+        System.out.println(XmlBeanUtil.xml2Object(result, UnifiedOrderResult.class));
+
     }
 
     /**
@@ -523,15 +554,16 @@ public class WechatServiceImpl implements WechatService {
             try {
                 in = new FileInputStream(new File(p12Path));
                 keyStore.load(in, mchId.toCharArray());
-            } finally {
+            }
+            finally {
                 IOUtils.closeQuietly(in);
             }
 
             // Trust own CA and all self-signed certs
             SSLContext sslcontext = SSLContexts.custom().loadKeyMaterial(keyStore, mchId.toCharArray()).build();
             // Allow TLSv1 protocol only
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[]{
-                    "TLSv1"
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] {
+                "TLSv1"
             }, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
             CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
 
@@ -543,7 +575,8 @@ public class WechatServiceImpl implements WechatService {
             String newSign = WechatUtil.sign(key, resultMap);
             Assert.equals(oldSign, newSign, ErrorCodeDef.REFUND_HASH_ERROR, oldSign, newSign);
             return resultMap;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LoggerUtil.error(e);
             throw new UtilException(ErrorCodeDef.REFUND_ERROR, e);
         }
@@ -569,13 +602,15 @@ public class WechatServiceImpl implements WechatService {
             if (DateUtil.getCurrentTime() - account.getAddtokentime().getTime() > WechatConstant.TOKEN_TIME) {// accesstoken失效
                 refreshAccessToken(appId, account.getAccountappsecret());
                 return getAccountByappId(appId);
-            } else {
+            }
+            else {
                 WechatAccount acct = new WechatAccount();
                 acct.setAppCode(account.getAccountappid());
                 acct.setAppSecret(account.getAccountappsecret());
                 return acct;
             }
-        } else {
+        }
+        else {
             return null;
         }
 
@@ -610,13 +645,12 @@ public class WechatServiceImpl implements WechatService {
         if (pojo != null && CommonUtil.isEmpty(pojo.getAccessToken())) {
             AccountPojo account = wechatDao.get(AccountPojo.class, pojo.getAccountId());
             if (account != null && account.getAddtokentime() != null
-                    && DateUtil.getCurrentTime() - account.getAddtokentime().getTime() > WechatConstant.TOKEN_TIME) {// accesstoken失效
+                && DateUtil.getCurrentTime() - account.getAddtokentime().getTime() > WechatConstant.TOKEN_TIME) {// accesstoken失效
                 refreshAccessToken(appId, account.getAccountappsecret());
                 return getOpenapiChannelByAppId(appId);
             }
             else {
-                if(account != null)
-                {
+                if (account != null) {
                     pojo.setAccessToken(account.getAccountaccesstoken());
                     wechatDao.saveOrUpdate(pojo);
                 }
@@ -653,7 +687,7 @@ public class WechatServiceImpl implements WechatService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public WXResult sendMessageByTemplate(WxTemplate wxTemplate, String appId) {
 
-    	String transId = CommonUtil.getTransactionID();
+        String transId = CommonUtil.getTransactionID();
         LoggerUtil.info("start sendMessageByTemplate  [{0}]", transId);
 
         // openID 不存在不发送
@@ -746,85 +780,84 @@ public class WechatServiceImpl implements WechatService {
         return result;
     }
 
-    public static void main(String[] args) {
-        // String timestamp = DateUtil.getCurrentTimestamp();
-        // String nonce = CommonUtil.getRandomNumber(32);
-        // String signature = SignUtil.signature("MqjTest", timestamp, nonce);
-        // String echostr = CommonUtil.getRandomChar(16);
-        //
-        // StringBuffer pushUrl = new StringBuffer("http://localhost:8080/ff8080815be6ab36015bf145dad20016?wechat");
-        // pushUrl.append("&signature=").append(signature).append("&nonce=").append(nonce).append("&timestamp=").append(timestamp).append("&echostr=").append(echostr);
-        // LoggerUtil.info("start pushUrl doGet , openapiChannelId = [{0}], pushUrl = [{1}]", 123, pushUrl);
-        // String echostrResp = HttpUtil.doGet(pushUrl.toString());
-        // LoggerUtil.info("<========== pushUrl doGet validate info [echostrResp={0}]", echostrResp);
-        System.out.println(
-                SignUtil.checkSignature("mms", "B296A51F111235C2E1855ED6821746CD3D6BB878", "1496645349", "3015559136"));
-    }
+    // public static void main(String[] args) {
+    // // String timestamp = DateUtil.getCurrentTimestamp();
+    // // String nonce = CommonUtil.getRandomNumber(32);
+    // // String signature = SignUtil.signature("MqjTest", timestamp, nonce);
+    // // String echostr = CommonUtil.getRandomChar(16);
+    // //
+    // // StringBuffer pushUrl = new StringBuffer("http://localhost:8080/ff8080815be6ab36015bf145dad20016?wechat");
+    // //
+    // pushUrl.append("&signature=").append(signature).append("&nonce=").append(nonce).append("&timestamp=").append(timestamp).append("&echostr=").append(echostr);
+    // // LoggerUtil.info("start pushUrl doGet , openapiChannelId = [{0}], pushUrl = [{1}]", 123, pushUrl);
+    // // String echostrResp = HttpUtil.doGet(pushUrl.toString());
+    // // LoggerUtil.info("<========== pushUrl doGet validate info [echostrResp={0}]", echostrResp);
+    // System.out.println(
+    // SignUtil.checkSignature("mms", "B296A51F111235C2E1855ED6821746CD3D6BB878", "1496645349", "3015559136"));
+    // }
 
-
-	/**
-	 * Description: <br> 
-	 *  
-	 * @author 查思玮<br>
-	 * @taskId <br>
-	 * @param actionName
-	 * @param sceneStr
-	 * @return <br>
-	 */ 
-	@Override
-	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	@Cache(node = CacheCodeDef.WX_SPREAD_QC_CACHE, key = "$!{sceneStr}")
-	public String getSpreadQcUrl(@Key("sceneStr") String sceneStr, String accessToken) {
-		JSONObject paramJson = new JSONObject();
-		JSONObject sceneJson = new JSONObject();
-		JSONObject actionInoJson = new JSONObject();
-		sceneJson.put("scene_str", sceneStr);
-		actionInoJson.put("scene", sceneJson);
-		paramJson.put("action_name", "QR_LIMIT_STR_SCENE");
-		paramJson.put("action_info", actionInoJson);
-		String url = MessageFormat.format(WechatConstant.SPREAD_QRCODE_URL, accessToken);
-		LoggerUtil.info("获得员工推广永久二维码url:[{0}]---body[{1}]", url, paramJson.toJSONString());
+    /**
+     * Description: <br>
+     * 
+     * @author 查思玮<br>
+     * @taskId <br>
+     * @param actionName
+     * @param sceneStr
+     * @return <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Cache(node = CacheCodeDef.WX_SPREAD_QC_CACHE, key = "$!{sceneStr}")
+    public String getSpreadQcUrl(@Key("sceneStr") String sceneStr, String accessToken) {
+        JSONObject paramJson = new JSONObject();
+        JSONObject sceneJson = new JSONObject();
+        JSONObject actionInoJson = new JSONObject();
+        sceneJson.put("scene_str", sceneStr);
+        actionInoJson.put("scene", sceneJson);
+        paramJson.put("action_name", "QR_LIMIT_STR_SCENE");
+        paramJson.put("action_info", actionInoJson);
+        String url = MessageFormat.format(WechatConstant.SPREAD_QRCODE_URL, accessToken);
+        LoggerUtil.info("获得员工推广永久二维码url:[{0}]---body[{1}]", url, paramJson.toJSONString());
         String jsonStr = HttpUtil.doPost(url, paramJson.toJSONString(), WechatConstant.APPLICATION_JSON_UTF_8);
         LoggerUtil.info("获得员工推广永久二维码url:代码:[{0}]", jsonStr);
         JSONObject obj = JSONObject.parseObject(jsonStr);
-		return obj.get("url").toString();
-	}
+        return obj.get("url").toString();
+    }
 
-	public List<ExpandconfigPojo> queryAllExpandConfig() {
-		DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);
-		criteria.addOrder(Order.desc(ExpandconfigPojo.ORDER));
-		List<ExpandconfigPojo> weixinExpandconfigEntityLst = wechatDao.getListByCriteriaQuery(criteria);
-	    CacheHelper.getCache().put(CacheCodeDef.EXPAND_CONFIG_CACHE, CacheCodeDef.CONFIG_SAVE_TIME,
-	            CacheCodeDef.EXPAND_CONFIG_CACHE, weixinExpandconfigEntityLst);
-	    
-	    return weixinExpandconfigEntityLst;
-	}
+    public List<ExpandconfigPojo> queryAllExpandConfig() {
+        DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);
+        criteria.addOrder(Order.desc(ExpandconfigPojo.ORDER));
+        List<ExpandconfigPojo> weixinExpandconfigEntityLst = wechatDao.getListByCriteriaQuery(criteria);
+        CacheHelper.getCache().put(CacheCodeDef.EXPAND_CONFIG_CACHE, CacheCodeDef.CONFIG_SAVE_TIME,
+            CacheCodeDef.EXPAND_CONFIG_CACHE, weixinExpandconfigEntityLst);
 
+        return weixinExpandconfigEntityLst;
+    }
 
-	/**
-	 * Description: <br> 
-	 *  
-	 * @author 查思玮<br>
-	 * @taskId <br>
-	 * @param id
-	 * @return <br>
-	 */ 
-	@Override
-	@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-	public AccountPojo getAccountById(String id) {
-		return wechatDao.get(AccountPojo.class, id);
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 查思玮<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public AccountPojo getAccountById(String id) {
+        return wechatDao.get(AccountPojo.class, id);
+    }
 
-	 /**
+    /**
      * 通过accessToken openId 获取用户信息
      * 
      * @param openId
      * @return {city,sex,headimgurl,nickname,province}
      */
-	 @Override
+    @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public JSONObject getUserInfoMessage(String openId,String appId) {
-        String url = MessageFormat.format(WechatConstant.USER_INFO,getAccessToken(appId), openId);
+    public JSONObject getUserInfoMessage(String openId, String appId) {
+        String url = MessageFormat.format(WechatConstant.USER_INFO, getAccessToken(appId), openId);
         LoggerUtil.info("获取用户信息:[{0}]", url);
         String jsonStr = HttpUtil.doGet(url);
         LoggerUtil.info("获取用户信息结果:[{0}]", jsonStr);
@@ -834,7 +867,7 @@ public class WechatServiceImpl implements WechatService {
             return obj;
         }
         else {
-        	return null;
+            return null;
         }
     }
 }
