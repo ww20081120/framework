@@ -3,12 +3,11 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.workflow.plugin.rule;
+package com.hbasesoft.framework.workflow.core.plugin;
 
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -27,7 +26,6 @@ import com.hbasesoft.framework.workflow.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.plugin.tools <br>
  */
-@Component
 public class ToolsInterceptor implements FlowComponentInterceptor {
 
     /**
