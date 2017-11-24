@@ -12,8 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.workflow.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowBean;
-import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 
 /**
@@ -26,19 +26,7 @@ import com.hbasesoft.framework.workflow.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.plugin.tools <br>
  */
-public class ToolsInterceptor implements FlowComponentInterceptor {
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public int order() {
-        return -1;
-    }
+public class ToolsInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

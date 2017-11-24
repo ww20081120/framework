@@ -14,8 +14,8 @@ import org.springframework.util.Assert;
 
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.workflow.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowBean;
-import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 
 /**
@@ -28,7 +28,7 @@ import com.hbasesoft.framework.workflow.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.plugin.condition <br>
  */
-public class CodeMatchInterceptor implements FlowComponentInterceptor {
+public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
 
     private String[] codes;
 

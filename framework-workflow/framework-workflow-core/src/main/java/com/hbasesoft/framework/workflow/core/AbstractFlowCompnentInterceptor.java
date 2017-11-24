@@ -11,20 +11,34 @@ package com.hbasesoft.framework.workflow.core;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年9月3日 <br>
+ * @CreateDate 2017年11月21日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
-public interface FlowComponentInterceptor extends Comparable<FlowComponentInterceptor> {
+public abstract class AbstractFlowCompnentInterceptor implements FlowComponentInterceptor {
 
-    default boolean before(FlowBean flowBean, FlowContext flowContext) {
-        return true;
+    private int order = 0;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param o
+     * @return <br>
+     */
+    @Override
+    public int compareTo(FlowComponentInterceptor o) {
+        AbstractFlowCompnentInterceptor ao = (AbstractFlowCompnentInterceptor) o;
+        return this.order = ao.order;
     }
 
-    default void after(FlowBean flowBean, FlowContext flowContext) {
+    public int getOrder() {
+        return order;
     }
 
-    default void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    public void setOrder(int order) {
+        this.order = order;
     }
 
 }

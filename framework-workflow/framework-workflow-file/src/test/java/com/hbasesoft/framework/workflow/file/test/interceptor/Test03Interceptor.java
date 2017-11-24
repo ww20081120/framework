@@ -7,8 +7,8 @@ package com.hbasesoft.framework.workflow.file.test.interceptor;
 
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.workflow.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowBean;
-import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 
 /**
@@ -22,7 +22,7 @@ import com.hbasesoft.framework.workflow.core.FlowContext;
  * @see com.hbasesoft.framework.workflow.file.test.interceptor <br>
  */
 @Component
-public class Test03Interceptor implements FlowComponentInterceptor {
+public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

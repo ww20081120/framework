@@ -179,9 +179,7 @@ public final class FlowHelper {
                 for (Entry<String, FlowComponentInterceptor> entry : interceptorMap.entrySet()) {
                     interceptors.add(entry.getValue());
                 }
-                Collections.sort(interceptors, (s1, s2) -> {
-                    return s1.order() - s2.order();
-                });
+                Collections.sort(interceptors);
                 reverseInterceptors = new ArrayList<FlowComponentInterceptor>();
                 reverseInterceptors.addAll(interceptors);
                 Collections.reverse(reverseInterceptors);

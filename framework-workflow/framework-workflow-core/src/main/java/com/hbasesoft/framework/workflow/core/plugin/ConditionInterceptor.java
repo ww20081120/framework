@@ -8,8 +8,8 @@ package com.hbasesoft.framework.workflow.core.plugin;
 import java.util.Map.Entry;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.workflow.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowBean;
-import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 
 import groovy.lang.Binding;
@@ -25,7 +25,7 @@ import groovy.lang.GroovyShell;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.plugin.rule <br>
  */
-public class ConditionInterceptor implements FlowComponentInterceptor {
+public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

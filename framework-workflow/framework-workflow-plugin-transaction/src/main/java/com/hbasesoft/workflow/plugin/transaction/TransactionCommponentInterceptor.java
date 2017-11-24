@@ -10,7 +10,6 @@ import java.util.Stack;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -19,8 +18,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.workflow.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowBean;
-import com.hbasesoft.framework.workflow.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.workflow.core.FlowContext;
 
 /**
@@ -33,8 +32,7 @@ import com.hbasesoft.framework.workflow.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.workflow.plugin.transaction <br>
  */
-@Component
-public class TransactionCommponentInterceptor implements FlowComponentInterceptor {
+public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterceptor {
 
     @Resource(name = "transactionManager")
     private PlatformTransactionManager platformTransactionManager;
