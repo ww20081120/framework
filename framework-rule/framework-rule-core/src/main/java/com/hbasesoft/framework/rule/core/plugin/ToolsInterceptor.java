@@ -3,18 +3,17 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.rule.plugin.condition;
+package com.hbasesoft.framework.rule.core.plugin;
 
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowBean;
-import com.hbasesoft.framework.rule.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -27,20 +26,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.plugin.tools <br>
  */
-@Component
-public class ToolsInterceptor implements FlowComponentInterceptor {
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public int order() {
-        return -1;
-    }
+public class ToolsInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

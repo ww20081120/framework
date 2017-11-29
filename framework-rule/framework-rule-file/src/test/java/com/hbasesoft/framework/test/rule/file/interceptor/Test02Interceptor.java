@@ -7,8 +7,8 @@ package com.hbasesoft.framework.test.rule.file.interceptor;
 
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowBean;
-import com.hbasesoft.framework.rule.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -22,7 +22,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @see com.hbasesoft.framework.test.rule.file.interceptor <br>
  */
 @Component
-public class Test02Interceptor implements FlowComponentInterceptor {
+public class Test02Interceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

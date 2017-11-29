@@ -13,7 +13,7 @@ package com.hbasesoft.framework.rule.core.config;
  * @taskId <br>
  * @CreateDate 2017年9月2日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.rule.core.config <br>
+ * @see com.hbasesoft.framework.workflow.core.config <br>
  */
 public interface FlowLoader {
 

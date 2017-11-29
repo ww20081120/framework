@@ -15,5 +15,14 @@
 			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-log-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+		</dependency>
 	</dependencies>
 </project>

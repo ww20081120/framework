@@ -12,7 +12,6 @@
   <modules>
   	<module>framework-rule-core</module>
   	<module>framework-rule-file</module>
-  	<module>framework-rule-plugin-condition</module>
   	<module>framework-rule-plugin-event</module>
   	<module>framework-rule-plugin-transaction</module>
   </modules>

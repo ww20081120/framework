@@ -19,7 +19,7 @@ import com.hbasesoft.framework.rule.core.config.FlowConfig;
  * @taskId <br>
  * @CreateDate 2017年9月4日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.rule.core <br>
+ * @see com.hbasesoft.framework.workflow.core <br>
  */
 public class FlowContext implements Serializable {
 

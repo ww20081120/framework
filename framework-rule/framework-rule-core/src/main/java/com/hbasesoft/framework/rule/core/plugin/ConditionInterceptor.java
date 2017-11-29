@@ -3,16 +3,15 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.rule.plugin.condition;
+package com.hbasesoft.framework.rule.core.plugin;
 
 import java.util.Map.Entry;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowBean;
-import com.hbasesoft.framework.rule.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 import groovy.lang.Binding;
@@ -26,10 +25,9 @@ import groovy.lang.GroovyShell;
  * @taskId <br>
  * @CreateDate 2017年9月4日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.test.rule.plugin.condition <br>
+ * @see com.hbasesoft.framework.workflow.plugin.rule <br>
  */
-@Component
-public class ConditionInterceptor implements FlowComponentInterceptor {
+public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

@@ -6,14 +6,13 @@
 package com.hbasesoft.rule.plugin.event;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
+import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowBean;
-import com.hbasesoft.framework.rule.core.FlowComponentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -26,8 +25,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.plugin.event <br>
  */
-@Component
-public class EventComponentIntercetor implements FlowComponentInterceptor {
+public class EventComponentIntercetor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>
