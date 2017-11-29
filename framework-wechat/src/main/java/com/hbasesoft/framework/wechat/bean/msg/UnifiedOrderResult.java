@@ -60,6 +60,8 @@ public class UnifiedOrderResult extends BaseEntity {
     private String prepay_id;
 
     private String code_url;
+    
+    private String mweb_url;
 
     public String getReturn_code() {
         return return_code;
@@ -169,4 +171,14 @@ public class UnifiedOrderResult extends BaseEntity {
         this.code_url = code_url;
     }
 
+    public String getMweb_url() {
+        return mweb_url;
+    }
+
+    @XmlElement(name = "mweb_url")
+    public void setMweb_url(String mweb_url) {
+        this.mweb_url = mweb_url;
+    }
+
+    
 }
