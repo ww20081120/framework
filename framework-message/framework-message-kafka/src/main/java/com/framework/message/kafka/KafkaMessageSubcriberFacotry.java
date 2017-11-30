@@ -71,6 +71,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
                         LoggerUtil.error(e);
                         Thread.sleep(1000L);
                     }
+                    LoggerUtil.info("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
                 }
             }
             catch (Exception e) {
