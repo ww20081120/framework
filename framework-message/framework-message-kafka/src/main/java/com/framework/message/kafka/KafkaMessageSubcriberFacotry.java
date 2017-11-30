@@ -12,7 +12,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
@@ -27,6 +27,8 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  * @see com.framework.message.kafka <br>
  */
 public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
+
+    private static final Logger LOGGER = new Logger("EventHandlerLogger");
 
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
@@ -68,14 +70,14 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
                         }
                     }
                     catch (Exception e) {
-                        LoggerUtil.error(e);
+                        LOGGER.error(e);
                         Thread.sleep(1000L);
                     }
-                    LoggerUtil.info("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
+                    LOGGER.info("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
                 }
             }
             catch (Exception e) {
-                LoggerUtil.error(e);
+                LOGGER.error(e);
             }
             subscriber.onUnsubscribe(channel, index);
         }).start();

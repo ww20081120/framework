@@ -17,6 +17,7 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListenerAdapter;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessageQueue;
@@ -33,13 +34,11 @@ import com.hbasesoft.framework.message.core.MessageQueue;
  */
 public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
+    private static final Logger LOGGER = new Logger("EventHandlerLogger");
+
     private ArrayBlockingQueue<Consumer> consumerQueue = new ArrayBlockingQueue<Consumer>(10000);
 
     private boolean flag = true;
-
-    public EventHandlerStartupLinstener() {
-
-    }
 
     /**
      * Description: <br>
@@ -90,13 +89,13 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                             if (CommonUtil.isNotEmpty(datas)) {
                                 for (byte[] data : datas) {
                                     String transId = CommonUtil.getTransactionID();
-                                    LoggerUtil.info("receive message by thread[{0}], transId[{1}]",
+                                    LOGGER.info("receive message by thread[{0}], transId[{1}]",
                                         Thread.currentThread().getId(), transId);
                                     consumerQueue.put(new Consumer(transId, channel, linsener, data));
                                 }
                             }
                             else {
-                                LoggerUtil.info("channel {0} consumer is alived.", channel);
+                                LOGGER.info("channel {0} consumer is alived.", channel);
                             }
                         }
                         catch (Exception e) {
@@ -131,7 +130,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                         }
 
                         if (++count % 100 == 0) {
-                            LoggerUtil.info("thread {0} for executor is alived.", Thread.currentThread().getId());
+                            LOGGER.info("thread {0} for executor is alived.", Thread.currentThread().getId());
                         }
                     }
                 }
@@ -161,12 +160,12 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
         public void excute() {
             try {
-                LoggerUtil.info("{0}|{1} before execute event.", transId, channel);
+                LOGGER.info("{0}|{1} before execute event.", transId, channel);
                 this.linsener.onMessage(this.channel, data);
-                LoggerUtil.info("{0}|{1} after execute event.", transId, channel);
+                LOGGER.info("{0}|{1} after execute event.", transId, channel);
             }
             catch (Exception e) {
-                LoggerUtil.error(e, "{0}|{1}|FAIL|execute event error.", transId, channel);
+                LOGGER.error(e, "{0}|{1}|FAIL|execute event error.", transId, channel);
             }
         }
     }
