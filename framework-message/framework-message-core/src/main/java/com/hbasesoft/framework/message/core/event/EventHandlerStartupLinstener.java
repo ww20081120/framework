@@ -112,7 +112,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     }
 
     private void initExecutor() {
-        int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 20); // 核心线程数
+        int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 5); // 核心线程数
         for (int i = 0; i < corePoolSize; i++) {
             new Thread(() -> {
                 long count = 0;
@@ -129,7 +129,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                             Thread.sleep(1000);
                         }
 
-                        if (++count % 100 == 0) {
+                        if (++count % 1000 == 0) {
                             LOGGER.info("thread {0} for executor is alived.", Thread.currentThread().getId());
                         }
                     }
