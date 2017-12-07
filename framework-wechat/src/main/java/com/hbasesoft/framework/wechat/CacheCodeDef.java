@@ -33,6 +33,9 @@ public interface CacheCodeDef extends CacheConstant {
 
     /** 最大缓存时间 */
     int MAX_CACHE_TIME = 60 * 60 * 24;
+    
+    /** 缓存一个月 */
+    int MONTH_CACHE_TIME = 60 * 60 * 24 * 30;
 
     /** access token */
     String OPEN_API_ACCESS_TOKEN = "openapi.access_token";
@@ -81,6 +84,9 @@ public interface CacheCodeDef extends CacheConstant {
     
     /**获取员工推广二维码URL缓存*/
     String WX_SPREAD_QC_CACHE = "wechat.spread_qc_cache";
+    
+    /**获取员工l临时推广二维码URL缓存*/
+    String WX_TEMP_SPREAD_QC_CACHE = "wechat.temp_spread_qc_cache";
 
     /**客服信息对象*/
     String WX_MESSAGE = "wechat.message";

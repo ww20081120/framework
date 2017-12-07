@@ -122,4 +122,9 @@ public interface WechatConstant {
      * 获取永久推广二维码请求URL,get
      */
     String SPREAD_QRCODE_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={0}";
+    
+    /**
+     * 获取临时推广二维码请求URL,get
+     */
+    String SPREAD_TEMP_QRCODE_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={0}";
 }

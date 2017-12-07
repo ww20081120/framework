@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasypt.commons.CommonUtils;
@@ -82,6 +83,8 @@ public class EventMessageHandler extends AbstractMessageHandler {
         }
         else if (WechatUtil.EVENT_TYPE_LOCATION.equals(eventType)) {
             respMessage = locationMessageHandler.process(msgId, toUserName, entity, content, requestMap, imagePath, serverPath, message);
+        } else if (WechatUtil.EVENT_TYPE_SCAN.equals(eventType)) {
+        	respMessage = doScanResponse(requestMap, toUserName, entity.getWeixinAccountid(), entity.getId(), entity.getAccountappid(),imagePath, serverPath);
         }
 
         return respMessage;
@@ -171,6 +174,37 @@ public class EventMessageHandler extends AbstractMessageHandler {
 //                respMessage = getExpendMsg(menuEntity.getTemplateid(), msgId, toUserName, entity, content, requestMap, imagePath, serverPath);
 //            }
         }
+        return respMessage;
+    }
+    
+    /**
+     * 针对关注用户扫描带参二维码处理
+     * 
+     * @param requestMap
+     * @param textMessage
+     * @param bundler
+     * @param respMessage
+     * @param toUserName
+     * @param fromUserName
+     * @throws FrameworkException
+     */
+    private String doScanResponse(Map<String, String> requestMap, String toUserName, String fromUserName,
+        String accountId, String appId,String imagePath, String serverPath) throws FrameworkException {
+        String respMessage = null;
+
+        if (CommonUtils.isNotEmpty(toUserName)) {
+            String enventKey = requestMap.get("EventKey");
+            
+            String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
+            logger.info("关注用户扫描带参二维码处理 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, paramId);
+            
+            EventData data = new EventData();
+            data.put("openid", toUserName);
+            data.put("appId", appId);
+            data.put("paramId", paramId);
+            EventEmmiter.emmit(WechatEventCodeDef.WECHAT_SCAN, data);
+        }
+        
         return respMessage;
     }
 

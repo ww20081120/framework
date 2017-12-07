@@ -823,6 +823,35 @@ public class WechatServiceImpl implements WechatService {
         JSONObject obj = JSONObject.parseObject(jsonStr);
         return obj.get("url").toString();
     }
+    
+    /**
+     * Description: <br>
+     * 
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param sceneStr
+     * @param accessToken
+     * @return <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Cache(node = CacheCodeDef.WX_TEMP_SPREAD_QC_CACHE, key = "$!{sceneStr}", expireTime = CacheCodeDef.MONTH_CACHE_TIME)
+    public String getTempSpreadQcUrl(@Key("sceneStr") String sceneStr, String accessToken) {
+        JSONObject paramJson = new JSONObject();
+        JSONObject sceneJson = new JSONObject();
+        JSONObject actionInoJson = new JSONObject();
+        sceneJson.put("scene_str", sceneStr);
+        actionInoJson.put("scene", sceneJson);
+        paramJson.put("action_name", "QR_LIMIT_STR_SCENE");
+        paramJson.put("expire_seconds", CacheCodeDef.MONTH_CACHE_TIME);
+        paramJson.put("action_info", actionInoJson);
+        String url = MessageFormat.format(WechatConstant.SPREAD_TEMP_QRCODE_URL, accessToken);
+        LoggerUtil.info("获得员工推广临时二维码url:[{0}]---body[{1}]", url, paramJson.toJSONString());
+        String jsonStr = HttpUtil.doPost(url, paramJson.toJSONString(), WechatConstant.APPLICATION_JSON_UTF_8);
+        LoggerUtil.info("获得员工推广临时二维码url:代码:[{0}]", jsonStr);
+        JSONObject obj = JSONObject.parseObject(jsonStr);
+        return obj.get("url").toString();
+    }
 
     public List<ExpandconfigPojo> queryAllExpandConfig() {
         DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);

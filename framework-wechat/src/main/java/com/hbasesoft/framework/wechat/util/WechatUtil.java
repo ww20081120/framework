@@ -130,6 +130,11 @@ public class WechatUtil {
      * 事件类型：LOCATION(位置上报)
      */
     public static final String EVENT_TYPE_LOCATION = "LOCATION";
+    
+    /**
+     * 事件类型：SCAN(用户已关注，扫码推送)
+     */
+    public static final String EVENT_TYPE_SCAN = "SCAN";
 
     /**
      * 解析微信发来的请求（XML）

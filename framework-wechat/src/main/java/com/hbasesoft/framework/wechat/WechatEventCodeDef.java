@@ -40,4 +40,7 @@ public interface WechatEventCodeDef {
     
     /** 绑卡事件 */
     String BIND_CARD_PUSH = "BIND_CARD_PUSH";
+    
+    /** 微信扫描带参二维码*/
+    String WECHAT_SCAN = "WECHAT_SCAN";
 }

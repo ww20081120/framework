@@ -203,6 +203,18 @@ public interface WechatService {
      * @return <br>
      */
     String getSpreadQcUrl(String sceneStr, String accessToken);
+    
+    /**
+     * 
+     * Description: 获取临时二维码<br> 
+     *  
+     * @author liu.xianan<br>
+     * @taskId <br>
+     * @param sceneStr:场景值ID（字符串形式的ID），字符串类型，长度限制为1到28 
+     * @param accessToken
+     * @return <br>
+     */
+    String getTempSpreadQcUrl(String sceneStr, String accessToken);
 
     WXResult sendMessage(WxMessage wxMessage,String accessToken);
 
