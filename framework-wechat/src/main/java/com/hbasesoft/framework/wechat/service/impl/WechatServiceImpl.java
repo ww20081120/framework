@@ -86,6 +86,8 @@ public class WechatServiceImpl implements WechatService {
     @Resource
     private WechatDao wechatDao;
 
+    private final WechatThreadPoolExecutor threadPoolExecutor = new WechatThreadPoolExecutor();
+
     /**
      * Description: <br>
      *
@@ -151,10 +153,7 @@ public class WechatServiceImpl implements WechatService {
                 data.put("imagePath", imagePath);
                 data.put("serverPath", serverPath);
                 data.put("accountId", accountId);
-                WechatExpandExecutor runnable = new WechatExpandExecutor(data);
-                WechatThreadPoolExecutor poolExecutor = (WechatThreadPoolExecutor) ContextHolder.getContext()
-                    .getBean("wechatThreadPoolExecutor");
-                poolExecutor.execute(runnable);
+                threadPoolExecutor.execute(new WechatExpandExecutor(data));
                 // WechatUtil.asyncWechatExpand(msgId, fromUserName, content,
                 // imagePath, serverPath, message, accountId);
                 // for (ExpandconfigPojo expandConfig : weixinExpandconfigEntityLst) {
@@ -507,7 +506,7 @@ public class WechatServiceImpl implements WechatService {
         String key = "eiy7ZoAHcPdtgC4uT2AFuDNFUudAXILZ";
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("nonce_str", CommonUtil.getRandomChar(20));
-        //paramMap.put("time_expire", DateUtil.getCurrentTimestamp());
+        // paramMap.put("time_expire", DateUtil.getCurrentTimestamp());
         paramMap.put("fee_type", "CNY");
         paramMap.put("mch_id", "1271056701");
         paramMap.put("body", "IC卡充值");
@@ -823,7 +822,7 @@ public class WechatServiceImpl implements WechatService {
         JSONObject obj = JSONObject.parseObject(jsonStr);
         return obj.get("url").toString();
     }
-    
+
     /**
      * Description: <br>
      * 
@@ -835,7 +834,8 @@ public class WechatServiceImpl implements WechatService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    @Cache(node = CacheCodeDef.WX_TEMP_SPREAD_QC_CACHE, key = "$!{sceneStr}", expireTime = CacheCodeDef.MONTH_CACHE_TIME)
+    @Cache(node = CacheCodeDef.WX_TEMP_SPREAD_QC_CACHE, key = "$!{sceneStr}",
+        expireTime = CacheCodeDef.MONTH_CACHE_TIME)
     public String getTempSpreadQcUrl(@Key("sceneStr") String sceneStr, String accessToken) {
         JSONObject paramJson = new JSONObject();
         JSONObject sceneJson = new JSONObject();
