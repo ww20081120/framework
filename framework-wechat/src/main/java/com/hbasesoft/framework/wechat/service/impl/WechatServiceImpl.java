@@ -853,6 +853,7 @@ public class WechatServiceImpl implements WechatService {
         return obj.get("url").toString();
     }
 
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public List<ExpandconfigPojo> queryAllExpandConfig() {
         DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);
         criteria.addOrder(Order.desc(ExpandconfigPojo.ORDER));
