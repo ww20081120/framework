@@ -119,10 +119,15 @@ public class EventMessageHandler extends AbstractMessageHandler {
         }
 
         if (CommonUtils.isNotEmpty(toUserName)) {
-            logger.info("用户首次关注 openId[{0}，appId{1}] 注册账号", toUserName,appId);
+            String enventKey = requestMap.get("EventKey");
+            
+            String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
+            logger.info("用户首次关注 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, paramId);
+            
             EventData data = new EventData();
             data.put("openid", toUserName);
             data.put("appId", appId);
+            data.put("paramId", paramId);
             EventEmmiter.emmit(WechatEventCodeDef.WECHAT_SUBSCRIBER, data);
         }
         
