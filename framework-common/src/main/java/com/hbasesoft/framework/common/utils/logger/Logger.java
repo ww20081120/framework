@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.common.utils.logger;
 
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 
@@ -20,7 +20,7 @@ public class Logger {
     /**
      * logger
      */
-    private org.apache.logging.log4j.Logger logger;
+    private org.slf4j.Logger logger;
 
     /**
      * Logger
@@ -28,7 +28,7 @@ public class Logger {
      * @param clazz <br>
      */
     public Logger(Class<?> clazz) {
-        this.logger = LogManager.getLogger(clazz);
+        this.logger = LoggerFactory.getLogger(clazz);
     }
 
     /**
@@ -37,7 +37,7 @@ public class Logger {
      * @param name <br>
      */
     public Logger(String name) {
-        this.logger = LogManager.getLogger(name);
+        this.logger = LoggerFactory.getLogger(name);
     }
 
     /**
@@ -56,7 +56,7 @@ public class Logger {
      * @taskId <br>
      * @param message <br>
      */
-    public void error(Object message) {
+    public void error(String message) {
         logger.error(message);
     }
 
@@ -66,7 +66,7 @@ public class Logger {
      * @param message 信息
      * @param t 异常
      */
-    public void error(Object message, Throwable t) {
+    public void error(String message, Throwable t) {
         logger.error(LoggerUtil.getErrorMessage(message, t), t);
     }
 
@@ -95,7 +95,7 @@ public class Logger {
      * 
      * @param message 日志信息
      */
-    public void warn(Object message) {
+    public void warn(String message) {
         logger.warn(message);
     }
 
@@ -105,7 +105,7 @@ public class Logger {
      * @param message 信息
      * @param t 异常
      */
-    public void warn(Object message, Throwable t) {
+    public void warn(String message, Throwable t) {
         logger.warn(LoggerUtil.getErrorMessage(message, t), t);
     }
 
@@ -125,7 +125,7 @@ public class Logger {
      * 
      * @param message 日志信息
      */
-    public void debug(Object message) {
+    public void debug(String message) {
         logger.debug(message);
     }
 
@@ -144,7 +144,7 @@ public class Logger {
      * 
      * @param message 日志信息
      */
-    public void info(Object message) {
+    public void info(String message) {
         logger.info(message);
     }
 

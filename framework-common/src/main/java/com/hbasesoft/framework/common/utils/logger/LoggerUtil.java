@@ -5,8 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.logger;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -48,7 +47,7 @@ public final class LoggerUtil {
      * @taskId <br>
      * @param message <br>
      */
-    public static void error(Object message) {
+    public static void error(String message) {
         getLogger().error(message);
     }
 
@@ -58,7 +57,7 @@ public final class LoggerUtil {
      * @param message 信息
      * @param t 异常
      */
-    public static void error(Object message, Throwable t) {
+    public static void error(String message, Throwable t) {
         getLogger().error(getErrorMessage(message, t), t);
     }
 
@@ -87,7 +86,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void warn(Object message) {
+    public static void warn(String message) {
         getLogger().warn(message);
     }
 
@@ -97,7 +96,7 @@ public final class LoggerUtil {
      * @param message 信息
      * @param t 异常
      */
-    public static void warn(Object message, Throwable t) {
+    public static void warn(String message, Throwable t) {
         getLogger().warn(getErrorMessage(message, t), t);
     }
 
@@ -117,7 +116,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void debug(Object message) {
+    public static void debug(String message) {
         getLogger().debug(message);
     }
 
@@ -127,7 +126,7 @@ public final class LoggerUtil {
      * @param message 信息
      * @param t 异常
      */
-    public static void debug(Object message, Throwable t) {
+    public static void debug(String message, Throwable t) {
         getLogger().debug(getErrorMessage(message, t), t);
     }
 
@@ -146,7 +145,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void info(Object message) {
+    public static void info(String message) {
         getLogger().info(message);
     }
 
@@ -166,7 +165,7 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void sqlLog(String message) {
-        LogManager.getLogger(SQL_LOG_NAME).info(message);
+        LoggerFactory.getLogger(SQL_LOG_NAME).info(message);
     }
 
     /**
@@ -176,7 +175,7 @@ public final class LoggerUtil {
      * @param message 日志信息 <br>
      */
     public static void sqlLog(String message, Throwable t) {
-        LogManager.getLogger(SQL_LOG_NAME).error(getErrorMessage(message, t), t);
+        LoggerFactory.getLogger(SQL_LOG_NAME).error(getErrorMessage(message, t), t);
     }
 
     public static String getErrorMessage(Throwable t) {
@@ -186,15 +185,15 @@ public final class LoggerUtil {
         return t.getMessage();
     }
 
-    public static Object getErrorMessage(Object message, Throwable t) {
+    public static String getErrorMessage(String message, Throwable t) {
         if (t instanceof FrameworkException) {
             return ((FrameworkException) t).getCode() + GlobalConstants.VERTICAL_LINE + message;
         }
         return message;
     }
 
-    private static Logger getLogger() {
+    private static org.slf4j.Logger getLogger() {
         StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
-        return LogManager.getLogger(stackTraces[3].getClassName());
+        return LoggerFactory.getLogger(stackTraces[3].getClassName());
     }
 }
