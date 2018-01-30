@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
@@ -25,6 +26,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @since V1.0<br>
  */
 @Component
+@NoTransLog
 public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAware {
 
     @Override

@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.log.core.annotation;
+package com.hbasesoft.framework.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

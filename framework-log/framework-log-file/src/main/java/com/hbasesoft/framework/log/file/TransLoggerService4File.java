@@ -5,9 +5,9 @@ package com.hbasesoft.framework.log.file;
 
 import java.util.Arrays;
 
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
-import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
@@ -43,7 +43,12 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
         if (alwaysLog) {
-            logger.info("{0}|{1}|before|{2}|{3}", stackId, parentStackId, method, Arrays.toString(params));
+            MDC.put("stackId", stackId);
+            MDC.put("parentStackId", parentStackId);
+            MDC.put("method", method);
+            MDC.put("params", Arrays.toString(params));
+            logger.info("BEFORE");
+            MDC.clear();
         }
         else {
             super.before(stackId, parentStackId, beginTime, method, params);
@@ -53,7 +58,12 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         if (alwaysLog) {
-            logger.info("{0}|after|{1}|{2}|{3}", stackId, method, consumeTime, returnValue);
+            MDC.put("stackId", stackId);
+            MDC.put("consumeTime", consumeTime + "");
+            MDC.put("method", method);
+            MDC.put("returnValue", CommonUtil.getString(returnValue));
+            logger.info("AFTER");
+            MDC.clear();
         }
         else {
             super.afterReturn(stackId, endTime, consumeTime, method, returnValue);
@@ -73,7 +83,12 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
         if (alwaysLog) {
-            logger.error(e, "{0}|error|{1}|{2}", stackId, method, consumeTime, getExceptionMsg(e));
+            MDC.put("stackId", stackId);
+            MDC.put("consumeTime", consumeTime + "");
+            MDC.put("method", method);
+            MDC.put("exception", e.getMessage());
+            logger.error(e, "ERROR");
+            MDC.clear();
         }
         else {
             super.afterThrow(stackId, endTime, consumeTime, method, e);
@@ -90,9 +105,22 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         Throwable e) {
         TransManager manager = TransManager.getInstance();
         if (alwaysLog) {
-            logger.info("{0}|end|{1}|{2}|{3}|{4}|{5}", stackId, method, consumeTime,
-                manager.isError() || manager.isTimeout() ? "FAIL" : "SUCCESS", returnValue,
-                e == null ? GlobalConstants.BLANK : e.getMessage());
+            MDC.put("stackId", stackId);
+            MDC.put("consumeTime", consumeTime + "");
+            MDC.put("method", method);
+            MDC.put("returnValue", CommonUtil.getString(returnValue));
+
+            if (manager.isError()) {
+                MDC.put("exception", e.getMessage());
+                logger.error(e, "FAIL");
+            }
+            else if (manager.isTimeout()) {
+                logger.warn("TIMEOUT");
+            }
+            else {
+                logger.info("SUCCESS");
+            }
+            MDC.clear();
         }
         else {
             try {

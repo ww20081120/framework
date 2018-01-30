@@ -12,11 +12,11 @@ import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.TransactionIDManager;
 import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
-import com.hbasesoft.framework.log.core.annotation.NoTransLog;
 
 /**
  * <Description> <br>
@@ -190,7 +190,7 @@ public class TransLogUtil {
      */
     private static ServiceLoader<TransLoggerService> getTransLoggerServices() {
         if (transLoggerServices == null) {
-            boolean alwaysLog = PropertyHolder.getBooleanProperty("logservice.aways.log", false);
+            boolean alwaysLog = PropertyHolder.getBooleanProperty("logservice.aways.log", true);
             transLoggerServices = ServiceLoader.load(TransLoggerService.class);
             for (TransLoggerService transLoggerService : transLoggerServices) {
                 transLoggerService.setAlwaysLog(alwaysLog);
