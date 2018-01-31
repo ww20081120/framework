@@ -34,17 +34,19 @@ public class FlowConfig implements Serializable {
 
     private String version;
 
+    @SuppressWarnings("rawtypes")
     private FlowComponent component;
 
     private Map<String, Object> configAttrMap;
 
     private List<FlowConfig> childrenConfigList;
 
+    @SuppressWarnings("rawtypes")
     public FlowComponent getComponent() {
         return component;
     }
 
-    public void setComponent(FlowComponent component) {
+    public void setComponent(FlowComponent<?> component) {
         this.component = component;
     }
 

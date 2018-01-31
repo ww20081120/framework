@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.core;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,12 +16,10 @@ import java.util.ServiceLoader;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.log.core.TransLogUtil;
@@ -47,15 +46,10 @@ public final class FlowHelper {
 
     private static Method processMethod;
 
-    public static int flowStart(FlowBean bean, String flowName) {
+    public static <T extends Serializable> int flowStart(T bean, String flowName) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
 
         int result = ErrorCodeDef.SUCCESS;
-        String transId = bean.getTransId();
-        if (StringUtils.isEmpty(transId)) {
-            transId = CommonUtil.getTransactionID();
-            bean.setTransId(transId);
-        }
 
         // match flow config
         FlowConfig config = match(flowName);
@@ -72,9 +66,10 @@ public final class FlowHelper {
         return result;
     }
 
-    private static void execute(FlowBean flowBean, FlowContext flowContext) throws Exception {
+    @SuppressWarnings("unchecked")
+    private static <T extends Serializable> void execute(T flowBean, FlowContext flowContext) throws Exception {
         FlowConfig flowConfig = flowContext.getFlowConfig();
-        FlowComponent component = null;
+        FlowComponent<T> component = null;
 
         // 执行拦截器前置拦截
         if (before(flowBean, flowContext)) {
@@ -143,7 +138,7 @@ public final class FlowHelper {
         return flowConfig;
     }
 
-    private static boolean before(FlowBean flowBean, FlowContext flowContext) {
+    private static boolean before(Serializable flowBean, FlowContext flowContext) {
         List<FlowComponentInterceptor> interceptors = loadInterceptor(false);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
@@ -155,7 +150,7 @@ public final class FlowHelper {
         return true;
     }
 
-    private static void after(FlowBean flowBean, FlowContext flowContext) {
+    private static void after(Serializable flowBean, FlowContext flowContext) {
         List<FlowComponentInterceptor> interceptors = loadInterceptor(true);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
@@ -164,7 +159,7 @@ public final class FlowHelper {
         }
     }
 
-    private static void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    private static void error(Exception e, Serializable flowBean, FlowContext flowContext) {
         List<FlowComponentInterceptor> interceptors = loadInterceptor(true);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             for (FlowComponentInterceptor interceptor : interceptors) {
@@ -194,7 +189,7 @@ public final class FlowHelper {
 
     private static Method getMethod() throws NoSuchMethodException, SecurityException {
         if (processMethod == null) {
-            processMethod = FlowComponent.class.getDeclaredMethod("process", FlowBean.class, FlowContext.class);
+            processMethod = FlowComponent.class.getDeclaredMethod("process", Object.class, FlowContext.class);
         }
         return processMethod;
     }

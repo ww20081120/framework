@@ -11,10 +11,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 import com.hbasesoft.framework.rule.core.FlowContext;
 import com.hbasesoft.framework.rule.plugin.transaction.entity.Employee;
+import com.hbasesoft.framework.test.rule.plugin.transaction.TestFlowBean;
 import com.hbasesoft.framework.test.rule.plugin.transaction.repository.EmployeeRepository;
 
 /**
@@ -28,7 +28,7 @@ import com.hbasesoft.framework.test.rule.plugin.transaction.repository.EmployeeR
  * @see com.hbasesoft.framework.workflow.plugin.rule.test.component <br>
  */
 @Component("Child03Component")
-public class Child03Component implements FlowComponent {
+public class Child03Component implements FlowComponent<TestFlowBean> {
     @Resource
     private EmployeeRepository employeeDao;
 
@@ -43,7 +43,7 @@ public class Child03Component implements FlowComponent {
      * @throws Exception <br>
      */
     @Override
-    public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
+    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
         List<Employee> employeeList = employeeDao.findByAgeGreaterThan(20);
         for (Employee employee : employeeList) {
             employee.setAge(employee.getAge() + 1);

@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.rule.core.plugin;
 
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
@@ -15,7 +16,6 @@ import org.springframework.util.Assert;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -49,7 +49,7 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(FlowBean flowBean, FlowContext flowContext) {
+    public boolean before(Serializable flowBean, FlowContext flowContext) {
         Map<String, Object> attrMap = flowContext.getFlowConfig().getConfigAttrMap();
         return !Arrays.stream(codes).anyMatch(code -> {
             // 匹配包含 code ，而且值匹配不上的
@@ -57,7 +57,7 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
         });
     }
 
-    private String getAttr(String code, FlowBean flowBean) {
+    private String getAttr(String code, Serializable flowBean) {
         try {
             PropertyDescriptor pd = new PropertyDescriptor(code, flowBean.getClass());
             Method rM = pd.getReadMethod();

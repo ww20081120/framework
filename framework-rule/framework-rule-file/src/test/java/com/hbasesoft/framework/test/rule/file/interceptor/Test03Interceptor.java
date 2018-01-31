@@ -5,10 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.test.rule.file.interceptor;
 
+import java.io.Serializable;
+
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -34,7 +35,7 @@ public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(FlowBean flowBean, FlowContext flowContext) {
+    public boolean before(Serializable flowBean, FlowContext flowContext) {
         System.out.println(flowContext.getFlowConfig().getName() + "===before 03=====" + flowBean + flowContext);
         return true;
     }
@@ -48,7 +49,7 @@ public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
      * @param flowContext <br>
      */
     @Override
-    public void after(FlowBean flowBean, FlowContext flowContext) {
+    public void after(Serializable flowBean, FlowContext flowContext) {
         System.out.println(flowContext.getFlowConfig().getName() + "===after 03=====" + flowBean + flowContext);
     }
 
@@ -62,7 +63,7 @@ public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
      * @param flowContext <br>
      */
     @Override
-    public void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    public void error(Exception e, Serializable flowBean, FlowContext flowContext) {
         System.out.println(flowContext.getFlowConfig().getName() + "===throw 03=====" + flowBean + flowContext);
     }
 

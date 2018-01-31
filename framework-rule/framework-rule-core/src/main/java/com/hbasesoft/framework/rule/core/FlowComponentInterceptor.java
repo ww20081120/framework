@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.core;
 
+import java.io.Serializable;
+
 /**
  * <Description> <br>
  * 
@@ -17,14 +19,14 @@ package com.hbasesoft.framework.rule.core;
  */
 public interface FlowComponentInterceptor extends Comparable<FlowComponentInterceptor> {
 
-    default boolean before(FlowBean flowBean, FlowContext flowContext) {
+    default boolean before(Serializable flowBean, FlowContext flowContext) {
         return true;
     }
 
-    default void after(FlowBean flowBean, FlowContext flowContext) {
+    default void after(Serializable flowBean, FlowContext flowContext) {
     }
 
-    default void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    default void error(Exception e, Serializable flowBean, FlowContext flowContext) {
     }
 
 }

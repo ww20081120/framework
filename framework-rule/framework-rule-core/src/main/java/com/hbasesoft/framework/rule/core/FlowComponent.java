@@ -15,7 +15,7 @@ package com.hbasesoft.framework.rule.core;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
-public interface FlowComponent {
+public interface FlowComponent<T> {
 
     /**
      * Description: 方法处理<br>
@@ -25,5 +25,5 @@ public interface FlowComponent {
      * @param flowBean
      * @throws Exception <br>
      */
-    boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception;
+    boolean process(T flowBean, FlowContext flowContext) throws Exception;
 }

@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.test.rule.plugin.transaction;
 
-import com.hbasesoft.framework.rule.core.FlowBean;
+import java.io.Serializable;
 
 /**
  * <Description> <br>
@@ -17,14 +17,12 @@ import com.hbasesoft.framework.rule.core.FlowBean;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.plugin.transaction <br>
  */
-public class TestFlowBean implements FlowBean {
+public class TestFlowBean implements Serializable {
 
     /**
      * serialVersionUID <br>
      */
     private static final long serialVersionUID = 4710973826238213054L;
-
-    private String transId;
 
     private String name;
 
@@ -44,30 +42,6 @@ public class TestFlowBean implements FlowBean {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public String getTransId() {
-        return transId;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param transId <br>
-     */
-    @Override
-    public void setTransId(String transId) {
-        this.transId = transId;
     }
 
 }

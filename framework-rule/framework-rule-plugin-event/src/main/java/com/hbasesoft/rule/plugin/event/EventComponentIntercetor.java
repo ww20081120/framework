@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.rule.plugin.event;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -12,7 +14,6 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -37,7 +38,7 @@ public class EventComponentIntercetor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(FlowBean flowBean, FlowContext flowContext) {
+    public boolean before(Serializable flowBean, FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("beforeEvent");
         if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
@@ -57,7 +58,7 @@ public class EventComponentIntercetor extends AbstractFlowCompnentInterceptor {
      * @param flowContext <br>
      */
     @Override
-    public void after(FlowBean flowBean, FlowContext flowContext) {
+    public void after(Serializable flowBean, FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("event");
         if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
@@ -77,7 +78,7 @@ public class EventComponentIntercetor extends AbstractFlowCompnentInterceptor {
      * @param flowContext <br>
      */
     @Override
-    public void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    public void error(Exception e, Serializable flowBean, FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("errorEvent");
         if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();

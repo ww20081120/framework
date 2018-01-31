@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.rule.plugin.transaction;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Stack;
 
@@ -19,7 +20,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -53,7 +53,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
      * @return <br>
      */
     @Override
-    public boolean before(FlowBean flowBean, FlowContext flowContext) {
+    public boolean before(Serializable flowBean, FlowContext flowContext) {
         Map<String, Object> configAttrMap = flowContext.getFlowConfig().getConfigAttrMap();
 
         String transactional = (String) configAttrMap.get("transactional");
@@ -104,7 +104,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
      * @param flowContext <br>
      */
     @Override
-    public void after(FlowBean flowBean, FlowContext flowContext) {
+    public void after(Serializable flowBean, FlowContext flowContext) {
         Map<String, Object> configAttrMap = flowContext.getFlowConfig().getConfigAttrMap();
 
         String transactional = (String) configAttrMap.get("transactional");
@@ -126,7 +126,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
      * @param flowContext <br>
      */
     @Override
-    public void error(Exception e, FlowBean flowBean, FlowContext flowContext) {
+    public void error(Exception e, Serializable flowBean, FlowContext flowContext) {
         Map<String, Object> configAttrMap = flowContext.getFlowConfig().getConfigAttrMap();
 
         String transactional = (String) configAttrMap.get("transactional");

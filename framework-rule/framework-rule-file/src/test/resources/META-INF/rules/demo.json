@@ -2,6 +2,7 @@
     "name": "demo",
     "version": "1.0",
     "component": "DemoComponent",
+    "condition": "#transId != null",
     "children": [
     {
         "component": "Child01Component",

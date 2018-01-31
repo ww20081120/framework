@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.core.plugin;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,7 +14,6 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
 /**
@@ -38,7 +38,7 @@ public class ToolsInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(FlowBean flowBean, FlowContext flowContext) {
+    public boolean before(Serializable flowBean, FlowContext flowContext) {
         String tools = (String) flowContext.getFlowConfig().getConfigAttrMap().get("tools");
         if (StringUtils.isNotEmpty(tools)) {
             String[] ts = StringUtils.split(tools, GlobalConstants.SPLITOR);

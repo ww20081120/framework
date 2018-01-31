@@ -3,23 +3,35 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.rule.core;
+package com.hbasesoft.framework.test.rule.file.bean;
 
 import java.io.Serializable;
 
 /**
- * <Description> 业务流程bean<br>
+ * <Description> <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年9月2日 <br>
+ * @CreateDate 2018年1月31日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.workflow.core <br>
+ * @see com.hbasesoft.framework.test.rule.file.bean <br>
  */
-public interface FlowBean extends Serializable {
+public class FlowBean implements Serializable {
 
-    String getTransId();
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 1837859786785097538L;
 
-    void setTransId(String transId);
+    private String transId;
+
+    public String getTransId() {
+        return transId;
+    }
+
+    public void setTransId(String transId) {
+        this.transId = transId;
+    }
+
 }

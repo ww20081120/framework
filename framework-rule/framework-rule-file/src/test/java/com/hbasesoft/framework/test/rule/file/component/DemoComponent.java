@@ -7,9 +7,9 @@ package com.hbasesoft.framework.test.rule.file.component;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 import com.hbasesoft.framework.rule.core.FlowContext;
+import com.hbasesoft.framework.test.rule.file.bean.FlowBean;
 
 /**
  * <Description> <br>
@@ -22,7 +22,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @see com.hbasesoft.framework.test.rule.file.component <br>
  */
 @Component("DemoComponent")
-public class DemoComponent implements FlowComponent {
+public class DemoComponent implements FlowComponent<FlowBean> {
 
     /**
      * Description: <br>

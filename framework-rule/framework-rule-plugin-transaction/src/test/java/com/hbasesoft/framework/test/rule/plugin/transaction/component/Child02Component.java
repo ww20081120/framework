@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 import com.hbasesoft.framework.rule.core.FlowContext;
 import com.hbasesoft.framework.rule.plugin.transaction.entity.Employee;
@@ -29,7 +28,7 @@ import com.hbasesoft.framework.test.rule.plugin.transaction.repository.EmployeeR
  * @see com.hbasesoft.framework.workflow.plugin.rule.test.component <br>
  */
 @Component("Child02Component")
-public class Child02Component implements FlowComponent {
+public class Child02Component implements FlowComponent<TestFlowBean> {
     @Resource
     private EmployeeRepository employeeDao;
 
@@ -44,8 +43,7 @@ public class Child02Component implements FlowComponent {
      * @throws Exception <br>
      */
     @Override
-    public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
-        TestFlowBean testFlowBean = (TestFlowBean) flowBean;
+    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
         List<Employee> employeeList = employeeDao.findByName(testFlowBean.getName());
         for (Employee employee : employeeList) {
             employee.setName(employee.getName() + 1);

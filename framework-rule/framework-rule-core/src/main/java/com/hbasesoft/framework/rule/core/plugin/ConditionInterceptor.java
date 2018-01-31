@@ -5,17 +5,19 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.core.plugin;
 
+import java.io.Serializable;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
-import com.hbasesoft.framework.rule.core.FlowBean;
 import com.hbasesoft.framework.rule.core.FlowContext;
-
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
 
 /**
  * <Description> 条件组合<br>
@@ -39,18 +41,33 @@ public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(FlowBean flowBean, FlowContext flowContext) {
+    public boolean before(Serializable flowBean, FlowContext flowContext) {
         String condition = (String) flowContext.getFlowConfig().getConfigAttrMap().get("condition");
         if (StringUtils.isNotEmpty(condition)) {
-            Binding binding = new Binding(flowContext.getParamMap());
+
+            // 构造上下文：准备比如变量定义等等表达式运行需要的上下文数据
+            EvaluationContext context = new StandardEvaluationContext();
+
             if (MapUtils.isNotEmpty(flowContext.getExtendUtils())) {
                 for (Entry<String, Object> util : flowContext.getExtendUtils().entrySet()) {
-                    binding.setProperty(util.getKey(), util.getValue());
+                    context.setVariable(util.getKey(), util.getValue());
                 }
             }
-            binding.setProperty("flowBean", flowBean);
-            GroovyShell shell = new GroovyShell(binding);
-            Object value = shell.evaluate(condition);
+
+            if (MapUtils.isNotEmpty(flowContext.getParamMap())) {
+                for (Entry<String, Object> param : flowContext.getParamMap().entrySet()) {
+                    context.setVariable(param.getKey(), param.getValue());
+                }
+            }
+
+            // 创建解析器：提供SpelExpressionParser默认实现
+            ExpressionParser parser = new SpelExpressionParser();
+
+            // 解析表达式：使用ExpressionParser来解析表达式为相应的Expression对象
+            Expression expression = parser.parseExpression(condition);
+
+            Object value = expression.getValue(context, flowBean);
+
             return value != null && "true".equals(value.toString().toLowerCase());
         }
         return true;
