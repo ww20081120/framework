@@ -34,7 +34,24 @@ public class TestFlow implements ApplicationContextAware {
 
     @Test
     public void flowStart() {
-        FlowBean flowBean = new FlowBean();
+        FlowBean flowBean = new FlowBean() {
+            /**
+             * serialVersionUID <br>
+             */
+            private static final long serialVersionUID = -4507854940540580031L;
+
+            private String transId;
+
+            @Override
+            public String getTransId() {
+                return transId;
+            }
+
+            @Override
+            public void setTransId(String transId) {
+                this.transId = transId;
+            }
+        };
         FlowHelper.flowStart(flowBean, "demo");
 
     }
