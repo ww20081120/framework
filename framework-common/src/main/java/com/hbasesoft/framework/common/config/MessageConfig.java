@@ -12,6 +12,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 
 /**
  * <Description> <br>
@@ -24,6 +25,7 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
  * @see com.hbasesoft.framework.common.config <br>
  */
 @Configuration
+@NoTransLog
 public class MessageConfig {
 
     @Bean
