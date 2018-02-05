@@ -33,7 +33,7 @@ public class FrameworkException extends RuntimeException {
      * @param code <br>
      */
     public FrameworkException(int code) {
-        super(code + ":" + PropertyHolder.getErrorMessage(code));
+        super(code + GlobalConstants.BLANK);
         this.code = code;
     }
 
