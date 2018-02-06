@@ -26,4 +26,18 @@ public interface FlowComponent<T> {
      * @throws Exception <br>
      */
     boolean process(T flowBean, FlowContext flowContext) throws Exception;
+
+    /**
+     * Description: 执行完成以后<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowBean
+     * @param flowContext
+     * @param e
+     * @throws Exception <br>
+     */
+    default void afterProcess(T flowBean, FlowContext flowContext, Exception e) throws Exception {
+    }
+
 }

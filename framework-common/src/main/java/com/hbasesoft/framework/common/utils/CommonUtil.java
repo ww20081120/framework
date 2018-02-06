@@ -195,13 +195,28 @@ public final class CommonUtil {
      * @param matchValue <br>
      * @return <br>
      */
-    public static boolean match(String key, String matchValue) {
+    public static boolean match(String rule, String matchValue) {
         boolean ismatch = false;
-        String value = getString(key);
-        if (StringUtils.isNotEmpty(value) && StringUtils.isNotEmpty(matchValue)) {
-            ismatch = new StringBuilder().append(GlobalConstants.SPLITOR).append(value).append(GlobalConstants.SPLITOR)
-                .indexOf(new StringBuilder().append(GlobalConstants.SPLITOR).append(matchValue)
-                    .append(GlobalConstants.SPLITOR).toString()) != -1;
+        if (StringUtils.isNotEmpty(rule) && StringUtils.isNotEmpty(matchValue)) {
+            // match all
+            if (GlobalConstants.ASTERISK.equals(rule)) {
+                ismatch = true;
+            }
+            // not eq match
+            else if (rule.startsWith("NOT:")) {
+                rule = rule.substring(4);
+                ismatch = rule.indexOf(GlobalConstants.SPLITOR) == -1 ? !rule.equals(matchValue)
+                    : new StringBuilder().append(GlobalConstants.SPLITOR).append(rule).append(GlobalConstants.SPLITOR)
+                        .indexOf(new StringBuilder().append(GlobalConstants.SPLITOR).append(matchValue)
+                            .append(GlobalConstants.SPLITOR).toString()) == -1;
+            }
+            // eq match
+            else {
+                ismatch = rule.indexOf(GlobalConstants.SPLITOR) == -1 ? rule.equals(matchValue)
+                    : new StringBuilder().append(GlobalConstants.SPLITOR).append(rule).append(GlobalConstants.SPLITOR)
+                        .indexOf(new StringBuilder().append(GlobalConstants.SPLITOR).append(matchValue)
+                            .append(GlobalConstants.SPLITOR).toString()) != -1;
+            }
         }
         return ismatch;
     }

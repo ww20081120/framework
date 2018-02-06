@@ -91,12 +91,22 @@ public final class FlowHelper {
                 // 是否执行流程组件中的子流程
                 if (flag) {
                     List<FlowConfig> list = flowConfig.getChildrenConfigList();
-                    if (CollectionUtils.isNotEmpty(list)) {
-                        for (FlowConfig childConfig : list) {
-                            flowContext.setFlowConfig(childConfig);
-                            execute(flowBean, flowContext);
+                    try {
+                        if (CollectionUtils.isNotEmpty(list)) {
+                            for (FlowConfig childConfig : list) {
+                                flowContext.setFlowConfig(childConfig);
+                                execute(flowBean, flowContext);
+
+                            }
                         }
+                        // 执行组件后置拦截
+                        component.afterProcess(flowBean, flowContext, null);
                     }
+                    catch (Exception e) {
+                        component.afterProcess(flowBean, flowContext, e);
+                        throw e;
+                    }
+
                 }
                 flowContext.setFlowConfig(flowConfig);
 
@@ -111,7 +121,6 @@ public final class FlowHelper {
             catch (Exception e) {
                 flowContext.setFlowConfig(flowConfig);
                 if (component != null) {
-
                     // 打印错误日志
                     TransLogUtil.afterThrowing(component, getMethod(), e);
                 }
