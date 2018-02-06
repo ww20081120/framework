@@ -12,7 +12,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.log.core.TransLogUtil;
 
 /**
@@ -34,7 +33,7 @@ public class BusinessTransactionAdivce {
     }
 
     @Around("log()")
-    public Object around(ProceedingJoinPoint joinPoint) throws FrameworkException {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object target = joinPoint.getTarget();
@@ -49,7 +48,7 @@ public class BusinessTransactionAdivce {
         }
         catch (Throwable e) {
             TransLogUtil.afterThrowing(target, method, e);
-            throw new FrameworkException(e);
+            throw e;
         }
     }
 }
