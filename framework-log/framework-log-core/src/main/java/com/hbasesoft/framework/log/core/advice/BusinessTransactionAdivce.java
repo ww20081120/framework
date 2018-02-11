@@ -34,7 +34,7 @@ public class BusinessTransactionAdivce {
     }
 
     @Around("log()")
-    public Object around(ProceedingJoinPoint joinPoint) throws FrameworkException {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object target = joinPoint.getTarget();
@@ -49,7 +49,7 @@ public class BusinessTransactionAdivce {
         }
         catch (Throwable e) {
             TransLogUtil.afterThrowing(target, method, e);
-            throw new FrameworkException(e);
+            throw e;
         }
     }
     //
