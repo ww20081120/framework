@@ -10,8 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Base64;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -35,7 +35,7 @@ public final class DataUtil {
 
     private static final String ALGORITHM = "PBEWithMD5AndDES";
 
-    private static final PasswordEncoder encoder = new StandardPasswordEncoder(SITE_WIDE_SECRET);
+    private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     /**
      * 默认构造
@@ -153,7 +153,7 @@ public final class DataUtil {
      * @param password
      * @return <br>
      */
-    public static boolean matchPassword(String rawPassword, String password) {
+    public static boolean matchPassword(CharSequence rawPassword, String password) {
         return encoder.matches(rawPassword, password);
     }
 
