@@ -564,7 +564,15 @@ public class HttpUtil {
         if (CommonUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+
+        if (CommonUtil.isNotEmpty(ip)) {
+            int index = ip.indexOf(",");
+            if (index != -1) {
+                ip = ip.substring(0, index);
+            }
+            return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+        }
+        return ip;
     }
 
     public static String getClientInfo(HttpServletRequest request) {
