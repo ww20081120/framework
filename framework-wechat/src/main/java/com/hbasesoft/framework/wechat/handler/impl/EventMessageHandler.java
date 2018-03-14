@@ -121,13 +121,13 @@ public class EventMessageHandler extends AbstractMessageHandler {
         if (CommonUtils.isNotEmpty(toUserName)) {
             String enventKey = requestMap.get("EventKey");
             
-            String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
-            logger.info("用户首次关注 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, paramId);
+            //String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
+            logger.info("用户首次关注 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, enventKey);
             
             EventData data = new EventData();
             data.put("openid", toUserName);
             data.put("appId", appId);
-            data.put("paramId", paramId);
+            data.put("paramId", enventKey);
             EventEmmiter.emmit(WechatEventCodeDef.WECHAT_SUBSCRIBER, data);
         }
         
@@ -200,13 +200,13 @@ public class EventMessageHandler extends AbstractMessageHandler {
         if (CommonUtils.isNotEmpty(toUserName)) {
             String enventKey = requestMap.get("EventKey");
             
-            String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
-            logger.info("关注用户扫描带参二维码处理 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, paramId);
+//            String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
+            logger.info("关注用户扫描带参二维码处理 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, enventKey);
             
             EventData data = new EventData();
             data.put("openid", toUserName);
             data.put("appId", appId);
-            data.put("paramId", paramId);
+            data.put("paramId", enventKey);
             EventEmmiter.emmit(WechatEventCodeDef.WECHAT_SCAN, data);
         }
         
