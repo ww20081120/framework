@@ -5,11 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.redis.lock;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -21,16 +17,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.cache.core.annotation.CacheLock;
-import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.cache.core.redis.ClusterRedisCache;
 import com.hbasesoft.framework.cache.core.redis.RedisCache;
+import com.hbasesoft.framework.cache.core.redis.util.KeyUtil;
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 
 /**
  * <Description> <br>
@@ -64,7 +56,7 @@ public class CacheLockAdvice {
                 if (cacheLock != null) {
                     // 新建一个锁
                     RedisLock lock = new RedisLock(
-                        cacheLock.value() + getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
+                        cacheLock.value() + KeyUtil.getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
 
                     // 加锁
                     boolean result = lock.lock(cacheLock.timeOut(), cacheLock.expireTime());
@@ -85,36 +77,5 @@ public class CacheLockAdvice {
         }
 
         return thisJoinPoint.proceed();
-    }
-
-    private String getLockKey(String template, Method method, Object[] args) throws FrameworkException {
-        if (CommonUtil.isNotEmpty(args)) {
-            Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-            Map<String, Object> paramMap = new TreeMap<String, Object>();
-            for (int i = 0; i < parameterAnnotations.length; i++) {
-                for (Annotation annotation : parameterAnnotations[i]) {
-                    if (annotation instanceof Key) {
-                        paramMap.put(((Key) annotation).value(), args[i]);
-                        break;
-                    }
-                }
-            }
-
-            if (CommonUtil.isNotEmpty(paramMap)) {
-                StringBuilder sb = new StringBuilder();
-                if (CommonUtil.isNotEmpty(template)) {
-                    sb.append(GlobalConstants.UNDERLINE)
-                        .append(VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap));
-                }
-                else {
-                    for (Entry<String, Object> entry : paramMap.entrySet()) {
-                        sb.append(GlobalConstants.UNDERLINE)
-                            .append(entry.getValue() == null ? GlobalConstants.BLANK : entry.getValue());
-                    }
-                }
-                return sb.toString();
-            }
-        }
-        return GlobalConstants.BLANK;
     }
 }
