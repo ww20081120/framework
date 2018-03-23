@@ -16,10 +16,12 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import com.hbasesoft.framework.cache.core.annotation.CacheLock;
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.cache.core.annotation.DulplicateLock;
+import com.hbasesoft.framework.cache.core.redis.AbstractRedisCache;
 import com.hbasesoft.framework.cache.core.redis.util.KeyUtil;
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.Assert;
 
 /**
  * <Description> <br>
@@ -27,19 +29,27 @@ import com.hbasesoft.framework.common.ServiceException;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2015年12月2日 <br>
+ * @CreateDate 2018年3月23日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.cache.core.annotation <br>
+ * @see com.hbasesoft.framework.cache.core.redis.lock <br>
  */
 @Aspect
 @Configuration
-public class CacheLockAdvice {
+public class DulplicateLockAdvice {
 
-    @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
-    public void cacheLock() {
+    public static final String LOCKED = "DULPLICATE_LOCKED";
+
+    private AbstractRedisCache redisCache;
+
+    public DulplicateLockAdvice() {
+        this.redisCache = (AbstractRedisCache) CacheHelper.getCache();
     }
 
-    @Around("cacheLock()")
+    @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
+    public void dulplicateLock() {
+    }
+
+    @Around("dulplicateLock()")
     public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {
@@ -47,26 +57,21 @@ public class CacheLockAdvice {
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
-            CacheLock cacheLock = AnnotationUtils.findAnnotation(currentMethod, CacheLock.class);
-            if (cacheLock != null) {
-                // 新建一个锁
-                RedisLock lock = new RedisLock(
-                    cacheLock.value() + KeyUtil.getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
+            DulplicateLock dulplicateLock = AnnotationUtils.findAnnotation(currentMethod, DulplicateLock.class);
+            if (dulplicateLock != null) {
+                String key = dulplicateLock.value()
+                    + KeyUtil.getLockKey(dulplicateLock.key(), currentMethod, thisJoinPoint.getArgs());
 
-                // 加锁
-                boolean result = lock.lock(cacheLock.timeOut(), cacheLock.expireTime());
-                if (!result) {
-                    throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, lock);
-                }
+                Assert.isTrue(redisCache.setnx(key, LOCKED, dulplicateLock.expireTime()),
+                    ErrorCodeDef.DULPLICATE_MESSAGE, key);
 
                 try {
                     // 加锁成功，执行方法
                     return thisJoinPoint.proceed();
                 }
-                finally {
-                    lock.unlock();
+                catch (Exception e) {
+                    redisCache.evict(key);
                 }
-
             }
         }
         return thisJoinPoint.proceed();
