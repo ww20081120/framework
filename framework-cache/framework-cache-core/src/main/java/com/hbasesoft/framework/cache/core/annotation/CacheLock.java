@@ -9,8 +9,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hbasesoft.framework.common.GlobalConstants;
-
 /**
  * <Description> 分布式锁<br>
  * 
@@ -42,7 +40,7 @@ public @interface CacheLock {
      * @taskId <br>
      * @return <br>
      */
-    String key() default GlobalConstants.BLANK;
+    String key();
 
     /**
      * Description: 锁过期时间<br>

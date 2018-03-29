@@ -11,8 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hbasesoft.framework.common.GlobalConstants;
-
 /**
  * <Description> <br>
  * 
@@ -44,7 +42,7 @@ public @interface DulplicateLock {
      * @taskId <br>
      * @return <br>
      */
-    String key() default GlobalConstants.BLANK;
+    String key();
 
     /**
      * Description: 锁过期时间<br>
