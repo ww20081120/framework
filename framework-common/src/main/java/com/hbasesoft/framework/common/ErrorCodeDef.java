@@ -342,4 +342,7 @@ public interface ErrorCodeDef {
      * 不支持的事务类型
      */
     int UNSUPPORT_TRASACTION_TYPE = 20051;
+
+    /** SQL不支持星号 */
+    int UNSUUPORT_ASTERISK = 20052;
 }

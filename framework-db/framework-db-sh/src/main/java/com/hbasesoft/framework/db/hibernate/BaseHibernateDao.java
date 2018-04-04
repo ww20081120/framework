@@ -36,6 +36,7 @@ import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
+import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 
 /**
  * <Description> <br>
@@ -65,6 +66,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
         try {
+
+            SQlCheckUtil.checkSql(sql);
+
             Session session = sessionFactory.getCurrentSession();
 
             SQLQuery query = session.createSQLQuery(sql);
@@ -167,6 +171,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public int excuteSql(final String sql, final DataParam param) throws DaoException {
         try {
+            SQlCheckUtil.checkSql(sql);
             Session session = sessionFactory.getCurrentSession();
             SQLQuery query = session.createSQLQuery(sql);
             setParamMap(param.getParamMap(), query);
