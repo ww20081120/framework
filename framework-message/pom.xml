@@ -12,5 +12,6 @@
 		<module>framework-message-core</module>
 		<module>framework-message-redis</module>
 		<module>framework-message-kafka</module>
+		<module>framework-message-rocketMQ</module>
 	</modules>
 </project>

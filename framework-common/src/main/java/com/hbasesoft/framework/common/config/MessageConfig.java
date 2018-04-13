@@ -12,6 +12,9 @@ import org.springframework.http.converter.HttpMessageConverter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 
 /**
@@ -27,6 +30,14 @@ import com.hbasesoft.framework.common.annotation.NoTransLog;
 @Configuration
 @NoTransLog
 public class MessageConfig {
+
+    @Bean
+    public ObjectMapper serializingObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
+    }
 
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
