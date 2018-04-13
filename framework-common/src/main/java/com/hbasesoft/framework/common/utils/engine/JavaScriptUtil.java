@@ -17,6 +17,9 @@ import javax.script.SimpleScriptContext;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -25,13 +28,8 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @CreateDate 2014年10月23日 <br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JavaScriptUtil {
-
-    /**
-     * 默认构造器
-     */
-    private JavaScriptUtil() {
-    }
 
     /**
      * Description: 执行脚本<br>

@@ -16,6 +16,9 @@ import org.apache.commons.lang.StringUtils;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -26,6 +29,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProtocolUtil {
 
     /**
@@ -42,9 +46,6 @@ public final class ProtocolUtil {
         defaultPortMap.put("ftp", 21);
         defaultPortMap.put("sftp", 22);
         defaultPortMap.put("ssh", 22);
-    }
-
-    private ProtocolUtil() {
     }
 
     /**

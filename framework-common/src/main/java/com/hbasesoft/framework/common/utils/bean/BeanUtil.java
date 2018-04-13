@@ -34,6 +34,8 @@ import javassist.NotFoundException;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * <Description> <br>
@@ -43,6 +45,7 @@ import javassist.bytecode.MethodInfo;
  * @CreateDate 2014年10月23日 <br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BeanUtil {
 
     /**

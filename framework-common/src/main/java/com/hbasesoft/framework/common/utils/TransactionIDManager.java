@@ -5,6 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -15,7 +18,8 @@ package com.hbasesoft.framework.common.utils;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils <br>
  */
-public class TransactionIDManager {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TransactionIDManager {
 
     /**
      * 本地线程对象, 保证对象在同一个线程内共享

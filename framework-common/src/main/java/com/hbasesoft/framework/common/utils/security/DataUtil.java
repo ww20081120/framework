@@ -17,6 +17,9 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -27,7 +30,7 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.security <br>
  */
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DataUtil {
 
     /** password */
@@ -36,12 +39,6 @@ public final class DataUtil {
     private static final String ALGORITHM = "PBEWithMD5AndDES";
 
     private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
-    /**
-     * 默认构造
-     */
-    private DataUtil() {
-    }
 
     /**
      * 16位字符串数组

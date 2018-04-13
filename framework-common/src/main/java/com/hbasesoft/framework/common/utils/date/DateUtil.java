@@ -20,6 +20,9 @@ import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.engine.JavaScriptUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -28,6 +31,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @CreateDate 2014年11月6日 <br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
     /**

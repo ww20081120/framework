@@ -9,6 +9,9 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -20,10 +23,8 @@ import com.alibaba.fastjson.JSONObject;
  * @see com.hbasesoft.framework.common.utils.bean <br>
  */
 @SuppressWarnings("rawtypes")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JSONUtil {
-
-    private JSONUtil() {
-    }
 
     public static String toJSONString(Object[][] array) {
         return toJSON(array).toJSONString();

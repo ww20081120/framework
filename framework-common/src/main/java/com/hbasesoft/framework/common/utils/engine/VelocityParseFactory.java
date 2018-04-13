@@ -25,6 +25,9 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -35,7 +38,8 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
-public class VelocityParseFactory {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class VelocityParseFactory {
 
     /**
      * properties

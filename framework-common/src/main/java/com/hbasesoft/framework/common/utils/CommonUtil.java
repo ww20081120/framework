@@ -17,6 +17,9 @@ import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -25,6 +28,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
  * @CreateDate 2014年10月23日 <br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommonUtil {
 
     /**

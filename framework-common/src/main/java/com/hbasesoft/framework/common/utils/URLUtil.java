@@ -8,6 +8,9 @@ import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * URL 常用方法处理类
  * 
@@ -16,13 +19,8 @@ import com.hbasesoft.framework.common.GlobalConstants;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class URLUtil {
-
-    /**
-     * <默认构造函数>
-     */
-    private URLUtil() {
-    }
 
     /**
      * UTF-8解码

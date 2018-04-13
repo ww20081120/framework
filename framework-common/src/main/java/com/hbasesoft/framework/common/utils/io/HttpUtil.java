@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.FormBody.Builder;
@@ -33,7 +35,8 @@ import okhttp3.Response;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
-public class HttpUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class HttpUtil {
 
     /**
      * <p>

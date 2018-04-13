@@ -21,6 +21,8 @@ import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
 import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * <Description> <br>
@@ -32,6 +34,7 @@ import io.protostuff.runtime.RuntimeSchema;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.cache.core.util <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SerializationUtil {
 
     /**

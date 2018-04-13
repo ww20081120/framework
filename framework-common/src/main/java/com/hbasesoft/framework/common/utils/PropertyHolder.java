@@ -38,6 +38,9 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> 系统配置<br>
  * 
@@ -48,7 +51,9 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils <br>
  */
-public class PropertyHolder {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PropertyHolder {
+    
     private static Logger log = new Logger(PropertyHolder.class);
 
     private static final Map<String, String> PROPERTIES = new HashMap<>();

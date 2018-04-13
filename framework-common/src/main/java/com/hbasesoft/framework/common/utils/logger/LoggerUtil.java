@@ -11,6 +11,9 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -21,15 +24,13 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.logger <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LoggerUtil {
 
     /**
      * sql语句日志名称，用于记录日志
      */
     private static final String SQL_LOG_NAME = "framework.sql.log";
-
-    private LoggerUtil() {
-    }
 
     /**
      * 普通异常日志

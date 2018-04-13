@@ -16,6 +16,9 @@ import net.coobird.thumbnailator.Thumbnails.Builder;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -26,6 +29,7 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ImageUtil {
 
     /**

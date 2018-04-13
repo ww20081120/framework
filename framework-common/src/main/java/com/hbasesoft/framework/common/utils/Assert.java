@@ -13,6 +13,9 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -21,13 +24,8 @@ import org.apache.commons.lang.StringUtils;
  * @CreateDate 2014年11月7日 <br>
  * @see com.hbasesoft.framework.core.utils <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Assert {
-
-    /**
-     * 默认构造函数
-     */
-    private Assert() {
-    }
 
     /**
      * Description: <br>

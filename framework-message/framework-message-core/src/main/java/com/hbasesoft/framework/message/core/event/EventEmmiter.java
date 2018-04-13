@@ -9,6 +9,9 @@ import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -19,10 +22,8 @@ import com.hbasesoft.framework.message.core.MessageHelper;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.event <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EventEmmiter {
-
-    private EventEmmiter() {
-    }
 
     /**
      * Description: 触发事件<br>
