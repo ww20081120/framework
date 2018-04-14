@@ -20,6 +20,7 @@
 		<module>framework-log</module>
 		<module>framework-rule</module>
 		<module>framework-bootstrap</module>
+		<module>framework-job</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -105,16 +106,16 @@
 			</resource>
 		</resources>
 	</build>
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/libs-milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+<!-- 	<repositories> -->
+<!-- 		<repository> -->
+<!-- 			<id>spring-milestones</id> -->
+<!-- 			<name>Spring Milestones</name> -->
+<!-- 			<url>https://repo.spring.io/libs-milestone</url> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</repository> -->
+<!-- 	</repositories> -->
 	<distributionManagement>
 		<repository>
 			<id>releases</id>

@@ -1,0 +1,17 @@
+project:
+ name: framework-job-core
+
+server: #系统配置
+  port: 8062
+
+job:
+  register:
+    url: localhost:2181
+    namespace: framework-job-core
+    
+master: #主数据库配置
+ db:
+  type: mysql
+  url: jdbc:mysql://www.hbasesoft.com:3306/sgp_job?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true
+  username: sgp
+  password: sgp

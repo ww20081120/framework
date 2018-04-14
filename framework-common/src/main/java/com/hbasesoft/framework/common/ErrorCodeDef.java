@@ -345,4 +345,10 @@ public interface ErrorCodeDef {
 
     /** SQL不支持星号 */
     int UNSUUPORT_ASTERISK = 20052;
+
+    /** Job 服务的注册中心未配置 */
+    int JOB_REGISTER_URL_IS_NULL = 20053;
+
+    /** 注册中心的命名空间未配置 */
+    int JOB_REGISTER_NAMESPACE_IS_NULL = 20054;
 }
