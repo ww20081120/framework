@@ -447,6 +447,19 @@ public final class BeanUtil {
         return sb.toString();
     }
 
+    public static String camelStr2underLine(String camelStr) {
+        StringBuilder sb = new StringBuilder(camelStr);
+        for (int i = 0; i < sb.length(); i++) {
+            char c = sb.charAt(i);
+            if (c >= 'A' && c <= 'Z') {
+                sb.replace(i, i + 1, Character.toString((char) (c + 32)));
+                sb.insert(i, GlobalConstants.UNDERLINE);
+                i++;
+            }
+        }
+        return sb.toString();
+    }
+
     /**
      * Description: <br>
      * 
