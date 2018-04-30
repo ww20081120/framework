@@ -18,6 +18,7 @@ import java.io.Serializable;
  * @see com.hbasesoft.framework.test.rule.plugin.transaction <br>
  */
 public class TestFlowBean implements Serializable {
+    
 
     /**
      * serialVersionUID <br>

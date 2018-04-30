@@ -36,7 +36,7 @@ public class TestFlow implements ApplicationContextAware {
     @Test
     public void flowStart() {
         FlowBean flowBean = new FlowBean();
-        flowBean.setTransId(CommonUtil.getTransactionID());
+        //flowBean.setTransId(CommonUtil.getTransactionID());
         FlowHelper.flowStart(flowBean, "demo");
         FlowHelper.flowStart(flowBean, "demo02");
     }
