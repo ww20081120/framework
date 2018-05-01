@@ -32,11 +32,6 @@ import lombok.NoArgsConstructor;
 public final class CommonUtil {
 
     /**
-     * random
-     */
-    private static final Random RANDOM = new Random();
-
-    /**
      * Description: 去除首尾空格，并将null字符串转化为null对象<br>
      * 
      * @author liuxianan<br>
@@ -77,8 +72,9 @@ public final class CommonUtil {
      */
     public static String getRandomNumber(int size) {
         StringBuilder sb = new StringBuilder();
+        Random random = new Random();
         for (int i = 0; i < size; i++) {
-            sb.append((char) ('0' + RANDOM.nextInt(10)));
+            sb.append((char) ('0' + random.nextInt(10)));
         }
         return sb.toString();
     }
@@ -93,16 +89,17 @@ public final class CommonUtil {
      */
     public static String getRandomChar(int size) {
         StringBuilder sb = new StringBuilder();
+        Random random = new Random();
         for (int i = 0; i < size; i++) {
-            switch (RANDOM.nextInt(10) % 3) {
+            switch (random.nextInt(10) % 3) {
                 case 0:
-                    sb.append((char) ('0' + RANDOM.nextInt(10)));
+                    sb.append((char) ('0' + random.nextInt(10)));
                     break;
                 case 1:
-                    sb.append((char) ('a' + RANDOM.nextInt(26)));
+                    sb.append((char) ('a' + random.nextInt(26)));
                     break;
                 case 2:
-                    sb.append((char) ('A' + RANDOM.nextInt(26)));
+                    sb.append((char) ('A' + random.nextInt(26)));
                     break;
                 default:
                     ;
