@@ -33,7 +33,7 @@ public @interface DulplicateLock {
      * @taskId <br>
      * @return <br>
      */
-    String value();
+    String name();
 
     /**
      * Description: 附属关键字<br>

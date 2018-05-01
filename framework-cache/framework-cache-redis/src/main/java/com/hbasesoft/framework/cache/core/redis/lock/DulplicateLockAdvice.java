@@ -59,7 +59,7 @@ public class DulplicateLockAdvice {
 
             DulplicateLock dulplicateLock = AnnotationUtils.findAnnotation(currentMethod, DulplicateLock.class);
             if (dulplicateLock != null) {
-                String key = dulplicateLock.value()
+                String key = dulplicateLock.name()
                     + KeyUtil.getLockKey(dulplicateLock.key(), currentMethod, thisJoinPoint.getArgs());
 
                 Assert.isTrue(redisCache.setnx(key, LOCKED, dulplicateLock.expireTime()),

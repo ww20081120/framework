@@ -583,7 +583,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException {
+    public <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize)
+        throws DaoException {
 
         Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
 

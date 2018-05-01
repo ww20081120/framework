@@ -10,6 +10,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 
 import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.utils.PagerList;
 
 /**
  * <Description> <br>
@@ -97,8 +98,7 @@ public interface IGenericBaseDao {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param ids
-     *            <br>
+     * @param ids <br>
      */
     <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException;
 
@@ -144,7 +144,7 @@ public interface IGenericBaseDao {
      * @return
      */
     <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
-	    throws DaoException;
+        throws DaoException;
 
     <T> T singleResult(String hql) throws DaoException;
 
@@ -155,7 +155,7 @@ public interface IGenericBaseDao {
      * @param isOffset
      * @return
      */
-    <T> List<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException;
+    <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException;
 
     /**
      * 通过cq获取全部实体
@@ -188,12 +188,12 @@ public interface IGenericBaseDao {
     <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException;
 
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param entity
      * @throws DaoException <br>
-     */ 
+     */
     <T> void saveOrUpdate(T entity) throws DaoException;
 }
