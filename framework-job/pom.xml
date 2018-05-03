@@ -13,5 +13,6 @@
 	<modules>
 		<module>framework-job-core</module>
 		<module>framework-job-demo</module>
+		<module>framework-job-manager</module>
 	</modules>
 </project>
