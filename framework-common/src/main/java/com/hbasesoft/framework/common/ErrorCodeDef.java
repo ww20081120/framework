@@ -342,4 +342,14 @@ public interface ErrorCodeDef {
      * 不支持的事务类型
      */
     int UNSUPPORT_TRASACTION_TYPE = 20051;
+
+    /**
+     * job 注册地址不能为空
+     */
+    int JOB_REGISTER_URL_IS_NULL = 20052;
+
+    /**
+     * job 的命名空间不能为空
+     */
+    int JOB_REGISTER_NAMESPACE_IS_NULL = 20053;
 }
