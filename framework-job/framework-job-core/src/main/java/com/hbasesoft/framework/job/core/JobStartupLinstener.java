@@ -63,6 +63,12 @@ public class JobStartupLinstener implements StartupListener {
      */
     @Override
     public void complete(ApplicationContext context) {
+        
+        // 未开启Job则不进行扫描
+        if (!PropertyHolder.getBooleanProperty("job.enable", true)) {
+            return;
+        }
+        
         try {
             final CoordinatorRegistryCenter regCenter = context.getBean(CoordinatorRegistryCenter.class);
 
