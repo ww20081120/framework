@@ -57,70 +57,75 @@ public class JobStartupLinstener extends StartupListenerAdapter {
      */
     @Override
     public void complete(ApplicationContext context) {
-        try {
-            final CoordinatorRegistryCenter regCenter = context.getBean(CoordinatorRegistryCenter.class);
 
-            for (String pack : packagesToScan) {
-                if (StringUtils.isNotEmpty(pack)) {
-                    Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
-                    for (Class<?> clazz : clazzSet) {
-                        if (clazz.isAnnotationPresent(Job.class)) {
-                            Job job = AnnotationUtils.findAnnotation(clazz, Job.class);
+        if (PropertyHolder.getBooleanProperty("job.enable", true)) {
+            try {
+                final CoordinatorRegistryCenter regCenter = context.getBean(CoordinatorRegistryCenter.class);
 
-                            // Job名称
-                            String name = getPropery(job.name());
-                            if (StringUtils.isEmpty(name)) {
-                                name = StringUtils.uncapitalize(clazz.getSimpleName());
-                            }
+                for (String pack : packagesToScan) {
+                    if (StringUtils.isNotEmpty(pack)) {
+                        Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
+                        for (Class<?> clazz : clazzSet) {
+                            if (clazz.isAnnotationPresent(Job.class)) {
+                                Job job = AnnotationUtils.findAnnotation(clazz, Job.class);
 
-                            // 分片大小
-                            int shardingTotalCount = 1;
-
-                            String shardingItemParameters = getPropery(job.shardingParam());
-                            if (StringUtils.isNotEmpty(shardingItemParameters)) {
-                                String[] params = StringUtils.split(shardingItemParameters, GlobalConstants.SPLITOR);
-                                shardingTotalCount = params.length;
-                                StringBuilder sb = new StringBuilder();
-                                for (int i = 0; i < shardingTotalCount; i++) {
-                                    sb.append(i).append(GlobalConstants.EQUAL_SPLITER).append(params[i]);
-                                    if (i < shardingTotalCount - 1) {
-                                        sb.append(GlobalConstants.SPLITOR);
-                                    }
+                                // Job名称
+                                String name = getPropery(job.name());
+                                if (StringUtils.isEmpty(name)) {
+                                    name = StringUtils.uncapitalize(clazz.getSimpleName());
                                 }
-                                shardingItemParameters = sb.toString();
-                            }
 
-                            JobCoreConfiguration coreConfig = JobCoreConfiguration
-                                .newBuilder(name, getPropery(job.cron()), shardingTotalCount)
-                                .shardingItemParameters(shardingItemParameters).build();
+                                // 分片大小
+                                int shardingTotalCount = 1;
 
-                            JobTypeConfiguration cfg = null;
-                            if (SimpleJob.class.isAssignableFrom(clazz)) {
-                                cfg = new SimpleJobConfiguration(coreConfig, clazz.getCanonicalName());
-                            }
-                            else if (DataflowJob.class.isAssignableFrom(clazz)) {
-                                cfg = new DataflowJobConfiguration(coreConfig, clazz.getCanonicalName(),
-                                    job.streamingProcess());
-                            }
-                            else if (ScriptJob.class.isAssignableFrom(clazz)) {
-                                ScriptJob scriptJob = (ScriptJob) clazz.newInstance();
-                                cfg = new ScriptJobConfiguration(coreConfig, scriptJob.loadScript());
-                            }
+                                String shardingItemParameters = getPropery(job.shardingParam());
+                                if (StringUtils.isNotEmpty(shardingItemParameters)) {
+                                    String[] params = StringUtils.split(shardingItemParameters,
+                                        GlobalConstants.SPLITOR);
+                                    shardingTotalCount = params.length;
+                                    StringBuilder sb = new StringBuilder();
+                                    for (int i = 0; i < shardingTotalCount; i++) {
+                                        sb.append(i).append(GlobalConstants.EQUAL_SPLITER).append(params[i]);
+                                        if (i < shardingTotalCount - 1) {
+                                            sb.append(GlobalConstants.SPLITOR);
+                                        }
+                                    }
+                                    shardingItemParameters = sb.toString();
+                                }
 
-                            if (cfg != null) {
-                                JobScheduler jobScheduler = new JobScheduler(regCenter,
-                                    LiteJobConfiguration.newBuilder(cfg).build());
-                                jobScheduler.init();
-                                LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(), name);
-                            }
+                                JobCoreConfiguration coreConfig = JobCoreConfiguration
+                                    .newBuilder(name, getPropery(job.cron()), shardingTotalCount)
+                                    .shardingItemParameters(shardingItemParameters).build();
 
+                                JobTypeConfiguration cfg = null;
+                                if (SimpleJob.class.isAssignableFrom(clazz)) {
+                                    cfg = new SimpleJobConfiguration(coreConfig, clazz.getCanonicalName());
+                                }
+                                else if (DataflowJob.class.isAssignableFrom(clazz)) {
+                                    cfg = new DataflowJobConfiguration(coreConfig, clazz.getCanonicalName(),
+                                        job.streamingProcess());
+                                }
+                                else if (ScriptJob.class.isAssignableFrom(clazz)) {
+                                    ScriptJob scriptJob = (ScriptJob) clazz.newInstance();
+                                    cfg = new ScriptJobConfiguration(coreConfig, scriptJob.loadScript());
+                                }
+
+                                if (cfg != null) {
+                                    JobScheduler jobScheduler = new JobScheduler(regCenter,
+                                        LiteJobConfiguration.newBuilder(cfg).build());
+                                    jobScheduler.init();
+                                    LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(),
+                                        name);
+                                }
+
+                            }
                         }
                     }
                 }
             }
-        }
-        catch (Exception e) {
-            throw new InitializationException(e);
+            catch (Exception e) {
+                throw new InitializationException(e);
+            }
         }
 
     }
