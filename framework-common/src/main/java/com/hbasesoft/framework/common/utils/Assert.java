@@ -190,7 +190,7 @@ public final class Assert {
     }
 
     public static void equals(Object obj1, Object obj2, int errorCode, Object... params) {
-        if ((obj1 != null && !obj1.equals(obj2)) && (obj2 != null && !obj2.equals(obj1))) {
+        if (!(obj1 != null && obj1.equals(obj2))) {
             throw new AssertException(errorCode, params);
         }
     }
