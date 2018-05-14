@@ -7,6 +7,7 @@ package com.hbasesoft.framework.common.config;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -52,6 +53,19 @@ public class MessageConfig implements WebMvcConfigurer {
         fastConverter.setFeatures(SerializerFeature.WriteDateUseDateFormat);
 
         converters.add(fastConverter);
+    }
+
+    @Bean
+    public HttpMessageConverters fastJsonHttpMessageConverters() {
+        // 1、需要先定义一个 convert 转换消息对象；
+        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
+
+        // 2、添加 fastJson 的配置信息，比如: 是否要格式化返回的Json数据；
+        fastConverter.setFeatures(SerializerFeature.WriteDateUseDateFormat);
+
+        // 4、
+        HttpMessageConverter<?> converter = fastConverter;
+        return new HttpMessageConverters(new StringHttpMessageConverter(), converter);
     }
 
     @Bean
