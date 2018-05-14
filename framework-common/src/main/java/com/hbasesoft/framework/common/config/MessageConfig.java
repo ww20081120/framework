@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -41,6 +42,9 @@ public class MessageConfig {
 
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
+
+        StringHttpMessageConverter strConverter = new StringHttpMessageConverter();
+
         // 1、需要先定义一个 convert 转换消息对象；
         FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
 
@@ -49,7 +53,7 @@ public class MessageConfig {
 
         // 4、
         HttpMessageConverter<?> converter = fastConverter;
-        return new HttpMessageConverters(converter);
+        return new HttpMessageConverters(strConverter, converter);
     }
 
 }
