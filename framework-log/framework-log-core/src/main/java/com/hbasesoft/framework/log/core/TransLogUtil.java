@@ -38,122 +38,134 @@ public class TransLogUtil {
      */
     private static ServiceLoader<TransLoggerService> transLoggerServices;
 
+    public static void before(String methodName, Object[] args) {
+
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+
+        TransManager manager = TransManager.getInstance();
+
+        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", 5);
+
+        // 深度检测
+        if (manager.getStackSize() > maxDeepLen) {
+            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
+        }
+
+        // 父id
+        String parentStackId = manager.peek();
+
+        if (StringUtils.isEmpty(parentStackId)) {
+            parentStackId = TransactionIDManager.getTransactionId();
+        }
+
+        // id
+        String stackId = CommonUtil.getTransactionID();
+        manager.push(stackId, beginTime);
+
+        // 执行记录
+        for (TransLoggerService service : getTransLoggerServices()) {
+            service.before(stackId, parentStackId, beginTime, methodName, args);
+        }
+
+    }
+
     public static void before(Object target, Method method, Object[] args) throws FrameworkException {
 
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
-            // 开始执行时间
-            long beginTime = System.currentTimeMillis();
-
             // 执行方法
             String methodName = getMethodSignature(method);
+            before(methodName, args);
+        }
+    }
 
-            TransManager manager = TransManager.getInstance();
+    public static void afterReturning(String methodName, Object returnValue) {
+        // 执行完成时间
+        long endTime = System.currentTimeMillis();
 
-            int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", 5);
+        TransManager manager = TransManager.getInstance();
+        String stackId = manager.pop();
+        if (StringUtils.isEmpty(stackId)) {
+            return;
+        }
 
-            // 深度检测
-            if (manager.getStackSize() > maxDeepLen) {
-                throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
-            }
+        long beginTime = manager.getBeginTime(stackId);
+        long consumeTime = endTime - beginTime;
 
-            // 父id
-            String parentStackId = manager.peek();
+        long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", 10L) * 1000;
 
-            if (StringUtils.isEmpty(parentStackId)) {
-                parentStackId = TransactionIDManager.getTransactionId();
-            }
+        if (consumeTime > maxExcuteTime) {
+            manager.setTimeout(true);
+        }
 
-            // id
-            String stackId = CommonUtil.getTransactionID();
-            manager.push(stackId, beginTime);
+        // 执行记录
+        for (TransLoggerService service : getTransLoggerServices()) {
+            service.afterReturn(stackId, endTime, consumeTime, methodName, returnValue);
+        }
 
-            // 执行记录
+        if (manager.getStackSize() <= 0) {
             for (TransLoggerService service : getTransLoggerServices()) {
-                service.before(stackId, parentStackId, beginTime, methodName, args);
+                service.end(stackId, beginTime, endTime, consumeTime, methodName, returnValue, null);
             }
+
+            for (TransLoggerService service : getTransLoggerServices()) {
+                service.clean();
+            }
+
+            manager.clean();
         }
     }
 
     public static void afterReturning(Object target, Method method, Object returnValue) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
-            // 执行完成时间
-            long endTime = System.currentTimeMillis();
-
-            TransManager manager = TransManager.getInstance();
-            String stackId = manager.pop();
-            if (StringUtils.isEmpty(stackId)) {
-                return;
-            }
-
-            long beginTime = manager.getBeginTime(stackId);
-            long consumeTime = endTime - beginTime;
-
-            long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", 10L) * 1000;
-
-            if (consumeTime > maxExcuteTime) {
-                manager.setTimeout(true);
-            }
-
             // 执行方法
             String methodName = getMethodSignature(method);
+            afterReturning(methodName, returnValue);
+        }
+    }
 
-            // 执行记录
+    public static void afterThrowing(String methodName, Throwable e) {
+        // 执行完成时间
+        long endTime = System.currentTimeMillis();
+
+        TransManager manager = TransManager.getInstance();
+        String stackId = manager.pop();
+        if (StringUtils.isEmpty(stackId)) {
+            return;
+        }
+
+        long beginTime = manager.getBeginTime(stackId);
+        long consumeTime = endTime - beginTime;
+
+        manager.setError(true);
+
+        // 执行记录
+        for (TransLoggerService service : getTransLoggerServices()) {
+            service.afterThrow(stackId, endTime, consumeTime, methodName, e);
+        }
+
+        if (manager.getStackSize() <= 0) {
             for (TransLoggerService service : getTransLoggerServices()) {
-                service.afterReturn(stackId, endTime, consumeTime, methodName, returnValue);
+                service.end(stackId, beginTime, endTime, consumeTime, methodName, null, e);
             }
 
-            if (manager.getStackSize() <= 0) {
-                for (TransLoggerService service : getTransLoggerServices()) {
-                    service.end(stackId, beginTime, endTime, consumeTime, methodName, returnValue, null);
-                }
-
-                for (TransLoggerService service : getTransLoggerServices()) {
-                    service.clean();
-                }
-
-                manager.clean();
+            for (TransLoggerService service : getTransLoggerServices()) {
+                service.clean();
             }
+
+            manager.clean();
         }
     }
 
     public static void afterThrowing(Object target, Method method, Throwable e) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
-            // 执行完成时间
-            long endTime = System.currentTimeMillis();
-
-            TransManager manager = TransManager.getInstance();
-            String stackId = manager.pop();
-            if (StringUtils.isEmpty(stackId)) {
-                return;
-            }
-
-            long beginTime = manager.getBeginTime(stackId);
-            long consumeTime = endTime - beginTime;
-
-            manager.setError(true);
 
             // 执行方法
             String methodName = getMethodSignature(method);
-
-            // 执行记录
-            for (TransLoggerService service : getTransLoggerServices()) {
-                service.afterThrow(stackId, endTime, consumeTime, methodName, e);
-            }
-
-            if (manager.getStackSize() <= 0) {
-                for (TransLoggerService service : getTransLoggerServices()) {
-                    service.end(stackId, beginTime, endTime, consumeTime, methodName, null, e);
-                }
-
-                for (TransLoggerService service : getTransLoggerServices()) {
-                    service.clean();
-                }
-
-                manager.clean();
-            }
+            afterThrowing(methodName, e);
         }
     }
 
