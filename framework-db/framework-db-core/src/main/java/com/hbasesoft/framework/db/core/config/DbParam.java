@@ -62,7 +62,7 @@ public class DbParam extends BaseEntity {
     /**
      * 连接池最小空闲
      */
-    private int minIdle = 0;
+    private int minIdle = 10;
 
     /**
      * 获取连接最大等待时间
@@ -129,7 +129,7 @@ public class DbParam extends BaseEntity {
         this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
         this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", 5);
         this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", 100);
-        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", 0);
+        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", 10);
         this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", 6000000L);
         this.validationQuery = PropertyHolder.getProperty(prefix + ".db.validationQuery", "SELECT 1");
         this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", true);
