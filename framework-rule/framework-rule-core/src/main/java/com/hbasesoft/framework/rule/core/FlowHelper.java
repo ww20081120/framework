@@ -71,6 +71,8 @@ public final class FlowHelper {
         FlowConfig flowConfig = flowContext.getFlowConfig();
         FlowComponent<T> component = null;
 
+        String beanName = flowConfig.getName();
+
         // 执行拦截器前置拦截
         if (before(flowBean, flowContext)) {
             try {
@@ -80,7 +82,7 @@ public final class FlowHelper {
                 boolean flag = true;
                 if (component != null) {
                     // 打印前置日志
-                    TransLogUtil.before(component, getMethod(), new Object[] {
+                    TransLogUtil.before(beanName, new Object[] {
                         flowBean, flowContext
                     });
 
@@ -112,7 +114,7 @@ public final class FlowHelper {
 
                 if (component != null) {
                     // 打印后置日志
-                    TransLogUtil.afterReturning(component, getMethod(), flag);
+                    TransLogUtil.afterReturning(beanName, getMethod(), flag);
                 }
 
                 // 执行后置拦截
@@ -122,7 +124,7 @@ public final class FlowHelper {
                 flowContext.setFlowConfig(flowConfig);
                 if (component != null) {
                     // 打印错误日志
-                    TransLogUtil.afterThrowing(component, getMethod(), e);
+                    TransLogUtil.afterThrowing(beanName, getMethod(), e);
                 }
 
                 // 执行异常拦截
