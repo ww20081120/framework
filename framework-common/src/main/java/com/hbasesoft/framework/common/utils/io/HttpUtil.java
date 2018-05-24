@@ -38,6 +38,8 @@ import okhttp3.Response;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HttpUtil {
 
+    private static ThreadLocal<OkHttpClient> httpClientHold = new ThreadLocal<>();
+
     /**
      * <p>
      * 执行Get请求
@@ -80,8 +82,8 @@ public final class HttpUtil {
     }
 
     public static String getStringRequest(Request request, String charset) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Call call = okHttpClient.newCall(request);
+
+        Call call = getOkHttpClient().newCall(request);
         try {
             Response response = call.execute();
             return IOUtil.readString(new InputStreamReader(response.body().byteStream(), charset));
@@ -135,7 +137,7 @@ public final class HttpUtil {
         File f = new File(absolutePath);
         if (!f.exists()) {
             Request request = new Request.Builder().url(url).build();
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = getOkHttpClient();
             Call call = okHttpClient.newCall(request);
             try {
                 Response response = call.execute();
@@ -209,6 +211,15 @@ public final class HttpUtil {
      */
     public static boolean isAsynRequest(HttpServletRequest request) {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+    }
+
+    private static OkHttpClient getOkHttpClient() {
+        OkHttpClient okHttpClient = httpClientHold.get();
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient();
+            httpClientHold.set(okHttpClient);
+        }
+        return okHttpClient;
     }
 
 }
