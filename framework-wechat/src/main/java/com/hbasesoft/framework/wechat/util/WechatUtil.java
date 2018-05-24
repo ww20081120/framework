@@ -265,9 +265,9 @@ public class WechatUtil {
         }
     });
 
-    public static String getOauth2Url(String appId, String redirectURI, String expendParam, String scope, String ipUrl) {
+    public static String getOauth2Url(String appId, String redirectURI, String expendParam, String scope) {
         String redirectUrl = URLUtil.encode(new StringBuilder()
-            .append(ipUrl).append(redirectURI)
+            .append(PropertyHolder.getProperty("server.wx.url", GlobalConstants.BLANK)).append(redirectURI)
             .append(redirectURI.indexOf("?") == -1 ? "?appId=" : "&appId=").append(appId).toString());
         return MessageFormat.format(WechatConstant.OAUTH2_CODE_URL, appId, redirectUrl, scope, expendParam);
     }

@@ -99,7 +99,7 @@ public class WeChatOpenApiController extends BaseController {
                         stateKey, map);
 
                     String authUrl = WechatUtil.getOauth2Url(appId, "/wechat" + WebConstant.OATH_CALLBACK_URI, stateKey,
-                        scope, PropertyHolder.getProperty("server.wx.url", GlobalConstants.BLANK));
+                        scope);
 
                     logger.info(">>> [微信OAuth2认证授权跳转] location = [{0}]", authUrl);
                     response.sendRedirect(authUrl);
