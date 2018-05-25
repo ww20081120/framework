@@ -63,12 +63,12 @@ public class JobStartupLinstener implements StartupListener {
      */
     @Override
     public void complete(ApplicationContext context) {
-        
+
         // 未开启Job则不进行扫描
         if (!PropertyHolder.getBooleanProperty("job.enable", true)) {
             return;
         }
-        
+
         try {
             final CoordinatorRegistryCenter regCenter = context.getBean(CoordinatorRegistryCenter.class);
 
@@ -86,6 +86,12 @@ public class JobStartupLinstener implements StartupListener {
                     for (Class<?> clazz : clazzSet) {
                         if (clazz.isAnnotationPresent(Job.class)) {
                             Job job = AnnotationUtils.findAnnotation(clazz, Job.class);
+
+                            String isJobEnable = job.enable();
+                            isJobEnable = getPropery(isJobEnable);
+                            if (!"true".equalsIgnoreCase(isJobEnable)) {
+                                continue;
+                            }
 
                             // Job名称
                             String name = getPropery(job.name());

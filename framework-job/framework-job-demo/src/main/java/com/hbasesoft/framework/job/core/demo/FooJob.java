@@ -21,7 +21,7 @@ import com.hbasesoft.framework.job.core.annotation.Job;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.job.core.demo <br>
  */
-@Job(cron = "0/5 * * * * ?")
+@Job(cron = "0/5 * * * * ?", enable = "${job.FooJob}")
 public class FooJob implements SimpleJob {
 
     /**

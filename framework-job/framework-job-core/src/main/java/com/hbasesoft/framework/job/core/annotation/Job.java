@@ -63,7 +63,7 @@ public @interface Job {
      * @taskId <br>
      * @return <br>
      */
-    boolean enable() default true;
+    String enable() default "true";
 
     /**
      * Description: 是否为流式操作<br>
