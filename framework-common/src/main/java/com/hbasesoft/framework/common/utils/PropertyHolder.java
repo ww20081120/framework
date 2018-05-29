@@ -53,7 +53,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PropertyHolder {
-    
+
     private static Logger log = new Logger(PropertyHolder.class);
 
     private static final Map<String, String> PROPERTIES = new HashMap<>();
@@ -244,11 +244,24 @@ public final class PropertyHolder {
     }
 
     public static String getProperty(String name) {
-        return PROPERTIES.get(name);
+        String value = PROPERTIES.get(name);
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(value)) {
+            int startIndex = value.indexOf("${");
+            if (startIndex != -1) {
+                String key = value.substring(startIndex + 2, value.indexOf("}", startIndex + 2));
+                if (!org.apache.commons.lang3.StringUtils.equals(name, key)
+                    && org.apache.commons.lang3.StringUtils.isNotEmpty(key)) {
+                    String kv = getProperty(key);
+                    value = StringUtils.replace(value, "${" + key + "}", kv);
+                }
+            }
+
+        }
+        return value;
     }
 
     public static String getProperty(String name, String defaultValue) {
-        String value = PROPERTIES.get(name);
+        String value = getProperty(name);
         return StringUtils.isNotEmpty(value) ? value : defaultValue;
     }
 
