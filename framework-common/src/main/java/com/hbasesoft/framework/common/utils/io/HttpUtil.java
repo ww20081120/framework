@@ -544,6 +544,14 @@ public class HttpUtil {
         }
         return url;
     }
+    
+    public static String getServletPath(HttpServletRequest request, boolean includeQueryString) {
+        String url = request.getServletPath();
+        if (includeQueryString && !StringUtils.isEmpty(request.getQueryString())) {
+            url += "?" + request.getQueryString();
+        }
+        return url;
+    }
 
     public static String getRequestRelaURI(HttpServletRequest request, boolean includeQueryString) {
         String url = request.getRequestURI();
