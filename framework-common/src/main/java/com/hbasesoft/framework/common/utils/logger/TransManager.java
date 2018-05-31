@@ -46,11 +46,6 @@ public final class TransManager implements Serializable {
      */
     private Stack<String> executeStack;
 
-    /***
-     * stactId
-     */
-    private String stackId;
-
     /**
      * executeTimeMap
      */
@@ -95,9 +90,6 @@ public final class TransManager implements Serializable {
      * @param beginTime <br>
      */
     public void push(String id, long beginTime) {
-        if (executeStack.isEmpty()) {
-            stackId = id;
-        }
         executeTimeMap.put(id, beginTime);
         executeStack.push(id);
     }
@@ -169,14 +161,17 @@ public final class TransManager implements Serializable {
         seq = 0;
         error = false;
         timeout = false;
-        stackId = null;
     }
 
     public Set<String> getIdSet() {
         return executeTimeMap.keySet();
     }
 
+    public String getTopStackId() {
+        return executeStack.isEmpty() ? null : executeStack.firstElement();
+    }
+
     public String getStackId() {
-        return stackId;
+        return executeStack.isEmpty() ? null : executeStack.lastElement();
     }
 }
