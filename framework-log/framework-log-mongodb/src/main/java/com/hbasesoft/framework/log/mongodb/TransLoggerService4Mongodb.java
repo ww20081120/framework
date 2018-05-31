@@ -16,9 +16,9 @@ import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.TransManager;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
 import com.hbasesoft.framework.log.core.TransBean;
-import com.hbasesoft.framework.log.core.TransManager;
 import com.hbasesoft.framework.log.mongodb.model.TransLog;
 import com.hbasesoft.framework.log.mongodb.repositoryimpl.LogRepository;
 

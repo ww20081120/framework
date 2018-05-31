@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.log.core;
+package com.hbasesoft.framework.common.utils.logger;
 
 import java.io.Serializable;
 import java.util.HashMap;

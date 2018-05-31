@@ -21,9 +21,9 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
-import com.hbasesoft.framework.common.utils.TransactionIDManager;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
+import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 /**
  * <Description> <br>
@@ -638,7 +638,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param msg <br>
      */
     private void saveMsg2Cache(String msg) {
-        String statckId = TransactionIDManager.getTransactionId();
+        String statckId = TransManager.getInstance().getStackId();
         for (TransLoggerService service : getTransLoggerServices()) {
             service.sql(statckId, msg);
         }

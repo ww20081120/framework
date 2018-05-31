@@ -21,6 +21,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
+import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 /**
  * <Description> <br>

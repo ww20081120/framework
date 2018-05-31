@@ -15,8 +15,8 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.TransactionIDManager;
 import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
+import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 /**
  * <Description> <br>
@@ -54,10 +54,6 @@ public class TransLogUtil {
 
         // 父id
         String parentStackId = manager.peek();
-
-        if (StringUtils.isEmpty(parentStackId)) {
-            parentStackId = TransactionIDManager.getTransactionId();
-        }
 
         // id
         String stackId = CommonUtil.getTransactionID();

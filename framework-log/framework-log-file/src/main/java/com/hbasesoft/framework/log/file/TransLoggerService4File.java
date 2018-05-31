@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.TransManager;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
-import com.hbasesoft.framework.log.core.TransManager;
 
 /**
  * <Description> <br>
