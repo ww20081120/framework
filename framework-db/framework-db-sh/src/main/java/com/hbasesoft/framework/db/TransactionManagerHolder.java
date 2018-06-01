@@ -84,7 +84,7 @@ public final class TransactionManagerHolder {
 
             if (sessionFactory == null) {
                 DataSource dataSource = DataSourceUtil.getDataSource(dbCode);
-                Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET);
+                Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, dbCode);
 
                 LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
                 bean.setDataSource(dataSource);
