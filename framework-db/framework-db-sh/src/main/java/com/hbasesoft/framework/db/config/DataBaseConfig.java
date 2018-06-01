@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.db.config;
 
 import org.aopalliance.intercept.MethodInterceptor;
-import org.hibernate.SessionFactory;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +39,7 @@ public class DataBaseConfig implements ApplicationContextAware {
     private ApplicationContext context;
 
     @Bean
-    public BaseHibernateDao registBaseHibernateDao(SessionFactory sessionFactory) {
+    public BaseHibernateDao registBaseHibernateDao() {
         return new BaseHibernateDao();
     }
 

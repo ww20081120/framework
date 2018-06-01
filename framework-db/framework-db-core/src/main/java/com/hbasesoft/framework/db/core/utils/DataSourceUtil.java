@@ -66,7 +66,7 @@ public final class DataSourceUtil {
                         Set<DbParam> dbParams = register.getDbParam();
                         if (CollectionUtils.isNotEmpty(dbParams)) {
                             dbParams.forEach(dbParam -> {
-                                regist(dbParam.getDbType(), dbParam);
+                                regist(dbParam.getCode(), dbParam);
                             });
                         }
                     });

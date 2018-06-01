@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -18,6 +19,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
@@ -72,6 +74,7 @@ public final class TransactionManagerHolder {
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
+     * @throws IOException
      */
     public static SessionFactory getSessionFactory() {
         synchronized (sessionFactoryHolder) {
@@ -94,7 +97,13 @@ public final class TransactionManagerHolder {
                 }
                 bean.setHibernateProperties(properties);
                 bean.setPackagesToScan(getBasePackage());
-
+                try {
+                    bean.afterPropertiesSet();
+                }
+                catch (IOException e) {
+                    throw new InitializationException(e);
+                }
+                sessionFactory = bean.getObject();
                 sessionFactoryHolder.put(dbCode, sessionFactory);
             }
 

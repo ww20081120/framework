@@ -29,6 +29,9 @@ public class DbParam extends BaseEntity {
      */
     private static final long serialVersionUID = -3873382206326039466L;
 
+    /** code */
+    private String code;
+
     /**
      * 数据库链接
      */
@@ -126,6 +129,7 @@ public class DbParam extends BaseEntity {
     }
 
     private void init(String prefix) {
+        this.code = prefix;
         this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
         this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", 5);
         this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", 100);
@@ -290,6 +294,14 @@ public class DbParam extends BaseEntity {
 
     public void setFilters(String filters) {
         this.filters = filters;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }
