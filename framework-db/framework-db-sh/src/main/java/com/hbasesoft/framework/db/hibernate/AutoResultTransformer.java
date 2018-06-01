@@ -68,6 +68,7 @@ public class AutoResultTransformer implements ResultTransformer {
      * @param aliases <br>
      * @return <br>
      */
+    @SuppressWarnings("deprecation")
     public Object transformTuple(Object[] tuple, String[] aliases) {
         if (CommonUtil.isEmpty(tuple)) {
             return null;

@@ -9,15 +9,19 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.DataSourceRegister;
+import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
 import com.hbasesoft.framework.db.core.config.DbParam;
 
 /**
@@ -39,6 +43,10 @@ public final class DataSourceUtil {
     private DataSourceUtil() {
     }
 
+    public static DataSource getDataSource() {
+        return getDataSource(DynamicDataSourceManager.getDataSourceCode());
+    }
+
     public static DataSource getDataSource(String name) {
         return getDataSourceMap().get(name);
     }
@@ -55,7 +63,12 @@ public final class DataSourceUtil {
                 ServiceLoader<DataSourceRegister> registerLoader = ServiceLoader.load(DataSourceRegister.class);
                 if (registerLoader != null) {
                     registerLoader.forEach(register -> {
-                        regist(register.getTypeName(), new DbParam(register.getTypeName()));
+                        Set<DbParam> dbParams = register.getDbParam();
+                        if (CollectionUtils.isNotEmpty(dbParams)) {
+                            dbParams.forEach(dbParam -> {
+                                regist(dbParam.getDbType(), dbParam);
+                            });
+                        }
                     });
                 }
                 initFlag = true;

@@ -225,7 +225,7 @@ public abstract class AbstractCache implements ICache {
      */
     @Override
     public <T> void put(String nodeName, int seconds, String key, T t) {
-        put(nodeName.getBytes(), seconds * 10, key.getBytes(), getData(seconds, t));
+        put(nodeName.getBytes(), seconds, key.getBytes(), getData(seconds, t));
     }
 
     protected abstract void put(byte[] nodeName, int seconds, byte[] key, byte[] t);

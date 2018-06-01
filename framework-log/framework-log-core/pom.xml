@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-log</artifactId>
-		<version>3.1</version>
+		<version>3.2</version>
 	</parent>
 	<artifactId>framework-log-core</artifactId>
 	<properties>

@@ -17,7 +17,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -27,14 +26,15 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
-import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
+import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 
@@ -46,6 +46,9 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
  * @CreateDate 2014-10-26 <br>
  * @see com.hbasesoft.framework.dao.support.hibernate <br>
  */
+@SuppressWarnings({
+    "deprecation", "rawtypes"
+})
 public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     /**
@@ -53,23 +56,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     private static Logger logger = new Logger(BaseHibernateDao.class);
 
-    /** sessionFactory */
-    private SessionFactory sessionFactory;
-
     /*
      * (non-Javadoc)
      * @see com.hbasesoft.framework.dao.support.SqlExcutor#query(java.lang.String, java.util.Map)
      */
-    @SuppressWarnings({
-        "rawtypes", "unchecked"
-    })
+    @SuppressWarnings("unchecked")
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
         try {
 
             SQlCheckUtil.checkSql(sql);
 
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
 
             SQLQuery query = session.createSQLQuery(sql);
 
@@ -172,7 +170,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public int excuteSql(final String sql, final DataParam param) throws DaoException {
         try {
             SQlCheckUtil.checkSql(sql);
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             SQLQuery query = session.createSQLQuery(sql);
             setParamMap(param.getParamMap(), query);
             return query.executeUpdate();
@@ -190,7 +188,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = getSession();
             int[] result = new int[sqls.length];
             SQLQuery query;
             for (int i = 0; i < sqls.length; i++) {
@@ -245,7 +243,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     protected Session getSession() {
         // 事务必须是开启的(Required)，否则获取不到
-        return sessionFactory.getCurrentSession();
+        return TransactionManagerHolder.getSessionFactory().getCurrentSession();
     }
 
     /**
@@ -344,7 +342,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Class<T> entityClass, Serializable id) throws DaoException {
         Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
@@ -361,7 +358,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
     @Override
     public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException {
         Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
@@ -495,8 +491,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @Override
     @SuppressWarnings("unchecked")
+    @Override
     public <T> List<T> findByQueryString(String hql) throws DaoException {
         Query queryObject = getSession().createQuery(hql);
         List<T> list = queryObject.list();
@@ -667,14 +663,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         return sqlQuery.list();
     }
 
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
     /**
      * Description: <br>
      * 
@@ -695,7 +683,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         commitNumber = commitNumber == 0 ? 1000 : commitNumber;
         Connection conn = null;
         try {
-            conn = SessionFactoryUtils.getDataSource(sessionFactory).getConnection();
+            conn = DataSourceUtil.getDataSource().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             conn.setAutoCommit(false);
             int i = 0;

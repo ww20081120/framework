@@ -5,10 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.config;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.ResultTransformer;
@@ -18,17 +14,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
-import com.hbasesoft.framework.db.core.config.DbParam;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
 import com.hbasesoft.framework.db.spring.AutoProxyBeanFactory;
 import com.hbasesoft.framework.db.spring.SpringDaoHandler;
@@ -49,34 +39,9 @@ public class DataBaseConfig implements ApplicationContextAware {
 
     private ApplicationContext context;
 
-    @Bean(name = "transactionManager")
-    public PlatformTransactionManager registTransactonManger(SessionFactory sessionFactory) {
-        HibernateTransactionManager manager = new HibernateTransactionManager();
-        manager.setSessionFactory(sessionFactory);
-        return manager;
-    }
-
-    @Bean(name = "sessionFactory")
-    public LocalSessionFactoryBean createSessionFactory() {
-        LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-        bean.setDataSource(DataSourceUtil.registDataSource("master", new DbParam("master")));
-        Map<String, String> map = PropertyHolder.getProperties();
-        Properties properties = new Properties();
-        for (Entry<String, String> entry : map.entrySet()) {
-            if (entry.getKey().startsWith("db.hibernate")) {
-                properties.setProperty(entry.getKey().substring(3, entry.getKey().length()), entry.getValue());
-            }
-        }
-        bean.setHibernateProperties(properties);
-        bean.setPackagesToScan(getBasePackage());
-        return bean;
-    }
-
     @Bean
     public BaseHibernateDao registBaseHibernateDao(SessionFactory sessionFactory) {
-        BaseHibernateDao dao = new BaseHibernateDao();
-        dao.setSessionFactory(sessionFactory);
-        return dao;
+        return new BaseHibernateDao();
     }
 
     @Bean
@@ -109,15 +74,9 @@ public class DataBaseConfig implements ApplicationContextAware {
         AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory();
         beanFactory.setHandler(sqlHandler);
         beanFactory.setInterceptors("springDaoHandler");
-        beanFactory.setPackagesToScan(getBasePackage());
+        beanFactory.setPackagesToScan(TransactionManagerHolder.getBasePackage());
 
         return beanFactory;
-    }
-
-    private String getBasePackage() {
-        String className = this.getClass().getName();
-        return className.substring(0,
-            className.indexOf(GlobalConstants.PERIOD, className.indexOf(GlobalConstants.PERIOD) + 1)) + ".*";
     }
 
     @Override
