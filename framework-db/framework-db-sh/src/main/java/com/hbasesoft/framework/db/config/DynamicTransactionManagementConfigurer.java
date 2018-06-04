@@ -7,6 +7,10 @@ package com.hbasesoft.framework.db.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import com.hbasesoft.framework.db.TransactionManagerHolder;
@@ -22,6 +26,7 @@ import com.hbasesoft.framework.db.TransactionManagerHolder;
  * @see com.hbasesoft.framework.db.config <br>
  */
 @Configuration
+@EnableTransactionManagement
 public class DynamicTransactionManagementConfigurer implements TransactionManagementConfigurer {
 
     /**
@@ -33,7 +38,51 @@ public class DynamicTransactionManagementConfigurer implements TransactionManage
      */
     @Override
     public PlatformTransactionManager annotationDrivenTransactionManager() {
-        return TransactionManagerHolder.getTransactionManager();
+        return new ProxyPlatformTransactionManager();
+    }
+
+    private static class ProxyPlatformTransactionManager implements PlatformTransactionManager {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param definition
+         * @return
+         * @throws TransactionException <br>
+         */
+        @Override
+        public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
+            return TransactionManagerHolder.getTransactionManager().getTransaction(definition);
+        }
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param status
+         * @throws TransactionException <br>
+         */
+        @Override
+        public void commit(TransactionStatus status) throws TransactionException {
+            TransactionManagerHolder.getTransactionManager().commit(status);
+        }
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param status
+         * @throws TransactionException <br>
+         */
+        @Override
+        public void rollback(TransactionStatus status) throws TransactionException {
+            TransactionManagerHolder.getTransactionManager().rollback(status);
+        }
+
     }
 
 }

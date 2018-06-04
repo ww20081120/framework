@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
@@ -33,7 +32,6 @@ import com.hbasesoft.framework.db.spring.SpringDaoHandler;
  * @see com.hbasesoft.framework.db.config <br>
  */
 @Configuration
-@EnableTransactionManagement
 public class DataBaseConfig implements ApplicationContextAware {
 
     private ApplicationContext context;
