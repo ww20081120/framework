@@ -35,6 +35,7 @@ import com.hbasesoft.framework.db.core.config.DbParam;
 import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.job.core.annotation.Job;
 import com.hbasesoft.framework.job.core.api.ScriptJob;
+import com.hbasesoft.framework.job.core.event.JobEventJsonConfiguration;
 
 /**
  * <Description> <br>
@@ -75,9 +76,10 @@ public class JobStartupLinstener implements StartupListener {
             boolean enableEvent = PropertyHolder.getBooleanProperty("job.event.enable", true);
             JobEventConfiguration jobEventConfig = null;
             if (enableEvent) {
-                String datasourceName = PropertyHolder.getProperty("job.event.datasource", "master");
-                DataSource datasource = DataSourceUtil.registDataSource(datasourceName, new DbParam(datasourceName));
-                jobEventConfig = new JobEventRdbConfiguration(datasource);
+//                String datasourceName = PropertyHolder.getProperty("job.event.datasource", "master");
+//                DataSource datasource = DataSourceUtil.registDataSource(datasourceName, new DbParam(datasourceName));
+//                jobEventConfig = new JobEventRdbConfiguration(datasource);
+                jobEventConfig = new JobEventJsonConfiguration();
             }
 
             for (String pack : packagesToScan) {
