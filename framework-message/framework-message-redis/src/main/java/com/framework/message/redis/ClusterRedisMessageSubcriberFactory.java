@@ -42,9 +42,7 @@ public class ClusterRedisMessageSubcriberFactory implements MessageSubcriberFact
      */
     @Override
     public void registSubscriber(String channel, final MessageSubscriber subscriber) {
-        new Thread(() -> {
-            RedisClientFactory.getBinaryJedisCluster().subscribe(new BinaryListener(subscriber), channel.getBytes());
-        }).start();
+        RedisClientFactory.getBinaryJedisCluster().subscribe(new BinaryListener(subscriber), channel.getBytes());
     }
 
 }

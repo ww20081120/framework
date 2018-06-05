@@ -54,35 +54,35 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
      */
     @Override
     public void registSubscriber(final String channel, final MessageSubscriber subscriber) {
-        new Thread(() -> {
-            int index = atomicInteger.incrementAndGet();
-            try {
-                subscriber.onSubscribe(channel, index);
-                KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
-                    .getKafkaConsumer(channel + CommonUtil.getTransactionID(), channel);
-                long count = 0;
-                while (!Thread.currentThread().isInterrupted()) {
-                    try {
-                        ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(3 * 1000L);
-                        if (records != null) {
-                            for (ConsumerRecord<String, byte[]> record : records) {
-                                subscriber.onMessage(channel, record.value());
-                            }
+
+        int index = atomicInteger.incrementAndGet();
+        try {
+            subscriber.onSubscribe(channel, index);
+            KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
+                .getKafkaConsumer(channel + CommonUtil.getTransactionID(), channel);
+            long count = 0;
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(3 * 1000L);
+                    if (records != null) {
+                        for (ConsumerRecord<String, byte[]> record : records) {
+                            subscriber.onMessage(channel, record.value());
                         }
                     }
-                    catch (Exception e) {
-                        LOGGER.error(e);
-                        Thread.sleep(1000L);
-                    }
-                    if (++count % 500 == 0) {
-                        LOGGER.info("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
-                    }
+                }
+                catch (Exception e) {
+                    LOGGER.error(e);
+                    Thread.sleep(1000L);
+                }
+                if (++count % 500 == 0) {
+                    LOGGER.info("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
                 }
             }
-            catch (Exception e) {
-                LOGGER.error(e);
-            }
-            subscriber.onUnsubscribe(channel, index);
-        }).start();
+        }
+        catch (Exception e) {
+            LOGGER.error(e);
+        }
+        subscriber.onUnsubscribe(channel, index);
+
     }
 }

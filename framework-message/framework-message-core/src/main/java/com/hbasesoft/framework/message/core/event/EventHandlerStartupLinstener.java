@@ -76,7 +76,9 @@ public class EventHandlerStartupLinstener implements StartupListener {
     }
 
     private void addSubscriber(String channel, EventLinsener linsener) {
-        MessageHelper.createMessageSubcriberFactory().registSubscriber(channel, linsener);
+        new Thread(() -> {
+            MessageHelper.createMessageSubcriberFactory().registSubscriber(channel, linsener);
+        }).start();
     }
 
     private void addConsummer(final String channel, final EventLinsener linsener) {
