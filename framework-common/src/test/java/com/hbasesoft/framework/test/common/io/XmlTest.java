@@ -37,14 +37,14 @@ public class XmlTest {
         Student student = new Student();
         student.setAge(10);
         student.setName("小明");
-        student.setRemark("小明是位好同学，年年三好学生👩‍🎓");
+        student.setRemark("小明是位好同学，<hello>年年三好学生👩‍🎓");
 
         System.out.println(XmlBeanUtil.object2Xml(student));
     }
 
     @Test
     public void xml2bean() {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><student><name>小明</name><age>10</age><remark><![CDATA[小明是位好同学，年年三好学生👩‍🎓]]></remark></student>";
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><student><name>小明</name><age>10</age><remark><![CDATA[小明是位好<abcdedf>同学，年年三好学生👩‍🎓]]></remark></student>";
         Student student = XmlBeanUtil.xml2Object(xml, Student.class);
         System.out.println(student.getAge());
         System.out.println(student.getName());
