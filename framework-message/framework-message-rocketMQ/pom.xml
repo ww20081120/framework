@@ -9,6 +9,7 @@
 	<artifactId>framework-message-rocketMQ</artifactId>
 	<name>framework message rocketMQ</name>
 	<description>rocket message queue </description>
+    
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

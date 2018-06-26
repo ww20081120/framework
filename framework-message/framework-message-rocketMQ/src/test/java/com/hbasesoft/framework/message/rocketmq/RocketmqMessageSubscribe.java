@@ -115,7 +115,6 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
 	 * 
 	 * @Title: shutdown @author 大刘杰 @Description: 终止消费者 @param @return @throws
 	 */
-	@Override
 	public void shutdown() {
 		defaultMQPushConsumer.shutdown();
 	}

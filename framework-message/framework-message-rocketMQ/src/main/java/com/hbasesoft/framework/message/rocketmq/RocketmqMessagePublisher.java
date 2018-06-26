@@ -49,7 +49,6 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	 * RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 * RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 */
-	@Override
 	public void publish(String channel, byte[] data, String produce_model) {
 		
 		DefaultMQProducer defaultMQProducer = ContextHolder.getContext().getBean("defaultProducer",DefaultMQProducer.class);
