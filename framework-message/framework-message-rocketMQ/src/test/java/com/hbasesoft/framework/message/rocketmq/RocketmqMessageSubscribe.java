@@ -24,8 +24,8 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.rocketmq <br>
  */
-@Component
-@ConditionalOnBean(DefaultMQProducer.class)
+//@Component
+//@ConditionalOnBean(DefaultMQProducer.class)
 public class RocketmqMessageSubscribe implements MessageSubscriber {
 
 	@Autowired
@@ -36,9 +36,10 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
 
 	private Logger log = new Logger(RocketmqMessageSubscribe.class);
 
-//	public RocketmqMessageSubscribe() {
-//		defaultMQPushConsumer = (DefaultMQPushConsumer) app.getBean(DefaultMQPushConsumer.class);
-//	}
+	// public RocketmqMessageSubscribe() {
+	// defaultMQPushConsumer = (DefaultMQPushConsumer)
+	// app.getBean(DefaultMQPushConsumer.class);
+	// }
 
 	/*
 	 * (non-Javadoc)
@@ -91,7 +92,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
 		// subscribe topic and subkeys eg.[channel:subscribeChannels]
 		// consumer.subscribe("TopicTest", "TagA || TagC || TagD");
 		try {
-			defaultMQPushConsumer.subscribe(channel, String.valueOf(subscribeChannels));
+			defaultMQPushConsumer.subscribe(channel, "*");
 		} catch (MQClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,12 +113,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
 
 	/**
 	 * 
-	 * @Title: shutdown 
-	 * @author 大刘杰
-	 * @Description: 终止消费者
-	 * @param 
-	 * @return 
-	 * @throws
+	 * @Title: shutdown @author 大刘杰 @Description: 终止消费者 @param @return @throws
 	 */
 	@Override
 	public void shutdown() {

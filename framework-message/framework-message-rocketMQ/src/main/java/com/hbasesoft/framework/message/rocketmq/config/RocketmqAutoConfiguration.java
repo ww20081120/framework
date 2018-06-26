@@ -1,24 +1,13 @@
 package com.hbasesoft.framework.message.rocketmq.config;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
-import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -48,17 +37,10 @@ public class RocketmqAutoConfiguration {
 	// 事务消费
 	public static final String ROCKET_MQ_PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
 
-	@Autowired
-	private ApplicationEventPublisher publisher;
-
-	private static boolean isFirstSub = true;
-
-	private static long startTime = System.currentTimeMillis();
-
 	/**
 	 * 初始化向rocketmq发送普通消息的生产者
 	 */
-	@Bean
+	@Bean(name = "defaultProducer")
 	@ConditionalOnProperty(prefix = RocketmqProperties.PREFIX, value = "producerGroupName")
 	public DefaultMQProducer defaultProducer() throws MQClientException {
 		/**
@@ -95,7 +77,7 @@ public class RocketmqAutoConfiguration {
 	/**
 	 * 初始化向rocketmq发送事务消息的生产者
 	 */
-	@Bean
+	@Bean(name = "transactionProducer")
 	@ConditionalOnProperty(prefix = RocketmqProperties.PREFIX, value = "transactionProducerGroupName")
 	public TransactionMQProducer transactionProducer() throws MQClientException {
 		/**
@@ -142,8 +124,8 @@ public class RocketmqAutoConfiguration {
 	/**
 	 * 初始化rocketmq消息监听方式的消费者
 	 */
-	@Bean
-	@Scope("prototype")
+	@Bean(name = "defaultPushConsumer")
+	// @Scope("prototype")
 	// @ConditionalOnProperty(prefix = RocketmqProperties.PREFIX, value =
 	// "consumerInstanceName")
 	public DefaultMQPushConsumer pushConsumer() throws MQClientException {
@@ -168,85 +150,7 @@ public class RocketmqAutoConfiguration {
 				PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 0) == 0 ? 1
 						: PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 0));// 设置批量消费，以提升消费吞吐量，默认是1
 
-		// subscribe topic and subkeys eg.[topic:subkeys]
-		// List<String> subscribeList = properties.getSubscribe();
-		// for (String sunscribe : subscribeList) {
-		// consumer.subscribe(sunscribe.split(":")[0], sunscribe.split(":")[1]);
-		// }
-
-		if (PropertyHolder.getBooleanProperty("message.rocketmq.consumer.isEnableOrderConsumer", false)) {
-			// Orderly consume
-			consumer.registerMessageListener((List<MessageExt> msgs, ConsumeOrderlyContext context) -> {
-				try {
-					context.setAutoCommit(true);
-					msgs = filter(msgs);
-					if (msgs.size() == 0)
-						return ConsumeOrderlyStatus.SUCCESS;
-					// 事件监听
-					this.publisher.publishEvent(new RocketmqEvent(msgs, consumer));
-				} catch (Exception e) {
-					e.printStackTrace();
-					return ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;
-				}
-				// 如果没有return success，consumer会重复消费此信息，直到success。
-				return ConsumeOrderlyStatus.SUCCESS;
-			});
-		} else {
-			consumer.registerMessageListener((List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
-				try {
-					msgs = filter(msgs);
-					if (msgs.size() == 0)
-						return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-					// 事件监听
-					this.publisher.publishEvent(new RocketmqEvent(msgs, consumer));
-				} catch (Exception e) {
-					e.printStackTrace();
-					return ConsumeConcurrentlyStatus.RECONSUME_LATER;
-				}
-				// 如果没有return success，consumer会重复消费此信息，直到success。
-				return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-			});
-		}
-		// new Thread(new Runnable() {
-		// @Override
-		// public void run() {
-		// try {
-		// //
-		// 延迟5秒再启动，主要是等待spring事件监听相关程序初始化完成，否则，回出现对RocketMQ的消息进行消费后立即发布消息到达的事件，然而此事件的监听程序还未初始化，从而造成消息的丢失
-		// Thread.sleep(5000);
-		// /**
-		// * Consumer对象在使用之前必须要调用start初始化，初始化一次即可<br>
-		// */
-		// try {
-		// consumer.start();
-		// } catch (Exception e) {
-		// log.info("RocketMq pushConsumer Start failure!!!.");
-		// log.error(e.getMessage(), e);
-		// }
-		// log.info("RocketMq pushConsumer Started.");
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		//
-		// }).start();
-
 		return consumer;
 	}
 
-	/**
-	 * 是否允许历史消费
-	 * 
-	 * @param msgs
-	 * @return
-	 */
-	private List<MessageExt> filter(List<MessageExt> msgs) {
-		if (isFirstSub && !PropertyHolder.getBooleanProperty("message.rocketmq.consumer.isEnableHisConsumer", false)) {
-			msgs = msgs.stream().filter(item -> startTime - item.getBornTimestamp() < 0).collect(Collectors.toList());
-		}
-		if (isFirstSub && msgs.size() > 0) {
-			isFirstSub = false;
-		}
-		return msgs;
-	}
 }

@@ -1,4 +1,4 @@
-package com.framework.message.rocketmq;
+package com.hbasesoft.framework.message.rocketmq;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+//@RestController
 public class ProducerDemo {
 	@Autowired
 	private DefaultMQProducer defaultProducer;

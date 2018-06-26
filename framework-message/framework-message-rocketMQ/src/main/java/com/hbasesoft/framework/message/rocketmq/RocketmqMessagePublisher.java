@@ -1,15 +1,14 @@
 package com.hbasesoft.framework.message.rocketmq;
 
-import org.apache.rocketmq.client.exception.MQBrokerException;
-import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.rocketmq.config.RocketmqAutoConfiguration;
 
@@ -28,11 +27,11 @@ import com.hbasesoft.framework.message.rocketmq.config.RocketmqAutoConfiguration
 @ConditionalOnBean(DefaultMQProducer.class)
 public class RocketmqMessagePublisher implements MessagePublisher {
 
-	@Autowired
-	private DefaultMQProducer defaultMQProducer;
+	private static final Logger log = new Logger(RocketmqMessagePublisher.class);
 
-//	@Autowired
-//	private TransactionMQProducer transactionMQProducer;
+
+	// @Autowired
+	// private TransactionMQProducer transactionMQProducer;
 
 	@Override
 	public String getName() {
@@ -53,6 +52,8 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	@Override
 	public void publish(String channel, byte[] data, String produce_model) {
 		
+		DefaultMQProducer defaultMQProducer = ContextHolder.getContext().getBean("defaultProducer",DefaultMQProducer.class);
+
 		// Create a message instance, specifying topic, tag and message body.
 		Message msg = new Message(channel, "", data);
 
@@ -68,21 +69,11 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 				break;
 			default:
 				// 普通消费
-				 defaultMQProducer.send(msg);
+				defaultMQProducer.send(msg);
 				break;
 			}
-		} catch (MQClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RemotingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MQBrokerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			log.error(e);
 		}
 
 	}

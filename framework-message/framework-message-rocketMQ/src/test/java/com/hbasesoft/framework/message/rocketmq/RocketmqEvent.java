@@ -1,4 +1,4 @@
-package com.hbasesoft.framework.message.rocketmq.config;
+package com.hbasesoft.framework.message.rocketmq;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
