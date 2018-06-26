@@ -43,5 +43,17 @@ public interface MessageSubscriber {
      * @param subscribedChannels <br>
      */
     void onUnsubscribe(String channel, int subscribedChannels);
+    
+    /**
+     * 
+     * @Title: shutdown 
+     * @author 大刘杰
+     * @Description: customer shutdown
+     * @param @param channel
+     * @param @param subscribedChannels
+     * @return void
+     * @throws
+     */
+    default void shutdown() {};
 
 }

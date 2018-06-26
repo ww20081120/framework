@@ -15,5 +15,11 @@
 			<artifactId>framework-message-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client -->
+		<dependency>
+		    <groupId>org.apache.rocketmq</groupId>
+		    <artifactId>rocketmq-client</artifactId>
+		    <version>4.1.0-incubating</version>
+		</dependency>		
 	</dependencies>
 </project>

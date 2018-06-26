@@ -1,0 +1,42 @@
+project: #项目信息
+ model: DEV
+ name: ${project.model}-framework-message-rocketmq
+
+server: #系统配置
+  port: 8110
+
+spring: #应用配置
+  application:
+    name: ${project.name}
+
+master: #主数据库配置
+ db:
+  type: mysql
+  url: jdbc:mysql://localhost:3306/test
+  username: root
+  password: root
+
+cache: #缓存配置
+  model: REDIS
+  redis:
+   address: 192.168.99.100:6379
+
+message: #消息服务
+  model: ROCKET_MQ
+  rocketmq: 
+    namesrvAddr: 192.168.99.100:9876
+    producer:
+      producerGroupName: testproducerGroupName1
+      #transactionProducerGroupName: testtransactionProducerGroupName
+    consumer:
+      consumerGroupName: testconsumerGroupName1
+      isConsumerBroadcasting: false
+      consumerBatchMaxSize: 0
+      isEnableOrderConsumer: false
+      isEnableHisConsumer: false
+  
+
+
+#logging:
+#  level:
+#   root: debug
