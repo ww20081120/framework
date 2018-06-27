@@ -19,6 +19,8 @@ import com.hbasesoft.framework.message.core.MessagePublisher;
  */
 public class ClusterRedisMessagePublisher implements MessagePublisher {
 
+    private MessageQueue messageQueue = new ClusterRedisMessageQueue();
+
     /**
      * Description: <br>
      * 
@@ -40,8 +42,13 @@ public class ClusterRedisMessagePublisher implements MessagePublisher {
      * @param data <br>
      */
     @Override
-    public void publish(String channel, byte[] data) {
-        RedisClientFactory.getBinaryJedisCluster().publish(channel.getBytes(), data);
+    public void publish(String channel, boolean broadcast, byte[] data) {
+        if (broadcast) {
+            RedisClientFactory.getBinaryJedisCluster().publish(channel.getBytes(), data);
+        }
+        else {
+            messageQueue.push(channel, data);
+        }
     }
 
 }

@@ -22,7 +22,9 @@ import redis.clients.jedis.Jedis;
  * @see com.framework.message.redis <br>
  */
 public class RedisMessagePublisher implements MessagePublisher {
-    
+
+    private MessageQueue messageQueue = new RedisMessageQueue();
+
     /**
      * Description: <br>
      * 
@@ -44,19 +46,24 @@ public class RedisMessagePublisher implements MessagePublisher {
      * @param data <br>
      */
     @Override
-    public void publish(String channel, byte[] data) {
-        Jedis jedis = null;
-        try {
-            jedis = RedisClientFactory.getJedisPool().getResource();
-            jedis.publish(channel.getBytes(), data);
-        }
-        catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
-        }
-        finally {
-            if (jedis != null) {
-                jedis.close();
+    public void publish(String channel, boolean broadcast, byte[] data) {
+        if (broadcast) {
+            Jedis jedis = null;
+            try {
+                jedis = RedisClientFactory.getJedisPool().getResource();
+                jedis.publish(channel.getBytes(), data);
             }
+            catch (Exception e) {
+                throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            }
+            finally {
+                if (jedis != null) {
+                    jedis.close();
+                }
+            }
+        }
+        else {
+            messageQueue.push(channel, data);
         }
     }
 

@@ -20,13 +20,13 @@ public interface MessageSubcriberFactory {
     String getName();
 
     /**
-     * Description: 注册监听者<br>
+     * Description: 注册消息订阅者（广播）<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
      * @param subscriber <br>
      */
-    void registSubscriber(String channel, MessageSubscriber subscriber);
+    void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber);
 
 }

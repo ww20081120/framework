@@ -27,14 +27,10 @@ public interface MessagePublisher {
      * @param channel
      * @param data <br>
      */
-    void publish(String channel, byte[] data);
-    
-    /**
-     * @author 大刘杰<br>
-     * @param channel
-     * @param data
-     * @param produce_model
-     */
-    default void publish(String channel, byte[] data , String produce_model) {}
+    void publish(String channel, boolean broadcast, byte[] data);
+
+    default void publish(String channel, byte[] data) {
+        publish(channel, false, data);
+    }
 
 }

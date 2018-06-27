@@ -13,11 +13,11 @@ import java.util.List;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年2月19日 <br>
+ * @CreateDate 2018年6月27日 <br>
  * @since V1.0<br>
  * @see com.framework.message.redis <br>
  */
-public class ClusterRedisMessageQueue implements MessageQueue {
+public interface MessageQueue {
 
     /**
      * Description: <br>
@@ -27,10 +27,7 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      * @param key
      * @param value <br>
      */
-    @Override
-    public void push(String key, byte[] value) {
-        RedisClientFactory.getBinaryJedisCluster().lpush(key.getBytes(), value);
-    }
+    void push(String key, byte[] value);
 
     /**
      * Description: <br>
@@ -41,10 +38,7 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      * @param key
      * @return <br>
      */
-    @Override
-    public List<byte[]> popList(String key) {
-        return RedisClientFactory.getBinaryJedisCluster().lrange(key.getBytes(), 0, -1);
-    }
+    List<byte[]> popList(String key);
 
     /**
      * Description: <br>
@@ -55,8 +49,5 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      * @param key
      * @return <br>
      */
-    @Override
-    public List<byte[]> pop(int timeout, String key) {
-        return RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
-    }
+    List<byte[]> pop(int timeout, String key);
 }

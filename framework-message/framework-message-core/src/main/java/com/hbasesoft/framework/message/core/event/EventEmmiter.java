@@ -45,31 +45,6 @@ public final class EventEmmiter {
      * @param data <br>
      */
     public static void emmit(String event, EventData data) {
-        byte[] bdata = SerializationUtil.serial(data);
-        MessageHelper.createMessageQueue().push(event, bdata);
-        LoggerUtil.info("触发[event={0},data={1}]事件", event, data);
-    }
-
-    /**
-     * Description: 触发通知<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param event <br>
-     */
-    public static void subscriber(String event) {
-        subscriber(event, new EventData());
-    }
-
-    /**
-     * Description: 触发通知<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param event
-     * @param data <br>
-     */
-    public static void subscriber(String event, EventData data) {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
         LoggerUtil.info("触发[event={0},data={1}]事件通知", event, data);
     }

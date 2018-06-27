@@ -24,6 +24,8 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
 
+    private MessageQueue messageQueue = new RedisMessageQueue();
+
     /**
      * Description: <br>
      * 
@@ -45,20 +47,29 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
      * @param subscriber <br>
      */
     @Override
-    public void registSubscriber(String channel, final MessageSubscriber subscriber) {
-        Jedis jedis = null;
-        try {
-            jedis = RedisClientFactory.getJedisPool().getResource();
-            jedis.subscribe(new BinaryListener(subscriber), channel.getBytes());
+    public void registSubscriber(String channel, boolean broadcast, final MessageSubscriber subscriber) {
+
+        if (broadcast) {
+            new Thread(() -> {
+                Jedis jedis = null;
+                try {
+                    jedis = RedisClientFactory.getJedisPool().getResource();
+                    jedis.subscribe(new BinaryListener(subscriber), channel.getBytes());
+                }
+                catch (Exception e) {
+                    throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+                }
+                finally {
+                    if (jedis != null) {
+                        jedis.close();
+                    }
+                }
+            }).start();
         }
-        catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+        else {
+            MessageHandler.getInstance().addConsummer(messageQueue, channel, subscriber);
         }
-        finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+
     }
 
 }

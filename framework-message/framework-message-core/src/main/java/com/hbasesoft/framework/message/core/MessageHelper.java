@@ -26,8 +26,6 @@ public final class MessageHelper {
 
     private static MessagePublisher messagePublisher;
 
-    private static MessageQueue messageQueue;
-
     private static MessageSubcriberFactory messageSubcriberFactory;
 
     private MessageHelper() {
@@ -51,26 +49,6 @@ public final class MessageHelper {
             }
         }
         return messagePublisher;
-    }
-
-    public static MessageQueue createMessageQueue() {
-        if (messageQueue == null) {
-            String messageModel = PropertyHolder.getProperty("message.model");
-            Assert.notEmpty(messageModel, ErrorCodeDef.MESSAGE_MODEL_NOT_SET);
-
-            ServiceLoader<MessageQueue> serviceLoader = ServiceLoader.load(MessageQueue.class);
-            for (MessageQueue c : serviceLoader) {
-                if (messageModel.equals(c.getName())) {
-                    messageQueue = c;
-                    break;
-                }
-            }
-
-            if (messageQueue == null) {
-                throw new InitializationException(ErrorCodeDef.MESSAGE_MIDDLE_NOT_FOUND);
-            }
-        }
-        return messageQueue;
     }
 
     public static MessageSubcriberFactory createMessageSubcriberFactory() {

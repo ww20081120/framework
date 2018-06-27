@@ -20,6 +20,8 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public class ClusterRedisMessageSubcriberFactory implements MessageSubcriberFactory {
 
+    private MessageQueue messageQueue = new ClusterRedisMessageQueue();
+
     /**
      * Description: <br>
      * 
@@ -41,8 +43,16 @@ public class ClusterRedisMessageSubcriberFactory implements MessageSubcriberFact
      * @param subscriber <br>
      */
     @Override
-    public void registSubscriber(String channel, final MessageSubscriber subscriber) {
-        RedisClientFactory.getBinaryJedisCluster().subscribe(new BinaryListener(subscriber), channel.getBytes());
+    public void registSubscriber(String channel, boolean broadcast, final MessageSubscriber subscriber) {
+        if (broadcast) {
+            new Thread(() -> {
+                RedisClientFactory.getBinaryJedisCluster().subscribe(new BinaryListener(subscriber),
+                    channel.getBytes());
+            }).start();
+        }
+        else {
+            MessageHandler.getInstance().addConsummer(messageQueue, channel, subscriber);
+        }
     }
 
 }
