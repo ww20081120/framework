@@ -19,37 +19,68 @@ import java.util.List;
  */
 public interface MessageQueue {
 
-    String getName();
+	String getName();
 
-    /**
-     * Description: 队尾插入<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param key
-     * @param value <br>
-     */
-    void push(String key, byte[] value);
+	/**
+	 * Description: 队尾插入<br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param key
+	 * @param value
+	 *            <br>
+	 */
+	void push(String key, byte[] value);
 
-    /**
-     * Description: 阻塞式获取<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param timeout
-     * @param key
-     * @return <br>
-     */
-    List<byte[]> pop(int timeout, String key);
+	/**
+	 * Description: 队尾插入<br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param key
+	 * @param value
+	 *            <br>
+	 */
+	default void push(String key, byte[] value, String producerGroup) {
+	};
 
-    /**
-     * Description: 获取队列数据<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param key
-     * @return <br>
-     */
-    List<byte[]> popList(String key);
+	/**
+	 * Description: 阻塞式获取<br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param timeout
+	 * @param key
+	 * @return <br>
+	 */
+	List<byte[]> pop(int timeout, String key);
+	
+	/** 
+	 * @Title: pop 
+	 * @author 大刘杰
+	 * @Description: TODO
+	 * @param @param timeout
+	 * @param @param channel
+	 * @param @param consumerGroup
+	 * @param @param isConsumerBroadcasting
+	 * @param @return
+	 * @return List<byte []>
+	 * @throws 
+	 */
+	default List<byte[]> pop(int timeout, String channel, String consumerGroup, boolean isConsumerBroadcasting) {
+		return null;
+	}
+
+	/**
+	 * Description: 获取队列数据<br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param key
+	 * @return <br>
+	 */
+	List<byte[]> popList(String key);
+
+
 
 }
