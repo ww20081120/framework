@@ -56,7 +56,6 @@ public class MessageServApplicationTest {
 		EventData eventData = new EventData();
 		for (int i = 0; i < 10; i++) {
 			eventData.put("topic1", "Hello word" + i);
-			EventEmmiter.subscriber("topic1", eventData);
 
 		}
 		

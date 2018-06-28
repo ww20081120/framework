@@ -1,17 +1,13 @@
 package com.hbasesoft.framework.message.rocketmq.factory;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
-import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -33,10 +29,6 @@ public final class RocketmqFactory {
 	private static final Logger log = new Logger(RocketmqFactory.class);
 
 	public static final String ROCKET_MQ_NAME = "ROCKET_MQ";
-
-	public static final String ROCKET_MQ_DEFAULT_PRODUCER_GROUP = "producerGroupTest3";
-
-	public static final String ROCKET_MQ_DEFAULT_CONSUMER_GROUP = "consumerGroupTest3";
 
 	// 普通消费
 	public static final String ROCKET_MQ_DEFAULT_PUBLISH_TYPE = "NORMAL";
@@ -60,6 +52,7 @@ public final class RocketmqFactory {
 		 * 因为服务器会回查这个Group下的任意一个Producer
 		 */
 		if (defaultMQProducer != null) {
+			log.info("producerGroup has exist");
 			return defaultMQProducer;
 		}
 
@@ -149,13 +142,14 @@ public final class RocketmqFactory {
 			Boolean isConsumerBroadcasting, MessageListenerConcurrently messageListenerConcurrently) {
 
 		log.info("getPushConsumer start topic : " + channel);
-		
+
 		DefaultMQPushConsumer consumer = null;
 
 		// Get consumer from threadlocal
 		Map<String, DefaultMQPushConsumer> defaultMQPushConsumerMap = getDefaultMQPushConsumerHolder();
 		consumer = defaultMQPushConsumerMap.get(consumerGroup);
 		if (consumer != null) {
+			log.info("consumerGroup has exist!");
 			return consumer;
 		}
 

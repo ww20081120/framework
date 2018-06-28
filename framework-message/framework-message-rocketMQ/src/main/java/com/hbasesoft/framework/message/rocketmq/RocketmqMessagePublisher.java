@@ -1,15 +1,10 @@
 package com.hbasesoft.framework.message.rocketmq;
 
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
@@ -29,9 +24,6 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 
 	private static final Logger log = new Logger(RocketmqMessagePublisher.class);
 
-	// @Autowired
-	// private TransactionMQProducer transactionMQProducer;
-
 	@Override
 	public String getName() {
 		return RocketmqFactory.ROCKET_MQ_NAME;
@@ -41,13 +33,22 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	public void publish(String channel, byte[] data) {
 		// 默认使用普通消费
 		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE,
-				RocketmqFactory.ROCKET_MQ_DEFAULT_PRODUCER_GROUP);
+				channel);
 	}
 
 	/**
-	 * produce_model: RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
-	 * RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
-	 * RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+	 * 
+	 * publish:. <br/>
+	 * 
+	 * @author 大刘杰
+	 * @param channel
+	 * @param data
+	 * @param produce_model
+	 * @param producerGroup
+	 * @since JDK 1.8
+	 * @produce_model: RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 */
 	public void publish(String channel, byte[] data, String produce_model, String producerGroup) {
 
@@ -82,5 +83,4 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 		}
 
 	}
-
 }

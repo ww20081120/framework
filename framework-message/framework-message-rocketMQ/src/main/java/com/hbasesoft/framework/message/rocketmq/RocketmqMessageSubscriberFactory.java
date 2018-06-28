@@ -1,22 +1,13 @@
 
 package com.hbasesoft.framework.message.rocketmq;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
-import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
@@ -24,14 +15,14 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 
 /**
- * <Description> <br>
  * 
- * @author 大刘杰<br>
- * @version 1.0<br>
- * @taskId <br>
- * @CreateDate 2018年6月25日 <br>
- * @since V1.0<br>
- * @see com.hbasesoft.framework.message.rocketmq <br>
+ * ClassName: RocketmqMessageSubscriberFactory <br/>
+ * Function: 设定Rocket的消费者 <br/>
+ * date: 2018年6月27日 下午9:46:52 <br/>
+ * 
+ * @author 大刘杰
+ * @version
+ * @since JDK 1.8
  */
 public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory {
 
@@ -43,7 +34,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 
 	/**
 	 * 
-	 * @Title: getName @author 大刘杰 @Description: TODO @param @return @return @throws
+	 * @see com.hbasesoft.framework.message.core.MessageSubcriberFactory#getName()
 	 */
 	@Override
 	public String getName() {
@@ -52,12 +43,12 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 
 	/**
 	 * 
-	 * @Title: registSubscriber @author 大刘杰 @Description: TODO @param @param
-	 *         channel @param @param subscriber @return @throws
+	 * @see com.hbasesoft.framework.message.core.MessageSubcriberFactory#registSubscriber(java.lang.String,
+	 *      com.hbasesoft.framework.message.core.MessageSubscriber)
 	 */
 	@Override
-	public void registSubscriber(String channel, MessageSubscriber subscriber) {
-		RocketmqFactory.getPushConsumer(channel, "consumerGroupNameregistSubscriber", true,
+	public void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber) {
+		RocketmqFactory.getPushConsumer(channel, channel, broadcast,
 				(List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
 					try {
 						// msgs = filter(msgs);
@@ -77,10 +68,13 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 	}
 
 	/**
-	 * 是否允许历史消费
 	 * 
+	 * filter:. <br/>
+	 * 
+	 * @author 大刘杰
 	 * @param msgs
 	 * @return
+	 * @since JDK 1.8
 	 */
 	@SuppressWarnings("unused")
 	private List<MessageExt> filter(List<MessageExt> msgs) {
@@ -92,4 +86,5 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 		}
 		return msgs;
 	}
+
 }
