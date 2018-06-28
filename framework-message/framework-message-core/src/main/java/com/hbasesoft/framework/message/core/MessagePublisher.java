@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core;
 
+import javax.validation.groups.Default;
+
 /**
  * <Description> <br>
  * 
@@ -17,15 +19,29 @@ package com.hbasesoft.framework.message.core;
  */
 public interface MessagePublisher {
 
-    String getName();
+	String getName();
 
-    /**
-     * Description: 发布<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param channel
-     * @param data <br>
-     */
-    void publish(String channel, byte[] data);
+	/**
+	 * Description: 发布<br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param channel
+	 * @param data
+	 *            <br>
+	 */
+	void publish(String channel, byte[] data);
+
+	/**
+	 * 
+	 * publish:设定延迟消费 <br/>
+	 * 
+	 * @author 大刘杰
+	 * @param channel
+	 * @param data
+	 * @param delayLevel
+	 * @since JDK 1.8
+	 */
+	default void publish(String channel, byte[] data, int delayLevel) {
+	}
 }

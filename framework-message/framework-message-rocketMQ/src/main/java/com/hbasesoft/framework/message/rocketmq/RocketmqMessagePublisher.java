@@ -32,8 +32,13 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	@Override
 	public void publish(String channel, byte[] data) {
 		// 默认使用普通消费
-		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE,
-				channel);
+		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, channel, 0);
+	}
+	
+	
+	public void publish(String channel, byte[] data, int delayLevel) {
+		// 默认使用普通消费
+		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, channel, delayLevel);
 	}
 
 	/**
@@ -50,7 +55,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 */
-	public void publish(String channel, byte[] data, String produce_model, String producerGroup) {
+	public void publish(String channel, byte[] data, String produce_model, String producerGroup, int delayLevel) {
 
 		if (GlobalConstants.BLANK.equals(producerGroup.trim())) {
 			log.error("producerGroup cannot be empty");
@@ -61,6 +66,11 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 
 		// Create a message instance, specifying topic, tag and message body.
 		Message msg = new Message(channel, GlobalConstants.BLANK, data);
+
+		// Set delay level
+		if (delayLevel != 0) {
+			msg.setDelayTimeLevel(delayLevel);
+		}
 
 		try {
 			switch (produce_model) {
