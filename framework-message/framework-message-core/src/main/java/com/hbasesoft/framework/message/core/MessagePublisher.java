@@ -27,10 +27,5 @@ public interface MessagePublisher {
      * @param channel
      * @param data <br>
      */
-    void publish(String channel, boolean broadcast, byte[] data);
-
-    default void publish(String channel, byte[] data) {
-        publish(channel, false, data);
-    }
-
+    void publish(String channel, byte[] data);
 }

@@ -42,7 +42,7 @@ public class KafkaMessagePublisher implements MessagePublisher {
      * @param data <br>
      */
     @Override
-    public void publish(String channel, boolean broadcast, byte[] data) {
+    public void publish(String channel, byte[] data) {
         ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(channel, data);
         KafkaClientFacotry.getProducer().send(record);
     }

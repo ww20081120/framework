@@ -5,7 +5,11 @@
  ****************************************************************************************/
 package com.framework.message.redis;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 
@@ -46,8 +50,9 @@ public class RedisMessagePublisher implements MessagePublisher {
      * @param data <br>
      */
     @Override
-    public void publish(String channel, boolean broadcast, byte[] data) {
-        if (broadcast) {
+    public void publish(String channel, byte[] data) {
+        String broadcastChannels = PropertyHolder.getProperty("message.redis.broadcast.channels");
+        if (StringUtils.isNotEmpty(broadcastChannels) && CommonUtil.match(broadcastChannels, channel)) {
             Jedis jedis = null;
             try {
                 jedis = RedisClientFactory.getJedisPool().getResource();
