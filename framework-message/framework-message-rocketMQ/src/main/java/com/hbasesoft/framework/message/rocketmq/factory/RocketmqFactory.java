@@ -28,6 +28,31 @@ public final class RocketmqFactory {
 
 	private static final Logger log = new Logger(RocketmqFactory.class);
 
+	// delay time map
+	public static final Map<Long, Integer> delayTimeMap = new HashMap<Long, Integer>();
+
+	static {
+		delayTimeMap.put(1L, 1);
+		delayTimeMap.put(5L, 2);
+		delayTimeMap.put(10L, 3);
+		delayTimeMap.put(30L, 4);
+		delayTimeMap.put(1 * 60L, 5);
+		delayTimeMap.put(5 * 60L, 6);
+		delayTimeMap.put(10 * 60L, 7);
+		delayTimeMap.put(15 * 60L, 8);
+		delayTimeMap.put(30 * 60L, 9);
+		delayTimeMap.put(1 * 3600L, 10);
+		delayTimeMap.put(2 * 3600L, 11);
+		delayTimeMap.put(3 * 3600L, 12);
+		delayTimeMap.put(4 * 3600L, 13);
+		delayTimeMap.put(5 * 3600L, 14);
+		delayTimeMap.put(6 * 3600L, 15);
+		delayTimeMap.put(8 * 3600L, 16);
+		delayTimeMap.put(12 * 3600L, 17);
+		delayTimeMap.put(24 * 3600L, 18);
+
+	}
+
 	public static final String ROCKET_MQ_NAME = "ROCKET_MQ";
 
 	// 普通消费

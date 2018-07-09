@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core;
 
-import javax.validation.groups.Default;
-
 /**
  * <Description> <br>
  * 
@@ -23,6 +21,7 @@ public interface MessagePublisher {
 
 	/**
 	 * Description: 发布<br>
+	 * 
 	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
@@ -42,6 +41,6 @@ public interface MessagePublisher {
 	 * @param delayLevel
 	 * @since JDK 1.8
 	 */
-	default void publish(String channel, byte[] data, int delayLevel) {
+	default void publish(String channel, byte[] data, Long delayTime) {
 	}
 }

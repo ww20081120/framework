@@ -32,13 +32,12 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	@Override
 	public void publish(String channel, byte[] data) {
 		// 默认使用普通消费
-		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, channel, 0);
+		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, channel, 0L);
 	}
-	
-	
-	public void publish(String channel, byte[] data, int delayLevel) {
+
+	public void publish(String channel, byte[] data, Long delayTime) {
 		// 默认使用普通消费
-		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, channel, delayLevel);
+		publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, channel, delayTime);
 	}
 
 	/**
@@ -55,10 +54,11 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 */
-	public void publish(String channel, byte[] data, String produce_model, String producerGroup, int delayLevel) {
+	public void publish(String channel, byte[] data, String produce_model, String producerGroup, Long delayTime) {
 
 		if (GlobalConstants.BLANK.equals(producerGroup.trim())) {
 			log.error("producerGroup cannot be empty");
+			// throw assert.isnotnull
 			return;
 		}
 
@@ -68,7 +68,10 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 		Message msg = new Message(channel, GlobalConstants.BLANK, data);
 
 		// Set delay level
-		if (delayLevel != 0) {
+		if (delayTime != 0L) {
+			Integer delayLevel = RocketmqFactory.delayTimeMap.get(delayTime);
+			if (delayLevel == null)
+				log.error("Special delay Time not exist!!! ");
 			msg.setDelayTimeLevel(delayLevel);
 		}
 
