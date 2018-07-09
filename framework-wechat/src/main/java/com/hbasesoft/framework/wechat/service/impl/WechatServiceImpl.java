@@ -67,6 +67,7 @@ import com.hbasesoft.framework.wechat.handler.WechatMessageHandler;
 import com.hbasesoft.framework.wechat.service.WechatService;
 import com.hbasesoft.framework.wechat.util.SignUtil;
 import com.hbasesoft.framework.wechat.util.WechatUtil;
+import com.hbasesoft.framework.wechat.util.wechatSDK.WXPayUtil;
 import com.hbasesoft.framework.wechat.vo.WechatAccount;
 
 /**
@@ -569,7 +570,7 @@ public class WechatServiceImpl implements WechatService {
             String result = HttpUtil.doPost(httpclient, WechatConstant.REFUND_API, content, "text/xml");
 
             LoggerUtil.info("---end 发送微信退费请求result[{0}]", result);
-            Map<String, String> resultMap = WechatUtil.xml2map(result);
+            Map<String, String> resultMap = WXPayUtil.xmlToMap(result);
             String oldSign = resultMap.remove("sign");
             String newSign = WechatUtil.sign(key, resultMap);
             Assert.equals(oldSign, newSign, ErrorCodeDef.REFUND_HASH_ERROR, oldSign, newSign);
