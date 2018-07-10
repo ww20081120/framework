@@ -48,12 +48,16 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 	 */
 	@Override
 	public void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber) {
+		
+		subscriber.onSubscribe(channel, 1);
+		
 		RocketmqFactory.getPushConsumer(channel, channel, broadcast,
 				(List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
 					try {
 						// msgs = filter(msgs);
-						if (msgs.size() == 0)
+						if (msgs.size() == 0) {
 							return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+						}
 						// 事件监听
 						for (MessageExt messageExt : msgs) {
 							subscriber.onMessage(messageExt.getTopic(), messageExt.getBody());

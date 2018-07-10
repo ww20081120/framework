@@ -4,7 +4,10 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
@@ -47,20 +50,16 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 	 * @author 大刘杰
 	 * @param channel
 	 * @param data
-	 * @param produce_model
+	 * @param produceModel
 	 * @param producerGroup
 	 * @since JDK 1.8
-	 * @produce_model: RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
-	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
-	 *                 RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+	 * @produceModel: RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+	 *                RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+	 *                RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
 	 */
-	public void publish(String channel, byte[] data, String produce_model, String producerGroup, Long delayTime) {
+	public void publish(String channel, byte[] data, String produceModel, String producerGroup, Long delayTime) {
 
-		if (GlobalConstants.BLANK.equals(producerGroup.trim())) {
-			log.error("producerGroup cannot be empty");
-			// throw assert.isnotnull
-			return;
-		}
+		Assert.notEmpty(producerGroup, ErrorCodeDef.MESSAGE_MODEL_EMPTY_P_GROUP_NAME);
 
 		DefaultMQProducer defaultMQProducer = RocketmqFactory.getDefaultProducer(producerGroup);
 
@@ -68,15 +67,12 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 		Message msg = new Message(channel, GlobalConstants.BLANK, data);
 
 		// Set delay level
-		if (delayTime != 0L) {
-			Integer delayLevel = RocketmqFactory.delayTimeMap.get(delayTime);
-			if (delayLevel == null)
-				log.error("Special delay Time not exist!!! ");
-			msg.setDelayTimeLevel(delayLevel);
+		if (delayTime > 0L) {
+			msg.setDelayTimeLevel(RocketmqFactory.calculationLevel(delayTime));
 		}
 
 		try {
-			switch (produce_model) {
+			switch (produceModel) {
 			case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY:
 				// 顺序消费
 				// defaultMQProducer.send(msg, mq)
@@ -88,11 +84,11 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 			default:
 				// 普通消费
 				SendResult send = defaultMQProducer.send(msg);
-				log.info(send.toString());
+				log.info("发送结果 " + send.toString());
 				break;
 			}
 		} catch (Exception e) {
-			log.error(e);
+			throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_P_SEND_ERROR, e);
 		}
 
 	}

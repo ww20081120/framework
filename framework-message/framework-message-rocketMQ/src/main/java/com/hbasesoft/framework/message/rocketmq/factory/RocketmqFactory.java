@@ -1,6 +1,9 @@
 package com.hbasesoft.framework.message.rocketmq.factory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -10,7 +13,9 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
@@ -28,30 +33,9 @@ public final class RocketmqFactory {
 
 	private static final Logger log = new Logger(RocketmqFactory.class);
 
-	// delay time map
-	public static final Map<Long, Integer> delayTimeMap = new HashMap<Long, Integer>();
-
-	static {
-		delayTimeMap.put(1L, 1);
-		delayTimeMap.put(5L, 2);
-		delayTimeMap.put(10L, 3);
-		delayTimeMap.put(30L, 4);
-		delayTimeMap.put(1 * 60L, 5);
-		delayTimeMap.put(5 * 60L, 6);
-		delayTimeMap.put(10 * 60L, 7);
-		delayTimeMap.put(15 * 60L, 8);
-		delayTimeMap.put(30 * 60L, 9);
-		delayTimeMap.put(1 * 3600L, 10);
-		delayTimeMap.put(2 * 3600L, 11);
-		delayTimeMap.put(3 * 3600L, 12);
-		delayTimeMap.put(4 * 3600L, 13);
-		delayTimeMap.put(5 * 3600L, 14);
-		delayTimeMap.put(6 * 3600L, 15);
-		delayTimeMap.put(8 * 3600L, 16);
-		delayTimeMap.put(12 * 3600L, 17);
-		delayTimeMap.put(24 * 3600L, 18);
-
-	}
+	public static final Long[] delayTimeArray = new Long[] { 1L, 5L, 10L, 30L, 1 * 60L, 5 * 60L, 10 * 60L, 15 * 60L,
+			30 * 60L, 1 * 3600L, 2 * 3600L, 3 * 3600L, 4 * 3600L, 5 * 3600L, 6 * 3600L, 8 * 3600L, 12 * 3600L,
+			24 * 3600L };
 
 	public static final String ROCKET_MQ_NAME = "ROCKET_MQ";
 
@@ -94,7 +78,8 @@ public final class RocketmqFactory {
 		defaultMQProducer.setVipChannelEnabled(false);
 
 		// Producer retry times
-		defaultMQProducer.setRetryTimesWhenSendAsyncFailed(10);
+		defaultMQProducer.setRetryTimesWhenSendAsyncFailed(
+				PropertyHolder.getIntProperty("message.rocketmq.producer.retrytimes", 10));
 
 		/**
 		 * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br>
@@ -103,9 +88,11 @@ public final class RocketmqFactory {
 		try {
 			defaultMQProducer.start();
 		} catch (MQClientException e) {
-			log.error(e);
 			log.error("RocketMq defaultProducer faile.");
+			defaultMQProducer.shutdown();
+			throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_P_CREATE_ERROR, e);
 		}
+
 		log.info("RocketMq defaultProducer Started.");
 		return defaultMQProducer;
 	}
@@ -201,7 +188,7 @@ public final class RocketmqFactory {
 			consumer.subscribe(channel, "*");
 		} catch (MQClientException e) {
 			log.error("RocketMq pushConsumer Start failure!!!.");
-			log.error(e);
+			throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
 		}
 
 		consumer.registerMessageListener(messageListenerConcurrently);
@@ -213,13 +200,15 @@ public final class RocketmqFactory {
 			consumer.start();
 		} catch (Exception e) {
 			log.error("RocketMq pushConsumer Start failure!!!.");
-			log.error(e.getMessage(), e);
+			consumer.shutdown();
+			throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
 		}
+
 		log.info("RocketMq pushConsumer Started.");
 
 		// Keep customer
 		defaultMQPushConsumerMap.put(consumerGroup, consumer);
-		System.out.println(consumer);
+		log.info(consumer.toString());
 		return consumer;
 	}
 
@@ -230,6 +219,21 @@ public final class RocketmqFactory {
 			threadLocalHolder.set(defaultMQPushConsumerHolder);
 		}
 		return defaultMQPushConsumerHolder;
+	}
+
+	public static int calculationLevel(long key) {
+		Long[] longArray = delayTimeArray;
+		List<Long> longList = Arrays.asList(longArray);
+		longList = new ArrayList<Long>(longList);
+		if (longList.indexOf(key) >= 0) {
+			return longList.indexOf(key) + 1;
+		}
+		longList.add(key);
+		longArray = longList.toArray(new Long[longList.size()]);
+		Arrays.sort(longArray);
+		longList = Arrays.asList(longArray);
+		int index = longList.indexOf(key) - 1;
+		return index == -1 ? 1 : index + 1;
 	}
 
 }
