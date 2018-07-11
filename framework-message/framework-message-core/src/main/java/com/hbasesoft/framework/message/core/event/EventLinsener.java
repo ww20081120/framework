@@ -57,7 +57,7 @@ public interface EventLinsener extends MessageSubscriber {
      * @param subscribeChannels <br>
      */
     default void onSubscribe(String channel, int subscribeChannels) {
-        LoggerUtil.info("开始监听{0}事件，监听者数目{subscribeChannels}", channel, subscribeChannels);
+        LoggerUtil.info("开始监听{0}事件，监听者数目{1}", channel, subscribeChannels);
     }
 
     /**
@@ -68,6 +68,6 @@ public interface EventLinsener extends MessageSubscriber {
      * @param subscribedChannels <br>
      */
     default void onUnsubscribe(String channel, int subscribedChannels) {
-        LoggerUtil.info("取消监听{0}事件，监听者数目{subscribeChannels}", channel, subscribedChannels);
+        LoggerUtil.info("取消监听{0}事件，监听者数目{1}", channel, subscribedChannels);
     }
 }
