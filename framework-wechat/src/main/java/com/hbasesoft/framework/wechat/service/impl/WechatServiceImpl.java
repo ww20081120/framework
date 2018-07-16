@@ -27,6 +27,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -263,7 +264,7 @@ public class WechatServiceImpl implements WechatService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public String getAccessToken(String appId) {
         AccountPojo accountPojo = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId);
         if (accountPojo == null) {
@@ -355,7 +356,7 @@ public class WechatServiceImpl implements WechatService {
      * @taskId <br>
      */
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED )
     public String getJsApiTicket(String appId) {
 
         LoggerUtil.info("get JsApiTicket, appId = [{0}]", appId);
