@@ -407,6 +407,8 @@ public class WechatServiceImpl implements WechatService {
 
                 CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME,
                     account.getAccountappid(), account);
+            }else {
+            	CacheHelper.getCache().removeNode(CacheCodeDef.WX_ACCOUNT_INFO);
             }
         }
         else {
