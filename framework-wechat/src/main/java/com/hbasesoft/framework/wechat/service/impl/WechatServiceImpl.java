@@ -27,6 +27,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -263,7 +264,7 @@ public class WechatServiceImpl implements WechatService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
     public String getAccessToken(String appId) {
         AccountPojo accountPojo = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId);
         if (accountPojo == null) {
@@ -355,7 +356,7 @@ public class WechatServiceImpl implements WechatService {
      * @taskId <br>
      */
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED )
     public String getJsApiTicket(String appId) {
 
         LoggerUtil.info("get JsApiTicket, appId = [{0}]", appId);
@@ -369,7 +370,7 @@ public class WechatServiceImpl implements WechatService {
 
         if (CommonUtil.isEmpty(accountPojo.getJsapiticket()) || accountPojo.getJsapitickettime() == null
             || DateUtil.getCurrentTime() - accountPojo.getJsapitickettime().getTime() > WechatConstant.TOKEN_TIME) {
-            refreshJsapiTicket(accountPojo.getAccountaccesstoken());
+            refreshJsapiTicket(appId);
             accountPojo.setJsapiticket(getJsApiTicket(appId));
 
         }
@@ -387,8 +388,12 @@ public class WechatServiceImpl implements WechatService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public String refreshJsapiTicket(String accessToken) {
-        String url = MessageFormat.format(WechatConstant.JSAPI_TICKET_URL, accessToken);
+    public String refreshJsapiTicket(String appId) {
+    	
+    	AccountPojo accountPojo = getAccessTokenFormDb(appId);
+    	Assert.notEmpty(accountPojo.getAccountaccesstoken(), ErrorCodeDef.ACCESS_TOKEN_NULL);
+        
+    	String url = MessageFormat.format(WechatConstant.JSAPI_TICKET_URL, accountPojo.getAccountaccesstoken());
         LoggerUtil.info("通过accessToken获取jsapi_ticket-url:[{0}]", url);
         String jsonStr = HttpUtil.doGet(url);
         LoggerUtil.info("getticket 获取jsapiticket wechat response: " + jsonStr);
@@ -396,23 +401,18 @@ public class WechatServiceImpl implements WechatService {
         String ticket = obj.getString("ticket");
         LoggerUtil.info("获取到的ticket为：" + ticket);
 
-        DetachedCriteria criteria = DetachedCriteria.forClass(AccountPojo.class);
-        criteria.add(Restrictions.eq(AccountPojo.ACCOUNT_ACCESS_TOKEN, accessToken));
-        AccountPojo account = wechatDao.getCriteriaQuery(criteria);
         if (CommonUtil.isNotEmpty(ticket)) {
-            if (!CommonUtil.isNull(account)) {
-                account.setJsapiticket(ticket);
-                account.setJsapitickettime(new Date());
-                wechatDao.saveOrUpdate(account);
+            	accountPojo.setJsapiticket(ticket);
+            	accountPojo.setJsapitickettime(new Date());
+                wechatDao.saveOrUpdate(accountPojo);
 
                 CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME,
-                    account.getAccountappid(), account);
-            }
+                		accountPojo.getAccountappid(), accountPojo);
         }
         else {
             LoggerUtil.error(obj.getString("errmsg"));
             if ("40001".equals(obj.getString("errcode"))) {
-                refreshAccessToken(account.getAccountappid(), account.getAccountappsecret());
+                refreshAccessToken(accountPojo.getAccountappid(), accountPojo.getAccountappsecret());
             }
             else {
                 throw new FrameworkException(ErrorCodeDef.ACCESS_TOKEN_ERROR);
