@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -46,35 +47,39 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
         Tracer tracer = getTracer();
-        Span span = tracer.currentSpan();
-        if (span == null) {
-            span = tracer.newTrace();
+        if (tracer != null) {
+            Span span = tracer.currentSpan();
+            if (span == null) {
+                span = tracer.newTrace();
+            }
+            else if (StringUtils.isNotEmpty(parentStackId)) {
+                span = tracer.newChild(spanMap.get(parentStackId).context());
+            }
+            else {
+                span = tracer.newChild(tracer.currentSpan().context());
+            }
+            span.tag("stackId", stackId);
+            if (StringUtils.isNotEmpty(parentStackId)) {
+                span.tag("parentStackId", parentStackId);
+            }
+            span.tag("method", method);
+            if (params != null) {
+                span.tag("params", Arrays.toString(params));
+            }
+            span.start();
+            spanMap.put(stackId, span);
         }
-        else if (StringUtils.isNotEmpty(parentStackId)) {
-            span = tracer.newChild(spanMap.get(parentStackId).context());
-        }
-        else {
-            span = tracer.newChild(tracer.currentSpan().context());
-        }
-        span.tag("stackId", stackId);
-        if (StringUtils.isNotEmpty(parentStackId)) {
-            span.tag("parentStackId", parentStackId);
-        }
-        span.tag("method", method);
-        if (params != null) {
-            span.tag("params", Arrays.toString(params));
-        }
-        span.start();
-        spanMap.put(stackId, span);
     }
 
     @Override
     public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
         Span span = spanMap.remove(stackId);
-        if (returnValue != null) {
-            span.tag("returnValue", CommonUtil.getString(returnValue));
+        if (span != null) {
+            if (returnValue != null) {
+                span.tag("returnValue", CommonUtil.getString(returnValue));
+            }
+            span.finish();
         }
-        span.finish();
     }
 
     /**
@@ -90,13 +95,15 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
     @Override
     public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
         Span span = spanMap.remove(stackId);
-        span.tag("error", "true");
-        span.tag("exception", e.getClass().getName());
-        String errorMsg = e.getMessage();
-        if (StringUtils.isNotEmpty(errorMsg)) {
-            span.tag("errorMsg", errorMsg);
+        if (span != null) {
+            span.tag("error", "true");
+            span.tag("exception", e.getClass().getName());
+            String errorMsg = e.getMessage();
+            if (StringUtils.isNotEmpty(errorMsg)) {
+                span.tag("errorMsg", errorMsg);
+            }
+            span.finish();
         }
-        span.finish();
     }
 
     /*
@@ -105,7 +112,10 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
      */
     @Override
     public void sql(String stackId, String sql) {
-        spanMap.get(stackId).tag(System.nanoTime() + "", sql);
+        Span span = spanMap.get(stackId);
+        if (span != null) {
+            span.tag(System.nanoTime() + "", sql);
+        }
     }
 
     /**
@@ -128,7 +138,10 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
 
     private Tracer getTracer() {
         if (tracer == null) {
-            tracer = ContextHolder.getContext().getBean(Tracer.class);
+            ApplicationContext context = ContextHolder.getContext();
+            if (context != null) {
+                tracer = context.getBean(Tracer.class);
+            }
         }
         return tracer;
     }
