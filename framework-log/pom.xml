@@ -12,5 +12,6 @@
   	<module>framework-log-db</module>
   	<module>framework-log-file</module>
   	<module>framework-log-mongodb</module>
+  	<module>framework-log-kafka</module>
   </modules>
 </project>

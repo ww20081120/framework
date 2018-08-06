@@ -6,7 +6,9 @@
 		<artifactId>framework-log</artifactId>
 		<version>3.2</version>
 	</parent>
-	<artifactId>framework-log-mongodb</artifactId>
+	<artifactId>framework-log-kafka</artifactId>
+	<name>framework log kafka</name>
+	<description>使用Kafka + Sleuth 记录日志</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -14,8 +16,12 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-zipkin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
 		</dependency>
 	</dependencies>
 </project>
