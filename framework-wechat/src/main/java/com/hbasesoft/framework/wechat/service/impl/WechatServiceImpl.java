@@ -272,6 +272,8 @@ public class WechatServiceImpl implements WechatService {
             CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId,
                 accountPojo);
         }
+        CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId + CacheCodeDef.WX_ACCOUNT_TIME,
+            accountPojo.getAddtokentime().getTime());
         if (CommonUtil.isEmpty(accountPojo.getAccountaccesstoken()) || accountPojo.getAddtokentime() == null
             || DateUtil.getCurrentTime() - accountPojo.getAddtokentime().getTime() > WechatConstant.TOKEN_TIME) {
             refreshAccessToken(appId, accountPojo.getAccountappsecret());
@@ -337,6 +339,8 @@ public class WechatServiceImpl implements WechatService {
                 }
                 CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId,
                     account);
+                CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId + CacheCodeDef.WX_ACCOUNT_TIME,
+                    account.getAddtokentime().getTime());
             }
         }
         else {
@@ -367,7 +371,9 @@ public class WechatServiceImpl implements WechatService {
             CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, appId,
                 accountPojo);
         }
-
+        CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, accountPojo.getJsapiticket() + CacheCodeDef.WX_JSTICKET_TIME,
+            accountPojo.getJsapitickettime().getTime());
+        
         if (CommonUtil.isEmpty(accountPojo.getJsapiticket()) || accountPojo.getJsapitickettime() == null
             || DateUtil.getCurrentTime() - accountPojo.getJsapitickettime().getTime() > WechatConstant.TOKEN_TIME) {
             refreshJsapiTicket(appId);
@@ -408,6 +414,8 @@ public class WechatServiceImpl implements WechatService {
 
                 CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME,
                 		accountPojo.getAccountappid(), accountPojo);
+                CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME, accountPojo.getJsapiticket() + CacheCodeDef.WX_JSTICKET_TIME,
+                    accountPojo.getJsapitickettime().getTime());
         }
         else {
             LoggerUtil.error(obj.getString("errmsg"));

@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.wechat.controller;
 
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,8 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.date.DateConstants;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.wechat.CacheCodeDef;
 import com.hbasesoft.framework.wechat.ErrorCodeDef;
@@ -145,9 +148,19 @@ public class WeChatOpenApiController extends BaseController {
         if (openapiChannel != null) {
             try {
                 String accessToken = wechatService.getAccessToken(appId);
+                long accessTime = 0;
+                if( CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId + CacheCodeDef.WX_ACCOUNT_TIME) != null) {
+                    accessTime =  CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId + CacheCodeDef.WX_ACCOUNT_TIME);
+                }
+                int expiresIn = 0;
+                if(accessTime != 0) {
+                    expiresIn = 7200 - (int) ((DateUtil.getCurrentDate().getTime() - accessTime)/1000);
+                }else {
+                    expiresIn = -1;
+                }
                 logger.info(">>> [get Token] accessToken = [{0}]", accessToken);
                 resq.put("access_token", accessToken);
-                resq.put("expires_in", 7200);
+                resq.put("expires_in", expiresIn >= 0 ? expiresIn : 7200);
             }
             catch (FrameworkException e) {
                 String errorMsg = PropertyHolder.getErrorMessage(e.getCode());
@@ -177,9 +190,20 @@ public class WeChatOpenApiController extends BaseController {
         if (openapiChannel != null) {
             try {
                 String jsApiTicket = wechatService.getJsApiTicket(openapiChannel.getAppCode());
+                long jsticketTime = 0;
+                if(CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_ACCOUNT_TIME) != null) {
+                    jsticketTime = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_ACCOUNT_TIME);
+                }
+                int expiresIn = 0;
+                if(jsticketTime != 0) {
+                    expiresIn = 7200 - (int) ((DateUtil.getCurrentDate().getTime() - jsticketTime)/1000);
+                }else {
+                    expiresIn = -1;
+                }
+                
                 logger.info(">>> [get jsApiTicket] jsApiTicket = [{0}]", accessToken);
                 resq.put("ticket", jsApiTicket);
-                resq.put("expires_in", 7200);
+                resq.put("expires_in", expiresIn >= 0 ? expiresIn : 7200);
             }
             catch (FrameworkException e) {
                 String errorMsg = PropertyHolder.getErrorMessage(e.getCode());
@@ -196,4 +220,5 @@ public class WeChatOpenApiController extends BaseController {
         return resq.toString();
 
     }
+    
 }
