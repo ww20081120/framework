@@ -55,6 +55,12 @@ public interface CacheCodeDef extends CacheConstant {
     /** 微信AppId */
     String WX_ACCOUNT_INFO = "wechat.account_info";
 
+    /** 微信accesstoken时间后缀 */
+    String WX_ACCOUNT_TIME = "account_time";
+    
+    /** 微信jsticket时间后缀 */
+    String WX_JSTICKET_TIME = "jsticket_time";
+    
     /** 微信JsApiTicket */
     String WX_JSAPI_TICKET = "wechat.JsApiTicket";
 

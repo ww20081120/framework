@@ -55,7 +55,9 @@ import org.apache.http.util.Args;
 import org.apache.http.util.EntityUtils;
 import org.springframework.util.MultiValueMap;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -98,7 +100,11 @@ public class HttpUtil {
     private static final Registry<CookieSpecProvider> defaultCookieSpecRegistry;
 
     private static final CloseableHttpClient httpClient;
-
+    
+    private static final String httpPro = "://";
+    
+    private static final String qm = "?";
+    
     static {
         try {
             SSLContext sslContext = SSLContexts.custom().useTLS().build();
@@ -150,6 +156,35 @@ public class HttpUtil {
     }
 
     /**
+     * 
+     * Description: 过滤url中的双斜杠<br> 
+     *  
+     * @author 査思玮<br>
+     * @taskId <br>
+     * @param url
+     * @return <br>
+     */
+    private static String checkUrl(String url) {
+        if(CommonUtil.isNotEmpty(url)) {
+            int startIndex = url.indexOf(httpPro);
+            if(startIndex == -1) {
+                startIndex = 0;
+            }else {
+                startIndex += httpPro.length();
+            }
+            int endIndex = url.indexOf("?");
+            if(endIndex == -1) {
+                endIndex = url.length();
+            }
+            String scheme = url.substring(0, startIndex);
+            String params = url.substring(endIndex,url.length());
+            url = scheme +url.substring(startIndex, endIndex).replaceAll("//", "/") + params;
+            
+        }
+        return url;
+    }
+    
+    /**
      * <p>
      * 执行Get请求
      * </p>
@@ -158,10 +193,11 @@ public class HttpUtil {
      * @return - 默认返回text/html
      */
     public static String doGet(String url) {
-        return doGet(url, GlobalConstants.DEFAULT_CHARSET);
+        return doGet(checkUrl(url), GlobalConstants.DEFAULT_CHARSET);
     }
 
     public static String doGet(String url, String charset) {
+        url = checkUrl(url);
         logger.info(">>> doGet[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "text/html");
@@ -169,6 +205,7 @@ public class HttpUtil {
     }
 
     public static String doGet(CloseableHttpClient httpClient, String url, String charset) {
+        url = checkUrl(url);
         logger.info(">>> doGet[url = {0}]", url);
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Content-type", "text/html");
@@ -185,6 +222,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(String url, Map<String, String> paramMap) {
+        url = checkUrl(url);
         logger.info(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
         HttpPost httpPost = createHttpPost(url, paramMap);
         return doHttpRequest(httpPost, null, new DefaultStringResponseHandler());
@@ -200,6 +238,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(CloseableHttpClient httpClient, String url, Map<String, String> paramMap) {
+        url = checkUrl(url);
         logger.info(">>> doPost[url = {0}, paramMap = {1}]", url, paramMap);
         HttpPost httpPost = createHttpPost(url, paramMap);
         return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
@@ -215,6 +254,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(String url, String body, String contentType) {
+        url = checkUrl(url);
         logger.info(">>> doPost[url = {0}, body = {1}]", url, body);
         HttpPost httpPost = createHttpPost(url, body);
         if (contentType == null) {
@@ -236,6 +276,7 @@ public class HttpUtil {
      * @return
      */
     public static String doPost(CloseableHttpClient httpClient, String url, String body, String contentType) {
+        url = checkUrl(url);
         logger.info(">>> doPost[url = {0}, body = {1}]", url, body);
         HttpPost httpPost = createHttpPost(url, body);
         if (contentType == null) {
