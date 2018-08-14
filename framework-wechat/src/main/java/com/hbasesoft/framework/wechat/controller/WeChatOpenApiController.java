@@ -192,7 +192,7 @@ public class WeChatOpenApiController extends BaseController {
                 String jsApiTicket = wechatService.getJsApiTicket(openapiChannel.getAppCode());
                 long jsticketTime = 0;
                 if(CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_ACCOUNT_TIME) != null) {
-                    jsticketTime = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_ACCOUNT_TIME);
+                    jsticketTime = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_JSTICKET_TIME);
                 }
                 int expiresIn = 0;
                 if(jsticketTime != 0) {
