@@ -54,6 +54,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.Args;
 import org.apache.http.util.EntityUtils;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -164,22 +165,23 @@ public class HttpUtil {
      * @param url
      * @return <br>
      */
-    private static String checkUrl(String url) {
+    public static String checkUrl(String url) {
         if(CommonUtil.isNotEmpty(url)) {
-            int startIndex = url.indexOf(httpPro);
-            if(startIndex == -1) {
-                startIndex = 0;
-            }else {
-                startIndex += httpPro.length();
-            }
-            int endIndex = url.indexOf("?");
-            if(endIndex == -1) {
-                endIndex = url.length();
-            }
-            String scheme = url.substring(0, startIndex);
-            String params = url.substring(endIndex,url.length());
-            url = scheme +url.substring(startIndex, endIndex).replaceAll("//", "/") + params;
-            
+//            int startIndex = url.indexOf(httpPro);
+//            if(startIndex == -1) {
+//                startIndex = 0;
+//            }else {
+//                startIndex += httpPro.length();
+//            }
+//            int endIndex = url.indexOf("?");
+//            if(endIndex == -1) {
+//                endIndex = url.length();
+//            }
+//            String scheme = url.substring(0, startIndex);
+//            String params = url.substring(endIndex,url.length());
+//            url = scheme +url.substring(startIndex, endIndex).replaceAll("//", "/") + params;
+            UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(url);
+            url = uri.toUriString();
         }
         return url;
     }
