@@ -154,7 +154,8 @@ public class WeChatOpenApiController extends BaseController {
                 }
                 int expiresIn = 0;
                 if(accessTime != 0) {
-                    expiresIn = 7200 - (int) ((DateUtil.getCurrentDate().getTime() - accessTime)/1000);
+                    // VCC accessToken 每小时更新，所以是3600秒
+                    expiresIn = 3600 - (int) ((DateUtil.getCurrentDate().getTime() - accessTime)/1000);
                 }else {
                     expiresIn = -1;
                 }
@@ -191,12 +192,13 @@ public class WeChatOpenApiController extends BaseController {
             try {
                 String jsApiTicket = wechatService.getJsApiTicket(openapiChannel.getAppCode());
                 long jsticketTime = 0;
-                if(CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_ACCOUNT_TIME) != null) {
+                if(CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_JSTICKET_TIME) != null) {
                     jsticketTime = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_JSTICKET_TIME);
                 }
                 int expiresIn = 0;
                 if(jsticketTime != 0) {
-                    expiresIn = 7200 - (int) ((DateUtil.getCurrentDate().getTime() - jsticketTime)/1000);
+                 // VCC jsticket 每小时更新，所以是3600秒
+                    expiresIn = 3600 - (int) ((DateUtil.getCurrentDate().getTime() - jsticketTime)/1000);
                 }else {
                     expiresIn = -1;
                 }
