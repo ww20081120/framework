@@ -35,6 +35,7 @@ import com.hbasesoft.framework.wechat.CacheCodeDef;
 import com.hbasesoft.framework.wechat.ErrorCodeDef;
 import com.hbasesoft.framework.wechat.WebConstant;
 import com.hbasesoft.framework.wechat.WechatConstant;
+import com.hbasesoft.framework.wechat.bean.AccountPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.service.WechatService;
 import com.hbasesoft.framework.wechat.util.MD5Encoder;
@@ -149,12 +150,14 @@ public class WeChatOpenApiController extends BaseController {
             try {
                 String accessToken = wechatService.getAccessToken(appId);
                 long accessTime = 0;
-                if( CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId + CacheCodeDef.WX_ACCOUNT_TIME) != null) {
-                    accessTime =  CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId + CacheCodeDef.WX_ACCOUNT_TIME);
+                AccountPojo accountPojo = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, appId);
+                if( accountPojo != null && accountPojo.getAddtokentime() != null ) {
+                    accessTime =  accountPojo.getAddtokentime().getTime();
                 }
                 int expiresIn = 0;
                 if(accessTime != 0) {
-                    expiresIn = 7200 - (int) ((DateUtil.getCurrentDate().getTime() - accessTime)/1000);
+                    // VCC accessToken 每小时更新，所以是3600秒
+                    expiresIn = 3600 - (int) ((DateUtil.getCurrentDate().getTime() - accessTime)/1000);
                 }else {
                     expiresIn = -1;
                 }
@@ -191,12 +194,14 @@ public class WeChatOpenApiController extends BaseController {
             try {
                 String jsApiTicket = wechatService.getJsApiTicket(openapiChannel.getAppCode());
                 long jsticketTime = 0;
-                if(CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_ACCOUNT_TIME) != null) {
-                    jsticketTime = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, jsApiTicket + CacheCodeDef.WX_JSTICKET_TIME);
+                AccountPojo accountPojo = CacheHelper.getCache().get(CacheCodeDef.WX_ACCOUNT_INFO, openapiChannel.getAppCode());
+                if(accountPojo != null && accountPojo.getJsapitickettime() != null) {
+                    jsticketTime = accountPojo.getJsapitickettime().getTime();
                 }
                 int expiresIn = 0;
                 if(jsticketTime != 0) {
-                    expiresIn = 7200 - (int) ((DateUtil.getCurrentDate().getTime() - jsticketTime)/1000);
+                 // VCC jsticket 每小时更新，所以是3600秒
+                    expiresIn = 3600 - (int) ((DateUtil.getCurrentDate().getTime() - jsticketTime)/1000);
                 }else {
                     expiresIn = -1;
                 }
