@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
+import com.hbasesoft.framework.wechat.bean.AutoresponsePojo;
 import com.hbasesoft.framework.wechat.bean.ExpandconfigPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.bean.msg.UnifiedOrderResult;
@@ -223,4 +224,16 @@ public interface WechatService {
     AccountPojo getAccountById(String id);
     
     JSONObject getUserInfoMessage(String openId,String appId);
+    
+    /**
+     * 
+     * Description:获取自动回复内容 <br> 
+     *  
+     * @author liuxianan<br>
+     * @taskId <br>
+     * @param accountId
+     * @param content
+     * @return <br>
+     */
+    AutoresponsePojo getAutoResponse(String accountId, String content);
 }
