@@ -54,6 +54,7 @@ import com.hbasesoft.framework.wechat.ErrorCodeDef;
 import com.hbasesoft.framework.wechat.WechatConstant;
 import com.hbasesoft.framework.wechat.WechatEventCodeDef;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
+import com.hbasesoft.framework.wechat.bean.AutoresponsePojo;
 import com.hbasesoft.framework.wechat.bean.ExpandconfigPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.bean.msg.UnifiedOrderResult;
@@ -899,6 +900,36 @@ public class WechatServiceImpl implements WechatService {
         }
         else {
             return null;
+        }
+    }
+
+    @Override
+    public AutoresponsePojo getAutoResponse(String accountId, String content) {
+        List<AutoresponsePojo> autoResponses = wechatDao.findByProperty(AutoresponsePojo.class,
+            AutoresponsePojo.ACCOUNT_ID, accountId);
+
+        AutoresponsePojo autoResponse = null;
+        @SuppressWarnings("unused")
+        AutoresponsePojo defaultResp = null;
+    
+        for (AutoresponsePojo r : autoResponses) {
+            if (matchKeyword(r.getKeyword(), content)) {
+                LoggerUtil.info("---------sys_accountId----查询结果----" + r);
+                autoResponse = r;
+                break;
+            } else if (com.hbasesoft.framework.common.utils.CommonUtil.isEmpty(r.getKeyword())) {
+                defaultResp = r;
+            }
+        }
+        return autoResponse;
+    }
+    
+    protected boolean matchKeyword(String key, String content) {
+        if (StringUtils.startsWith(key, "^")) {
+            return content.matches(key);
+        }
+        else {
+            return StringUtils.equals(key, content);
         }
     }
 }
