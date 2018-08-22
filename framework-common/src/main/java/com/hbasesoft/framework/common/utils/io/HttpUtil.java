@@ -69,6 +69,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @author meiguiyang
  */
 @SuppressWarnings("deprecation")
+@Deprecated
 public class HttpUtil {
     private static final Logger logger = new Logger(HttpUtil.class);
 
