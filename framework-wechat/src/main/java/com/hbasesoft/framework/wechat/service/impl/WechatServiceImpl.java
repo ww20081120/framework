@@ -904,6 +904,7 @@ public class WechatServiceImpl implements WechatService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AutoresponsePojo getAutoResponse(String accountId, String content) {
         List<AutoresponsePojo> autoResponses = wechatDao.findByProperty(AutoresponsePojo.class,
             AutoresponsePojo.ACCOUNT_ID, accountId);
