@@ -69,6 +69,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @author meiguiyang
  */
 @SuppressWarnings("deprecation")
+@Deprecated
 public class HttpUtil {
     private static final Logger logger = new Logger(HttpUtil.class);
 
@@ -167,21 +168,22 @@ public class HttpUtil {
      */
     public static String checkUrl(String url) {
         if(CommonUtil.isNotEmpty(url)) {
-//            int startIndex = url.indexOf(httpPro);
-//            if(startIndex == -1) {
-//                startIndex = 0;
-//            }else {
-//                startIndex += httpPro.length();
-//            }
-//            int endIndex = url.indexOf("?");
-//            if(endIndex == -1) {
-//                endIndex = url.length();
-//            }
-//            String scheme = url.substring(0, startIndex);
-//            String params = url.substring(endIndex,url.length());
-//            url = scheme +url.substring(startIndex, endIndex).replaceAll("//", "/") + params;
-            UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(url);
-            url = uri.toUriString();
+            int startIndex = url.indexOf(httpPro);
+            if(startIndex == -1) {
+                startIndex = 0;
+            }else {
+                startIndex += httpPro.length();
+            }
+            int endIndex = url.indexOf("?");
+            if(endIndex == -1) {
+                endIndex = url.length();
+            }
+            String scheme = url.substring(0, startIndex);
+            String params = url.substring(endIndex,url.length());
+            url = scheme +url.substring(startIndex, endIndex).replaceAll("//", "/") + params;
+            // 暂时先屏蔽该代码
+//            UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(url);
+//            url = uri.build(true).toUriString();
         }
         return url;
     }
