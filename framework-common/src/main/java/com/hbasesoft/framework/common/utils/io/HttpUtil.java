@@ -181,7 +181,7 @@ public class HttpUtil {
 //            String params = url.substring(endIndex,url.length());
 //            url = scheme +url.substring(startIndex, endIndex).replaceAll("//", "/") + params;
             UriComponentsBuilder uri = UriComponentsBuilder.fromHttpUrl(url);
-            url = uri.toUriString();
+            url = uri.build(true).toUriString();
         }
         return url;
     }
