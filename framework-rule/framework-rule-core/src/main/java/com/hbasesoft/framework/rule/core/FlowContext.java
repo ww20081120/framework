@@ -11,6 +11,8 @@ import java.util.Map;
 
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
 
+import lombok.AllArgsConstructor;
+
 /**
  * <Description> <br>
  * 
@@ -21,6 +23,7 @@ import com.hbasesoft.framework.rule.core.config.FlowConfig;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
+@AllArgsConstructor
 public class FlowContext implements Serializable {
 
     /**

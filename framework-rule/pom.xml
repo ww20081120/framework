@@ -14,5 +14,7 @@
   	<module>framework-rule-file</module>
   	<module>framework-rule-plugin-event</module>
   	<module>framework-rule-plugin-transaction</module>
+  	<module>framework-rule-plugin-stateMachine</module>
+  	<module>framework-rule-demo</module>
   </modules>
 </project>

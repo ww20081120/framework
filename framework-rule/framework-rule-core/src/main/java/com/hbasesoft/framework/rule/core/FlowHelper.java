@@ -46,7 +46,7 @@ public final class FlowHelper {
 
     private static Method processMethod;
 
-    public static <T extends Serializable> int flowStart(T bean, String flowName) {
+    public static <T extends Serializable> int flowStart(T bean, String flowName, boolean throwable) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
 
         int result = ErrorCodeDef.SUCCESS;
@@ -60,15 +60,25 @@ public final class FlowHelper {
         }
         catch (Exception e) {
             LoggerUtil.error("flow process error.", e);
-            result = (e instanceof FrameworkException) ? ((FrameworkException) e).getCode()
-                : ErrorCodeDef.SYSTEM_ERROR_10001;
+            FrameworkException fe = e instanceof FrameworkException ? (FrameworkException) e
+                : new FrameworkException(e);
+            if (throwable) {
+                throw fe;
+            }
+            result = fe.getCode();
         }
         return result;
     }
 
+    public static <T extends Serializable> int flowStart(T bean, String flowName) {
+        return flowStart(bean, flowName, false);
+    }
+
     @SuppressWarnings("unchecked")
-    private static <T extends Serializable> void execute(T flowBean, FlowContext flowContext) throws Exception {
+    public static <T extends Serializable> void execute(T flowBean, FlowContext flowContext) throws Exception {
         FlowConfig flowConfig = flowContext.getFlowConfig();
+        Assert.notNull(flowConfig, ErrorCodeDef.FLOW_COMPONENT_NOT_FOUND);
+
         FlowComponent<T> component = null;
 
         String beanName = flowConfig.getName();
