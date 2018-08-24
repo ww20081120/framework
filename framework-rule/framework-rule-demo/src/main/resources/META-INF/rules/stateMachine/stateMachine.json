@@ -1,11 +1,11 @@
 {
     "name": "stateMachine",
     "version": "1.0",
-    "begin": "A",
+    "begin": "B",
     "end": "D,E",
     "stateMachine": {
         "A": [{
-                "event": "e2",
+                "event": "e1",
                 "end": "C",
                 "error": "E",
                 "children": [{
@@ -23,15 +23,15 @@
                 ]
             },
             {
-                "event": "e1",
+                "event": "e2",
                 "end": "D",
                 "error": "1001=C, 1002=D, *=E",
                 "component": "Child02Component"
             }
         ],
         "B": [{
-            "event": "e2",
-            "end": "C",
+            "event": "e1",
+            "end": "A",
             "error": "E",
             "component": "Child02Component"
         }],

@@ -387,4 +387,7 @@ public interface ErrorCodeDef {
 
     /** STATE MACHINE的FlowBean 必须实现 StateMachineFlowBean */
     int FLOW_MUST_HAS_STATE = 20066;
+
+    /** 未找到状态所对应的事件 */
+    int EVENT_NOT_FOUND = 20067;
 }

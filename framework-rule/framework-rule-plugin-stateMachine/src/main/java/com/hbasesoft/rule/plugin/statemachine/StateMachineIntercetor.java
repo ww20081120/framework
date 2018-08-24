@@ -16,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -134,9 +135,12 @@ public class StateMachineIntercetor extends AbstractFlowCompnentInterceptor {
                                 flowBean.setState(es);
                             }
                         }
-                        break;
+                        return false;
                     }
                 }
+
+                throw new ServiceException(ErrorCodeDef.EVENT_NOT_FOUND, currentState, currentEvent);
+
             }
             return false;
         }
