@@ -14,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.rule.core.FlowComponent;
@@ -65,9 +64,6 @@ public final class JsonConfigUtil {
                 childConfigList.add(getFlowConfig(children.getJSONObject(i)));
             }
             config.setChildrenConfigList(childConfigList);
-        }
-        else if (StringUtils.isEmpty(component)) {
-            throw new InitializationException(ErrorCodeDef.FLOW_COMPONENT_INSTANCE_OR_CHILDREN_NOT_FOUND, name);
         }
 
         obj.remove("component");

@@ -384,4 +384,7 @@ public interface ErrorCodeDef {
 
     /** 未找到失败状态的配置 */
     int ERROR_STATE_NOT_FOUND = 20065;
+
+    /** STATE MACHINE的FlowBean 必须实现 StateMachineFlowBean */
+    int FLOW_MUST_HAS_STATE = 20066;
 }

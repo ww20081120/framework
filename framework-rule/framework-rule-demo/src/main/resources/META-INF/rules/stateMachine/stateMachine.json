@@ -1,12 +1,11 @@
 {
     "name": "stateMachine",
     "version": "1.0",
-    "component": "StateMachineComponent",
     "begin": "A",
     "end": "D,E",
-    "control": {
+    "stateMachine": {
         "A": [{
-                "event": "e1",
+                "event": "e2",
                 "end": "C",
                 "error": "E",
                 "children": [{
@@ -24,7 +23,7 @@
                 ]
             },
             {
-                "event": "e2",
+                "event": "e1",
                 "end": "D",
                 "error": "1001=C, 1002=D, *=E",
                 "component": "Child02Component"
