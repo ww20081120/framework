@@ -1,20 +1,15 @@
 {
-    "name": "demo",
+    "name": "demo", 
     "version": "1.0",
-    "component": "StateMachineComponent",
-    "condition": "#transId != null",
-    "begin" : "A",
-    "end" : "B,C,D",
-    "control" : {
-        "A" : [
-           {"event": "e1", "end": "C" , "error": "E", "children" : []},
-           {"event": "e2", "end": "D", "error": "1001=C, 1002=D, *=E" , "children" : []}
-        ],
-        "B" : [],
-        "C" : [],
-        "D" : [],
-        "F" : [],
-        "E" : []
-    }
-    
+    "children": [
+        {
+            "component": "Child01Component"
+        },
+        {
+            "component": "Child02Component"
+        },
+        {
+            "component": "Child03Component"
+        }
+    ]
 }

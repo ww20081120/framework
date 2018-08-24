@@ -24,11 +24,11 @@
 			<artifactId>framework-rule-plugin-stateMachine</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-rule-plugin-transaction</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.hbasesoft.framework</groupId> -->
+<!-- 			<artifactId>framework-rule-plugin-transaction</artifactId> -->
+<!-- 			<version>${project.parent.version}</version> -->
+<!-- 		</dependency> -->
 
 
 		<dependency>
@@ -49,6 +49,10 @@
 				<exclusion>
 					<groupId>org.apache.logging.log4j</groupId>
 					<artifactId>log4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-to-slf4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

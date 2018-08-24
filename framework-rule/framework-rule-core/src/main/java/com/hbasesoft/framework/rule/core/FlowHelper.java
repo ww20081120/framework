@@ -111,11 +111,15 @@ public final class FlowHelper {
 
                             }
                         }
-                        // 执行组件后置拦截
-                        component.afterProcess(flowBean, flowContext, null);
+                        if (component != null) {
+                            // 执行组件后置拦截
+                            component.afterProcess(flowBean, flowContext, null);
+                        }
                     }
                     catch (Exception e) {
-                        component.afterProcess(flowBean, flowContext, e);
+                        if (component != null) {
+                            component.afterProcess(flowBean, flowContext, e);
+                        }
                         throw e;
                     }
 

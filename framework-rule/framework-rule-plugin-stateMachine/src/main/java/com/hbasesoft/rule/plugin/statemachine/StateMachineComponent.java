@@ -70,7 +70,7 @@ public class StateMachineComponent<T extends StateMachineFlowBean> implements Fl
         }
 
         // 如果当前流程已经结束，则不往下继续走了
-        if (CommonUtil.match(end, currentState)) {
+        if (!CommonUtil.match(end, currentState)) {
 
             JSONArray matchEvents = control.getJSONArray(currentState);
             Assert.notEmpty(matchEvents, ErrorCodeDef.STATE_NOT_MATCH, currentState);

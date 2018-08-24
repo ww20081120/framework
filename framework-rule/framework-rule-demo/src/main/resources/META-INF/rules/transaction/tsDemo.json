@@ -1,5 +1,5 @@
 {
-    "name": "demo", 
+    "name": "tsDemo", 
     "version": "1.0",
     "transactional":"true",
     "children": [

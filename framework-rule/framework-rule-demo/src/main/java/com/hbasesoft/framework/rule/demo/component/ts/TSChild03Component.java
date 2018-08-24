@@ -29,7 +29,7 @@ import com.hbasesoft.framework.rule.demo.repository.EmployeeRepository;
  */
 @Component("TSChild03Component")
 public class TSChild03Component implements FlowComponent<TestFlowBean> {
-    @Resource
+   // @Resource
     private EmployeeRepository employeeDao;
 
     /**

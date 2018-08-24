@@ -12,8 +12,6 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.hbasesoft.framework.db.core.BaseEntity;
-
 /**
  * <Description> <br>
  * 
@@ -25,7 +23,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @see com.hbasesoft.framework.rule.plugin.transaction.entity <br>
  */
 @Entity(name = "Employee")
-public class Employee extends BaseEntity {
+public class Employee {
 
     /**
      * serialVersionUID <br>
