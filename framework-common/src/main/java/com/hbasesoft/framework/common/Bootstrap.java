@@ -100,94 +100,94 @@ public class Bootstrap {
 
     private static void setHttpProxy() {
         // 检查并设置http代理
-        if (StringUtils.isEmpty(System.getProperty("http.proxyHost"))) {
-            String httpProxy = PropertyHolder.getProperty("http.proxy");
-            if (StringUtils.isEmpty(httpProxy)) {
-                httpProxy = System.getenv("http_proxy");
-            }
+        // if (StringUtils.isEmpty(System.getProperty("http.proxyHost"))) {
+        String httpProxy = PropertyHolder.getProperty("http.proxy");
+        if (StringUtils.isEmpty(httpProxy)) {
+            httpProxy = System.getenv("http_proxy");
+        }
 
-            if (StringUtils.isNotEmpty(httpProxy)) {
-                Address[] protocols = ProtocolUtil.parseAddress(httpProxy);
-                if (CommonUtil.isNotEmpty(protocols)) {
-                    Address addr = protocols[0];
-                    System.setProperty("http.proxyHost", addr.getHost());
-                    System.setProperty("http.proxyPort", addr.getPort() + GlobalConstants.BLANK);
-                    String nonProxyHosts = PropertyHolder.getProperty("http.nonProxyHosts");
-                    if (StringUtils.isNotEmpty(nonProxyHosts)) {
-                        System.setProperty("http.nonProxyHosts", nonProxyHosts);
-                    }
-                    logger.info("set http proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+        if (StringUtils.isNotEmpty(httpProxy)) {
+            Address[] protocols = ProtocolUtil.parseAddress(httpProxy);
+            if (CommonUtil.isNotEmpty(protocols)) {
+                Address addr = protocols[0];
+                System.setProperty("http.proxyHost", addr.getHost());
+                System.setProperty("http.proxyPort", addr.getPort() + GlobalConstants.BLANK);
+                String nonProxyHosts = PropertyHolder.getProperty("http.nonProxyHosts");
+                if (StringUtils.isNotEmpty(nonProxyHosts)) {
+                    System.setProperty("http.nonProxyHosts", nonProxyHosts);
                 }
+                logger.info("set http proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
+        // }
     }
 
     private static void setHttpsProxy() {
         // 检查并设置http代理
-        if (StringUtils.isEmpty(System.getProperty("https.proxyHost"))) {
-            String httpsProxy = PropertyHolder.getProperty("https.proxy");
-            if (StringUtils.isEmpty(httpsProxy)) {
-                httpsProxy = System.getenv("https_proxy");
-            }
+        // if (StringUtils.isEmpty(System.getProperty("https.proxyHost"))) {
+        String httpsProxy = PropertyHolder.getProperty("https.proxy");
+        if (StringUtils.isEmpty(httpsProxy)) {
+            httpsProxy = System.getenv("https_proxy");
+        }
 
-            if (StringUtils.isNotEmpty(httpsProxy)) {
-                Address[] protocols = ProtocolUtil.parseAddress(httpsProxy);
-                if (CommonUtil.isNotEmpty(protocols)) {
-                    Address addr = protocols[0];
-                    System.setProperty("https.proxyHost", addr.getHost());
-                    System.setProperty("https.proxyPort", addr.getPort() + GlobalConstants.BLANK);
-                    String nonProxyHosts = PropertyHolder.getProperty("https.nonProxyHosts");
-                    if (StringUtils.isNotEmpty(nonProxyHosts)) {
-                        System.setProperty("https.nonProxyHosts", nonProxyHosts);
-                    }
-                    logger.info("set https proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+        if (StringUtils.isNotEmpty(httpsProxy)) {
+            Address[] protocols = ProtocolUtil.parseAddress(httpsProxy);
+            if (CommonUtil.isNotEmpty(protocols)) {
+                Address addr = protocols[0];
+                System.setProperty("https.proxyHost", addr.getHost());
+                System.setProperty("https.proxyPort", addr.getPort() + GlobalConstants.BLANK);
+                String nonProxyHosts = PropertyHolder.getProperty("https.nonProxyHosts");
+                if (StringUtils.isNotEmpty(nonProxyHosts)) {
+                    System.setProperty("https.nonProxyHosts", nonProxyHosts);
                 }
+                logger.info("set https proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
+        // }
     }
 
     private static void setFtpProxy() {
         // 检查并设置http代理
-        if (StringUtils.isEmpty(System.getProperty("ftp.proxyHost"))) {
-            String ftpProxy = PropertyHolder.getProperty("ftp.proxy");
-            if (StringUtils.isEmpty(ftpProxy)) {
-                ftpProxy = System.getenv("ftp_proxy");
-            }
+        // if (StringUtils.isEmpty(System.getProperty("ftp.proxyHost"))) {
+        String ftpProxy = PropertyHolder.getProperty("ftp.proxy");
+        if (StringUtils.isEmpty(ftpProxy)) {
+            ftpProxy = System.getenv("ftp_proxy");
+        }
 
-            if (StringUtils.isNotEmpty(ftpProxy)) {
-                Address[] protocols = ProtocolUtil.parseAddress(ftpProxy);
-                if (CommonUtil.isNotEmpty(protocols)) {
-                    Address addr = protocols[0];
-                    System.setProperty("ftp.proxyHost", addr.getHost());
-                    System.setProperty("ftp.proxyPort", addr.getPort() + GlobalConstants.BLANK);
-                    String nonProxyHosts = PropertyHolder.getProperty("ftp.nonProxyHosts");
-                    if (StringUtils.isNotEmpty(nonProxyHosts)) {
-                        System.setProperty("ftp.nonProxyHosts", nonProxyHosts);
-                    }
-                    logger.info("set ftp proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+        if (StringUtils.isNotEmpty(ftpProxy)) {
+            Address[] protocols = ProtocolUtil.parseAddress(ftpProxy);
+            if (CommonUtil.isNotEmpty(protocols)) {
+                Address addr = protocols[0];
+                System.setProperty("ftp.proxyHost", addr.getHost());
+                System.setProperty("ftp.proxyPort", addr.getPort() + GlobalConstants.BLANK);
+                String nonProxyHosts = PropertyHolder.getProperty("ftp.nonProxyHosts");
+                if (StringUtils.isNotEmpty(nonProxyHosts)) {
+                    System.setProperty("ftp.nonProxyHosts", nonProxyHosts);
                 }
+                logger.info("set ftp proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
+        // }
     }
 
     private static void setSocksProxy() {
         // 检查并设置http代理
-        if (StringUtils.isEmpty(System.getProperty("socksProxyHost"))) {
-            String socksProxy = PropertyHolder.getProperty("socksProxy");
-            if (StringUtils.isEmpty(socksProxy)) {
-                socksProxy = System.getenv("socks_proxy");
-            }
+        // if (StringUtils.isEmpty(System.getProperty("socksProxyHost"))) {
+        String socksProxy = PropertyHolder.getProperty("socksProxy");
+        if (StringUtils.isEmpty(socksProxy)) {
+            socksProxy = System.getenv("socks_proxy");
+        }
 
-            if (StringUtils.isNotEmpty(socksProxy)) {
-                Address[] protocols = ProtocolUtil.parseAddress(socksProxy);
-                if (CommonUtil.isNotEmpty(protocols)) {
-                    Address addr = protocols[0];
-                    System.setProperty("socksProxyHost", addr.getHost());
-                    System.setProperty("socksProxyPort", addr.getPort() + GlobalConstants.BLANK);
+        if (StringUtils.isNotEmpty(socksProxy)) {
+            Address[] protocols = ProtocolUtil.parseAddress(socksProxy);
+            if (CommonUtil.isNotEmpty(protocols)) {
+                Address addr = protocols[0];
+                System.setProperty("socksProxyHost", addr.getHost());
+                System.setProperty("socksProxyPort", addr.getPort() + GlobalConstants.BLANK);
 
-                    logger.info("set socks proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
-                }
+                logger.info("set socks proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
+        // }
     }
 }
