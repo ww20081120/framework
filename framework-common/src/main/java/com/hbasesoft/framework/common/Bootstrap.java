@@ -100,7 +100,7 @@ public class Bootstrap {
 
     private static void setHttpProxy() {
         // 检查并设置http代理
-        if (StringUtils.isEmpty(System.getProperty("http.proxyHost"))) {
+        if (StringUtils.isNotEmpty(System.getProperty("http.proxyHost"))) {
             String httpProxy = PropertyHolder.getProperty("http.proxy");
             if (StringUtils.isEmpty(httpProxy)) {
                 httpProxy = System.getenv("http_proxy");
