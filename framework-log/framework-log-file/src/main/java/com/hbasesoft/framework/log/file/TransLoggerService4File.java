@@ -5,10 +5,12 @@ package com.hbasesoft.framework.log.file;
 
 import java.util.Arrays;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.TransManager;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
@@ -111,8 +113,10 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
             MDC.put("returnValue", CommonUtil.getString(returnValue));
 
             if (manager.isError()) {
-                MDC.put("exception", e.getMessage());
-                logger.error(e, "FAIL");
+                if (e != null) {
+                    MDC.put("exception", e.getMessage());
+                    logger.error(e, "FAIL");
+                }
             }
             else if (manager.isTimeout()) {
                 logger.warn("TIMEOUT");
