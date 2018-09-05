@@ -45,7 +45,7 @@ public class TransLogUtil {
 
         TransManager manager = TransManager.getInstance();
 
-        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", 5);
+        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", 100);
 
         // 深度检测
         if (manager.getStackSize() > maxDeepLen) {
