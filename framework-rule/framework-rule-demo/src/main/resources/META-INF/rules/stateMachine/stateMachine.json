@@ -3,11 +3,11 @@
     "version": "1.0",
     "begin": "B",
     "end": "D,E",
+    "error": "E",
     "stateMachine": {
         "A": [{
                 "event": "e1",
                 "end": "C",
-                "error": "E",
                 "children": [{
                         "component": "Child02Component",
                         "children": [{
@@ -32,13 +32,11 @@
         "B": [{
             "event": "e1",
             "end": "A",
-            "error": "E",
             "component": "Child02Component"
         }],
         "C": [{
             "event": "e1",
             "end": "D",
-            "error": "E",
             "component": "Child01Component"
         }]
     }

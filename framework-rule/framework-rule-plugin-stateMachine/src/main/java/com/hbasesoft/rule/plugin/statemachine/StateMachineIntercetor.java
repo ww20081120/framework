@@ -97,10 +97,16 @@ public class StateMachineIntercetor extends AbstractFlowCompnentInterceptor {
                     String event = eventObj.getString("event");
                     Assert.notEmpty(event, ErrorCodeDef.EVENT_NOT_EMPTY);
                     String endState = eventObj.getString("end");
-                    Assert.notEmpty(event, ErrorCodeDef.END_STATE_NOT_EMPTY);
+                    String gError = eventObj.getString("error");
+
+                    if (StringUtils.isEmpty(endState)) {
+                        endState = currentState;
+                    }
 
                     String errorState = eventObj.getString("error");
-                    Assert.notEmpty(errorState, ErrorCodeDef.ERROR_STATE_NOT_FOUND);
+                    if (StringUtils.isEmpty(errorState)) {
+                        errorState = StringUtils.isEmpty(gError) ? gError : currentState;
+                    }
 
                     if (CommonUtil.match(event, currentEvent)) {
                         FlowConfig flowConfig = JsonConfigUtil.getFlowConfig(eventObj);
