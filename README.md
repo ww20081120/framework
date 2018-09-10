@@ -94,6 +94,6 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 ```
 
 ---
-###　　　　　　　　　　　　Author:王伟
-###　　　　　　　　　 E-mail:[ww20081120@126.com](mail://ww20081120@126.com)
+- Author:王伟 
+- E-mail:[ww20081120@126.com](mail://ww20081120@126.com)
 
