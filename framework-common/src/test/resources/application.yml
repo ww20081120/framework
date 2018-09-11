@@ -1,0 +1,24 @@
+project:
+  name: demo
+
+test:
+  str:
+    str1: abc
+    str2: bcd
+  int:
+    int1: 1
+    int2: -1
+  long:
+    long1: 1000
+    long2: 3000
+  bool:
+    bool1: true
+    bool2: false
+    
+    
+    
+extend:
+  property:
+    files: ext01.properties, ext02.yml
+  errorMessage:
+    files: ext_errorMessage.properties

@@ -32,18 +32,6 @@ import lombok.NoArgsConstructor;
 public final class CommonUtil {
 
     /**
-     * Description: 去除首尾空格，并将null字符串转化为null对象<br>
-     * 
-     * @author liuxianan<br>
-     * @taskId <br>
-     * @param str
-     * @return <br>
-     */
-    public static String trim(String str) {
-        return "null".equalsIgnoreCase(str) ? null : StringUtils.trim(str);
-    }
-
-    /**
      * 消息格式化
      * 
      * @param message message <br>
@@ -238,22 +226,13 @@ public final class CommonUtil {
     }
 
     /**
-     * Description: 除去字符串中symbol意外的所有符号<br>
+     * Description: 去除所有的空格和制表符、换行符<br>
      * 
-     * @author 何佳文<br>
+     * @author 王伟<br>
      * @taskId <br>
      * @param str
-     * @param symbol
      * @return <br>
      */
-    public static String removeAllSymbol(String str, String symbol) {
-        if (StringUtils.isNotEmpty(str)) {
-            String random = getRandomChar(10);
-            return str.replace(symbol, random).replaceAll("[\\pP\\p{Punct}]", "").replace(random, symbol);
-        }
-        return "";
-    }
-
     public static String replaceAllBlank(String str) {
         String dest = GlobalConstants.BLANK;
         if (StringUtils.isNotEmpty(str)) {
@@ -264,14 +243,22 @@ public final class CommonUtil {
         return dest;
     }
 
-    public static String replaceBlank(String str) {
+    /**
+     * Description: 替换多余的制表符、换行符，只保留一个<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param str
+     * @return <br>
+     */
+    public static String replaceRedundantBlank(String str) {
         String dest = GlobalConstants.BLANK;
         if (StringUtils.isNotEmpty(str)) {
-            Pattern p = Pattern.compile("\\s{1,*}|\t|\r|\n");
+            Pattern p = Pattern.compile("\\s{1,}|\t|\r|\n");
             Matcher m = p.matcher(str);
-            dest = m.replaceAll(GlobalConstants.BLANK);
+            dest = m.replaceAll(" ");
         }
-        return dest;
+        return StringUtils.trim(dest);
     }
 
     /**

@@ -148,6 +148,7 @@ public final class PropertyHolder {
             String[] files = StringUtils.split(extendPropertyFiles, GlobalConstants.SPLITOR);
             for (String file : files) {
                 try {
+                    file = StringUtils.trim(file);
                     cr = new ClassPathResource(file);
                     if (cr.exists()) {
                         if (StringUtils.endsWith(file, "yml")) {

@@ -1,13 +1,14 @@
 /**************************************************************************************** 
- Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
+22 Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.common.utils;
+package com.hbasesoft.framework.common.utils.date;
 
 import org.junit.Test;
 
-import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.date.DateConstants;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
  * <Description> <br>
@@ -19,16 +20,16 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common <br>
  */
-public class ProperyTest {
+public class DateUtilTest {
 
     @Test
-    public void getProperty() {
-        System.out.println(PropertyHolder.getProperty("master.db.url"));
+    public void string2Date() {
+        System.out.println(DateUtil.string2Date("2012-08-15", DateConstants.DATE_FORMAT_10));
     }
 
     @Test
-    public void getInt() {
-        System.out.println(PropertyHolder.getIntProperty("logservice.max.deep.size", 100));
-
+    public void date2String() {
+        System.out.println(DateUtil.date2String(DateUtil.string2Date("2012/08/15", DateConstants.DATE_FORMAT_10_2),
+            DateConstants.DATE_FORMAT_10));
     }
 }
