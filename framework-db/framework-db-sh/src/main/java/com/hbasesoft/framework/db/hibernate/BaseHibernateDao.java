@@ -447,8 +447,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void deleteAllEntitie(Collection<T> entities) throws DaoException {
         for (Object entity : entities) {
             getSession().delete(entity);
-            getSession().flush();
         }
+        getSession().flush();
     }
 
     /**
@@ -464,8 +464,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         Assert.notEmpty(ids, ErrorCodeDef.ID_IS_NULL);
         for (String id : ids) {
             getSession().delete(get(entityName, id));
-            getSession().flush();
         }
+        getSession().flush();
     }
 
     /**
