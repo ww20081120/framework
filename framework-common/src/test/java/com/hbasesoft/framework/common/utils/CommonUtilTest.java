@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.test.common.io;
+package com.hbasesoft.framework.common.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
  * @taskId <br>
  * @CreateDate 2018年4月19日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.test.common.io <br>
+ * @see com.hbasesoft.framework.common <br>
  */
 public class CommonUtilTest {
 
