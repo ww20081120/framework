@@ -47,6 +47,8 @@ public final class DataUtil {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
+    private static String HEX_DIGIT = "0123456789ABCDEF";
+
     /**
      * 16位加密
      * 
@@ -197,6 +199,48 @@ public final class DataUtil {
         encryptor.setConfig(config);
         // 解密
         return encryptor.decrypt(password);
+    }
+
+    /**
+     * Description: 将字节数组转化为16进制字符串 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bs
+     * @return <br>
+     */
+    public static String byte2HexStr(byte[] bs) {
+        char[] chars = HEX_DIGIT.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        int bit;
+        for (int i = 0; i < bs.length; i++) {
+            bit = (bs[i] & 0x0f0) >> 4;
+            sb.append(chars[bit]);
+            bit = bs[i] & 0x0f;
+            sb.append(chars[bit]);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 把16进制字符串转换成字节数组
+     * 
+     * @param hexString
+     * @return byte[]
+     */
+    public static byte[] hexStr2Byte(String hex) {
+        int len = (hex.length() / 2);
+        byte[] result = new byte[len];
+        char[] achar = hex.toCharArray();
+        for (int i = 0; i < len; i++) {
+            int pos = i * 2;
+            result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
+        }
+        return result;
+    }
+
+    private static int toByte(char c) {
+        return (byte) HEX_DIGIT.indexOf(c);
     }
 
 }
