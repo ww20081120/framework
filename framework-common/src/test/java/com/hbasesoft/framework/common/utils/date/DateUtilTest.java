@@ -149,17 +149,17 @@ public class DateUtilTest {
 
     @Test
     public void getYrMonthLastDay() {
+        Date t1 = DateUtil.string2Date("2018-02-20");
+        Date t2 = DateUtil.getYrMonthLastDay(t1);
+        String str = DateUtil.date2String(t2, DateConstants.DATE_FORMAT_10);
+        Assert.equals(str, "2018-02-28", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
     public void getYrMonthFirstDay() {
-    }
-
-    @Test
-    public void daysBetweenMonths() {
-    }
-
-    @Test
-    public void daysUntilNow() {
+        Date t1 = DateUtil.string2Date("2018-02-20");
+        Date t2 = DateUtil.getYrMonthFirstDay(t1);
+        String str = DateUtil.date2String(t2, DateConstants.DATE_FORMAT_10);
+        Assert.equals(str, "2018-02-01", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 }

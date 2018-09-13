@@ -159,14 +159,14 @@ public final class DateUtil {
      * @param YrMonth
      * @return <br>
      */
-    public static Date getYrMonthLastDay(String YrMonth) {
-        String date = YrMonth + "01";
-        Date start = string2Date(date);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(start);
-        cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 1);
-        cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 1);
-        return cal.getTime();
+    public static Date getYrMonthLastDay(Date d) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(d);
+        calendar.add(Calendar.MONTH, 1);
+        Date nextMonthFirstDay = DateUtil.getYrMonthFirstDay(calendar.getTime());
+        calendar.setTime(nextMonthFirstDay);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return calendar.getTime();
     }
 
     /**
@@ -177,37 +177,10 @@ public final class DateUtil {
      * @param YrMonth
      * @return <br>
      */
-    public static Date getYrMonthFirstDay(String YrMonth) {
-        String date = YrMonth + "01";
-        Date start = string2Date(date);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(start);
-        return cal.getTime();
-    }
-
-    /**
-     * Description: 返回beginYrMonth月初到endYrMonth月末的时间<br>
-     * 
-     * @author liuxianan<br>
-     * @taskId <br>
-     * @param beginYrMonth
-     * @param endYrMonth
-     * @return <br>
-     */
-    public static long daysBetweenMonths(String beginYrMonth, String endYrMonth) {
-        return daysBetween(getYrMonthFirstDay(beginYrMonth), getYrMonthLastDay(endYrMonth));
-    }
-
-    /**
-     * Description: 返回Yrmonth月末到今天的时间<br>
-     * 
-     * @author liuxianan<br>
-     * @taskId <br>
-     * @param YrMonth
-     * @return <br>
-     */
-    public static long daysUntilNow(String YrMonth) {
-        return daysBetween(getYrMonthLastDay(YrMonth));
+    public static Date getYrMonthFirstDay(Date d) {
+        String yrMonth = DateUtil.date2String(d, "yyyyMM");
+        String date = yrMonth + "01";
+        return DateUtil.string2Date(date);
     }
 
     /**
