@@ -15,9 +15,6 @@ import com.hbasesoft.framework.common.Bootstrap;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.UtilException;
-
-import javassist.NotFoundException;
 
 /**
  * <Description> <br>
@@ -46,15 +43,15 @@ public class BeanUtilTest {
         System.out.println("接口中的default方法不是抽象方法。");
     }
 
-    @Test
-    public void getMethodParamNames() throws UtilException, NotFoundException {
-
-        Method[] methods = Bootstrap.class.getDeclaredMethods();
-        Method method = methods[1];
-        String[] names = BeanUtil.getMethodParamNames(method);
-        Assert.equals(names[0], "context", ErrorCodeDef.SYSTEM_ERROR_10001);
-        System.out.println("获取到了Bootstrap after方法中的参数名称");
-    }
+    // @Test
+    // public void getMethodParamNames() throws UtilException, NotFoundException {
+    //
+    // Method[] methods = Bootstrap.class.getDeclaredMethods();
+    // Method method = methods[1];
+    // String[] names = BeanUtil.getMethodParamNames(method);
+    // Assert.equals(names[0], "context", ErrorCodeDef.SYSTEM_ERROR_10001);
+    // System.out.println("获取到了Bootstrap after方法中的参数名称");
+    // }
 
     @Test
     public void getMethodSignature() {
