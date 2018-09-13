@@ -123,7 +123,9 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param connection <br>
      */
     public void connection_connectAfter(ConnectionProxy connection) {
-        connectionLog("{conn-" + connection.getId() + "} connected");
+        if (connection != null) {
+            connectionLog("{conn-" + connection.getId() + "} connected");
+        }
     }
 
     /**
@@ -269,7 +271,7 @@ public class SqlLogFilter extends FilterEventAdapter {
         double millis = nanos / (1000 * 1000);
 
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + "} executed. "
-            + millis + " millis. " + getExcuteSql((PreparedStatementProxy) statement);
+            + millis + " millis. " + getExcuteSql(statement);
         statementLog(sqlMsg);
         saveMsg2Cache(sqlMsg);
     }
@@ -314,8 +316,7 @@ public class SqlLogFilter extends FilterEventAdapter {
         double millis = nanos / (1000 * 1000);
 
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + ", rs-"
-            + resultSet.getId() + "} query executed. " + millis + " millis. "
-            + getExcuteSql((PreparedStatementProxy) statement);
+            + resultSet.getId() + "} query executed. " + millis + " millis. " + getExcuteSql(statement);
         statementLog(sqlMsg);
         saveMsg2Cache(sqlMsg);
     }
@@ -334,8 +335,7 @@ public class SqlLogFilter extends FilterEventAdapter {
         double nanos = statement.getLastExecuteTimeNano();
         double millis = nanos / (1000 * 1000);
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
-            + "} update executed. effort " + updateCount + ". " + millis + " millis. "
-            + getExcuteSql((PreparedStatementProxy) statement);
+            + "} update executed. effort " + updateCount + ". " + millis + " millis. " + getExcuteSql(statement);
 
         statementLog(sqlMsg);
         saveMsg2Cache(sqlMsg);
@@ -515,7 +515,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     @Override
     protected void statement_executeErrorAfter(StatementProxy statement, String sql, Throwable error) {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
-            + "} execute error. " + getExcuteSql((PreparedStatementProxy) statement);
+            + "} execute error. " + getExcuteSql(statement);
         statementLogError(sqlMsg, error);
         saveMsg2Cache(sqlMsg);
     }
@@ -620,14 +620,15 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param statement <br>
      * @return <br>
      */
-    private String getExcuteSql(PreparedStatementProxy statement) {
-        String sqlStr = statement.getSql();
-        for (JdbcParameter parameter : statement.getParameters().values()) {
-            int sqlType = parameter.getSqlType();
-            Object value = parameter.getValue();
-            String tempValue = Types.NULL == sqlType ? "NULL" : String.valueOf(value);
-            sqlStr = StringUtils.replaceOnce(sqlStr, "?", tempValue);
-        }
+    private String getExcuteSql(StatementProxy statement) {
+        String sqlStr = statement.getBatchSql();
+        if (statement instanceof PreparedStatementProxy)
+            for (JdbcParameter parameter : statement.getParameters().values()) {
+                int sqlType = parameter.getSqlType();
+                Object value = parameter.getValue();
+                String tempValue = Types.NULL == sqlType ? "NULL" : String.valueOf(value);
+                sqlStr = StringUtils.replaceOnce(sqlStr, "?", tempValue);
+            }
 
         return sqlStr;
     }

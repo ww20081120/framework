@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.sql.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -84,8 +85,13 @@ public final class DataSourceUtil {
             ds.setDbType(dbParam.getDbType());
 
             ds.setUrl(dbParam.getUrl());
-            ds.setUsername(dbParam.getUsername());
-            ds.setPassword(dbParam.getPassword());
+            if (StringUtils.isNotEmpty(dbParam.getUsername())) {
+                ds.setUsername(dbParam.getUsername());
+                ds.setPassword(dbParam.getPassword());
+            }
+            if (StringUtils.isNotEmpty(dbParam.getDriverClass())) {
+                ds.setDriverClassName(dbParam.getDriverClass());
+            }
             ds.setInitialSize(dbParam.getInitialSize());
             ds.setMaxActive(dbParam.getMaxActive());
             ds.setMinIdle(dbParam.getMinIdle());
@@ -110,7 +116,7 @@ public final class DataSourceUtil {
                 if (ds != null) {
                     ds.close();
                 }
-                throw new InitializationException(ErrorCodeDef.DB_DATASOURCE_NOT_SET, e);
+                throw new InitializationException(ErrorCodeDef.DB_DATASOURCE_NOT_SET, e, name);
             }
         }
         return dataSource;
