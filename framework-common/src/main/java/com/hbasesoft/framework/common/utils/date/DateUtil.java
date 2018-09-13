@@ -10,15 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.engine.JavaScriptUtil;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -34,10 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
-    /**
-     * logger
-     */
-    private static Logger logger = new Logger(DateUtil.class);
+    private static final int ONE_DAY_MILISECOND = 1000 * 3600 * 24;
 
     /**
      * Description: <br>
@@ -66,6 +56,9 @@ public final class DateUtil {
                 break;
             case 14:
                 date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_14);
+                break;
+            case 17:
+                date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_17);
                 break;
             case 19:
                 date = string2Date(dateStr,
@@ -149,39 +142,12 @@ public final class DateUtil {
     }
 
     /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param date <br>
-     * @param formatStr <br>
-     * @return <br>
-     */
-    public static String getDatetimeFormat(Date date, String formatStr) {
-        if (StringUtils.isNotEmpty(formatStr)) {
-            Map<String, Object> param = new HashMap<String, Object>();
-            param.put("date", date);
-            Object result = null;
-            try {
-                result = JavaScriptUtil.eval(formatStr, param);
-            }
-            catch (UtilException e) {
-                logger.warn(e.getMessage(), e);
-            }
-            return result == null ? GlobalConstants.BLANK : result.toString();
-        }
-        else {
-            return date2String(date);
-        }
-    }
-
-    /**
      * 获取开始日期到今天的间隔天数
      * 
      * @param startDate 开始时间
      * @return 相差天数
      */
-    public static long daysBetween(Date startDate) {
+    public static int daysBetween(Date startDate) {
         return daysBetween(startDate, getCurrentDate());
     }
 
@@ -245,13 +211,24 @@ public final class DateUtil {
     }
 
     /**
-     * 获取两个日期之间间隔的天数
+     * 获取一年内，两个日期之间间隔的天数
      * 
      * @param startDate 开始时间
      * @param endDate 结束时间
      * @return 相差天数
      */
-    public static long daysBetween(Date startDate, Date endDate) {
-        return (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24);
+    public static int daysBetween(Date startDate, Date endDate) {
+        long s1 = startDate.getTime();
+        long s2 = endDate.getTime();
+        long c = s1 - s2;
+        if (c <= ONE_DAY_MILISECOND) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startDate);
+            int d1 = calendar.get(Calendar.DAY_OF_YEAR);
+            calendar.setTime(endDate);
+            int d2 = calendar.get(Calendar.DAY_OF_YEAR);
+            return d1 == d2 ? 0 : 1;
+        }
+        return Math.abs(new Double(Math.floor((s2 - s1) / ONE_DAY_MILISECOND)).intValue());
     }
 }

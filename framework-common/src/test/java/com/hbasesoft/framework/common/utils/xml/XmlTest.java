@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.test.common.io;
+package com.hbasesoft.framework.common.utils.xml;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,7 +27,7 @@ import lombok.Setter;
  * @taskId <br>
  * @CreateDate 2018年6月7日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.test.common.io <br>
+ * @see com.hbasesoft.framework.common <br>
  */
 public class XmlTest {
 

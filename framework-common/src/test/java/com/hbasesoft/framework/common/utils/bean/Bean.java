@@ -3,12 +3,14 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.test.common.io;
+package com.hbasesoft.framework.common.utils.bean;
 
-import org.junit.Test;
+import java.io.Serializable;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <Description> <br>
@@ -16,14 +18,21 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2018年4月19日 <br>
+ * @CreateDate 2018年9月12日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.test.common.io <br>
+ * @see com.hbasesoft.framework.common.utils.bean <br>
  */
-public class ErrorMessageTest {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Bean implements Serializable {
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 953343907289102121L;
 
-    @Test
-    public void testMessage() {
-        System.out.println(PropertyHolder.getErrorMessage(ErrorCodeDef.CAN_NOT_FIND_VER_NAME_10003, "张三丰"));
-    }
+    private String name;
+
+    private int age;
 }

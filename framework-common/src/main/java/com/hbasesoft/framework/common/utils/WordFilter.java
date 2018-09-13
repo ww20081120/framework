@@ -2,9 +2,7 @@ package com.hbasesoft.framework.common.utils;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -74,7 +72,7 @@ public class WordFilter {
 
     // 返回是否包含需要过滤的词
     @SuppressWarnings("unchecked")
-    public boolean isHasFilterWord(String info) {
+    public boolean hasFilterWord(String info) {
         if (info == null || info.length() == 0) {
             return false;
         }
@@ -211,35 +209,5 @@ public class WordFilter {
             }
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-
-        WordFilter filter = new WordFilter();
-        Set<String> sss = new HashSet<String>();
-
-        sss.add("南京");
-        sss.add("上海");
-        sss.add("北京");
-        sss.add("天津");
-        sss.add("合肥");
-        sss.add("深圳");
-
-        // for (int i = 0; i < 1000000; i++) {
-        // sss.add(CommonUtil.getRandomChar(3));
-        // }
-        //
-        //
-        filter.init(sss);
-        // StringBuilder sb = new StringBuilder();
-        // for (int i = 0; i < 10000; i++) {
-        // sb.append(CommonUtil.getRandomChar(3));
-        // }
-        //
-        // String sssss = sb.toString();
-
-        long s = System.currentTimeMillis();
-
-        System.out.println(filter.getKeyword("我家住在南京南京的天安门上") + ":" + (System.currentTimeMillis() - s));
     }
 }
