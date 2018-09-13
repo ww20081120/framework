@@ -1,0 +1,18 @@
+project: #项目信息
+ name: db-demo
+  
+spring: #应用配置
+  application:
+    name: ${project.name}
+    
+cache: #缓存配置
+  model: SIMPLE
+  
+master: #主数据库配置
+ db:
+  type: h2
+  driverClass: org.h2.Driver
+  url: jdbc:h2:~/test
+ hibernate:
+  dialect: org.hibernate.dialect.H2Dialect
+  

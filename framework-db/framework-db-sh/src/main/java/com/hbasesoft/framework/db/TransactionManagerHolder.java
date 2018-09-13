@@ -90,9 +90,12 @@ public final class TransactionManagerHolder {
                 bean.setDataSource(dataSource);
                 Map<String, String> map = PropertyHolder.getProperties();
                 Properties properties = new Properties();
+                int prefixLength = dbCode.length() + 1;
+                String prefix = dbCode + ".hibernate";
                 for (Entry<String, String> entry : map.entrySet()) {
-                    if (entry.getKey().startsWith("db.hibernate")) {
-                        properties.setProperty(entry.getKey().substring(3, entry.getKey().length()), entry.getValue());
+                    if (entry.getKey().startsWith(prefix)) {
+                        properties.setProperty(entry.getKey().substring(prefixLength, entry.getKey().length()),
+                            entry.getValue());
                     }
                 }
                 bean.setHibernateProperties(properties);

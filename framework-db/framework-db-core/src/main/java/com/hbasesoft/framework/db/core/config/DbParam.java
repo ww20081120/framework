@@ -110,6 +110,8 @@ public class DbParam extends BaseEntity {
 
     private String filters = "stat";
 
+    private String driverClass;
+
     public DbParam(String prefix, String url, String username, String password) {
         setUrl(url);
         setUsername(username);
@@ -121,9 +123,9 @@ public class DbParam extends BaseEntity {
         this.url = PropertyHolder.getProperty(prefix + ".db.url");
         Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET);
         this.username = PropertyHolder.getProperty(prefix + ".db.username");
-        Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
+        // Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
         String password = PropertyHolder.getProperty(prefix + ".db.password");
-        Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
+        // Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
         setPassword(password);
         init(prefix);
     }
@@ -146,6 +148,7 @@ public class DbParam extends BaseEntity {
         this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.removeAbandoned", true);
         this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout", 1800);
         this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.logAbandoned", true);
+        this.driverClass = PropertyHolder.getProperty(prefix + ".db.driverClass");
         this.filters = PropertyHolder.getProperty(prefix + ".db.filters", "stat");
     }
 
@@ -302,6 +305,14 @@ public class DbParam extends BaseEntity {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getDriverClass() {
+        return driverClass;
+    }
+
+    public void setDriverClass(String driverClass) {
+        this.driverClass = driverClass;
     }
 
 }

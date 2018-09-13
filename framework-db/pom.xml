@@ -11,5 +11,6 @@
   	<module>framework-db-core</module>
   	<module>framework-db-sh</module>
   	<module>framework-db-jpa</module>
+  	<module>framework-db-demo</module>
   </modules>
 </project>
