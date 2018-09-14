@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.apache.commons.io.IOUtils;
 
@@ -164,7 +165,7 @@ public final class IOUtil {
      * @return <br>
      * @throws IOException <br>
      */
-    public static <T> List<T> readFile(String filePath, LineTransfer<T> transfer) throws IOException {
+    public static <T> List<T> readFile(String filePath, Function<String, ? extends T> transfer) throws IOException {
         return readFile(new File(filePath), transfer);
     }
 
@@ -184,7 +185,7 @@ public final class IOUtil {
         return null;
     }
 
-    public static <T> List<T> readFile(File file, LineTransfer<T> transfer) {
+    public static <T> List<T> readFile(File file, Function<String, ? extends T> transfer) {
         List<T> list = new ArrayList<T>();
         if (file.exists() && file.isFile()) {
             BufferedReader in = null;
@@ -192,7 +193,7 @@ public final class IOUtil {
             try {
                 in = new BufferedReader(new FileReader(file));
                 while ((line = in.readLine()) != null) {
-                    T t = transfer.transfer(line);
+                    T t = transfer.apply(line);
                     if (t != null) {
                         list.add(t);
                     }
@@ -206,6 +207,52 @@ public final class IOUtil {
             }
         }
         return list;
+    }
+
+    public static void batchProcessFile(File file, BatchProcessor<String> batchProcessor) {
+        batchProcessFile(file, s -> s, batchProcessor);
+    }
+
+    public static <T> void batchProcessFile(File file, Function<String, ? extends T> transfer,
+        BatchProcessor<T> batchProcessor) {
+        batchProcessFile(file, transfer, batchProcessor, 10000);
+    }
+
+    public static <T> void batchProcessFile(File file, Function<String, ? extends T> transfer,
+        BatchProcessor<T> batchProcessor, int pageSize) {
+        if (file.exists() && file.isFile()) {
+            BufferedReader in = null;
+            String line = null;
+            try {
+                in = new BufferedReader(new FileReader(file));
+                List<T> list = new ArrayList<>();
+                int i = 0;
+                while ((line = in.readLine()) != null) {
+                    T t = transfer.apply(line);
+                    if (t != null) {
+                        list.add(t);
+                    }
+
+                    if (list.size() >= pageSize) {
+                        boolean result = batchProcessor.process(list, ++i, pageSize);
+                        list.clear();
+                        if (!result) {
+                            break;
+                        }
+                    }
+                }
+                if (list.size() != 0) {
+                    batchProcessor.process(list, ++i, pageSize);
+                    list.clear();
+                }
+            }
+            catch (Exception e) {
+                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+            }
+            finally {
+                IOUtils.closeQuietly(in);
+            }
+        }
     }
 
     /**

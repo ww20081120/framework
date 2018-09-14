@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.io;
 
+import java.util.List;
+
 /**
  * <Description> <br>
  * 
@@ -16,6 +18,6 @@ package com.hbasesoft.framework.common.utils.io;
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
 @FunctionalInterface
-public interface LineTransfer<T> {
-    T transfer(String line);
+public interface BatchProcessor<T> {
+    boolean process(List<T> beanList, int pageIndex, int pageSize);
 }

@@ -196,4 +196,8 @@ public interface IGenericBaseDao {
      * @throws DaoException <br>
      */
     <T> void saveOrUpdate(T entity) throws DaoException;
+
+    void clear();
+
+    void flush();
 }
