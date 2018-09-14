@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -22,7 +23,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
 public class StudentEntity extends BaseEntity {
 
     public static final String NAME = "name";
-    
+
     public static final String AGE = "age";
 
     /**
@@ -42,6 +43,12 @@ public class StudentEntity extends BaseEntity {
 
     @Column(name = "AGE")
     private int age;
+
+    @Transient
+    private Integer score;
+
+    @Transient
+    private String courseName;
 
     public String getId() {
         return id;
@@ -65,6 +72,22 @@ public class StudentEntity extends BaseEntity {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
 }

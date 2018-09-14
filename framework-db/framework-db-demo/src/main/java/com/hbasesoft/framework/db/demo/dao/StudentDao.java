@@ -5,9 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.demo.dao;
 
+import java.util.List;
+
 import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
+import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
 
 /**
@@ -31,4 +34,8 @@ public interface StudentDao extends IGenericBaseDao {
 
     @Sql("select count(1) from t_student")
     int countStudentSize();
+
+    @Sql(bean = StudentEntity.class)
+    List<StudentEntity> queryStudentCourse(@Param("entity") StudentEntity studentEntity,
+        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);
 }

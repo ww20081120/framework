@@ -68,6 +68,26 @@ public class DaoTester {
     }
 
     @Test
+    public void queryStudentCourse() {
+        List<StudentEntity> entityes = studentDao.queryStudentCourse(null, 1, 5);
+        Assert.isTrue(entityes.size() == 5, ErrorCodeDef.SYSTEM_ERROR_10001);
+
+        entityes = studentDao.queryStudentCourse(null, 1, 3);
+        Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
+
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(19);
+        entityes = studentDao.queryStudentCourse(entity, 1, 10);
+        Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
+
+        entity = new StudentEntity();
+        entity.setAge(18);
+        entity.setName("张%");
+        entityes = studentDao.queryStudentCourse(entity, 1, 10);
+        Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
+    }
+
+    @Test
     public void save() {
         StudentEntity entity = new StudentEntity();
         entity.setAge(16);
