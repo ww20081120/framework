@@ -9,6 +9,11 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * <Description> T_MEM_ACCOUNT的Entity<br>
  * 
@@ -18,17 +23,19 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
-@Entity(name = "T_STUDENT")
-public class StudentEntity extends BaseEntity {
-
-    public static final String NAME = "name";
-    
-    public static final String AGE = "age";
+@Entity(name = "T_COURSE")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourseEntity extends BaseEntity {
 
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = -5443184537634014662L;
+    private static final long serialVersionUID = 3095712295731014196L;
+
+    public static final String COURSE_NAME = "courseName";
 
     /** ID */
     @Id
@@ -37,34 +44,10 @@ public class StudentEntity extends BaseEntity {
     @Column(name = "ID")
     private String id;
 
-    @Column(name = "NAME")
-    private String name;
+    @Column(name = "COURSE_NAME")
+    private String courseName;
 
-    @Column(name = "AGE")
-    private int age;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
+    @Column(name = "REMARK")
+    private String remark;
 
 }

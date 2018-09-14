@@ -3,7 +3,10 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.common.utils.io;
+package com.hbasesoft.framework.db.demo.dao;
+
+import com.hbasesoft.framework.db.Dao;
+import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
 
 /**
  * <Description> <br>
@@ -11,11 +14,10 @@ package com.hbasesoft.framework.common.utils.io;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年2月6日 <br>
+ * @CreateDate 2018年9月13日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.common.utils.io <br>
+ * @see com.hbasesoft.framework.db.demo.dao <br>
  */
-@FunctionalInterface
-public interface LineTransfer<T> {
-    T transfer(String line);
+@Dao
+public interface CourseDao extends IGenericBaseDao {
 }

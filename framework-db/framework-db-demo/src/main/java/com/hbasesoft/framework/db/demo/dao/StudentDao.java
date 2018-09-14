@@ -29,4 +29,6 @@ public interface StudentDao extends IGenericBaseDao {
         + "where sc.course_id = c.id and sc.score >= 60 and c.course_name = :courseName")
     int countCoursePass(@Param("courseName") String courseName);
 
+    @Sql("select count(1) from t_student")
+    int countStudentSize();
 }

@@ -19,7 +19,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -29,6 +28,7 @@ import org.hibernate.transform.Transformers;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.DaoException;
@@ -104,7 +104,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
                 query.setMaxResults(param.getPageSize());
 
-                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(*) FROM (" + sql + ") QUERY_DATA__");
+                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(1) FROM (" + sql + ") QUERY_DATA__");
                 setParamMap(param.getParamMap(), countQuery);
                 resultList = new PagerList();
                 resultList.setPageIndex(param.getPageIndex());
@@ -114,7 +114,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             }
 
             if (isPager) {
-                resultList.addAll(query.list());
+                if (resultList.getTotalCount() > 0
+                    && (resultList.getPageIndex() - 1) * resultList.getPageSize() < resultList.getTotalCount())
+                    resultList.addAll(query.list());
                 return resultList;
             }
             else if (List.class.isAssignableFrom(param.getReturnType())) {
@@ -220,27 +222,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         return criteria;
     }
 
-    /**
-     * 创建Criteria对象，有排序功能。
-     *
-     * @param <T>
-     * @param entityClass
-     * @param orderBy
-     * @param isAsc
-     * @param criterions
-     * @return
-     */
-    private <T> Criteria createCriteria(Class<T> entityClass, boolean isAsc, Criterion... criterions) {
-        Criteria criteria = createCriteria(entityClass, criterions);
-        if (isAsc) {
-            criteria.addOrder(Order.asc("asc"));
-        }
-        else {
-            criteria.addOrder(Order.desc("desc"));
-        }
-        return criteria;
-    }
-
     protected Session getSession() {
         // 事务必须是开启的(Required)，否则获取不到
         return TransactionManagerHolder.getSessionFactory().getCurrentSession();
@@ -259,7 +240,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> Serializable save(T entity) throws DaoException {
         try {
             Serializable id = getSession().save(entity);
-            getSession().flush();
             logger.info("保存实体成功," + entity.getClass().getName());
             return id;
         }
@@ -279,7 +259,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void saveOrUpdate(T entity) throws DaoException {
         try {
             getSession().saveOrUpdate(entity);
-            getSession().flush();
             logger.info("添加或更新成功," + entity.getClass().getName());
         }
         catch (RuntimeException e) {
@@ -300,7 +279,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void delete(T entity) throws DaoException {
         try {
             getSession().delete(entity);
-            getSession().flush();
             logger.info("删除成功," + entity.getClass().getName());
         }
         catch (RuntimeException e) {
@@ -319,15 +297,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public <T> void batchSave(List<T> entitys) throws DaoException {
+        if (entitys.size() > 1000) {
+            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+        }
         for (int i = 0; i < entitys.size(); i++) {
             getSession().save(entitys.get(i));
-            if (i % 20 == 0) {
-                // 20个对象后才清理缓存，写入数据库
+            if (i % 100 == 0) {
+                // 1000个对象后才清理缓存，写入数据库
                 getSession().flush();
                 getSession().clear();
             }
         }
-        // 最后清理一下----防止大于20小于40的不保存
+        // 最后清理一下----防止大于1000小于2000的不保存
         getSession().flush();
         getSession().clear();
     }
@@ -432,7 +413,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException {
         Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
         delete(get(entityName, id));
-        getSession().flush();
     }
 
     /**
@@ -479,7 +459,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T> void updateEntity(T pojo) throws DaoException {
         getSession().update(pojo);
-        getSession().flush();
     }
 
     /**
@@ -495,11 +474,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T> List<T> findByQueryString(String hql) throws DaoException {
         Query queryObject = getSession().createQuery(hql);
-        List<T> list = queryObject.list();
-        if (list.size() > 0) {
-            getSession().flush();
-        }
-        return list;
+        return queryObject.list();
     }
 
     /**
@@ -531,25 +506,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> List<T> findListbySql(String sql) throws DaoException {
         Query querys = getSession().createSQLQuery(sql);
         return querys.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClass
-     * @param propertyName
-     * @param value
-     * @param isAsc
-     * @return
-     * @throws DaoException <br>
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
-        throws DaoException {
-        return createCriteria(entityClass, isAsc, Restrictions.eq(propertyName, value)).list();
     }
 
     /**
@@ -715,5 +671,39 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             }
         }
 
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Override
+    public void clear() {
+        try {
+            getSession().clear();
+        }
+        catch (Exception e) {
+            throw new DaoException(e);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Override
+    public void flush() {
+        try {
+            getSession().flush();
+        }
+        catch (Exception e) {
+            throw new DaoException(e);
+        }
     }
 }
