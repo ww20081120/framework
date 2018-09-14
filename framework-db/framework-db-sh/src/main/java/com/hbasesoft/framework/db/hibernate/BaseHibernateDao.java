@@ -19,7 +19,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -219,27 +218,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         Criteria criteria = getSession().createCriteria(entityClass);
         for (Criterion c : criterions) {
             criteria.add(c);
-        }
-        return criteria;
-    }
-
-    /**
-     * 创建Criteria对象，有排序功能。
-     *
-     * @param <T>
-     * @param entityClass
-     * @param orderBy
-     * @param isAsc
-     * @param criterions
-     * @return
-     */
-    private <T> Criteria createCriteria(Class<T> entityClass, boolean isAsc, Criterion... criterions) {
-        Criteria criteria = createCriteria(entityClass, criterions);
-        if (isAsc) {
-            criteria.addOrder(Order.asc("asc"));
-        }
-        else {
-            criteria.addOrder(Order.desc("desc"));
         }
         return criteria;
     }
@@ -450,6 +428,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         for (Object entity : entities) {
             getSession().delete(entity);
         }
+        getSession().flush();
     }
 
     /**
@@ -466,6 +445,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         for (String id : ids) {
             getSession().delete(get(entityName, id));
         }
+        getSession().flush();
     }
 
     /**
@@ -526,25 +506,6 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> List<T> findListbySql(String sql) throws DaoException {
         Query querys = getSession().createSQLQuery(sql);
         return querys.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClass
-     * @param propertyName
-     * @param value
-     * @param isAsc
-     * @return
-     * @throws DaoException <br>
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
-        throws DaoException {
-        return createCriteria(entityClass, isAsc, Restrictions.eq(propertyName, value)).list();
     }
 
     /**

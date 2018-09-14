@@ -8,10 +8,14 @@ package com.hbasesoft.framework.db.demo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +28,10 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
+import com.hbasesoft.framework.db.core.utils.PagerList;
+import com.hbasesoft.framework.db.demo.dao.CourseDao;
 import com.hbasesoft.framework.db.demo.dao.StudentDao;
+import com.hbasesoft.framework.db.demo.entity.CourseEntity;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 
 /**
@@ -44,6 +51,9 @@ public class DaoTester {
 
     @Resource
     private StudentDao studentDao;
+
+    @Resource
+    private CourseDao courseDao;
 
     @Before
     public void createTable() {
@@ -128,65 +138,127 @@ public class DaoTester {
         Assert.isTrue(s2 - s1 == 200000, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void get() {
+        StudentEntity entity = studentDao.get(StudentEntity.class, "1");
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
-    public void getEntity() {
-    }
-
+    @Test
     public void findUniqueByProperty() {
+        CourseEntity entity = courseDao.findUniqueByProperty(CourseEntity.class, CourseEntity.COURSE_NAME, "语文");
+        Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void findByProperty() {
+        List<StudentEntity> entities = studentDao.findByProperty(StudentEntity.class, StudentEntity.AGE, 18);
+        Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
     public void loadAll() {
-        System.out.println(studentDao.loadAll(StudentEntity.class));
+        List<StudentEntity> entities = studentDao.loadAll(StudentEntity.class);
+        int size = studentDao.countStudentSize();
+        Assert.isTrue(entities.size() == size, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void deleteEntityById() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(16);
+        entity.setName("张三丰");
+
+        studentDao.save(entity);
+        String id = entity.getId();
+
+        studentDao.deleteEntityById(StudentEntity.class, id);
+
+        entity = studentDao.get(StudentEntity.class, id);
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void deleteAllEntitie() {
+        List<StudentEntity> entities = studentDao.loadAll(StudentEntity.class);
+        studentDao.deleteAllEntitie(entities);
+        int size = studentDao.countStudentSize();
+        Assert.isTrue(size == 0, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void deleteAllEntitiesByIds() {
+        int s1 = studentDao.countStudentSize();
+        studentDao.deleteAllEntitiesByIds(StudentEntity.class, Arrays.asList("1", "2", "3"));
+        int s2 = studentDao.countStudentSize();
+        Assert.isTrue(s1 - s2 == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void updateEntity() {
+        StudentEntity entity = studentDao.get(StudentEntity.class, "1");
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
+        entity.setName("李四");
+        studentDao.updateEntity(entity);
+
+        StudentEntity e2 = studentDao.get(StudentEntity.class, "1");
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void findByQueryString() {
+        List<StudentEntity> entities = studentDao
+            .findByQueryString("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+        Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void updateBySqlString() {
+        StudentEntity entity = studentDao.get(StudentEntity.class, "1");
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
+
+        studentDao.updateBySqlString("update t_student set name = '李四' where id = '1'");
+
+        // 因为上面已经查询过一次，hibernate做了缓存，在事务未提交前，操作的都是缓存，所以得清理掉， 才能从数据库中重新查询。
+        studentDao.clear();
+
+        StudentEntity e2 = studentDao.get(StudentEntity.class, "1");
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
-    public void findListbySql() {
-    }
-
-    public void findByPropertyisOrder() {
-    }
-
+    @Test
     public void singleResult() {
+        StudentEntity entity = studentDao
+            .singleResult("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
+
     }
 
+    @Test
     public void getPageList() {
+        DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
+        PagerList<StudentEntity> entities = studentDao.getPageList(criteria, 1, 1);
+        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void getListByCriteriaQuery() {
+        DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
+        criteria.add(Restrictions.eq(StudentEntity.AGE, 18));
+        List<StudentEntity> es1 = studentDao.getListByCriteriaQuery(criteria);
+
+        List<StudentEntity> es2 = studentDao.findByProperty(StudentEntity.class, StudentEntity.AGE, 18);
+        Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    @Test
     public void getCriteriaQuery() {
-    }
+        DetachedCriteria criteria = DetachedCriteria.forClass(CourseEntity.class);
+        criteria.add(Restrictions.eq(CourseEntity.COURSE_NAME, "语文"));
+        CourseEntity e1 = courseDao.getCriteriaQuery(criteria);
 
-    public void findHql() {
-    }
+        CourseEntity e2 = courseDao.findUniqueByProperty(CourseEntity.class, CourseEntity.COURSE_NAME, "语文");
 
-    public void executeProcedure() {
-    }
-
-    public void saveOrUpdate() {
+        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 }

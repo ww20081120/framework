@@ -136,16 +136,6 @@ public interface IGenericBaseDao {
      */
     <T> List<T> findListbySql(String sql) throws DaoException;
 
-    /**
-     * 通过属性称获取实体带排序
-     * 
-     * @param <T>
-     * @param clas
-     * @return
-     */
-    <T> List<T> findByPropertyisOrder(Class<T> entityClass, String propertyName, Object value, boolean isAsc)
-        throws DaoException;
-
     <T> T singleResult(String hql) throws DaoException;
 
     /**
