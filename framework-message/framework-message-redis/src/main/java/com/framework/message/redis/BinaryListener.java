@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.framework.message.redis;
 
-import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
 import redis.clients.jedis.BinaryJedisPubSub;
@@ -39,8 +37,6 @@ public class BinaryListener extends BinaryJedisPubSub {
      */
     @Override
     public void onMessage(byte[] channel, byte[] message) {
-        LoggerUtil.info("redis on message channel[{0}] message[{1}]", DataUtil.byte2HexStr(channel),
-            DataUtil.byte2HexStr(message));
         subscriber.onMessage(new String(channel), message);
     }
 

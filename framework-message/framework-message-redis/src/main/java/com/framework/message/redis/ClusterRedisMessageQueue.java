@@ -7,6 +7,8 @@ package com.framework.message.redis;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+
 /**
  * <Description> <br>
  * 
@@ -57,6 +59,11 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      */
     @Override
     public List<byte[]> pop(int timeout, String key) {
-        return RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
+
+        List<byte[]> result = RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
+        if (CollectionUtils.isNotEmpty(result) && result.size() >= 2) {
+            result.remove(0);
+        }
+        return result;
     }
 }
