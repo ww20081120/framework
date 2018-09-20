@@ -7,6 +7,7 @@ package com.framework.message.redis;
 
 import java.util.List;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.message.core.MessageQueue;
 
 /**
@@ -71,6 +72,10 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      */
     @Override
     public List<byte[]> pop(int timeout, String key) {
-        return RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
+        List<byte[]> result = RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
+        if (CommonUtil.isNotEmpty(result) && result.size() >= 2) {
+            result.remove(0);
+        }
+        return result;
     }
 }

@@ -8,6 +8,7 @@ package com.framework.message.redis;
 import java.util.List;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.message.core.MessageQueue;
 
@@ -102,7 +103,11 @@ public class RedisMessageQueue implements MessageQueue {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();
-            return jedis.brpop(timeout, key.getBytes());
+            List<byte[]> result = jedis.brpop(timeout, key.getBytes());
+            if (CommonUtil.isNotEmpty(result) && result.size() >= 2) {
+                result.remove(0);
+            }
+            return result;
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
