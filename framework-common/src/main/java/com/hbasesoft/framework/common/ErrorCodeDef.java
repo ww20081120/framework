@@ -393,4 +393,10 @@ public interface ErrorCodeDef {
 
     /** 未找到状态所对应的事件 */
     int EVENT_NOT_FOUND = 20067;
+
+    /** JDK 序列化失败 */
+    int JDK_SERIALIZE_ERROR = 20068;
+    
+    /** JDK 反序列化失败 */
+    int JDK_UNSERIALIZE_ERROR = 20069;
 }

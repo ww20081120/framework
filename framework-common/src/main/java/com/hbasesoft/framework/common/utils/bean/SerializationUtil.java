@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtostuffIOUtil;
@@ -56,7 +57,7 @@ public final class SerializationUtil {
                 }
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
+                throw new UtilException(e, ErrorCodeDef.SERIALIZE_ERROR, obj);
             }
 
         }
@@ -82,7 +83,7 @@ public final class SerializationUtil {
             bytes = byteArrayOutputStream.toByteArray();
         }
         catch (IOException e) {
-            throw new UtilException(ErrorCodeDef.SERIALIZE_ERROR, e);
+            throw new UtilException(e, ErrorCodeDef.JDK_SERIALIZE_ERROR, obj);
         }
         finally {
             IOUtils.closeQuietly(out);
@@ -105,7 +106,7 @@ public final class SerializationUtil {
                 }
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
+                throw new UtilException(e, ErrorCodeDef.UNSERIALIZE_ERROR, DataUtil.byte2HexStr(data));
             }
         }
         return result;
@@ -130,7 +131,7 @@ public final class SerializationUtil {
                 result = in.readObject();
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR, e);
+                throw new UtilException(e, ErrorCodeDef.JDK_UNSERIALIZE_ERROR, DataUtil.byte2HexStr(data));
             }
             finally {
                 if (in != null) {
@@ -138,7 +139,7 @@ public final class SerializationUtil {
                         in.close();
                     }
                     catch (IOException e) {
-                        throw new UtilException(ErrorCodeDef.UNSERIALIZE_ERROR);
+                        throw new UtilException(ErrorCodeDef.JDK_UNSERIALIZE_ERROR);
                     }
                 }
             }
