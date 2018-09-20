@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.framework.message.redis;
 
+import java.util.Arrays;
+
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
 import redis.clients.jedis.BinaryJedisPubSub;
@@ -37,7 +39,9 @@ public class BinaryListener extends BinaryJedisPubSub {
      */
     @Override
     public void onMessage(byte[] channel, byte[] message) {
-        subscriber.onMessage(new String(channel), message);
+        if (!Arrays.equals(channel, message)) {
+            subscriber.onMessage(new String(channel), message);
+        }
     }
 
     /**
