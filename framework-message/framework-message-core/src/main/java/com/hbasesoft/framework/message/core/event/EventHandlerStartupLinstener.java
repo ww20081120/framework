@@ -36,7 +36,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
     private static final Logger LOGGER = new Logger("EventHandlerLogger");
 
-    private ArrayBlockingQueue<Consumer> consumerQueue = new ArrayBlockingQueue<Consumer>(10000);
+    private ArrayBlockingQueue<Consumer> consumerQueue = new ArrayBlockingQueue<Consumer>(100000);
 
     private boolean flag = true;
 
@@ -89,8 +89,8 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                             if (CommonUtil.isNotEmpty(datas)) {
                                 for (byte[] data : datas) {
                                     String transId = CommonUtil.getTransactionID();
-                                    LOGGER.info("receive message by thread[{0}], transId[{1}]",
-                                        Thread.currentThread().getId(), transId);
+                                    LOGGER.info("receive message by thread[{0}], transId[{1}], channel[{2}]",
+                                        Thread.currentThread().getId(), transId, channel);
                                     consumerQueue.put(new Consumer(transId, channel, linsener, data));
                                 }
                             }
