@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -9,7 +10,7 @@
 	<artifactId>framework-message-rocketMQ</artifactId>
 	<name>framework message rocketMQ</name>
 	<description>rocket message queue </description>
-    
+
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -18,9 +19,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client -->
 		<dependency>
-		    <groupId>org.apache.rocketmq</groupId>
-		    <artifactId>rocketmq-client</artifactId>
-		    <version>4.1.0-incubating</version>
-		</dependency>		
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+			<version>4.3.0</version>
+		</dependency>
 	</dependencies>
 </project>
