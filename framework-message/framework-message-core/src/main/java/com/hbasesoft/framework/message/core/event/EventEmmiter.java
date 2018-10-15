@@ -48,4 +48,9 @@ public final class EventEmmiter {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
         LoggerUtil.info("触发[event={0},data={1}]事件通知", event, data);
     }
+
+    public static void emmit(String event, EventData data, long delayTime) {
+        MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), delayTime);
+        LoggerUtil.info("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, delayTime);
+    }
 }
