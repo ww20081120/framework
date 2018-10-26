@@ -68,6 +68,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             SQlCheckUtil.checkSql(sql);
 
             Session session = getSession();
+            session.flush();
 
             SQLQuery query = session.createSQLQuery(sql);
 
@@ -173,6 +174,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         try {
             SQlCheckUtil.checkSql(sql);
             Session session = getSession();
+            session.flush();
+
             SQLQuery query = session.createSQLQuery(sql);
             setParamMap(param.getParamMap(), query);
             return query.executeUpdate();
@@ -191,6 +194,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
         try {
             Session session = getSession();
+            session.flush();
+
             int[] result = new int[sqls.length];
             SQLQuery query;
             for (int i = 0; i < sqls.length; i++) {
@@ -341,12 +346,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException {
-        Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
-        T t = (T) getSession().get(entityName, id);
-        if (t != null) {
-            getSession().flush();
-        }
-        return t;
+        return get(entityName, id);
     }
 
     /**
@@ -488,7 +488,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public int updateBySqlString(String sql) throws DaoException {
-        Query querys = getSession().createSQLQuery(sql);
+        Session session = getSession();
+        session.flush();
+
+        Query querys = session.createSQLQuery(sql);
         return querys.executeUpdate();
     }
 
@@ -504,7 +507,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> findListbySql(String sql) throws DaoException {
-        Query querys = getSession().createSQLQuery(sql);
+        Session session = getSession();
+        session.flush();
+        Query querys = session.createSQLQuery(sql);
         return querys.list();
     }
 
@@ -611,7 +616,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException {
-        SQLQuery sqlQuery = getSession().createSQLQuery(procedureSql);
+        Session session = getSession();
+        session.flush();
+        SQLQuery sqlQuery = session.createSQLQuery(procedureSql);
 
         for (int i = 0; i < params.length; i++) {
             sqlQuery.setParameter(i, params[i]);
@@ -636,6 +643,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     @Override
     public <T> void batchExecute(String sql, Collection<Object[]> objcts, int commitNumber) throws DaoException {
+        Session session = getSession();
+        session.flush();
+        
         commitNumber = commitNumber == 0 ? 1000 : commitNumber;
         Connection conn = null;
         try {

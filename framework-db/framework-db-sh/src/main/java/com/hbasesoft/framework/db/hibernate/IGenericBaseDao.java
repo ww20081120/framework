@@ -50,6 +50,7 @@ public interface IGenericBaseDao {
      * @param id
      * @return
      */
+    @Deprecated
     <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException;
 
     /**
