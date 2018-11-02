@@ -7,7 +7,9 @@ package com.hbasesoft.framework.wechat.handler;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -18,12 +20,17 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.URLUtil;
+import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.wechat.bean.MediaUploadPojo;
 import com.hbasesoft.framework.wechat.bean.MediatemplatePojo;
 import com.hbasesoft.framework.wechat.bean.MenuentityPojo;
 import com.hbasesoft.framework.wechat.bean.NewsitemPojo;
+import com.hbasesoft.framework.wechat.bean.QrcodeParamsPojo;
 import com.hbasesoft.framework.wechat.bean.TexttemplatePojo;
 import com.hbasesoft.framework.wechat.bean.resp.Article;
 import com.hbasesoft.framework.wechat.bean.resp.Image;
@@ -60,7 +67,7 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
 //    @Value("${server.wx.url}")
 //    private String serverPath;
 
-    protected String getTextMsg(String templateId, String fromUserName, String toUserName) throws ServiceException {
+    protected String getTextMsg(String templateId, String fromUserName, String toUserName, String eventKey, String appId) throws ServiceException {
         TexttemplatePojo textTemplate = wechatDao.get(TexttemplatePojo.class, templateId);
         String content = textTemplate.getContent();
         TextMessageResp textMessage = new TextMessageResp();
@@ -68,11 +75,37 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         textMessage.setFromUserName(fromUserName);
         textMessage.setMsgType(WechatUtil.RESP_MESSAGE_TYPE_TEXT);
         textMessage.setCreateTime(new Date().getTime());
+        if(CommonUtil.isNotEmpty(eventKey)){
+        	//判断是否为地址二维码
+        	String addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
+    		//如果是地址，则替换欢迎语
+    		if(CommonUtil.isNotEmpty(addrId)){
+    			QrcodeParamsPojo qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, addrId);
+    			//如果地址二维码信息存在，则替换关注欢迎语中的关键字
+    			if(!CommonUtil.isNull(qrcodeParamsPojo)){
+    				//解析json数据
+    				JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+    				
+					Map<String, String> map = new HashMap<String, String>();
+					//URL中不能出现中文 所以需要转码
+					map.put("gardenName", URLUtil.encode(obj.getString("gardenName")));
+					map.put("addrId", URLUtil.encode(obj.getString("attrId")));
+					map.put("gardenCode", URLUtil.encode(obj.getString("gardenCode")));
+					map.put("orgCode", URLUtil.encode(obj.getString("orgCode")));
+					map.put("shortName", URLUtil.encode(obj.getString("shortName")));
+					map.put("wxAppId", appId);
+					//不在url中出现的无需转码
+					map.put("garden", obj.getString("gardenName"));
+					
+					content = VelocityParseFactory.parse("kfMessage", content, map);
+    			} 
+    		}
+        } 
         textMessage.setContent(content);
         return WechatUtil.textMessageToXml(textMessage);
     }
 
-    protected String getImageMsg(MenuentityPojo entity, String fromUserName, String toUserName)
+	protected String getImageMsg(MenuentityPojo entity, String fromUserName, String toUserName)
         throws ServiceException {
         String templateId = entity.getTemplateid();
         String accountId = entity.getAccountid();
@@ -193,8 +226,18 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         return WechatUtil.textMessageToXml(textMessage);
     }
 
-    protected String getNewsItem(String templateId, String fromUserName, String toUserName, String imagePath, String serverPath) throws ServiceException {
-
+	protected String getNewsItem(String templateId, String fromUserName, String toUserName, String imagePath,
+			String serverPath, String eventKey, String appId) throws ServiceException {
+		//将地址id当作参数带在url中
+		String params = null;
+		if(CommonUtil.isNotEmpty(eventKey)){
+        	//判断是否为地址二维码
+        	String addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
+    		//如果是地址，则替换欢迎语
+    		if(CommonUtil.isNotEmpty(addrId)){
+    			params = "?addrId=" + addrId + "&appId=" + appId;
+    		}
+        }
         List<NewsitemPojo> newsList = wechatDao.findByProperty(NewsitemPojo.class, NewsitemPojo.TEMPLATE_ID,
             templateId); // wechatTemplateService.selectNewsItemByTemplateId(templateId);
         List<Article> articleList = new ArrayList<Article>();
@@ -205,6 +248,10 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
             String url = news.getUrl();
             if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
                 url = serverPath + "/article/" + news.getId();
+                if(CommonUtil.isNotEmpty(params)){
+                	url += params;
+                	LoggerUtil.info("图文消息 小区地址跳转二维码  [{0}]", url);
+                }
             }
             article.setUrl(url);
             article.setDescription(news.getDescription());
