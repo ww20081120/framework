@@ -105,8 +105,8 @@ public class EventMessageHandler extends AbstractMessageHandler {
         String respMessage = null;
         //获取事件中的值
         String eventKey = requestMap.get("EventKey");
-        List<SubscribePojo> lst = wechatDao.findByProperty(SubscribePojo.class, SubscribePojo.ACCOUNT_ID, accountId);
-
+        List<SubscribePojo> lst = querySubscribeOrScanList(accountId, SubscribePojo.SUBSCRIBE);
+        
         if (lst.size() != 0) {
             SubscribePojo subscribe = lst.get(0);
             String type = subscribe.getMsgtype();
@@ -197,7 +197,7 @@ public class EventMessageHandler extends AbstractMessageHandler {
 		 String respMessage = null;
 		 //获取事件中的值
 		 String eventKey = requestMap.get("EventKey");
-		 List<SubscribePojo> lst = wechatDao.findByProperty(SubscribePojo.class, SubscribePojo.ACCOUNT_ID, accountId);
+		 List<SubscribePojo> lst = querySubscribeOrScanList(accountId, SubscribePojo.SCAN);
 		
 		 if (lst.size() != 0) {
 		     SubscribePojo subscribe = lst.get(0);
@@ -222,6 +222,14 @@ public class EventMessageHandler extends AbstractMessageHandler {
         
         return respMessage;
     }
+
+	private List<SubscribePojo> querySubscribeOrScanList(String accountId, String dataType) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(SubscribePojo.class);
+		 criteria.add(Restrictions.eq(SubscribePojo.ACCOUNT_ID, accountId));
+		 criteria.add(Restrictions.eq(SubscribePojo.DATA_TYPE, dataType));
+		 List<SubscribePojo> lst = wechatDao.getListByCriteriaQuery(criteria);
+		return lst;
+	}
 
 	@Override
 	public void asynProcess(String msgId, String toUserName, AccountPojo entity, String content,
