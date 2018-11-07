@@ -228,33 +228,49 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
 
 	protected String getNewsItem(String templateId, String fromUserName, String toUserName, String imagePath,
 			String serverPath, String eventKey, String appId) throws ServiceException {
-		//将地址id当作参数带在url中
-		String params = null;
-		if(CommonUtil.isNotEmpty(eventKey)){
-        	//判断是否为地址二维码
-        	String addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
-    		//如果是地址，则替换欢迎语
-    		if(CommonUtil.isNotEmpty(addrId)){
-    			params = "?addrId=" + addrId + "&appId=" + appId;
-    		}
-        }
         List<NewsitemPojo> newsList = wechatDao.findByProperty(NewsitemPojo.class, NewsitemPojo.TEMPLATE_ID,
             templateId); // wechatTemplateService.selectNewsItemByTemplateId(templateId);
         List<Article> articleList = new ArrayList<Article>();
+        
         for (NewsitemPojo news : newsList) {
-            Article article = new Article();
+        	Article article = new Article();
+        	
+        	String url = news.getUrl();
+        	String description = news.getDescription();
+        	if(CommonUtil.isNotEmpty(eventKey)){
+            	//判断是否为地址二维码（为地址二维码时应为单图文消息）
+            	String addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
+        		//如果是地址，则替换欢迎语
+        		if(CommonUtil.isNotEmpty(addrId)){
+        			QrcodeParamsPojo qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, addrId);
+        			//如果地址二维码信息存在，则替换关注欢迎语中的关键字
+        			if(!CommonUtil.isNull(qrcodeParamsPojo)){
+        				//解析json数据
+        				JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+        				
+    					Map<String, String> map = new HashMap<String, String>();
+    					//URL中不能出现中文 所以需要转码
+    					map.put("gardenName", URLUtil.encode(obj.getString("gardenName")));
+    					map.put("addrId", URLUtil.encode(obj.getString("attrId")));
+    					map.put("gardenCode", URLUtil.encode(obj.getString("gardenCode")));
+    					map.put("orgCode", URLUtil.encode(obj.getString("orgCode")));
+    					map.put("shortName", URLUtil.encode(obj.getString("shortName")));
+    					map.put("wxAppId", appId);
+    					//不在url中出现的无需转码
+    					map.put("garden", obj.getString("gardenName"));
+    					
+    					url = VelocityParseFactory.parse("kfMessage", url, map);
+    					description = VelocityParseFactory.parse("kfMessage", description, map);
+        			} 
+        		}
+            }
             article.setTitle(news.getTitle());
             article.setPicUrl(imagePath + "/" + news.getImagepath());
-            String url = news.getUrl();
             if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
                 url = serverPath + "/article/" + news.getId();
-                if(CommonUtil.isNotEmpty(params)){
-                	url += params;
-                	LoggerUtil.info("图文消息 小区地址跳转二维码  [{0}]", url);
-                }
             }
             article.setUrl(url);
-            article.setDescription(news.getDescription());
+            article.setDescription(description);
             articleList.add(article);
         }
         NewsMessageResp newsResp = new NewsMessageResp();
