@@ -142,6 +142,7 @@ public abstract class AbstractCache implements ICache {
                 hmap.put(entry.getKey().getBytes(), value);
             }
         }
+        putNode(nodeName.getBytes(), hmap);
     }
 
     /**
