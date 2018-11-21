@@ -215,7 +215,7 @@ public final class IOUtil {
 
     public static <T> void batchProcessFile(File file, Function<String, ? extends T> transfer,
         BatchProcessor<T> batchProcessor) {
-        batchProcessFile(file, transfer, batchProcessor, 10000);
+        batchProcessFile(file, transfer, batchProcessor, 1000);
     }
 
     public static <T> void batchProcessFile(File file, Function<String, ? extends T> transfer,
