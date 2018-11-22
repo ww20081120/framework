@@ -557,6 +557,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         PagerList<T> resultList = new PagerList<T>();
         resultList.setPageIndex(pageIndex);
         resultList.setPageSize(pageSize);
+        if (allCounts == null) {
+            allCounts = 0L;
+        }
         resultList.setTotalCount(allCounts);
 
         if (allCounts > 0) {
@@ -645,7 +648,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void batchExecute(String sql, Collection<Object[]> objcts, int commitNumber) throws DaoException {
         Session session = getSession();
         session.flush();
-        
+
         commitNumber = commitNumber == 0 ? 1000 : commitNumber;
         Connection conn = null;
         try {
