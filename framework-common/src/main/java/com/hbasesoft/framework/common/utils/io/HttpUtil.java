@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -216,7 +217,8 @@ public final class HttpUtil {
     private static OkHttpClient getOkHttpClient() {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient();
+            okHttpClient = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(2, TimeUnit.MINUTES).build();
             httpClientHold.set(okHttpClient);
         }
         return okHttpClient;
