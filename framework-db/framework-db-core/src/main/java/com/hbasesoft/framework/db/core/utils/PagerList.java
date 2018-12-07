@@ -41,9 +41,8 @@ public class PagerList<E> extends CopyOnWriteArrayList<E> {
     private long totalCount = 0;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -53,14 +52,13 @@ public class PagerList<E> extends CopyOnWriteArrayList<E> {
             return false;
         }
         else {
-            return totalCount > pageIndex * (pageSize + 1);
+            return totalCount > pageIndex * pageSize;
         }
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @return <br>
@@ -70,7 +68,7 @@ public class PagerList<E> extends CopyOnWriteArrayList<E> {
             return 0;
         }
         else {
-            //return (int) (totalCount / pageSize + 1);
+            // return (int) (totalCount / pageSize + 1);
             return (int) (totalCount % pageSize == 0 ? (totalCount / pageSize) : (totalCount / pageSize + 1));
         }
     }
