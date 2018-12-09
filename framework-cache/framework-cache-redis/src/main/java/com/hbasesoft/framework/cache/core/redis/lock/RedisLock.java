@@ -62,7 +62,7 @@ public class RedisLock {
                     return this.lock;
                 }
 
-                if (i % 100 == 0) {
+                if (i++ % 100 == 0) {
                     LoggerUtil.debug("等待锁[{0}]的施放, 已锁定{1}毫秒", lockName, i * 300);
                 }
                 // 短暂休眠，避免可能的活锁
