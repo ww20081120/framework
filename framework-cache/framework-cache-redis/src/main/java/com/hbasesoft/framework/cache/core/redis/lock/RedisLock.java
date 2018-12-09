@@ -51,6 +51,7 @@ public class RedisLock {
      */
     public boolean lock(long timeout, int expireTime) {
         long lockTime = System.currentTimeMillis();
+        int i = 0;
         try {
             // 在timeout的时间范围内不断轮询锁
             while (System.currentTimeMillis() - lockTime < timeout) {
@@ -60,7 +61,10 @@ public class RedisLock {
                     this.lock = true;
                     return this.lock;
                 }
-                LoggerUtil.debug("等待锁[{0}]的施放", lockName);
+
+                if (i % 100 == 0) {
+                    LoggerUtil.debug("等待锁[{0}]的施放, 已锁定{1}毫秒", lockName, i * 300);
+                }
                 // 短暂休眠，避免可能的活锁
                 Thread.sleep(3, RANDOM.nextInt(30));
             }
