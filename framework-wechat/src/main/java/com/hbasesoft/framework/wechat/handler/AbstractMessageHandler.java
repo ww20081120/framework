@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.URLUtil;
@@ -61,6 +62,9 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
 
     protected ApplicationContext applicationContext;
 
+    private static final String QRCODE_URL = "bindingSite";
+    
+    private static final String REPLACE_URL ="siteBinding/addSite";
 //    @Value("${server.image.url}")
 //    private String imagePath;
 //
@@ -237,9 +241,11 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         	
         	String url = news.getUrl();
         	String description = news.getDescription();
+        	String addrId = null;
+        	String title = news.getTitle();
         	if(CommonUtil.isNotEmpty(eventKey)){
             	//判断是否为地址二维码（为地址二维码时应为单图文消息）
-            	String addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
+            	addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
         		//如果是地址，则替换欢迎语
         		if(CommonUtil.isNotEmpty(addrId)){
         			QrcodeParamsPojo qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, addrId);
@@ -261,14 +267,31 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
     					
     					url = VelocityParseFactory.parse("kfMessage", url, map);
     					description = VelocityParseFactory.parse("kfMessage", description, map);
+    					title = VelocityParseFactory.parse("kfMessage", title, map);
         			} 
         		}
             }
-            article.setTitle(news.getTitle());
+            
             article.setPicUrl(imagePath + "/" + news.getImagepath());
             if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
                 url = serverPath + "/article/" + news.getId();
             }
+            if(CommonUtil.isEmpty(addrId) && url.indexOf(QRCODE_URL) != -1){
+                Map<String, String> map = new HashMap<String, String>();
+                //URL涓­涓嶈兘鍑虹幇涓­鏂 鎵€浠ラ渶瑕佽浆鐮
+                map.put("gardenName", GlobalConstants.BLANK);
+                map.put("addrId", GlobalConstants.BLANK);
+                map.put("gardenCode", GlobalConstants.BLANK);
+                map.put("orgCode", GlobalConstants.BLANK);
+                map.put("shortName", GlobalConstants.BLANK);
+                map.put("wxAppId", GlobalConstants.BLANK);
+                map.put("garden", GlobalConstants.BLANK);
+                
+                url = url.substring(0, url.indexOf(QRCODE_URL)) +REPLACE_URL;
+                description = VelocityParseFactory.parse("kfMessage", description, map);
+                title = VelocityParseFactory.parse("kfMessage", title, map);
+            }
+            article.setTitle(title);
             article.setUrl(url);
             article.setDescription(description);
             articleList.add(article);
