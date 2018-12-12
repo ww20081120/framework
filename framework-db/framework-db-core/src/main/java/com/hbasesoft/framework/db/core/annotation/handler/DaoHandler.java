@@ -19,6 +19,7 @@ import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
+import com.hbasesoft.framework.common.utils.engine.OgnlUtil;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.DaoConstants;
@@ -26,8 +27,6 @@ import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.config.ParamMetadata;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
-
-import ognl.Ognl;
 
 /**
  * <Description> <br>
@@ -124,7 +123,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
             while (m.find()) {
                 logger.debug(" Match [" + m.group() + "] at positions " + m.start() + "-" + (m.end() - 1));
                 String ognl_key = m.group().replace(":", "").trim();
-                map.put(ognl_key, Ognl.getValue(ognl_key, sqlParamsMap));
+                map.put(ognl_key, OgnlUtil.getValue(ognl_key, sqlParamsMap));
             }
         }
         catch (Exception e) {
