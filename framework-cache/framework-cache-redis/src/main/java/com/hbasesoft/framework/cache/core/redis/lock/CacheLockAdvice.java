@@ -45,7 +45,7 @@ public class CacheLockAdvice {
     @Around("cacheLock()")
     public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         String cacheModel = PropertyHolder.getProperty("cache.model");
-        if (RedisCache.CACHE_MODEL.equals(cacheModel) && ClusterRedisCache.CACHE_MODEL.equals(cacheModel)) {
+        if (RedisCache.CACHE_MODEL.equals(cacheModel) || ClusterRedisCache.CACHE_MODEL.equals(cacheModel)) {
             Signature sig = thisJoinPoint.getSignature();
             if (sig instanceof MethodSignature) {
                 MethodSignature msig = (MethodSignature) sig;
