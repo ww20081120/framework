@@ -6,6 +6,7 @@
 package com.framework.message.redis;
 
 import com.hbasesoft.framework.message.core.MessageSubscriber;
+import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
 
 import redis.clients.jedis.BinaryJedisPubSub;
 
@@ -37,7 +38,11 @@ public class BinaryListener extends BinaryJedisPubSub {
      */
     @Override
     public void onMessage(byte[] channel, byte[] message) {
-        subscriber.onMessage(new String(channel), message);
+        String channelStr = new String(channel);
+        MessageThreadPoolExecutor.execute(channelStr, () -> {
+            subscriber.onMessage(new String(channel), message);
+        });
+
     }
 
     /**

@@ -6,18 +6,14 @@
 package com.framework.message.redis;
 
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
+import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
 
 /**
  * <Description> <br>
@@ -47,9 +43,6 @@ public final class MessageHandler {
     public void addConsummer(MessageQueue queue, final String channel, final MessageSubscriber subscriber) {
         Thread thread = new Thread(() -> {
             // 建一个线程池
-
-            ThreadPoolExecutor executor = createThreadPoolExecutor();
-            BlockingQueue<Runnable> bq = executor.getQueue();
             try {
                 while (flag) {
                     try {
@@ -61,16 +54,9 @@ public final class MessageHandler {
                             LOGGER.info("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
                                 transId);
 
-                            // 当线程池中的队列出现阻塞后，暂停从redis中进行获取
-                            while (bq.remainingCapacity() == 0
-                                && executor.getMaximumPoolSize() == executor.getPoolSize()) {
-                                LOGGER.info("wait message[{0}] execute, current pool size is [{1}]", channel,
-                                    bq.size());
-                                Thread.sleep(100);
-                            }
-
                             for (byte[] data : datas) {
-                                executor.execute(new Consumer(transId, channel, subscriber, data));
+                                MessageThreadPoolExecutor.execute(channel,
+                                    new Consumer(transId, channel, subscriber, data));
                             }
                         }
                         else {
@@ -93,15 +79,6 @@ public final class MessageHandler {
 
     public void destory() {
         flag = false;
-    }
-
-    private ThreadPoolExecutor createThreadPoolExecutor() {
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            PropertyHolder.getIntProperty("message.executor.coreSize", 1), // 设置核心线程数量
-            PropertyHolder.getIntProperty("message.executor.maxPoolSize", 10), // 线程池维护线程的最大数量
-            PropertyHolder.getIntProperty("message.executor.keepAliveSeconds", 600), TimeUnit.SECONDS, // 允许的空闲时间
-            new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.executor.queueCapacity", 10))); // 缓存队列
-        return executor;
     }
 
     private static class Consumer implements Runnable {

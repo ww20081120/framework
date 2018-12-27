@@ -12,6 +12,8 @@ message: #消息服务
   model: REDIS
   redis:
    address: 127.0.0.1:6379
+   broadcast:
+    channels: log-p21
   executor: # 事件执行者性能配置
    memeryCapacity: 10  # 缓冲在内存中最大容量
    coreSize: 1 # 设置核心线程数量

@@ -23,7 +23,7 @@ public class MessageConsummer {
     public static void main(String[] args) throws InterruptedException {
         MessageSubcriberFactory factory = MessageHelper.createMessageSubcriberFactory();
         // factory.registSubscriber("log-p15", true, new MessageLinsener());
-        factory.registSubscriber("log-p21", false, new MessageLinsener());
+        factory.registSubscriber("log-p21", true, new MessageLinsener());
         Thread.sleep(1000000);
         System.out.println("消费者者启动完成！");
     }
