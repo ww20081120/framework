@@ -7,6 +7,8 @@ package com.framework.message.redis;
 
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -31,15 +33,9 @@ public final class MessageHandler {
 
     private static final Logger LOGGER = new Logger("MessageHandlerLogger");
 
-    private ArrayBlockingQueue<Consumer> consumerQueue = new ArrayBlockingQueue<Consumer>(10000);
-
     private boolean flag = true;
 
     private static MessageHandler handler;
-
-    private MessageHandler() {
-        initExecutor();
-    }
 
     public static MessageHandler getInstance() {
         if (handler == null) {
@@ -49,73 +45,66 @@ public final class MessageHandler {
     }
 
     public void addConsummer(MessageQueue queue, final String channel, final MessageSubscriber subscriber) {
-        int coreReadSize = PropertyHolder.getIntProperty("message.event.coreConsummerSize", 1); // 核心读取线程大小
-        for (int i = 0; i < coreReadSize; i++) {
-            new Thread(() -> {
-                try {
-                    while (flag) {
-                        try {
-                            List<byte[]> datas = queue.pop(3, channel);
-                            if (CollectionUtils.isNotEmpty(datas)) {
-                                for (byte[] data : datas) {
-                                    String transId = CommonUtil.getTransactionID();
-                                    LOGGER.info("receive message by thread[{0}], transId[{1}]",
-                                        Thread.currentThread().getId(), transId);
-                                    consumerQueue.put(new Consumer(transId, channel, subscriber, data));
-                                }
+        Thread thread = new Thread(() -> {
+            // 建一个线程池
+
+            ThreadPoolExecutor executor = createThreadPoolExecutor();
+            BlockingQueue<Runnable> bq = executor.getQueue();
+            try {
+                while (flag) {
+                    try {
+                        // 每次从redis的队列中消费3条数据
+                        List<byte[]> datas = queue.pop(3, channel);
+                        if (CollectionUtils.isNotEmpty(datas)) {
+
+                            String transId = CommonUtil.getTransactionID();
+                            LOGGER.info("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
+                                transId);
+
+                            // 当线程池中的队列出现阻塞后，暂停从redis中进行获取
+                            while (bq.remainingCapacity() == 0
+                                && executor.getMaximumPoolSize() == executor.getPoolSize()) {
+                                LOGGER.info("wait message[{0}] execute, current pool size is [{1}]", channel,
+                                    bq.size());
+                                Thread.sleep(100);
                             }
-                            else {
-                                LOGGER.info("channel {0} consumer is alived.", channel);
+
+                            for (byte[] data : datas) {
+                                executor.execute(new Consumer(transId, channel, subscriber, data));
                             }
                         }
-                        catch (Exception e) {
-                            LoggerUtil.error(e);
-                            Thread.sleep(1000);
+                        else {
+                            LOGGER.info("channel {0} consumer is alived.", channel);
                         }
                     }
-                }
-                catch (InterruptedException e) {
-                    LoggerUtil.error(e);
-                }
-            }).start();
-        }
-    }
-
-    private void initExecutor() {
-        int corePoolSize = PropertyHolder.getIntProperty("message.redis.corePoolSize", 20); // 核心线程数
-        for (int i = 0; i < corePoolSize; i++) {
-            new Thread(() -> {
-                long count = 0;
-                try {
-                    while (flag) {
-                        try {
-                            Consumer consumer = consumerQueue.poll(100, TimeUnit.MILLISECONDS);
-                            if (consumer != null) {
-                                consumer.excute();
-                            }
-                        }
-                        catch (Exception e) {
-                            LoggerUtil.error(e);
-                            Thread.sleep(1000);
-                        }
-
-                        if (++count % 1000 == 0) {
-                            LOGGER.info("thread {0} for executor is alived.", Thread.currentThread().getId());
-                        }
+                    catch (Exception e) {
+                        LoggerUtil.error(e);
+                        Thread.sleep(1000);
                     }
                 }
-                catch (InterruptedException e1) {
-                    LoggerUtil.error(e1);
-                }
-            }).start();
-        }
+            }
+            catch (InterruptedException e) {
+                LoggerUtil.error(e);
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void destory() {
         flag = false;
     }
 
-    private static class Consumer {
+    private ThreadPoolExecutor createThreadPoolExecutor() {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(
+            PropertyHolder.getIntProperty("message.executor.coreSize", 1), // 设置核心线程数量
+            PropertyHolder.getIntProperty("message.executor.maxPoolSize", 10), // 线程池维护线程的最大数量
+            PropertyHolder.getIntProperty("message.executor.keepAliveSeconds", 600), TimeUnit.SECONDS, // 允许的空闲时间
+            new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.executor.queueCapacity", 10))); // 缓存队列
+        return executor;
+    }
+
+    private static class Consumer implements Runnable {
 
         private String transId;
 
@@ -132,7 +121,7 @@ public final class MessageHandler {
             this.data = data;
         }
 
-        public void excute() {
+        public void run() {
             try {
                 LOGGER.info("{0}|{1} before execute event.", transId, channel);
                 this.subscriber.onMessage(this.channel, data);
