@@ -12,5 +12,6 @@
   	<module>framework-cache-redis</module>
   	<module>framework-cache-simple</module>
   	<module>framework-cache-ehcache</module>
+  	<module>framework-cache-demo</module>
   </modules>
 </project>

@@ -1,0 +1,13 @@
+project: #项目信息
+ name: cache-demo
+  
+spring: #应用配置
+  application:
+    name: ${project.name}
+    
+cache: #缓存配置
+  model: REDIS
+  redis:
+    address: 127.0.0.1:6379
+   
+    
