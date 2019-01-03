@@ -25,6 +25,11 @@
 			<artifactId>framework-message-rocketMQ</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+			<version>4.1.0-incubating</version>
+		</dependency>
 	</dependencies>
 
 	<build>
