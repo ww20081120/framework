@@ -26,6 +26,9 @@ message: #消息服务
       consumerBatchMaxSize: 0
       isEnableOrderConsumer: false
       isEnableHisConsumer: false
-   
+  executor: # 事件执行者性能配置
+   coreSize: 20 # 设置核心线程数量
+   maxPoolSize: 64 # 线程池维护线程的最大数量
+
    
     
