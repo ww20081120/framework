@@ -5,18 +5,27 @@ spring: #应用配置
   application:
     name: ${project.name}
 
+#message: #消息服务
+#  model: REDIS
+#  redis:
+#   address: 127.0.0.1:6379
+#   broadcast:
+#    channels: log-p21
+#  executor: # 事件执行者性能配置
+#   memeryCapacity: 10  # 缓冲在内存中最大容量
+#   coreSize: 1 # 设置核心线程数量
+#   keepAliveSeconds: 600 # 允许的空闲时间
+#   maxPoolSize: 10 # 线程池维护线程的最大数量
+#   queueCapacity: 10 # 线程缓冲最大容量，该值要大于等于memeryCapacity
 message: #消息服务
-  model: REDIS
-  redis:
-   address: 127.0.0.1:6379
-   broadcast:
-    channels: log-p21
-  executor: # 事件执行者性能配置
-   memeryCapacity: 10  # 缓冲在内存中最大容量
-   coreSize: 1 # 设置核心线程数量
-   keepAliveSeconds: 600 # 允许的空闲时间
-   maxPoolSize: 10 # 线程池维护线程的最大数量
-   queueCapacity: 10 # 线程缓冲最大容量，该值要大于等于memeryCapacity
+  model: ROCKET_MQ
+  rocketmq:
+    namesrvAddr: 192.168.99.100:9876
+    producer:
+    consumer:
+      consumerBatchMaxSize: 0
+      isEnableOrderConsumer: false
+      isEnableHisConsumer: false
    
    
     
