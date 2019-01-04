@@ -5,7 +5,6 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
-import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 import org.apache.rocketmq.client.consumer.listener.*;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -93,9 +92,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 						}
 						// 事件监听
 						for (MessageExt messageExt : msgs) {
-							MessageThreadPoolExecutor.execute(messageExt.getTopic(), () -> {
 								subscriber.onMessage(messageExt.getTopic(), messageExt.getBody());
-							});
 						}
 					} catch (Exception e) {
 						log.error(e);
