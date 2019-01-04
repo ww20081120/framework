@@ -172,6 +172,10 @@ public final class RocketmqFactory {
 		// Defalut value ip@pid when not set , this key used for cluster
 		// consumer.setInstanceName(properties.getConsumeCrInstanceName());
 
+		// Set Consume Thread
+		consumer.setConsumeThreadMin(PropertyHolder.getIntProperty("message.executor.coreSize", 20));
+		consumer.setConsumeThreadMax(PropertyHolder.getIntProperty("message.executor.maxPoolSize", 64));
+
 		// Message Model
 		if (isConsumerBroadcasting) {
 			consumer.setMessageModel(MessageModel.BROADCASTING);
