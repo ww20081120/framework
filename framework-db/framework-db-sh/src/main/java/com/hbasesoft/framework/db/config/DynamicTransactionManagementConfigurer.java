@@ -26,7 +26,7 @@ import com.hbasesoft.framework.db.TransactionManagerHolder;
  * @see com.hbasesoft.framework.db.config <br>
  */
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement(order = 2)
 public class DynamicTransactionManagementConfigurer implements TransactionManagementConfigurer {
 
     /**
