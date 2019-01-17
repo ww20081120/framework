@@ -22,6 +22,12 @@ import com.hbasesoft.framework.db.core.BaseEntity;
 public class SubscribePojo extends BaseEntity {
 
     public static final String ACCOUNT_ID = "accountid";
+    
+    public static final String DATA_TYPE = "dataType";
+    
+    public static final String SUBSCRIBE = "subscribe";
+    
+    public static final String SCAN = "scan";
 
     /**
      * serialVersionUID
@@ -54,6 +60,10 @@ public class SubscribePojo extends BaseEntity {
     /** accountid */
     @Column(name = "accountid")
     private String accountid;
+    
+    /** data_type */
+    @Column(name = "dataType")
+    private String dataType;
 
     public String getId() {
         return this.id;
@@ -102,5 +112,13 @@ public class SubscribePojo extends BaseEntity {
     public void setAccountid(String accountid) {
         this.accountid = accountid;
     }
+
+	public String getDataType() {
+		return dataType;
+	}
+
+	public void setDataType(String dataType) {
+		this.dataType = dataType;
+	}
 
 }

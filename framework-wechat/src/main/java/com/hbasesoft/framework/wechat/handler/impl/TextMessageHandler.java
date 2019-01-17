@@ -110,10 +110,10 @@ public class TextMessageHandler extends AbstractMessageHandler {
 		String resMsgType = resp.getMsgtype();
 		if (WechatUtil.REQ_MESSAGE_TYPE_TEXT.equals(resMsgType)) {
 			// 根据返回消息key，获取对应的文本消息返回给微信客户端
-			respMessage = getTextMsg(resp.getRescontent(), entity.getWeixinAccountid(), toUserName);
+			respMessage = getTextMsg(resp.getRescontent(), entity.getWeixinAccountid(), toUserName, null, null);
 		} else if (WechatUtil.RESP_MESSAGE_TYPE_NEWS.equals(resMsgType)) {
 			respMessage = super.getNewsItem(resp.getRescontent(), entity.getWeixinAccountid(), toUserName, imagePath,
-					serverPath);
+					serverPath, null, null);
 		}
 		return respMessage;
 	}

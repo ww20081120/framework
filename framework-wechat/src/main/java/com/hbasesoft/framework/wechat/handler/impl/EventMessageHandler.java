@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasypt.commons.CommonUtils;
@@ -66,7 +65,7 @@ public class EventMessageHandler extends AbstractMessageHandler {
         String respMessage = null;
         // 事件类型
         String eventType = requestMap.get("Event");
-
+        
         logger.info("------------微信客户端发送请求------------------【微信触发类型 " + eventType + "】事件推送---");
 
         // 订阅
@@ -104,30 +103,29 @@ public class EventMessageHandler extends AbstractMessageHandler {
     private String doSubscribeResponse(Map<String, String> requestMap, String toUserName, String fromUserName,
         String accountId, String appId,String imagePath, String serverPath) throws FrameworkException {
         String respMessage = null;
-
-        List<SubscribePojo> lst = wechatDao.findByProperty(SubscribePojo.class, SubscribePojo.ACCOUNT_ID, accountId);
-
+        //获取事件中的值
+        String eventKey = requestMap.get("EventKey");
+        List<SubscribePojo> lst = querySubscribeOrScanList(accountId, SubscribePojo.SUBSCRIBE);
+        
         if (lst.size() != 0) {
             SubscribePojo subscribe = lst.get(0);
             String type = subscribe.getMsgtype();
             if (WechatUtil.REQ_MESSAGE_TYPE_TEXT.equals(type)) {
-                respMessage = getTextMsg(subscribe.getTemplateid(), fromUserName, toUserName);
+                respMessage = getTextMsg(subscribe.getTemplateid(), fromUserName, toUserName, eventKey, appId);
             }
             else if (WechatUtil.RESP_MESSAGE_TYPE_NEWS.equals(type)) {
-                respMessage = getNewsItem(subscribe.getTemplateid(), fromUserName, toUserName, imagePath, serverPath);
+                respMessage = getNewsItem(subscribe.getTemplateid(), fromUserName, toUserName, imagePath, serverPath, eventKey, appId);
             }
         }
 
         if (CommonUtils.isNotEmpty(toUserName)) {
-            String enventKey = requestMap.get("EventKey");
-            
             //String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
-            logger.info("用户首次关注 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, enventKey);
+            logger.info("用户首次关注 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, eventKey);
             
             EventData data = new EventData();
             data.put("openid", toUserName);
             data.put("appId", appId);
-            data.put("paramId", enventKey);
+            data.put("paramId", eventKey);
             EventEmmiter.emmit(WechatEventCodeDef.WECHAT_SUBSCRIBER, data);
         }
         
@@ -161,10 +159,10 @@ public class EventMessageHandler extends AbstractMessageHandler {
         if (menuEntity != null && CommonUtil.isNotEmpty(menuEntity.getTemplateid())) {
             String type = menuEntity.getMsgtype();
             if (WechatUtil.RESP_MESSAGE_TYPE_TEXT.equals(type)) {
-                respMessage = getTextMsg(menuEntity.getTemplateid(), fromUserName, toUserName);
+                respMessage = getTextMsg(menuEntity.getTemplateid(), fromUserName, toUserName, null, null);
             }
             else if (WechatUtil.RESP_MESSAGE_TYPE_NEWS.equals(type)) {
-                respMessage = getNewsItem(menuEntity.getTemplateid(), fromUserName, toUserName, imagePath, serverPath);
+                respMessage = getNewsItem(menuEntity.getTemplateid(), fromUserName, toUserName, imagePath, serverPath, null, null);
             }
             else if (WechatUtil.RESP_MESSAGE_TYPE_IMAGE.equals(type)) {
                 respMessage = getImageMsg(menuEntity, fromUserName, toUserName);
@@ -195,23 +193,43 @@ public class EventMessageHandler extends AbstractMessageHandler {
      */
     private String doScanResponse(Map<String, String> requestMap, String toUserName, String fromUserName,
         String accountId, String appId,String imagePath, String serverPath) throws FrameworkException {
-        String respMessage = null;
-
+    	
+		 String respMessage = null;
+		 //获取事件中的值
+		 String eventKey = requestMap.get("EventKey");
+		 List<SubscribePojo> lst = querySubscribeOrScanList(accountId, SubscribePojo.SCAN);
+		
+		 if (lst.size() != 0) {
+		     SubscribePojo subscribe = lst.get(0);
+		     String type = subscribe.getMsgtype();
+		     if (WechatUtil.REQ_MESSAGE_TYPE_TEXT.equals(type)) {
+		         respMessage = getTextMsg(subscribe.getTemplateid(), fromUserName, toUserName, eventKey, appId);
+		     }
+		     else if (WechatUtil.RESP_MESSAGE_TYPE_NEWS.equals(type)) {
+		         respMessage = getNewsItem(subscribe.getTemplateid(), fromUserName, toUserName, imagePath, serverPath, eventKey, appId);
+		     }
+		 }
         if (CommonUtils.isNotEmpty(toUserName)) {
-            String enventKey = requestMap.get("EventKey");
-            
 //            String paramId = StringUtils.substringAfterLast(enventKey, "VCC_");
-            logger.info("关注用户扫描带参二维码处理 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, enventKey);
+            logger.info("关注用户扫描带参二维码处理 openId[{0}，appId{1}] 注册账号，paramId[{2}]", toUserName,appId, eventKey);
             
             EventData data = new EventData();
             data.put("openid", toUserName);
             data.put("appId", appId);
-            data.put("paramId", enventKey);
+            data.put("paramId", eventKey);
             EventEmmiter.emmit(WechatEventCodeDef.WECHAT_SCAN, data);
         }
         
         return respMessage;
     }
+
+	private List<SubscribePojo> querySubscribeOrScanList(String accountId, String dataType) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(SubscribePojo.class);
+		 criteria.add(Restrictions.eq(SubscribePojo.ACCOUNT_ID, accountId));
+		 criteria.add(Restrictions.eq(SubscribePojo.DATA_TYPE, dataType));
+		 List<SubscribePojo> lst = wechatDao.getListByCriteriaQuery(criteria);
+		return lst;
+	}
 
 	@Override
 	public void asynProcess(String msgId, String toUserName, AccountPojo entity, String content,
