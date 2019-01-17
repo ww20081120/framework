@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.ApplicationContext;
@@ -26,7 +24,7 @@ import com.hbasesoft.framework.message.core.MessageQueue;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -38,11 +36,13 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
     private static final Logger LOGGER = new Logger("EventHandlerLogger");
 
+    private ArrayBlockingQueue<Consumer> consumerQueue = new ArrayBlockingQueue<Consumer>(100000);
+
     private boolean flag = true;
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param context
@@ -65,6 +65,9 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
                             addConsummer(channel, linsener);
                         }
                     }
+
+                    // 初始化事件执行器
+                    initExecutor();
                 }
             }
         }
@@ -75,61 +78,70 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
     }
 
     private void addConsummer(final String channel, final EventLinsener linsener) {
+        int coreReadSize = PropertyHolder.getIntProperty("message.event.coreConsummerSize", 1); // 核心读取线程大小
         MessageQueue queue = MessageHelper.createMessageQueue();
-
-        new Thread(() -> {
-            // 建一个线程池
-            ThreadPoolExecutor executor = createThreadPoolExecutor();
-            BlockingQueue<Runnable> bq = executor.getQueue();
-
-            try {
-                while (flag) {
-                    try {
-                        List<byte[]> datas = queue.pop(3, channel);
-                        if (CommonUtil.isNotEmpty(datas)) {
-                            String transId = CommonUtil.getTransactionID();
-                            LOGGER.info("receive message by thread[{0}], transId[{1}], channel[{2}]",
-                                Thread.currentThread().getId(), transId, channel);
-
-                            // 当线程池中的出现阻塞后，暂停从消息队列中进行获取
-                            while (bq.remainingCapacity() == 0
-                                && executor.getMaximumPoolSize() == executor.getPoolSize()) {
-                                LOGGER.info("wait message[{0}] execute, current pool size is [{1}]", channel,
-                                    bq.size());
-                                Thread.sleep(100);
+        for (int i = 0; i < coreReadSize; i++) {
+            new Thread(() -> {
+                try {
+                    while (flag) {
+                        try {
+                            List<byte[]> datas = queue.pop(3, channel);
+                            if (CommonUtil.isNotEmpty(datas)) {
+                                for (byte[] data : datas) {
+                                    String transId = CommonUtil.getTransactionID();
+                                    LOGGER.info("receive message by thread[{0}], transId[{1}], channel[{2}]",
+                                            Thread.currentThread().getId(), transId, channel);
+                                    consumerQueue.put(new Consumer(transId, channel, linsener, data));
+                                }
                             }
-
-                            for (byte[] data : datas) {
-                                executor.execute(new Consumer(transId, channel, linsener, data));
+                            else {
+                                LOGGER.info("channel {0} consumer is alived.", channel);
                             }
                         }
-                        else {
-                            LOGGER.info("channel {0} consumer is alived.", channel);
+                        catch (Exception e) {
+                            LoggerUtil.error(e);
+                            Thread.sleep(1000);
                         }
-                    }
-                    catch (Exception e) {
-                        LoggerUtil.error(e);
-                        Thread.sleep(1000);
                     }
                 }
-            }
-            catch (InterruptedException e) {
-                LoggerUtil.error(e);
-            }
-        }).start();
-
+                catch (InterruptedException e) {
+                    LoggerUtil.error(e);
+                }
+            }).start();
+        }
     }
 
-    private ThreadPoolExecutor createThreadPoolExecutor() {
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            PropertyHolder.getIntProperty("message.executor.coreSize", 1), // 设置核心线程数量
-            PropertyHolder.getIntProperty("message.executor.maxPoolSize", 10), // 线程池维护线程的最大数量
-            PropertyHolder.getIntProperty("message.executor.keepAliveSeconds", 600), TimeUnit.SECONDS, // 允许的空闲时间
-            new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.executor.queueCapacity", 10))); // 缓存队列
-        return executor;
+    private void initExecutor() {
+        int corePoolSize = PropertyHolder.getIntProperty("message.event.corePoolSize", 5); // 核心线程数
+        for (int i = 0; i < corePoolSize; i++) {
+            new Thread(() -> {
+                long count = 0;
+                try {
+                    while (flag) {
+                        try {
+                            Consumer consumer = consumerQueue.poll(100, TimeUnit.MILLISECONDS);
+                            if (consumer != null) {
+                                consumer.excute();
+                            }
+                        }
+                        catch (Exception e) {
+                            LoggerUtil.error(e);
+                            Thread.sleep(1000);
+                        }
+
+                        if (++count % 1000 == 0) {
+                            LOGGER.info("thread {0} for executor is alived.", Thread.currentThread().getId());
+                        }
+                    }
+                }
+                catch (InterruptedException e1) {
+                    LoggerUtil.error(e1);
+                }
+            }).start();
+        }
     }
 
-    private static class Consumer implements Runnable {
+    private static class Consumer {
 
         private String transId;
 
@@ -146,7 +158,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
             this.data = data;
         }
 
-        public void run() {
+        public void excute() {
             try {
                 LOGGER.info("{0}|{1} before execute event.", transId, channel);
                 this.linsener.onMessage(this.channel, data);
@@ -160,7 +172,7 @@ public class EventHandlerStartupLinstener extends StartupListenerAdapter {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      *         <br>
