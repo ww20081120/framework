@@ -253,7 +253,7 @@ public class HttpUtil {
         	CloseableHttpClient httpclient = HttpClients.custom()
         			.setDefaultRequestConfig(defaultRequestConfig)
         			.build();
-        	return doHttpRequest(httpClient, httpGet, null, new DefaultStringResponseHandler(charset));
+        	return doHttpRequest(httpclient, httpGet, null, new DefaultStringResponseHandler(charset));
         }else {
         	return doHttpRequest(httpGet, null, new DefaultStringResponseHandler(charset));
         }
@@ -369,7 +369,7 @@ public class HttpUtil {
         	CloseableHttpClient httpclient = HttpClients.custom()
         			.setDefaultRequestConfig(defaultRequestConfig)
         			.build();
-        	return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
+        	return doHttpRequest(httpclient, httpPost, null, new DefaultStringResponseHandler());
         }else {
         	return doHttpRequest(httpPost, null, new DefaultStringResponseHandler());
         }
