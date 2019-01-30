@@ -241,6 +241,9 @@ public class HttpUtil {
     				break;
     			case UNIT_MIN:
     				connectionTimeout = connectionTimeout *60 *1000;
+    				break;
+    			default:
+    				break;
     		}
         	RequestConfig defaultRequestConfig = RequestConfig.custom()
         			.setSocketTimeout(connectionTimeout)
@@ -354,6 +357,9 @@ public class HttpUtil {
     				break;
     			case UNIT_MIN:
     				connectionTimeout = connectionTimeout *60 *1000;
+    				break;
+    			default:
+    				break;
     		}
         	RequestConfig defaultRequestConfig = RequestConfig.custom()
         			.setSocketTimeout(connectionTimeout)
