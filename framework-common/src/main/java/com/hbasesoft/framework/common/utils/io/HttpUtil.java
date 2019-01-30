@@ -62,6 +62,7 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.vcc.common.CommonContant;
 
 /**
  * http
@@ -73,6 +74,15 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 public class HttpUtil {
     private static final Logger logger = new Logger(HttpUtil.class);
 
+    // 单位： 秒
+    public static final String UNIT_SECONDE = "second";
+    
+    // 单位： 分
+    public static final String UNIT_MIN = "min";
+    
+    // 单位： 毫秒
+    public static final String UNIT_MSEC = "msec";
+    
     /**
      * 默认连接池中最大连接数
      */
@@ -216,6 +226,39 @@ public class HttpUtil {
         return doHttpRequest(httpClient, httpGet, null, new DefaultStringResponseHandler(charset));
     }
 
+    public static String doGet(int connectionTimeout, String unit, String url, String charset) {
+        
+    	HttpGet httpGet = new HttpGet(url);
+    	url = checkUrl(url);
+    	logger.info(">>> doGet[url = {0}]", url);
+    	httpGet.setHeader("Content-type", "text/html");
+    	if( connectionTimeout >0 && CommonUtil.isNotEmpty(unit)) {
+    		switch(unit) {
+    			case UNIT_MSEC:
+    				break;
+    			case UNIT_SECONDE:
+    				connectionTimeout = connectionTimeout * 1000;
+    				break;
+    			case UNIT_MIN:
+    				connectionTimeout = connectionTimeout *60 *1000;
+    		}
+        	RequestConfig defaultRequestConfig = RequestConfig.custom()
+        			.setSocketTimeout(connectionTimeout)
+        			.setConnectTimeout(connectionTimeout)
+        			.setConnectionRequestTimeout(connectionTimeout)
+        			.setStaleConnectionCheckEnabled(true)
+        			.build();
+        	CloseableHttpClient httpclient = HttpClients.custom()
+        			.setDefaultRequestConfig(defaultRequestConfig)
+        			.build();
+        	return doHttpRequest(httpClient, httpGet, null, new DefaultStringResponseHandler(charset));
+        }else {
+        	return doHttpRequest(httpGet, null, new DefaultStringResponseHandler(charset));
+        }
+    	
+    	
+    }
+    
     /**
      * <p>
      * 执行Post请求
@@ -292,6 +335,43 @@ public class HttpUtil {
         return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
     }
 
+    public static String doPost(int connectionTimeout, String unit, String url, String body, String contentType) {
+        url = checkUrl(url);
+        logger.info(">>> doPost[url = {0}, body = {1}]", url, body);
+        HttpPost httpPost = createHttpPost(url, body);
+        if (contentType == null) {
+            httpPost.setHeader("Content-type", "text/plain");
+        }
+        else {
+            httpPost.setHeader("Content-type", contentType);
+        }
+        if( connectionTimeout >0 && CommonUtil.isNotEmpty(unit)) {
+    		switch(unit) {
+    			case UNIT_MSEC:
+    				break;
+    			case UNIT_SECONDE:
+    				connectionTimeout = connectionTimeout * 1000;
+    				break;
+    			case UNIT_MIN:
+    				connectionTimeout = connectionTimeout *60 *1000;
+    		}
+        	RequestConfig defaultRequestConfig = RequestConfig.custom()
+        			.setSocketTimeout(connectionTimeout)
+        			.setConnectTimeout(connectionTimeout)
+        			.setConnectionRequestTimeout(connectionTimeout)
+        			.setStaleConnectionCheckEnabled(true)
+        			.build();
+        	CloseableHttpClient httpclient = HttpClients.custom()
+        			.setDefaultRequestConfig(defaultRequestConfig)
+        			.build();
+        	return doHttpRequest(httpClient, httpPost, null, new DefaultStringResponseHandler());
+        }else {
+        	return doHttpRequest(httpPost, null, new DefaultStringResponseHandler());
+        }
+        
+        
+    }
+    
     /**
      * <p>
      * 根据URL和参数创建HttpPost对象
