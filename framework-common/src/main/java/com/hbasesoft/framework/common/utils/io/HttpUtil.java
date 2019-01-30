@@ -62,7 +62,6 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.vcc.common.CommonContant;
 
 /**
  * http
