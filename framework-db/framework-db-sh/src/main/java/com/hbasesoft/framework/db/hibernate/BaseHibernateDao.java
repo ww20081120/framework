@@ -23,6 +23,7 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.CriteriaImpl;
+import org.hibernate.jdbc.Work;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
@@ -34,7 +35,6 @@ import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 
@@ -649,41 +649,29 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         Session session = getSession();
         session.flush();
 
-        commitNumber = commitNumber == 0 ? 1000 : commitNumber;
-        Connection conn = null;
-        try {
-            conn = DataSourceUtil.getDataSource().getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            conn.setAutoCommit(false);
-            int i = 0;
-            for (Object[] object : objcts) {
-                i++;
-                for (int j = 0; j < object.length; j++) {
-                    stmt.setObject(j + 1, object[j]);
-                }
-                stmt.addBatch();
-                if (i % commitNumber == 0) {
-                    stmt.executeBatch();
-                    conn.commit();
-                }
-            }
-            stmt.executeBatch();
-            conn.commit();
-        }
-        catch (SQLException e) {
-            throw new DaoException(e.getErrorCode(), e);
-        }
-        finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                }
-                catch (SQLException e) {
-                    throw new DaoException(e.getErrorCode(), e);
-                }
-            }
-        }
+        session.doWork(new Work() {
 
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                connection.setAutoCommit(false);
+                int i = 0;
+                for (Object[] object : objcts) {
+                    i++;
+                    for (int j = 0; j < object.length; j++) {
+                        stmt.setObject(j + 1, object[j]);
+                    }
+                    stmt.addBatch();
+                    if (i % commitNumber == 0) {
+                        stmt.executeBatch();
+                        connection.commit();
+                    }
+                }
+                stmt.executeBatch();
+                connection.commit();
+
+            }
+        });
     }
 
     /**
