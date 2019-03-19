@@ -272,7 +272,7 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         		}
             }
             
-        	boolean msgFlag = true;
+        	boolean msgFlag = false;
         	
         	//如果没有url的情况下跟原来一样处理
             if (CommonUtil.isNotEmpty(url)) {
@@ -285,31 +285,30 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
             	msgFlag = true;
             }
         	
-            article.setPicUrl(imagePath + "/" + news.getImagepath());
-            if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
-                url = serverPath + "/article/" + news.getId();
-            }
-            if(CommonUtil.isEmpty(addrId) && url.indexOf(QRCODE_URL) != -1){
-                Map<String, String> map = new HashMap<String, String>();
-                //URL涓­涓嶈兘鍑虹幇涓­鏂 鎵€浠ラ渶瑕佽浆鐮
-                map.put("gardenName", GlobalConstants.BLANK);
-                map.put("addrId", GlobalConstants.BLANK);
-                map.put("gardenCode", GlobalConstants.BLANK);
-                map.put("orgCode", GlobalConstants.BLANK);
-                map.put("shortName", GlobalConstants.BLANK);
-                map.put("wxAppId", GlobalConstants.BLANK);
-                map.put("garden", GlobalConstants.BLANK);
-                
-                url = url.substring(0, url.indexOf(QRCODE_URL)) +REPLACE_URL;
-                description = VelocityParseFactory.parse("kfMessage", description, map);
-                title = VelocityParseFactory.parse("kfMessage", title, map);
-            }
-            article.setTitle(title);
-            article.setUrl(url);
-            article.setDescription(description);
-            
             if (msgFlag) {
-            	articleList.add(article);
+            	article.setPicUrl(imagePath + "/" + news.getImagepath());
+                if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
+                    url = serverPath + "/article/" + news.getId();
+                }
+                if(CommonUtil.isEmpty(addrId) && url.indexOf(QRCODE_URL) != -1){
+                    Map<String, String> map = new HashMap<String, String>();
+                    //URL涓­涓嶈兘鍑虹幇涓­鏂 鎵€浠ラ渶瑕佽浆鐮
+                    map.put("gardenName", GlobalConstants.BLANK);
+                    map.put("addrId", GlobalConstants.BLANK);
+                    map.put("gardenCode", GlobalConstants.BLANK);
+                    map.put("orgCode", GlobalConstants.BLANK);
+                    map.put("shortName", GlobalConstants.BLANK);
+                    map.put("wxAppId", GlobalConstants.BLANK);
+                    map.put("garden", GlobalConstants.BLANK);
+                    
+                    url = url.substring(0, url.indexOf(QRCODE_URL)) +REPLACE_URL;
+                    description = VelocityParseFactory.parse("kfMessage", description, map);
+                    title = VelocityParseFactory.parse("kfMessage", title, map);
+                }
+                article.setTitle(title);
+                article.setUrl(url);
+                article.setDescription(description);
+                articleList.add(article);
             }
         }
         NewsMessageResp newsResp = new NewsMessageResp();
