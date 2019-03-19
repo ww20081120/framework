@@ -316,7 +316,7 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         newsResp.setToUserName(toUserName);
         newsResp.setFromUserName(fromUserName);
         newsResp.setMsgType(WechatUtil.RESP_MESSAGE_TYPE_NEWS);
-        newsResp.setArticleCount(newsList.size());
+        newsResp.setArticleCount(articleList.size());
         newsResp.setArticles(articleList);
         return WechatUtil.newsMessageToXml(newsResp);
     }
