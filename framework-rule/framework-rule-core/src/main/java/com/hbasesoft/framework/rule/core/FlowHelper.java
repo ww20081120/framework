@@ -17,6 +17,7 @@ import java.util.ServiceLoader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -25,6 +26,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.log.core.TransLogUtil;
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
 import com.hbasesoft.framework.rule.core.config.FlowLoader;
+import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
 
 /**
  * <Description> <br>
@@ -46,6 +48,54 @@ public final class FlowHelper {
 
     private static Method processMethod;
 
+    /**
+     * Description: 支持通过json方式启动流程<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean
+     * @param flowConfig
+     * @param throwable
+     * @return <br>
+     */
+    public static <T extends Serializable> int flowStart(T bean, JSONObject flowConfig, boolean throwable) {
+
+        Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
+
+        int result = ErrorCodeDef.SUCCESS;
+
+        Assert.notNull(flowConfig, ErrorCodeDef.FLOW_NOT_MATCH, bean);
+
+        FlowConfig config = JsonConfigUtil.getFlowConfig(flowConfig);
+        Assert.notNull(config, ErrorCodeDef.FLOW_NOT_MATCH, bean);
+
+        try {
+            execute(bean, new FlowContext(config));
+        }
+        catch (Exception e) {
+            LoggerUtil.error("flow process error.", e);
+            FrameworkException fe = e instanceof FrameworkException ? (FrameworkException) e
+                : new FrameworkException(e);
+            if (throwable) {
+                throw fe;
+            }
+            result = fe.getCode();
+        }
+        return result;
+
+    }
+
+    /**
+     * Description: 支持读取本地配置文件的方式启动流程 <br>
+     * <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean
+     * @param flowName
+     * @param throwable
+     * @return <br>
+     */
     public static <T extends Serializable> int flowStart(T bean, String flowName, boolean throwable) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
 
@@ -72,6 +122,10 @@ public final class FlowHelper {
 
     public static <T extends Serializable> int flowStart(T bean, String flowName) {
         return flowStart(bean, flowName, false);
+    }
+
+    public static <T extends Serializable> int flowStart(T bean, JSONObject flowConfig) {
+        return flowStart(bean, flowConfig, false);
     }
 
     @SuppressWarnings("unchecked")
