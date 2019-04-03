@@ -25,7 +25,7 @@ import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
-import com.hbasesoft.framework.db.hibernate.IBaseDAO;
+import com.hbasesoft.framework.db.hibernate.IBaseDao;
 
 /**
  * <Description> <br>
@@ -109,7 +109,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         handler.setSqlExcutor(baseDao);
 
         // 继承泛型的类需要获取到范性类
-        if (IBaseDAO.class.isAssignableFrom(clazz)) {
+        if (IBaseDao.class.isAssignableFrom(clazz)) {
             Class<?> entityClazz = null;
             ParameterizedType type = (ParameterizedType) clazz.getGenericSuperclass();
             if (type != null) {

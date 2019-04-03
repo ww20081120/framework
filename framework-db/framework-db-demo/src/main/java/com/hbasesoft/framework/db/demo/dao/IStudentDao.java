@@ -11,7 +11,7 @@ import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
-import com.hbasesoft.framework.db.hibernate.IBaseDAO;
+import com.hbasesoft.framework.db.hibernate.IBaseDao;
 
 /**
  * <Description> <br>
@@ -24,7 +24,7 @@ import com.hbasesoft.framework.db.hibernate.IBaseDAO;
  * @see com.hbasesoft.framework.db.demo.dao <br>
  */
 @Dao
-public interface IStudentDao extends IBaseDAO<StudentEntity> {
+public interface IStudentDao extends IBaseDao<StudentEntity> {
 
     void createTable();
 

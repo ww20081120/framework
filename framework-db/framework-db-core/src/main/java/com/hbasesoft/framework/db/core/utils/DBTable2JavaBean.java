@@ -15,6 +15,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,7 +65,7 @@ public class DBTable2JavaBean extends JFrame {
      * filedNames
      */
     private String[] filedNames = new String[] {
-        "表名", "包名", "输出目录", "模板文件", "数据库地址", "用户名", "密码", "加密后的密码"
+        "表名", "包名", "输出目录", "数据库地址", "用户名", "密码", "加密后的密码"
     };
 
     /**
@@ -85,7 +86,9 @@ public class DBTable2JavaBean extends JFrame {
     /**
      * template
      */
-    private String template;
+    private String daoTemplate;
+
+    private String entityTemplate;
 
     /**
      * dateFormat
@@ -117,7 +120,7 @@ public class DBTable2JavaBean extends JFrame {
             label.setBounds(40, 13 + (i * 30), 80, 15);
             panel.add(label);
 
-            if (i == 6) {
+            if (i == 5) {
                 textField = new JPasswordField();
             }
             else {
@@ -151,8 +154,8 @@ public class DBTable2JavaBean extends JFrame {
         button.setBounds(145, 20 + 30 * filedNames.length, 93, 23);
         panel.add(button);
 
-        textFields[7].setEditable(false);
-        textFields[6].addKeyListener(new KeyListener() {
+        textFields[6].setEditable(false);
+        textFields[5].addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -177,7 +180,7 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     private void encryptPwd() {
-        textFields[7].setText("ENC(" + DataUtil.encrypt(textFields[6].getText()) + ")");
+        textFields[6].setText("ENC(" + DataUtil.encrypt(textFields[6].getText()) + ")");
     }
 
     /**
@@ -193,10 +196,9 @@ public class DBTable2JavaBean extends JFrame {
         tips[0].setText((String) configParam.get("tableNameText"));
         textFields[1].setText((String) configParam.get("package"));
         textFields[2].setText((String) configParam.get("dirstr"));
-        textFields[3].setText((String) configParam.get("templatePath"));
-        textFields[4].setText((String) configParam.get("jdbcUrl"));
-        textFields[5].setText((String) configParam.get("username"));
-        textFields[6].setText((String) configParam.get("password"));
+        textFields[3].setText((String) configParam.get("jdbcUrl"));
+        textFields[4].setText((String) configParam.get("username"));
+        textFields[5].setText((String) configParam.get("password"));
         encryptPwd();
     }
 
@@ -205,10 +207,9 @@ public class DBTable2JavaBean extends JFrame {
         paramMap.put("tableNameText", tips[0].getText());
         paramMap.put("package", textFields[1].getText());
         paramMap.put("dirstr", textFields[2].getText());
-        paramMap.put("templatePath", textFields[3].getText());
-        paramMap.put("jdbcUrl", textFields[4].getText());
-        paramMap.put("username", textFields[5].getText());
-        paramMap.put("password", textFields[6].getText());
+        paramMap.put("jdbcUrl", textFields[3].getText());
+        paramMap.put("username", textFields[4].getText());
+        paramMap.put("password", textFields[5].getText());
         String content = JSONObject.toJSONString(paramMap);
         try {
             IOUtil.writeFile(content,
@@ -244,8 +245,6 @@ public class DBTable2JavaBean extends JFrame {
         String classPath = this.getClass().getClassLoader().getResource("").getPath();
         paramMap.put("dirstr", StringUtils.replace(StringUtils.replace(classPath, "/target/classes", "/src/main/java"),
             "/target/test-classes", "/src/main/java"));
-        paramMap.put("templatePath", StringUtils.replace(classPath, "/target/classes", "/src/main/java")
-            + "com/hbasesoft/framework/db/core/utils/template.vm");
         paramMap.put("jdbcUrl", "jdbc:mysql://ranyinfo.com:3306/web?useUnicode=true&characterEncoding=UTF-8");
         paramMap.put("username", "root");
         paramMap.put("password", "ranyinfo.com");
@@ -266,22 +265,13 @@ public class DBTable2JavaBean extends JFrame {
         String tablename = textFields[0].getText();
         String packname = textFields[1].getText();
         String dirstr = textFields[2].getText(); // 空表示当前目录
-        String tempPath = textFields[3].getText();
 
         if (dataSource == null) {
             DruidDataSource dbs = new DruidDataSource();
-            dbs.setUrl(textFields[4].getText());
-            dbs.setUsername(textFields[5].getText());
-            dbs.setPassword(textFields[6].getText());
+            dbs.setUrl(textFields[3].getText());
+            dbs.setUsername(textFields[4].getText());
+            dbs.setPassword(textFields[5].getText());
             dataSource = dbs;
-        }
-
-        if (StringUtils.isEmpty(tempPath) || !new File(tempPath).exists()) {
-            tips[3].setText("大侠你的模板文件呢？");
-            return;
-        }
-        else {
-            tips[3].setText(GlobalConstants.BLANK);
         }
 
         if (StringUtils.isEmpty(dirstr)) {
@@ -300,6 +290,12 @@ public class DBTable2JavaBean extends JFrame {
             tips[1].setText(GlobalConstants.BLANK);
         }
 
+        export(dirstr, packname, tablename);
+
+    }
+
+    private void export(String dirstr, String packname, String tablename) throws SQLException {
+
         File dir = new File(dirstr + "/" + StringUtils.replace(packname, ".", "/"));
         if (!dir.exists()) {
             dir.mkdirs();
@@ -309,7 +305,11 @@ public class DBTable2JavaBean extends JFrame {
         Connection conn = null;
 
         try {
-            template = IOUtil.readFile(tempPath);
+            entityTemplate = IOUtil.readString(this.getClass().getClassLoader()
+                .getResourceAsStream("com/hbasesoft/framework/db/core/utils/entityTemplate.vm"));
+            daoTemplate = IOUtil.readString(this.getClass().getClassLoader()
+                .getResourceAsStream("com/hbasesoft/framework/db/core/utils/daoTemplate.vm"));
+
             conn = dataSource.getConnection();
             if (StringUtils.isEmpty(tablename)) {
                 parseAllTable(conn, packname, outputdir);
@@ -328,7 +328,6 @@ public class DBTable2JavaBean extends JFrame {
                 conn.close();
             }
         }
-
     }
 
     /**
@@ -373,14 +372,31 @@ public class DBTable2JavaBean extends JFrame {
      */
     public void parseTableByShowCreate(Connection conn, String tablename, String packname, String outputdir)
         throws Exception {
-        String className = BeanUtil.toCapitalizeCamelCase(
-            tablename.toUpperCase().startsWith("T_") ? tablename.substring(2) : tablename) + "Entity";
+        String className = BeanUtil
+            .toCapitalizeCamelCase(tablename.toUpperCase().startsWith("T_") ? tablename.substring(2) : tablename);
         tablename = StringUtils.upperCase(tablename);
-        File file = new File(outputdir + "/" + className + ".java");
-        if (file.exists()) {
-            System.out.println("文件已经存在，请删除后在生成。" + file.getAbsoluteFile());
+
+        File dir = new File(outputdir + "/entity/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File entityFile = new File(dir, className + "Entity.java");
+        if (entityFile.exists()) {
+            System.out.println("文件已经存在，请删除后在生成。" + entityFile.getAbsoluteFile());
             return;
         }
+
+        dir = new File(outputdir + "/dao/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File daoFile = new File(dir, className + "Dao.java");
+        if (daoFile.exists()) {
+            System.out.println("文件已经存在，请删除后在生成。" + daoFile.getAbsoluteFile());
+            return;
+        }
+
         PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement("select * from " + tablename + " where 1 = 2");
@@ -408,13 +424,21 @@ public class DBTable2JavaBean extends JFrame {
                 methods.append('\n').append(getMethodStr(field, type));
             }
 
-            IOUtil.writeFile(StringUtils.replaceEach(template, new String[] {
+            IOUtil.writeFile(StringUtils.replaceEach(entityTemplate, new String[] {
                 "${PACKAGE}", "${CLASSNAME}", "${CODE}", "${TABLENAME}", "${DATE}", "${ENTITY}"
             }, new String[] {
                 packname, className, fields.append(methods).toString(), tablename, dateFormat.format(new Date()),
                 StringUtils.isEmpty(pkColum) ? GlobalConstants.BLANK : "@Entity(name = \"" + tablename + "\")"
-            }), file);
-            System.out.println("生成文件成功。" + file.getAbsoluteFile());
+            }), entityFile);
+            System.out.println("生成文件成功。" + entityFile.getAbsoluteFile());
+
+            IOUtil.writeFile(StringUtils.replaceEach(daoTemplate, new String[] {
+                "${PACKAGE}", "${CLASSNAME}", "${TABLENAME}", "${DATE}"
+            }, new String[] {
+                packname, className, tablename, dateFormat.format(new Date())
+            }), daoFile);
+            System.out.println("生成文件成功。" + daoFile.getAbsoluteFile());
+
         }
         finally {
             if (ps != null) {

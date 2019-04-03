@@ -1,4 +1,10 @@
-package ${PACKAGE};
+/**************************************************************************************** 
+ Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or     <br>
+ transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
+ or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+ ****************************************************************************************/
+ 
+package ${PACKAGE}.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +25,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
 ${ENTITY}
-public class ${CLASSNAME} extends BaseEntity {
+public class ${CLASSNAME}Entity extends BaseEntity {
 
     /**
      * serialVersionUID

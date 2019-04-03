@@ -25,7 +25,7 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface IBaseDAO<T extends BaseEntity> {
+public interface IBaseDao<T extends BaseEntity> {
 
     Serializable save(T entity);
 
