@@ -29,8 +29,8 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
-import com.hbasesoft.framework.db.demo.dao.CourseDao;
-import com.hbasesoft.framework.db.demo.dao.StudentDao;
+import com.hbasesoft.framework.db.demo.dao.ICourseDao;
+import com.hbasesoft.framework.db.demo.dao.IStudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 
@@ -47,43 +47,43 @@ import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-public class DaoTester {
+public class BaseDaoTester {
 
     @Resource
-    private StudentDao studentDao;
+    private IStudentDao iStudentDao;
 
     @Resource
-    private CourseDao courseDao;
+    private ICourseDao iCourseDao;
 
     @Before
     public void createTable() {
-        studentDao.createTable();
+        iStudentDao.createTable();
     }
 
     @Test
     public void countCoursePass() {
-        int count = studentDao.countCoursePass("语文");
+        int count = iStudentDao.countCoursePass("语文");
         Assert.isTrue(count == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
         System.out.println("语文考及格的有两人");
     }
 
     @Test
     public void queryStudentCourse() {
-        List<StudentEntity> entityes = studentDao.queryStudentCourse(null, 1, 5);
+        List<StudentEntity> entityes = iStudentDao.queryStudentCourse(null, 1, 5);
         Assert.isTrue(entityes.size() == 5, ErrorCodeDef.SYSTEM_ERROR_10001);
 
-        entityes = studentDao.queryStudentCourse(null, 1, 3);
+        entityes = iStudentDao.queryStudentCourse(null, 1, 3);
         Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
 
         StudentEntity entity = new StudentEntity();
         entity.setAge(19);
-        entityes = studentDao.queryStudentCourse(entity, 1, 10);
+        entityes = iStudentDao.queryStudentCourse(entity, 1, 10);
         Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
 
         entity = new StudentEntity();
         entity.setAge(18);
         entity.setName("张%");
-        entityes = studentDao.queryStudentCourse(entity, 1, 10);
+        entityes = iStudentDao.queryStudentCourse(entity, 1, 10);
         Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
@@ -93,10 +93,10 @@ public class DaoTester {
         entity.setAge(16);
         entity.setName("张三丰");
 
-        studentDao.save(entity);
+        iStudentDao.save(entity);
         String id = entity.getId();
 
-        entity = studentDao.get(StudentEntity.class, id);
+        entity = iStudentDao.get(id);
         Assert.equals(entity.getName(), "张三丰", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
@@ -106,18 +106,18 @@ public class DaoTester {
         entity.setAge(16);
         entity.setName("张三丰");
 
-        studentDao.save(entity);
+        iStudentDao.save(entity);
         String id = entity.getId();
 
-        studentDao.delete(entity);
+        iStudentDao.delete(entity);
 
-        entity = studentDao.get(StudentEntity.class, id);
+        entity = iStudentDao.get(id);
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void batchSave() throws UnsupportedEncodingException, FileNotFoundException {
-        int s1 = studentDao.countStudentSize();
+    public void saveBatch() throws UnsupportedEncodingException, FileNotFoundException {
+        int s1 = iStudentDao.countStudentSize();
         IOUtil.batchProcessFile(new File("Student.csv"), line -> {
             if (StringUtils.isNotEmpty(line)) {
                 String[] strs = StringUtils.split(line, GlobalConstants.SPLITOR);
@@ -130,16 +130,16 @@ public class DaoTester {
             }
             return null;
         }, (students, pageIndex, pageSize) -> {
-            studentDao.batchSave(students);
+            iStudentDao.saveBatch(students);
             return true;
         }, 1000);
-        int s2 = studentDao.countStudentSize();
+        int s2 = iStudentDao.countStudentSize();
         Assert.isTrue(s2 - s1 == 200000, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void batchExecute() {
-        int s1 = studentDao.countStudentSize();
+    public void executeBatch() {
+        int s1 = iStudentDao.countStudentSize();
         IOUtil.batchProcessFile(new File("Student.csv"), line -> {
             if (StringUtils.isNotEmpty(line)) {
                 String[] strs = StringUtils.split(line, GlobalConstants.SPLITOR);
@@ -151,133 +151,133 @@ public class DaoTester {
             }
             return null;
         }, (students, pageIndex, pageSize) -> {
-            studentDao.batchExecute("insert into t_student (id, name, age) values (?, ?, ?)", students, 1000);
+            iStudentDao.executeBatch("insert into t_student (id, name, age) values (?, ?, ?)", students, 1000);
             return true;
         });
-        int s2 = studentDao.countStudentSize();
+        int s2 = iStudentDao.countStudentSize();
         Assert.isTrue(s2 - s1 == 200000, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
     public void get() {
-        StudentEntity entity = studentDao.get(StudentEntity.class, "1");
+        StudentEntity entity = iStudentDao.get("1");
         Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void findUniqueByProperty() {
-        CourseEntity entity = courseDao.findUniqueByProperty(CourseEntity.class, CourseEntity.COURSE_NAME, "语文");
+    public void getByProperty() {
+        CourseEntity entity = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
         Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void findByProperty() {
-        List<StudentEntity> entities = studentDao.findByProperty(StudentEntity.class, StudentEntity.AGE, 18);
+    public void queryByProperty() {
+        List<StudentEntity> entities = iStudentDao.queryByProperty(StudentEntity.AGE, 18);
         Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void loadAll() {
-        List<StudentEntity> entities = studentDao.loadAll(StudentEntity.class);
-        int size = studentDao.countStudentSize();
+    public void queryAll() {
+        List<StudentEntity> entities = iStudentDao.queryAll();
+        int size = iStudentDao.countStudentSize();
         Assert.isTrue(entities.size() == size, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void deleteEntityById() {
+    public void deleteById() {
         StudentEntity entity = new StudentEntity();
         entity.setAge(16);
         entity.setName("张三丰");
 
-        studentDao.save(entity);
+        iStudentDao.save(entity);
         String id = entity.getId();
 
-        studentDao.deleteEntityById(StudentEntity.class, id);
+        iStudentDao.deleteById(id);
 
-        entity = studentDao.get(StudentEntity.class, id);
+        entity = iStudentDao.get(id);
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void deleteAllEntitie() {
-        List<StudentEntity> entities = studentDao.loadAll(StudentEntity.class);
-        studentDao.deleteAllEntitie(entities);
-        int size = studentDao.countStudentSize();
+    public void deleteAll() {
+        List<StudentEntity> entities = iStudentDao.queryAll();
+        iStudentDao.delete(entities);
+        int size = iStudentDao.countStudentSize();
         Assert.isTrue(size == 0, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
     public void deleteAllEntitiesByIds() {
-        int s1 = studentDao.countStudentSize();
-        studentDao.deleteAllEntitiesByIds(StudentEntity.class, Arrays.asList("1", "2", "3"));
-        int s2 = studentDao.countStudentSize();
+        int s1 = iStudentDao.countStudentSize();
+        iStudentDao.deleteByIds(Arrays.asList("1", "2", "3"));
+        int s2 = iStudentDao.countStudentSize();
         Assert.isTrue(s1 - s2 == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void updateEntity() {
-        StudentEntity entity = studentDao.get(StudentEntity.class, "1");
+    public void update() {
+        StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
         entity.setName("李四");
-        studentDao.updateEntity(entity);
+        iStudentDao.update(entity);
 
-        StudentEntity e2 = studentDao.get(StudentEntity.class, "1");
+        StudentEntity e2 = iStudentDao.get("1");
         Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void findByQueryString() {
-        List<StudentEntity> entities = studentDao
-            .findByQueryString("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+    public void queryByHql() {
+        List<StudentEntity> entities = iStudentDao
+            .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
         Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void updateBySqlString() {
-        StudentEntity entity = studentDao.get(StudentEntity.class, "1");
+    public void updateBySql() {
+        StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
 
-        studentDao.updateBySqlString("update t_student set name = '李四' where id = '1'");
+        iStudentDao.updateBySql("update t_student set name = '李四' where id = '1'");
 
         // 因为上面已经查询过一次，hibernate做了缓存，在事务未提交前，操作的都是缓存，所以得清理掉， 才能从数据库中重新查询。
-        studentDao.clear();
+        iStudentDao.clear();
 
-        StudentEntity e2 = studentDao.get(StudentEntity.class, "1");
+        StudentEntity e2 = iStudentDao.get("1");
         Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void singleResult() {
-        StudentEntity entity = studentDao
-            .singleResult("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+    public void getByHql() {
+        StudentEntity entity = iStudentDao
+            .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
         Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
 
     }
 
     @Test
-    public void getPageList() {
+    public void queryPagerByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
-        PagerList<StudentEntity> entities = studentDao.getPageList(criteria, 1, 1);
+        PagerList<StudentEntity> entities = iStudentDao.queryPagerByCriteria(criteria, 1, 1);
         Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void getListByCriteriaQuery() {
+    public void queryByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
         criteria.add(Restrictions.eq(StudentEntity.AGE, 18));
-        List<StudentEntity> es1 = studentDao.getListByCriteriaQuery(criteria);
+        List<StudentEntity> es1 = iStudentDao.queryByCriteria(criteria);
 
-        List<StudentEntity> es2 = studentDao.findByProperty(StudentEntity.class, StudentEntity.AGE, 18);
+        List<StudentEntity> es2 = iStudentDao.queryByProperty(StudentEntity.AGE, 18);
         Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
     @Test
-    public void getCriteriaQuery() {
+    public void getByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(CourseEntity.class);
         criteria.add(Restrictions.eq(CourseEntity.COURSE_NAME, "语文"));
-        CourseEntity e1 = courseDao.getCriteriaQuery(criteria);
+        CourseEntity e1 = iCourseDao.getByCriteria(criteria);
 
-        CourseEntity e2 = courseDao.findUniqueByProperty(CourseEntity.class, CourseEntity.COURSE_NAME, "语文");
+        CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
 
         Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR_10001);
     }

@@ -13,15 +13,17 @@ import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
 /**
- * <Description> <br>
+ * <Description> 
+ * 请使用com.hbasesoft.framework.db.hibernate.IBaseDAO<T> 代替现在这个类 <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年10月23日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.dao.support <br>
+ * @see com.hbasesoft.framework.db.hibernate.IBaseDAO<T> <br>
  */
+@Deprecated
 public interface IGenericBaseDao {
 
     <T> Serializable save(T entity) throws DaoException;
@@ -101,7 +103,7 @@ public interface IGenericBaseDao {
      * @taskId <br>
      * @param ids <br>
      */
-    <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException;
+    <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<? extends Serializable> ids) throws DaoException;
 
     /**
      * 更新指定的实体

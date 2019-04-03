@@ -22,13 +22,14 @@ public class DaoConfig {
     private String dbType;
 
     /** 基础dao的类型 */
-    private Object baseDao;
+    private Class<?> baseDaoType;
 
     /** 结果集类型转换回调函数 */
     private Class<?> callBackType;
 
     /**
      * isCache
+     * 
      * @return the cache
      */
     public boolean isCache() {
@@ -37,6 +38,7 @@ public class DaoConfig {
 
     /**
      * setCache
+     * 
      * @param cache the cache to set
      */
     public void setCache(boolean cache) {
@@ -45,6 +47,7 @@ public class DaoConfig {
 
     /**
      * getDbType
+     * 
      * @return the dbType
      */
     public String getDbType() {
@@ -53,26 +56,19 @@ public class DaoConfig {
 
     /**
      * setDbType
+     * 
      * @param dbType the dbType to set
      */
     public void setDbType(String dbType) {
         this.dbType = dbType;
     }
 
-    /**
-     * getBaseDao
-     * @return the baseDao
-     */
-    public Object getBaseDao() {
-        return baseDao;
+    public Class<?> getBaseDaoType() {
+        return baseDaoType;
     }
 
-    /**
-     * setBaseDao
-     * @param baseDao the baseDao to set
-     */
-    public void setBaseDao(Object baseDao) {
-        this.baseDao = baseDao;
+    public void setBaseDaoType(Class<?> baseDaoType) {
+        this.baseDaoType = baseDaoType;
     }
 
     public Class<?> getCallBackType() {
@@ -84,9 +80,8 @@ public class DaoConfig {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param typeName <br>

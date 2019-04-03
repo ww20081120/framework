@@ -47,7 +47,7 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
  * @see com.hbasesoft.framework.dao.support.hibernate <br>
  */
 @SuppressWarnings({
-    "deprecation", "rawtypes"
+    "rawtypes", "deprecation", "unchecked"
 })
 public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
@@ -56,11 +56,12 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     private static Logger logger = new Logger(BaseHibernateDao.class);
 
+    private Class<?> entityClazz;
+
     /*
      * (non-Javadoc)
      * @see com.hbasesoft.framework.dao.support.SqlExcutor#query(java.lang.String, java.util.Map)
      */
-    @SuppressWarnings("unchecked")
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
         try {
@@ -92,6 +93,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 Class<?> beanType = param.getBeanType();
                 if (Serializable.class.equals(beanType)) {
                     beanType = param.getReturnType();
+                    if (entityClazz != null && List.class.isAssignableFrom(param.getReturnType())) {
+                        beanType = entityClazz;
+                    }
                 }
                 query.setResultTransformer(new AutoResultTransformer(beanType));
             }
@@ -360,7 +364,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
         Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
@@ -378,7 +382,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
         Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
@@ -394,7 +398,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> loadAll(Class<T> entityClass) throws DaoException {
         return createCriteria(entityClass).list();
@@ -440,9 +444,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<String> ids) throws DaoException {
+    public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<? extends Serializable> ids)
+        throws DaoException {
         Assert.notEmpty(ids, ErrorCodeDef.ID_IS_NULL);
-        for (String id : ids) {
+        for (Serializable id : ids) {
             getSession().delete(get(entityName, id));
         }
         getSession().flush();
@@ -470,7 +475,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> findByQueryString(String hql) throws DaoException {
         Query queryObject = getSession().createQuery(hql);
@@ -504,7 +509,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> findListbySql(String sql) throws DaoException {
         Session session = getSession();
@@ -522,7 +527,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> T singleResult(String hql) throws DaoException {
         return (T) getSession().createQuery(hql).uniqueResult();
@@ -538,7 +543,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize)
         throws DaoException {
@@ -578,7 +583,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
         return detachedCriteria.getExecutableCriteria(getSession()).list();
@@ -594,7 +599,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> findHql(String hql, Object... param) throws DaoException {
         Query q = getSession().createQuery(hql);
@@ -616,7 +621,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException {
         Session session = getSession();
@@ -638,7 +643,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
-    @SuppressWarnings("unchecked")
+
     @Override
     public <T> T getCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
         return (T) detachedCriteria.getExecutableCriteria(getSession()).uniqueResult();
@@ -707,4 +712,97 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             throw new DaoException(e);
         }
     }
+
+    public <T> void saveBatch(List<T> entitys) {
+        this.batchSave(entitys);
+    }
+
+    public <T> void update(T pojo) {
+        this.updateEntity(pojo);
+    }
+
+    public int updateBySql(String sql) {
+        return this.updateBySqlString(sql);
+    };
+
+    public void deleteById(Serializable id) {
+        this.deleteEntityById(getEntityClazz(), id);
+    }
+
+    public <T> void delete(Collection<T> entities) {
+        this.deleteAllEntitie(entities);
+    }
+
+    public void deleteByIds(Collection<? extends Serializable> ids) {
+        this.deleteAllEntitiesByIds(getEntityClazz(), ids);
+    }
+
+    public <T> T get(Serializable id) {
+        return (T) this.get(getEntityClazz(), id);
+    }
+
+    public <T> T getByProperty(String propertyName, Object value) {
+        return (T) this.findUniqueByProperty(getEntityClazz(), propertyName, value);
+    }
+
+    public <T> T getByCriteria(DetachedCriteria detachedCriteria) {
+        return this.getCriteriaQuery(detachedCriteria);
+    }
+
+    public <T> T getByHql(String hql) {
+        return this.singleResult(hql);
+    }
+
+    public <T> List<T> queryAll() {
+        return (List<T>) this.loadAll(getEntityClazz());
+    }
+
+    public <T> List<T> queryByProperty(String propertyName, Object value) {
+        return (List<T>) this.findByProperty(getEntityClazz(), propertyName, value);
+    }
+
+    public <T> PagerList<T> queryPagerByCriteria(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) {
+        return this.getPageList(detachedCriteria, pageIndex, pageSize);
+    }
+
+    public <T> List<T> queryByCriteria(DetachedCriteria detachedCriteria) {
+        return this.getListByCriteriaQuery(detachedCriteria);
+    }
+
+    public <T> List<T> queryBySql(String sql) {
+
+        Session session = getSession();
+        session.flush();
+        Query query = session.createSQLQuery(sql);
+
+        if (getEntityClazz().equals(Map.class)) {
+            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        }
+        else {
+            query.setResultTransformer(new AutoResultTransformer(getEntityClazz()));
+        }
+        return query.list();
+    }
+
+    public <T> List<T> queryByHqlParam(String hql, Object... param) {
+        return findHql(hql, param);
+    }
+
+    public <T> List<T> queryByHql(String hql) {
+        return this.findByQueryString(hql);
+    }
+
+    public void executeBatch(String sql, Collection<Object[]> objcts, int commitNumber) {
+        this.batchExecute(sql, objcts, commitNumber);
+    }
+
+    private Class<?> getEntityClazz() {
+        Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
+        return entityClazz;
+    }
+
+    public void setEntityClazz(Class<?> entityClazz) {
+        this.entityClazz = entityClazz;
+    }
+
 }
