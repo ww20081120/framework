@@ -5,9 +5,14 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.config;
 
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,18 +33,18 @@ import com.hbasesoft.framework.common.annotation.NoTransLog;
 public class MessageConfig {
 
     // Spring MVC 项目请实现 org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-    // @Bean
-    // public HttpMessageConverters fastJsonHttpMessageConverters() {
-    // // 1、需要先定义一个 convert 转换消息对象；
-    // FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
-    //
-    // // 2、添加 fastJson 的配置信息，比如: 是否要格式化返回的Json数据；
-    // fastConverter.setFeatures(SerializerFeature.WriteDateUseDateFormat);
-    //
-    // // 4、
-    // HttpMessageConverter<?> converter = fastConverter;
-    // return new HttpMessageConverters(new StringHttpMessageConverter(), converter);
-    // }
+    @Bean
+    public HttpMessageConverters fastJsonHttpMessageConverters() {
+        // 1、需要先定义一个 convert 转换消息对象；
+        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
+
+        // 2、添加 fastJson 的配置信息，比如: 是否要格式化返回的Json数据；
+        fastConverter.setFeatures(SerializerFeature.WriteDateUseDateFormat);
+
+        // 4、
+        HttpMessageConverter<?> converter = fastConverter;
+        return new HttpMessageConverters(new StringHttpMessageConverter(), converter);
+    }
 
     @Bean
     public ObjectMapper serializingObjectMapper() {
