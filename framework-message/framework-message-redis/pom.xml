@@ -4,14 +4,11 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-message</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 	</parent>
 	<artifactId>framework-message-redis</artifactId>
 	<name>message-redis</name>
 	<description>用redis实现消息队列和订阅发布</description>
-	<properties>
-		<redis.version>2.9.0</redis.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -21,7 +18,6 @@
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
-			<version>${redis.version}</version>
 		</dependency>
 	</dependencies>
 </project>

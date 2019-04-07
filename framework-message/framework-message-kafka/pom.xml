@@ -4,14 +4,11 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-message</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 	</parent>
 	<artifactId>framework-message-kafka</artifactId>
 	<name>message-kafka</name>
 	<description>Apache kafka implement message module</description>
-	<properties>
-		<kafka.version>0.10.2.0</kafka.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -21,7 +18,6 @@
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka_2.12</artifactId>
-			<version>${kafka.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>

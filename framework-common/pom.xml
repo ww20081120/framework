@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 	</parent>
 	<artifactId>framework-common</artifactId>
 	<name>${project.artifactId}</name>
@@ -22,13 +22,9 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-codec.version>1.10</commons-codec.version>
 		<!-- sftp -->
-		<jsch.version>0.1.53</jsch.version>
 		<jasypt.version>1.9.2</jasypt.version>
 		<cglib.version>3.2.1</cglib.version>
 		<protostuff.version>1.5.3</protostuff.version>
-
-		<!-- http -->
-		<okhttp.version>3.9.0</okhttp.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -101,7 +97,6 @@
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
-			<version>${jsch.version}</version>
 		</dependency>
 
 		<!-- 数据库密码加密工具 -->
@@ -137,7 +132,6 @@
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
-			<version>${okhttp.version}</version>
 		</dependency>
 
 		<!-- 编码神器 -->

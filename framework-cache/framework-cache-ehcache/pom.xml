@@ -4,12 +4,9 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-cache</artifactId>
-		<version>3.2</version>
+		<version>3.3</version>
 	</parent>
 	<artifactId>framework-cache-ehcache</artifactId>
-	<properties>
-		<ehcache.version>2.10.1</ehcache.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -23,7 +20,6 @@
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
-			<version>${ehcache.version}</version>
 		</dependency>
 	</dependencies>
 </project>

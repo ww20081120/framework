@@ -83,8 +83,8 @@ public class XmlBeanUtil {
             String xml = writer.toString();
             xml = StringUtils.replace(xml, "&lt;", "<");
             xml = StringUtils.replace(xml, "&gt;", ">");
-            xml = StringUtils.replaceAll(xml, "&amp;", "&");
-            xml = StringUtils.replaceAll(xml, "&#xd;", GlobalConstants.BLANK);
+            xml = StringUtils.replace(xml, "&amp;", "&");
+            xml = StringUtils.replace(xml, "&#xd;", GlobalConstants.BLANK);
             return xml;
         }
         catch (Exception e) {

@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.framework.message.kafka;
 
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -72,7 +73,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
             long count = 0;
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(3 * 1000L);
+                    ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(Duration.ofSeconds(3));
                     if (records != null) {
 
                         for (ConsumerRecord<String, byte[]> record : records) {
