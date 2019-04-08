@@ -271,6 +271,8 @@ public class DBTable2JavaBean extends JFrame {
             dbs.setUrl(textFields[3].getText());
             dbs.setUsername(textFields[4].getText());
             dbs.setPassword(textFields[5].getText());
+            dbs.setValidationQuery("select 1");
+            dbs.init();
             dataSource = dbs;
         }
 
