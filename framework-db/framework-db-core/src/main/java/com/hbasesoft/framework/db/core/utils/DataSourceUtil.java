@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.utils;
 
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
@@ -91,6 +92,19 @@ public final class DataSourceUtil {
             }
             if (StringUtils.isNotEmpty(dbParam.getDriverClass())) {
                 ds.setDriverClassName(dbParam.getDriverClass());
+            }
+            else {
+                ServiceLoader<Driver> drivers = ServiceLoader.load(Driver.class);
+                if (drivers != null) {
+                    String dbType = new StringBuilder().append('.').append(dbParam.getDbType().toLowerCase())
+                        .append('.').toString();
+                    for (Driver driver : drivers) {
+                        if (driver.getClass().getName().indexOf(dbType) != -1) {
+                            ds.setDriverClassName(driver.getClass().getName());
+                            break;
+                        }
+                    }
+                }
             }
             ds.setInitialSize(dbParam.getInitialSize());
             ds.setMaxActive(dbParam.getMaxActive());
