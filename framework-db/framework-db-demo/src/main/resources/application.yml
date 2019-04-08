@@ -12,6 +12,4 @@ master: #主数据库配置
  db:
   type: h2
   url: jdbc:h2:~/test
- hibernate:
-  dialect: org.hibernate.dialect.H2Dialect
   
