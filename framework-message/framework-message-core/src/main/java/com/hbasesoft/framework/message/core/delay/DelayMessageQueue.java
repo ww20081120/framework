@@ -32,7 +32,7 @@ public class DelayMessageQueue {
         int[] levels = stepDelayMessageQueueLoader.getLevels();
         for (int i = 0, l = levels.length; i < l; i++) {
             int level = levels[i];
-            if (message.getSeconds() <= level) {
+            if (message.getSeconds() > level) {
                 newLevel = level;
                 break;
             }
@@ -58,19 +58,21 @@ public class DelayMessageQueue {
     public void delete(String msgId) {
         Collection<StepDelayMessageQueue> delayMessageQueues = stepDelayMessageQueueLoader.loadDelayMessageQueues();
         for (StepDelayMessageQueue queue : delayMessageQueues) {
-            if (queue.remove(msgId)) {
+            if (queue.remove(msgId) != null) {
                 LoggerUtil.info("ID为{0}消息从{1}级别的队列中移除", msgId, queue.getLevel());
                 break;
             }
         }
     }
 
-    public void update(StepDelayMessageQueue oldQueue, DelayMessage message) {
+    public void update(String msgId, Long expireTime, int oldLevel) {
+
         int newLevel = -1;
         int[] levels = stepDelayMessageQueueLoader.getLevels();
+        int currentSeconds = new Long((expireTime - System.currentTimeMillis()) / 1000).intValue();
         for (int i = 0, l = levels.length; i < l; i++) {
             int level = levels[i];
-            if (message.getSeconds() <= level) {
+            if (currentSeconds > level) {
                 newLevel = level;
                 break;
             }
@@ -79,10 +81,12 @@ public class DelayMessageQueue {
             }
         }
 
-        if (newLevel >= 0 && newLevel != oldQueue.getLevel()) {
-            oldQueue.remove(message.getMessageId());
-            stepDelayMessageQueueLoader.getDelayMessageQueue(newLevel).add(message);
-            LoggerUtil.info("{0}级别的队列中ID为{1}消息被迁移到{2}级别的队列中 ", oldQueue.getLevel(), message.getMessageId(), newLevel);
+        if (newLevel >= 0 && newLevel != oldLevel) {
+            stepDelayMessageQueueLoader.changeData(msgId, expireTime, oldLevel, newLevel);
+            LoggerUtil.info("{0}级别的队列中ID为{1}消息被迁移到{2}级别的队列中 ", oldLevel, msgId, newLevel);
+        }
+        else {
+            LoggerUtil.info("ID为{0}消息离发送时间还有{1}秒", msgId, currentSeconds);
         }
     }
 

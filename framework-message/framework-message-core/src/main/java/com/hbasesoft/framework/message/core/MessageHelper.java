@@ -5,12 +5,15 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core;
 
+import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.message.core.delay.DelayMessageQueue;
+import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueueLoader;
 
 /**
  * <Description> <br>
@@ -27,6 +30,8 @@ public final class MessageHelper {
     private static MessagePublisher messagePublisher;
 
     private static MessageSubcriberFactory messageSubcriberFactory;
+
+    private static DelayMessageQueue delayMessageQueue;
 
     private MessageHelper() {
     }
@@ -69,5 +74,21 @@ public final class MessageHelper {
             }
         }
         return messageSubcriberFactory;
+    }
+
+    public static DelayMessageQueue getDelayMessageQueue() {
+        if (delayMessageQueue == null) {
+            ServiceLoader<StepDelayMessageQueueLoader> serviceLoader = ServiceLoader
+                .load(StepDelayMessageQueueLoader.class);
+            Iterator<StepDelayMessageQueueLoader> it = serviceLoader.iterator();
+            if (it.hasNext()) {
+                StepDelayMessageQueueLoader loader = it.next();
+                if (loader != null) {
+                    delayMessageQueue = new DelayMessageQueue(loader);
+                }
+            }
+            Assert.notNull(delayMessageQueue, ErrorCodeDef.UNSPORT_DELAY_MESSAGE);
+        }
+        return delayMessageQueue;
     }
 }

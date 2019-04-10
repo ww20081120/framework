@@ -20,47 +20,35 @@ import java.util.Map;
  */
 public interface MessageSubscriber {
 
-	/**
-	 * Description: 接收到消息 <br>
-	 *
-	 * @param data <br>
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 */
-	void onMessage(String channel, byte[] data);
+    /**
+     * Description: 接收到消息 <br>
+     *
+     * @param data <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     */
+    void onMessage(String channel, byte[] data);
 
-	/**
-	 * Description: 开始订阅<br>
-	 *
-	 * @param subscribeChannels <br>
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 */
-	void onSubscribe(String channel, int subscribeChannels);
+    /**
+     * Description: 开始订阅<br>
+     *
+     * @param subscribeChannels <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     */
+    void onSubscribe(String channel, int subscribeChannels);
 
-	/**
-	 * Description: 取消订阅<br>
-	 *
-	 * @param subscribedChannels <br>
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 */
-	void onUnsubscribe(String channel, int subscribedChannels);
+    /**
+     * Description: 取消订阅<br>
+     *
+     * @param subscribedChannels <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     */
+    void onUnsubscribe(String channel, int subscribedChannels);
 
-	/**
-	 * @param @param channel
-	 * @param @param subscribedChannels
-	 * @return void
-	 * @throws
-	 * @Title: shutdown
-	 * @author 大刘杰
-	 * @Description: customer shutdown
-	 */
-	default void shutdown() {
-	}
-
-	default Map<String, Object> subscriberSetting() {
-		return new HashMap<>();
-	}
+    default Map<String, Object> subscriberSetting() {
+        return new HashMap<>();
+    }
 
 }

@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.delay.cache;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
@@ -25,14 +23,14 @@ import com.hbasesoft.framework.message.core.delay.DelayMessage;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.delay.cache <br>
  */
-public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue {
+public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue implements IndexQueue {
 
     private String nodeName;
 
     public CacheStepDelayMessageQueue(int level) {
         super(level);
-        nodeName = new StringBuilder().append("t_msg_delaymsg_").append(level).append(GlobalConstants.UNDERLINE)
-            .append(PropertyHolder.getProjectName()).toString();
+        nodeName = new StringBuilder().append(QueueManager.CACHE_NODE_NAME).append(level)
+            .append(GlobalConstants.UNDERLINE).append(PropertyHolder.getProjectName()).toString();
     }
 
     /**
@@ -44,7 +42,9 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue {
      */
     @Override
     public void add(DelayMessage delayMessage) {
-        CacheHelper.getCache().put(nodeName, delayMessage.getMessageId(), delayMessage);
+        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + delayMessage.getSeconds() * 1000);
+        CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
+            delayMessage.getMessageId(), delayMessage);
     }
 
     /**
@@ -56,13 +56,13 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue {
      * @return <br>
      */
     @Override
-    public boolean remove(String msgId) {
-        DelayMessage delayMessage = CacheHelper.getCache().get(nodeName, msgId);
+    public DelayMessage remove(String msgId) {
+        DelayMessage delayMessage = CacheHelper.getCache().get(QueueManager.CACHE_NODE_NAME, msgId);
         if (delayMessage != null) {
-            CacheHelper.getCache().evict(nodeName, msgId);
-            return true;
+            removeIndex(msgId);
+            CacheHelper.getCache().evict(QueueManager.CACHE_NODE_NAME, msgId);
         }
-        return false;
+        return delayMessage;
     }
 
     /**
@@ -73,8 +73,45 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue {
      * @return <br>
      */
     @Override
-    protected Collection<DelayMessage> getAll() {
-        Map<String, DelayMessage> maps = CacheHelper.getCache().getNode(nodeName, DelayMessage.class);
-        return maps == null ? new HashSet<>() : maps.values();
+    protected Map<String, Long> getAll() {
+        return CacheHelper.getCache().getNode(nodeName, Long.class);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param msgId
+     * @return <br>
+     */
+    @Override
+    public DelayMessage get(String msgId) {
+        return CacheHelper.getCache().get(QueueManager.CACHE_NODE_NAME, msgId);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
+    @Override
+    public void removeIndex(String key) {
+        CacheHelper.getCache().evict(nodeName, key);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param expireTime <br>
+     */
+    @Override
+    public void addIndex(String key, Long expireTime) {
+        CacheHelper.getCache().put(nodeName, key, expireTime);
     }
 }

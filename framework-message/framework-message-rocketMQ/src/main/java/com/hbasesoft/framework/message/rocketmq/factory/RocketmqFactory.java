@@ -38,15 +38,6 @@ public final class RocketmqFactory {
 
 	public static final String CONSUME_TYPE = "CONSUME_TYPE";
 
-	// 普通消费
-	public static final String ROCKET_MQ_DEFAULT_PUBLISH_TYPE = "NORMAL";
-
-	// 顺序消费
-	public static final String ROCKET_MQ_PUBLISH_TYPE_ORDERLY = "ORDERLY";
-
-	// 事务消费
-	public static final String ROCKET_MQ_PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
-
 	private static ThreadLocal<Map<String, DefaultMQPushConsumer>> threadLocalHolder = new ThreadLocal<Map<String, DefaultMQPushConsumer>>();
 
 	private static DefaultMQProducer defaultMQProducer;

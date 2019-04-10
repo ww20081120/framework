@@ -14,5 +14,7 @@
 		<module>framework-message-kafka</module>
 		<module>framework-message-rocketMQ</module>
 		<module>framework-message-demo</module>
+		<module>framework-message-delay-cache</module>
+		<module>framework-message-delay-db</module>
 	</modules>
 </project>

@@ -8,7 +8,6 @@ package com.hbasesoft.framework.message.delay.cache;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.hbasesoft.framework.message.core.delay.MemeryStepDelayMessageQueue;
 import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueue;
 
 /**
@@ -22,6 +21,8 @@ import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueue;
  * @see com.hbasesoft.framework.message.delay.cache <br>
  */
 public final class QueueManager {
+
+    public static final String CACHE_NODE_NAME = "t_msg_delaymsg";
 
     /** 秒级队列 */
     public static final int SECONDS_QUEUE = 1;
@@ -44,8 +45,9 @@ public final class QueueManager {
     /** 以天为单位的队列 */
     public static final int DAY_QUEUE = 60 * 60 * 24;
 
+    /** 顺序由大到小 */
     private static int[] levels = new int[] {
-        SECONDS_QUEUE, TEN_SECONDS_QUEUE, MINUTE_QUEUE, TEN_MINUTE_QUEUE, HALF_HOUR_QUEUE, HOUR_QUEUE, DAY_QUEUE
+        DAY_QUEUE, HOUR_QUEUE, HALF_HOUR_QUEUE, TEN_MINUTE_QUEUE, MINUTE_QUEUE, TEN_SECONDS_QUEUE, SECONDS_QUEUE
     };
 
     private static Map<Integer, StepDelayMessageQueue> map = new HashMap<>();
@@ -56,7 +58,7 @@ public final class QueueManager {
         MemeryStepDelayMessageQueue secondsQueue = new MemeryStepDelayMessageQueue(SECONDS_QUEUE);
         map.put(SECONDS_QUEUE, secondsQueue);
 
-        MemeryStepDelayMessageQueue tenSecondsQueue = new MemeryStepDelayMessageQueue(SECONDS_QUEUE);
+        MemeryStepDelayMessageQueue tenSecondsQueue = new MemeryStepDelayMessageQueue(TEN_SECONDS_QUEUE);
         map.put(TEN_SECONDS_QUEUE, tenSecondsQueue);
 
         map.put(MINUTE_QUEUE, new CacheStepDelayMessageQueue(MINUTE_QUEUE));

@@ -5,9 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.delay;
 
-import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -45,23 +46,22 @@ public abstract class AbstractStepDelayMessageQueue implements StepDelayMessageQ
         return this.level;
     }
 
-    public void check() {
-        Collection<DelayMessage> delayMessages = getAll();
-        if (CollectionUtils.isNotEmpty(delayMessages)) {
+    public synchronized void check() {
+        Map<String, Long> delayMessages = getAll();
+        if (MapUtils.isNotEmpty(delayMessages)) {
             LoggerUtil.info("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", this.getLevel(), delayMessages.size());
-            for (DelayMessage delayMessage : delayMessages) {
-                if (delayMessage.getCurrentTime() + delayMessage.getSeconds() * 1000 >= System.currentTimeMillis()) {
-                    LoggerUtil.info("{0}级别的队列中{1}消息已经到期，消息ID为{2}", this.getLevel(), delayMessage.getChannel(),
-                        delayMessage.getMessageId());
-                    this.remove(delayMessage.getMessageId());
+            for (Entry<String, Long> entry : delayMessages.entrySet()) {
+                if (entry.getValue() <= System.currentTimeMillis()) {
+                    LoggerUtil.info("{0}级别的队列中ID为{1}消息已经到期", this.getLevel(), entry.getKey());
+                    DelayMessage delayMessage = this.remove(entry.getKey());
                     MessageHelper.createMessagePublisher().publish(delayMessage.getChannel(), delayMessage.getData());
                 }
                 else {
-                    MessageHelper.getDelayMessageQueue().update(this, delayMessage);
+                    MessageHelper.getDelayMessageQueue().update(entry.getKey(), entry.getValue(), this.getLevel());
                 }
             }
         }
     }
 
-    protected abstract Collection<DelayMessage> getAll();
+    protected abstract Map<String, Long> getAll();
 }

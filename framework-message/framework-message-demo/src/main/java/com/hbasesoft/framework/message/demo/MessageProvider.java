@@ -9,7 +9,6 @@ import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.core.event.EventData;
-import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 
 /**
  * <Description> <br>
@@ -23,26 +22,26 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
  */
 public class MessageProvider {
 
-	public static void main(String[] args) throws InterruptedException {
-		MessagePublisher publisher = MessageHelper.createMessagePublisher();
-		int i = 0;
-		while (true) {
-			++i;
-//			publisher.publish("log-p21", (i + "").getBytes());
-			EventData data = new EventData();
-			data.put("param",(i + ""));
-			publisher.publish("testEvent", SerializationUtil.serial(data), RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY);
-			// publisher.publish("log-p16", (i + "").getBytes());
+    public static void main(String[] args) throws InterruptedException {
+        MessagePublisher publisher = MessageHelper.createMessagePublisher();
+        int i = 0;
+        while (true) {
+            ++i;
+            // publisher.publish("log-p21", (i + "").getBytes());
+            EventData data = new EventData();
+            data.put("param", (i + ""));
+            //publisher.publish("testEvent", SerializationUtil.serial(data), MessagePublisher.PUBLISH_TYPE_ORDERLY);
+            publisher.publish("log-p15", (i + "").getBytes());
 
-			// if (i % 5 == 0) {
-			// publisher.publish("log-p2", (++i + "").getBytes());
-			// }
-			System.out.println("produce " + i);
-			Thread.sleep(1000);
-			if (i==10){
-				return;
-			}
-		}
-	}
+            // if (i % 5 == 0) {
+            // publisher.publish("log-p2", (++i + "").getBytes());
+            // }
+            System.out.println("produce " + i);
+            Thread.sleep(1000);
+            if (i == 10) {
+                return;
+            }
+        }
+    }
 
 }

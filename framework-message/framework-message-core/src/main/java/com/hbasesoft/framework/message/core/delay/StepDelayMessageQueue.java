@@ -28,7 +28,9 @@ public interface StepDelayMessageQueue {
 
     void add(DelayMessage delayMessage);
 
-    boolean remove(String msgId);
+    DelayMessage get(String msgId);
+
+    DelayMessage remove(String msgId);
 
     void check();
 

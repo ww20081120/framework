@@ -59,4 +59,21 @@ public class CacheStepDelayMessageQueueLoader implements StepDelayMessageQueueLo
         return QueueManager.getMap().values();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param messageId
+     * @param oldLevel
+     * @param newLevel <br>
+     */
+    @Override
+    public void changeData(String messageId, long expireTime, int oldLevel, int newLevel) {
+        if (oldLevel != newLevel) {
+            ((IndexQueue) getDelayMessageQueue(oldLevel)).removeIndex(messageId);
+            ((IndexQueue) getDelayMessageQueue(newLevel)).addIndex(messageId, expireTime);
+        }
+    }
+
 }

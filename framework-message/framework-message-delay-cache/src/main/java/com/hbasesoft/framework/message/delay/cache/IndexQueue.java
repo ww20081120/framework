@@ -5,10 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.delay.cache;
 
-import org.springframework.context.ApplicationContext;
-
-import com.hbasesoft.framework.common.StartupListener;
-
 /**
  * <Description> <br>
  * 
@@ -19,29 +15,9 @@ import com.hbasesoft.framework.common.StartupListener;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.delay.cache <br>
  */
-public class DelayMessageStartupLinstener implements StartupListener {
+public interface IndexQueue {
 
-    /**
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */ 
-    @Override
-    public LoadOrder getOrder() {
-        return LoadOrder.LAST;
-    }
-    
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param context <br>
-     */
-    @Override
-    public void complete(ApplicationContext context) {
-        QueueManager.init();
-    }
+    void removeIndex(String key);
+
+    void addIndex(String key, Long expireTime);
 }

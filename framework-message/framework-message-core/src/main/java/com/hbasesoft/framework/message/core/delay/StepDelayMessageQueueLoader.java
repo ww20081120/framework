@@ -31,4 +31,6 @@ public interface StepDelayMessageQueueLoader {
      * @return <br>
      */
     Collection<StepDelayMessageQueue> loadDelayMessageQueues();
+
+    void changeData(String messageId, long expireTime, int oldLevel, int newLevel);
 }

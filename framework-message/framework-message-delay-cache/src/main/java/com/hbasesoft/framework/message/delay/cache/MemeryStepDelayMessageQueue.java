@@ -3,13 +3,16 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.message.core.delay;
+package com.hbasesoft.framework.message.delay.cache;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.message.core.delay.AbstractStepDelayMessageQueue;
+import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
 /**
  * <Description> <br>
@@ -21,9 +24,9 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.delay <br>
  */
-public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue implements Runnable {
+public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue implements Runnable, IndexQueue {
 
-    private Map<String, DelayMessage> holder;
+    private Map<String, Long> holder;
 
     public MemeryStepDelayMessageQueue(int level) {
         super(level);
@@ -39,7 +42,9 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      */
     @Override
     public void add(DelayMessage delayMessage) {
-        holder.put(delayMessage.getMessageId(), delayMessage);
+        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + delayMessage.getSeconds() * 1000);
+        CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
+            delayMessage.getMessageId(), delayMessage);
     }
 
     /**
@@ -51,8 +56,15 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @return <br>
      */
     @Override
-    public boolean remove(String msgId) {
-        return holder.remove(msgId) != null;
+    public DelayMessage remove(String msgId) {
+        Long t = holder.remove(msgId);
+        if (t != null) {
+            ICache cache = CacheHelper.getCache();
+            DelayMessage msg = cache.get(QueueManager.CACHE_NODE_NAME, msgId);
+            cache.evict(QueueManager.CACHE_NODE_NAME, msgId);
+            return msg;
+        }
+        return null;
     }
 
     /**
@@ -63,8 +75,8 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @return <br>
      */
     @Override
-    protected Collection<DelayMessage> getAll() {
-        return holder.values();
+    protected Map<String, Long> getAll() {
+        return holder;
     }
 
     /**
@@ -76,7 +88,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      */
     @Override
     public void run() {
-        LoggerUtil.info("{0}级别的内存启动check功能");
+        LoggerUtil.info("{0}级别的内存启动check功能", this.getLevel());
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 this.check();
@@ -92,6 +104,44 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
                 }
             }
         }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param msgId
+     * @return <br>
+     */
+    @Override
+    public DelayMessage get(String msgId) {
+        return CacheHelper.getCache().get(QueueManager.CACHE_NODE_NAME, msgId);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
+    @Override
+    public void removeIndex(String key) {
+        holder.remove(key);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param expireTime <br>
+     */
+    @Override
+    public void addIndex(String key, Long expireTime) {
+        holder.put(key, expireTime);
     }
 
 }
