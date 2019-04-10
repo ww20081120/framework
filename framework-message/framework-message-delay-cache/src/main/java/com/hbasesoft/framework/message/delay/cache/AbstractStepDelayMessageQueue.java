@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.message.core.delay;
+package com.hbasesoft.framework.message.delay.cache;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,6 +14,8 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
+import com.hbasesoft.framework.message.core.delay.DelayMessage;
+import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueue;
 
 /**
  * <Description> <br>

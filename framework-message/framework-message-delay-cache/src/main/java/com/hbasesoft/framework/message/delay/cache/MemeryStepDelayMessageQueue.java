@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.message.core.delay.AbstractStepDelayMessageQueue;
 import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
 /**

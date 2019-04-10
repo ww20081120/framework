@@ -10,7 +10,6 @@ import java.util.Map;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.message.core.delay.AbstractStepDelayMessageQueue;
 import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
 /**
