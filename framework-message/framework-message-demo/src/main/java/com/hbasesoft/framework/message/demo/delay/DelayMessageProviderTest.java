@@ -43,30 +43,30 @@ public class DelayMessageProviderTest implements ApplicationContextAware {
 
     @Test
     public void testDelayMessage() throws InterruptedException {
-        MessagePublisher publisher = MessageHelper.createMessagePublisher();
-
-        publisher.publish("log-p15", ("立即发送").getBytes());
-        
-        for (int i = 1; i < 800; i++) {
-            if (i <= 30) {
-                publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
-            }
-            else if (i <= 60) {
-                if (i % 2 == 0) {
-                    publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
-                }
-            }
-            else if (i <= 120) {
-                if (i % 30 == 1) {
-                    publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
-                }
-            }
-            else {
-                if (i % 60 == 3) {
-                    publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
-                }
-            }
-        }
+//        MessagePublisher publisher = MessageHelper.createMessagePublisher();
+//
+//        publisher.publish("log-p15", ("立即发送").getBytes());
+//        
+//        for (int i = 1; i < 800; i++) {
+//            if (i <= 30) {
+//                publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
+//            }
+//            else if (i <= 60) {
+//                if (i % 2 == 0) {
+//                    publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
+//                }
+//            }
+//            else if (i <= 120) {
+//                if (i % 30 == 1) {
+//                    publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
+//                }
+//            }
+//            else {
+//                if (i % 60 == 3) {
+//                    publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
+//                }
+//            }
+//        }
         Thread.sleep(10000000l);
     }
 

@@ -117,7 +117,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
                 }
                 else {
                     MessageHelper.getDelayMessageQueue().update(entity.getId(), entity.getExpireTime().getTime(),
-                        level);
+                        HALF_HOUR_QUEUE);
                 }
             }
         }
