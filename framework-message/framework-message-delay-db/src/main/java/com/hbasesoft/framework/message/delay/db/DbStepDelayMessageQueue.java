@@ -75,27 +75,9 @@ public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
      * @return <br>
      */
     @Override
-    public DelayMessage get(String msgId) {
-        MsgDelaymsgEntity entity = delaymsgService.get(msgId);
-        return entity == null ? null : entity.toVo();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param msgId
-     * @return <br>
-     */
-    @Override
     public DelayMessage remove(String msgId) {
-        MsgDelaymsgEntity entity = delaymsgService.get(msgId);
-        if (entity != null) {
-            delaymsgService.delete(msgId);
-            return entity.toVo();
-        }
-        return null;
+        MsgDelaymsgEntity entity = delaymsgService.delete(msgId);
+        return entity != null ? entity.toVo() : null;
     }
 
     /**
@@ -120,7 +102,7 @@ public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
             for (MsgDelaymsgEntity entity : entites) {
                 if (entity.getExpireTime().getTime() <= System.currentTimeMillis()) {
                     LoggerUtil.info("{0}级别的队列中ID为{1}消息已经到期", this.getLevel(), entity.getId());
-                    MsgDelaymsgEntity msg = delaymsgService.get(entity.getId());
+                    MsgDelaymsgEntity msg = delaymsgService.delete(entity.getId());
                     MessageHelper.createMessagePublisher().publish(msg.getChannel(),
                         StringUtils.isNotEmpty(msg.getContent()) ? DataUtil.hexStr2Byte(msg.getContent()) : null);
                 }

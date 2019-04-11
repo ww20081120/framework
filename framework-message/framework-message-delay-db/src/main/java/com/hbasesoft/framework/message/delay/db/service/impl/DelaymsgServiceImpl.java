@@ -49,24 +49,15 @@ public class DelaymsgServiceImpl implements DelaymsgService {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param id
-     * @return <br>
-     */
-    @Override
-    public MsgDelaymsgEntity get(String id) {
-        return msgDelaymsgDao.get(id);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param id <br>
      */
     @Override
-    public void delete(String id) {
-        msgDelaymsgDao.deleteById(id);
+    public MsgDelaymsgEntity delete(String id) {
+        MsgDelaymsgEntity entity = msgDelaymsgDao.get(id);
+        if (entity != null) {
+            msgDelaymsgDao.deleteById(id);
+        }
+        return entity;
     }
 
     /**

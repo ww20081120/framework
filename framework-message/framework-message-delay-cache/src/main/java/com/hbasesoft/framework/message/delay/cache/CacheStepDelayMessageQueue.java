@@ -81,19 +81,6 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param msgId
-     * @return <br>
-     */
-    @Override
-    public DelayMessage get(String msgId) {
-        return CacheHelper.getCache().get(QueueManager.CACHE_NODE_NAME, msgId);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param key <br>
      */
     @Override

@@ -81,27 +81,9 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
      * @return <br>
      */
     @Override
-    public DelayMessage get(String msgId) {
-        MsgDelaymsgEntity entity = delaymsgService.get(msgId);
-        return entity == null ? null : entity.toVo();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param msgId
-     * @return <br>
-     */
-    @Override
     public DelayMessage remove(String msgId) {
         if (holder.remove(msgId) != null) {
-            MsgDelaymsgEntity entity = delaymsgService.get(msgId);
-            if (entity != null) {
-                delaymsgService.delete(msgId);
-                return entity.toVo();
-            }
+            return delaymsgService.delete(msgId).toVo();
         }
         return null;
     }

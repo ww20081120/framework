@@ -111,7 +111,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
             for (MsgDelaymsgEntity entity : entites) {
                 if (entity.getExpireTime().getTime() <= System.currentTimeMillis()) {
                     LoggerUtil.info("{0}级别的队列中ID为{1}消息已经到期", level, entity.getId());
-                    MsgDelaymsgEntity msg = delaymsgService.get(entity.getId());
+                    MsgDelaymsgEntity msg = delaymsgService.delete(entity.getId());
                     MessageHelper.createMessagePublisher().publish(msg.getChannel(),
                         StringUtils.isNotEmpty(msg.getContent()) ? DataUtil.hexStr2Byte(msg.getContent()) : null);
                 }

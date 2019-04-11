@@ -29,11 +29,8 @@ public interface DelaymsgService {
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
     void save(MsgDelaymsgEntity entity);
 
-    @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
-    MsgDelaymsgEntity get(String id);
-
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
-    void delete(String id);
+    MsgDelaymsgEntity delete(String id);
 
     @Transactional(rollbackFor = Exception.class)
     void createTable();
