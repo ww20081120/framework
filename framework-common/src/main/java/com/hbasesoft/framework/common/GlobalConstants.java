@@ -77,4 +77,7 @@ public interface GlobalConstants {
 
     String SYMBOL_REGULAR = "[\\pP\\p{Punct}]";
 
+    String DOLLAR_BRACE = "${";
+
+
 }
