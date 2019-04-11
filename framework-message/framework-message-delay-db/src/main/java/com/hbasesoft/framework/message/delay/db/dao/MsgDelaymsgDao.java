@@ -6,9 +6,12 @@
 
 package com.hbasesoft.framework.message.delay.db.dao;
 
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Date;
 
 import com.hbasesoft.framework.db.Dao;
+import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.annotation.Sql;
+import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.hibernate.IBaseDao;
 import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
 
@@ -23,7 +26,19 @@ import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
  * @see com.hbasesoft.framework.db.hibernate.IBaseDao <br>
  */
 @Dao
-@Transactional
 public interface MsgDelaymsgDao extends IBaseDao<MsgDelaymsgEntity> {
+
     void createTable();
+
+    @Sql("SELECT ID, EXPIRE_TIME FROM T_MSG_DELAYMSG WHERE EXPIRE_TIME <= :expireTime AND MEMERY_FLAG = 'N'")
+    PagerList<MsgDelaymsgEntity> queryByTime(@Param("expireTime") Date expireTime,
+        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);
+
+    @Sql("SELECT ID, EXPIRE_TIME FROM T_MSG_DELAYMSG WHERE SHARD_INFO = :shardInfo AND EXPIRE_TIME <= :expireTime AND MEMERY_FLAG = 'Y'")
+    PagerList<MsgDelaymsgEntity> queryByTimeAndShard(@Param("expireTime") Date expireTime,
+        @Param("shardInfo") String shardInfo, @Param(Param.PAGE_INDEX) int pageIndex,
+        @Param(Param.PAGE_SIZE) int pageSize);
+
+    @Sql("UPDATE T_MSG_DELAYMSG SET MEMERY_FLAG = 'Y' WHERE ID = :id")
+    int updateMemeryFlag(@Param("id") String id);
 }

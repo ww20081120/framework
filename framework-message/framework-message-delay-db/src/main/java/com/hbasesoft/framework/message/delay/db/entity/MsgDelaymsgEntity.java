@@ -3,17 +3,24 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
- 
+
 package com.hbasesoft.framework.message.delay.db.entity;
+
+import java.net.InetAddress;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.apache.commons.lang3.StringUtils;
 
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
 /**
  * <Description> T_MSG_DELAYMSG的Entity<br>
@@ -34,8 +41,6 @@ public class MsgDelaymsgEntity extends BaseEntity {
 
     /** id */
     @Id
-    @GeneratedValue(generator = "paymentableGenerator")
-    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
     @Column(name = "id")
     private String id;
 
@@ -62,6 +67,44 @@ public class MsgDelaymsgEntity extends BaseEntity {
     /** expire_time */
     @Column(name = "expire_time")
     private java.util.Date expireTime;
+
+    /** shard_info */
+    @Column(name = "shard_info")
+    private String shardInfo;
+
+    public MsgDelaymsgEntity() {
+    }
+
+    public MsgDelaymsgEntity(DelayMessage delayMessage) {
+        this.setId(delayMessage.getMessageId());
+        this.setChannel(delayMessage.getChannel());
+        if (delayMessage.getData() != null) {
+            this.setContent(DataUtil.byte2HexStr(delayMessage.getData()));
+        }
+        this.setCreateTime(new Date(delayMessage.getCurrentTime()));
+        this.setDelaySeconds(delayMessage.getSeconds());
+        this.setMemeryFlag(GlobalConstants.NO);
+        this.setShardInfo(getShardMsg());
+        this.expireTime = new Date(delayMessage.getCurrentTime() + this.getDelaySeconds() * 1000);
+    }
+
+    public DelayMessage toVo() {
+        return new DelayMessage(this.id, this.channel,
+            StringUtils.isNotEmpty(content) ? DataUtil.hexStr2Byte(content) : null, this.delaySeconds,
+            this.createTime.getTime());
+    }
+
+    public static String getShardMsg() {
+        String shardInfo = PropertyHolder.getProjectName();
+        try {
+            shardInfo += PropertyHolder.getProperty("eureka.instance.hostname",
+                InetAddress.getLocalHost().getHostAddress());
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e);
+        }
+        return shardInfo;
+    }
 
     public String getId() {
         return this.id;
@@ -117,6 +160,14 @@ public class MsgDelaymsgEntity extends BaseEntity {
 
     public void setExpireTime(java.util.Date expireTime) {
         this.expireTime = expireTime;
+    }
+
+    public String getShardInfo() {
+        return shardInfo;
+    }
+
+    public void setShardInfo(String shardInfo) {
+        this.shardInfo = shardInfo;
     }
 
 }

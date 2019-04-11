@@ -5,6 +5,13 @@ spring: #应用配置
   application:
     name: ${project.name}
     
+master: #主数据库配置
+ db:
+  type: mysql
+  url: jdbc:mysql://vcc.hbasesoft.com:8306/sgp_msg?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true
+  username: sgp
+  password: sgp
+    
 cache: #缓存配置
   model: REDIS
   redis:

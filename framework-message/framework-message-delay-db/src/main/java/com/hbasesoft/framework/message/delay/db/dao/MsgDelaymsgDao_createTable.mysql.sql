@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS `t_msg_delaymsg` (
   `memery_flag` char(1) NOT NULL DEFAULT 'N',
   `content` text,
   `expire_time` datetime NOT NULL,
+  `shard_info` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
 )

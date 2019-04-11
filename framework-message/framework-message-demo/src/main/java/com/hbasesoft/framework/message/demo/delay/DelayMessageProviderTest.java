@@ -46,6 +46,7 @@ public class DelayMessageProviderTest implements ApplicationContextAware {
         MessagePublisher publisher = MessageHelper.createMessagePublisher();
 
         publisher.publish("log-p15", ("立即发送").getBytes());
+        
         for (int i = 1; i < 800; i++) {
             if (i <= 30) {
                 publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);

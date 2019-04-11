@@ -3,12 +3,12 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.message.delay.db.job;
+package com.hbasesoft.framework.message.delay.db;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
-import com.hbasesoft.framework.job.core.annotation.Job;
-import com.hbasesoft.framework.message.delay.db.DbStepDelayMessageQueueLoader;
+import org.springframework.context.ApplicationContext;
+
+import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.message.delay.db.service.DelaymsgService;
 
 /**
  * <Description> <br>
@@ -18,21 +18,31 @@ import com.hbasesoft.framework.message.delay.db.DbStepDelayMessageQueueLoader;
  * @taskId <br>
  * @CreateDate 2019年4月10日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.message.delay.db <br>
+ * @see com.hbasesoft.framework.message.delay.cache <br>
  */
-@Job(cron = "0 0/30 * * * ?")
-public class HalfHourCheckJob implements SimpleJob {
+public class DelayMessageStartupLinstener implements StartupListener {
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param shardingContext <br>
+     * @return <br>
      */
     @Override
-    public void execute(ShardingContext shardingContext) {
-        DbStepDelayMessageQueueLoader.getMap().get(DbStepDelayMessageQueueLoader.TEN_MINUTE_QUEUE).check();
+    public LoadOrder getOrder() {
+        return LoadOrder.MIDDLE;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
+    @Override
+    public void complete(ApplicationContext context) {
+        DbStepDelayMessageQueueLoader.init(context.getBean(DelaymsgService.class));
+    }
 }
