@@ -182,7 +182,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
                 delaymsgService.updateMemeryFlag(messageId);
             }
 
-            StepDelayMessageQueue newQueue = getDelayMessageQueue(oldLevel);
+            StepDelayMessageQueue newQueue = getDelayMessageQueue(newLevel);
             if (newQueue instanceof MemeryStepDelayMessageQueue) {
                 ((MemeryStepDelayMessageQueue) newQueue).addIndex(messageId, expireTime);
             }
