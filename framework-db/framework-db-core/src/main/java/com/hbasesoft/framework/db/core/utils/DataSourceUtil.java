@@ -8,20 +8,17 @@ package com.hbasesoft.framework.db.core.utils;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.db.core.DataSourceRegister;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
 import com.hbasesoft.framework.db.core.config.DbParam;
 
@@ -39,9 +36,20 @@ public final class DataSourceUtil {
 
     private static Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<String, DataSource>();
 
-    private static boolean initFlag = false;
-
     private DataSourceUtil() {
+    }
+
+    public static void init() {
+        synchronized (dataSourceMap) {
+            for (String key : PropertyHolder.getProperties().keySet()) {
+                if (key.endsWith(".db.url")) {
+                    String name = key.substring(0, key.indexOf("."));
+                    LoggerUtil.info("开始注册{0}数据源", name);
+                    regist(name, new DbParam(name));
+                    LoggerUtil.info("注册{0}数据源成功", name);
+                }
+            }
+        }
     }
 
     public static DataSource getDataSource() {
@@ -49,32 +57,14 @@ public final class DataSourceUtil {
     }
 
     public static DataSource getDataSource(String name) {
-        return getDataSourceMap().get(name);
+        synchronized (dataSourceMap) {
+            return dataSourceMap.get(name);
+        }
     }
 
     public static DataSource registDataSource(String name, DbParam dbParam) {
         synchronized (dataSourceMap) {
             return regist(name, dbParam);
-        }
-    }
-
-    private static Map<String, DataSource> getDataSourceMap() {
-        synchronized (dataSourceMap) {
-            if (!initFlag) {
-                ServiceLoader<DataSourceRegister> registerLoader = ServiceLoader.load(DataSourceRegister.class);
-                if (registerLoader != null) {
-                    registerLoader.forEach(register -> {
-                        Set<DbParam> dbParams = register.getDbParam();
-                        if (CollectionUtils.isNotEmpty(dbParams)) {
-                            dbParams.forEach(dbParam -> {
-                                regist(dbParam.getCode(), dbParam);
-                            });
-                        }
-                    });
-                }
-                initFlag = true;
-            }
-            return dataSourceMap;
         }
     }
 

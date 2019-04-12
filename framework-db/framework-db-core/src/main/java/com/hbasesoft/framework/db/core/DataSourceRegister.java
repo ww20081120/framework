@@ -19,6 +19,7 @@ import com.hbasesoft.framework.db.core.config.DbParam;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core <br>
  */
+@Deprecated
 public interface DataSourceRegister {
 
     Set<DbParam> getDbParam();
