@@ -5,9 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core;
 
-import java.util.Set;
-
-import com.hbasesoft.framework.db.core.config.DbParam;
+import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 
 /**
  * <Description> <br>
@@ -15,11 +14,34 @@ import com.hbasesoft.framework.db.core.config.DbParam;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2016年8月28日 <br>
+ * @CreateDate 2019年4月12日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core <br>
  */
-public interface DataSourceRegister {
+public class DatasourceStartupLinstener implements StartupListener {
 
-    Set<DbParam> getDbParam();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public LoadOrder getOrder() {
+        return LoadOrder.MIDDLE;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Override
+    public void init() {
+        DataSourceUtil.init();
+    }
+
 }
