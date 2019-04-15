@@ -531,7 +531,7 @@ public class DBTable2JavaBean extends JFrame {
      * @return <br>
      */
     private String typeTrans(String type) {
-        if ("TINYINT".equals(type) || "INTEGER".equals(type) || "INT".equals(type)) {
+        if (type.contains("INT")) {
             return "Integer";
         }
         else if ("LONG".equals(type) || "NUMBER".equals(type) || "BIGINT".equals(type)) {
