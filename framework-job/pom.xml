@@ -3,9 +3,10 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>3.3.0</version>
+		<version>3.3.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>framework-job</artifactId>
+  <version>3.3</version>
 	<name>framework job</name>
 	<packaging>pom</packaging>
 	<description>分布式Job引擎</description>
@@ -13,8 +14,4 @@
 		<module>framework-job-core</module>
 		<module>framework-job-demo</module>
 	</modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>

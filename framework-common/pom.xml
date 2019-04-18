@@ -3,9 +3,10 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>3.3.0</version>
+		<version>3.3.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>framework-common</artifactId>
+  <version>3.3</version>
 	<name>${project.artifactId}</name>
 	<description>公共模块</description>
 	<properties>
@@ -144,8 +145,4 @@
 			<artifactId>dom4j</artifactId>
 		</dependency>
 	</dependencies>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>
