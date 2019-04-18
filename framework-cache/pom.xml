@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.hbasesoft.framework</groupId>
     <artifactId>framework</artifactId>
-    <version>3.3</version>
+    <version>3.3.0</version>
   </parent>
   <artifactId>framework-cache</artifactId>
   <packaging>pom</packaging>
@@ -14,4 +14,8 @@
   	<module>framework-cache-ehcache</module>
   	<module>framework-cache-demo</module>
   </modules>
+
+  <scm>
+    <tag>3.3.0</tag>
+  </scm>
 </project>
