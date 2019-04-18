@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-rule</artifactId>
-		<version>3.3</version>
+		<version>3.3.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>framework-rule-core</artifactId>
 	<name>rule-core</name>

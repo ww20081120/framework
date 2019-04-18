@@ -6,7 +6,6 @@
     <version>3.3.1-SNAPSHOT</version>
   </parent>
   <artifactId>framework-rule</artifactId>
-  <version>3.3</version>
   <packaging>pom</packaging>
   <name>framework-rule</name>
   <description>简易规则引擎</description>

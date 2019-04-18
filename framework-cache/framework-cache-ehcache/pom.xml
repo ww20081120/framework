@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-cache</artifactId>
-		<version>3.3</version>
+		<version>3.3.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>framework-cache-ehcache</artifactId>
 	<dependencies>

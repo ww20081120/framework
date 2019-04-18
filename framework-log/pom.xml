@@ -6,7 +6,7 @@
     <version>3.3.1-SNAPSHOT</version>
   </parent>
   <artifactId>framework-log</artifactId>
-  <version>3.3</version>
+  <version>3.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
   	<module>framework-log-core</module>

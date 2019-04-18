@@ -6,7 +6,6 @@
 		<version>3.3.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>framework-message</artifactId>
-  <version>3.3</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>framework-message-core</module>
