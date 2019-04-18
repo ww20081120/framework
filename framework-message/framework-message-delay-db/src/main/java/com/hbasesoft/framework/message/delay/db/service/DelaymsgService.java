@@ -26,21 +26,21 @@ import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
  */
 public interface DelaymsgService {
 
-    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(rollbackFor = Exception.class)
     void save(MsgDelaymsgEntity entity);
 
-    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(rollbackFor = Exception.class)
     MsgDelaymsgEntity delete(String id);
 
     @Transactional(rollbackFor = Exception.class)
     void createTable();
 
-    @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(readOnly = true)
     PagerList<MsgDelaymsgEntity> queryByTime(Date expireTime, int pageIndex, int pageSize);
 
-    @Transactional(readOnly = true, isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(readOnly = true)
     PagerList<MsgDelaymsgEntity> queryByTimeAndShard(Date expireTime, String shardInfo, int pageIndex, int pageSize);
 
-    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(rollbackFor = Exception.class)
     int updateMemeryFlag(@Param("id") String id);
 }
