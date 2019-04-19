@@ -278,9 +278,31 @@ public class WechatServiceImpl implements WechatService {
             refreshAccessToken(appId, accountPojo.getAccountappsecret());
             accountPojo.setAccountaccesstoken(getAccessToken(appId));
         }
+        try {
+			// 校验accessToken有效性
+			if(!checkAccessToken(accountPojo.getAccountaccesstoken())) {
+				refreshAccessToken(appId, accountPojo.getAccountappsecret());	
+			}
+		} catch (Exception e) {
+			LoggerUtil.error("校验accessToken有效性失败", e);
+		}
         return accountPojo.getAccountaccesstoken();
     }
     
+    private boolean checkAccessToken(String accessToken) {
+   	 String url = MessageFormat.format(WechatConstant.CALLBACK_IP_URL, accessToken);
+        LoggerUtil.info("checkAccessToken url [{0}]", url);
+        String jsonStr = HttpUtil.doGet(url);
+        LoggerUtil.info("checkAccessToken 获取 response: [{0}]", jsonStr);
+
+        JSONObject obj = JSONObject.parseObject(jsonStr);
+        String errorCode = obj.getString("errcode");
+        if("40001".equals(errorCode)) {
+       	 return false;
+        }
+        return true;
+   }
+
     /**
      * Description: <br>
      *

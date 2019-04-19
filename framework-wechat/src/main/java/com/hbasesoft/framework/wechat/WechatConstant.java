@@ -128,4 +128,8 @@ public interface WechatConstant {
      */
     String SPREAD_TEMP_QRCODE_URL = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={0}";
 
+    /**
+     * 获取微信服务器IP地址
+     */
+    String CALLBACK_IP_URL = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token={0}";
 }
