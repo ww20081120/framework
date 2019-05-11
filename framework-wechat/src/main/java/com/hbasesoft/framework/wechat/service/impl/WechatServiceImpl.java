@@ -917,7 +917,7 @@ public class WechatServiceImpl implements WechatService {
         LoggerUtil.info("获取用户信息结果:[{0}]", jsonStr);
         JSONObject obj = JSONObject.parseObject(jsonStr);
         String errorCode = obj.getString("errcode");
-        if (CommonUtil.isEmpty(errorCode)) {
+        if (CommonUtil.isEmpty(errorCode) || "0".equals(errorCode)) {
             return obj;
         }
         else {
