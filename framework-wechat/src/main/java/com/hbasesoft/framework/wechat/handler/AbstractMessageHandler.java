@@ -252,8 +252,7 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
                 		if (null != qrcodeParamsPojo) {
                 			JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
                 			if (null != obj) {
-                				String subsCode = URLUtil.encode(obj.getString("subsCode"));
-                    			if (CommonUtil.isNotEmpty(subsCode)) {
+                    			if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
                     				return null;
                     			}
                 			}
