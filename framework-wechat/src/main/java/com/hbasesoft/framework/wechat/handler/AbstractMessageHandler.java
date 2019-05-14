@@ -275,11 +275,10 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         	//如果没有url的情况下跟原来一样处理
             if (CommonUtil.isNotEmpty(url)) {
             	//如果有url 1：关注事件的推送url没有小区二维码url直接推送 2：扫码事件中必须是小区二维码才推送
-            	if (-1 == url.indexOf(QRCODE_URL) || (-1 != url.indexOf(QRCODE_URL) && 
-            			CommonUtil.isNotEmpty(eventKey) && eventKey.indexOf("ADDR_") != -1)) {
-                } else {
-                	return null;
-                }
+            	if (-1 != url.indexOf(QRCODE_URL) && 
+            			CommonUtil.isNotEmpty(eventKey) && eventKey.indexOf("ADDR_") == -1) {
+            		return null;
+                } 
             } 
         	
         	article.setPicUrl(imagePath + "/" + news.getImagepath());
