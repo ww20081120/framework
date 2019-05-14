@@ -105,7 +105,14 @@ public class EventMessageHandler extends AbstractMessageHandler {
         String respMessage = null;
         //获取事件中的值
         String eventKey = requestMap.get("EventKey");
-        List<SubscribePojo> lst = querySubscribeOrScanList(accountId, SubscribePojo.SUBSCRIBE);
+        List<SubscribePojo> lst = null;
+        //燃气管家扫描小区二维码没有关注的情况下会进关注事件,但是需要推送扫码的消息
+        if (CommonUtil.isNotEmpty(eventKey) && eventKey.indexOf("ADDR_") != -1) {
+        	lst = querySubscribeOrScanList(accountId, SubscribePojo.SCAN);
+        } else {
+        	lst = querySubscribeOrScanList(accountId, SubscribePojo.SUBSCRIBE);
+        }
+        
         
         if (lst.size() != 0) {
             SubscribePojo subscribe = lst.get(0);

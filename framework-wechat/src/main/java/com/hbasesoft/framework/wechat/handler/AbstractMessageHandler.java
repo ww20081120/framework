@@ -271,8 +271,17 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         			} 
         		}
             }
-            
-            article.setPicUrl(imagePath + "/" + news.getImagepath());
+        	
+        	//如果没有url的情况下跟原来一样处理
+            if (CommonUtil.isNotEmpty(url)) {
+            	//如果有url 1：关注事件的推送url没有小区二维码url直接推送 2：扫码事件中必须是小区二维码才推送
+            	if (-1 != url.indexOf(QRCODE_URL) && 
+            			CommonUtil.isNotEmpty(eventKey) && eventKey.indexOf("ADDR_") == -1) {
+            		return null;
+                } 
+            } 
+        	
+        	article.setPicUrl(imagePath + "/" + news.getImagepath());
             if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
                 url = serverPath + "/article/" + news.getId();
             }
@@ -301,7 +310,7 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         newsResp.setToUserName(toUserName);
         newsResp.setFromUserName(fromUserName);
         newsResp.setMsgType(WechatUtil.RESP_MESSAGE_TYPE_NEWS);
-        newsResp.setArticleCount(newsList.size());
+        newsResp.setArticleCount(articleList.size());
         newsResp.setArticles(articleList);
         return WechatUtil.newsMessageToXml(newsResp);
     }
