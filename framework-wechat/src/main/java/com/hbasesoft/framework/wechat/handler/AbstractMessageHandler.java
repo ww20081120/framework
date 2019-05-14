@@ -244,6 +244,25 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         	String addrId = null;
         	String title = news.getTitle();
         	if(CommonUtil.isNotEmpty(eventKey)){
+        		try {
+        			//临时邀请码不推送
+            		String vccId = StringUtils.substringAfterLast(eventKey, "VCC_");
+            		if (CommonUtil.isNotEmpty(vccId)) {
+            			QrcodeParamsPojo qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, vccId);
+                		if (null != qrcodeParamsPojo) {
+                			JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+                			if (null != obj) {
+                				String subsCode = URLUtil.encode(obj.getString("subsCode"));
+                    			if (CommonUtil.isNotEmpty(subsCode)) {
+                    				return null;
+                    			}
+                			}
+                		}
+            		}
+        		} catch (Exception e) {
+        			LoggerUtil.error("查询解析VCC二维码失败");
+        		}
+        		
             	//判断是否为地址二维码（为地址二维码时应为单图文消息）
             	addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
         		//如果是地址，则替换欢迎语
