@@ -14,5 +14,6 @@
 		<module>framework-message-kafka</module>
 		<module>framework-message-rocketMQ</module>
 		<module>framework-message-demo</module>
+		<module>framework-message-simple</module>
 	</modules>
 </project>
