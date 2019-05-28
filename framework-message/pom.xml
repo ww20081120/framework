@@ -17,8 +17,4 @@
 		<module>framework-message-delay-db</module>
 		<module>framework-message-simple</module>
 	</modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>

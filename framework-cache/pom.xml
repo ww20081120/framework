@@ -14,8 +14,4 @@
   	<module>framework-cache-ehcache</module>
   	<module>framework-cache-demo</module>
   </modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>

@@ -12,8 +12,4 @@
   <modules>
   	<module>framework-bootstrap-normal</module>
   </modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>

@@ -12,8 +12,4 @@
   	<module>framework-db-sh</module>
   	<module>framework-db-demo</module>
   </modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>

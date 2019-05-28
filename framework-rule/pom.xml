@@ -17,8 +17,4 @@
   	<module>framework-rule-plugin-stateMachine</module>
   	<module>framework-rule-demo</module>
   </modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>

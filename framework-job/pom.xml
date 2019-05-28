@@ -13,8 +13,4 @@
 		<module>framework-job-core</module>
 		<module>framework-job-demo</module>
 	</modules>
-
-  <scm>
-    <tag>3.3.0</tag>
-  </scm>
 </project>
