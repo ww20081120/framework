@@ -866,7 +866,7 @@ public class WechatServiceImpl implements WechatService {
         JSONObject actionInoJson = new JSONObject();
         sceneJson.put("scene_str", sceneStr);
         actionInoJson.put("scene", sceneJson);
-        paramJson.put("action_name", "QR_LIMIT_STR_SCENE");
+        paramJson.put("action_name", "QR_STR_SCENE");
         paramJson.put("expire_seconds", CacheCodeDef.MONTH_CACHE_TIME);
         paramJson.put("action_info", actionInoJson);
         String url = MessageFormat.format(WechatConstant.SPREAD_TEMP_QRCODE_URL, accessToken);
