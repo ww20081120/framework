@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
@@ -61,11 +63,18 @@
 		<connection>scm:git:git@github.com:ww20081120/framework.git</connection>
 		<url>git@github.com:ww20081120/framework</url>
 		<developerConnection>scm:git:git@github.com:ww20081120/framework.git</developerConnection>
-	  <tag>3.3.0</tag>
-  </scm>
+		<tag>3.3.0</tag>
+	</scm>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
