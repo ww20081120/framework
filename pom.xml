@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
@@ -67,6 +68,13 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -106,16 +114,16 @@
 			</resource>
 		</resources>
 	</build>
-<!-- 	<repositories> -->
-<!-- 		<repository> -->
-<!-- 			<id>spring-milestones</id> -->
-<!-- 			<name>Spring Milestones</name> -->
-<!-- 			<url>https://repo.spring.io/libs-milestone</url> -->
-<!-- 			<snapshots> -->
-<!-- 				<enabled>false</enabled> -->
-<!-- 			</snapshots> -->
-<!-- 		</repository> -->
-<!-- 	</repositories> -->
+	<!-- <repositories> -->
+	<!-- <repository> -->
+	<!-- <id>spring-milestones</id> -->
+	<!-- <name>Spring Milestones</name> -->
+	<!-- <url>https://repo.spring.io/libs-milestone</url> -->
+	<!-- <snapshots> -->
+	<!-- <enabled>false</enabled> -->
+	<!-- </snapshots> -->
+	<!-- </repository> -->
+	<!-- </repositories> -->
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
