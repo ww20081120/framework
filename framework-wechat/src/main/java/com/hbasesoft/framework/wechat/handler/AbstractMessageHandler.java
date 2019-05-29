@@ -247,7 +247,7 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         	if(CommonUtil.isNotEmpty(eventKey)){
         		try {
         			//临时邀请码不推送
-            		String vccId = StringUtils.substringAfterLast(eventKey, "VCC_");
+            		String vccId = StringUtils.substringAfterLast(eventKey, "VCC_"); 
             		if (CommonUtil.isNotEmpty(vccId)) {
             			QrcodeParamsPojo qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, vccId);
             			ChangeQrcodeParamPojo changePojo = null;
