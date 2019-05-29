@@ -27,6 +27,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.URLUtil;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.MediaUploadPojo;
 import com.hbasesoft.framework.wechat.bean.MediatemplatePojo;
 import com.hbasesoft.framework.wechat.bean.MenuentityPojo;
@@ -249,6 +250,10 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
             		String vccId = StringUtils.substringAfterLast(eventKey, "VCC_");
             		if (CommonUtil.isNotEmpty(vccId)) {
             			QrcodeParamsPojo qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, vccId);
+            			ChangeQrcodeParamPojo changePojo = null;
+                		if(qrcodeParamsPojo == null) {
+                			changePojo = wechatDao.getEntity(ChangeQrcodeParamPojo.class, vccId);
+                		}
                 		if (null != qrcodeParamsPojo) {
                 			JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
                 			if (null != obj) {
@@ -256,7 +261,15 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
                     				return null;
                     			}
                 			}
+                		}else if(changePojo != null) {
+                			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
+                			if (null != obj) {
+                    			if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
+                    				return null;
+                    			}
+                			}
                 		}
+            			
             		}
         		} catch (Exception e) {
         			LoggerUtil.error("查询解析VCC二维码失败");
