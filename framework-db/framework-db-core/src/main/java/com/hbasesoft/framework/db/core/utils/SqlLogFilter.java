@@ -640,8 +640,12 @@ public class SqlLogFilter extends FilterEventAdapter {
      */
     private void saveMsg2Cache(String msg) {
         String statckId = TransManager.getInstance().getStackId();
-        for (TransLoggerService service : getTransLoggerServices()) {
-            service.sql(statckId, msg);
+
+        ServiceLoader<TransLoggerService> services = getTransLoggerServices();
+        if (services != null) {
+            for (TransLoggerService service : services) {
+                service.sql(statckId, msg);
+            }
         }
     }
 
