@@ -50,6 +50,17 @@ public final class CommonUtil {
     public static String getTransactionID() {
         return UUID.randomUUID().toString().replace("-", GlobalConstants.BLANK);
     }
+    
+    /**
+     * Description: 根据UUID的hash code生成随机码<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static String getRandomCode() {
+        return Long.toUnsignedString(Long.parseUnsignedLong(UUID.randomUUID().toString().substring(24), 16), 36);
+    }
 
     /**
      * Description: 获取指定位数的随机数<br>
