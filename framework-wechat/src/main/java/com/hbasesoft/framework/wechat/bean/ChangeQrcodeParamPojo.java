@@ -47,6 +47,9 @@ public class ChangeQrcodeParamPojo extends BaseEntity {
     @Column(name = "create_time")
     private java.util.Date createTime;
 
+    @Column(name = "update_time")
+    private java.util.Date updateTime;
+    
     /** employee_code */
     @Column(name = "employee_code")
     private String employeeCode;
@@ -177,6 +180,14 @@ public class ChangeQrcodeParamPojo extends BaseEntity {
 
 	public void setIsUsed(String isUsed) {
 		this.isUsed = isUsed;
+	}
+
+	public java.util.Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(java.util.Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 }
