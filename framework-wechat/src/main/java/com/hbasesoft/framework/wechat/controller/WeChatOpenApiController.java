@@ -8,6 +8,7 @@ package com.hbasesoft.framework.wechat.controller;
 import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -261,7 +262,8 @@ public class WeChatOpenApiController extends BaseController {
     		}else if(WechatConstant.QR_LIMIT_STR_SCENE.equals(actionName)) {
     			datas = scene.getString("scene_str");
     		}
-        	ChangeQrcodeParamPojo pojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.DATAS, datas);
+    		List<ChangeQrcodeParamPojo> pojoList = wechatDao.findByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.DATAS, datas);
+        	ChangeQrcodeParamPojo pojo = CommonUtil.isNotEmpty(pojoList) ? pojoList.get(0): null;
         	
         	if(pojo == null) {
         		pojo = wechatService.getChangeQrcodeParamPojo(null, null, "0");
