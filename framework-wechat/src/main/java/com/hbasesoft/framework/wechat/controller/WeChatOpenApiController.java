@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
@@ -29,6 +30,7 @@ import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
+import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.wechat.CacheCodeDef;
 import com.hbasesoft.framework.wechat.ErrorCodeDef;
@@ -233,10 +235,11 @@ public class WeChatOpenApiController extends BaseController {
     
     @RequestMapping(value = "/cgi-bin/qrcode/create", method = RequestMethod.POST)
     @ResponseBody
-    public String qrCodeCreate(HttpServletRequest request, HttpServletResponse response, String jsonStr) throws Exception {
+    public String qrCodeCreate(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     	String transId = CommonUtil.getTransactionID();
     	String accessToken = getParameter("access_token", ErrorCodeDef.ACCESS_TOKEN_NULL);
+    	String jsonStr = StringUtils.trim(IOUtil.readString(request.getReader()));
     	JSONObject bodyJson = JSONObject.parseObject(jsonStr);
         logger.info(" start create qrcode [{0}]|[{1}]|[{2}]", transId, jsonStr, accessToken);
 
