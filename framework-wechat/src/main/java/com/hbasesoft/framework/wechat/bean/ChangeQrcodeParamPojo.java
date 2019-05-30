@@ -24,6 +24,9 @@ public class ChangeQrcodeParamPojo extends BaseEntity {
 	public static final String NOT_USED = "0";
 	
 	public static final String USED = "1";
+	
+	public static final String QRCODE_PARAMS_ID = "qrcodeParamsId";
+	
     /**
      * serialVersionUID
      */
