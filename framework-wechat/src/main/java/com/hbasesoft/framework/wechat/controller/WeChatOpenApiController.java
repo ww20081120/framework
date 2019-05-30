@@ -253,21 +253,21 @@ public class WeChatOpenApiController extends BaseController {
         if(WechatConstant.QR_SCENE.equals(actionName) || WechatConstant.QR_STR_SCENE.equals(actionName)) {
         	resp = wechatService.getOpenApiTempSpreadQcUrl(jsonStr, accessToken);
         }else {
-        	ChangeQrcodeParamPojo pojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.DATAS, jsonStr);
+        	String datas = null;
+        	JSONObject actionInfo = (JSONObject) bodyJson.get("action_info");
+    		JSONObject scene = (JSONObject) actionInfo.get("scene");
+    		if(WechatConstant.QR_LIMIT_SCENE.equals(actionName)) {
+    			datas = scene.getLongValue("scene_id") + "";
+    		}else if(WechatConstant.QR_LIMIT_STR_SCENE.equals(actionName)) {
+    			datas = scene.getString("scene_str");
+    		}
+        	ChangeQrcodeParamPojo pojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.DATAS, datas);
         	
         	if(pojo == null) {
         		pojo = wechatService.getChangeQrcodeParamPojo(null, null, "0");
         		pojo.setIsUsed("1");
         		pojo.setUpdateTime(new Date());
-        		String datas = null;
-        		JSONObject actionInfo = (JSONObject) bodyJson.get("action_info");
-        		JSONObject scene = (JSONObject) actionInfo.get("scene");
-        		if(WechatConstant.QR_LIMIT_SCENE.equals(actionName)) {
-        			datas = scene.getLongValue("scene_id") + "";
-        			pojo.setType(actionName);
-        		}else if(WechatConstant.QR_LIMIT_STR_SCENE.equals(actionName)) {
-        			datas = scene.getString("scene_str");
-        		}
+        		pojo.setType(actionName);
         		pojo.setDatas(datas);
         		wechatDao.updateEntity(pojo);
         	}
