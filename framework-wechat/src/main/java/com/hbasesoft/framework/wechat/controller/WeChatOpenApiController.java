@@ -264,7 +264,7 @@ public class WeChatOpenApiController extends BaseController {
         		JSONObject scene = (JSONObject) actionInfo.get("scene");
         		if(WechatConstant.QR_LIMIT_SCENE.equals(actionName)) {
         			datas = scene.getLongValue("scene_id") + "";
-        			pojo.setType("int");
+        			pojo.setType(actionName);
         		}else if(WechatConstant.QR_LIMIT_STR_SCENE.equals(actionName)) {
         			datas = scene.getString("scene_str");
         		}
