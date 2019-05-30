@@ -389,7 +389,11 @@ public class WechatUtil {
         sb.append("<xml>");
         for (Entry<String, String> entry : map.entrySet()) {
             if (CommonUtil.isNotEmpty(entry.getValue())) {
-                sb.append(CommonUtil.messageFormat("<{0}><![CDATA[{1}]]></{2}>", entry.getKey(), entry.getValue(), entry.getKey()));
+            	if("CreateTime".equals(entry.getKey())) {
+            		sb.append(CommonUtil.messageFormat("<{0}>{1}</{2}>", entry.getKey(), entry.getValue(), entry.getKey()));
+            	}else {
+            		sb.append(CommonUtil.messageFormat("<{0}><![CDATA[{1}]]></{2}>", entry.getKey(), entry.getValue(), entry.getKey()));
+            	}
             }
         }
         sb.append("</xml>");
