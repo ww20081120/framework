@@ -55,6 +55,7 @@ import com.hbasesoft.framework.wechat.WechatConstant;
 import com.hbasesoft.framework.wechat.WechatEventCodeDef;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
 import com.hbasesoft.framework.wechat.bean.AutoresponsePojo;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.ExpandconfigPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.bean.msg.UnifiedOrderResult;
@@ -955,4 +956,11 @@ public class WechatServiceImpl implements WechatService {
             return StringUtils.equals(key, content);
         }
     }
+    
+    @Override
+	@Transactional(readOnly = true)
+	public ChangeQrcodeParamPojo getChangeQrcodeParamPojo(String orgCode, String appId, String usedFlag) throws ServiceException {
+		return wechatDao.getChangeQrcodeParamPojo(orgCode, appId, usedFlag);
+	}
+    
 }

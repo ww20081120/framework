@@ -28,7 +28,6 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.date.DateConstants;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.wechat.CacheCodeDef;
@@ -36,7 +35,10 @@ import com.hbasesoft.framework.wechat.ErrorCodeDef;
 import com.hbasesoft.framework.wechat.WebConstant;
 import com.hbasesoft.framework.wechat.WechatConstant;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
+import com.hbasesoft.framework.wechat.bean.resp.CreateQrcodeResp;
+import com.hbasesoft.framework.wechat.dao.WechatDao;
 import com.hbasesoft.framework.wechat.service.WechatService;
 import com.hbasesoft.framework.wechat.util.MD5Encoder;
 import com.hbasesoft.framework.wechat.util.WechatUtil;
@@ -59,6 +61,9 @@ public class WeChatOpenApiController extends BaseController {
 
     @Resource(name = "WechatServiceImpl")
     private WechatService wechatService;
+    
+    @Resource
+    private WechatDao wechatDao;
 
     @RequestMapping(value = "/connect/oauth2/authorize", method = RequestMethod.GET)
     public void wechatAuth(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -226,4 +231,39 @@ public class WeChatOpenApiController extends BaseController {
 
     }
     
+    @RequestMapping(value = "/cgi-bin/qrcode/create", method = RequestMethod.POST)
+    @ResponseBody
+    public String qrCodeCreate(HttpServletRequest request, HttpServletResponse response, String jsonStr) throws Exception {
+
+    	String transId = CommonUtil.getTransactionID();
+    	String accessToken = getParameter("access_token", ErrorCodeDef.ACCESS_TOKEN_NULL);
+    	JSONObject bodyJson = JSONObject.parseObject(jsonStr);
+        logger.info(" start create qrcode [{0}]|[{1}]|[{2}]", transId, jsonStr, accessToken);
+
+        String resp = null;
+        //判断是否是临时二维码 临时二维码直接从微信申请
+        String actionName = (String) bodyJson.get("action_name");
+        
+        if(WechatConstant.QR_SCENE.equals(actionName) || WechatConstant.QR_STR_SCENE.equals(actionName)) {
+        	resp = wechatService.getSpreadQcUrl(jsonStr, accessToken);
+        }else {
+        	ChangeQrcodeParamPojo pojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.DATAS, jsonStr);
+        	
+        	if(pojo == null) {
+        		pojo = wechatService.getChangeQrcodeParamPojo(null, null, "0");
+        		pojo.setIsUsed("1");
+        		pojo.setUpdateTime(new Date());
+        		pojo.setDatas(jsonStr);
+        		wechatDao.updateEntity(pojo);
+        	}
+        	
+        	CreateQrcodeResp qrVo = new CreateQrcodeResp();
+        	qrVo.setTicket(pojo.getQrcodeParamsId());
+        	qrVo.setUrl(pojo.getQrcodeUrl());
+        	resp = qrVo.toString();
+        }
+        
+        return resp;
+
+    }
 }

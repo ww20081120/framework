@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
 import com.hbasesoft.framework.wechat.bean.AutoresponsePojo;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.ExpandconfigPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.bean.msg.UnifiedOrderResult;
@@ -236,4 +238,18 @@ public interface WechatService {
      * @return <br>
      */
     AutoresponsePojo getAutoResponse(String accountId, String content);
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author zhasiwei<br>
+     * @taskId <br>
+     * @param orgCode
+     * @param appId
+     * @return
+     * @throws ServiceException <br>
+     */
+    ChangeQrcodeParamPojo getChangeQrcodeParamPojo(String orgCode,String appId, String usedFlag) throws ServiceException;
+	
 }

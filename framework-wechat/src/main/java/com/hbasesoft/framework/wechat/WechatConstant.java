@@ -132,4 +132,24 @@ public interface WechatConstant {
      * 获取微信服务器IP地址
      */
     String CALLBACK_IP_URL = "https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token={0}";
+
+    /**
+     * 临时的整型参数值
+     */
+    String QR_SCENE = "QR_SCENE";
+    
+    /**
+     * 临时的字符串参数值
+     */
+    String QR_STR_SCENE = "QR_STR_SCENE";
+    
+    /**
+     * 永久的整型参数值
+     */
+    String QR_LIMIT_SCENE = "QR_LIMIT_SCENE";
+    
+    /**
+     * 永久的字符串参数值
+     */
+    String QR_LIMIT_STR_SCENE = "QR_LIMIT_STR_SCENE";
 }
