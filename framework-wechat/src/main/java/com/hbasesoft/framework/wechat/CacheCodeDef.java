@@ -88,6 +88,9 @@ public interface CacheCodeDef extends CacheConstant {
     /**获取员工l临时推广二维码URL缓存*/
     String WX_TEMP_SPREAD_QC_CACHE = "wechat.temp_spread_qc_cache";
 
+    /**获取会员员工l临时推广二维码URL缓存*/
+    String WX_MEMBER_TEMP_SPREAD_QC_CACHE = "wechat.temp_member_spread_qc_cache";
+    
     /**客服信息对象*/
     String WX_MESSAGE = "wechat.message";
 

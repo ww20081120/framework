@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -235,6 +237,7 @@ public class WeChatOpenApiController extends BaseController {
     
     @RequestMapping(value = "/cgi-bin/qrcode/create", method = RequestMethod.POST)
     @ResponseBody
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public String qrCodeCreate(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     	String transId = CommonUtil.getTransactionID();
@@ -246,9 +249,9 @@ public class WeChatOpenApiController extends BaseController {
         String resp = null;
         //判断是否是临时二维码 临时二维码直接从微信申请
         String actionName = (String) bodyJson.get("action_name");
-        
+        CreateQrcodeResp qrVo = new CreateQrcodeResp();
         if(WechatConstant.QR_SCENE.equals(actionName) || WechatConstant.QR_STR_SCENE.equals(actionName)) {
-        	resp = wechatService.getSpreadQcUrl(jsonStr, accessToken);
+        	resp = wechatService.getOpenApiTempSpreadQcUrl(jsonStr, accessToken);
         }else {
         	ChangeQrcodeParamPojo pojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.DATAS, jsonStr);
         	
@@ -256,15 +259,25 @@ public class WeChatOpenApiController extends BaseController {
         		pojo = wechatService.getChangeQrcodeParamPojo(null, null, "0");
         		pojo.setIsUsed("1");
         		pojo.setUpdateTime(new Date());
-        		pojo.setDatas(jsonStr);
+        		String datas = null;
+        		JSONObject actionInfo = (JSONObject) bodyJson.get("action_info");
+        		JSONObject scene = (JSONObject) actionInfo.get("scene");
+        		if(WechatConstant.QR_LIMIT_SCENE.equals(actionName)) {
+        			datas = scene.getLongValue("scene_id") + "";
+        			pojo.setType("int");
+        		}else if(WechatConstant.QR_LIMIT_STR_SCENE.equals(actionName)) {
+        			datas = scene.getString("scene_str");
+        		}
+        		pojo.setDatas(datas);
         		wechatDao.updateEntity(pojo);
         	}
         	
-        	CreateQrcodeResp qrVo = new CreateQrcodeResp();
         	qrVo.setTicket(pojo.getQrcodeParamsId());
         	qrVo.setUrl(pojo.getQrcodeUrl());
         	resp = qrVo.toString();
         }
+        
+        logger.info(" end create qrcode [{0}]|[{1}]", transId, resp);
         
         return resp;
 

@@ -878,6 +878,16 @@ public class WechatServiceImpl implements WechatService {
         return obj.get("url").toString();
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public String getOpenApiTempSpreadQcUrl(@Key("sceneStr") String sceneStr, String accessToken) {
+        String url = MessageFormat.format(WechatConstant.SPREAD_TEMP_QRCODE_URL, accessToken);
+        LoggerUtil.info("获得员工推广临时二维码url:[{0}]---body[{1}]", url, sceneStr);
+        String jsonStr = HttpUtil.doPost(url, sceneStr, WechatConstant.APPLICATION_JSON_UTF_8);
+        LoggerUtil.info("获得员工推广临时二维码url:代码:[{0}]", jsonStr);
+        return jsonStr;
+    }
+    
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public List<ExpandconfigPojo> queryAllExpandConfig() {
         DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);
