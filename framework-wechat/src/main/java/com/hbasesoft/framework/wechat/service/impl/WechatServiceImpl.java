@@ -885,7 +885,8 @@ public class WechatServiceImpl implements WechatService {
         LoggerUtil.info("获得员工推广临时二维码url:[{0}]---body[{1}]", url, sceneStr);
         String jsonStr = HttpUtil.doPost(url, sceneStr, WechatConstant.APPLICATION_JSON_UTF_8);
         LoggerUtil.info("获得员工推广临时二维码url:代码:[{0}]", jsonStr);
-        return jsonStr;
+        JSONObject obj = JSONObject.parseObject(jsonStr);
+        return obj.toString();
     }
     
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
