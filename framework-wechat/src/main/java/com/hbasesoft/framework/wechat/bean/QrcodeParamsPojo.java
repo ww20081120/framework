@@ -34,6 +34,8 @@ public class QrcodeParamsPojo extends BaseEntity {
     
     public static final String SUBS_CODE = "subsCode";
     
+    public static final String ORG_CODE = "orgCode";
+    
     public static final String GARDEN_CODE = "gardenCode";
 
     /** id */
