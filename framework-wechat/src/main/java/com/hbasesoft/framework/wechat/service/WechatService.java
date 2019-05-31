@@ -9,8 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
 import com.hbasesoft.framework.wechat.bean.AutoresponsePojo;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.ExpandconfigPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.bean.msg.UnifiedOrderResult;
@@ -217,6 +219,18 @@ public interface WechatService {
      */
     String getTempSpreadQcUrl(String sceneStr, String accessToken);
 
+    /**
+     * 
+     * Description: 获取第三方临时二维码<br> 
+     *  
+     * @author liu.xianan<br>
+     * @taskId <br>
+     * @param sceneStr:场景值ID（字符串形式的ID），字符串类型，长度限制为1到28 
+     * @param accessToken
+     * @return <br>
+     */
+    String getOpenApiTempSpreadQcUrl(String sceneStr, String accessToken);
+    
     WXResult sendMessage(WxMessage wxMessage,String accessToken);
 
     List<ExpandconfigPojo> queryAllExpandConfig();
@@ -236,4 +250,18 @@ public interface WechatService {
      * @return <br>
      */
     AutoresponsePojo getAutoResponse(String accountId, String content);
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author zhasiwei<br>
+     * @taskId <br>
+     * @param orgCode
+     * @param appId
+     * @return
+     * @throws ServiceException <br>
+     */
+    ChangeQrcodeParamPojo getChangeQrcodeParamPojo(String orgCode,String appId, String usedFlag) throws ServiceException;
+	
 }

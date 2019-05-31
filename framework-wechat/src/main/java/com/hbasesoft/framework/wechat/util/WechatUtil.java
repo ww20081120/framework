@@ -383,6 +383,22 @@ public class WechatUtil {
         sb.append("</xml>");
         return sb.toString();
     }
+    
+    public static String map2wechatXml(Map<String, String> map) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<xml>");
+        for (Entry<String, String> entry : map.entrySet()) {
+            if (CommonUtil.isNotEmpty(entry.getValue())) {
+            	if("CreateTime".equals(entry.getKey())) {
+            		sb.append(CommonUtil.messageFormat("<{0}>{1}</{2}>", entry.getKey(), entry.getValue(), entry.getKey()));
+            	}else {
+            		sb.append(CommonUtil.messageFormat("<{0}><![CDATA[{1}]]></{2}>", entry.getKey(), entry.getValue(), entry.getKey()));
+            	}
+            }
+        }
+        sb.append("</xml>");
+        return sb.toString();
+    }
 
     @SuppressWarnings("unchecked")
     public static Map<String, String> xml2map(String content) {

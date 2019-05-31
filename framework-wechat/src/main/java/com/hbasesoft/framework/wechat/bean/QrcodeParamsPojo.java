@@ -1,5 +1,7 @@
 package com.hbasesoft.framework.wechat.bean;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,6 +33,8 @@ public class QrcodeParamsPojo extends BaseEntity {
     public static final String APP_ID = "appId";
     
     public static final String SUBS_CODE = "subsCode";
+    
+    public static final String ORG_CODE = "orgCode";
     
     public static final String GARDEN_CODE = "gardenCode";
 
@@ -68,6 +72,12 @@ public class QrcodeParamsPojo extends BaseEntity {
     /** type */
     @Column(name = "type")
     private String type;
+    
+    @Column(name = "create_time")
+    private Date createTime;
+    
+    @Column(name = "qrcode_url")
+    private String qrcodeUrl;
 
     public String getId() {
         return this.id;
@@ -131,6 +141,22 @@ public class QrcodeParamsPojo extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getQrcodeUrl() {
+		return qrcodeUrl;
+	}
+
+	public void setQrcodeUrl(String qrcodeUrl) {
+		this.qrcodeUrl = qrcodeUrl;
 	}
     
 }

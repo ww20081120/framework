@@ -55,6 +55,7 @@ import com.hbasesoft.framework.wechat.WechatConstant;
 import com.hbasesoft.framework.wechat.WechatEventCodeDef;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
 import com.hbasesoft.framework.wechat.bean.AutoresponsePojo;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.ExpandconfigPojo;
 import com.hbasesoft.framework.wechat.bean.OpenapiChannelPojo;
 import com.hbasesoft.framework.wechat.bean.msg.UnifiedOrderResult;
@@ -877,6 +878,17 @@ public class WechatServiceImpl implements WechatService {
         return obj.get("url").toString();
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public String getOpenApiTempSpreadQcUrl(@Key("sceneStr") String sceneStr, String accessToken) {
+        String url = MessageFormat.format(WechatConstant.SPREAD_TEMP_QRCODE_URL, accessToken);
+        LoggerUtil.info("获得员工推广临时二维码url:[{0}]---body[{1}]", url, sceneStr);
+        String jsonStr = HttpUtil.doPost(url, sceneStr, WechatConstant.APPLICATION_JSON_UTF_8);
+        LoggerUtil.info("获得员工推广临时二维码url:代码:[{0}]", jsonStr);
+        JSONObject obj = JSONObject.parseObject(jsonStr);
+        return obj.toString();
+    }
+    
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public List<ExpandconfigPojo> queryAllExpandConfig() {
         DetachedCriteria criteria = DetachedCriteria.forClass(ExpandconfigPojo.class);
@@ -955,4 +967,11 @@ public class WechatServiceImpl implements WechatService {
             return StringUtils.equals(key, content);
         }
     }
+    
+    @Override
+	@Transactional(readOnly = true)
+	public ChangeQrcodeParamPojo getChangeQrcodeParamPojo(String orgCode, String appId, String usedFlag) throws ServiceException {
+		return wechatDao.getChangeQrcodeParamPojo(orgCode, appId, usedFlag);
+	}
+    
 }

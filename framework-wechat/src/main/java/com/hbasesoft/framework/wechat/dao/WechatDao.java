@@ -5,8 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.wechat.dao;
 
+import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.annotation.Dao;
+import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 
 /**
  * <Description> <br>
@@ -20,5 +24,8 @@ import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
  */
 @Dao
 public interface WechatDao extends IGenericBaseDao {
+
+	@Sql(bean = ChangeQrcodeParamPojo.class)
+    ChangeQrcodeParamPojo getChangeQrcodeParamPojo(@Param("orgCode") String orgCode, @Param("appId") String appId, @Param("usedFlag") String usedFlag) throws DaoException;
 
 }
