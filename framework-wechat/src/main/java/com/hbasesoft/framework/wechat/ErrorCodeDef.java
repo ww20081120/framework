@@ -55,6 +55,9 @@ public interface ErrorCodeDef extends com.hbasesoft.framework.common.ErrorCodeDe
     /** ACCESS_TOKEN错误 */
     int ACCESS_TOKEN_ERROR = 30010;
     
+    /** 永久二维码达到上限错误 */
+    int QRCODE_MAX_ERROR = 45029;
+    
     /** 退费错误 */
     int REFUND_ERROR = 50007;
     

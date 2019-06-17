@@ -12,7 +12,7 @@ public class WechatAccount {
     private String appCode; // required
 
     private String appSecret; // required
-
+    
     public String getAppCode() {
         return appCode;
     }
