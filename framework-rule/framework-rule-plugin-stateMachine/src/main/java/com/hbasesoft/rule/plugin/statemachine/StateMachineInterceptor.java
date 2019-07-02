@@ -37,7 +37,7 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  * @see com.hbasesoft.rule.plugin.statemachine <br>
  */
 @Component("StateMachineComponent")
-public class StateMachineIntercetor extends AbstractFlowCompnentInterceptor {
+public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>

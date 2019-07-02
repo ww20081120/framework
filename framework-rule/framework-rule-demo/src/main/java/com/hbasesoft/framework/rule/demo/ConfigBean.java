@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.hbasesoft.framework.rule.core.plugin.CodeMatchInterceptor;
 import com.hbasesoft.framework.rule.core.plugin.ConditionInterceptor;
 import com.hbasesoft.framework.rule.core.plugin.ToolsInterceptor;
-import com.hbasesoft.rule.plugin.statemachine.StateMachineIntercetor;
+import com.hbasesoft.rule.plugin.statemachine.StateMachineInterceptor;
 
 /**
  * <Description> <br>
@@ -42,7 +42,7 @@ public class ConfigBean {
     }
 
     @Bean
-    public StateMachineIntercetor stateMachineIntercetor() {
-        return new StateMachineIntercetor();
+    public StateMachineInterceptor stateMachineIntercetor() {
+        return new StateMachineInterceptor();
     }
 }
