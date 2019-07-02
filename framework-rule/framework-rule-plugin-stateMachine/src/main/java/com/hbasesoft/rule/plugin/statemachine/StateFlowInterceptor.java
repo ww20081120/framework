@@ -8,7 +8,6 @@ package com.hbasesoft.rule.plugin.statemachine;
 import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
@@ -24,7 +23,6 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.rule.plugin.statemachine <br>
  */
-@Component("StateFlowIntercetor")
 public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
 
     private ThreadLocal<Boolean> skipFlagHolder = ThreadLocal.withInitial(() -> true);
@@ -49,7 +47,7 @@ public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
         if (flowBean instanceof StateFlowBean
             && flowContext.getFlowConfig().getConfigAttrMap().containsKey("stateFlow")) {
             StateFlowBean stateFlowBean = (StateFlowBean) flowBean;
-            
+
             // 如果未设置lastComponent则一直执行
             if (StringUtils.isEmpty(stateFlowBean.getLastComponent())) {
                 skipFlagHolder.set(false);
