@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -36,8 +35,7 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.rule.plugin.statemachine <br>
  */
-@Component("StateMachineComponent")
-public class StateMachineIntercetor extends AbstractFlowCompnentInterceptor {
+public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>
