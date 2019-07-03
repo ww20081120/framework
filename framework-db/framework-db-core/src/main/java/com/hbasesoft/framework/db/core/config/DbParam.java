@@ -51,7 +51,7 @@ public class DbParam extends BaseEntity {
     /**
      * 初始化连接大小
      */
-    private int initialSize = 30;
+    private int initialSize = 5;
 
     /**
      * 连接池最大使用连接数量
@@ -61,7 +61,7 @@ public class DbParam extends BaseEntity {
     /**
      * 连接池最小空闲
      */
-    private int minIdle = 30;
+    private int minIdle = 0;
 
     /**
      * 获取连接最大等待时间
