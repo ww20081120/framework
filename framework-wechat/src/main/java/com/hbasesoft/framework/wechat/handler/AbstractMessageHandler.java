@@ -323,8 +323,11 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
             		return null;
                 } 
             } 
-        	
-        	article.setPicUrl(imagePath + "/" + news.getImagepath());
+            if(com.hbasesoft.framework.common.utils.CommonUtil.isNotEmpty(news.getImagepath()) && news.getImagepath().startsWith("http")) {
+            	article.setPicUrl(news.getImagepath());
+            }else {
+            	article.setPicUrl(imagePath + "/" + news.getImagepath());
+            }
             if (CommonUtil.isNotEmpty(news.getContent()) || CommonUtil.isEmpty(news.getUrl())) {
                 url = serverPath + "/article/" + news.getId();
             }
