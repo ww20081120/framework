@@ -81,6 +81,20 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         textMessage.setMsgType(WechatUtil.RESP_MESSAGE_TYPE_TEXT);
         textMessage.setCreateTime(new Date().getTime());
         if(CommonUtil.isNotEmpty(eventKey)){
+        	// 判断是否转二维码
+        	String vccId = StringUtils.substringAfterLast(eventKey, "VCC_"); 
+        	if (CommonUtil.isNotEmpty(vccId)) {
+    			ChangeQrcodeParamPojo changePojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.QRCODE_PARAMS_ID, vccId);
+    			if(changePojo != null) {
+        			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
+        			if (null != obj) {
+        				if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
+        					eventKey = "ADDR_" + vccId;
+        				}
+        			}
+        		}
+    			
+    		}
         	//判断是否为地址二维码
         	String addrId = StringUtils.substringAfterLast(eventKey, "ADDR_");
     		//如果是地址，则替换欢迎语
@@ -270,7 +284,10 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
                 		}else if(changePojo != null) {
                 			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
                 			if (null != obj) {
-                    			if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
+                				if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
+                					eventKey = "ADDR_" + vccId;
+                				}
+                				else if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
                     				return null;
                     			}
                 			}

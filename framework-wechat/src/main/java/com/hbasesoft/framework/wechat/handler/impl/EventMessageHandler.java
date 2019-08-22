@@ -10,11 +10,13 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.jasypt.commons.CommonUtils;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -23,6 +25,7 @@ import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.wechat.WechatEventCodeDef;
 import com.hbasesoft.framework.wechat.bean.AccountPojo;
+import com.hbasesoft.framework.wechat.bean.ChangeQrcodeParamPojo;
 import com.hbasesoft.framework.wechat.bean.MenuentityPojo;
 import com.hbasesoft.framework.wechat.bean.SubscribePojo;
 import com.hbasesoft.framework.wechat.handler.AbstractMessageHandler;
@@ -107,6 +110,20 @@ public class EventMessageHandler extends AbstractMessageHandler {
         String eventKey = requestMap.get("EventKey");
         List<SubscribePojo> lst = null;
         //燃气管家扫描小区二维码没有关注的情况下会进关注事件,但是需要推送扫码的消息
+        // 判断是否转二维码
+    	String vccId = StringUtils.substringAfterLast(eventKey, "VCC_"); 
+    	if (CommonUtil.isNotEmpty(vccId)) {
+			ChangeQrcodeParamPojo changePojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.QRCODE_PARAMS_ID, vccId);
+			if(changePojo != null) {
+    			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
+    			if (null != obj) {
+    				if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
+    					eventKey = "ADDR_" + vccId;
+    				}
+    			}
+    		}
+			
+		}
         if (CommonUtil.isNotEmpty(eventKey) && eventKey.indexOf("ADDR_") != -1) {
         	lst = querySubscribeOrScanList(accountId, SubscribePojo.SCAN);
         } else {
