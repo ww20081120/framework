@@ -45,7 +45,7 @@ public interface EventLinsener extends MessageSubscriber {
      */
     default void onMessage(String channel, byte[] data) {
         EventData eventData = SerializationUtil.unserial(EventData.class, data);
-        LoggerUtil.info("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().getId(), channel, eventData);
+        LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().getId(), channel, eventData);
         onEmmit(channel, eventData);
     }
 
@@ -57,7 +57,7 @@ public interface EventLinsener extends MessageSubscriber {
      * @param subscribeChannels <br>
      */
     default void onSubscribe(String channel, int subscribeChannels) {
-        LoggerUtil.info("开始监听{0}事件，监听者数目{1}", channel, subscribeChannels);
+        LoggerUtil.debug("开始监听{0}事件，监听者数目{1}", channel, subscribeChannels);
     }
 
     /**
@@ -68,6 +68,6 @@ public interface EventLinsener extends MessageSubscriber {
      * @param subscribedChannels <br>
      */
     default void onUnsubscribe(String channel, int subscribedChannels) {
-        LoggerUtil.info("取消监听{0}事件，监听者数目{1}", channel, subscribedChannels);
+        LoggerUtil.debug("取消监听{0}事件，监听者数目{1}", channel, subscribedChannels);
     }
 }

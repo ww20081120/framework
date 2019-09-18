@@ -52,7 +52,7 @@ public final class MessageHandler {
                         if (CollectionUtils.isNotEmpty(datas)) {
 
                             String transId = CommonUtil.getTransactionID();
-                            LOGGER.info("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
+                            LOGGER.debug("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
                                 transId);
 
                             for (byte[] data : datas) {
@@ -62,7 +62,7 @@ public final class MessageHandler {
                         }
                         else {
                             if (++count % 500 == 0) {
-                                LOGGER.info("channel {0} consumer is alived.", channel);
+                                LOGGER.debug("channel {0} consumer is alived.", channel);
                             }
                         }
                     }

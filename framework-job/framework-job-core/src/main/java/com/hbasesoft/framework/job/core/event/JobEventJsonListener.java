@@ -23,7 +23,7 @@ public class JobEventJsonListener extends JobEventJsonIdentity implements JobEve
 		String stackId = CommonUtil.getTransactionID();
 		manager.push(stackId, beginTime);
 		MDC.put("stackId", TransManager.getInstance().getStackId());
-		logger.info(JSON.toJSONString(jobExecutionEvent));
+		logger.debug(JSON.toJSONString(jobExecutionEvent));
 		MDC.clear();
 	}
 
@@ -36,7 +36,7 @@ public class JobEventJsonListener extends JobEventJsonIdentity implements JobEve
 		String stackId = CommonUtil.getTransactionID();
 		manager.push(stackId, beginTime);
 		MDC.put("stackId", TransManager.getInstance().getStackId());
-		logger.info(JSON.toJSONString(jobStatusTraceEvent));
+		logger.debug(JSON.toJSONString(jobStatusTraceEvent));
 		MDC.clear();
 	}
 

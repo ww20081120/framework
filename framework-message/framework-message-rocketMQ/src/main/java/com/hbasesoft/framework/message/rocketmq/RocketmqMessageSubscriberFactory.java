@@ -56,7 +56,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
         switch (String.valueOf(subscriberSetting.get(RocketmqFactory.CONSUME_TYPE))) {
             case MessagePublisher.PUBLISH_TYPE_ORDERLY:
                 // 顺序消费
-                log.info("启动顺序消费");
+                log.debug("启动顺序消费");
                 consumeOrderly(channel, broadcast, subscriber);
                 break;
             case MessagePublisher.PUBLISH_TYPE_TRANSACTION:
@@ -65,7 +65,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
                 break;
             default:
                 // 普通并发消费
-                log.info("启动普通并发消费");
+                log.debug("启动普通并发消费");
                 consumeConcurrently(channel, broadcast, subscriber);
                 break;
         }

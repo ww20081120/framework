@@ -50,7 +50,7 @@ public class RedisLock {
      * @return <br>
      */
     public boolean lock(int timeout, int expireTime) {
-        LoggerUtil.info("开始锁住{0},timeout={1},expireTime={2}", lockName, timeout, expireTime);
+        LoggerUtil.debug("开始锁住{0},timeout={1},expireTime={2}", lockName, timeout, expireTime);
         long lockTime = System.currentTimeMillis();
         int i = 0;
         try {
@@ -60,7 +60,7 @@ public class RedisLock {
                 if (redisCache.setnx(lockName, LOCKED, expireTime)) {
                     // 锁的情况下锁过期后消失，不会造成永久阻塞
                     this.lock = true;
-                    LoggerUtil.info("获取锁成功{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
+                    LoggerUtil.debug("获取锁成功{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
                     return this.lock;
                 }
 
@@ -74,7 +74,7 @@ public class RedisLock {
         catch (Exception e) {
             throw new RuntimeException("locking error", e);
         }
-        LoggerUtil.info("获取锁失败{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
+        LoggerUtil.debug("获取锁失败{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
         return false;
     }
 

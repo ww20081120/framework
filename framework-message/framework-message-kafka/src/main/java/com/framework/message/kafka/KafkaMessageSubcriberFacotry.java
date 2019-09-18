@@ -88,7 +88,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
                     Thread.sleep(1000L);
                 }
                 if (++count % 500 == 0) {
-                    LOGGER.info("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
+                    LOGGER.debug("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
                 }
             }
         }

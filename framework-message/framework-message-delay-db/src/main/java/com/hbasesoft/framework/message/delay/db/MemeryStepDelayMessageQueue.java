@@ -98,10 +98,10 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
     @Override
     public synchronized void check() {
         if (MapUtils.isNotEmpty(holder)) {
-            LoggerUtil.info("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", this.getLevel(), holder.size());
+            LoggerUtil.debug("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", this.getLevel(), holder.size());
             for (Entry<String, Long> entry : holder.entrySet()) {
                 if (entry.getValue() <= System.currentTimeMillis()) {
-                    LoggerUtil.info("{0}级别的队列中ID为{1}消息已经到期", this.getLevel(), entry.getKey());
+                    LoggerUtil.debug("{0}级别的队列中ID为{1}消息已经到期", this.getLevel(), entry.getKey());
                     DelayMessage delayMessage = this.remove(entry.getKey());
                     MessageHelper.createMessagePublisher().publish(delayMessage.getChannel(), delayMessage.getData());
                 }
@@ -147,7 +147,7 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
      */
     @Override
     public void run() {
-        LoggerUtil.info("{0}级别的内存启动check功能", this.getLevel());
+        LoggerUtil.debug("{0}级别的内存启动check功能", this.getLevel());
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 this.check();

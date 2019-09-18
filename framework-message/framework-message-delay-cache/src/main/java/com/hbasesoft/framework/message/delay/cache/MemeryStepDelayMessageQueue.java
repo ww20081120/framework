@@ -87,7 +87,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      */
     @Override
     public void run() {
-        LoggerUtil.info("{0}级别的内存启动check功能", this.getLevel());
+        LoggerUtil.debug("{0}级别的内存启动check功能", this.getLevel());
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 this.check();

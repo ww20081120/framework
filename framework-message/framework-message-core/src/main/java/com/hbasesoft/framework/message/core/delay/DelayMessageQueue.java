@@ -42,7 +42,7 @@ public class DelayMessageQueue {
         }
 
         if (newLevel >= 0) {
-            LoggerUtil.info("ID为{0}的{1}消息寄存到{2}级别的队列中", message.getMessageId(), message.getChannel(), newLevel);
+            LoggerUtil.debug("ID为{0}的{1}消息寄存到{2}级别的队列中", message.getMessageId(), message.getChannel(), newLevel);
             stepDelayMessageQueueLoader.getDelayMessageQueue(newLevel).add(message);
         }
         return message.getMessageId();
@@ -59,7 +59,7 @@ public class DelayMessageQueue {
         Collection<StepDelayMessageQueue> delayMessageQueues = stepDelayMessageQueueLoader.loadDelayMessageQueues();
         for (StepDelayMessageQueue queue : delayMessageQueues) {
             if (queue.remove(msgId) != null) {
-                LoggerUtil.info("ID为{0}消息从{1}级别的队列中移除", msgId, queue.getLevel());
+                LoggerUtil.debug("ID为{0}消息从{1}级别的队列中移除", msgId, queue.getLevel());
                 break;
             }
         }
@@ -83,10 +83,10 @@ public class DelayMessageQueue {
 
         if (newLevel >= 0 && newLevel != oldLevel) {
             stepDelayMessageQueueLoader.changeData(msgId, expireTime, oldLevel, newLevel);
-            LoggerUtil.info("{0}级别的队列中ID为{1}消息被迁移到{2}级别的队列中 ", oldLevel, msgId, newLevel);
+            LoggerUtil.debug("{0}级别的队列中ID为{1}消息被迁移到{2}级别的队列中 ", oldLevel, msgId, newLevel);
         }
         else {
-            LoggerUtil.info("ID为{0}消息离发送时间还有{1}秒", msgId, currentSeconds);
+            LoggerUtil.debug("ID为{0}消息离发送时间还有{1}秒", msgId, currentSeconds);
         }
     }
 

@@ -51,10 +51,10 @@ public abstract class AbstractStepDelayMessageQueue implements StepDelayMessageQ
     public synchronized void check() {
         Map<String, Long> delayMessages = getAll();
         if (MapUtils.isNotEmpty(delayMessages)) {
-            LoggerUtil.info("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", this.getLevel(), delayMessages.size());
+            LoggerUtil.debug("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", this.getLevel(), delayMessages.size());
             for (Entry<String, Long> entry : delayMessages.entrySet()) {
                 if (entry.getValue() <= System.currentTimeMillis()) {
-                    LoggerUtil.info("{0}级别的队列中ID为{1}消息已经到期", this.getLevel(), entry.getKey());
+                    LoggerUtil.debug("{0}级别的队列中ID为{1}消息已经到期", this.getLevel(), entry.getKey());
                     DelayMessage delayMessage = this.remove(entry.getKey());
                     MessageHelper.createMessagePublisher().publish(delayMessage.getChannel(), delayMessage.getData());
                 }
