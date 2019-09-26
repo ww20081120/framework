@@ -56,7 +56,7 @@ public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
             else if (skipFlagHolder.get()) {
                 // 不是相同的name，不能执行
                 if (!StringUtils.equals(stateFlowBean.getLastComponent(), lcName)) {
-                    LoggerUtil.info("当前记录的状态为{0}, 跳过组件{1}", stateFlowBean.getLastComponent(), lcName);
+                    LoggerUtil.debug("当前记录的状态为{0}, 跳过组件{1}", stateFlowBean.getLastComponent(), lcName);
                     return false;
                 }
                 // 匹配到相同的name才能继续执行

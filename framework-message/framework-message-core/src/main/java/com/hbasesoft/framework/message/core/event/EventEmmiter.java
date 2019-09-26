@@ -46,16 +46,16 @@ public final class EventEmmiter {
 	 */
 	public static void emmit(String event, EventData data) {
 		MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
-		LoggerUtil.info("触发[event={0},data={1}]事件通知", event, data);
+		LoggerUtil.debug("触发[event={0},data={1}]事件通知", event, data);
 	}
 
 	public static void emmit(String event, EventData data, long delayTime) {
 		MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), delayTime);
-		LoggerUtil.info("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, delayTime);
+		LoggerUtil.debug("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, delayTime);
 	}
 
 	public static void emmit(String event, EventData data, String produceModel) {
 		MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
-		LoggerUtil.info("触发[event={0},data={1}, produceModel={2}]事件通知", event, data, produceModel);
+		LoggerUtil.debug("触发[event={0},data={1}, produceModel={2}]事件通知", event, data, produceModel);
 	}
 }

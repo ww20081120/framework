@@ -52,7 +52,7 @@ public final class MessageThreadPoolExecutor {
                 long count = 0;
                 while (bq.remainingCapacity() == 0 && executor.getMaximumPoolSize() == executor.getPoolSize()) {
                     if (count++ % 100 == 0) {
-                        LoggerUtil.info("wait message[{0}] execute, current pool size is [{1}]", channel, bq.size());
+                        LoggerUtil.debug("wait message[{0}] execute, current pool size is [{1}]", channel, bq.size());
                     }
                     Thread.sleep(100);
                 }

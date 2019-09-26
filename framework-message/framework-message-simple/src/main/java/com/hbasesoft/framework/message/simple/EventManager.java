@@ -142,7 +142,7 @@ public class EventManager {
                         Thread.sleep(1000L);
                     }
                     if (++count % 500 == 0) {
-                        LOGGER.info("scanner for {0} is alived.", channel);
+                        LOGGER.debug("scanner for {0} is alived.", channel);
                     }
                 }
             }

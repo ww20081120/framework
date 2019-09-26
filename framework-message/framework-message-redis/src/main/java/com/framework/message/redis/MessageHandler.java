@@ -51,7 +51,7 @@ public final class MessageHandler {
                         if (CollectionUtils.isNotEmpty(datas)) {
 
                             String transId = CommonUtil.getTransactionID();
-                            LOGGER.info("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
+                            LOGGER.debug("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
                                 transId);
 
                             for (byte[] data : datas) {
@@ -60,7 +60,7 @@ public final class MessageHandler {
                             }
                         }
                         else {
-                            LOGGER.info("channel {0} consumer is alived.", channel);
+                            LOGGER.debug("channel {0} consumer is alived.", channel);
                         }
                     }
                     catch (Exception e) {
@@ -100,9 +100,9 @@ public final class MessageHandler {
 
         public void run() {
             try {
-                LOGGER.info("{0}|{1} before execute event.", transId, channel);
+                LOGGER.debug("{0}|{1} before execute event.", transId, channel);
                 this.subscriber.onMessage(this.channel, data);
-                LOGGER.info("{0}|{1} after execute event.", transId, channel);
+                LOGGER.debug("{0}|{1} after execute event.", transId, channel);
             }
             catch (Exception e) {
                 LOGGER.error(e, "{0}|{1}|FAIL|execute event error.", transId, channel);

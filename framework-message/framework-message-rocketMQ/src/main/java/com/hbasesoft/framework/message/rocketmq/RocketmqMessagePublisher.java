@@ -89,7 +89,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 				default:
 					// 普通消费
 					SendResult send = defaultMQProducer.send(msg);
-					log.info("发送结果 " + send.toString());
+					log.debug("发送结果 " + send.toString());
 					break;
 			}
 		} catch (Exception e) {

@@ -249,7 +249,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> Serializable save(T entity) throws DaoException {
         try {
             Serializable id = getSession().save(entity);
-            logger.info("保存实体成功," + entity.getClass().getName());
+            logger.debug("保存实体成功," + entity.getClass().getName());
             return id;
         }
         catch (Exception e) {
@@ -268,7 +268,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void saveOrUpdate(T entity) throws DaoException {
         try {
             getSession().saveOrUpdate(entity);
-            logger.info("添加或更新成功," + entity.getClass().getName());
+            logger.debug("添加或更新成功," + entity.getClass().getName());
         }
         catch (RuntimeException e) {
             logger.error("添加或更新异常", e);
@@ -288,7 +288,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void delete(T entity) throws DaoException {
         try {
             getSession().delete(entity);
-            logger.info("删除成功," + entity.getClass().getName());
+            logger.debug("删除成功," + entity.getClass().getName());
         }
         catch (RuntimeException e) {
             logger.error("删除异常", e);

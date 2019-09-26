@@ -61,7 +61,7 @@ public final class RocketmqFactory {
 		 * ProducerGroup这个概念发送普通的消息时，作用不大，但是发送分布式事务消息时，比较关键， 因为服务器会回查这个Group下的任意一个Producer
 		 */
 		if (defaultMQProducer != null) {
-			log.info("producerGroup has exist");
+			log.debug("producerGroup has exist");
 			return defaultMQProducer;
 		}
 
@@ -93,7 +93,7 @@ public final class RocketmqFactory {
 			throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_P_CREATE_ERROR, e);
 		}
 
-		log.info("RocketMq defaultProducer Started.");
+		log.debug("RocketMq defaultProducer Started.");
 		return defaultMQProducer;
 	}
 
@@ -137,7 +137,7 @@ public final class RocketmqFactory {
 		 */
 		producer.start();
 
-		log.info("RocketMq TransactionMQProducer Started.");
+		log.debug("RocketMq TransactionMQProducer Started.");
 		return producer;
 	}
 
@@ -151,7 +151,7 @@ public final class RocketmqFactory {
 	public static DefaultMQPushConsumer getPushConsumer(String channel, String consumerGroup,
 														Boolean isConsumerBroadcasting, MessageListener messageListener) {
 
-		log.info("getPushConsumer start topic : " + channel);
+		log.debug("getPushConsumer start topic : " + channel);
 
 		DefaultMQPushConsumer consumer = null;
 
@@ -159,7 +159,7 @@ public final class RocketmqFactory {
 		Map<String, DefaultMQPushConsumer> defaultMQPushConsumerMap = getDefaultMQPushConsumerHolder();
 		consumer = defaultMQPushConsumerMap.get(consumerGroup);
 		if (consumer != null) {
-			log.info("consumerGroup has exist!");
+			log.debug("consumerGroup has exist!");
 			return consumer;
 		}
 
@@ -210,11 +210,11 @@ public final class RocketmqFactory {
 			throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
 		}
 
-		log.info("RocketMq pushConsumer Started.");
+		log.debug("RocketMq pushConsumer Started.");
 
 		// Keep customer
 		defaultMQPushConsumerMap.put(consumerGroup, consumer);
-		log.info(consumer.toString());
+		log.debug(consumer.toString());
 		return consumer;
 	}
 
