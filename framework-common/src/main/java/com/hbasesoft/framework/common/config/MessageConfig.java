@@ -33,8 +33,8 @@ import com.hbasesoft.framework.common.annotation.NoTransLog;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.config <br>
  */
-@Configuration
-@NoTransLog
+//@Configuration
+//@NoTransLog
 public class MessageConfig {
 
     // Spring MVC 项目请实现 org.springframework.web.servlet.config.annotation.WebMvcConfigurer
