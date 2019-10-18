@@ -45,6 +45,18 @@ public class RedisLock {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param timeout 超时时间
+     * @return <br>
+     */
+    public boolean lock(int timeout) {
+        return lock(timeout, timeout * 2);
+    }
+
+    /**
+     * Description: 获取锁<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param timeOut
      * @param expireTime
      * @return <br>

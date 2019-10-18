@@ -34,6 +34,8 @@ public interface IBaseDao<T extends BaseEntity> {
     void update(T pojo);
 
     int updateBySql(String sql) throws DaoException;
+    
+    void updateBatch(List<T> entitys);
 
     void delete(T entity);
 
