@@ -658,23 +658,30 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
             @Override
             public void execute(Connection connection) throws SQLException {
-                PreparedStatement stmt = connection.prepareStatement(sql);
-                connection.setAutoCommit(false);
-                int i = 0;
-                for (Object[] object : objcts) {
-                    i++;
-                    for (int j = 0; j < object.length; j++) {
-                        stmt.setObject(j + 1, object[j]);
+                PreparedStatement stmt = null;
+                try {
+                    stmt = connection.prepareStatement(sql);
+                    connection.setAutoCommit(false);
+                    int i = 0;
+                    for (Object[] object : objcts) {
+                        i++;
+                        for (int j = 0; j < object.length; j++) {
+                            stmt.setObject(j + 1, object[j]);
+                        }
+                        stmt.addBatch();
+                        if (i % commitNumber == 0) {
+                            stmt.executeBatch();
+                            connection.commit();
+                        }
                     }
-                    stmt.addBatch();
-                    if (i % commitNumber == 0) {
-                        stmt.executeBatch();
-                        connection.commit();
+                    stmt.executeBatch();
+                    connection.commit();
+                }
+                finally {
+                    if (stmt != null) {
+                        stmt.close();
                     }
                 }
-                stmt.executeBatch();
-                connection.commit();
-
             }
         });
     }
