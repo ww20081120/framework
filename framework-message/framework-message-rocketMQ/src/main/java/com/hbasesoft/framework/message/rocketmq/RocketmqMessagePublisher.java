@@ -77,15 +77,15 @@ public class RocketmqMessagePublisher implements MessagePublisher {
 
         try {
             switch (produceModel) {
-                case MessagePublisher.PUBLISH_TYPE_ORDERLY:
+                case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY:
                     // 顺序消费
                     defaultMQProducer.send(msg, (messageQueue, message, arg) -> {
                         Integer id = (Integer) arg;
-                        // System.out.println(messageQueue.get(id));
+                        System.out.println(messageQueue.get(id));
                         return messageQueue.get(id);
                     }, 0); // 默认四个队列中的0号队列 队列内有序
                     break;
-                case MessagePublisher.PUBLISH_TYPE_TRANSACTION:
+                case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_TRANSACTION:
                     // 事务消费
                     // transactionMQProducer.sendMessageInTransaction(msg, tranExecuter, arg);
                     break;

@@ -22,11 +22,11 @@
 			<artifactId>framework-rule-plugin-stateMachine</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.hbasesoft.framework</groupId> -->
-<!-- 			<artifactId>framework-rule-plugin-transaction</artifactId> -->
-<!-- 			<version>${project.parent.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.hbasesoft.framework</groupId> -->
+		<!-- <artifactId>framework-rule-plugin-transaction</artifactId> -->
+		<!-- <version>${project.parent.version}</version> -->
+		<!-- </dependency> -->
 
 
 		<dependency>
@@ -61,7 +61,7 @@
 			<version>1.0.0.Final</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

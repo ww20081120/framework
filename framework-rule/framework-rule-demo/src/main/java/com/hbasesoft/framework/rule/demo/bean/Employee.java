@@ -11,6 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <Description> <br>
@@ -65,5 +73,33 @@ public class Employee {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Getter
+    @Setter
+    public static class AAA {
+        private Employee entity;
+
+    }
+
+    public static void main(String[] args) {
+
+        // 构造上下文：准备比如变量定义等等表达式运行需要的上下文数据
+        EvaluationContext context = new StandardEvaluationContext();
+
+        // 创建解析器：提供SpelExpressionParser默认实现
+        ExpressionParser parser = new SpelExpressionParser();
+
+        // 解析表达式：使用ExpressionParser来解析表达式为相应的Expression对象
+        Expression expression = parser.parseExpression("entity?.name eq 'C'");
+
+        AAA flowBean = new AAA();
+        Employee emp = new Employee();
+        emp.setName("C");
+        flowBean.entity = emp;
+
+        Object value = expression.getValue(context, flowBean);
+        System.out.println(value);
+
     }
 }

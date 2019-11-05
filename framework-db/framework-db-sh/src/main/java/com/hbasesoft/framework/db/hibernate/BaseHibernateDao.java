@@ -717,6 +717,23 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         this.batchSave(entitys);
     }
 
+    public <T> void updateBatch(List<T> entitys) {
+        if (entitys.size() > 1000) {
+            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+        }
+        for (int i = 0; i < entitys.size(); i++) {
+            getSession().update(entitys.get(i));
+            if (i % 100 == 0) {
+                // 1000个对象后才清理缓存，写入数据库
+                getSession().flush();
+                getSession().clear();
+            }
+        }
+        // 最后清理一下----防止大于1000小于2000的不保存
+        getSession().flush();
+        getSession().clear();
+    }
+
     public <T> void update(T pojo) {
         this.updateEntity(pojo);
     }

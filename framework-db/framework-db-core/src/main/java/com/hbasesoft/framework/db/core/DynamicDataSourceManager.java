@@ -36,6 +36,6 @@ public final class DynamicDataSourceManager {
 
     public static void setDataSourceCode(String code) {
         dataSourceCodeHolder.set(code);
-        LoggerUtil.info("datasource change to " + code);
+        LoggerUtil.debug("datasource change to " + code);
     }
 }

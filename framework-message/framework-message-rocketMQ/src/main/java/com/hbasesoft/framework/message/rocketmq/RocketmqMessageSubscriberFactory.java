@@ -14,7 +14,6 @@ import org.apache.rocketmq.common.message.MessageExt;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
@@ -54,12 +53,12 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
         Map<String, Object> subscriberSetting = subscriber.subscriberSetting();
 
         switch (String.valueOf(subscriberSetting.get(RocketmqFactory.CONSUME_TYPE))) {
-            case MessagePublisher.PUBLISH_TYPE_ORDERLY:
+            case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY:
                 // 顺序消费
                 log.debug("启动顺序消费");
                 consumeOrderly(channel, broadcast, subscriber);
                 break;
-            case MessagePublisher.PUBLISH_TYPE_TRANSACTION:
+            case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_TRANSACTION:
                 // 事务消费
                 // transactionMQProducer.sendMessageInTransaction(msg, tranExecuter, arg);
                 break;
