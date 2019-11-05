@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-cache</artifactId>
-		<version>3.3.0</version>
+		<version>3.3</version>
 	</parent>
 	<artifactId>framework-cache-redis</artifactId>
 	<properties>

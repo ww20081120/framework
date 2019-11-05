@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
-	<version>3.3.0</version>
+	<version>3.3</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 	<description>框架</description>
