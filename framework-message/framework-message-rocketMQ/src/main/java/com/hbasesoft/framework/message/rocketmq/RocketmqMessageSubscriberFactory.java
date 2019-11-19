@@ -66,6 +66,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 			}
 		}
 		catch (Exception e) {
+			log.debug("registSubscriber fail");
 			e.printStackTrace();
 		}
 	}
@@ -100,8 +101,11 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 								subscriber.onMessage(messageExt.getTopic(), messageExt.getBody());
 						}
 					} catch (Exception e) {
+						log.error("消息消费失败不再重试");
 						log.error(e);
-						return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+						return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+						// 就算失败也不再重试
+						//	return ConsumeConcurrentlyStatus.RECONSUME_LATER;
 					}
 					// 如果没有return success，consumer会重复消费此信息，直到success。
 					return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
