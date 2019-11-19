@@ -47,21 +47,26 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 		subscriber.onSubscribe(channel, 1);
 		Map<String, Object> subscriberSetting = subscriber.subscriberSetting();
 
-		switch (String.valueOf(subscriberSetting.get(RocketmqFactory.CONSUME_TYPE))) {
-			case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY:
-				// 顺序消费
-				log.debug("启动顺序消费");
-				consumeOrderly(channel, broadcast, subscriber);
-				break;
-			case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_TRANSACTION:
-				// 事务消费
-				// transactionMQProducer.sendMessageInTransaction(msg, tranExecuter, arg);
-				break;
-			default:
-				// 普通并发消费
-				log.debug("启动普通并发消费");
-				consumeConcurrently(channel, broadcast, subscriber);
-				break;
+		try {
+			switch (String.valueOf(subscriberSetting.get(RocketmqFactory.CONSUME_TYPE))) {
+				case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY:
+					// 顺序消费
+					log.debug("启动顺序消费");
+					consumeOrderly(channel, broadcast, subscriber);
+					break;
+				case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_TRANSACTION:
+					// 事务消费
+					// transactionMQProducer.sendMessageInTransaction(msg, tranExecuter, arg);
+					break;
+				default:
+					// 普通并发消费
+					log.debug("启动普通并发消费");
+					consumeConcurrently(channel, broadcast, subscriber);
+					break;
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
