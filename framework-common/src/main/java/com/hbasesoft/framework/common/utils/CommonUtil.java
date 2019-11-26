@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.common.utils;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -50,7 +51,7 @@ public final class CommonUtil {
     public static String getTransactionID() {
         return UUID.randomUUID().toString().replace("-", GlobalConstants.BLANK);
     }
-    
+
     /**
      * Description: 根据UUID的hash code生成随机码<br>
      * 
@@ -184,6 +185,47 @@ public final class CommonUtil {
      */
     public static final Integer[] splitId(String idStr) {
         return splitId(idStr, GlobalConstants.SPLITOR);
+    }
+
+    /**
+     * Description: 多个通配符匹配<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param rules rule 规则 带正则表达式的
+     * @param matchValue
+     * @return <br>
+     */
+    public static boolean wildcardMatch(Collection<String> rules, String matchValue) {
+        for (String rule : rules) {
+            if (wildcardMatch(rule, matchValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 通配符匹配
+     *
+     * @param rule 规则 带正则表达式的
+     * @param matchValue 要匹配的值
+     * @return
+     */
+    public static boolean wildcardMatch(String rule, String matchValue) {
+        rule = org.apache.commons.lang3.StringUtils
+            .replaceEach(org.apache.commons.lang3.StringUtils.replaceEach(rule, new String[] {
+                "\\", ".", "^", "$"
+            }, new String[] {
+                "\\\\", "\\.", "\\^", "\\$"
+            }), new String[] {
+                "*", "?"
+            }, new String[] {
+                ".*", ".?"
+            });
+        Pattern pp = Pattern.compile(rule);
+        Matcher m = pp.matcher(matchValue);
+        return m.matches();
     }
 
     /**
