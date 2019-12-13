@@ -7,6 +7,9 @@ package com.hbasesoft.framework.db.spring;
 
 import java.util.Set;
 
+import com.hbasesoft.framework.cache.core.CacheConstant;
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.cache.core.ICache;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -56,6 +59,9 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         logger.info("*************************Dao注入列表***************************");
         try {
+            ICache cache = CacheHelper.getCache();
+            cache.removeNode(CacheConstant.SQL_PARAM_DIR);
+            cache.removeNode(CacheConstant.SQL_DIR);
             for (String pack : packagesToScan) {
                 if (CommonUtil.isNotEmpty(pack)) {
                     Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
