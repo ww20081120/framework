@@ -103,6 +103,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
             boolean isPager = false;
             PagerList resultList = null;
 
+            if (param.getPageIndex() == 0) {
+                param.setPageIndex(1);
+            }
+
             // step3:设置分页
             if (param.getPageIndex() != -1 && param.getPageSize() != -1
                 && List.class.isAssignableFrom(param.getReturnType())) {
