@@ -552,6 +552,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize)
         throws DaoException {
 
+        if (pageIndex == 0) {
+            pageIndex = 1;
+        }
+
         Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
 
         // 查询分页总数
