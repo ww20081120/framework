@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.db.core.utils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 
 /**
@@ -21,7 +20,9 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public final class SQlCheckUtil {
 
+    public static final String ASTERISK = " * ";
+
     public static void checkSql(String sql) {
-        Assert.isTrue(sql.indexOf(GlobalConstants.ASTERISK) == -1, ErrorCodeDef.UNSUUPORT_ASTERISK);
+        Assert.isTrue(sql.indexOf(ASTERISK) == -1, ErrorCodeDef.UNSUUPORT_ASTERISK);
     }
 }
