@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 
@@ -419,6 +421,19 @@ public final class CommonUtil {
             dest = m.replaceAll("");
         }
         return dest;
+    }
+    
+    public static boolean checkJson(String str) {
+    	try {
+            JSONObject.parseObject(str);
+        } catch (JSONException ex) {
+            try {
+                JSONObject.parseArray(str);
+            } catch (JSONException ex1) {
+                return false;
+            }
+        }
+        return true;
     }
     
 }

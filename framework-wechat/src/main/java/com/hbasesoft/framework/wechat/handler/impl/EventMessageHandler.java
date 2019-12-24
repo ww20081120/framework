@@ -115,12 +115,14 @@ public class EventMessageHandler extends AbstractMessageHandler {
     	if (CommonUtil.isNotEmpty(vccId)) {
 			ChangeQrcodeParamPojo changePojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.QRCODE_PARAMS_ID, vccId);
 			if(changePojo != null) {
-    			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
-    			if (null != obj) {
-    				if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
-    					eventKey = "ADDR_" + vccId;
-    				}
-    			}
+				if(CommonUtil.checkJson(changePojo.getDatas())) {
+					JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
+					if (null != obj) {
+						if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
+							eventKey = "ADDR_" + vccId;
+						}
+					}
+				}
     		}
 			
 		}
