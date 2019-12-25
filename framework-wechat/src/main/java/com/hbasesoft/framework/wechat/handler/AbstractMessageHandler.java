@@ -86,12 +86,14 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         	if (CommonUtil.isNotEmpty(vccId)) {
     			ChangeQrcodeParamPojo changePojo = wechatDao.findUniqueByProperty(ChangeQrcodeParamPojo.class, ChangeQrcodeParamPojo.QRCODE_PARAMS_ID, vccId);
     			if(changePojo != null) {
-        			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
-        			if (null != obj) {
-        				if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
-        					eventKey = "ADDR_" + vccId;
-        				}
-        			}
+    				if(CommonUtil.checkJson(changePojo.getDatas())) {
+    					JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
+    					if (null != obj) {
+    						if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
+    							eventKey = "ADDR_" + vccId;
+    						}
+    					}
+    				}
         		}
     			
     		}
@@ -104,9 +106,13 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
     			JSONObject obj = null;
     			if(changePojo == null) {
     				qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, addrId);
-    				obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+    				if(CommonUtil.checkJson(qrcodeParamsPojo.getDatas())) {
+    					obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+    				}
     			}else {
-    				obj = JSONObject.parseObject(changePojo.getDatas());
+    				if(CommonUtil.checkJson(changePojo.getDatas())) {
+    					obj = JSONObject.parseObject(changePojo.getDatas());
+    				}
     			}
     			//如果地址二维码信息存在，则替换关注欢迎语中的关键字
     			if(!CommonUtil.isNull(obj)){
@@ -275,21 +281,25 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
                 			qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, vccId);
                 		}
                 		if (null != qrcodeParamsPojo) {
-                			JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
-                			if (null != obj) {
-                    			if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
-                    				return null;
-                    			}
+                			if(CommonUtil.checkJson(changePojo.getDatas())) {
+                				JSONObject obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+                				if (null != obj) {
+                					if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
+                						return null;
+                					}
+                				}
                 			}
                 		}else if(changePojo != null) {
-                			JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
-                			if (null != obj) {
-                				if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
-                					eventKey = "ADDR_" + vccId;
+                			if(CommonUtil.checkJson(changePojo.getDatas())) {
+                				JSONObject obj = JSONObject.parseObject(changePojo.getDatas());
+                				if (null != obj) {
+                					if(CommonUtil.isNotEmpty(obj.getString("vccAddr")) && "ADDR_".equals(obj.getString("vccAddr"))){
+                						eventKey = "ADDR_" + vccId;
+                					}
+                					else if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
+                						return null;
+                					}
                 				}
-                				else if (CommonUtil.isNotEmpty(obj.getString("subsCode"))) {
-                    				return null;
-                    			}
                 			}
                 		}
             			
@@ -307,9 +317,13 @@ public abstract class AbstractMessageHandler implements WechatMessageHandler, Ap
         			JSONObject obj = null;
         			if(changePojo == null) {
         				qrcodeParamsPojo = wechatDao.getEntity(QrcodeParamsPojo.class, addrId);
-        				obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+        				if(CommonUtil.checkJson(qrcodeParamsPojo.getDatas())) {
+        					obj = JSONObject.parseObject(qrcodeParamsPojo.getDatas());
+        				}
         			}else {
-        				obj = JSONObject.parseObject(changePojo.getDatas());
+        				if(CommonUtil.checkJson(changePojo.getDatas())) {
+        					obj = JSONObject.parseObject(changePojo.getDatas());
+        				}
         			}
         			//如果地址二维码信息存在，则替换关注欢迎语中的关键字
         			if(!CommonUtil.isNull(obj)){
