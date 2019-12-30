@@ -14,7 +14,6 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import redis.clients.jedis.BinaryJedisCluster;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
@@ -37,7 +36,6 @@ public class ClusterRedisCache extends AbstractRedisCache {
     private static final int DEFAULT_MAX_REDIRECTIONS = 5;
 
     private JedisCluster cluster;
-    private BinaryJedisCluster cluster2;
 
     public ClusterRedisCache() {
         String cacheModel = PropertyHolder.getProperty("cache.model");
