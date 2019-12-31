@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -41,9 +42,12 @@ public class ShardedRedisCache extends AbstractRedisCache {
         String cacheModel = PropertyHolder.getProperty("cache.model");
         if (CACHE_MODEL.equals(cacheModel)) {
             Address[] addresses = getAddresses();
+            String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
             List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
             for (Address addr : addresses) {
-                shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
+                JedisShardInfo jedisShardInfo = new JedisShardInfo(addr.getHost(), addr.getPort());
+                jedisShardInfo.setPassword(passwd);
+                shards.add(jedisShardInfo);
             }
             shardedPool = new ShardedJedisPool(getConfig(), shards);
         }
