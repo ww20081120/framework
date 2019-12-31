@@ -46,9 +46,12 @@ public class RedisCache extends AbstractRedisCache {
             for (Address addr : addresses) {
                 shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
             }
-//            jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
-            jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
-                    addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+            if (CommonUtil.isEmpty(passwd)) {
+                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+            } else {
+                jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
+                        addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+            }
         }
     }
 

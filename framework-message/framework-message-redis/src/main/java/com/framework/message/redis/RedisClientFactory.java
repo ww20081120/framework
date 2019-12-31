@@ -71,9 +71,12 @@ public final class RedisClientFactory {
                     for (Address addr : addresses) {
                         shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
                     }
-//                    jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
-                    jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
-                            addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+                    if (CommonUtil.isEmpty(passwd)) {
+                        jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+                    } else {
+                        jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
+                                addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+                    }
                 }
             }
             return jedisPool;
@@ -94,13 +97,17 @@ public final class RedisClientFactory {
                     }
                     // cluster = new BinaryJedisCluster(readSet,
                     // PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
-//
-//                    cluster = new BinaryJedisCluster(readSet,
-//                        PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000), 5, getConfig());
-                    cluster = new JedisCluster(readSet,
-                            PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                            PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                            DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+
+                    if (CommonUtil.isEmpty(passwd)) {
+                        cluster = new BinaryJedisCluster(readSet,
+                        PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000), 5, getConfig());
+                    } else {
+                        cluster = new JedisCluster(readSet,
+                                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                                DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+                    }
+
                 }
             }
             return cluster;

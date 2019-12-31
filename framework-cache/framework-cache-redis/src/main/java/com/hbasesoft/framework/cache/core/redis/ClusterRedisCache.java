@@ -14,6 +14,7 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import redis.clients.jedis.BinaryJedisCluster;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
@@ -47,10 +48,16 @@ public class ClusterRedisCache extends AbstractRedisCache {
                 HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
                 readSet.add(hostAndPort);
             }
-            cluster = new JedisCluster(readSet,
-                    PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                    PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                    DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+            if (CommonUtil.isEmpty(passwd)) {
+                cluster = new JedisCluster(readSet,
+                        PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000));
+            } else {
+                cluster = new JedisCluster(readSet,
+                        PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                        PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                        DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+            }
+
         }
 
 
