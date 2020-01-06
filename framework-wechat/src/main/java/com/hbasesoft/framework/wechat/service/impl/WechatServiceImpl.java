@@ -413,35 +413,48 @@ public class WechatServiceImpl implements WechatService {
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public String refreshJsapiTicket(String appId) {
+    	boolean endloopFlag = false;// 是否结束循环
+    	int retryTimes = 0;// 尝试次数
     	
-    	AccountPojo accountPojo = getAccessTokenFormDb(appId);
-    	Assert.notEmpty(accountPojo.getAccountaccesstoken(), ErrorCodeDef.ACCESS_TOKEN_NULL);
-        
-    	String url = MessageFormat.format(WechatConstant.JSAPI_TICKET_URL, accountPojo.getAccountaccesstoken());
-        LoggerUtil.info("通过accessToken获取jsapi_ticket-url:[{0}]", url);
-        String jsonStr = HttpUtil.doGet(url);
-        LoggerUtil.info("getticket 获取jsapiticket wechat response: " + jsonStr);
-        JSONObject obj = JSONObject.parseObject(jsonStr);
-        String ticket = obj.getString("ticket");
-        LoggerUtil.info("获取到的ticket为：" + ticket);
-
-        if (CommonUtil.isNotEmpty(ticket)) {
-            	accountPojo.setJsapiticket(ticket);
-            	accountPojo.setJsapitickettime(new Date());
-                wechatDao.saveOrUpdate(accountPojo);
-
-                CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME,
-                		accountPojo.getAccountappid(), accountPojo);
-        }
-        else {
-            LoggerUtil.error(obj.getString("errmsg"));
-            if ("40001".equals(obj.getString("errcode"))) {
-                refreshAccessToken(accountPojo.getAccountappid(), accountPojo.getAccountappsecret());
-            }
-            else {
-                throw new FrameworkException(ErrorCodeDef.ACCESS_TOKEN_ERROR);
-            }
-        }
+    	String ticket = null;
+    	while (!endloopFlag && retryTimes < 3) {
+    		retryTimes ++;
+    		
+    		AccountPojo accountPojo = getAccessTokenFormDb(appId);
+    		Assert.notEmpty(accountPojo.getAccountaccesstoken(), ErrorCodeDef.ACCESS_TOKEN_NULL);
+    		
+    		String url = MessageFormat.format(WechatConstant.JSAPI_TICKET_URL, accountPojo.getAccountaccesstoken());
+    		LoggerUtil.info("通过accessToken获取jsapi_ticket-url:[{0}]|[{1}]", url, retryTimes);
+    		String jsonStr = HttpUtil.doGet(url);
+    		LoggerUtil.info("getticket 获取jsapiticket wechat response: [{0}]|[{1}]", jsonStr, retryTimes);
+    		JSONObject obj = JSONObject.parseObject(jsonStr);
+    		ticket = obj.getString("ticket");
+    		LoggerUtil.info("获取到的ticket为：[{0}]|[{1}]", ticket, retryTimes);
+    		
+    		if (CommonUtil.isNotEmpty(ticket)) {
+    			accountPojo.setJsapiticket(ticket);
+    			accountPojo.setJsapitickettime(new Date());
+    			wechatDao.saveOrUpdate(accountPojo);
+    			
+    			CacheHelper.getCache().put(CacheCodeDef.WX_ACCOUNT_INFO, WechatConstant.TOKEN_CACHE_TIME,
+    					accountPojo.getAccountappid(), accountPojo);
+    			
+    			endloopFlag = true;// 获取ticket成功，结束重试
+    		}
+    		else {
+    			LoggerUtil.error(obj.getString("errmsg"));
+    			// 40001token无效，42001token过期，-1000微信服务器内部错误
+				if ("40001".equals(obj.getString("errcode")) || "42001".equals(obj.getString("errcode"))
+						|| "-1000".equals(obj.getString("errcode"))) {
+					refreshAccessToken(accountPojo.getAccountappid(), accountPojo.getAccountappsecret());
+				}
+    		}
+    	}
+    	
+    	if (null == ticket) {
+    		throw new FrameworkException(ErrorCodeDef.ACCESS_TOKEN_ERROR);
+		}
+    	
         return ticket;
     }
 
