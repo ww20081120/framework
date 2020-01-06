@@ -16,12 +16,13 @@ import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisShardInfo;
+import redis.clients.jedis.Protocol;
 
 /**
  * <Description> <br>
  * 
- * @author 王伟<br>
- * @version 1.0<br>
+ * @author liuxianan<br>
+ * @version 2.0<br>
  * @taskId <br>
  * @CreateDate 2015年12月2日 <br>
  * @since V1.0<br>
@@ -40,11 +41,17 @@ public class RedisCache extends AbstractRedisCache {
         String cacheModel = PropertyHolder.getProperty("cache.model");
         if (CACHE_MODEL.equals(cacheModel)) {
             Address[] addresses = getAddresses();
+            String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
             List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
             for (Address addr : addresses) {
                 shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
             }
-            jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+            if (CommonUtil.isEmpty(passwd)) {
+                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+            } else {
+                jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
+                        addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+            }
         }
     }
 
