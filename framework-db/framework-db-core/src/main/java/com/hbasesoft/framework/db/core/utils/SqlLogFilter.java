@@ -626,7 +626,20 @@ public class SqlLogFilter extends FilterEventAdapter {
             for (JdbcParameter parameter : statement.getParameters().values()) {
                 int sqlType = parameter.getSqlType();
                 Object value = parameter.getValue();
-                String tempValue = Types.NULL == sqlType ? "NULL" : String.valueOf(value);
+                String tempValue;
+                switch (sqlType) {
+                    case Types.NULL:
+                        tempValue = "NULL";
+                        break;
+                    case Types.CLOB:
+                    case Types.CHAR:
+                    case Types.VARCHAR:
+                        tempValue = new StringBuilder().append('\'').append(value).append('\'').toString();
+                        break;
+                    default:
+                        tempValue = String.valueOf(value);
+                        break;
+                }
                 sqlStr = StringUtils.replaceOnce(sqlStr, "?", tempValue);
             }
 
