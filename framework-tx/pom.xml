@@ -11,6 +11,6 @@
   <description>解决分布式事务补偿问题</description>
   <modules>
   	<module>framework-tx-core</module>
-  	<module>framework-tx-demo</module>
+  	<module>framework-tx-server</module>
   </modules>
 </project>

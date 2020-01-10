@@ -7,13 +7,13 @@
 		<artifactId>framework-tx</artifactId>
 		<version>3.4</version>
 	</parent>
-	<artifactId>framework-tx-core</artifactId>
-	<name>tx-core</name>
-	<description>分布式事务顶层设计</description>
+	<artifactId>framework-tx-server</artifactId>
+	<name>服务端</name>
+	<description>服务端</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-common</artifactId>
+			<artifactId>framework-tx-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
