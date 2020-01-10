@@ -23,6 +23,7 @@
 		<module>framework-rule</module>
 		<module>framework-bootstrap</module>
 		<module>framework-job</module>
+		<module>framework-tx</module>
 	</modules>
 	<properties>
 		<java.version>1.8</java.version>
