@@ -12,7 +12,6 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
-import com.hbasesoft.framework.tx.core.client.TxProducer;
 
 /**
  * <Description> <br>

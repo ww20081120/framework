@@ -9,9 +9,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.hbasesoft.framework.tx.core.TxProducer;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
-import com.hbasesoft.framework.tx.core.client.TxProducer;
 
 /**
  * <Description> <br>
@@ -24,7 +24,7 @@ import com.hbasesoft.framework.tx.core.client.TxProducer;
  * @see com.hbasesoft.framework.tx.server <br>
  */
 @Service
-public class TxComsumer implements TxProducer {
+public class TxProducerImpl implements TxProducer {
 
     @Resource
     private TxStorage txStorage;

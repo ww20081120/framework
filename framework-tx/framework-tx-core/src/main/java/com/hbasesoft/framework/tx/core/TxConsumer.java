@@ -3,14 +3,9 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.core.bean;
+package com.hbasesoft.framework.tx.core;
 
-import java.util.Map;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 
 /**
  * <Description> <br>
@@ -18,25 +13,12 @@ import lombok.Setter;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Jan 21, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.core <br>
+ * @see com.hbasesoft.framework.tx.core.client <br>
  */
-@Getter
-@Setter
-@RequiredArgsConstructor
-@AllArgsConstructor
-public class ClientInfo {
+public interface TxConsumer {
 
-    private final String id;
+    void retry(ClientInfo clientInfo);
 
-    private final String mark;
-
-    private Map<String, String> context;
-
-    private Object[] args;
-
-    private int maxRetryTimes;
-
-    private String retryConfigs;
 }

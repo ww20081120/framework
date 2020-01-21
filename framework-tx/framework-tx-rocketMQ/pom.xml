@@ -7,21 +7,14 @@
 		<artifactId>framework-tx</artifactId>
 		<version>3.4</version>
 	</parent>
-	<artifactId>framework-tx-springcloud</artifactId>
-	<name>springcloud的分布式事务管理</name>
+	<artifactId>framework-tx-rocketMQ</artifactId>
+	<name>rocket mq</name>
+	<description>通过rocketMQ进行传递消息</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-tx-core</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -3,10 +3,12 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.core.client;
+package com.hbasesoft.framework.tx.core;
 
-import com.hbasesoft.framework.tx.core.bean.CheckInfo;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * <Description> <br>
@@ -14,34 +16,31 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Jan 21, 2020 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.core <br>
  */
-public interface TxProducer {
+@RequiredArgsConstructor
+public class SimpleConsumer implements TxConsumer {
 
-    void registClient(ClientInfo clientInfo);
-
-    void removeClient(String id);
+    private final TxProducer txProducer;
 
     /**
-     * Description: 注册消息，并获取结果<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param id
-     * @param mark
-     * @return <br>
+     * @param clientInfo <br>
      */
-    CheckInfo registMsg(String id, String mark);
-
-    /**
-     * Description: 反馈执行结果<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param checkInfo <br>
-     */
-    void saveResult(CheckInfo checkInfo);
+    @Override
+    public void retry(ClientInfo clientInfo) {
+        try {
+            TxManager.execute(clientInfo.getMark(), clientInfo.getContext(), clientInfo.getArgs());
+            txProducer.removeClient(clientInfo.getId());
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e);
+        }
+    }
 
 }

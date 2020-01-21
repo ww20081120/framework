@@ -5,6 +5,14 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.core;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.Assert;
+
 /**
  * <Description> <br>
  * 
@@ -19,11 +27,29 @@ public final class TxManager {
 
     private static ThreadLocal<String> traceIdHolder = new ThreadLocal<>();
 
+    private static Map<String, Method> proxyMethod = new HashMap<>();
+
+    private static Map<String, Object> proxyObject = new HashMap<>();
+
     public static String getTraceId() {
         return traceIdHolder.get();
     }
 
     public static void setTraceId(String traceId) {
         traceIdHolder.set(traceId);
+    }
+
+    public static void execute(String mark, Map<String, String> context, Object[] args)
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Object obj = proxyObject.get(mark);
+        Assert.notNull(obj, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
+        Method method = proxyMethod.get(mark);
+        Assert.notNull(method, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
+        method.invoke(obj, args);
+    }
+
+    public static void regist(String mark, Object obj, Method method) {
+        proxyObject.put(mark, obj);
+        proxyMethod.put(mark, method);
     }
 }

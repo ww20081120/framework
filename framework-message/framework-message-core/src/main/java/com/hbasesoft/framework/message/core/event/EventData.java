@@ -19,6 +19,17 @@ import java.util.HashMap;
  */
 public class EventData extends HashMap<String, Object> {
 
+    private static final String DEFAULT_KEY = "__DATA";
+
+    public EventData() {
+        super();
+    }
+
+    public EventData(Object data) {
+        super();
+        super.put(DEFAULT_KEY, data);
+    }
+
     /**
      * serialVersionUID <br>
      */
@@ -26,6 +37,11 @@ public class EventData extends HashMap<String, Object> {
 
     public String getParameter(String key) {
         return (String) this.get(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getData() {
+        return (T) super.get(DEFAULT_KEY);
     }
 
 }
