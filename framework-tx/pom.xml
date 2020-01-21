@@ -12,5 +12,8 @@
   <modules>
   	<module>framework-tx-core</module>
   	<module>framework-tx-server</module>
+  	<module>framework-tx-springcloud</module>
+  	<module>framework-tx-storage-db</module>
+  	<module>framework-tx-storage-cassandra</module>
   </modules>
 </project>

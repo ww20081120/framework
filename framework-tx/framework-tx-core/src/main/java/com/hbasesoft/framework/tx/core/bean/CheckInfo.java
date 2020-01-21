@@ -3,10 +3,15 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.core;
+package com.hbasesoft.framework.tx.core.bean;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
- * <Description> 事务执行者<br>
+ * <Description> <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
@@ -15,7 +20,18 @@ package com.hbasesoft.framework.tx.core;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.core <br>
  */
-@FunctionalInterface
-public interface TxInvoker {
-    <T> T invoke() throws Throwable;
+@Getter
+@Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class CheckInfo {
+
+    private final String id;
+
+    private final String mark;
+
+    /** 0:执行成功， 1:未执行， 其它错误码*/
+    private final int flag;
+
+    private Object result;
 }

@@ -7,9 +7,8 @@
 		<artifactId>framework-tx</artifactId>
 		<version>3.4</version>
 	</parent>
-	<artifactId>framework-tx-server</artifactId>
-	<name>服务端</name>
-	<description>服务端</description>
+	<artifactId>framework-tx-springcloud</artifactId>
+	<name>springcloud的分布式事务管理</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -17,9 +16,12 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-job-core</artifactId>
-			<version>${project.parent.version}</version>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 	</dependencies>
 </project>

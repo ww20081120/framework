@@ -5,6 +5,13 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.core;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.tx.core.bean.CheckInfo;
+import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.core.client.TxProducer;
 
 /**
@@ -19,12 +26,24 @@ import com.hbasesoft.framework.tx.core.client.TxProducer;
  */
 public final class TxInvokerProxy {
 
-    private TxProducer sender;
+    private static final Object LOCK = new Object();
+
+    private static TxProducer sender;
+
+    public static <T> T registInvoke(ClientInfo clientInfo, TxInvoker invoker) throws Throwable {
+        TxProducer sender = getSender();
+        TxManager.setTraceId(clientInfo.getId());
+        sender.registClient(clientInfo);
+        T msg = invoker.invoke();
+        sender.removeClient(clientInfo.getId());
+        return msg;
+    }
 
     @SuppressWarnings("unchecked")
-    public <T> T invoke(String mark, TxInvoker invoker) {
-        String id = null;
-        CheckInfo checkInfo = sender.check(id, mark);
+    public static <T> T invoke(String marker, TxInvoker invoker) throws Throwable {
+        TxProducer sender = getSender();
+
+        CheckInfo checkInfo = sender.registMsg(TxManager.getTraceId(), marker);
         if (checkInfo.getFlag() != 0) {
             T msg = invoker.invoke();
             checkInfo.setResult(msg);
@@ -32,5 +51,17 @@ public final class TxInvokerProxy {
             return msg;
         }
         return (T) checkInfo.getResult();
+    }
+
+    private static TxProducer getSender() {
+        synchronized (LOCK) {
+            if (sender == null) {
+                ServiceLoader<TxProducer> producerLoader = ServiceLoader.load(TxProducer.class);
+                Iterator<TxProducer> it = producerLoader.iterator();
+                Assert.isTrue(it.hasNext(), ErrorCodeDef.TRASCATION_SENDER_NOT_FOUND);
+                sender = it.next();
+            }
+            return sender;
+        }
     }
 }

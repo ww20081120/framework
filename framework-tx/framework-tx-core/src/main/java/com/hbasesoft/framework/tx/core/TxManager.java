@@ -5,28 +5,25 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.core;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * <Description> <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Jan 21, 2020 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.core <br>
  */
-@Getter
-@Setter
-public class CheckInfo {
+public final class TxManager {
 
-    private String id;
+    private static ThreadLocal<String> traceIdHolder = new ThreadLocal<>();
 
-    private String mark;
+    public static String getTraceId() {
+        return traceIdHolder.get();
+    }
 
-    private int flag;
-
-    private Object result;
+    public static void setTraceId(String traceId) {
+        traceIdHolder.set(traceId);
+    }
 }

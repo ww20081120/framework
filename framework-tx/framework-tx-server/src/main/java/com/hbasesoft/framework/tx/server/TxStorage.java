@@ -3,10 +3,11 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.core.client;
+package com.hbasesoft.framework.tx.server;
 
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
+import com.hbasesoft.framework.tx.server.bean.TxClientInfo;
 
 /**
  * <Description> <br>
@@ -14,34 +15,26 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Jan 21, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.core <br>
+ * @see com.hbasesoft.framework.tx.server <br>
  */
-public interface TxProducer {
+public interface TxStorage {
 
-    void registClient(ClientInfo clientInfo);
+    ClientInfo getClientInfo(String id);
 
-    void removeClient(String id);
+    CheckInfo getCheckInfo(String id, String mark);
 
-    /**
-     * Description: 注册消息，并获取结果<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id
-     * @param mark
-     * @return <br>
-     */
-    CheckInfo registMsg(String id, String mark);
+    void saveClientInfo(ClientInfo clientInfo);
 
-    /**
-     * Description: 反馈执行结果<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param checkInfo <br>
-     */
-    void saveResult(CheckInfo checkInfo);
+    void saveCheckInfo(CheckInfo checkInfo);
+
+    void updateCheckInfo(CheckInfo checkInfo);
+
+    PagerList<TxClientInfo> queryTimeoutClientInfo(int pageIndex, int pageSize);
+
+    void updateClientRetryTimes(TxClientInfo clientInfo);
+
+    void delete(String id);
 
 }
