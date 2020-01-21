@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.hbasesoft.framework.common.GlobalConstants;
+
 /**
  * <Description> <br>
  * 
@@ -24,8 +26,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface Tx {
 
-    /** 名称*/
-    String name();
+    /** 名称 */
+    String name() default GlobalConstants.BLANK;
 
     /** 最大重试几次 */
     int maxRetryTimes() default 5;
