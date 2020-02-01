@@ -4,14 +4,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
-		<artifactId>framework-tx</artifactId>
+		<artifactId>framework-tx-client</artifactId>
 		<version>3.4</version>
 	</parent>
-	<artifactId>framework-tx-storage-db</artifactId>
+	<artifactId>framework-tx-client-producer-springcloud</artifactId>
+	<name>producer-springcloud</name>
+	<description>使用springcloud来实现的生产者</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-tx-server</artifactId>
+			<artifactId>framework-tx-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>

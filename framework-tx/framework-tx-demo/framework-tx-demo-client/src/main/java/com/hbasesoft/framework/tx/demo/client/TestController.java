@@ -3,21 +3,29 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.core;
+package com.hbasesoft.framework.tx.demo.client;
 
-import com.hbasesoft.framework.common.FrameworkException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hbasesoft.framework.tx.core.annotation.Tx;
 
 /**
- * <Description> 事务执行者<br>
+ * <Description> <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Feb 1, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.core <br>
+ * @see com.hbasesoft.framework.tx.demo.client <br>
  */
-@FunctionalInterface
-public interface TxInvoker<T> {
-    T invoke() throws FrameworkException;
+@RestController
+public class TestController {
+
+    @GetMapping
+    @Tx
+    public String test() {
+        return "test";
+    }
 }

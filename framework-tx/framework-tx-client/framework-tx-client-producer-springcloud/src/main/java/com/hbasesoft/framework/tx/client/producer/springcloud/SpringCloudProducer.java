@@ -3,8 +3,10 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.core;
+package com.hbasesoft.framework.tx.client.producer.springcloud;
 
+import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.tx.core.TxProducer;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 
@@ -14,32 +16,38 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Feb 1, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.core <br>
+ * @see com.hbasesoft.framework.tx.client.producer.springcloud <br>
  */
-public interface TxProducer {
+public class SpringCloudProducer implements TxProducer {
 
     /**
-     * Description: 注册客户端<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param clientInfo 客户端信息<br>
+     * @param clientInfo <br>
      */
-    void registClient(ClientInfo clientInfo);
+    @Override
+    public void registClient(ClientInfo clientInfo) {
+        System.out.println("registClient----->" + JSONObject.toJSONString(clientInfo));
+    }
 
     /**
-     * Description: 删除客户端<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param id <br>
      */
-    void removeClient(String id);
+    @Override
+    public void removeClient(String id) {
+        System.out.println("removeClient ------>" + id);
+    }
 
     /**
-     * Description: 注册消息，并获取结果<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -47,15 +55,22 @@ public interface TxProducer {
      * @param mark
      * @return <br>
      */
-    CheckInfo registMsg(String id, String mark);
+    @Override
+    public CheckInfo registMsg(String id, String mark) {
+        System.out.println("registMsg ------>" + id + "," + mark);
+        return new CheckInfo(id, mark, 1);
+    }
 
     /**
-     * Description: 反馈执行结果<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param checkInfo <br>
      */
-    void saveResult(CheckInfo checkInfo);
+    @Override
+    public void saveResult(CheckInfo checkInfo) {
+        System.out.println("saveResult ------>" + JSONObject.toJSONString(checkInfo));
+    }
 
 }

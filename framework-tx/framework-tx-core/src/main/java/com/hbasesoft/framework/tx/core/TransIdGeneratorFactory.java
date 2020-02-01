@@ -5,19 +5,17 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.core;
 
-import com.hbasesoft.framework.common.FrameworkException;
-
 /**
- * <Description> 事务执行者<br>
+ * <Description> <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 10, 2020 <br>
+ * @CreateDate Feb 1, 2020 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.core <br>
  */
-@FunctionalInterface
-public interface TxInvoker<T> {
-    T invoke() throws FrameworkException;
+public interface TransIdGeneratorFactory {
+
+    String getTraceId();
 }

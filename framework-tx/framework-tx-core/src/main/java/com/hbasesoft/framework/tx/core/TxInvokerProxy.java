@@ -14,7 +14,7 @@ import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 
 /**
- * <Description> <br>
+ * <Description> 代理执行类<br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
@@ -29,17 +29,36 @@ public final class TxInvokerProxy {
 
     private static TxProducer sender;
 
-    public static <T> T registInvoke(ClientInfo clientInfo, TxInvoker invoker) throws Throwable {
+    /**
+     * Description: 注册代理<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo 客户端信息
+     * @param invoker 具体的执行类
+     * @return
+     * @throws Throwable <br>
+     */
+    public static <T> T registInvoke(ClientInfo clientInfo, TxInvoker<T> invoker) {
         TxProducer sender = getSender();
-        TxManager.setTraceId(clientInfo.getId());
         sender.registClient(clientInfo);
         T msg = invoker.invoke();
         sender.removeClient(clientInfo.getId());
         return msg;
     }
 
+    /**
+     * Description: 执行代理方法 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param marker
+     * @param invoker
+     * @return
+     * @throws Throwable <br>
+     */
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(String marker, TxInvoker invoker) throws Throwable {
+    public static <T> T invoke(String marker, TxInvoker<T> invoker) {
         TxProducer sender = getSender();
 
         CheckInfo checkInfo = sender.registMsg(TxManager.getTraceId(), marker);

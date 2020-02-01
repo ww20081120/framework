@@ -1,0 +1,10 @@
+project: #项目信息
+ name: tx-demo-client
+ 
+server.port: 8936
+ 
+spring: #应用配置
+  application:
+    name: ${project.name} 
+    
+    

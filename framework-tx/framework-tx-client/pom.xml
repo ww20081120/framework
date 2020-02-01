@@ -5,5 +5,11 @@
     <artifactId>framework-tx</artifactId>
     <version>3.4</version>
   </parent>
-  <artifactId>framework-tx-storage-cassandra</artifactId>
+  <artifactId>framework-tx-client</artifactId>
+  <packaging>pom</packaging>
+  <name>client</name>
+  <description>客户端相关实现</description>
+  <modules>
+  	<module>framework-tx-client-producer-springcloud</module>
+  </modules>
 </project>
