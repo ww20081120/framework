@@ -20,7 +20,7 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public interface TxStorage {
 
-    ClientInfo getClientInfo(String id);
+    boolean containsClientInfo(String id);
 
     CheckInfo getCheckInfo(String id, String mark);
 

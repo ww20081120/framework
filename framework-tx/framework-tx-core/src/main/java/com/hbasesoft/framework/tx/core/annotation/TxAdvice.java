@@ -21,6 +21,7 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.tx.core.TxInvokerProxy;
 import com.hbasesoft.framework.tx.core.TxManager;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
+import com.hbasesoft.framework.tx.core.util.ArgsSerializationUtil;
 
 /**
  * <Description> <br>
@@ -53,7 +54,7 @@ public class TxAdvice {
                 ClientInfo clientInfo = new ClientInfo(TxManager.getTraceId(),
                     StringUtils.isNotEmpty(tx.name()) ? tx.name() : TxManager.getMarker(currentMethod));
 
-                clientInfo.setArgs(thisJoinPoint.getArgs());
+                clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(thisJoinPoint.getArgs()));
                 clientInfo.setMaxRetryTimes(tx.maxRetryTimes());
                 clientInfo.setRetryConfigs(tx.retryConfigs());
 

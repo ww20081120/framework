@@ -10,6 +10,7 @@ import java.util.ServiceLoader;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 
@@ -64,11 +65,14 @@ public final class TxInvokerProxy {
         CheckInfo checkInfo = sender.registMsg(TxManager.getTraceId(), marker);
         if (checkInfo.getFlag() != 0) {
             T msg = invoker.invoke();
-            checkInfo.setResult(msg);
+            if (msg != null) {
+                checkInfo.setResult(SerializationUtil.jdkSerial(msg));
+            }
             sender.saveResult(checkInfo);
             return msg;
         }
-        return (T) checkInfo.getResult();
+        byte[] result = checkInfo.getResult();
+        return result != null && result.length > 0 ? (T) SerializationUtil.jdkUnserial(result) : null;
     }
 
     private static TxProducer getSender() {

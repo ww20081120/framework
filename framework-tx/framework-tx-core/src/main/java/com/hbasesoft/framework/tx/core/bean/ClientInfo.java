@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.tx.core.bean;
 
 import java.io.Serializable;
-import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,11 +37,13 @@ public class ClientInfo implements Serializable {
 
     private final String mark;
 
-    private Map<String, String> context;
+    private String context;
 
-    private Object[] args;
+    private byte[] args;
 
     private int maxRetryTimes;
 
     private String retryConfigs;
+
+    private String clientInfo;
 }

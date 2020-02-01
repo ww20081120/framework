@@ -417,4 +417,7 @@ public interface ErrorCodeDef {
 
     /** JDK 反序列化失败 */
     int JDK_UNSERIALIZE_ERROR = 20069;
+
+    /** 参数的内容大小超过65535个字节 */
+    int ARGUMENTS_SIZE_TOO_LARGE = 20070;
 }

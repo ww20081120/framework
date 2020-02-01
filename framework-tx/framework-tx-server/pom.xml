@@ -12,5 +12,6 @@
   <modules>
   	<module>framework-tx-server-core</module>
   	<module>framework-tx-server-producer-springcloud</module>
+  	<module>framework-tx-server-storage-db</module>
   </modules>
 </project>

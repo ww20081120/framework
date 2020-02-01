@@ -5,15 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.client.producer.springcloud.client;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 
@@ -27,10 +20,9 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.client.producer.springcloud.client <br>
  */
-@FeignClient(name = "${project.server.transaction}", url = "${project.server-url.transaction:}",
-    fallback = FallBackProducer.class)
-@RequestMapping("/framework/tx")
-public interface FeginProducer {
+public class FallBackProducer implements FeginProducer {
+
+    private static final Logger logger = new Logger("tx");
 
     /**
      * Description: <br>
@@ -39,8 +31,10 @@ public interface FeginProducer {
      * @taskId <br>
      * @param clientInfo <br>
      */
-    @PostMapping
-    void registClient(@RequestBody ClientInfo clientInfo);
+    @Override
+    public void registClient(ClientInfo clientInfo) {
+        logger.warn("registClient|" + JSONObject.toJSONString(clientInfo));
+    }
 
     /**
      * Description: <br>
@@ -49,8 +43,10 @@ public interface FeginProducer {
      * @taskId <br>
      * @param id <br>
      */
-    @DeleteMapping("/{id}")
-    void removeClient(@PathVariable("id") String id);
+    @Override
+    public void removeClient(String id) {
+        logger.warn("removeClient|" + id);
+    }
 
     /**
      * Description: <br>
@@ -61,8 +57,11 @@ public interface FeginProducer {
      * @param mark
      * @return <br>
      */
-    @GetMapping("/{id}/{mark}")
-    CheckInfo registMsg(@PathVariable("id") String id, @PathVariable("mark") String mark);
+    @Override
+    public CheckInfo registMsg(String id, String mark) {
+        logger.warn("registMsg|" + id + "|" + mark);
+        return new CheckInfo(id, mark, 1, null);
+    }
 
     /**
      * Description: <br>
@@ -71,7 +70,8 @@ public interface FeginProducer {
      * @taskId <br>
      * @param checkInfo <br>
      */
-    @PutMapping
-    void saveResult(@RequestBody CheckInfo checkInfo);
-
+    @Override
+    public void saveResult(CheckInfo checkInfo) {
+        logger.warn("saveResult|" + JSONObject.toJSONString(checkInfo));
+    }
 }

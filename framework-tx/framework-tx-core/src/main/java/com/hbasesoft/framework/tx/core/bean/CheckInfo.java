@@ -40,5 +40,5 @@ public class CheckInfo implements Serializable {
     /** 0:执行成功， 1:未执行， 其它错误码 */
     private final int flag;
 
-    private Object result;
+    private byte[] result;
 }

@@ -7,6 +7,7 @@ package com.hbasesoft.framework.tx.core;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
+import com.hbasesoft.framework.tx.core.util.ArgsSerializationUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +36,8 @@ public class SimpleConsumer implements TxConsumer {
     @Override
     public void retry(ClientInfo clientInfo) {
         try {
-            TxManager.execute(clientInfo.getMark(), clientInfo.getContext(), clientInfo.getArgs());
+            TxManager.execute(clientInfo.getMark(), clientInfo.getContext(),
+                ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
             txProducer.removeClient(clientInfo.getId());
         }
         catch (Exception e) {

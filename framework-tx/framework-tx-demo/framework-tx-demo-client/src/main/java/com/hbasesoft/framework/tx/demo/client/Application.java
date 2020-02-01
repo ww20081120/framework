@@ -27,7 +27,6 @@ import com.hbasesoft.framework.common.Bootstrap;
 public class Application {
     /**
      * Description: <br>
-     * zookeeper-3.4.12zookeeper-3.4.12zookeeper-3.4.12zookeeper-3.4.12
      * 
      * @author 王伟<br>
      * @taskId <br>
