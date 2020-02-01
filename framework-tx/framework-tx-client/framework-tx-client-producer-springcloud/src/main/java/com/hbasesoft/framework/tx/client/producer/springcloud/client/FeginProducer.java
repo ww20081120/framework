@@ -3,12 +3,17 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.client.producer.springcloud;
+package com.hbasesoft.framework.tx.client.producer.springcloud.client;
 
-import com.hbasesoft.framework.common.annotation.NoTransLog;
-import com.hbasesoft.framework.common.utils.ContextHolder;
-import com.hbasesoft.framework.tx.client.producer.springcloud.client.FeginProducer;
-import com.hbasesoft.framework.tx.core.TxProducer;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 
@@ -20,12 +25,11 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @taskId <br>
  * @CreateDate Feb 1, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.client.producer.springcloud <br>
+ * @see com.hbasesoft.framework.tx.client.producer.springcloud.client <br>
  */
-@NoTransLog
-public class SpringCloudProducer implements TxProducer {
-
-    private static FeginProducer feginProducer;
+@FeignClient(name = "${project.server.transaction}", url = "${project.server-url.transaction:}")
+@RequestMapping("/framework/tx")
+public interface FeginProducer {
 
     /**
      * Description: <br>
@@ -34,10 +38,8 @@ public class SpringCloudProducer implements TxProducer {
      * @taskId <br>
      * @param clientInfo <br>
      */
-    @Override
-    public void registClient(ClientInfo clientInfo) {
-        getFeginProducer().registClient(clientInfo);
-    }
+    @PostMapping
+    void registClient(@RequestBody ClientInfo clientInfo);
 
     /**
      * Description: <br>
@@ -46,10 +48,8 @@ public class SpringCloudProducer implements TxProducer {
      * @taskId <br>
      * @param id <br>
      */
-    @Override
-    public void removeClient(String id) {
-        getFeginProducer().removeClient(id);
-    }
+    @DeleteMapping("/{id}")
+    void removeClient(@PathVariable("id") String id);
 
     /**
      * Description: <br>
@@ -60,10 +60,8 @@ public class SpringCloudProducer implements TxProducer {
      * @param mark
      * @return <br>
      */
-    @Override
-    public CheckInfo registMsg(String id, String mark) {
-        return getFeginProducer().registMsg(id, mark);
-    }
+    @GetMapping("/{id}/{mark}")
+    CheckInfo registMsg(@PathVariable("id") String id, @PathVariable("mark") String mark);
 
     /**
      * Description: <br>
@@ -72,16 +70,7 @@ public class SpringCloudProducer implements TxProducer {
      * @taskId <br>
      * @param checkInfo <br>
      */
-    @Override
-    public void saveResult(CheckInfo checkInfo) {
-        getFeginProducer().saveResult(checkInfo);
-    }
-
-    private FeginProducer getFeginProducer() {
-        if (feginProducer == null) {
-            feginProducer = ContextHolder.getContext().getBean(FeginProducer.class);
-        }
-        return feginProducer;
-    }
+    @PutMapping
+    void saveResult(@RequestBody CheckInfo checkInfo);
 
 }

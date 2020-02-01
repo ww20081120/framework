@@ -11,5 +11,6 @@
   <description>服务端相关实现</description>
   <modules>
   	<module>framework-tx-server-core</module>
+  	<module>framework-tx-server-producer-springcloud</module>
   </modules>
 </project>

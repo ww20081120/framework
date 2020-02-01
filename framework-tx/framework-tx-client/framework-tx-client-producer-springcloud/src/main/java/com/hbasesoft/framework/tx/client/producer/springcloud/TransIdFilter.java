@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 
 /**
@@ -29,6 +30,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.client.producer.springcloud <br>
  */
+@NoTransLog
 @Component
 @WebFilter(urlPatterns = "/**", filterName = "transIdFilter")
 public class TransIdFilter implements javax.servlet.Filter {

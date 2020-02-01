@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.core.bean;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -26,7 +27,12 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ClientInfo {
+public class ClientInfo implements Serializable {
+
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = -1186576125746340794L;
 
     private final String id;
 

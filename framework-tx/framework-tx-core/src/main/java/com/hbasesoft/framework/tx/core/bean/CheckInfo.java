@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.core.bean;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +26,18 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class CheckInfo {
+public class CheckInfo implements Serializable {
+
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = -2786923426306997256L;
 
     private final String id;
 
     private final String mark;
 
-    /** 0:执行成功， 1:未执行， 其它错误码*/
+    /** 0:执行成功， 1:未执行， 其它错误码 */
     private final int flag;
 
     private Object result;
