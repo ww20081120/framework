@@ -28,7 +28,7 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @see com.hbasesoft.framework.tx.client.producer.springcloud.client <br>
  */
 @FeignClient(name = "${project.server.transaction}", url = "${project.server-url.transaction:}",
-    fallback = FallBackProducer.class)
+    fallbackFactory = FallBackProducerFactory.class)
 @RequestMapping("/framework/tx")
 public interface FeginProducer {
 

@@ -8,10 +8,7 @@ package com.hbasesoft.framework.tx.server.storage.db.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
 
@@ -34,8 +31,6 @@ public class TxClientinfoEntity extends BaseEntity {
 
     /** id */
     @Id
-    @GeneratedValue(generator = "paymentableGenerator")
-    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
     @Column(name = "id")
     private String id;
 

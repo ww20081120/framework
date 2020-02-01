@@ -420,7 +420,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     @Override
     public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException {
         Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
-        delete(get(entityName, id));
+        T entity = get(entityName, id);
+        if (entity != null) {
+            delete(entity);
+        }
     }
 
     /**

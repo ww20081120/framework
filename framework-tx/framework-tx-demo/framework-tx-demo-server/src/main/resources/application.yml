@@ -1,0 +1,25 @@
+project: #项目信息
+ name: tx-demo-server
+ 
+server.port: 8937
+ 
+spring: #应用配置
+  application:
+    name: ${project.name} 
+    
+master: #主数据库配置
+ db:
+  type: mysql
+  url: jdbc:mysql://vcc.hbasesoft.com:8316/sgp-tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
+  username: root
+  password: hbasesoft.com
+  
+cache: #缓存配置
+  model: SIMPLE
+  
+job:
+  register:
+    url: localhost:2181
+    namespace: ${project.name}
+  event:
+    enable: false

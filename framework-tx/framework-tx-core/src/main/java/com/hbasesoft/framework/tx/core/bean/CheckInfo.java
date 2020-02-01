@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -24,7 +24,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class CheckInfo implements Serializable {
 
@@ -33,12 +33,19 @@ public class CheckInfo implements Serializable {
      */
     private static final long serialVersionUID = -2786923426306997256L;
 
-    private final String id;
+    private String id;
 
-    private final String mark;
+    private String mark;
 
     /** 0:执行成功， 1:未执行， 其它错误码 */
-    private final int flag;
+    private int flag;
 
     private byte[] result;
+
+    public CheckInfo(String id, String mark, int flag) {
+        this.id = id;
+        this.mark = mark;
+        this.flag = flag;
+    }
+
 }

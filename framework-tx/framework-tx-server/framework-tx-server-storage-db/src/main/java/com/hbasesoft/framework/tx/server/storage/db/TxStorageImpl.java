@@ -12,6 +12,8 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -52,6 +54,7 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
+    @Transactional(readOnly = true)
     public boolean containsClientInfo(String id) {
         return StringUtils.isNotEmpty(txClientinfoDao.containsClientInfo(id));
     }
@@ -66,6 +69,7 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
+    @Transactional(readOnly = true)
     public CheckInfo getCheckInfo(String id, String mark) {
         TxCheckinfoEntity bean = txCheckinfoDao.getById(id, mark);
         if (bean != null) {
@@ -82,6 +86,7 @@ public class TxStorageImpl implements TxStorage {
      * @param clientInfo <br>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void saveClientInfo(ClientInfo clientInfo) {
         TxClientinfoEntity bean = new TxClientinfoEntity();
         bean.setArgs(clientInfo.getArgs());
@@ -109,6 +114,7 @@ public class TxStorageImpl implements TxStorage {
      * @param checkInfo <br>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void saveCheckInfo(CheckInfo checkInfo) {
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setFlag(checkInfo.getFlag());
@@ -126,6 +132,7 @@ public class TxStorageImpl implements TxStorage {
      * @param checkInfo <br>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void updateCheckInfo(CheckInfo checkInfo) {
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setFlag(checkInfo.getFlag());
@@ -146,6 +153,7 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
+    @Transactional(readOnly = true)
     public PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize) {
         com.hbasesoft.framework.db.core.utils.PagerList<TxClientinfoEntity> beans = txClientinfoDao
             .queryTimeoutClientInfos(retryTimes, pageIndex, pageSize);
@@ -170,6 +178,7 @@ public class TxStorageImpl implements TxStorage {
      * @param id <br>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void updateClientRetryTimes(String id) {
         TxClientinfoEntity bean = txClientinfoDao.getRetryConfigs(id);
         if (bean != null) {
@@ -195,8 +204,9 @@ public class TxStorageImpl implements TxStorage {
      * @param id <br>
      */
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void delete(String id) {
-        txClientinfoDao.deleteById(id);
+        txClientinfoDao.deleteClientinfo(id);
         txCheckinfoDao.delete(id);
     }
 }

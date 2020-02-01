@@ -36,7 +36,7 @@ public class SimpleConsumer implements TxConsumer {
     @Override
     public void retry(ClientInfo clientInfo) {
         try {
-            TxManager.execute(clientInfo.getMark(), clientInfo.getContext(),
+            TxManager.execute(clientInfo.getMark(), null,
                 ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
             txProducer.removeClient(clientInfo.getId());
         }

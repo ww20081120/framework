@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -24,7 +24,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class ClientInfo implements Serializable {
 
@@ -33,9 +33,9 @@ public class ClientInfo implements Serializable {
      */
     private static final long serialVersionUID = -1186576125746340794L;
 
-    private final String id;
+    private String id;
 
-    private final String mark;
+    private String mark;
 
     private String context;
 
@@ -46,4 +46,10 @@ public class ClientInfo implements Serializable {
     private String retryConfigs;
 
     private String clientInfo;
+
+    public ClientInfo(String id, String mark) {
+        this.id = id;
+        this.mark = mark;
+    }
+
 }

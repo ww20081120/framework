@@ -53,7 +53,6 @@ public class TxAdvice {
             if (tx != null) {
                 ClientInfo clientInfo = new ClientInfo(TxManager.getTraceId(),
                     StringUtils.isNotEmpty(tx.name()) ? tx.name() : TxManager.getMarker(currentMethod));
-
                 clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(thisJoinPoint.getArgs()));
                 clientInfo.setMaxRetryTimes(tx.maxRetryTimes());
                 clientInfo.setRetryConfigs(tx.retryConfigs());

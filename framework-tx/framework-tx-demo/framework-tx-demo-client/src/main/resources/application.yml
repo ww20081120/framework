@@ -1,10 +1,18 @@
 project: #项目信息
  name: tx-demo-client
- 
+ server:
+   transaction: tx-demo-server
+ server-url:
+   transaction: http://localhost:8937
+    
 server.port: 8936
  
 spring: #应用配置
   application:
     name: ${project.name} 
+    
+feign:
+  hystrix:
+    enabled: true
     
     
