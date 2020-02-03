@@ -15,4 +15,10 @@ feign:
   hystrix:
     enabled: true
     
-    
+tx:
+  rocketmq:
+    namesrvAddr: localhost:9876   #rocketMq的地址
+  executor:  #consumer的线程池配置
+    coreSize: 10 
+    maxPoolSize: 20
+        

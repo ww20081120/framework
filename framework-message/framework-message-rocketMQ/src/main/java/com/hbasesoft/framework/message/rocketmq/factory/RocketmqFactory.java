@@ -189,8 +189,7 @@ public final class RocketmqFactory {
 
         // One time consume max size
         consumer.setConsumeMessageBatchMaxSize(
-            PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 0) == 0 ? 1
-                : PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 0));// 设置批量消费，以提升消费吞吐量，默认是1
+            PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 1));// 设置批量消费，以提升消费吞吐量，默认是1
 
         try {
             consumer.subscribe(channel, "*");

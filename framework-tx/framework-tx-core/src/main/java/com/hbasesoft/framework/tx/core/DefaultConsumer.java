@@ -9,8 +9,6 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.core.util.ArgsSerializationUtil;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * <Description> <br>
  * 
@@ -21,10 +19,7 @@ import lombok.RequiredArgsConstructor;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.core <br>
  */
-@RequiredArgsConstructor
-public class SimpleConsumer implements TxConsumer {
-
-    private final TxProducer txProducer;
+public class DefaultConsumer implements TxConsumer {
 
     /**
      * Description: <br>
@@ -35,10 +30,12 @@ public class SimpleConsumer implements TxConsumer {
      */
     @Override
     public void retry(ClientInfo clientInfo) {
+        TxProducer sender = TxInvokerProxy.getSender();
         try {
-            TxManager.execute(clientInfo.getMark(), null,
-                ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
-            txProducer.removeClient(clientInfo.getId());
+            if (sender.containClient(clientInfo.getId())) {
+                TxManager.execute(clientInfo.getMark(), null, ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
+                sender.removeClient(clientInfo.getId());
+            }
         }
         catch (Exception e) {
             LoggerUtil.error(e);

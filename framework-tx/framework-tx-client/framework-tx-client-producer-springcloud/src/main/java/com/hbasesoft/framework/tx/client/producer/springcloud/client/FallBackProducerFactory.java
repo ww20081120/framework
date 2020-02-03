@@ -82,6 +82,12 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
             logger.warn("saveResult|" + JSONObject.toJSONString(checkInfo));
         }
 
+        @Override
+        public boolean containClient(String id) {
+            logger.warn("containClient|" + id);
+            return false;
+        }
+
     };
 
     /**

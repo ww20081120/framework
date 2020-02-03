@@ -83,4 +83,17 @@ public class TxProducerImpl implements TxProducer {
     public void saveResult(CheckInfo checkInfo) {
         txStorage.updateCheckInfo(checkInfo);
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    public boolean containClient(String id) {
+        return txStorage.containsClientInfo(id);
+    }
 }

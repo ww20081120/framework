@@ -11,5 +11,6 @@
   <description>客户端相关实现</description>
   <modules>
   	<module>framework-tx-client-producer-springcloud</module>
+  	<module>framework-tx-client-consumer-rocketMQ</module>
   </modules>
 </project>

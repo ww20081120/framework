@@ -37,6 +37,11 @@ public class SpringCloudController {
     @Resource
     private TxProducer txProducer;
 
+    @GetMapping("/{id}")
+    public boolean containClient(@PathVariable("id") String id) {
+        return txProducer.containClient(id);
+    }
+
     /**
      * Description: <br>
      * 

@@ -20,6 +20,9 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public interface TxProducer {
 
+    /** 检测消息是否执行完毕 */
+    boolean containClient(String id);
+
     /**
      * Description: 注册客户端<br>
      * 

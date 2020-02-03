@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.hbasesoft.framework</groupId>
+    <artifactId>framework-tx-client</artifactId>
+    <version>3.4</version>
+  </parent>
+  <artifactId>framework-tx-client-consumer-rocketMQ</artifactId>
+  <name>consumer-rocketMQ</name>
+  <description>RocketMQ的实现</description>
+  <dependencies>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-tx-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-client -->
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-client</artifactId>
+			<version>4.3.2</version>
+		</dependency>
+	</dependencies>
+</project>

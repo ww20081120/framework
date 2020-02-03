@@ -84,4 +84,17 @@ public class SpringCloudProducer implements TxProducer {
         return feginProducer;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    public boolean containClient(String id) {
+        return getFeginProducer().containClient(id);
+    }
+
 }
