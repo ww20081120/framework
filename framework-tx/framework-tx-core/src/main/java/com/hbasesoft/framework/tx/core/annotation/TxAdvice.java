@@ -50,7 +50,8 @@ public class TxAdvice {
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
             Tx tx = AnnotationUtils.findAnnotation(currentMethod, Tx.class);
-            if (tx != null) {
+            if (tx != null && !TxManager.isRetry()) {
+
                 ClientInfo clientInfo = new ClientInfo(TxManager.getTraceId(),
                     StringUtils.isNotEmpty(tx.name()) ? tx.name() : TxManager.getMarker(currentMethod));
                 clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(thisJoinPoint.getArgs()));

@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.server.retry;
+package com.hbasesoft.framework.tx.core;
 
 /**
  * <Description> <br>
@@ -11,13 +11,11 @@ package com.hbasesoft.framework.tx.server.retry;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jan 21, 2020 <br>
+ * @CreateDate Feb 3, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.server.retry <br>
+ * @see com.hbasesoft.framework.tx.core <br>
  */
-public interface RetryService {
+public interface TxClientInfoFactory {
 
-    String getType();
-
-    void retryMsg(String id, String serverInfo);
+    String getClientInfo();
 }

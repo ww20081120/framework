@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.demo.client;
 
+import java.util.Random;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,9 +25,16 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
 @RestController
 public class TestController {
 
+    private int i = 0;
+
     @GetMapping
     @Tx
-    public String test() {
+    public synchronized String test() {
+        i++;
+        if (new Random().nextInt(10) % 3 == 0) {
+            throw new RuntimeException();
+        }
+        System.out.println(i);
         return "test";
     }
 }

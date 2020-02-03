@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 
@@ -28,6 +30,8 @@ import com.hbasesoft.framework.common.utils.Assert;
 public final class TxManager {
 
     private static final Object LOCK = new Object();
+
+    private static ThreadLocal<String> retryFlag = new ThreadLocal<>();
 
     /**
      * 存放traceId
@@ -69,11 +73,21 @@ public final class TxManager {
      */
     public static void execute(String mark, Map<String, String> context, Object[] args)
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Object obj = proxyObject.get(mark);
-        Assert.notNull(obj, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
-        Method method = proxyMethod.get(mark);
-        Assert.notNull(method, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
-        method.invoke(obj, args);
+        try {
+            retryFlag.set("retry");
+            Object obj = proxyObject.get(mark);
+            Assert.notNull(obj, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
+            Method method = proxyMethod.get(mark);
+            Assert.notNull(method, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
+            method.invoke(obj, args);
+        }
+        finally {
+            retryFlag.remove();
+        }
+    }
+
+    public static boolean isRetry() {
+        return StringUtils.isNotEmpty(retryFlag.get());
     }
 
     /**

@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -49,10 +50,12 @@ public class RocketMQStartupListener implements StartupListener {
     public void complete(ApplicationContext context) {
         LoggerUtil.info("开始启动分布式事务Rocket MQ Consumer");
 
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(TxConsumer.CONSUMER_CHANNEL);
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(TxConsumer.CONSUMER_GROUP);
 
         // Name service address
-        consumer.setNamesrvAddr(PropertyHolder.getProperty("tx.rocketmq.namesrvAddr"));
+        String address = PropertyHolder.getProperty("tx.rocketmq.namesrvAddr");
+        Assert.notEmpty(address, ErrorCodeDef.TX_ROCKET_MQ_ADDRESS_NOT_FOUND);
+        consumer.setNamesrvAddr(address);
         // Set Consume Thread
         consumer.setConsumeThreadMin(PropertyHolder.getIntProperty("tx.executor.coreSize", 20));
         consumer.setConsumeThreadMax(PropertyHolder.getIntProperty("tx.executor.maxPoolSize", 64));
@@ -61,8 +64,10 @@ public class RocketMQStartupListener implements StartupListener {
 
         TxConsumer txConsumer = new DefaultConsumer();
 
+        String topic = new RocketMQClientInfoFactory().getClientInfo();
+        Assert.notEmpty(topic, ErrorCodeDef.TX_ROCKET_MQ_TOPIC_NOT_FOUND);
         try {
-            consumer.subscribe(TxConsumer.CONSUMER_CHANNEL, "*");
+            consumer.subscribe(topic, "*");
 
             consumer.registerMessageListener(new MessageListenerConcurrently() {
 

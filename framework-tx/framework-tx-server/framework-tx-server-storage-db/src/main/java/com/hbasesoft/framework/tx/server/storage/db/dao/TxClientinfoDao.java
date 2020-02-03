@@ -26,13 +26,13 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
 @Dao
 public interface TxClientinfoDao extends IBaseDao<TxClientinfoEntity> {
 
-    @Sql("SELET ID FROM T_TX_CLIENTINFO WHERE ID = :id")
+    @Sql("SELECT ID FROM T_TX_CLIENTINFO WHERE ID = :id")
     String containsClientInfo(@Param("id") String id);
 
     @Sql("SELECT ID, MAX_RETRY_TIMES, CURRENT_RETRY_TIMES, RETRY_CONFIGS FROM T_TX_CLIENTINFO WHERE ID = :id")
     TxClientinfoEntity getRetryConfigs(@Param("id") String id);
 
-    @Sql("UPDATE T_TX_CLIENTINFO SET CURRENT_RETRY_TIMES = :entity.current_retry_times, NEXT_RETRY_TIME = :entity.nextRetryTime WHERE ID = :entity.id")
+    @Sql("UPDATE T_TX_CLIENTINFO SET CURRENT_RETRY_TIMES = :entity.currentRetryTimes, NEXT_RETRY_TIME = :entity.nextRetryTime WHERE ID = :entity.id")
     int updateRetryTimes(@Param("entity") TxClientinfoEntity entity);
 
     @Sql("SELECT ID, MARK, CONTEXT, ARGS, CLIENT_INFO FROM T_TX_CLIENTINFO WHERE NEXT_RETRY_TIME <= NOW() AND MAX_RETRY_TIMES > CURRENT_RETRY_TIMES AND CURRENT_RETRY_TIMES = :retryTimes ")

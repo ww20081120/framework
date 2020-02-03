@@ -23,3 +23,7 @@ job:
     namespace: ${project.name}
   event:
     enable: false
+    
+tx:
+  rocketmq:
+    namesrvAddr: localhost:9876   #rocketMq的地址

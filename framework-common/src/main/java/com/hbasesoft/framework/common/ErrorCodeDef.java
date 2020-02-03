@@ -212,6 +212,9 @@ public interface ErrorCodeDef {
     /** 未找到transId生成工厂 */
     int TRANS_ID_GENERATOR_FACTORY_NOT_FOUND = 10063;
 
+    /** 未找到客户端信息生成工厂 */
+    int TRANS_CLIENT_INFO_FACTORY_NOT_FOUND = 10064;
+
     /************************************************************************************
      * ---------------------------------用户错误区域 必须大于20000的5位数-------------------------------------------
      ************************************************************************************/
@@ -420,4 +423,10 @@ public interface ErrorCodeDef {
 
     /** 参数的内容大小超过65535个字节 */
     int ARGUMENTS_SIZE_TOO_LARGE = 20070;
+
+    /** 事务rocketmq的地址未设置 */
+    int TX_ROCKET_MQ_ADDRESS_NOT_FOUND = 20071;
+
+    /** 事务rocketmq的topic未设置 */
+    int TX_ROCKET_MQ_TOPIC_NOT_FOUND = 20072;
 }

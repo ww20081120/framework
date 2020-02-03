@@ -26,7 +26,7 @@ import com.hbasesoft.framework.tx.server.TxStorage;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.server.retry <br>
  */
-@Job(cron = "3 1/5 * * * ?")
+@Job(cron = "3 1/5 * * * ?", shardingParam="0,1,2,3,4,5,6,7,8,9,10")
 public class RetryJob implements SimpleJob {
 
     /**
@@ -58,7 +58,6 @@ public class RetryJob implements SimpleJob {
             }
         }
         while (timeoutClientInfos != null && timeoutClientInfos.hasNextPage());
-
     }
 
 }

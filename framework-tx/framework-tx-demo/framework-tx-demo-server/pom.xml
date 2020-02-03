@@ -18,6 +18,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-tx-server-consumer-rocketMQ</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-tx-server-storage-db</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

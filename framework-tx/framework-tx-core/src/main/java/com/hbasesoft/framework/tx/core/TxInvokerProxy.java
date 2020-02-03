@@ -30,6 +30,8 @@ public final class TxInvokerProxy {
 
     private static TxProducer sender;
 
+    private static TxClientInfoFactory clientInfoFactory;
+
     /**
      * Description: 注册代理<br>
      * 
@@ -41,6 +43,7 @@ public final class TxInvokerProxy {
      * @throws Throwable <br>
      */
     public static <T> T registInvoke(ClientInfo clientInfo, TxInvoker<T> invoker) {
+        clientInfo.setClientInfo(getClientInfoFactory().getClientInfo());
         TxProducer sender = getSender();
         sender.registClient(clientInfo);
         T msg = invoker.invoke();
@@ -58,11 +61,25 @@ public final class TxInvokerProxy {
      * @return
      * @throws Throwable <br>
      */
-    @SuppressWarnings("unchecked")
     public static <T> T invoke(String marker, TxInvoker<T> invoker) {
+        return invoke(TxManager.getTraceId(), marker, invoker);
+    }
+
+    /**
+     * Description: 执行代理方法 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param marker
+     * @param invoker
+     * @return
+     * @throws Throwable <br>
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T invoke(String id, String marker, TxInvoker<T> invoker) {
         TxProducer sender = getSender();
 
-        CheckInfo checkInfo = sender.registMsg(TxManager.getTraceId(), marker);
+        CheckInfo checkInfo = sender.registMsg(id, marker);
         if (checkInfo.getFlag() != 0) {
             T msg = invoker.invoke();
             if (msg != null) {
@@ -73,6 +90,18 @@ public final class TxInvokerProxy {
         }
         byte[] result = checkInfo.getResult();
         return result != null && result.length > 0 ? (T) SerializationUtil.jdkUnserial(result) : null;
+    }
+
+    static TxClientInfoFactory getClientInfoFactory() {
+        synchronized (LOCK) {
+            if (clientInfoFactory == null) {
+                ServiceLoader<TxClientInfoFactory> loader = ServiceLoader.load(TxClientInfoFactory.class);
+                Iterator<TxClientInfoFactory> it = loader.iterator();
+                Assert.isTrue(it.hasNext(), ErrorCodeDef.TRANS_CLIENT_INFO_FACTORY_NOT_FOUND);
+                clientInfoFactory = it.next();
+            }
+            return clientInfoFactory;
+        }
     }
 
     static TxProducer getSender() {
