@@ -24,7 +24,7 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
 @Dao
 public interface TxCheckinfoDao {
 
-    @Sql("SELECT ID, MARK, FLAG, RESULT FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
+    @Sql("SELECT ID, MARK, RESULT FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
     TxCheckinfoEntity getCheckInfoById(@Param("id") String id, @Param("mark") String mark);
 
     @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT) VALUES (:entity.id, :entity.mark, :entity.result)")
