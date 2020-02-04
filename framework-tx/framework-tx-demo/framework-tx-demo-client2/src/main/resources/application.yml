@@ -24,5 +24,3 @@ tx:
   executor:  #consumer的线程池配置
     coreSize: 10 
     maxPoolSize: 20
-        
-logging.level.root: debug

@@ -25,7 +25,4 @@ tx:
     namesrvAddr: localhost:9876   #rocketMq的地址
   executor:  #consumer的线程池配置
     coreSize: 10 
-    maxPoolSize: 20
-    
-logging.level.root: debug
-        
+    maxPoolSize: 20        

@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.client.producer.springcloud;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.tx.core.TransIdGeneratorFactory;
 
@@ -20,11 +22,7 @@ import com.hbasesoft.framework.tx.core.TransIdGeneratorFactory;
  */
 public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
 
-    private static ThreadLocal<String> transIdHolder = new ThreadLocal<String>() {
-        protected String initialValue() {
-            return CommonUtil.getTransactionID();
-        };
-    };
+    private static ThreadLocal<String> transIdHolder = new ThreadLocal<String>();
 
     /**
      * Description: <br>
@@ -35,7 +33,12 @@ public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
      */
     @Override
     public String getTraceId() {
-        return transIdHolder.get();
+        String traceId = transIdHolder.get();
+        if (StringUtils.isEmpty(traceId)) {
+            traceId = CommonUtil.getTransactionID();
+            setTraceId(traceId);
+        }
+        return traceId;
     }
 
     public void setTraceId(String traceId) {
