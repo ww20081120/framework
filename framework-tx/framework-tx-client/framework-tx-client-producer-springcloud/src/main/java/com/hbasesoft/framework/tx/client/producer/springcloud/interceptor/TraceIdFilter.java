@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.client.producer.springcloud;
+package com.hbasesoft.framework.tx.client.producer.springcloud.interceptor;
 
 import java.io.IOException;
 
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.tx.client.producer.springcloud.MutableHttpServletRequest;
+import com.hbasesoft.framework.tx.client.producer.springcloud.WebTransIdGeneratorFactory;
 
 /**
  * <Description> <br>
@@ -32,8 +34,8 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
  */
 @NoTransLog
 @Component
-@WebFilter(urlPatterns = "/**", filterName = "transIdFilter")
-public class TransIdFilter implements javax.servlet.Filter {
+@WebFilter(urlPatterns = "/**", filterName = "traceIdFilter")
+public class TraceIdFilter implements javax.servlet.Filter {
 
     public static final String TRACE_ID = "X-B3-TraceId";
 

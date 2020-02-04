@@ -42,7 +42,7 @@ public class TestConsumer {
         }
         System.out.println(i + ":" + id);
 
-        String value1 = TxInvokerProxy.invoke("client2", () -> {
+        String value1 = TxInvokerProxy.invoke("client4", () -> {
             return feClient3Consumer.test(id);
         });
         System.out.println(value1);
