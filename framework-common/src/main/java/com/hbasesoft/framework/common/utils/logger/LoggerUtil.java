@@ -79,7 +79,10 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void warn(Throwable t) {
-        getLogger().warn(getErrorMessage(t), t);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isWarnEnabled()) {
+            logger.warn(getErrorMessage(t), t);
+        }
     }
 
     /**
@@ -88,7 +91,10 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void warn(String message) {
-        getLogger().warn(message);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isWarnEnabled()) {
+            logger.warn(message);
+        }
     }
 
     /**
@@ -98,7 +104,10 @@ public final class LoggerUtil {
      * @param t 异常
      */
     public static void warn(String message, Throwable t) {
-        getLogger().warn(getErrorMessage(message, t), t);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isWarnEnabled()) {
+            logger.warn(getErrorMessage(message, t), t);
+        }
     }
 
     /**
@@ -109,7 +118,10 @@ public final class LoggerUtil {
      * @param params 日志信息 <br>
      */
     public static void warn(Throwable t, String message, Object... params) {
-        getLogger().warn(getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isWarnEnabled()) {
+            logger.warn(getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
+        }
     }
 
     /**
@@ -118,7 +130,10 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void debug(String message) {
-        getLogger().debug(message);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isDebugEnabled()) {
+            logger.debug(message);
+        }
     }
 
     /**
@@ -128,7 +143,10 @@ public final class LoggerUtil {
      * @param t 异常
      */
     public static void debug(String message, Throwable t) {
-        getLogger().debug(getErrorMessage(message, t), t);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isDebugEnabled()) {
+            logger.debug(getErrorMessage(message, t), t);
+        }
     }
 
     /**
@@ -138,7 +156,10 @@ public final class LoggerUtil {
      * @param params 日志信息
      */
     public static void debug(String message, Object... params) {
-        getLogger().debug(CommonUtil.messageFormat(message, params));
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isDebugEnabled()) {
+            logger.debug(CommonUtil.messageFormat(message, params));
+        }
     }
 
     /**
@@ -147,7 +168,10 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void info(String message) {
-        getLogger().info(message);
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isInfoEnabled()) {
+            logger.info(message);
+        }
     }
 
     /**
@@ -157,7 +181,10 @@ public final class LoggerUtil {
      * @param params 日志信息
      */
     public static void info(String message, Object... params) {
-        getLogger().info(CommonUtil.messageFormat(message, params));
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isInfoEnabled()) {
+            logger.info(CommonUtil.messageFormat(message, params));
+        }
     }
 
     /**
