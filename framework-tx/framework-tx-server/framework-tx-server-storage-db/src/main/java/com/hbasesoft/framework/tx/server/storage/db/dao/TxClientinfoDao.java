@@ -41,4 +41,9 @@ public interface TxClientinfoDao extends IBaseDao<TxClientinfoEntity> {
 
     @Sql("DELETE FROM T_TX_CLIENTINFO WHERE ID = :id")
     int deleteClientinfo(@Param("id") String id);
+
+    @Sql("SELECT 1 FROM T_TX_CLIENTINFO")
+    int checkTable();
+
+    void createTable();
 }

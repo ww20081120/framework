@@ -10,7 +10,7 @@ spring: #应用配置
 master: #主数据库配置
  db:
   type: mysql
-  url: jdbc:mysql://vcc.hbasesoft.com:8316/sgp-tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
+  url: jdbc:mysql://vcc.hbasesoft.com:8316/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
   username: root
   password: hbasesoft.com
   
