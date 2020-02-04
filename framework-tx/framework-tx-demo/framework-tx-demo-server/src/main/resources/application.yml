@@ -12,7 +12,7 @@ master: #主数据库配置
   type: mysql
   url: jdbc:mysql://vcc.hbasesoft.com:8316/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
   username: root
-  password: hbasesoft.com
+  password: ENC(XL4vc+/5GgQuRtpN1/nhog==)
   
 cache: #缓存配置
   model: SIMPLE
