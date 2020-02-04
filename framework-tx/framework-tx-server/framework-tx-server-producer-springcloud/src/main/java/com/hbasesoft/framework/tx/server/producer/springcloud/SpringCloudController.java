@@ -50,8 +50,8 @@ public class SpringCloudController {
      * @param clientInfo <br>
      */
     @PostMapping
-    public void registClient(@RequestBody ClientInfo clientInfo) {
-        txProducer.registClient(clientInfo);
+    public boolean registClient(@RequestBody ClientInfo clientInfo) {
+        return txProducer.registClient(clientInfo);
     }
 
     /**
