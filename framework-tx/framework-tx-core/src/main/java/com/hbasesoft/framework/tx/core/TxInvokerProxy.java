@@ -95,7 +95,7 @@ public final class TxInvokerProxy {
         return result != null && result.length > 0 ? (T) SerializationUtil.jdkUnserial(result) : null;
     }
 
-    static TxClientInfoFactory getClientInfoFactory() {
+    public static TxClientInfoFactory getClientInfoFactory() {
         synchronized (LOCK) {
             if (clientInfoFactory == null) {
                 ServiceLoader<TxClientInfoFactory> loader = ServiceLoader.load(TxClientInfoFactory.class);
@@ -107,7 +107,7 @@ public final class TxInvokerProxy {
         }
     }
 
-    static TxProducer getSender() {
+    public static TxProducer getSender() {
         synchronized (LOCK) {
             if (sender == null) {
                 ServiceLoader<TxProducer> producerLoader = ServiceLoader.load(TxProducer.class);

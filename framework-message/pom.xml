@@ -16,5 +16,6 @@
 		<module>framework-message-delay-cache</module>
 		<module>framework-message-delay-db</module>
 		<module>framework-message-simple</module>
+		<module>framework-message-tx</module>
 	</modules>
 </project>
