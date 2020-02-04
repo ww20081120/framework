@@ -18,4 +18,6 @@ package com.hbasesoft.framework.tx.core;
 public interface TransIdGeneratorFactory {
 
     String getTraceId();
+
+    void setTraceId(String traceId);
 }

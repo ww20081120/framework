@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.tx.client.producer.springcloud.MutableHttpServletRequest;
-import com.hbasesoft.framework.tx.client.producer.springcloud.WebTransIdGeneratorFactory;
+import com.hbasesoft.framework.tx.core.TxManager;
 
 /**
  * <Description> <br>
@@ -62,8 +62,8 @@ public class TraceIdFilter implements javax.servlet.Filter {
             MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(req);
             mutableRequest.putHeader(TRACE_ID, traceId);
             req = mutableRequest;
-            WebTransIdGeneratorFactory.setTraceId(traceId);
         }
+        TxManager.setTraceId(traceId);
         chain.doFilter(req, response);
     }
 }

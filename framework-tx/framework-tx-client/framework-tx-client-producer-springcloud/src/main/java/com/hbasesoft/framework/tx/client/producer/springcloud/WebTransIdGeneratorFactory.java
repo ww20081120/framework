@@ -38,7 +38,7 @@ public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
         return transIdHolder.get();
     }
 
-    public static void setTraceId(String traceId) {
+    public void setTraceId(String traceId) {
         transIdHolder.set(traceId);
     }
 

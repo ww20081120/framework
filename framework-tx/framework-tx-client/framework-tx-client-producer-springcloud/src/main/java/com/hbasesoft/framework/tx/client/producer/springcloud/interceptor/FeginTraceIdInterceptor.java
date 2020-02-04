@@ -5,13 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.client.producer.springcloud.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.hbasesoft.framework.tx.core.TxManager;
 
 import feign.RequestInterceptor;
@@ -38,16 +31,9 @@ public class FeginTraceIdInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-        RequestAttributes requestAttr = RequestContextHolder.getRequestAttributes();
-        if (requestAttr != null && requestAttr instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttr).getRequest();
-
-            String traceId = request.getHeader(TraceIdFilter.TRACE_ID);
-            if (StringUtils.isEmpty(traceId)) {
-                traceId = TxManager.getTraceId();
-            }
-            template.header(TraceIdFilter.TRACE_ID, traceId);
-        }
+        String traceId = TxManager.getTraceId();
+        System.out.println(traceId);
+        template.header(TraceIdFilter.TRACE_ID, traceId);
     }
 
 }
