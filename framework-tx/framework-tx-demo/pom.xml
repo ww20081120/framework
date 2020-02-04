@@ -12,6 +12,8 @@
 	<modules>
 		<module>framework-tx-demo-client</module>
 		<module>framework-tx-demo-server</module>
+		<module>framework-tx-demo-client2</module>
+		<module>framework-tx-demo-client3</module>
 	</modules>
 	<build>
 		<plugins>

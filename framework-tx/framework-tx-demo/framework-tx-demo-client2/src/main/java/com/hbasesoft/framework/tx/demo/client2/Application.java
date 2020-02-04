@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.demo.client;
+package com.hbasesoft.framework.tx.demo.client2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +24,7 @@ import com.hbasesoft.framework.common.Bootstrap;
  * @see com.hbasesoft.vcc.sgp.bootstrap.plat <br>
  */
 @EnableFeignClients(basePackages = {
-    "com.hbasesoft.framework.tx.demo.client", "com.hbasesoft.framework.tx.client.producer.springcloud.client"
+    "com.hbasesoft.framework.tx.demo.client2", "com.hbasesoft.framework.tx.client.producer.springcloud.client"
 })
 @ComponentScan(basePackages = "com.hbasesoft")
 @SpringBootApplication

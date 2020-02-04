@@ -71,7 +71,7 @@ public class TxStorageImpl implements TxStorage {
     @Override
     @Transactional(readOnly = true)
     public CheckInfo getCheckInfo(String id, String mark) {
-        TxCheckinfoEntity bean = txCheckinfoDao.getById(id, mark);
+        TxCheckinfoEntity bean = txCheckinfoDao.getCheckInfoById(id, mark);
         if (bean != null) {
             return new CheckInfo(bean.getId(), bean.getMark(), bean.getFlag(), bean.getResult());
         }
@@ -121,7 +121,7 @@ public class TxStorageImpl implements TxStorage {
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
         bean.setResult(checkInfo.getResult());
-        txCheckinfoDao.save(bean);
+        txCheckinfoDao.saveCheckInfo(bean);
     }
 
     /**
@@ -139,7 +139,7 @@ public class TxStorageImpl implements TxStorage {
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
         bean.setResult(checkInfo.getResult());
-        txCheckinfoDao.update(bean);
+        txCheckinfoDao.updateCheckInfo(bean);
     }
 
     /**
@@ -207,6 +207,6 @@ public class TxStorageImpl implements TxStorage {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void delete(String id) {
         txClientinfoDao.deleteClientinfo(id);
-        txCheckinfoDao.delete(id);
+        txCheckinfoDao.deleteCheckInfo(id);
     }
 }

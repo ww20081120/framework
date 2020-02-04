@@ -25,14 +25,14 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
 public interface TxCheckinfoDao {
 
     @Sql("SELECT ID, MARK, FLAG, RESULT FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
-    TxCheckinfoEntity getById(@Param("id") String id, @Param("mark") String mark);
+    TxCheckinfoEntity getCheckInfoById(@Param("id") String id, @Param("mark") String mark);
 
     @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, FLAG, RESULT) VALUES (:entity.id, :entity.mark, :entity.flag, :entity.result)")
-    int save(@Param("entity") TxCheckinfoEntity entity);
+    int saveCheckInfo(@Param("entity") TxCheckinfoEntity entity);
 
     @Sql("UPDATE T_TX_CHECKINFO SET FLAG = :entity.flag, RESULT = :entity.result WHERE ID = :entity.id AND MARK = :entity.mark")
-    int update(@Param("entity") TxCheckinfoEntity entity);
+    int updateCheckInfo(@Param("entity") TxCheckinfoEntity entity);
 
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id")
-    int delete(@Param("id") String id);
+    int deleteCheckInfo(@Param("id") String id);
 }

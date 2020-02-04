@@ -33,7 +33,8 @@ public class DefaultConsumer implements TxConsumer {
         TxProducer sender = TxInvokerProxy.getSender();
         try {
             if (sender.containClient(clientInfo.getId())) {
-                TxManager.execute(clientInfo.getMark(), null, ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
+                TxManager.execute(clientInfo.getId(), clientInfo.getMark(), null,
+                    ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
                 sender.removeClient(clientInfo.getId());
             }
         }

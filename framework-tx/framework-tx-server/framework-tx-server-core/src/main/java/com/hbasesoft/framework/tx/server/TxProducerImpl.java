@@ -38,7 +38,9 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public void registClient(ClientInfo clientInfo) {
-        txStorage.saveClientInfo(clientInfo);
+        if (!txStorage.containsClientInfo(clientInfo.getId())) {
+            txStorage.saveClientInfo(clientInfo);
+        }
     }
 
     /**

@@ -56,7 +56,8 @@ public final class TxManager {
      * @return <br>
      */
     public static String getTraceId() {
-        return getTransIdGeneratorFactory().getTraceId();
+        String retryId = retryFlag.get();
+        return StringUtils.isNotEmpty(retryId) ? retryId : getTransIdGeneratorFactory().getTraceId();
     }
 
     /**
@@ -71,10 +72,10 @@ public final class TxManager {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException <br>
      */
-    public static void execute(String mark, Map<String, String> context, Object[] args)
+    public static void execute(String id, String mark, Map<String, String> context, Object[] args)
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         try {
-            retryFlag.set("retry");
+            retryFlag.set(id);
             Object obj = proxyObject.get(mark);
             Assert.notNull(obj, ErrorCodeDef.TRASACTION_RETRY_SENDER_NOT_FOUND, mark);
             Method method = proxyMethod.get(mark);
