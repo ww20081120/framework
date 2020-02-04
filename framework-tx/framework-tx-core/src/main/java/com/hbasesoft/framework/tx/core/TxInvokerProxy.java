@@ -45,9 +45,11 @@ public final class TxInvokerProxy {
     public static <T> T registInvoke(ClientInfo clientInfo, TxInvoker<T> invoker) {
         clientInfo.setClientInfo(getClientInfoFactory().getClientInfo());
         TxProducer sender = getSender();
-        sender.registClient(clientInfo);
+        boolean flag = sender.registClient(clientInfo);
         T msg = invoker.invoke();
-        sender.removeClient(clientInfo.getId());
+        if (flag) {
+            sender.removeClient(clientInfo.getId());
+        }
         return msg;
     }
 

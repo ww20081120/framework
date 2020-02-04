@@ -35,17 +35,19 @@ public class TestConsumer {
     private int i = 0;
 
     @GetMapping
+    @Tx
     public synchronized String test(@RequestParam("id") String id) {
         i++;
-        if (new Random().nextInt(10) % 4 == 0) {
-            throw new RuntimeException();
-        }
-        System.out.println(i + ":" + id);
 
         String value1 = TxInvokerProxy.invoke("client4", () -> {
             return feClient3Consumer.test(id);
         });
         System.out.println(value1);
+
+        if (new Random().nextInt(9) == 3) {
+            throw new RuntimeException();
+        }
+        System.out.println(i + ":" + id);
 
         return i + "client2" + id;
     }

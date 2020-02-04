@@ -36,9 +36,9 @@ public class SpringCloudProducer implements TxProducer {
      * @param clientInfo <br>
      */
     @Override
-    public void registClient(ClientInfo clientInfo) {
+    public boolean registClient(ClientInfo clientInfo) {
         LoggerUtil.debug("registClient {0}|{1}", clientInfo.getId(), clientInfo.getMark());
-        getFeginProducer().registClient(clientInfo);
+        return getFeginProducer().registClient(clientInfo);
     }
 
     /**

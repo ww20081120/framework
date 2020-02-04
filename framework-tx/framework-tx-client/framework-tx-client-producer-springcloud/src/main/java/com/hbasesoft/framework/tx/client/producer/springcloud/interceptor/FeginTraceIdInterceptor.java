@@ -31,9 +31,7 @@ public class FeginTraceIdInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-        String traceId = TxManager.getTraceId();
-        System.out.println(traceId);
-        template.header(TraceIdFilter.TRACE_ID, traceId);
+        template.header(TraceIdFilter.TRACE_ID, TxManager.getTraceId());
     }
 
 }

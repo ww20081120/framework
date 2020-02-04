@@ -37,10 +37,12 @@ public class TxProducerImpl implements TxProducer {
      * @param clientInfo <br>
      */
     @Override
-    public void registClient(ClientInfo clientInfo) {
+    public boolean registClient(ClientInfo clientInfo) {
         if (!txStorage.containsClientInfo(clientInfo.getId())) {
             txStorage.saveClientInfo(clientInfo);
+            return true;
         }
+        return false;
     }
 
     /**

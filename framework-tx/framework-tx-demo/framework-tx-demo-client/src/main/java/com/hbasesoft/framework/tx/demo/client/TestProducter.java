@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.demo.client;
 
+import java.util.Random;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +40,6 @@ public class TestProducter {
     @GetMapping
     @Tx
     public synchronized String test(@RequestParam("id") String id) {
-        System.out.println(i++ + ":" + id);
         String value1 = TxInvokerProxy.invoke("client2", () -> {
             return feClient2Consumer.test(id);
         });
@@ -48,6 +49,11 @@ public class TestProducter {
             return feClient3Consumer.test(id);
         });
         System.out.println(value2);
+
+        if (new Random().nextInt(5) == 1) {
+            throw new RuntimeException();
+        }
+        System.out.println(i++ + ":" + id);
 
         return new StringBuilder().append(i).append("client1").append(id).append(':').append(value1).append(':')
             .append(value2).toString();

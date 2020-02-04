@@ -22,7 +22,7 @@ import com.hbasesoft.framework.tx.core.TransIdGeneratorFactory;
  */
 public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
 
-    private static ThreadLocal<String> transIdHolder = new ThreadLocal<String>();
+    private static ThreadLocal<String> transIdHolder = new InheritableThreadLocal<String>();
 
     /**
      * Description: <br>

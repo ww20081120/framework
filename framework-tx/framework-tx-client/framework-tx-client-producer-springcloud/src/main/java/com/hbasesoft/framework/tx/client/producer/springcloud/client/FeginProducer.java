@@ -43,7 +43,7 @@ public interface FeginProducer {
      * @param clientInfo <br>
      */
     @PostMapping
-    void registClient(@RequestBody ClientInfo clientInfo);
+    boolean registClient(@RequestBody ClientInfo clientInfo);
 
     /**
      * Description: <br>

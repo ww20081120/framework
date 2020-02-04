@@ -30,7 +30,7 @@ public interface TxProducer {
      * @taskId <br>
      * @param clientInfo 客户端信息<br>
      */
-    void registClient(ClientInfo clientInfo);
+    boolean registClient(ClientInfo clientInfo);
 
     /**
      * Description: 删除客户端<br>

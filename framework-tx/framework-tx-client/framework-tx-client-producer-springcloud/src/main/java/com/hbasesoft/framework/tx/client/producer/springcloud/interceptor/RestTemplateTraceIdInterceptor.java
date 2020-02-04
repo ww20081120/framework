@@ -18,7 +18,9 @@ public class RestTemplateTraceIdInterceptor implements ClientHttpRequestIntercep
         ClientHttpRequestExecution clientHttpRequestExecution) throws IOException {
 
         HttpHeaders headers = httpRequest.getHeaders();
+
         headers.put(TraceIdFilter.TRACE_ID, Arrays.asList(TxManager.getTraceId()));
+
         return clientHttpRequestExecution.execute(httpRequest, bytes);
     }
 }
