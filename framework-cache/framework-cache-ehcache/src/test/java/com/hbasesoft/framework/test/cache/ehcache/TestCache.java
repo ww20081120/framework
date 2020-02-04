@@ -91,7 +91,7 @@ public class TestCache {
      */
     @Test
     public void getValue() {
-        System.out.println(CacheHelper.getCache().get("person", "zhangsan", Person.class));
+        System.out.println((Person) CacheHelper.getCache().get("person", "zhangsan"));
     }
 
     /**

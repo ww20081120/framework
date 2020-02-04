@@ -12,15 +12,14 @@ import java.util.Set;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-import redis.clients.jedis.BinaryJedisCluster;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisShardInfo;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import redis.clients.jedis.*;
 
 /**
  * <Description> <br>
@@ -51,6 +50,8 @@ public final class RedisClientFactory {
 
     private static final boolean VALIDATE = false;
 
+    private static final int DEFAULT_MAX_REDIRECTIONS = 5;
+
     private static JedisPool jedisPool;
 
     private static BinaryJedisCluster cluster;
@@ -66,11 +67,17 @@ public final class RedisClientFactory {
                 String cacheModel = PropertyHolder.getProperty("message.model");
                 if (MESSAGE_MODEL.equals(cacheModel)) {
                     Address[] addresses = getAddresses();
+                    String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
                     List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
                     for (Address addr : addresses) {
                         shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
                     }
-                    jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+                    if (StringUtils.isEmpty(passwd)) {
+                        jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+                    } else {
+                        jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
+                                addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+                    }
                 }
             }
             return jedisPool;
@@ -84,6 +91,7 @@ public final class RedisClientFactory {
                 if (CLUSTER_MESSAGE_MODEL.equals(cacheModel)) {
                     Address[] addresses = getAddresses();
                     Set<HostAndPort> readSet = new HashSet<HostAndPort>();
+                    String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
                     for (Address addr : addresses) {
                         HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
                         readSet.add(hostAndPort);
@@ -91,8 +99,15 @@ public final class RedisClientFactory {
                     // cluster = new BinaryJedisCluster(readSet,
                     // PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000));
 
-                    cluster = new BinaryJedisCluster(readSet,
-                        PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000), 5, getConfig());
+                    if (StringUtils.isEmpty(passwd)) {
+                        cluster = new BinaryJedisCluster(readSet,
+                                PropertyHolder.getIntProperty("message.redis.cluster.max.timeout", 100000), 5, getConfig());
+                    } else {
+                        cluster = new JedisCluster(readSet,
+                                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                                PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
+                                DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+                    }
                 }
             }
             return cluster;

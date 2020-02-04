@@ -58,5 +58,5 @@ public @interface CacheLock {
      * @taskId <br>
      * @return <br>
      */
-    long timeOut() default 2000;
+    int timeOut() default 2000;
 }

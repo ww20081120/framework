@@ -46,6 +46,7 @@ import ognl.MemberAccess;
  * @author Drew Davidson (drew@ognl.org)
  * @version 15 October 1999
  */
+@SuppressWarnings("rawtypes")
 public class DefaultMemberAccess implements MemberAccess {
     public boolean allowPrivateAccess = false;
 

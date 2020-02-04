@@ -5,55 +5,50 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2017年2月19日 <br>
- * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core <br>
+ * @since V1.0<br>
  */
 public interface MessageSubscriber {
 
     /**
      * Description: 接收到消息 <br>
-     * 
+     *
+     * @param data <br>
      * @author 王伟<br>
      * @taskId <br>
-     * @param data <br>
      */
     void onMessage(String channel, byte[] data);
 
     /**
      * Description: 开始订阅<br>
-     * 
+     *
+     * @param subscribeChannels <br>
      * @author 王伟<br>
      * @taskId <br>
-     * @param subscribeChannels <br>
      */
     void onSubscribe(String channel, int subscribeChannels);
 
     /**
      * Description: 取消订阅<br>
-     * 
+     *
+     * @param subscribedChannels <br>
      * @author 王伟<br>
      * @taskId <br>
-     * @param subscribedChannels <br>
      */
     void onUnsubscribe(String channel, int subscribedChannels);
-    
-    /**
-     * 
-     * @Title: shutdown 
-     * @author 大刘杰
-     * @Description: customer shutdown
-     * @param @param channel
-     * @param @param subscribedChannels
-     * @return void
-     * @throws
-     */
-    default void shutdown() {};
+
+    default Map<String, Object> subscriberSetting() {
+        return new HashMap<>();
+    }
 
 }

@@ -16,6 +16,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
@@ -82,8 +83,8 @@ public class XmlBeanUtil {
             String xml = writer.toString();
             xml = StringUtils.replace(xml, "&lt;", "<");
             xml = StringUtils.replace(xml, "&gt;", ">");
-            xml = StringUtils.replaceAll(xml, "&amp;", "&");
-            xml = StringUtils.replaceAll(xml, "&#xd;", System.getProperty("line.separator"));
+            xml = StringUtils.replace(xml, "&amp;", "&");
+            xml = StringUtils.replace(xml, "&#xd;", GlobalConstants.BLANK);
             return xml;
         }
         catch (Exception e) {

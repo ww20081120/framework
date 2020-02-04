@@ -7,6 +7,8 @@ package com.hbasesoft.framework.message.core.event;
 
 import java.util.HashMap;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
+
 /**
  * <Description> <br>
  * 
@@ -19,6 +21,28 @@ import java.util.HashMap;
  */
 public class EventData extends HashMap<String, Object> {
 
+    private String msgId;
+
+    private static final String DEFAULT_KEY = "__DATA";
+
+    public EventData() {
+        super();
+        this.msgId = CommonUtil.getTransactionID();
+    }
+
+    public EventData(String msgId) {
+        this.msgId = msgId;
+    }
+
+    public EventData(Object data) {
+        this(CommonUtil.getTransactionID(), data);
+    }
+
+    public EventData(String msgId, Object data) {
+        this(msgId);
+        super.put(DEFAULT_KEY, data);
+    }
+
     /**
      * serialVersionUID <br>
      */
@@ -28,4 +52,16 @@ public class EventData extends HashMap<String, Object> {
         return (String) this.get(key);
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getData() {
+        return (T) super.get(DEFAULT_KEY);
+    }
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
 }

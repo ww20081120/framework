@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-db</artifactId>
-		<version>3.2</version>
+		<version>3.4</version>
 	</parent>
 	<artifactId>framework-db-demo</artifactId>
 	<name>database demo</name>
@@ -46,4 +46,15 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

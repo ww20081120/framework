@@ -194,6 +194,27 @@ public interface ErrorCodeDef {
     /** 保存的数量过多，请采用batchExecute替代 */
     int TOO_MANY_OBJECTS = 10057;
 
+    /** DAO泛型设置有问题 */
+    int GENERIC_TYPE_ERROR = 10058;
+
+    /** 不支持延迟消息 */
+    int UNSPORT_DELAY_MESSAGE = 10059;
+
+    /** 延迟消息必须大于1s */
+    int DELAY_TIME_TOO_SHORT = 10060;
+
+    /** 未找到分布式事务的发送者 */
+    int TRASCATION_SENDER_NOT_FOUND = 10061;
+
+    /** 未找到{0}协议的实现者 */
+    int TRASACTION_RETRY_SENDER_NOT_FOUND = 10062;
+
+    /** 未找到transId生成工厂 */
+    int TRANS_ID_GENERATOR_FACTORY_NOT_FOUND = 10063;
+
+    /** 未找到客户端信息生成工厂 */
+    int TRANS_CLIENT_INFO_FACTORY_NOT_FOUND = 10064;
+
     /************************************************************************************
      * ---------------------------------用户错误区域 必须大于20000的5位数-------------------------------------------
      ************************************************************************************/
@@ -396,7 +417,16 @@ public interface ErrorCodeDef {
 
     /** JDK 序列化失败 */
     int JDK_SERIALIZE_ERROR = 20068;
-    
+
     /** JDK 反序列化失败 */
     int JDK_UNSERIALIZE_ERROR = 20069;
+
+    /** 参数的内容大小超过65535个字节 */
+    int ARGUMENTS_SIZE_TOO_LARGE = 20070;
+
+    /** 事务rocketmq的地址未设置 */
+    int TX_ROCKET_MQ_ADDRESS_NOT_FOUND = 20071;
+
+    /** 事务rocketmq的topic未设置 */
+    int TX_ROCKET_MQ_TOPIC_NOT_FOUND = 20072;
 }

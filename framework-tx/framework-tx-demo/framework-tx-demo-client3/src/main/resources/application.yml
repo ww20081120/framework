@@ -1,0 +1,24 @@
+project: #项目信息
+ name: tx-demo-client3
+ server:
+   transaction: tx-demo-server
+ server-url:
+   transaction: http://localhost:8937
+    
+server.port: 8939
+ 
+spring: #应用配置
+  application:
+    name: ${project.name} 
+    
+feign:
+  hystrix:
+    enabled: true
+    
+tx:
+  rocketmq:
+    topic: ${project.name}
+    namesrvAddr: localhost:9876   #rocketMq的地址
+  executor:  #consumer的线程池配置
+    coreSize: 10 
+    maxPoolSize: 20

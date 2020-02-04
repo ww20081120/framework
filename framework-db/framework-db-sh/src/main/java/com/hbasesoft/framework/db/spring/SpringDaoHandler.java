@@ -21,7 +21,7 @@ import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
  * @CreateDate 2014年10月23日 <br>
  * @see com.hbasesoft.framework.dao.annotation.handler <br>
  */
-public class SpringDaoHandler extends DaoHandler implements MethodInterceptor {
+public class SpringDaoHandler implements MethodInterceptor {
 
     /**
      * logger
@@ -41,8 +41,10 @@ public class SpringDaoHandler extends DaoHandler implements MethodInterceptor {
     public Object invoke(MethodInvocation invocation) throws Throwable {
         Method method = invocation.getMethod();
         Object[] args = invocation.getArguments();
+
         try {
-            return super.invoke(invocation.getThis(), method, args);
+            DaoHandler handler = (DaoHandler) invocation.getThis();
+            return handler.invoke(null, method, args);
         }
         catch (Exception e) {
             logger.error(e);

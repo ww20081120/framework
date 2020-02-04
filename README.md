@@ -5,10 +5,11 @@ Framework 3.0 框架说明
 版本|更新内容| 时间|修改人
 --- | --- | --- | ---
 3.0 | 1.更新了spring boot 版本至2.0 <br> 2.去除dubbox框架，引入spring cloud框架 <br> 3. 重新定义了common 模块的API <br> 4. 支持JPA <br> 5. 支持yml格式的配置文件| 2017年9月24 | 王伟
+3.4 | 增加了framework-tx模块 | 2020年2月4日 | 王伟
 
 # 框架介绍
 
-Framework框架集成了log、cache、db、message，每块都以模块形式组织，可以根据项目需要获取模块。
+Framework框架集成了log、cache、db、message、rule、tx，每块都以模块形式组织，可以根据项目需要获取模块。
 
 + framework-common 定义公用的常量、工具类 采用了spring-boot方式启动， 启动类为Application， 也可以支持web方式启动。
 + framework-log 分布式集成日志模块，详细的记录了每个方法执行的参数、返回结果、执行时间，可以很方便的排查问题或告警，通过远程接口上传服务器（支持直连服务端，也支持通过kafka发送）
@@ -17,6 +18,7 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 + framework-job 基于[ElasticJob](http://elasticjob.io)简单封装的定时器，支持分布式、分片等功能
 + framework-message 消息模块，通过简单的api发布和订阅事件， 目前支持kafka、redis、rocketMq
 + framework-rule 规则引擎，基于json的简单规则引擎， 支持多种插件及扩展， 例如：基于状态机的工作流引擎
++ [framework-tx](#framework-tx) 分布式事务，支持各种远程接口、同步异步消息。
 
 -------
 ## <p id="framework-db">framework-db</p>具有以下特征:
@@ -92,6 +94,42 @@ Framework框架集成了log、cache、db、message，每块都以模块形式组
 	    }
 	 }
 ```
+
+## <p id="framework-tx">framework-tx</p>分布式事务:
+
+该模块用于解决微服务业务模块不稳定问题。因业务要求，不允许出现失败回滚场景，该模块只实现了事务补偿，通过N次重试， 跳过执行成功的部分，一直重试失败部分，来达到业务最终执行完成。（N次失败后可以通知人工来进行解决）。
+
+实际场景举例： 用户购买了商品，当微信支付成功后，突然订单模块数据库宕机了。 当数据库修复后，之前丢失的订单能正确处理。
+
+#### 具有以下特征:
+
+1. 支持同步消息与异步消息  
+2. 提供注解方法，使用简单，学习成本低 
+3. 任何需要重试的内容都可以使用，适应性强。  
+
+#### 测试代码[TestProducter.java]
+
+``` java
+@RestController
+public class TestProducter {
+
+    @Resource
+    private FeginClient2Consumer feClient2Consumer;
+
+    @GetMapping
+    @Tx
+    public String test(@RequestParam("id") String id) {
+
+        String value1 = TxInvokerProxy.invoke("client2", () -> {
+            return feClient2Consumer.test(id);
+        });
+        System.out.println(value1);
+        return value1;
+    }
+}
+
+```
+
 
 ---
 - Author:王伟 

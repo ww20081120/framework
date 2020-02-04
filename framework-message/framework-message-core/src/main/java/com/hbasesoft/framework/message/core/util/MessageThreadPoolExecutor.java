@@ -49,8 +49,11 @@ public final class MessageThreadPoolExecutor {
 
             // 当线程池中的队列出现阻塞后，暂停从redis中进行获取
             try {
+                long count = 0;
                 while (bq.remainingCapacity() == 0 && executor.getMaximumPoolSize() == executor.getPoolSize()) {
-                    LoggerUtil.info("wait message[{0}] execute, current pool size is [{1}]", channel, bq.size());
+                    if (count++ % 100 == 0) {
+                        LoggerUtil.debug("wait message[{0}] execute, current pool size is [{1}]", channel, bq.size());
+                    }
                     Thread.sleep(100);
                 }
                 executor.execute(message);

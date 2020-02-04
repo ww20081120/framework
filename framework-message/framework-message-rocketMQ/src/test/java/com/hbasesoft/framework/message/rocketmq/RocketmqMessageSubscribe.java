@@ -62,10 +62,10 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
 						try {
 							defaultMQPushConsumer.start();
 						} catch (Exception e) {
-							log.info("RocketMq pushConsumer Start failure!!!.");
+							log.error("RocketMq pushConsumer Start failure!!!.");
 							log.error(e.getMessage(), e);
 						}
-						log.info("RocketMq pushConsumer Started.");
+						log.debug("RocketMq pushConsumer Started.");
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -73,7 +73,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
 			}).start();
 
 		} catch (Exception e) {
-			log.info("RocketMq pushConsumer Start failure!!!.");
+			log.error("RocketMq pushConsumer Start failure!!!.");
 			log.error(e.getMessage(), e);
 			// TODO Auto-generated catch block
 			e.printStackTrace();

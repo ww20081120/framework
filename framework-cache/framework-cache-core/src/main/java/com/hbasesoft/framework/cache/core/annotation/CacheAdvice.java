@@ -5,11 +5,16 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.bean.BeanUtil;
+import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -20,15 +25,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import com.hbasesoft.framework.cache.core.CacheHelper;
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.bean.BeanUtil;
-import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
-import com.hbasesoft.framework.common.utils.logger.Logger;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <Description> <br>
@@ -103,7 +103,7 @@ public class CacheAdvice {
                     CacheHelper.getCache().put(cache.node(), key, result);
                 }
 
-                logger.info("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
+                logger.debug("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
                     cache.node(), key);
             }
         }
@@ -130,7 +130,7 @@ public class CacheAdvice {
                     CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
                 }
 
-                logger.info("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(method), cache.node());
+                logger.debug("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(method), cache.node());
             }
         }
 
@@ -141,14 +141,14 @@ public class CacheAdvice {
         if (rmCache.clean()) {
             for (String node : rmCache.node()) {
                 CacheHelper.getCache().removeNode(node);
-                logger.info("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), node);
+                logger.debug("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), node);
             }
         }
         else {
             String key = getCacheKey(rmCache.key(), method, args);
             for (String node : rmCache.node()) {
                 CacheHelper.getCache().evict(node, key);
-                logger.info("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
+                logger.debug("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
                     rmCache.node(), key);
             }
         }
@@ -171,6 +171,7 @@ public class CacheAdvice {
                 }
             }
             key = VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap);
+            Assert.isFalse(key.contains(GlobalConstants.DOLLAR_BRACE), ErrorCodeDef.CACHE_ERROR_10002);
         }
         else {
             StringBuilder sb = new StringBuilder();

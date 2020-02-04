@@ -46,6 +46,12 @@ public final class ProtocolUtil {
         defaultPortMap.put("ftp", 21);
         defaultPortMap.put("sftp", 22);
         defaultPortMap.put("ssh", 22);
+        defaultPortMap.put("redis", 6379);
+        defaultPortMap.put("es", 9200);
+        defaultPortMap.put("mysql", 3306);
+        defaultPortMap.put("oracle", 1521);
+        defaultPortMap.put("zk", 2181);
+        defaultPortMap.put("kafka", 9092);
     }
 
     /**

@@ -54,7 +54,9 @@ public class CacheLockAdvice {
                     cacheLock.value() + KeyUtil.getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
 
                 // 加锁
-                boolean result = lock.lock(cacheLock.timeOut(), cacheLock.expireTime());
+                boolean result = lock.lock(
+                    cacheLock.timeOut() > cacheLock.expireTime() ? cacheLock.timeOut() : cacheLock.expireTime(),
+                    cacheLock.expireTime());
                 if (!result) {
                     throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, lock);
                 }

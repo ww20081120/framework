@@ -45,20 +45,34 @@ public class RedisLock {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param timeout 超时时间
+     * @return <br>
+     */
+    public boolean lock(int timeout) {
+        return lock(timeout, timeout * 2);
+    }
+
+    /**
+     * Description: 获取锁<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param timeOut
      * @param expireTime
      * @return <br>
      */
-    public boolean lock(long timeout, int expireTime) {
+    public boolean lock(int timeout, int expireTime) {
+        LoggerUtil.debug("开始锁住{0},timeout={1},expireTime={2}", lockName, timeout, expireTime);
         long lockTime = System.currentTimeMillis();
         int i = 0;
         try {
             // 在timeout的时间范围内不断轮询锁
-            while (System.currentTimeMillis() - lockTime < timeout) {
+            while (System.currentTimeMillis() - lockTime < timeout * 1000) {
                 // 锁不存在的话，设置锁并设置锁过期时间，即加锁
                 if (redisCache.setnx(lockName, LOCKED, expireTime)) {
                     // 锁的情况下锁过期后消失，不会造成永久阻塞
                     this.lock = true;
+                    LoggerUtil.debug("获取锁成功{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
                     return this.lock;
                 }
 
@@ -72,6 +86,7 @@ public class RedisLock {
         catch (Exception e) {
             throw new RuntimeException("locking error", e);
         }
+        LoggerUtil.debug("获取锁失败{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
         return false;
     }
 

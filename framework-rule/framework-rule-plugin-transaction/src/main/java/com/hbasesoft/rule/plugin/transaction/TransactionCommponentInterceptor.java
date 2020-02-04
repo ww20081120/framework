@@ -9,16 +9,14 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringUtils;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
@@ -33,9 +31,6 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @see com.hbasesoft.framework.test.rule.plugin.transaction <br>
  */
 public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterceptor {
-
-    @Resource(name = "transactionManager")
-    private PlatformTransactionManager platformTransactionManager;
 
     private ThreadLocal<Stack<TransactionStatus>> statusHolder = new ThreadLocal<Stack<TransactionStatus>>() {
         protected synchronized Stack<TransactionStatus> initialValue() {
@@ -89,8 +84,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
             if ("true".equals(configAttrMap.get("readOnly"))) {
                 def.setReadOnly(true);
             }
-
-            statusHolder.get().push(platformTransactionManager.getTransaction(def));
+            statusHolder.get().push(TransactionManagerHolder.getTransactionManager().getTransaction(def));
         }
         return true;
     }
@@ -111,7 +105,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
         if ("true".equals(transactional)) {
             TransactionStatus status = statusHolder.get().isEmpty() ? null : statusHolder.get().pop();
             if (status != null) {
-                platformTransactionManager.commit(status);
+                TransactionManagerHolder.getTransactionManager().commit(status);
             }
         }
     }
@@ -133,7 +127,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
         if ("true".equals(transactional)) {
             TransactionStatus status = statusHolder.get().isEmpty() ? null : statusHolder.get().pop();
             if (status != null) {
-                platformTransactionManager.rollback(status);
+                TransactionManagerHolder.getTransactionManager().rollback(status);
             }
         }
     }

@@ -87,7 +87,9 @@ public class Logger {
      * @param message 日志信息
      */
     public void warn(Throwable t) {
-        logger.warn(LoggerUtil.getErrorMessage(t), t);
+        if (logger.isWarnEnabled()) {
+            logger.warn(LoggerUtil.getErrorMessage(t), t);
+        }
     }
 
     /**
@@ -96,7 +98,9 @@ public class Logger {
      * @param message 日志信息
      */
     public void warn(String message) {
-        logger.warn(message);
+        if (logger.isWarnEnabled()) {
+            logger.warn(message);
+        }
     }
 
     /**
@@ -106,7 +110,9 @@ public class Logger {
      * @param t 异常
      */
     public void warn(String message, Throwable t) {
-        logger.warn(LoggerUtil.getErrorMessage(message, t), t);
+        if (logger.isWarnEnabled()) {
+            logger.warn(LoggerUtil.getErrorMessage(message, t), t);
+        }
     }
 
     /**
@@ -117,7 +123,9 @@ public class Logger {
      * @param params 日志信息 <br>
      */
     public void warn(Throwable t, String message, Object... params) {
-        logger.warn(LoggerUtil.getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
+        if (logger.isWarnEnabled()) {
+            logger.warn(LoggerUtil.getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
+        }
     }
 
     /**
@@ -126,7 +134,9 @@ public class Logger {
      * @param message 日志信息
      */
     public void debug(String message) {
-        logger.debug(message);
+        if (logger.isDebugEnabled()) {
+            logger.debug(message);
+        }
     }
 
     /**
@@ -136,7 +146,9 @@ public class Logger {
      * @param params 日志信息
      */
     public void debug(String message, Object... params) {
-        logger.debug(CommonUtil.messageFormat(message, params));
+        if (logger.isDebugEnabled()) {
+            logger.debug(CommonUtil.messageFormat(message, params));
+        }
     }
 
     /**
@@ -145,7 +157,9 @@ public class Logger {
      * @param message 日志信息
      */
     public void info(String message) {
-        logger.info(message);
+        if (logger.isInfoEnabled()) {
+            logger.info(message);
+        }
     }
 
     /**
@@ -155,6 +169,8 @@ public class Logger {
      * @param params 日志信息
      */
     public void info(String message, Object... params) {
-        logger.info(CommonUtil.messageFormat(message, params));
+        if (logger.isInfoEnabled()) {
+            logger.info(CommonUtil.messageFormat(message, params));
+        }
     }
 }

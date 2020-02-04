@@ -91,7 +91,7 @@ public final class CacheHelper {
                 clazz
             } : clazz.getInterfaces(), invocationHandler);
 
-            LoggerUtil.info("Success cache proxy clazz[{0}].", clazz);
+            LoggerUtil.debug("Success cache proxy clazz[{0}].", clazz);
             return proxyObj;
         }
         return null;

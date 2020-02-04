@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
@@ -27,7 +28,7 @@ import com.hbasesoft.framework.db.core.annotation.DataSource;
  */
 @Aspect
 @Component
-public class DynamicDataSourceChangeAdvice {
+public class DynamicDataSourceChangeAdvice implements Ordered {
 
     @Pointcut("execution(public * com.hbasesoft..*(..))")
     public void change() {
@@ -50,6 +51,26 @@ public class DynamicDataSourceChangeAdvice {
                 DynamicDataSourceManager.setDataSourceCode(dataSource.value());
             }
         }
-        return joinPoint.proceed();
+        try {
+            return joinPoint.proceed();
+        }
+        finally {
+            if (dataSource != null) {
+                DynamicDataSourceManager.setDataSourceCode(DynamicDataSourceManager.DEFAULT_DATASOURCE_CODE);
+            }
+        }
+
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public int getOrder() {
+        return 0;
     }
 }

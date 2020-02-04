@@ -74,7 +74,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
             if (CommonUtil.isNotEmpty(config.removeMethods())) {
                 for (String methodName : config.removeMethods()) {
                     CacheHelper.getCache().evict(nodeNamePrefix + methodName);
-                    LoggerUtil.info("Success evict proxy cache [class={0}, method={1}]", clazz, methodName);
+                    LoggerUtil.debug("Success evict proxy cache [class={0}, method={1}]", clazz, methodName);
                 }
             }
         }
@@ -101,7 +101,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         if (result != null) {
             CacheHelper.getCache().put(nodeNamePrefix + method.getName(), expireTime, getCacheKey(method, args),
                 result);
-            LoggerUtil.info("Success proxy cache [class={0}, method={1}, expireTime={2}]", clazz, method.getName(),
+            LoggerUtil.debug("Success proxy cache [class={0}, method={1}, expireTime={2}]", clazz, method.getName(),
                 expireTime);
         }
         return result;

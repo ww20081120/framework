@@ -5,12 +5,17 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.hibernate;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Proxy;
+import java.sql.Blob;
 import java.sql.Clob;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.hibernate.engine.jdbc.SerializableBlobProxy;
 import org.hibernate.engine.jdbc.SerializableClobProxy;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.beans.BeanUtils;
@@ -96,10 +101,29 @@ public class AutoResultTransformer implements ResultTransformer {
                         SerializableClobProxy proxy = (SerializableClobProxy) Proxy.getInvocationHandler(tuple[i]);
                         Clob clob = proxy.getWrappedClob();
                         Reader inStreamDoc = clob.getCharacterStream();
-                        char[] tempDoc = new char[(int) clob.length()];
-                        inStreamDoc.read(tempDoc);
-                        inStreamDoc.close();
-                        tuple[i] = new String(tempDoc);
+                        try {
+                            char[] tempDoc = new char[(int) clob.length()];
+                            inStreamDoc.read(tempDoc);
+                            tuple[i] = new String(tempDoc);
+                        }
+                        finally {
+                            inStreamDoc.close();
+                        }
+                    }
+                    else if (tuple[i] instanceof Blob) {
+                        // blob 转化成byte[]
+                        SerializableBlobProxy proxy = (SerializableBlobProxy) Proxy.getInvocationHandler(tuple[i]);
+                        Blob blob = proxy.getWrappedBlob();
+                        InputStream in = blob.getBinaryStream();
+                        ByteArrayOutputStream out = new ByteArrayOutputStream();
+                        try {
+                            IOUtils.copy(in, out);
+                        }
+                        finally {
+                            in.close();
+                            out.close();
+                        }
+                        tuple[i] = out.toByteArray();
                     }
                     wrapper.setPropertyValue(property, tuple[i]);
                 }

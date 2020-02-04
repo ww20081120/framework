@@ -23,9 +23,11 @@ import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
@@ -74,21 +76,42 @@ public class AbstractAnnotationHandler {
      */
     protected Method getBaseDaoExcutor(Method method) {
         Method result = null;
-        Object obj = daoConfig.getBaseDao();
-        if (obj != null) {
+        Class<?> daoClazz = daoConfig.getBaseDaoType();
+        if (daoClazz != null) {
             if (genericBaseDaoMethodMap == null) {
                 genericBaseDaoMethodMap = new HashMap<String, Method>();
-                Method[] methods = obj.getClass().getDeclaredMethods();
+                Method[] methods = daoClazz.getDeclaredMethods();
                 for (Method m : methods) {
-                    genericBaseDaoMethodMap.put(BeanUtil.getMethodSignature(m), m);
+                    genericBaseDaoMethodMap.put(getMethodSignature(m), m);
                 }
             }
-            String methodSignature = BeanUtil.getMethodSignature(method);
+            String methodSignature = getMethodSignature(method);
             if (genericBaseDaoMethodMap.containsKey(methodSignature)) {
                 result = genericBaseDaoMethodMap.get(methodSignature);
             }
         }
         return result;
+    }
+
+    /**
+     * 获取对象的方法签名
+     * 
+     * @param method <br>
+     * @return <br>
+     */
+    private String getMethodSignature(Method method) {
+        StringBuilder sbuf = new StringBuilder();
+        sbuf.append(method.getName());
+        sbuf.append('(');
+        Class<?>[] paramTypes = method.getParameterTypes();
+        if (CommonUtil.isNotEmpty(paramTypes)) {
+            for (Class<?> clazz : paramTypes) {
+                sbuf.append(BaseEntity.class.isAssignableFrom(clazz) ? Object.class.getName() : clazz.getName())
+                    .append(',');
+            }
+        }
+        sbuf.append(')');
+        return sbuf.toString();
     }
 
     /**

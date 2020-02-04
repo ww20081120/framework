@@ -5,42 +5,71 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core;
 
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.message.core.delay.DelayMessage;
+
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2017年2月19日 <br>
- * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core <br>
+ * @since V1.0<br>
  */
 public interface MessagePublisher {
 
-	String getName();
+    /** 普通消费 */
+    String PUBLISH_TYPE_DEFAULT = "NORMAL";
 
-	/**
-	 * Description: 发布<br>
-	 * 
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param channel
-	 * @param data
-	 *            <br>
-	 */
-	void publish(String channel, byte[] data);
+    /** 顺序消费 */
+    String PUBLISH_TYPE_ORDERLY = "ORDERLY";
 
-	/**
-	 * 
-	 * publish:设定延迟消费 <br/>
-	 * 
-	 * @author 大刘杰
-	 * @param channel
-	 * @param data
-	 * @param delayLevel
-	 * @since JDK 1.8
-	 */
-	default void publish(String channel, byte[] data, Long delayTime) {
-	}
+    /** 事务消费 */
+    String PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
+
+    String getName();
+
+    /**
+     * Description: 发布<br>
+     *
+     * @param channel
+     * @param data <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     */
+    void publish(String channel, byte[] data);
+
+    /**
+     * publish:设定延迟消费 <br/>
+     *
+     * @param channel
+     * @param data
+     * @param delayLevel
+     * @author 大刘杰
+     * @since JDK 1.8
+     */
+    default void publish(String channel, byte[] data, int seconds) {
+        if (seconds > 0) {
+            MessageHelper.getDelayMessageQueue().add(new DelayMessage(channel, data, seconds));
+        }
+        else {
+            publish(channel, data);
+        }
+    }
+
+    /**
+     * publish:指定消费模式 <br/>
+     *
+     * @param channel
+     * @param data
+     * @param delayLevel
+     * @author 大刘杰
+     * @since JDK 1.8
+     */
+    default void publish(String channel, byte[] data, String produceModel) {
+        LoggerUtil.warn("不支持设置消息模式" + produceModel);
+        publish(channel, data);
+    }
 }

@@ -7,8 +7,6 @@ package com.hbasesoft.framework.job.core;
 
 import java.util.Set;
 
-import javax.sql.DataSource;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -21,7 +19,6 @@ import com.dangdang.ddframe.job.config.dataflow.DataflowJobConfiguration;
 import com.dangdang.ddframe.job.config.script.ScriptJobConfiguration;
 import com.dangdang.ddframe.job.config.simple.SimpleJobConfiguration;
 import com.dangdang.ddframe.job.event.JobEventConfiguration;
-import com.dangdang.ddframe.job.event.rdb.JobEventRdbConfiguration;
 import com.dangdang.ddframe.job.lite.api.JobScheduler;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
 import com.dangdang.ddframe.job.reg.base.CoordinatorRegistryCenter;
@@ -31,8 +28,6 @@ import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.db.core.config.DbParam;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.job.core.annotation.Job;
 import com.hbasesoft.framework.job.core.api.ScriptJob;
 import com.hbasesoft.framework.job.core.event.JobEventJsonConfiguration;
@@ -76,9 +71,9 @@ public class JobStartupLinstener implements StartupListener {
             boolean enableEvent = PropertyHolder.getBooleanProperty("job.event.enable", true);
             JobEventConfiguration jobEventConfig = null;
             if (enableEvent) {
-//                String datasourceName = PropertyHolder.getProperty("job.event.datasource", "master");
-//                DataSource datasource = DataSourceUtil.registDataSource(datasourceName, new DbParam(datasourceName));
-//                jobEventConfig = new JobEventRdbConfiguration(datasource);
+                // String datasourceName = PropertyHolder.getProperty("job.event.datasource", "master");
+                // DataSource datasource = DataSourceUtil.registDataSource(datasourceName, new DbParam(datasourceName));
+                // jobEventConfig = new JobEventRdbConfiguration(datasource);
                 jobEventConfig = new JobEventJsonConfiguration();
             }
 

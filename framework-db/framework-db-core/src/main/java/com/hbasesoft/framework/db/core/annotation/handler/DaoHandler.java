@@ -84,7 +84,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
         // Step2:判断是否是genericBaseDao方法，如果是则直接执行
         Method m = getBaseDaoExcutor(method);
         if (m != null) {
-            return m.invoke(super.getDaoConfig().getBaseDao(), args);
+            return m.invoke(sqlExcutor, args);
         }
 
         // Step3: 装载SQL模板和所需参数
@@ -101,6 +101,9 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
 
         // Step5:组装sql参数
         installPlaceholderSqlParam(dataParam, executeSql, sqlParamsMap);
+        
+        // Step6: 替换：的关键字
+        executeSql = StringUtils.replace(executeSql, "：", ":");
 
         // Step5: 执行Sql返回结果
         return excuteSql(executeSql, dataParam);

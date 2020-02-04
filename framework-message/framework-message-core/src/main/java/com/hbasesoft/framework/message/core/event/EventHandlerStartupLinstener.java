@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 
@@ -52,6 +54,8 @@ public class EventHandlerStartupLinstener implements StartupListener {
                     for (String channel : linsener.events()) {
                         factory.registSubscriber(channel, linsener.subscriber(), linsener);
                     }
+                    LoggerUtil.info("regist event success {0}|{1}", Arrays.toString(events),
+                        linsener.getClass().getName());
                 }
             }
         }

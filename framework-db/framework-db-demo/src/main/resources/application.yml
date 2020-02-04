@@ -11,8 +11,5 @@ cache: #缓存配置
 master: #主数据库配置
  db:
   type: h2
-  driverClass: org.h2.Driver
   url: jdbc:h2:~/test
- hibernate:
-  dialect: org.hibernate.dialect.H2Dialect
   

@@ -14,13 +14,13 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 大刘杰<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2018年6月25日 <br>
- * @since V1.0<br>
  * @see com.hbasesoft.framework.message.rocketmq <br>
+ * @since V1.0<br>
  */
 public class RocketmqMessagePublisher implements MessagePublisher {
 
@@ -34,28 +34,35 @@ public class RocketmqMessagePublisher implements MessagePublisher {
     @Override
     public void publish(String channel, byte[] data) {
         // 默认使用普通消费
-        publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, 0L);
+        publish(channel, data, MessagePublisher.PUBLISH_TYPE_DEFAULT, 0);
     }
 
-    public void publish(String channel, byte[] data, Long delayTime) {
+    @Override
+    public void publish(String channel, byte[] data, int seconds) {
         // 默认使用普通消费
-        publish(channel, data, RocketmqFactory.ROCKET_MQ_DEFAULT_PUBLISH_TYPE, delayTime);
+        publish(channel, data, MessagePublisher.PUBLISH_TYPE_DEFAULT, seconds);
+    }
+
+    @Override
+    public void publish(String channel, byte[] data, String produceModel) {
+        // 指定消费模式
+        publish(channel, data, produceModel, 0);
     }
 
     /**
      * publish:. <br/>
-     * 
-     * @author 大刘杰
+     *
      * @param channel
      * @param data
      * @param produceModel
-     * @param producerGroup
-     * @since JDK 1.8
+     * @param delayTime
+     * @author 大刘杰
      * @produceModel: RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
      *                RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
      *                RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
+     * @since JDK 1.8
      */
-    public void publish(String channel, byte[] data, String produceModel, Long delayTime) {
+    public void publish(String channel, byte[] data, String produceModel, int seconds) {
 
         DefaultMQProducer defaultMQProducer = RocketmqFactory
             .getDefaultProducer(PropertyHolder.getProperty("message.rocketmq.groupName", "hbasesoft"));
@@ -64,15 +71,19 @@ public class RocketmqMessagePublisher implements MessagePublisher {
         Message msg = new Message(channel, GlobalConstants.BLANK, data);
 
         // Set delay level
-        if (delayTime > 0L) {
-            msg.setDelayTimeLevel(RocketmqFactory.calculationLevel(delayTime));
+        if (seconds > 0L) {
+            msg.setDelayTimeLevel(RocketmqFactory.calculationLevel(seconds));
         }
 
         try {
             switch (produceModel) {
                 case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_ORDERLY:
                     // 顺序消费
-                    // defaultMQProducer.send(msg, mq)
+                    defaultMQProducer.send(msg, (messageQueue, message, arg) -> {
+                        Integer id = (Integer) arg;
+                        System.out.println(messageQueue.get(id));
+                        return messageQueue.get(id);
+                    }, 0); // 默认四个队列中的0号队列 队列内有序
                     break;
                 case RocketmqFactory.ROCKET_MQ_PUBLISH_TYPE_TRANSACTION:
                     // 事务消费
@@ -81,7 +92,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
                 default:
                     // 普通消费
                     SendResult send = defaultMQProducer.send(msg);
-                    log.info("发送结果 " + send.toString());
+                    log.debug("发送结果 " + send.toString());
                     break;
             }
         }
