@@ -131,8 +131,8 @@ public class TxStorageImpl implements TxStorage {
         Byte[] data = null;
         if (ArrayUtils.isNotEmpty(checkInfo.getResult())) {
             data = new Byte[checkInfo.getResult().length];
-            for (int i = 0, len = bean.getResult().length; i < len; i++) {
-                data[i] = bean.getResult()[i];
+            for (int i = 0, len = checkInfo.getResult().length; i < len; i++) {
+                data[i] = checkInfo.getResult()[i];
             }
         }
         bean.setResult(data);
@@ -156,8 +156,8 @@ public class TxStorageImpl implements TxStorage {
         Byte[] data = null;
         if (ArrayUtils.isNotEmpty(checkInfo.getResult())) {
             data = new Byte[checkInfo.getResult().length];
-            for (int i = 0, len = bean.getResult().length; i < len; i++) {
-                data[i] = bean.getResult()[i];
+            for (int i = 0, len = checkInfo.getResult().length; i < len; i++) {
+                data[i] = checkInfo.getResult()[i];
             }
         }
         bean.setResult(data);
