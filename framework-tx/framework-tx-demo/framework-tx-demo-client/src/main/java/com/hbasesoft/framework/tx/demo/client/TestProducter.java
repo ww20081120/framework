@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hbasesoft.framework.message.tx.TxEventEmmiter;
 import com.hbasesoft.framework.tx.core.TxInvokerProxy;
 import com.hbasesoft.framework.tx.core.annotation.Tx;
 
@@ -40,6 +41,13 @@ public class TestProducter {
     @GetMapping
     @Tx
     public synchronized String test(@RequestParam("id") String id) {
+
+        TxInvokerProxy.invoke("client1", () -> {
+            TxEventEmmiter.emmit("testEvent");
+            return null;
+        });
+        System.out.println("emmit event");
+
         String value1 = TxInvokerProxy.invoke("client2", () -> {
             return feClient2Consumer.test(id);
         });

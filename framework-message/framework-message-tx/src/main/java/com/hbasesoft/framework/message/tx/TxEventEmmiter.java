@@ -47,33 +47,24 @@ public final class TxEventEmmiter {
      * @taskId <br>
      */
     public static void emmit(String event, EventData data) {
-        TxInvokerProxy.invoke(event, () -> {
-            TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
-                event, data
-            }, "emmit1"), () -> 0);
-            EventEmmiter.emmit(event, data);
-            return null;
-        });
+        TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
+            event, data
+        }, "emmit1"), () -> 0);
+        EventEmmiter.emmit(event, data);
     }
 
     public static void emmit(String event, EventData data, int seconds) {
-        TxInvokerProxy.invoke(event, () -> {
-            TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
-                event, data, seconds
-            }, "emmit2"), () -> 0);
-            EventEmmiter.emmit(event, data, seconds);
-            return null;
-        });
+        TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
+            event, data, seconds
+        }, "emmit2"), () -> 0);
+        EventEmmiter.emmit(event, data, seconds);
     }
 
     public static void emmit(String event, EventData data, String produceModel) {
-        TxInvokerProxy.invoke(event, () -> {
-            TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
-                event, data, produceModel
-            }, "emmit3"), () -> 0);
-            EventEmmiter.emmit(event, data, produceModel);
-            return null;
-        });
+        TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
+            event, data, produceModel
+        }, "emmit3"), () -> 0);
+        EventEmmiter.emmit(event, data, produceModel);
     }
 
     private static ClientInfo getClientInfo(String id, Object[] args, String method) {

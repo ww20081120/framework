@@ -21,6 +21,16 @@
 			<artifactId>framework-tx-client-consumer-rocketMQ</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-message-tx</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-message-rocketMQ</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
