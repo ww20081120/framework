@@ -52,7 +52,7 @@ public class RocketMQConsumer implements TxConsumer {
         if (clientInfo != null && StringUtils.isNotEmpty(clientInfo.getClientInfo())) {
 
             try {
-                Message msg = new Message(TxConsumer.RETRY_TOPIC, GlobalConstants.BLANK,
+                Message msg = new Message(clientInfo.getClientInfo(), GlobalConstants.BLANK,
                     SerializationUtil.serial(clientInfo));
                 getMQProducer(clientInfo.getClientInfo()).send(msg);
                 return true;
