@@ -39,8 +39,9 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          * @param clientInfo <br>
          */
         @Override
-        public void registClient(ClientInfo clientInfo) {
+        public boolean registClient(ClientInfo clientInfo) {
             logger.warn("registClient|" + JSONObject.toJSONString(clientInfo));
+            return false;
         }
 
         /**
