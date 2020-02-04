@@ -37,7 +37,7 @@ public class TestConsumer {
     @GetMapping
     public synchronized String test(@RequestParam("id") String id) {
         i++;
-        if (new Random().nextInt(10) % 3 == 0) {
+        if (new Random().nextInt(10) % 4 == 0) {
             throw new RuntimeException();
         }
         System.out.println(i + ":" + id);

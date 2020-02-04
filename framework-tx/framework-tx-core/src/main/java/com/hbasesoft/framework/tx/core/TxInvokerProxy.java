@@ -85,6 +85,7 @@ public final class TxInvokerProxy {
             if (msg != null) {
                 checkInfo.setResult(SerializationUtil.jdkSerial(msg));
             }
+            checkInfo.setFlag(0);
             sender.saveResult(checkInfo);
             return msg;
         }

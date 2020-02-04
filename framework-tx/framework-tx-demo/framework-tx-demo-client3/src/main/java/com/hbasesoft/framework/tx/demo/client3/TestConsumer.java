@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hbasesoft.framework.tx.core.annotation.Tx;
-
 /**
  * <Description> <br>
  * 
@@ -31,7 +29,7 @@ public class TestConsumer {
     @GetMapping
     public synchronized String test(@RequestParam("id") String id) {
         i++;
-        if (new Random().nextInt(10) % 3 == 0) {
+        if (new Random().nextInt(10) % 5 == 0) {
             throw new RuntimeException();
         }
         System.out.println(i + ":" + id);

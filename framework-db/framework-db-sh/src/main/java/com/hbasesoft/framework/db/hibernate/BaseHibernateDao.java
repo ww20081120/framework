@@ -159,10 +159,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 if (obj instanceof Collection<?>) {
                     query.setParameterList(entry.getKey(), (Collection<?>) obj);
                 }
-                else if (obj != null && obj.getClass().isArray()) {
-                    if (!(obj instanceof Object[])) {
-                        throw new DaoException(ErrorCodeDef.LIST_PARAM_ERROR_10040);
-                    }
+                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[]) {
                     query.setParameterList(entry.getKey(), (Object[]) obj);
                 }
                 else {
