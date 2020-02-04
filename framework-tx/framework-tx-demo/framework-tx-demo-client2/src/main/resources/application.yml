@@ -25,3 +25,4 @@ tx:
     coreSize: 10 
     maxPoolSize: 20
         
+logging.level.root: debug

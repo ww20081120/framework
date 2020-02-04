@@ -7,6 +7,7 @@ package com.hbasesoft.framework.tx.client.producer.springcloud;
 
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.tx.client.producer.springcloud.client.FeginProducer;
 import com.hbasesoft.framework.tx.core.TxProducer;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
@@ -36,6 +37,7 @@ public class SpringCloudProducer implements TxProducer {
      */
     @Override
     public void registClient(ClientInfo clientInfo) {
+        LoggerUtil.debug("registClient {0}|{1}", clientInfo.getId(), clientInfo.getMark());
         getFeginProducer().registClient(clientInfo);
     }
 
@@ -48,6 +50,7 @@ public class SpringCloudProducer implements TxProducer {
      */
     @Override
     public void removeClient(String id) {
+        LoggerUtil.debug("removeClient {0}", id);
         getFeginProducer().removeClient(id);
     }
 
@@ -62,6 +65,7 @@ public class SpringCloudProducer implements TxProducer {
      */
     @Override
     public CheckInfo registMsg(String id, String mark) {
+        LoggerUtil.debug("registMsg {0}|{1}", id, mark);
         return getFeginProducer().registMsg(id, mark);
     }
 
@@ -74,6 +78,7 @@ public class SpringCloudProducer implements TxProducer {
      */
     @Override
     public void saveResult(CheckInfo checkInfo) {
+        LoggerUtil.debug("saveResult {0}|{1}", checkInfo.getId(), checkInfo.getMark());
         getFeginProducer().saveResult(checkInfo);
     }
 
@@ -94,6 +99,7 @@ public class SpringCloudProducer implements TxProducer {
      */
     @Override
     public boolean containClient(String id) {
+        LoggerUtil.debug("containClient {0}", id);
         return getFeginProducer().containClient(id);
     }
 

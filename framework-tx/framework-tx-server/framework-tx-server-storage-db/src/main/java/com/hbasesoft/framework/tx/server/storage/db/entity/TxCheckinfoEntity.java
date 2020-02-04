@@ -36,12 +36,12 @@ public class TxCheckinfoEntity extends BaseEntity {
     private String mark;
 
     /** flag */
-    @Column(name = "flag")
+    @Column(name = "flag", columnDefinition = "tinyint")
     private Integer flag;
 
     /** result */
     @Column(name = "result")
-    private byte[] result;
+    private Byte[] result;
 
     public String getId() {
         return this.id;
@@ -67,11 +67,11 @@ public class TxCheckinfoEntity extends BaseEntity {
         this.flag = flag;
     }
 
-    public byte[] getResult() {
+    public Byte[] getResult() {
         return this.result;
     }
 
-    public void setResult(byte[] result) {
+    public void setResult(Byte[] result) {
         this.result = result;
     }
 

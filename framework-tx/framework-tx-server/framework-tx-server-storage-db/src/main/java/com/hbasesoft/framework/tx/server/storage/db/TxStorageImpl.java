@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -73,7 +74,14 @@ public class TxStorageImpl implements TxStorage {
     public CheckInfo getCheckInfo(String id, String mark) {
         TxCheckinfoEntity bean = txCheckinfoDao.getCheckInfoById(id, mark);
         if (bean != null) {
-            return new CheckInfo(bean.getId(), bean.getMark(), bean.getFlag(), bean.getResult());
+            byte[] data = null;
+            if (ArrayUtils.isNotEmpty(bean.getResult())) {
+                data = new byte[bean.getResult().length];
+                for (int i = 0, len = bean.getResult().length; i < len; i++) {
+                    data[i] = bean.getResult()[i];
+                }
+            }
+            return new CheckInfo(bean.getId(), bean.getMark(), bean.getFlag(), data);
         }
         return null;
     }
@@ -120,7 +128,14 @@ public class TxStorageImpl implements TxStorage {
         bean.setFlag(checkInfo.getFlag());
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
-        bean.setResult(checkInfo.getResult());
+        Byte[] data = null;
+        if (ArrayUtils.isNotEmpty(checkInfo.getResult())) {
+            data = new Byte[checkInfo.getResult().length];
+            for (int i = 0, len = bean.getResult().length; i < len; i++) {
+                data[i] = bean.getResult()[i];
+            }
+        }
+        bean.setResult(data);
         txCheckinfoDao.saveCheckInfo(bean);
     }
 
@@ -138,7 +153,14 @@ public class TxStorageImpl implements TxStorage {
         bean.setFlag(checkInfo.getFlag());
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
-        bean.setResult(checkInfo.getResult());
+        Byte[] data = null;
+        if (ArrayUtils.isNotEmpty(checkInfo.getResult())) {
+            data = new Byte[checkInfo.getResult().length];
+            for (int i = 0, len = bean.getResult().length; i < len; i++) {
+                data[i] = bean.getResult()[i];
+            }
+        }
+        bean.setResult(data);
         txCheckinfoDao.updateCheckInfo(bean);
     }
 
