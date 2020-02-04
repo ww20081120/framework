@@ -20,8 +20,8 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 public interface TxConsumer {
 
     /** tx的渠道 */
-    String CONSUMER_GROUP = "TX_RETRY";
+    String RETRY_TOPIC = "TX_RETRY";
 
-    void retry(ClientInfo clientInfo);
+    boolean retry(ClientInfo clientInfo);
 
 }

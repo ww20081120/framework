@@ -5,6 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.server.consumer.rocketmq;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -14,7 +17,6 @@ import org.springframework.stereotype.Service;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
-import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
@@ -35,24 +37,7 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @Service
 public class RocketMQConsumer implements TxConsumer {
 
-    private DefaultMQProducer defaultMQProducer;
-
-    public RocketMQConsumer() {
-        defaultMQProducer = new DefaultMQProducer(TxConsumer.CONSUMER_GROUP);
-        String address = PropertyHolder.getProperty("tx.rocketmq.namesrvAddr");
-        Assert.notEmpty(address, ErrorCodeDef.TX_ROCKET_MQ_ADDRESS_NOT_FOUND);
-        defaultMQProducer.setNamesrvAddr(address);
-        defaultMQProducer
-            .setRetryTimesWhenSendAsyncFailed(PropertyHolder.getIntProperty("tx.rocketmq.producer.retrytimes", 3));
-        try {
-            defaultMQProducer.start();
-        }
-        catch (MQClientException e) {
-            LoggerUtil.error("tx RocketMq defaultProducer faile.", e);
-            defaultMQProducer.shutdown();
-            throw new InitializationException(ErrorCodeDef.MESSAGE_MODEL_P_CREATE_ERROR, e);
-        }
-    }
+    private Map<String, DefaultMQProducer> producerHolder = new HashMap<>();
 
     /**
      * Description: <br>
@@ -62,20 +47,43 @@ public class RocketMQConsumer implements TxConsumer {
      * @param clientInfo <br>
      */
     @Override
-    public void retry(ClientInfo clientInfo) {
+    public boolean retry(ClientInfo clientInfo) {
 
         if (clientInfo != null && StringUtils.isNotEmpty(clientInfo.getClientInfo())) {
 
             try {
-                Message msg = new Message(clientInfo.getClientInfo(), GlobalConstants.BLANK,
+                Message msg = new Message(TxConsumer.RETRY_TOPIC, GlobalConstants.BLANK,
                     SerializationUtil.serial(clientInfo));
-                defaultMQProducer.send(msg);
+                getMQProducer(clientInfo.getClientInfo()).send(msg);
+                return true;
             }
             catch (Exception e) {
-                throw new ServiceException(e);
+                LoggerUtil.error(e);
             }
         }
+        return false;
+    }
 
+    private synchronized DefaultMQProducer getMQProducer(String clientInfo) {
+        DefaultMQProducer defaultMQProducer = producerHolder.get(clientInfo);
+        if (defaultMQProducer == null) {
+            defaultMQProducer = new DefaultMQProducer(clientInfo);
+            String address = PropertyHolder.getProperty("tx.rocketmq.namesrvAddr");
+            Assert.notEmpty(address, ErrorCodeDef.TX_ROCKET_MQ_ADDRESS_NOT_FOUND);
+            defaultMQProducer.setNamesrvAddr(address);
+            defaultMQProducer
+                .setRetryTimesWhenSendAsyncFailed(PropertyHolder.getIntProperty("tx.rocketmq.producer.retrytimes", 3));
+            try {
+                defaultMQProducer.start();
+                producerHolder.put(clientInfo, defaultMQProducer);
+            }
+            catch (MQClientException e) {
+                LoggerUtil.error("tx RocketMq defaultProducer faile.", e);
+                defaultMQProducer.shutdown();
+                throw new InitializationException(ErrorCodeDef.MESSAGE_MODEL_P_CREATE_ERROR, e);
+            }
+        }
+        return defaultMQProducer;
     }
 
 }

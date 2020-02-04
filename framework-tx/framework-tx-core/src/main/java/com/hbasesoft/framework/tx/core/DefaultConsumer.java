@@ -31,7 +31,7 @@ public class DefaultConsumer implements TxConsumer {
      * @param clientInfo <br>
      */
     @Override
-    public void retry(ClientInfo clientInfo) {
+    public boolean retry(ClientInfo clientInfo) {
         LoggerUtil.debug("before execute retry {0}|{1}", clientInfo.getId(), clientInfo.getMark());
         TxProducer sender = TxInvokerProxy.getSender();
         try {
@@ -40,11 +40,13 @@ public class DefaultConsumer implements TxConsumer {
                     ArgsSerializationUtil.unserialArgs(clientInfo.getArgs()));
                 sender.removeClient(clientInfo.getId());
                 LoggerUtil.debug("success execute retry {0}|{1}", clientInfo.getId(), clientInfo.getMark());
+                return true;
             }
         }
         catch (Exception e) {
             LoggerUtil.error(e, "error execute retry {0}|{1}", clientInfo.getId(), clientInfo.getMark());
         }
+        return false;
     }
 
 }

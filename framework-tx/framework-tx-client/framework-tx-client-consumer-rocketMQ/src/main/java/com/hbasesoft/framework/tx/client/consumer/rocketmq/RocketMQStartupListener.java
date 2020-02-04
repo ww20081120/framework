@@ -50,7 +50,10 @@ public class RocketMQStartupListener implements StartupListener {
     public void complete(ApplicationContext context) {
         LoggerUtil.info("开始启动分布式事务Rocket MQ Consumer");
 
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(TxConsumer.CONSUMER_GROUP);
+        String group = new RocketMQClientInfoFactory().getClientInfo();
+        Assert.notEmpty(group, ErrorCodeDef.TX_ROCKET_MQ_TOPIC_NOT_FOUND);
+
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(group);
 
         // Name service address
         String address = PropertyHolder.getProperty("tx.rocketmq.namesrvAddr");
@@ -64,10 +67,8 @@ public class RocketMQStartupListener implements StartupListener {
 
         TxConsumer txConsumer = new DefaultConsumer();
 
-        String topic = new RocketMQClientInfoFactory().getClientInfo();
-        Assert.notEmpty(topic, ErrorCodeDef.TX_ROCKET_MQ_TOPIC_NOT_FOUND);
         try {
-            consumer.subscribe(topic, "*");
+            consumer.subscribe(TxConsumer.RETRY_TOPIC, "*");
 
             consumer.registerMessageListener(new MessageListenerConcurrently() {
 

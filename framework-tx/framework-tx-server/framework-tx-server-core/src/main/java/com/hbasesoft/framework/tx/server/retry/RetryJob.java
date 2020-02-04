@@ -26,7 +26,7 @@ import com.hbasesoft.framework.tx.server.TxStorage;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.server.retry <br>
  */
-@Job(cron = "3 1/5 * * * ?", shardingParam="0,1,2,3,4,5,6,7,8,9,10")
+@Job(cron = "3 1/5 * * * ?", shardingParam = "0,1,2,3,4,5,6,7,8,9,10")
 public class RetryJob implements SimpleJob {
 
     /**
@@ -52,8 +52,9 @@ public class RetryJob implements SimpleJob {
                 pageSize);
             if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
                 for (ClientInfo clientInfo : timeoutClientInfos) {
-                    txConsumer.retry(clientInfo);
-                    storage.updateClientRetryTimes(clientInfo.getId());
+                    if (txConsumer.retry(clientInfo)) {
+                        storage.updateClientRetryTimes(clientInfo.getId());
+                    }
                 }
             }
         }
