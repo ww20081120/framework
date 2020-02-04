@@ -67,13 +67,8 @@ public class TxProducerImpl implements TxProducer {
      * @return <br>
      */
     @Override
-    public CheckInfo registMsg(String id, String mark) {
-        CheckInfo checkInfo = txStorage.getCheckInfo(id, mark);
-        if (checkInfo == null) {
-            checkInfo = new CheckInfo(id, mark, 1, null);
-            txStorage.saveCheckInfo(checkInfo);
-        }
-        return checkInfo;
+    public CheckInfo check(String id, String mark) {
+        return txStorage.getCheckInfo(id, mark);
     }
 
     /**
@@ -85,7 +80,7 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public void saveResult(CheckInfo checkInfo) {
-        txStorage.updateCheckInfo(checkInfo);
+        txStorage.saveCheckInfo(checkInfo);
     }
 
     /**

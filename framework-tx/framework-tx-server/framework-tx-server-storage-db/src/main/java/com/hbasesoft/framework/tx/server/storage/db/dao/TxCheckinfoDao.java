@@ -27,11 +27,8 @@ public interface TxCheckinfoDao {
     @Sql("SELECT ID, MARK, FLAG, RESULT FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
     TxCheckinfoEntity getCheckInfoById(@Param("id") String id, @Param("mark") String mark);
 
-    @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, FLAG, RESULT) VALUES (:entity.id, :entity.mark, :entity.flag, :entity.result)")
+    @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT) VALUES (:entity.id, :entity.mark, :entity.result)")
     int saveCheckInfo(@Param("entity") TxCheckinfoEntity entity);
-
-    @Sql("UPDATE T_TX_CHECKINFO SET FLAG = :entity.flag, RESULT = :entity.result WHERE ID = :entity.id AND MARK = :entity.mark")
-    int updateCheckInfo(@Param("entity") TxCheckinfoEntity entity);
 
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id")
     int deleteCheckInfo(@Param("id") String id);

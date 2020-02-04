@@ -28,8 +28,6 @@ public interface TxStorage {
 
     void saveCheckInfo(CheckInfo checkInfo);
 
-    void updateCheckInfo(CheckInfo checkInfo);
-
     PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize);
 
     void updateClientRetryTimes(String id);

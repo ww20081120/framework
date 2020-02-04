@@ -78,16 +78,16 @@ public final class TxInvokerProxy {
      * @throws Throwable <br>
      */
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(String id, String marker, TxInvoker<T> invoker) {
+    public static <T> T invoke(String id, String mark, TxInvoker<T> invoker) {
         TxProducer sender = getSender();
 
-        CheckInfo checkInfo = sender.registMsg(id, marker);
-        if (checkInfo.getFlag() != 0) {
+        CheckInfo checkInfo = sender.check(id, mark);
+        if (checkInfo == null) {
             T msg = invoker.invoke();
+            checkInfo = new CheckInfo(id, mark);
             if (msg != null) {
                 checkInfo.setResult(SerializationUtil.jdkSerial(msg));
             }
-            checkInfo.setFlag(0);
             sender.saveResult(checkInfo);
             return msg;
         }

@@ -37,15 +37,11 @@ public class CheckInfo implements Serializable {
 
     private String mark;
 
-    /** 0:执行成功， 1:未执行， 其它错误码 */
-    private int flag;
-
     private byte[] result;
 
-    public CheckInfo(String id, String mark, int flag) {
+    public CheckInfo(String id, String mark) {
         this.id = id;
         this.mark = mark;
-        this.flag = flag;
     }
 
 }

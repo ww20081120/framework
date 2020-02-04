@@ -76,8 +76,8 @@ public class SpringCloudController {
      * @return <br>
      */
     @GetMapping("/{id}/{mark}")
-    public CheckInfo registMsg(@PathVariable("id") String id, @PathVariable("mark") String mark) {
-        return txProducer.registMsg(id, mark);
+    public CheckInfo check(@PathVariable("id") String id, @PathVariable("mark") String mark) {
+        return txProducer.check(id, mark);
     }
 
     /**

@@ -50,7 +50,7 @@ public interface TxProducer {
      * @param mark
      * @return <br>
      */
-    CheckInfo registMsg(String id, String mark);
+    CheckInfo check(String id, String mark);
 
     /**
      * Description: 反馈执行结果<br>

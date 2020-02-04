@@ -35,10 +35,6 @@ public class TxCheckinfoEntity extends BaseEntity {
     @Column(name = "mark")
     private String mark;
 
-    /** flag */
-    @Column(name = "flag", columnDefinition = "tinyint")
-    private Integer flag;
-
     /** result */
     @Column(name = "result")
     private byte[] result;
@@ -57,14 +53,6 @@ public class TxCheckinfoEntity extends BaseEntity {
 
     public void setMark(String mark) {
         this.mark = mark;
-    }
-
-    public Integer getFlag() {
-        return this.flag;
-    }
-
-    public void setFlag(Integer flag) {
-        this.flag = flag;
     }
 
     public byte[] getResult() {

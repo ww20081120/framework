@@ -73,7 +73,7 @@ public class TxStorageImpl implements TxStorage {
     public CheckInfo getCheckInfo(String id, String mark) {
         TxCheckinfoEntity bean = txCheckinfoDao.getCheckInfoById(id, mark);
         if (bean != null) {
-            return new CheckInfo(bean.getId(), bean.getMark(), bean.getFlag(), bean.getResult());
+            return new CheckInfo(bean.getId(), bean.getMark(), bean.getResult());
         }
         return null;
     }
@@ -117,29 +117,10 @@ public class TxStorageImpl implements TxStorage {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void saveCheckInfo(CheckInfo checkInfo) {
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
-        bean.setFlag(checkInfo.getFlag());
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
         bean.setResult(checkInfo.getResult());
         txCheckinfoDao.saveCheckInfo(bean);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param checkInfo <br>
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void updateCheckInfo(CheckInfo checkInfo) {
-        TxCheckinfoEntity bean = new TxCheckinfoEntity();
-        bean.setFlag(checkInfo.getFlag());
-        bean.setId(checkInfo.getId());
-        bean.setMark(checkInfo.getMark());
-        bean.setResult(checkInfo.getResult());
-        txCheckinfoDao.updateCheckInfo(bean);
     }
 
     /**

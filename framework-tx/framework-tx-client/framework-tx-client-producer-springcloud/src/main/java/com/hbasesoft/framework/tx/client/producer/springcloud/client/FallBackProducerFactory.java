@@ -66,9 +66,9 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          * @return <br>
          */
         @Override
-        public CheckInfo registMsg(String id, String mark) {
+        public CheckInfo check(String id, String mark) {
             logger.warn("registMsg|" + id + "|" + mark);
-            return new CheckInfo(id, mark, 1, null);
+            return null;
         }
 
         /**

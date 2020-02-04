@@ -64,9 +64,9 @@ public class SpringCloudProducer implements TxProducer {
      * @return <br>
      */
     @Override
-    public CheckInfo registMsg(String id, String mark) {
-        LoggerUtil.debug("registMsg {0}|{1}", id, mark);
-        return getFeginProducer().registMsg(id, mark);
+    public CheckInfo check(String id, String mark) {
+        LoggerUtil.debug("check {0}|{1}", id, mark);
+        return getFeginProducer().check(id, mark);
     }
 
     /**

@@ -65,7 +65,7 @@ public interface FeginProducer {
      * @return <br>
      */
     @GetMapping("/{id}/{mark}")
-    CheckInfo registMsg(@PathVariable("id") String id, @PathVariable("mark") String mark);
+    CheckInfo check(@PathVariable("id") String id, @PathVariable("mark") String mark);
 
     /**
      * Description: <br>
