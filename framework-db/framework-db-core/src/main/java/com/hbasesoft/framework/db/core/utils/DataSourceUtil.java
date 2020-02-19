@@ -70,6 +70,15 @@ public final class DataSourceUtil {
         }
     }
 
+    public static void close(String name) {
+        synchronized (dataSourceMap) {
+            DataSource dataSource = dataSourceMap.remove(name);
+            if (dataSource != null && dataSource instanceof DruidDataSource) {
+                ((DruidDataSource) dataSource).close();
+            }
+        }
+    }
+
     private static DataSource regist(String name, DbParam dbParam) {
         DataSource dataSource = dataSourceMap.get(name);
         if (dataSource == null) {
