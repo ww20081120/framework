@@ -79,5 +79,4 @@ public interface GlobalConstants {
 
     String DOLLAR_BRACE = "${";
 
-
 }

@@ -29,7 +29,7 @@ public interface DateConstants {
 
     /** yyyyMMddHHmmss */
     String DATETIME_FORMAT_14 = "yyyyMMddHHmmss";
-    
+
     /** yyyyMMddHHmmssSSS */
     String DATETIME_FORMAT_17 = "yyyyMMddHHmmssSSS";
 
@@ -43,9 +43,9 @@ public interface DateConstants {
     String DATETIME_FORMAT_21 = "yyyy年MM月dd日 HH时mm分ss秒";
 
     /** yyyy-MM-dd HH:mm:ss.SSS */
-    public static final String DATETIME_FORMAT_23 = "yyyy-MM-dd HH:mm:ss.SSS";
+    String DATETIME_FORMAT_23 = "yyyy-MM-dd HH:mm:ss.SSS";
 
     /** yyyy/MM/dd HH:mm:ss.SSS */
-    public static final String DATETIME_FORMAT_23_2 = "yyyy/MM/dd HH:mm:ss.SSS";
+    String DATETIME_FORMAT_23_2 = "yyyy/MM/dd HH:mm:ss.SSS";
 
 }

@@ -65,13 +65,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<scm>
-		<connection>scm:git:git@github.com:ww20081120/framework.git</connection>
-		<url>git@github.com:ww20081120/framework</url>
-		<developerConnection>scm:git:git@github.com:ww20081120/framework.git</developerConnection>
-		<tag>3.3.0</tag>
-	</scm>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -97,6 +90,56 @@
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sandbox</groupId>
+				<artifactId>githook-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install</goal>
+						</goals>
+						<configuration>
+							<hooks>
+								<pre-commit>
+									echo git commit 前进行自动编译,findbugs,checkstyle,提交
+									exec
+									mvn clean install -Dmaven.test.skip=true
+									exec mvn
+									checkstyle:checkstyle
+								</pre-commit>
+							</hooks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>3.0.5</version>
+				<configuration>
+					<!-- 设置分析工作的等级，可以为Min、Default和Max -->
+					<effort>Low</effort>
+					<!-- Low、Medium和High (Low最严格) High只扫描严重错误。建议用Medium -->
+					<threshold>Medium</threshold>
+					<failOnError>false</failOnError>
+					<includeTests>true</includeTests>
+				</configuration>
+				<executions>
+					<execution>
+						<id>run-findbugs</id>
+						<!-- 在package(也可设为compile) 阶段触发执行findbugs检查，比如执行 mvn clean package -->
+						<phase>compile</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -113,6 +156,35 @@
 				</includes>
 			</resource>
 		</resources>
+
+		<pluginManagement>
+			<plugins>
+				<!--公共checkstyle标准配置，可以在子模块中覆盖，修改自定义选项 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>3.1.1</version>
+					<configuration>
+						<configLocation>config/checkstyle/hbasesoft-check-1.0.xml</configLocation>
+						<consoleOutput>true</consoleOutput>
+						<encoding>UTF-8</encoding>
+						<failsOnError>true</failsOnError>
+						<linkXRef>false</linkXRef>
+						<skip>false</skip>
+						<violationSeverity>error</violationSeverity>
+					</configuration>
+					<executions>
+						<execution>
+							<id>install</id>
+							<phase>install</phase>
+							<goals>
+								<goal>checkstyle</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<distributionManagement>
 		<repository>
@@ -126,4 +198,14 @@
 			<url>http://www.hbasesoft.com:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>3.0.0</version>
+			</plugin>
+		</plugins>
+	</reporting>
 </project> 

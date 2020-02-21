@@ -32,7 +32,7 @@ public interface StartupListener {
     default void destory() {
     }
 
-    static enum LoadOrder {
+    enum LoadOrder {
         FIRST, MIDDLE, LAST
     }
 

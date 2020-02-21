@@ -39,7 +39,7 @@ public final class CommonUtil {
      * @param params params <br>
      * @return String <br>
      */
-    public static String messageFormat(String message, Object... params) {
+    public static String messageFormat(final String message, final Object... params) {
         return (params == null || params.length == 0) ? message : MessageFormat.format(message, params);
     }
 
@@ -87,7 +87,7 @@ public final class CommonUtil {
      * @param size <br>
      * @return <br>
      */
-    public static String getRandomChar(int size) {
+    public static String getRandomChar(final int size) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < size; i++) {
@@ -102,7 +102,6 @@ public final class CommonUtil {
                     sb.append((char) ('A' + random.nextInt(26)));
                     break;
                 default:
-                    ;
             }
         }
         return sb.toString();
@@ -116,7 +115,7 @@ public final class CommonUtil {
      * @param obj <br>
      * @return <br>
      */
-    public static String getString(Object obj) {
+    public static String getString(final Object obj) {
         String result = null;
         if (obj != null) {
             result = obj instanceof String ? (String) obj : obj.toString();
@@ -124,7 +123,15 @@ public final class CommonUtil {
         return result;
     }
 
-    public static String notNullStr(String str) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param str
+     * @return <br>
+     */
+    public static String notNullStr(final String str) {
         return StringUtils.isEmpty(str) ? GlobalConstants.BLANK : str;
     }
 
@@ -135,7 +142,7 @@ public final class CommonUtil {
      * @param time <br
      * @return <br>
      */
-    public static Date getDate(Long time) {
+    public static Date getDate(final Long time) {
         if (time != null) {
             return new Date(time);
         }
@@ -151,7 +158,7 @@ public final class CommonUtil {
      * @param splitor
      * @return <br>
      */
-    public static final Integer[] splitId(String idStr, String splitor) {
+    public static Integer[] splitId(final String idStr, final String splitor) {
         Integer[] ids = null;
         if (StringUtils.isNotEmpty(idStr)) {
             String[] strs = StringUtils.split(idStr, splitor);
@@ -163,7 +170,16 @@ public final class CommonUtil {
         return ids;
     }
 
-    public static final Long[] splitIdsByLong(String idStr, String splitor) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param idStr
+     * @param splitor
+     * @return <br>
+     */
+    public static Long[] splitIdsByLong(final String idStr, final String splitor) {
         Long[] ids = null;
         if (StringUtils.isNotEmpty(idStr)) {
             String[] strs = StringUtils.split(idStr, splitor);
@@ -183,7 +199,7 @@ public final class CommonUtil {
      * @param idStr
      * @return <br>
      */
-    public static final Integer[] splitId(String idStr) {
+    public static Integer[] splitId(final String idStr) {
         return splitId(idStr, GlobalConstants.SPLITOR);
     }
 
@@ -196,7 +212,7 @@ public final class CommonUtil {
      * @param matchValue
      * @return <br>
      */
-    public static boolean wildcardMatch(Collection<String> rules, String matchValue) {
+    public static boolean wildcardMatch(final Collection<String> rules, final String matchValue) {
         for (String rule : rules) {
             if (wildcardMatch(rule, matchValue)) {
                 return true;
@@ -210,10 +226,10 @@ public final class CommonUtil {
      *
      * @param rule 规则 带正则表达式的
      * @param matchValue 要匹配的值
-     * @return
+     * @return 匹配结果
      */
-    public static boolean wildcardMatch(String rule, String matchValue) {
-        rule = org.apache.commons.lang3.StringUtils
+    public static boolean wildcardMatch(final String rule, final String matchValue) {
+        String tempRule = org.apache.commons.lang3.StringUtils
             .replaceEach(org.apache.commons.lang3.StringUtils.replaceEach(rule, new String[] {
                 "\\", ".", "^", "$"
             }, new String[] {
@@ -223,7 +239,7 @@ public final class CommonUtil {
             }, new String[] {
                 ".*", ".?"
             });
-        Pattern pp = Pattern.compile(rule);
+        Pattern pp = Pattern.compile(tempRule);
         Matcher m = pp.matcher(matchValue);
         return m.matches();
     }
@@ -233,11 +249,11 @@ public final class CommonUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param key <br>
-     * @param matchValue <br>
+     * @param rule
+     * @param matchValue
      * @return <br>
      */
-    public static boolean match(String rule, String matchValue) {
+    public static boolean match(final String rule, final String matchValue) {
         boolean ismatch = false;
         if (StringUtils.isNotEmpty(rule) && StringUtils.isNotEmpty(matchValue)) {
             // match all
@@ -246,11 +262,11 @@ public final class CommonUtil {
             }
             // not eq match
             else if (rule.startsWith("NOT:")) {
-                rule = rule.substring(4);
-                ismatch = rule.indexOf(GlobalConstants.SPLITOR) == -1 ? !rule.equals(matchValue)
-                    : new StringBuilder().append(GlobalConstants.SPLITOR).append(rule).append(GlobalConstants.SPLITOR)
-                        .indexOf(new StringBuilder().append(GlobalConstants.SPLITOR).append(matchValue)
-                            .append(GlobalConstants.SPLITOR).toString()) == -1;
+                String tempRule = rule.substring(4);
+                ismatch = tempRule.indexOf(GlobalConstants.SPLITOR) == -1 ? !tempRule.equals(matchValue)
+                    : new StringBuilder().append(GlobalConstants.SPLITOR).append(tempRule)
+                        .append(GlobalConstants.SPLITOR).indexOf(new StringBuilder().append(GlobalConstants.SPLITOR)
+                            .append(matchValue).append(GlobalConstants.SPLITOR).toString()) == -1;
             }
             // eq match
             else {
@@ -271,7 +287,7 @@ public final class CommonUtil {
      * @param str
      * @return <br>
      */
-    public static String removeAllSymbol(String str) {
+    public static String removeAllSymbol(final String str) {
         if (StringUtils.isNotEmpty(str)) {
             return str.replaceAll("[\\pP\\p{Punct}]", "");
         }
@@ -286,7 +302,7 @@ public final class CommonUtil {
      * @param str
      * @return <br>
      */
-    public static String replaceAllBlank(String str) {
+    public static String replaceAllBlank(final String str) {
         String dest = GlobalConstants.BLANK;
         if (StringUtils.isNotEmpty(str)) {
             Pattern p = Pattern.compile("\\s*|\t|\r|\n");
@@ -304,7 +320,7 @@ public final class CommonUtil {
      * @param str
      * @return <br>
      */
-    public static String replaceRedundantBlank(String str) {
+    public static String replaceRedundantBlank(final String str) {
         String dest = GlobalConstants.BLANK;
         if (StringUtils.isNotEmpty(str)) {
             Pattern p = Pattern.compile("\\s{1,}|\t|\r|\n");
@@ -315,18 +331,30 @@ public final class CommonUtil {
     }
 
     /**
-     * Description: <br>
      * 
+     * Description: <br> 
+     *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param paramTypes
+     * @param paramTypes 数组值
+     * @param <T> 数据类型
      * @return <br>
      */
-    public static <T> boolean isNotEmpty(T[] paramTypes) {
+    public static <T> boolean isNotEmpty(final T[] paramTypes) {
         return !ArrayUtils.isEmpty(paramTypes);
     }
 
-    public static <T> boolean isEmpty(T[] paramTypes) {
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param paramTypes 数组值
+     * @param <T> 数据类型
+     * @return <br>
+     */
+    public static <T> boolean isEmpty(final T[] paramTypes) {
         return ArrayUtils.isEmpty(paramTypes);
     }
 }

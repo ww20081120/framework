@@ -17,7 +17,7 @@ public class XmlFilterReader extends FilterReader {
         int num = in.read(cbuf, off, len);
         for (int i = 0; i < cbuf.length; i++) {
             char ch = cbuf[i];
-            if(ch >= 0x00 && ch <= 0x08){
+            if (ch >= 0x00 && ch <= 0x08) {
                 cbuf[i] = ' ';
             }
         }

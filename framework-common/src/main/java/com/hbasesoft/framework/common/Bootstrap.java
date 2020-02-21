@@ -36,7 +36,7 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common <br>
  */
-public class Bootstrap {
+public final class Bootstrap {
 
     /**
      * logger
