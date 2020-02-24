@@ -101,7 +101,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
 
         // Step5:组装sql参数
         installPlaceholderSqlParam(dataParam, executeSql, sqlParamsMap);
-        
+
         // Step6: 替换：的关键字
         executeSql = StringUtils.replace(executeSql, "：", ":");
 
@@ -125,8 +125,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
         try {
             while (m.find()) {
                 logger.debug(" Match [" + m.group() + "] at positions " + m.start() + "-" + (m.end() - 1));
-                String ognl_key = m.group().replace(":", "").trim();
-                map.put(ognl_key, OgnlUtil.getValue(ognl_key, sqlParamsMap));
+                String ognlKey = m.group().replace(":", "").trim();
+                map.put(ognlKey, OgnlUtil.getValue(ognlKey, sqlParamsMap));
             }
         }
         catch (Exception e) {
@@ -220,7 +220,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
         return executeSql.replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("\\s{1,}", " ").trim();
     }
 
-    public void setSqlExcutor(ISqlExcutor sqlExcutor) {
-        this.sqlExcutor = sqlExcutor;
+    public void setSqlExcutor(ISqlExcutor se) {
+        this.sqlExcutor = se;
     }
 }

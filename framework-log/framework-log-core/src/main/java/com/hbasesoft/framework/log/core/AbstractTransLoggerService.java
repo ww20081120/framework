@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.log.core;
 
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -38,7 +37,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      */
     private Logger logger = new Logger(AbstractTransLoggerService.class);
 
-    protected boolean alwaysLog;
+    private boolean alwaysLog;
 
     /*
      * (non-Javadoc)
@@ -122,7 +121,6 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @taskId <br>
      * @param ex <br>
      * @return <br>
-     * @throws IOException <br>
      */
     protected String getExceptionMsg(Throwable ex) {
         if (ex == null) {

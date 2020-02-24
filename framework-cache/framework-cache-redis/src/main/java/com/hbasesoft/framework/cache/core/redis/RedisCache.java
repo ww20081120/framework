@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-import org.apache.commons.lang.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisShardInfo;
@@ -38,8 +38,12 @@ public class RedisCache extends AbstractRedisCache {
      */
     public static final String CACHE_MODEL = "REDIS";
 
+    /** jeditPool */
     private JedisPool jedisPool;
 
+    /**
+     * redisCache
+     */
     public RedisCache() {
         String cacheModel = PropertyHolder.getProperty("cache.model");
         if (CACHE_MODEL.equals(cacheModel)) {
@@ -51,9 +55,10 @@ public class RedisCache extends AbstractRedisCache {
             }
             if (StringUtils.isEmpty(passwd)) {
                 jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
-            } else {
-                jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
-                        addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+            }
+            else {
+                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort(),
+                    Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
             }
         }
     }
@@ -114,7 +119,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(byte[] key) {
+    protected byte[] get(final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -136,7 +141,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(byte[] key, byte[] value) {
+    protected void put(final byte[] key, final byte[] value) {
         if (value != null && value.length > 0) {
             Jedis jedis = null;
             try {
@@ -159,7 +164,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(byte[] key) {
+    protected void evict(final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -181,7 +186,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected Map<byte[], byte[]> getNode(byte[] node) {
+    protected Map<byte[], byte[]> getNode(final byte[] node) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -203,7 +208,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
+    protected void putNode(final byte[] key, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             Jedis jedis = null;
             try {
@@ -225,10 +230,9 @@ public class RedisCache extends AbstractRedisCache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     * @return <br>
      */
     @Override
-    protected void removeNode(byte[] nodeName) {
+    protected void removeNode(final byte[] nodeName) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -251,7 +255,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(byte[] nodeName, byte[] key) {
+    protected byte[] get(final byte[] nodeName, final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -274,7 +278,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
+    protected void put(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             Jedis jedis = null;
             try {
@@ -301,7 +305,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(byte[] nodeName, byte[] key) {
+    protected void evict(final byte[] nodeName, final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -325,7 +329,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public boolean setnx(String key, String value, int expireTime) {
+    public boolean setnx(final String key, final String value, final int expireTime) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();

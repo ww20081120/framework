@@ -67,7 +67,7 @@ public class DelayMessageProviderTest implements ApplicationContextAware {
                 }
             }
         }
-        Thread.sleep(10000000l);
+        Thread.sleep(10000000L);
     }
 
     /**

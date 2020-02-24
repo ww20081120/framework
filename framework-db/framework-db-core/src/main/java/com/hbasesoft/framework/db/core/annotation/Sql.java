@@ -26,17 +26,50 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Sql {
-    /** sql语句 */
+    /**
+     * Description: sql语句 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String value() default GlobalConstants.BLANK;
 
-    /** sql文件的位置 */
+    /**
+     * Description: sql文件的位置<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String path() default GlobalConstants.BLANK;
 
-    /** 返回值指定类型 */
+    /**
+     * Description: 返回值指定类型 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     Class<?> bean() default Serializable.class;
 
-    /** 数据源标识 */
+    /**
+     * 
+     * Description: 数据源标识<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String dbId() default GlobalConstants.BLANK;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String dataSource() default GlobalConstants.BLANK;
 }

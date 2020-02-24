@@ -40,7 +40,7 @@ public final class JavaScriptUtil {
      * @return 脚本返回值
      * @throws UtilException <br>
      */
-    public static Object eval(String script, Map<String, Object> params) throws UtilException {
+    public static Object eval(final String script, final Map<String, Object> params) throws UtilException {
         ScriptEngineManager mgr = new ScriptEngineManager();
         ScriptEngine engine = mgr.getEngineByName("javascript");
         try {

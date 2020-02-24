@@ -39,6 +39,16 @@ import okhttp3.Response;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HttpUtil {
 
+    /** DEFAULT_HTTP_PORT */
+    public static final int DEFAULT_HTTP_PORT = 80;
+
+    /** DEFAULT_HTTPS_PORT */
+    public static final int DEFAULT_HTTPS_PORT = 443;
+
+    /** CONNECT_TIMEOUT */
+    private static final int CONNECT_TIMEOUT = 10;
+
+    /** httpClientHold */
     private static ThreadLocal<OkHttpClient> httpClientHold = new ThreadLocal<>();
 
     /**
@@ -49,29 +59,48 @@ public final class HttpUtil {
      * @param url
      * @return - 默认返回text/html
      */
-    public static String doGet(String url) {
+    public static String doGet(final String url) {
         return doGet(url, GlobalConstants.DEFAULT_CHARSET);
     }
 
-    public static String doGet(String url, String charset) {
+    /**
+     * Description: doGet<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param charset
+     * @return <br>
+     */
+    public static String doGet(final String url, final String charset) {
         Request request = new Request.Builder().url(url).build();
         return getStringRequest(request, charset);
     }
 
     /**
-     * <p>
-     * 执行Post请求
-     * </p>
+     * Description: 执行Post请求<br>
      * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param url
      * @param paramMap
-     * @return
+     * @return <br>
      */
-    public static String doPost(String url, Map<String, String> paramMap) {
+    public static String doPost(final String url, final Map<String, String> paramMap) {
         return doPost(url, paramMap, GlobalConstants.DEFAULT_CHARSET);
     }
 
-    public static String doPost(String url, Map<String, String> paramMap, String charset) {
+    /**
+     * Description: doPost<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param paramMap
+     * @param charset
+     * @return <br>
+     */
+    public static String doPost(final String url, final Map<String, String> paramMap, final String charset) {
         Builder builder = new FormBody.Builder();
         if (MapUtils.isNotEmpty(paramMap)) {
             for (Entry<String, String> param : paramMap.entrySet()) {
@@ -82,7 +111,16 @@ public final class HttpUtil {
         return getStringRequest(request, charset);
     }
 
-    public static String getStringRequest(Request request, String charset) {
+    /**
+     * Description: getStringRequest<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param request
+     * @param charset
+     * @return <br>
+     */
+    public static String getStringRequest(final Request request, final String charset) {
 
         Call call = getOkHttpClient().newCall(request);
         try {
@@ -95,26 +133,47 @@ public final class HttpUtil {
     }
 
     /**
-     * <p>
-     * 执行Post请求
-     * </p>
+     * Description: 执行Post请求<br>
      * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param url
-     * @param paramMap
-     * @return
+     * @param body
+     * @param contentType
+     * @param charset
+     * @return <br>
      */
-    public static String doPost(String url, String body, String contentType, String charset) {
+    public static String doPost(final String url, final String body, final String contentType, final String charset) {
         MediaType mediaType = MediaType.parse(contentType);
         RequestBody requestBody = RequestBody.create(mediaType, body);
         Request request = new Request.Builder().url(url).post(requestBody).build();
         return getStringRequest(request, charset);
     }
 
-    public static String doPost(String url, String body, String contentType) {
+    /**
+     * Description: doPost<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param body
+     * @param contentType
+     * @return <br>
+     */
+    public static String doPost(final String url, final String body, final String contentType) {
         return doPost(url, body, contentType, GlobalConstants.DEFAULT_CHARSET);
     }
 
-    public static String doPost(String url, String body) {
+    /**
+     * Description:doPost <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param body
+     * @return <br>
+     */
+    public static String doPost(final String url, final String body) {
         String contentType = "text/plain";
         if (body.startsWith("{") && body.endsWith("}")) {
             contentType = "application/json";
@@ -126,15 +185,14 @@ public final class HttpUtil {
     }
 
     /**
-     * <p>
-     * 执行get请求
-     * </p>
+     * Description: 执行get请求<br>
      * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param url
-     * @param paramMap
-     * @return
+     * @param absolutePath <br>
      */
-    public static void doGetDowloadFile(String url, String absolutePath) {
+    public static void doGetDowloadFile(final String url, final String absolutePath) {
         File f = new File(absolutePath);
         if (!f.exists()) {
             Request request = new Request.Builder().url(url).build();
@@ -150,7 +208,16 @@ public final class HttpUtil {
         }
     }
 
-    public static String getRequestURL(HttpServletRequest request, boolean includeQueryString) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param request
+     * @param includeQueryString
+     * @return <br>
+     */
+    public static String getRequestURL(final HttpServletRequest request, final boolean includeQueryString) {
         StringBuffer url = new StringBuffer();
         String scheme = request.getScheme();
         int port = request.getServerPort();
@@ -159,7 +226,8 @@ public final class HttpUtil {
         url.append(scheme); // http, https
         url.append("://");
         url.append(request.getServerName());
-        if ((scheme.equals("http") && port != 80) || (scheme.equals("https") && port != 443)) {
+        if ((scheme.equals("http") && port != DEFAULT_HTTP_PORT)
+            || (scheme.equals("https") && port != DEFAULT_HTTPS_PORT)) {
             url.append(':');
             url.append(request.getServerPort());
         }
@@ -170,7 +238,16 @@ public final class HttpUtil {
         return url.toString();
     }
 
-    public static String getRequestURI(HttpServletRequest request, boolean includeQueryString) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param request
+     * @param includeQueryString
+     * @return <br>
+     */
+    public static String getRequestURI(final HttpServletRequest request, final boolean includeQueryString) {
         String url = request.getRequestURI();
         if (includeQueryString && !StringUtils.isEmpty(request.getQueryString())) {
             url += "?" + request.getQueryString();
@@ -178,7 +255,16 @@ public final class HttpUtil {
         return url;
     }
 
-    public static String getRequestRelaURI(HttpServletRequest request, boolean includeQueryString) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param request
+     * @param includeQueryString
+     * @return <br>
+     */
+    public static String getRequestRelaURI(final HttpServletRequest request, final boolean includeQueryString) {
         String url = request.getRequestURI();
         if (includeQueryString && !StringUtils.isEmpty(request.getQueryString())) {
             url += "?" + request.getQueryString();
@@ -186,7 +272,15 @@ public final class HttpUtil {
         return url.substring(request.getContextPath().length());
     }
 
-    public static String getRequestIp(HttpServletRequest request) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param request
+     * @return <br>
+     */
+    public static String getRequestIp(final HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -200,24 +294,34 @@ public final class HttpUtil {
         return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
-    public static String getClientInfo(HttpServletRequest request) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param request
+     * @return <br>
+     */
+    public static String getClientInfo(final HttpServletRequest request) {
         return request.getHeader("User-Agent").toLowerCase();
     }
 
     /**
-     * 判断来的请求是否是异步请求
+     * Description: 判断来的请求是否是异步请求<br>
      * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param request
-     * @return
+     * @return <br>
      */
-    public static boolean isAsynRequest(HttpServletRequest request) {
+    public static boolean isAsynRequest(final HttpServletRequest request) {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
     }
 
     private static OkHttpClient getOkHttpClient() {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
+            okHttpClient = new OkHttpClient.Builder().connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(2, TimeUnit.MINUTES).build();
             httpClientHold.set(okHttpClient);
         }

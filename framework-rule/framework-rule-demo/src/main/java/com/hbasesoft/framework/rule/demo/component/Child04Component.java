@@ -30,8 +30,8 @@ public class Child04Component implements FlowComponent<FlowBean> {
      * @author 王伟<br>
      * @taskId <br>
      * @param flowBean
-     * @param paramMap
-     * @return
+     * @param flowContext
+     * @return b
      * @throws Exception <br>
      */
     @Override

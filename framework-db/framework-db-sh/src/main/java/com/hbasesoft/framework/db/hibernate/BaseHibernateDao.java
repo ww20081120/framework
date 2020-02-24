@@ -124,8 +124,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
             if (isPager) {
                 if (resultList.getTotalCount() > 0
-                    && (resultList.getPageIndex() - 1) * resultList.getPageSize() < resultList.getTotalCount())
+                    && (resultList.getPageIndex() - 1) * resultList.getPageSize() < resultList.getTotalCount()) {
                     resultList.addAll(query.list());
+                }
                 return resultList;
             }
             else if (List.class.isAssignableFrom(param.getReturnType())) {
@@ -222,7 +223,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param <T>
      * @param entityClass
      * @param criterions
-     * @return
+     * @return Criteria
      */
     private <T> Criteria createCriteria(Class<T> entityClass, Criterion... criterions) {
         Criteria criteria = getSession().createCriteria(entityClass);
@@ -232,6 +233,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         return criteria;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     protected Session getSession() {
         // 事务必须是开启的(Required)，否则获取不到
         return TransactionManagerHolder.getSessionFactory().getCurrentSession();
@@ -328,13 +336,14 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param class1
+     * @param entityClass
      * @param id
-     * @return
+     * @param <T> T
+     * @return T
      * @throws DaoException <br>
      */
     @Override
-    public <T> T get(Class<T> entityClass, Serializable id) throws DaoException {
+    public <T> T get(final Class<T> entityClass, final Serializable id) throws DaoException {
         Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
         return (T) getSession().get(entityClass, id);
     }
@@ -509,8 +518,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param query
-     * @return
+     * @param sql
+     * @param <T> T
+     * @return T
      * @throws DaoException <br>
      */
 
@@ -538,16 +548,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     }
 
     /**
-     * Description: <br>
      * 
+     * Description: <br> 
+     *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param clazz
-     * @param cq
-     * @return
+     * @param detachedCriteria
+     * @param pageIndex
+     * @param pageSize
+     * @param <T> T
+     * @return T
      * @throws DaoException <br>
      */
-
     @Override
     public <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize)
         throws DaoException {
@@ -582,16 +594,16 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     }
 
     /**
-     * Description: <br>
      * 
+     * Description: <br> 
+     *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param cq
-     * @param ispage
-     * @return
+     * @param detachedCriteria
+     * @param <T> T
+     * @return T
      * @throws DaoException <br>
      */
-
     @Override
     public <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
         return detachedCriteria.getExecutableCriteria(getSession()).list();

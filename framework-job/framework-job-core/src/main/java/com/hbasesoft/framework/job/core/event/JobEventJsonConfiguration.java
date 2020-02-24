@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 
  * <Description> 作业Json事件配置.<br>
  * 
  * @author 大刘杰<br>
@@ -23,19 +22,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public final class JobEventJsonConfiguration extends JobEventJsonIdentity
-		implements JobEventConfiguration, Serializable {
+    implements JobEventConfiguration, Serializable {
 
-	private static final long serialVersionUID = 3344410699286435226L;
+    private static final long serialVersionUID = 3344410699286435226L;
 
-	// private final transient DataSource dataSource; TODO 定义输出源头
+    // private final transient DataSource dataSource; TODO 定义输出源头
 
-	@Override
-	public JobEventListener createJobEventListener() throws JobEventListenerConfigurationException {
-		try {
-			// return new JobEventJsonListener(dataSource);
-			return new JobEventJsonListener();
-		} catch (final Exception ex) {
-			throw new JobEventListenerConfigurationException(ex);
-		}
-	}
+    @Override
+    public JobEventListener createJobEventListener() throws JobEventListenerConfigurationException {
+        try {
+            // return new JobEventJsonListener(dataSource);
+            return new JobEventJsonListener();
+        }
+        catch (final Exception ex) {
+            throw new JobEventListenerConfigurationException(ex);
+        }
+    }
 }

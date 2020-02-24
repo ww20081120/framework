@@ -27,17 +27,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LoggerUtil {
 
+    /** stack层数 */
+    private static final int STACKTRACES = 3;
+
     /**
      * sql语句日志名称，用于记录日志
      */
     private static final String SQL_LOG_NAME = "framework.sql.log";
 
     /**
-     * 普通异常日志
+     * Description: 普通异常日志<br>
      * 
-     * @param message 日志信息
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param t <br>
      */
-    public static void error(Throwable t) {
+    public static void error(final Throwable t) {
         getLogger().error(getErrorMessage(t), t);
     }
 
@@ -48,7 +53,7 @@ public final class LoggerUtil {
      * @taskId <br>
      * @param message <br>
      */
-    public static void error(String message) {
+    public static void error(final String message) {
         getLogger().error(message);
     }
 
@@ -58,7 +63,7 @@ public final class LoggerUtil {
      * @param message 信息
      * @param t 异常
      */
-    public static void error(String message, Throwable t) {
+    public static void error(final String message, final Throwable t) {
         getLogger().error(getErrorMessage(message, t), t);
     }
 
@@ -69,16 +74,18 @@ public final class LoggerUtil {
      * @param message 日志信息 <br>
      * @param params 日志信息 <br>
      */
-    public static void error(Throwable t, String message, Object... params) {
+    public static void error(final Throwable t, final String message, final Object... params) {
         getLogger().error(getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
     }
 
     /**
-     * 普通异常日志
+     * Description: 普通异常日志<br>
      * 
-     * @param message 日志信息
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param t <br>
      */
-    public static void warn(Throwable t) {
+    public static void warn(final Throwable t) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isWarnEnabled()) {
             logger.warn(getErrorMessage(t), t);
@@ -90,7 +97,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void warn(String message) {
+    public static void warn(final String message) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isWarnEnabled()) {
             logger.warn(message);
@@ -103,7 +110,7 @@ public final class LoggerUtil {
      * @param message 信息
      * @param t 异常
      */
-    public static void warn(String message, Throwable t) {
+    public static void warn(final String message, final Throwable t) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isWarnEnabled()) {
             logger.warn(getErrorMessage(message, t), t);
@@ -117,7 +124,7 @@ public final class LoggerUtil {
      * @param message 日志信息 <br>
      * @param params 日志信息 <br>
      */
-    public static void warn(Throwable t, String message, Object... params) {
+    public static void warn(final Throwable t, final String message, final Object... params) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isWarnEnabled()) {
             logger.warn(getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
@@ -129,7 +136,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void debug(String message) {
+    public static void debug(final String message) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isDebugEnabled()) {
             logger.debug(message);
@@ -142,7 +149,7 @@ public final class LoggerUtil {
      * @param message 信息
      * @param t 异常
      */
-    public static void debug(String message, Throwable t) {
+    public static void debug(final String message, final Throwable t) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isDebugEnabled()) {
             logger.debug(getErrorMessage(message, t), t);
@@ -155,7 +162,7 @@ public final class LoggerUtil {
      * @param message 日志信息
      * @param params 日志信息
      */
-    public static void debug(String message, Object... params) {
+    public static void debug(final String message, final Object... params) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isDebugEnabled()) {
             logger.debug(CommonUtil.messageFormat(message, params));
@@ -167,7 +174,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void info(String message) {
+    public static void info(final String message) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isInfoEnabled()) {
             logger.info(message);
@@ -180,7 +187,7 @@ public final class LoggerUtil {
      * @param message 日志信息
      * @param params 日志信息
      */
-    public static void info(String message, Object... params) {
+    public static void info(final String message, final Object... params) {
         org.slf4j.Logger logger = getLogger();
         if (logger.isInfoEnabled()) {
             logger.info(CommonUtil.messageFormat(message, params));
@@ -192,7 +199,7 @@ public final class LoggerUtil {
      * 
      * @param message 日志信息
      */
-    public static void sqlLog(String message) {
+    public static void sqlLog(final String message) {
         LoggerFactory.getLogger(SQL_LOG_NAME).info(message);
     }
 
@@ -202,18 +209,35 @@ public final class LoggerUtil {
      * @param t <br>
      * @param message 日志信息 <br>
      */
-    public static void sqlLog(String message, Throwable t) {
+    public static void sqlLog(final String message, final Throwable t) {
         LoggerFactory.getLogger(SQL_LOG_NAME).error(getErrorMessage(message, t), t);
     }
 
-    public static String getErrorMessage(Throwable t) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param t
+     * @return <br>
+     */
+    public static String getErrorMessage(final Throwable t) {
         if (t instanceof FrameworkException) {
             return ((FrameworkException) t).getCode() + GlobalConstants.VERTICAL_LINE + t.getMessage();
         }
         return t.getMessage();
     }
 
-    public static String getErrorMessage(String message, Throwable t) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param message
+     * @param t
+     * @return <br>
+     */
+    public static String getErrorMessage(final String message, final Throwable t) {
         if (t instanceof FrameworkException) {
             return ((FrameworkException) t).getCode() + GlobalConstants.VERTICAL_LINE + message;
         }
@@ -222,6 +246,6 @@ public final class LoggerUtil {
 
     private static org.slf4j.Logger getLogger() {
         StackTraceElement[] stackTraces = Thread.currentThread().getStackTrace();
-        return LoggerFactory.getLogger(stackTraces[3].getClassName());
+        return LoggerFactory.getLogger(stackTraces[STACKTRACES].getClassName());
     }
 }

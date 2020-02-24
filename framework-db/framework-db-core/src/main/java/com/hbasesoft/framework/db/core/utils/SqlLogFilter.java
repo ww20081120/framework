@@ -45,7 +45,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     /**
      * dataSource
      */
-    protected DataSourceProxy dataSource;
+    private DataSourceProxy dataSource;
 
     /**
      * SqlLogFilter
@@ -54,8 +54,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     @Override
-    public void init(DataSourceProxy dataSource) {
-        this.dataSource = dataSource;
+    public void init(DataSourceProxy ds) {
+        this.dataSource = ds;
     }
 
     /**
@@ -122,7 +122,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param connection <br>
      */
-    public void connection_connectAfter(ConnectionProxy connection) {
+    public void connectionConnectAfter(final ConnectionProxy connection) {
         if (connection != null) {
             connectionLog("{conn-" + connection.getId() + "} connected");
         }
@@ -622,7 +622,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      */
     private String getExcuteSql(StatementProxy statement) {
         String sqlStr = statement.getBatchSql();
-        if (statement instanceof PreparedStatementProxy)
+        if (statement instanceof PreparedStatementProxy) {
             for (JdbcParameter parameter : statement.getParameters().values()) {
                 int sqlType = parameter.getSqlType();
                 Object value = parameter.getValue();
@@ -642,6 +642,7 @@ public class SqlLogFilter extends FilterEventAdapter {
                 }
                 sqlStr = StringUtils.replaceOnce(sqlStr, "?", tempValue);
             }
+        }
 
         return sqlStr;
     }

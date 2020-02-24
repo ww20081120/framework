@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core;
 
+import com.hbasesoft.framework.common.GlobalConstants;
+
 /**
  * <Description> 可过期的bean <br>
  * 
@@ -17,8 +19,10 @@ package com.hbasesoft.framework.cache.core;
  */
 public class CacheObject {
 
+    /** expreTime */
     private long expreTime;
 
+    /** target */
     private Object target;
 
     /** 
@@ -28,34 +32,56 @@ public class CacheObject {
         super();
     }
 
-    /** 
-     *  
+    /**
+     * @param t
      */
-    public CacheObject(Object target) {
+    public CacheObject(final Object t) {
         super();
-        this.target = target;
+        this.target = t;
     }
 
     /**
-     * @param expreTime
-     * @param target
+     * @param seconds
+     * @param t target
      */
-    public CacheObject(int seconds, Object target) {
+    public CacheObject(final int seconds, final Object t) {
         super();
         if (seconds > 0) {
-            this.expreTime = System.currentTimeMillis() + (seconds * 1000L);
+            this.expreTime = System.currentTimeMillis() + (seconds * GlobalConstants.SECONDS);
         }
-        this.target = target;
+        this.target = t;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public long getExpreTime() {
         return expreTime;
     }
 
-    public void setExpreTime(long seconds) {
-        this.expreTime = System.currentTimeMillis() + (seconds * 1000L);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds <br>
+     */
+    public void setExpreTime(final long seconds) {
+        this.expreTime = System.currentTimeMillis() + (seconds * GlobalConstants.SECONDS);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T> T
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
     public <T> T getTarget() {
         if (expreTime > 0 && System.currentTimeMillis() - expreTime > 0) {
@@ -64,8 +90,15 @@ public class CacheObject {
         return (T) target;
     }
 
-    public void setTarget(Object target) {
-        this.target = target;
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param t <br>
+     */
+    public void setTarget(final Object t) {
+        this.target = t;
     }
 
 }

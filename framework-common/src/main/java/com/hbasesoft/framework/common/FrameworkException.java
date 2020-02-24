@@ -30,26 +30,30 @@ public class FrameworkException extends RuntimeException {
     /**
      * FrameworkException
      * 
-     * @param code <br>
+     * @param ocode <br>
      */
-    public FrameworkException(int code) {
-        super(code + GlobalConstants.BLANK);
-        this.code = code;
+    public FrameworkException(final int ocode) {
+        super(ocode + GlobalConstants.BLANK);
+        this.code = ocode;
     }
 
     /**
      * FrameworkException
      * 
-     * @param code <br>
-     * @param msg <br>
-     * @param params <br>
+     * @param ocode
+     * @param params
      */
-    public FrameworkException(int code, Object... params) {
-        super(PropertyHolder.getErrorMessage(code, params));
-        this.code = code;
+    public FrameworkException(final int ocode, final Object... params) {
+        super(PropertyHolder.getErrorMessage(ocode, params));
+        this.code = ocode;
     }
 
-    public FrameworkException(Throwable t) {
+    /**
+     * FrameworkException
+     * 
+     * @param t
+     */
+    public FrameworkException(final Throwable t) {
         super(t);
         if (t instanceof FrameworkException) {
             this.code = ((FrameworkException) t).getCode();
@@ -63,27 +67,33 @@ public class FrameworkException extends RuntimeException {
     /**
      * FrameworkException
      * 
-     * @param code <br>
-     * @param arg0 <br>
+     * @param tempCode
+     * @param t
      */
-    public FrameworkException(int code, Throwable t) {
-        super(PropertyHolder.getErrorMessage(code), t);
-        this.code = code;
+    public FrameworkException(final int tempCode, final Throwable t) {
+        super(PropertyHolder.getErrorMessage(tempCode), t);
+        this.code = tempCode;
     }
 
     /**
      * FrameworkException
      * 
-     * @param code <br>
-     * @param arg0 <br>
-     * @param arg1 <br>
-     * @param params <br>
+     * @param t
+     * @param ocode
+     * @param params
      */
-    public FrameworkException(Throwable t, int code, Object... params) {
-        super(PropertyHolder.getErrorMessage(code, params), t);
-        this.code = code;
+    public FrameworkException(final Throwable t, final int ocode, final Object... params) {
+        super(PropertyHolder.getErrorMessage(ocode, params), t);
+        this.code = ocode;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getCode() {
         return code;
     }

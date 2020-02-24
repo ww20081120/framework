@@ -27,9 +27,9 @@ import feign.hystrix.FallbackFactory;
 @Component
 public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
 
-    private static final Logger logger = new Logger("tx");
+    private static final Logger LOGGER = new Logger("tx");
 
-    private static final FeginProducer producer = new FeginProducer() {
+    private static final FeginProducer PRODUCER = new FeginProducer() {
 
         /**
          * Description: <br>
@@ -40,7 +40,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          */
         @Override
         public boolean registClient(ClientInfo clientInfo) {
-            logger.warn("registClient|" + JSONObject.toJSONString(clientInfo));
+            LOGGER.warn("registClient|" + JSONObject.toJSONString(clientInfo));
             return false;
         }
 
@@ -53,7 +53,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          */
         @Override
         public void removeClient(String id) {
-            logger.warn("removeClient|" + id);
+            LOGGER.warn("removeClient|" + id);
         }
 
         /**
@@ -67,7 +67,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          */
         @Override
         public CheckInfo check(String id, String mark) {
-            logger.warn("registMsg|" + id + "|" + mark);
+            LOGGER.warn("registMsg|" + id + "|" + mark);
             return null;
         }
 
@@ -80,12 +80,12 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          */
         @Override
         public void saveResult(CheckInfo checkInfo) {
-            logger.warn("saveResult|" + JSONObject.toJSONString(checkInfo));
+            LOGGER.warn("saveResult|" + JSONObject.toJSONString(checkInfo));
         }
 
         @Override
         public boolean containClient(String id) {
-            logger.warn("containClient|" + id);
+            LOGGER.warn("containClient|" + id);
             return false;
         }
 
@@ -101,7 +101,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
      */
     @Override
     public FeginProducer create(Throwable cause) {
-        return FallBackProducerFactory.producer;
+        return FallBackProducerFactory.PRODUCER;
     }
 
 }

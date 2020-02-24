@@ -5,12 +5,10 @@ package com.hbasesoft.framework.log.file;
 
 import java.util.Arrays;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.TransManager;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;

@@ -278,11 +278,14 @@ public class AbstractAnnotationHandler {
     }
 
     /**
-     * Description: <br>
      * 
-     * @author 王伟 <br>
-     * @param method <br>
-     * @throws InitializationException InitializationException
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param method
+     * @return String
+     * @throws InitializationException <br>
      */
     protected String cacheSqlTemplate(Method method) throws InitializationException {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
@@ -325,9 +328,9 @@ public class AbstractAnnotationHandler {
     /**
      * setDaoConfig
      * 
-     * @param daoConfig the daoConfig to set
+     * @param dc the daoConfig to set
      */
-    public void setDaoConfig(DaoConfig daoConfig) {
-        this.daoConfig = daoConfig;
+    public void setDaoConfig(DaoConfig dc) {
+        this.daoConfig = dc;
     }
 }

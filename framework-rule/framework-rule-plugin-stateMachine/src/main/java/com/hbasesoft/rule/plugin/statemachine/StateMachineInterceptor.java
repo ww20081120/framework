@@ -54,7 +54,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param flowBean
+     * @param bean
      * @param flowContext
      * @return <br>
      */

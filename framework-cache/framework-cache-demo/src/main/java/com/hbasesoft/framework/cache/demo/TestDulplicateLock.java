@@ -5,14 +5,16 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.demo;
 
-import com.hbasesoft.framework.cache.demo.dulplicateLock.ZhanWeiZiService;
+import java.util.Random;
+
+import javax.annotation.Resource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
-import java.util.Random;
+import com.hbasesoft.framework.cache.demo.dulplicateLock.ZhanWeiZiService;
 
 /**
  * <Description> <br>
@@ -28,22 +30,43 @@ import java.util.Random;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestDulplicateLock {
 
+    /** MAX_SIZE */
+    private static final int MAX_SIZE = 10;
+
+    /** MAX_TIMES */
+    private static final int MAX_TIMES = 1000;
+
+    /** SLEEP_TIME */
+    private static final int SLEEP_TIME = 10;
+
+    /** SLEEP_TIME */
+    private static final int MAX_SLEEP_TIME = 100000;
+
+    /** zhanWeiZiService */
     @Resource
     private ZhanWeiZiService zhanWeiZiService;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws InterruptedException <br>
+     */
     @Test
     public void zhanwei() throws InterruptedException {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_SIZE; i++) {
             new Thread(() -> {
                 Random random = new Random();
                 try {
-                    for (int j = 0; j < 1000; j++) {
+                    for (int j = 0; j < MAX_TIMES; j++) {
                         try {
-                            zhanWeiZiService.rob(random.nextInt(10), Thread.currentThread().getName() + "_" + j);
+                            zhanWeiZiService.rob(random.nextInt(SLEEP_TIME),
+                                Thread.currentThread().getName() + "_" + j);
                         }
                         catch (Exception e) {
                         }
-                        Thread.sleep(10);
+                        Thread.sleep(SLEEP_TIME);
                     }
                 }
                 catch (Exception e) {
@@ -52,7 +75,7 @@ public class TestDulplicateLock {
             }).start();
         }
 
-        Thread.sleep(100000);
+        Thread.sleep(MAX_SLEEP_TIME);
     }
 
 }

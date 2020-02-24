@@ -30,14 +30,13 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param obj <br>
-     * @param message <br>
+     * @param obj
+     * @param errorCode
      * @param params <br>
-     * @throws AssertException <br>
      */
-    public static void notNull(Object obj, int errorCode, Object... params) {
+    public static void notNull(final Object obj, final int errorCode, final Object... params) {
         if (obj == null) {
             throw new AssertException(errorCode, params);
         }
@@ -46,14 +45,14 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param obj <br>
-     * @param message <br>
-     * @param params <br>
+     * @param obj
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void isNull(Object obj, int errorCode, Object... params) throws AssertException {
+    public static void isNull(final Object obj, final int errorCode, final Object... params) throws AssertException {
         if (obj != null) {
             throw new AssertException(errorCode, params);
         }
@@ -62,14 +61,14 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void notEmpty(String str, int errorCode, Object... params) throws AssertException {
+    public static void notEmpty(final String str, final int errorCode, final Object... params) throws AssertException {
         if (StringUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -78,14 +77,14 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void isEmpty(String str, int errorCode, Object... params) throws AssertException {
+    public static void isEmpty(final String str, final int errorCode, final Object... params) throws AssertException {
         if (StringUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -94,15 +93,15 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param <T> <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
+     * @param <T> T
      * @throws AssertException <br>
      */
-    public static <T> void notEmpty(T[] str, int errorCode, Object... params) throws AssertException {
+    public static <T> void notEmpty(final T[] str, final int errorCode, final Object... params) throws AssertException {
         if (ArrayUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -111,31 +110,32 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param <T> <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
+     * @param <T> T
      * @throws AssertException <br>
      */
-    public static <T> void isEmpty(T[] str, int errorCode, Object... params) throws AssertException {
+    public static <T> void isEmpty(final T[] str, final int errorCode, final Object... params) throws AssertException {
         if (!ArrayUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
 
     /**
-     * Description: <br>
+     * Description: notEmpty<br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void notEmpty(Collection<?> str, int errorCode, Object... params) throws AssertException {
+    public static void notEmpty(final Collection<?> str, final int errorCode, final Object... params)
+        throws AssertException {
         if (CollectionUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -144,14 +144,15 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void isEmpty(Collection<?> str, int errorCode, Object... params) throws AssertException {
+    public static void isEmpty(final Collection<?> str, final int errorCode, final Object... params)
+        throws AssertException {
         if (CollectionUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -160,14 +161,15 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void notEmpty(Map<?, ?> str, int errorCode, Object... params) throws AssertException {
+    public static void notEmpty(final Map<?, ?> str, final int errorCode, final Object... params)
+        throws AssertException {
         if (MapUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -176,38 +178,77 @@ public final class Assert {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param str <br>
-     * @param message <br>
-     * @param params <br>
+     * @param str
+     * @param errorCode
+     * @param params
      * @throws AssertException <br>
      */
-    public static void isEmpty(Map<?, ?> str, int errorCode, Object... params) throws AssertException {
+    public static void isEmpty(final Map<?, ?> str, final int errorCode, final Object... params)
+        throws AssertException {
         if (MapUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
     }
 
-    public static void equals(Object obj1, Object obj2, int errorCode, Object... params) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param obj1
+     * @param obj2
+     * @param errorCode
+     * @param params <br>
+     */
+    public static void equals(final Object obj1, final Object obj2, final int errorCode, final Object... params) {
         if (!(obj1 != null && obj1.equals(obj2))) {
             throw new AssertException(errorCode, params);
         }
     }
 
-    public static void notEquals(Object obj1, Object obj2, int errorCode, Object... params) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param obj1
+     * @param obj2
+     * @param errorCode
+     * @param params <br>
+     */
+    public static void notEquals(final Object obj1, final Object obj2, final int errorCode, final Object... params) {
         if ((obj1 != null && obj1.equals(obj2)) || (obj2 != null && obj2.equals(obj1))) {
             throw new AssertException(errorCode, params);
         }
     }
 
-    public static void isTrue(boolean result, int errorCode, Object... params) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param result
+     * @param errorCode
+     * @param params <br>
+     */
+    public static void isTrue(final boolean result, final int errorCode, final Object... params) {
         if (!result) {
             throw new AssertException(errorCode, params);
         }
     }
 
-    public static void isFalse(boolean result, int errorCode, Object... params) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param result
+     * @param errorCode
+     * @param params <br>
+     */
+    public static void isFalse(final boolean result, final int errorCode, final Object... params) {
         if (result) {
             throw new AssertException(errorCode, params);
         }

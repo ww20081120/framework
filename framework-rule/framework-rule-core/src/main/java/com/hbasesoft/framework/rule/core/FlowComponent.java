@@ -11,6 +11,7 @@ package com.hbasesoft.framework.rule.core;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
+ * @param <T> T
  * @CreateDate 2017年9月2日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
@@ -18,11 +19,13 @@ package com.hbasesoft.framework.rule.core;
 public interface FlowComponent<T> {
 
     /**
-     * Description: 方法处理<br>
+     * Description: 方法处理 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param flowBean
+     * @param flowContext
+     * @return process
      * @throws Exception <br>
      */
     boolean process(T flowBean, FlowContext flowContext) throws Exception;

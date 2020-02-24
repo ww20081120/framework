@@ -19,20 +19,49 @@ import org.springframework.context.ApplicationContext;
  */
 public interface StartupListener {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     default LoadOrder getOrder() {
         return LoadOrder.LAST;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     default void init() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
     default void complete(ApplicationContext context) {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     default void destory() {
     }
 
     enum LoadOrder {
+        /** order */
         FIRST, MIDDLE, LAST
     }
 

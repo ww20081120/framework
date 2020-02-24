@@ -25,6 +25,7 @@ import java.util.function.Function;
 import org.apache.commons.io.IOUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
@@ -49,7 +50,7 @@ public final class IOUtil {
      * @param src
      * @param dist <br>
      */
-    public static void copyFile(File src, File dist) {
+    public static void copyFile(final File src, final File dist) {
         OutputStream out = null;
         InputStream in = null;
         try {
@@ -74,7 +75,7 @@ public final class IOUtil {
      * @param filePath
      * @param in <br>
      */
-    public static void copyFileFromInputStream(String filePath, InputStream in) {
+    public static void copyFileFromInputStream(final String filePath, final InputStream in) {
         copyFileFromInputStream(filePath, in, null);
     }
 
@@ -88,7 +89,7 @@ public final class IOUtil {
      * @param charset <br>
      * @throws UtilException <br>
      */
-    public static void copyFileFromInputStream(String filePath, InputStream in, String charset) {
+    public static void copyFileFromInputStream(final String filePath, final InputStream in, final String charset) {
         OutputStream out = null;
         try {
             out = new BufferedOutputStream(new FileOutputStream(filePath));
@@ -112,7 +113,7 @@ public final class IOUtil {
      * @return <br>
      * @throws UtilException <br>
      */
-    public static String readString(InputStream in) {
+    public static String readString(final InputStream in) {
         try {
             return IOUtils.toString(in);
         }
@@ -133,7 +134,7 @@ public final class IOUtil {
      * @return <br>
      * @throws UtilException <br>
      */
-    public static String readString(Reader in) {
+    public static String readString(final Reader in) {
         try {
             return IOUtils.toString(in);
         }
@@ -153,19 +154,23 @@ public final class IOUtil {
      * @return <br>
      * @throws IOException <br>
      */
-    public static String readFile(String filePath) throws IOException {
+    public static String readFile(final String filePath) throws IOException {
         return readFile(new File(filePath));
     }
 
     /**
-     * Description: readFile<br>
+     * Description: <br>
      * 
-     * @author 王伟 <br>
-     * @param filePath <br>
-     * @return <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param filePath
+     * @param transfer
+     * @param <T> T
+     * @return List
      * @throws IOException <br>
      */
-    public static <T> List<T> readFile(String filePath, Function<String, ? extends T> transfer) throws IOException {
+    public static <T> List<T> readFile(final String filePath, final Function<String, ? extends T> transfer)
+        throws IOException {
         return readFile(new File(filePath), transfer);
     }
 
@@ -175,17 +180,27 @@ public final class IOUtil {
      * @author 王伟<br>
      * @taskId <br>
      * @param file
-     * @return
+     * @return 文件内容
      * @throws IOException <br>
      */
-    public static String readFile(File file) throws IOException {
+    public static String readFile(final File file) throws IOException {
         if (file.exists() && file.isFile()) {
             return readString(new BufferedReader(new FileReader(file)));
         }
         return null;
     }
 
-    public static <T> List<T> readFile(File file, Function<String, ? extends T> transfer) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param file
+     * @param transfer
+     * @param <T> T
+     * @return <br>
+     */
+    public static <T> List<T> readFile(final File file, final Function<String, ? extends T> transfer) {
         List<T> list = new ArrayList<T>();
         if (file.exists() && file.isFile()) {
             BufferedReader in = null;
@@ -209,17 +224,46 @@ public final class IOUtil {
         return list;
     }
 
-    public static void batchProcessFile(File file, BatchProcessor<String> batchProcessor) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param file
+     * @param batchProcessor <br>
+     */
+    public static void batchProcessFile(final File file, final BatchProcessor<String> batchProcessor) {
         batchProcessFile(file, s -> s, batchProcessor);
     }
 
-    public static <T> void batchProcessFile(File file, Function<String, ? extends T> transfer,
-        BatchProcessor<T> batchProcessor) {
-        batchProcessFile(file, transfer, batchProcessor, 1000);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param file
+     * @param transfer
+     * @param <T> T
+     * @param batchProcessor <br>
+     */
+    public static <T> void batchProcessFile(final File file, final Function<String, ? extends T> transfer,
+        final BatchProcessor<T> batchProcessor) {
+        batchProcessFile(file, transfer, batchProcessor, GlobalConstants.DEFAULT_LINES);
     }
 
-    public static <T> void batchProcessFile(File file, Function<String, ? extends T> transfer,
-        BatchProcessor<T> batchProcessor, int pageSize) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param file
+     * @param transfer
+     * @param batchProcessor
+     * @param pageSize <br>
+     * @param <T> T
+     */
+    public static <T> void batchProcessFile(final File file, final Function<String, ? extends T> transfer,
+        final BatchProcessor<T> batchProcessor, final int pageSize) {
         if (file.exists() && file.isFile()) {
             BufferedReader in = null;
             String line = null;
@@ -264,7 +308,7 @@ public final class IOUtil {
      * @param file <br>
      * @throws UtilException <br>
      */
-    public static void writeFile(byte[] content, File file) {
+    public static void writeFile(final byte[] content, final File file) {
         if (file != null) {
             BufferedOutputStream out = null;
             try {
@@ -289,7 +333,7 @@ public final class IOUtil {
      * @param file <br>
      * @throws UtilException <br>
      */
-    public static void writeFile(String contents, File file) {
+    public static void writeFile(final String contents, final File file) {
         if (file != null) {
             BufferedWriter out = null;
             try {

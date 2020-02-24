@@ -32,6 +32,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommonUtil {
 
+    /** UUID_MIN_LENGTH */
+    private static final int UUID_MIN_LENGTH = 24;
+
+    /** UNSIGNED_LONG */
+    private static final int UNSIGNED_LONG = 16;
+
+    /** UNSIGNED_STRING */
+    private static final int UNSIGNED_STRING = 36;
+
+    /** NEXT_INT */
+    private static final int NEXT_INT = 10;
+
+    /** NEXT_INT */
+    private static final int NEXT_INT_3 = 3;
+
+    /** NEXT_CHAR */
+    private static final int NEXT_CHAR = 26;
+
     /**
      * 消息格式化
      * 
@@ -60,7 +78,9 @@ public final class CommonUtil {
      * @return <br>
      */
     public static String getRandomCode() {
-        return Long.toUnsignedString(Long.parseUnsignedLong(UUID.randomUUID().toString().substring(24), 16), 36);
+        return Long.toUnsignedString(
+            Long.parseUnsignedLong(UUID.randomUUID().toString().substring(UUID_MIN_LENGTH), UNSIGNED_LONG),
+            UNSIGNED_STRING);
     }
 
     /**
@@ -70,11 +90,11 @@ public final class CommonUtil {
      * @param size <br>
      * @return <br>
      */
-    public static String getRandomNumber(int size) {
+    public static String getRandomNumber(final int size) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < size; i++) {
-            sb.append((char) ('0' + random.nextInt(10)));
+            sb.append((char) ('0' + random.nextInt(NEXT_INT)));
         }
         return sb.toString();
     }
@@ -91,15 +111,15 @@ public final class CommonUtil {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < size; i++) {
-            switch (random.nextInt(10) % 3) {
+            switch (random.nextInt(NEXT_INT) % NEXT_INT_3) {
                 case 0:
-                    sb.append((char) ('0' + random.nextInt(10)));
+                    sb.append((char) ('0' + random.nextInt(NEXT_INT)));
                     break;
                 case 1:
-                    sb.append((char) ('a' + random.nextInt(26)));
+                    sb.append((char) ('a' + random.nextInt(NEXT_CHAR)));
                     break;
                 case 2:
-                    sb.append((char) ('A' + random.nextInt(26)));
+                    sb.append((char) ('A' + random.nextInt(NEXT_CHAR)));
                     break;
                 default:
             }
@@ -262,7 +282,7 @@ public final class CommonUtil {
             }
             // not eq match
             else if (rule.startsWith("NOT:")) {
-                String tempRule = rule.substring(4);
+                String tempRule = rule.substring("NOT:".length());
                 ismatch = tempRule.indexOf(GlobalConstants.SPLITOR) == -1 ? !tempRule.equals(matchValue)
                     : new StringBuilder().append(GlobalConstants.SPLITOR).append(tempRule)
                         .append(GlobalConstants.SPLITOR).indexOf(new StringBuilder().append(GlobalConstants.SPLITOR)
@@ -331,9 +351,8 @@ public final class CommonUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param paramTypes 数组值
@@ -345,9 +364,8 @@ public final class CommonUtil {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param paramTypes 数组值

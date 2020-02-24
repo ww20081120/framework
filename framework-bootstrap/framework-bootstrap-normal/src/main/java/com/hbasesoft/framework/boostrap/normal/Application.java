@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.boostrap.normal;
 
-import java.io.IOException;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -38,9 +36,9 @@ public class Application {
      * 
      * @author 王伟 <br>
      * @param args <br>
-     * @throws IOException <br>
+     * @throws Exception <br>
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         Bootstrap.before();
         ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         Bootstrap.after(context);

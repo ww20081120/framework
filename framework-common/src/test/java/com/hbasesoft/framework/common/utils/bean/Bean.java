@@ -32,7 +32,9 @@ public class Bean implements Serializable {
      */
     private static final long serialVersionUID = 953343907289102121L;
 
+    /** name */
     private String name;
 
+    /** age */
     private int age;
 }

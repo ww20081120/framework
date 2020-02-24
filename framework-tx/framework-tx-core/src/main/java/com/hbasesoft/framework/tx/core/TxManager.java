@@ -68,6 +68,7 @@ public final class TxManager {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param id
      * @param mark
      * @param context
      * @param args
@@ -75,8 +76,8 @@ public final class TxManager {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException <br>
      */
-    public static void execute(String id, String mark, Map<String, String> context, Object[] args)
-        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static void execute(final String id, final String mark, final Map<String, String> context,
+        final Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         try {
             retryFlag.set(id);
             setTraceId(id);

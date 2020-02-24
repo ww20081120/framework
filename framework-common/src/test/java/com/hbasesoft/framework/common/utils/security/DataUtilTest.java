@@ -22,6 +22,13 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public class DataUtilTest {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void md5For16() {
         String str1 = "123456";
@@ -29,6 +36,13 @@ public class DataUtilTest {
         Assert.equals(str2, "49BA59ABBE56E057", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void md5() {
         String str1 = "123456";
@@ -36,6 +50,13 @@ public class DataUtilTest {
         Assert.equals(str2, "E10ADC3949BA59ABBE56E057F20F883E", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void base64Decode() {
         String str1 = "MTIzNDU2";
@@ -43,6 +64,13 @@ public class DataUtilTest {
         Assert.equals(str2, "123456", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void base64Encode() {
         String str1 = "123456";
@@ -50,6 +78,13 @@ public class DataUtilTest {
         Assert.equals(str2, "MTIzNDU2", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void encryptPassowrd() {
         String str1 = "123456";
@@ -57,6 +92,13 @@ public class DataUtilTest {
         Assert.isTrue(DataUtil.matchPassword(str1, str2), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void encrypt() {
         String str1 = "123456";
@@ -65,6 +107,13 @@ public class DataUtilTest {
         Assert.equals(str1, str3, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void byte2HexStr() {
         String str1 = "abcdefg";
@@ -72,6 +121,13 @@ public class DataUtilTest {
         Assert.equals(str2, "61626364656667", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void hexStr2Byte() {
         String str1 = "61626364656667";

@@ -26,10 +26,13 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public final class TxInvokerProxy {
 
+    /** LOCK */
     private static final Object LOCK = new Object();
 
+    /** sender */
     private static TxProducer sender;
 
+    /** clientInfoFactory */
     private static TxClientInfoFactory clientInfoFactory;
 
     /**
@@ -39,16 +42,17 @@ public final class TxInvokerProxy {
      * @taskId <br>
      * @param clientInfo 客户端信息
      * @param invoker 具体的执行类
-     * @return
+     * @param <T> T
+     * @return T
      * @throws Throwable <br>
      */
-    public static <T> T registInvoke(ClientInfo clientInfo, TxInvoker<T> invoker) {
+    public static <T> T registInvoke(final ClientInfo clientInfo, final TxInvoker<T> invoker) {
         clientInfo.setClientInfo(getClientInfoFactory().getClientInfo());
-        TxProducer sender = getSender();
-        boolean flag = sender.registClient(clientInfo);
+        TxProducer sd = getSender();
+        boolean flag = sd.registClient(clientInfo);
         T msg = invoker.invoke();
         if (flag) {
-            sender.removeClient(clientInfo.getId());
+            sd.removeClient(clientInfo.getId());
         }
         return msg;
     }
@@ -60,41 +64,50 @@ public final class TxInvokerProxy {
      * @taskId <br>
      * @param marker
      * @param invoker
-     * @return
+     * @param <T> T
+     * @return T
      * @throws Throwable <br>
      */
-    public static <T> T invoke(String marker, TxInvoker<T> invoker) {
+    public static <T> T invoke(final String marker, final TxInvoker<T> invoker) {
         return invoke(TxManager.getTraceId(), marker, invoker);
     }
 
     /**
-     * Description: 执行代理方法 <br>
+     * Description:执行代理方法 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param id
      * @param marker
      * @param invoker
-     * @return
-     * @throws Throwable <br>
+     * @param <T> T
+     * @return <br>
      */
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(String id, String mark, TxInvoker<T> invoker) {
-        TxProducer sender = getSender();
+    public static <T> T invoke(final String id, final String marker, final TxInvoker<T> invoker) {
+        TxProducer sd = getSender();
 
-        CheckInfo checkInfo = sender.check(id, mark);
+        CheckInfo checkInfo = sd.check(id, marker);
         if (checkInfo == null) {
             T msg = invoker.invoke();
-            checkInfo = new CheckInfo(id, mark);
+            checkInfo = new CheckInfo(id, marker);
             if (msg != null) {
                 checkInfo.setResult(SerializationUtil.jdkSerial(msg));
             }
-            sender.saveResult(checkInfo);
+            sd.saveResult(checkInfo);
             return msg;
         }
         byte[] result = checkInfo.getResult();
         return result != null && result.length > 0 ? (T) SerializationUtil.jdkUnserial(result) : null;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static TxClientInfoFactory getClientInfoFactory() {
         synchronized (LOCK) {
             if (clientInfoFactory == null) {
@@ -107,6 +120,13 @@ public final class TxInvokerProxy {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static TxProducer getSender() {
         synchronized (LOCK) {
             if (sender == null) {

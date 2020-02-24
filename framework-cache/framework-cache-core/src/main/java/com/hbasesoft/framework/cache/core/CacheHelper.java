@@ -34,6 +34,13 @@ public final class CacheHelper {
     /** cache */
     private static ICache cache;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static ICache getCache() {
 
         if (cache == null) {
@@ -63,7 +70,7 @@ public final class CacheHelper {
      * @param paths <br>
      * @return <br>
      */
-    public static String buildKey(String... paths) {
+    public static String buildKey(final String... paths) {
         StringBuilder sb = new StringBuilder();
         for (String path : paths) {
             sb.append(GlobalConstants.PATH_SPLITOR).append(path);
@@ -71,7 +78,17 @@ public final class CacheHelper {
         return sb.toString();
     }
 
-    public static <T> T proxy(Class<T> clazz, CacheProxy cacheProxy) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clazz
+     * @param cacheProxy
+     * @param <T> T
+     * @return <br>
+     */
+    public static <T> T proxy(final Class<T> clazz, final CacheProxy cacheProxy) {
 
         if (Modifier.isAbstract(clazz.getModifiers())) {
             T target = null;

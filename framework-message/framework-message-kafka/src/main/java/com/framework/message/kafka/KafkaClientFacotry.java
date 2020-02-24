@@ -33,7 +33,8 @@ public final class KafkaClientFacotry {
 
     private static KafkaProducer<String, byte[]> kafkaProducer;
 
-    private static ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>> threadLocalHolder = new ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>>();
+    private static ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>> threadLocalHolder = 
+        new ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>>();
 
     private KafkaClientFacotry() {
     }
@@ -74,7 +75,7 @@ public final class KafkaClientFacotry {
         props.put("bootstrap.servers", PropertyHolder.getProperty("message.kafka.bootstrap.servers"));
 
         // 消费者的组id
-        props.put("group.id", group);// 这里是GroupA或者GroupB
+        props.put("group.id", group); // 这里是GroupA或者GroupB
 
         props.put("enable.auto.commit", PropertyHolder.getProperty("message.kafka.enable.auto.commit", "true"));
         props.put("auto.commit.interval.ms",

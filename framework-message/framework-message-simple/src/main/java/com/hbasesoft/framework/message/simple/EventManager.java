@@ -32,7 +32,7 @@ import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.simple <br>
  */
-public class EventManager {
+public final class EventManager {
 
     private static final Logger LOGGER = new Logger("EventHandlerLogger");
 
@@ -95,10 +95,13 @@ public class EventManager {
 
         private boolean broadcast;
 
-        /** 
-         *  
+        /**
+         * 
+         * @param channel
+         * @param broadcast
+         * @param queue
          */
-        public EventScanner(String channel, boolean broadcast, ArrayBlockingQueue<byte[]> queue) {
+        EventScanner(String channel, boolean broadcast, ArrayBlockingQueue<byte[]> queue) {
             this.channel = channel;
             this.broadcast = broadcast;
             this.queue = queue;
@@ -118,7 +121,7 @@ public class EventManager {
                 Random random = new Random();
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
-                        byte[] data = queue.poll(10l, TimeUnit.MILLISECONDS);
+                        byte[] data = queue.poll(10L, TimeUnit.MILLISECONDS);
                         if (data != null) {
                             List<MessageSubscriber> subscribers = subscriberHolder.get(channel);
                             if (CollectionUtils.isNotEmpty(subscribers)) {

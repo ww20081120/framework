@@ -13,8 +13,7 @@ import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
 /**
- * <Description> 
- * 请使用com.hbasesoft.framework.db.hibernate.IBaseDAO<T> 代替现在这个类 <br>
+ * <Description> 请使用com.hbasesoft.framework.db.hibernate.IBaseDAO<T> 代替现在这个类 <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
@@ -26,31 +25,77 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
 @Deprecated
 public interface IGenericBaseDao {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity
+     * @param <T> T
+     * @return T
+     * @throws DaoException <br>
+     */
     <T> Serializable save(T entity) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity
+     * @param <T> T
+     * @throws DaoException <br>
+     */
     <T> void delete(T entity) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entitys
+     * @param <T> T
+     * @throws DaoException <br>
+     */
     <T> void batchSave(List<T> entitys) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param objcts
+     * @param commitNumber
+     * @param <T> T
+     * @throws DaoException <br>
+     */
     <T> void batchExecute(String sql, Collection<Object[]> objcts, int commitNumber) throws DaoException;
 
     /**
-     * 根据实体名称和主键获取实体
+     * Description: 根据实体名称和主键获取实体<br>
      * 
-     * @param <T>
-     * @param entityName
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param class1
      * @param id
-     * @return
+     * @param <T> T
+     * @return T
+     * @throws DaoException <br>
      */
     <T> T get(Class<T> class1, Serializable id) throws DaoException;
 
     /**
      * 根据实体名称和主键获取实体
      * 
-     * @param <T>
+     * @param <T> T
      * @param entityName
      * @param id
-     * @return
+     * @return T
      */
     @Deprecated
     <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException;
@@ -58,33 +103,46 @@ public interface IGenericBaseDao {
     /**
      * 根据实体名称和字段名称和字段值获取唯一记录
      * 
-     * @param <T>
+     * @param <T> T
      * @param entityClass
      * @param propertyName
      * @param value
-     * @return
+     * @return T
      */
     <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException;
 
     /**
-     * 按属性查找对象列表.
+     * Description: 按属性查找对象列表.<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClass
+     * @param propertyName
+     * @param <T> T
+     * @param value
+     * @return T
+     * @throws DaoException <br>
      */
     <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException;
 
     /**
      * 加载全部实体
      * 
-     * @param <T>
+     * @param <T> T
      * @param entityClass
-     * @return
+     * @return T
      */
-    <T> List<T> loadAll(final Class<T> entityClass) throws DaoException;
+    <T> List<T> loadAll(Class<T> entityClass) throws DaoException;
 
     /**
-     * 删除实体主键删除
+     * Description: 删除实体主键删除 <br>
      * 
-     * @param <T>
-     * @param entities
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityName
+     * @param id
+     * @param <T> T
+     * @throws DaoException <br>
      */
     <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException;
 
@@ -97,11 +155,15 @@ public interface IGenericBaseDao {
     <T> void deleteAllEntitie(Collection<T> entities) throws DaoException;
 
     /**
-     * Description: 根据Id集合删除实体<br>
      * 
+     * Description: 根据Id集合删除实体 <br> 
+     *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param ids <br>
+     * @param entityName
+     * @param ids
+     * @param <T> T
+     * @throws DaoException <br>
      */
     <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<? extends Serializable> ids) throws DaoException;
 
@@ -116,57 +178,90 @@ public interface IGenericBaseDao {
     /**
      * 通过hql 查询语句查找对象
      * 
-     * @param <T>
-     * @param query
-     * @return
+     * @param <T> T
+     * @param hql
+     * @return T
      */
     <T> List<T> findByQueryString(String hql) throws DaoException;
 
     /**
      * 根据sql更新
      * 
-     * @param query
-     * @return
+     * @param sql
+     * @return i
      */
     int updateBySqlString(String sql) throws DaoException;
 
     /**
      * 根据sql查找List
      * 
-     * @param <T>
-     * @param query
-     * @return
+     * @param <T> T
+     * @param sql
+     * @return T
      */
     <T> List<T> findListbySql(String sql) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T> T
+     * @param hql
+     * @return T
+     * @throws DaoException <br>
+     */
     <T> T singleResult(String hql) throws DaoException;
 
     /**
-     * cq方式分页
      * 
-     * @param cq
-     * @param isOffset
-     * @return
+     * Description: cq方式分页<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param detachedCriteria
+     * @param pageIndex
+     * @param pageSize
+     * @param <T> T
+     * @return T
+     * @throws DaoException <br>
      */
     <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) throws DaoException;
 
     /**
      * 通过cq获取全部实体
      * 
-     * @param <T>
-     * @param cq
-     * @return
+     * @param <T> T
+     * @param detachedCriteria
+     * @return T
      */
     <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param detachedCriteria
+     * @param <T> T
+     * @return T
+     * @throws DaoException <br>
+     */
     <T> T getCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException;
 
     /**
-     * 通过hql 查询语句查找对象
      * 
-     * @param <T>
-     * @param query
-     * @return
+     * Description: 通过hql 查询语句查找对象<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param param
+     * @param <T> T
+     * @return T
+     * @throws DaoException <br>
      */
     <T> List<T> findHql(String hql, Object... param) throws DaoException;
 
@@ -174,9 +269,10 @@ public interface IGenericBaseDao {
     /**
      * 执行存储过程
      * 
-     * @param executeSql
+     * @param procedureSql
      * @param params
-     * @return
+     * @param <T> T
+     * @return T
      */
     <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException;
 
@@ -186,11 +282,26 @@ public interface IGenericBaseDao {
      * @author 王伟<br>
      * @taskId <br>
      * @param entity
+     * @param <T> T
      * @throws DaoException <br>
      */
     <T> void saveOrUpdate(T entity) throws DaoException;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br> <br>
+     */
     void clear();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br> <br>
+     */
     void flush();
 }

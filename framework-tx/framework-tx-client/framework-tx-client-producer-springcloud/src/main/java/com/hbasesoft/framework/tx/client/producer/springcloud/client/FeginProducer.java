@@ -32,6 +32,14 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @RequestMapping("/framework/tx")
 public interface FeginProducer {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping("/{id}")
     boolean containClient(@PathVariable("id") String id);
 
@@ -40,7 +48,8 @@ public interface FeginProducer {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param clientInfo <br>
+     * @param clientInfo
+     * @return <br>
      */
     @PostMapping
     boolean registClient(@RequestBody ClientInfo clientInfo);

@@ -7,6 +7,7 @@ package com.hbasesoft.framework.cache.core.redis;
 
 import com.hbasesoft.framework.cache.core.AbstractCache;
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
@@ -26,30 +27,59 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public abstract class AbstractRedisCache extends AbstractCache {
 
+    /** redis 配置 */
     private static final String REDIS_ADDRESS = "cache.redis.address";
 
+    /** 最大超时时间 */
     private static final int MAX_IDLE = 5;
 
+    /** 最大等待时间 */
     private static final int MAX_WAIT = 100;
 
-    private static final boolean validate = false;
+    /** 是否校验完成 */
+    private static final boolean VALIDATE = false;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     protected JedisPoolConfig getConfig() {
         JedisPoolConfig config = new JedisPoolConfig();
         // 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
         config.setMaxIdle(PropertyHolder.getIntProperty("cache.redis.max.idle", MAX_IDLE));
         // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
-        config.setMaxWaitMillis(1000 * PropertyHolder.getIntProperty("cache.redis.max.wait", MAX_WAIT));
+        config.setMaxWaitMillis(
+            GlobalConstants.ONE_SECONDS * PropertyHolder.getIntProperty("cache.redis.max.wait", MAX_WAIT));
         // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
-        config.setTestOnBorrow(PropertyHolder.getBooleanProperty("cache.redis.testonborrow", validate));
+        config.setTestOnBorrow(PropertyHolder.getBooleanProperty("cache.redis.testonborrow", VALIDATE));
         return config;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     protected Address[] getAddresses() {
         String address = PropertyHolder.getProperty(REDIS_ADDRESS);
         Assert.notEmpty(address, ErrorCodeDef.REDIS_ADDRESS_NOT_SET, REDIS_ADDRESS);
         return ProtocolUtil.parseAddress(address);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value
+     * @param expireTime
+     * @return <br>
+     */
     public abstract boolean setnx(String key, String value, int expireTime);
 }

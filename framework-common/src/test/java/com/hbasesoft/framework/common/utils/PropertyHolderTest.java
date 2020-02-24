@@ -23,6 +23,31 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
  */
 public class PropertyHolderTest {
 
+    /** number */
+    private static final int NUM_3 = 3;
+
+    /** number */
+    private static final long NUM_3L = 3L;
+
+    /** number */
+    private static final int NUM_8888 = 8888;
+
+    /** number */
+    private static final int NUM_9998 = 9998;
+
+    /** number */
+    private static final int NUM_9999 = 9999;
+
+    /** number */
+    private static final long NUM_1000L = 1000L;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getProperties() {
         Map<String, String> map = PropertyHolder.getProperties();
@@ -36,6 +61,13 @@ public class PropertyHolderTest {
         Assert.isTrue(map.containsKey("test02"), ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getBooleanProperty() {
         boolean b1 = PropertyHolder.getBooleanProperty("test.bool.bool1");
@@ -45,24 +77,45 @@ public class PropertyHolderTest {
         Assert.isFalse(b2, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getIntProperty() {
         int a = PropertyHolder.getIntProperty("test.int.int1");
         Assert.isTrue(a == 1, ErrorCodeDef.SYSTEM_ERROR_10001);
 
-        a = PropertyHolder.getIntProperty("test.int.none", 3);
-        Assert.isTrue(a == 3, ErrorCodeDef.SYSTEM_ERROR_10001);
+        a = PropertyHolder.getIntProperty("test.int.none", NUM_3);
+        Assert.isTrue(a == NUM_3, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getLongProperty() {
         long a = PropertyHolder.getLongProperty("test.long.long1");
-        Assert.isTrue(a == 1000l, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(a == NUM_1000L, ErrorCodeDef.SYSTEM_ERROR_10001);
 
-        a = PropertyHolder.getLongProperty("test.long.none", 3l);
-        Assert.isTrue(a == 3l, ErrorCodeDef.SYSTEM_ERROR_10001);
+        a = PropertyHolder.getLongProperty("test.long.none", NUM_3L);
+        Assert.isTrue(a == NUM_3L, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getProperty() {
         String a = PropertyHolder.getProperty("test.str.str2");
@@ -81,6 +134,13 @@ public class PropertyHolderTest {
         Assert.equals(a, "false", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void setProperty() {
         String a = PropertyHolder.getProperty("test.none");
@@ -91,12 +151,26 @@ public class PropertyHolderTest {
         Assert.equals(a, "你好", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getProjectName() {
         String projectName = PropertyHolder.getProjectName();
         Assert.equals(projectName, "demo", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getErrorMessage() {
 
@@ -109,14 +183,14 @@ public class PropertyHolderTest {
         Assert.equals(e2, "-1", ErrorCodeDef.SYSTEM_ERROR_10001);
 
         // 取项目名称所对应的错误文件 demo_errorMessage.properties
-        String e3 = PropertyHolder.getErrorMessage(8888);
+        String e3 = PropertyHolder.getErrorMessage(NUM_8888);
         Assert.equals(e3, "demo", ErrorCodeDef.SYSTEM_ERROR_10001);
 
         // 取扩展文件中对应的错误文件 ext_errorMessage.properties
-        String e4 = PropertyHolder.getErrorMessage(9998,"a");
+        String e4 = PropertyHolder.getErrorMessage(NUM_9998, "a");
         Assert.equals(e4, "测试a测试", ErrorCodeDef.SYSTEM_ERROR_10001);
-        
-        String e5 = PropertyHolder.getErrorMessage(9999);
+
+        String e5 = PropertyHolder.getErrorMessage(NUM_9999);
         Assert.equals(e5, "测试", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 

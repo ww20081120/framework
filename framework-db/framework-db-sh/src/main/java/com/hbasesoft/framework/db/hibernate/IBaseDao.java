@@ -21,6 +21,7 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
+ * @param <T> T
  * @CreateDate 2019年4月3日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>

@@ -20,7 +20,14 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public interface TxProducer {
 
-    /** 检测消息是否执行完毕 */
+    /**
+     * Description: 检测消息是否执行完毕<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     boolean containClient(String id);
 
     /**
@@ -29,6 +36,7 @@ public interface TxProducer {
      * @author 王伟<br>
      * @taskId <br>
      * @param clientInfo 客户端信息<br>
+     * @return boolean
      */
     boolean registClient(ClientInfo clientInfo);
 

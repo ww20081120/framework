@@ -13,9 +13,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.junit.Test;
 
-import com.hbasesoft.framework.common.utils.xml.CDATAAdapter;
-import com.hbasesoft.framework.common.utils.xml.XmlBeanUtil;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,20 +28,38 @@ import lombok.Setter;
  */
 public class XmlTest {
 
+    /** number */
+    private static final int NUM_10 = 10;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void bean2xml() {
 
         Student student = new Student();
-        student.setAge(10);
+        student.setAge(NUM_10);
         student.setName("小明");
         student.setRemark("小明是位好同学，<hello>年年三好学生👩‍🎓");
 
         System.out.println(XmlBeanUtil.object2Xml(student));
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void xml2bean() {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><student><name>小明</name><age>10</age><remark><![CDATA[小明是位好<abcdedf>同学，年年三好学生👩‍🎓]]></remark></student>";
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><student><name>小明</name><age>10</age><remark>"
+            + "<![CDATA[小明是位好<abcdedf>同学，年年三好学生👩‍🎓]]></remark></student>";
         Student student = XmlBeanUtil.xml2Object(xml, Student.class);
         System.out.println(student.getAge());
         System.out.println(student.getName());
@@ -57,12 +72,15 @@ public class XmlTest {
     @XmlRootElement
     public static class Student {
 
+        /** name */
         @XmlElement
         private String name;
 
+        /** age */
         @XmlElement
         private int age;
 
+        /** remark */
         @XmlElement
         @XmlJavaTypeAdapter(CDATAAdapter.class)
         private String remark;

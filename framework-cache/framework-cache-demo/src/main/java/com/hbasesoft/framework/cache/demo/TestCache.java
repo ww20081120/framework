@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.hbasesoft.framework.cache.demo.service.TestService;
+import com.hbasesoft.framework.common.GlobalConstants;
 
 /**
  * <Description> <br>
@@ -27,14 +28,25 @@ import com.hbasesoft.framework.cache.demo.service.TestService;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestCache {
 
+    /** MAX_SIZE */
+    private static final int MAX_SIZE = 20;
+
+    /** testService */
     @Autowired
     private TestService testService;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws InterruptedException <br>
+     */
     @Test
     public void testCache() throws InterruptedException {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < MAX_SIZE; i++) {
             System.out.println(testService.getTestContent("test"));
-            Thread.sleep(1000);
+            Thread.sleep(GlobalConstants.SECONDS);
         }
     }
 

@@ -77,6 +77,13 @@ public final class TransManager implements Serializable {
         return sessionThread.get();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getStackSize() {
         return executeStack.size();
     }
@@ -89,7 +96,7 @@ public final class TransManager implements Serializable {
      * @param id <br>
      * @param beginTime <br>
      */
-    public void push(String id, long beginTime) {
+    public void push(final String id, final long beginTime) {
         executeTimeMap.put(id, beginTime);
         executeStack.push(id);
     }
@@ -116,16 +123,37 @@ public final class TransManager implements Serializable {
         return executeStack.isEmpty() ? null : executeStack.peek();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getSeq() {
         return seq++;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public boolean isError() {
         return error;
     }
 
-    public void setError(boolean error) {
-        this.error = error;
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param e <br>
+     */
+    public void setError(final boolean e) {
+        this.error = e;
     }
 
     /**
@@ -136,16 +164,30 @@ public final class TransManager implements Serializable {
      * @param id <br>
      * @return <br>
      */
-    public long getBeginTime(String id) {
+    public long getBeginTime(final String id) {
         return executeTimeMap.get(id);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public boolean isTimeout() {
         return timeout;
     }
 
-    public void setTimeout(boolean timeout) {
-        this.timeout = timeout;
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param t <br>
+     */
+    public void setTimeout(final boolean t) {
+        this.timeout = t;
     }
 
     /**
@@ -163,14 +205,35 @@ public final class TransManager implements Serializable {
         timeout = false;
     }
 
+    /**
+     * Description: getIdSet<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Set<String> getIdSet() {
         return executeTimeMap.keySet();
     }
 
+    /**
+     * Description: getTopStackId<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getTopStackId() {
         return executeStack.isEmpty() ? null : executeStack.firstElement();
     }
 
+    /**
+     * Description: getStackId<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getStackId() {
         return executeStack.isEmpty() ? null : executeStack.lastElement();
     }

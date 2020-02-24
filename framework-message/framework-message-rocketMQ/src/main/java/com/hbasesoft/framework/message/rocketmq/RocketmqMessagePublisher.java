@@ -24,7 +24,7 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
  */
 public class RocketmqMessagePublisher implements MessagePublisher {
 
-    private static final Logger log = new Logger(RocketmqMessagePublisher.class);
+    private static final Logger LOG = new Logger(RocketmqMessagePublisher.class);
 
     @Override
     public String getName() {
@@ -55,14 +55,14 @@ public class RocketmqMessagePublisher implements MessagePublisher {
      * @param channel
      * @param data
      * @param produceModel
-     * @param delayTime
+     * @param seconds
      * @author 大刘杰
      * @produceModel: RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
      *                RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
      *                RocketmqAutoConfiguration.ROCKET_MQ_DEFAULT_PUBLISH_TYPE
      * @since JDK 1.8
      */
-    public void publish(String channel, byte[] data, String produceModel, int seconds) {
+    public void publish(final String channel, final byte[] data, final String produceModel, final int seconds) {
 
         DefaultMQProducer defaultMQProducer = RocketmqFactory
             .getDefaultProducer(PropertyHolder.getProperty("message.rocketmq.groupName", "hbasesoft"));
@@ -92,7 +92,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
                 default:
                     // 普通消费
                     SendResult send = defaultMQProducer.send(msg);
-                    log.debug("发送结果 " + send.toString());
+                    LOG.debug("发送结果 " + send.toString());
                     break;
             }
         }

@@ -170,7 +170,7 @@
         <module name="EqualsHashCode"/>
         <module name="HiddenField"/>
         <module name="IllegalInstantiation"/>
-        <module name="InnerAssignment"/>
+        <!--<module name="InnerAssignment"/> -->
         <module name="MagicNumber"/>
         <module name="MissingSwitchDefault"/>
         <module name="MultipleVariableDeclarations"/>
@@ -187,7 +187,7 @@
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See https://checkstyle.org/config_misc.html -->
-        <module name="ArrayTypeStyle"/>
+        <!-- <module name="ArrayTypeStyle"/> -->
         <module name="FinalParameters"/>
         <module name="TodoComment"/>
         <module name="UpperEll"/>

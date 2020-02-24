@@ -29,7 +29,7 @@ public final class URLUtil {
      * @return 解码地址
      * @see [类、类#方法、类#成员]
      */
-    public static String decode(String str) {
+    public static String decode(final String str) {
         return decode(str, GlobalConstants.DEFAULT_CHARSET);
     }
 
@@ -41,7 +41,7 @@ public final class URLUtil {
      * @return 解密的字符串
      * @see [类、类#方法、类#成员]
      */
-    public static String decode(String str, String enc) {
+    public static String decode(final String str, final String enc) {
         String s = null;
         if (StringUtils.isNotEmpty(str)) {
             try {
@@ -61,7 +61,7 @@ public final class URLUtil {
      * @return 加密的字符串
      * @see [类、类#方法、类#成员]
      */
-    public static String encode(String str) {
+    public static String encode(final String str) {
         return encode(str, GlobalConstants.DEFAULT_CHARSET);
     }
 
@@ -73,7 +73,7 @@ public final class URLUtil {
      * @return 加密的字符串
      * @see [类、类#方法、类#成员]
      */
-    public static String encode(String str, String enc) {
+    public static String encode(final String str, final String enc) {
         String s = null;
         if (StringUtils.isNotEmpty(str)) {
             try {

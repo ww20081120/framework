@@ -41,6 +41,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VelocityParseFactory {
 
+    /** v length */
+    private static final int V_LENGTH = "velocity.".length();
+
     /**
      * properties
      */
@@ -71,7 +74,7 @@ public final class VelocityParseFactory {
             for (Entry<String, String> entry : PropertyHolder.getProperties().entrySet()) {
                 String key = entry.getKey();
                 if (key.startsWith("velocity.")) {
-                    properties.setProperty(key.substring(9), entry.getValue());
+                    properties.setProperty(key.substring(V_LENGTH), entry.getValue());
                 }
             }
 
@@ -91,7 +94,8 @@ public final class VelocityParseFactory {
      * @return String
      * @throws UtilException UtilException
      */
-    public static String parse(String templateName, String body, Map<String, ?> params) throws UtilException {
+    public static String parse(final String templateName, final String body, final Map<String, ?> params)
+        throws UtilException {
         VelocityContext context = new VelocityContext();
         // context.put("dateTool", dateTool);
         if (MapUtils.isNotEmpty(params)) {

@@ -150,7 +150,7 @@ public class JobStartupLinstener implements StartupListener {
 
     }
 
-    private static final String getPropery(String propery) {
+    private static String getPropery(String propery) {
         if (StringUtils.isNotEmpty(propery) && propery.startsWith("${") && propery.endsWith("}")) {
             return PropertyHolder.getProperty(propery.substring(2, propery.length() - 1));
         }

@@ -23,61 +23,117 @@ import ognl.MemberAccess;
  */
 @SuppressWarnings("rawtypes")
 public class DefaultMemberAccess implements MemberAccess {
-    public boolean allowPrivateAccess = false;
 
-    public boolean allowProtectedAccess = false;
+    /** allowPrivateAccess */
+    private boolean allowPrivateAccess = false;
 
-    public boolean allowPackageProtectedAccess = false;
+    /** allowProtectedAccess */
+    private boolean allowProtectedAccess = false;
 
-    /*
-     * =================================================================== Constructors
-     * ===================================================================
+    /** allowPackageProtectedAccess */
+    private boolean allowPackageProtectedAccess = false;
+
+    /**
+     * DefaultMemberAccess
+     * 
+     * @param allowAllAccess
      */
-    public DefaultMemberAccess(boolean allowAllAccess) {
+    public DefaultMemberAccess(final boolean allowAllAccess) {
         this(allowAllAccess, allowAllAccess, allowAllAccess);
     }
 
-    public DefaultMemberAccess(boolean allowPrivateAccess, boolean allowProtectedAccess,
-        boolean allowPackageProtectedAccess) {
+    /**
+     * DefaultMemberAccess
+     * 
+     * @param ap
+     * @param access
+     * @param allowPackage
+     */
+    public DefaultMemberAccess(final boolean ap, final boolean access, final boolean allowPackage) {
         super();
-        this.allowPrivateAccess = allowPrivateAccess;
-        this.allowProtectedAccess = allowProtectedAccess;
-        this.allowPackageProtectedAccess = allowPackageProtectedAccess;
+        this.allowPrivateAccess = ap;
+        this.allowProtectedAccess = access;
+        this.allowPackageProtectedAccess = allowPackage;
     }
 
-    /*
-     * =================================================================== Public methods
-     * ===================================================================
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
      */
     public boolean getAllowPrivateAccess() {
         return allowPrivateAccess;
     }
 
-    public void setAllowPrivateAccess(boolean value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param value <br>
+     */
+    public void setAllowPrivateAccess(final boolean value) {
         allowPrivateAccess = value;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public boolean getAllowProtectedAccess() {
         return allowProtectedAccess;
     }
 
-    public void setAllowProtectedAccess(boolean value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param value <br>
+     */
+    public void setAllowProtectedAccess(final boolean value) {
         allowProtectedAccess = value;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public boolean getAllowPackageProtectedAccess() {
         return allowPackageProtectedAccess;
     }
 
-    public void setAllowPackageProtectedAccess(boolean value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param value <br>
+     */
+    public void setAllowPackageProtectedAccess(final boolean value) {
         allowPackageProtectedAccess = value;
     }
 
-    /*
-     * =================================================================== MemberAccess interface
-     * ===================================================================
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context
+     * @param target
+     * @param member
+     * @param propertyName
+     * @return <br>
      */
-    public Object setup(Map context, Object target, Member member, String propertyName) {
+    public Object setup(final Map context, final Object target, final Member member, final String propertyName) {
         Object result = null;
 
         if (isAccessible(context, target, member, propertyName)) {
@@ -91,16 +147,37 @@ public class DefaultMemberAccess implements MemberAccess {
         return result;
     }
 
-    public void restore(Map context, Object target, Member member, String propertyName, Object state) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context
+     * @param target
+     * @param member
+     * @param propertyName
+     * @param state <br>
+     */
+    public void restore(final Map context, final Object target, final Member member, final String propertyName,
+        final Object state) {
         if (state != null) {
             ((AccessibleObject) member).setAccessible(((Boolean) state).booleanValue());
         }
     }
 
     /**
-     * Returns true if the given member is accessible or can be made accessible by this object.
+     * Description: Returns true if the given member is accessible or can be made accessible by this object.<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context
+     * @param target
+     * @param member
+     * @param propertyName
+     * @return <br>
      */
-    public boolean isAccessible(Map context, Object target, Member member, String propertyName) {
+    public boolean isAccessible(final Map context, final Object target, final Member member,
+        final String propertyName) {
         int modifiers = member.getModifiers();
         boolean result = Modifier.isPublic(modifiers);
 

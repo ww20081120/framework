@@ -32,41 +32,53 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  */
 public final class RocketmqFactory {
 
-    private static final Logger log = new Logger(RocketmqFactory.class);
+    /** log */
+    private static final Logger LOG = new Logger(RocketmqFactory.class);
 
-    private static final Long[] delayTimeArray = new Long[] {
+    /** delayTimeArray */
+    private static final Long[] DELAY_TIME_ARRAY = new Long[] {
         1L, 5L, 10L, 30L, 60L, 5 * 60L, 10 * 60L, 15 * 60L, 30 * 60L, 3600L, 2 * 3600L, 3 * 3600L, 4 * 3600L, 5 * 3600L,
         6 * 3600L, 8 * 3600L, 12 * 3600L, 24 * 3600L
     };
 
+    /** ROCKET_MQ_NAME */
     public static final String ROCKET_MQ_NAME = "ROCKET_MQ";
 
+    /** CONSUME_TYPE */
     public static final String CONSUME_TYPE = "CONSUME_TYPE";
 
-    // 普通消费
+    /** 普通消费 */
     public static final String ROCKET_MQ_DEFAULT_PUBLISH_TYPE = "NORMAL";
 
-    // 顺序消费
+    /** 顺序消费 */
     public static final String ROCKET_MQ_PUBLISH_TYPE_ORDERLY = "ORDERLY";
 
-    // 事务消费
+    /** 事务消费 */
     public static final String ROCKET_MQ_PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
 
-    private static ThreadLocal<Map<String, DefaultMQPushConsumer>> threadLocalHolder = new ThreadLocal<Map<String, DefaultMQPushConsumer>>();
+    /** threadLocalHolder */
+    private static ThreadLocal<Map<String, DefaultMQPushConsumer>> threadLocalHolder = 
+        new ThreadLocal<Map<String, DefaultMQPushConsumer>>();
 
+    /** defaultMQProducer */
     private static DefaultMQProducer defaultMQProducer;
 
     /**
-     * 初始化向rocketmq发送普通消息的生产者
+     * Description: 初始化向rocketmq发送普通消息的生产者<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param producerGroup
+     * @return <br>
      */
-    public static DefaultMQProducer getDefaultProducer(String producerGroup) {
-        /**
-         * 一个应用创建一个Producer，由应用来维护此对象，可以设置为全局对象或者单例<br>
-         * 注意：ProducerGroupName需要由应用来保证唯一<br>
+    public static DefaultMQProducer getDefaultProducer(final String producerGroup) {
+
+        /*
+         * 一个应用创建一个Producer，由应用来维护此对象，可以设置为全局对象或者单例<br> 注意：ProducerGroupName需要由应用来保证唯一<br>
          * ProducerGroup这个概念发送普通的消息时，作用不大，但是发送分布式事务消息时，比较关键， 因为服务器会回查这个Group下的任意一个Producer
          */
         if (defaultMQProducer != null) {
-            log.debug("producerGroup has exist");
+            LOG.debug("producerGroup has exist");
             return defaultMQProducer;
         }
 
@@ -86,30 +98,34 @@ public final class RocketmqFactory {
         defaultMQProducer.setRetryTimesWhenSendAsyncFailed(
             PropertyHolder.getIntProperty("message.rocketmq.producer.retrytimes", 10));
 
-        /**
-         * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br>
-         * 注意：切记不可以在每次发送消息时，都调用start方法
+        /*
+         * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br> 注意：切记不可以在每次发送消息时，都调用start方法
          */
         try {
             defaultMQProducer.start();
         }
         catch (MQClientException e) {
-            log.error("RocketMq defaultProducer faile.");
+            LOG.error("RocketMq defaultProducer faile.");
             defaultMQProducer.shutdown();
             throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_P_CREATE_ERROR, e);
         }
 
-        log.debug("RocketMq defaultProducer Started.");
+        LOG.debug("RocketMq defaultProducer Started.");
         return defaultMQProducer;
     }
 
     /**
-     * 初始化向rocketmq发送事务消息的生产者
+     * Description: 初始化向rocketmq发送事务消息的生产者<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return TransactionMQProducer
+     * @throws MQClientException <br>
      */
     public static TransactionMQProducer getTransactionProducer() throws MQClientException {
-        /**
-         * 一个应用创建一个Producer，由应用来维护此对象，可以设置为全局对象或者单例<br>
-         * 注意：ProducerGroupName需要由应用来保证唯一<br>
+
+        /*
+         * 一个应用创建一个Producer，由应用来维护此对象，可以设置为全局对象或者单例<br> 注意：ProducerGroupName需要由应用来保证唯一<br>
          * ProducerGroup这个概念发送普通的消息时，作用不大，但是发送分布式事务消息时，比较关键， 因为服务器会回查这个Group下的任意一个Producer
          */
         // Producer Group Name
@@ -137,27 +153,30 @@ public final class RocketmqFactory {
         // TransactionCheckListenerImpl();
         // producer.setTransactionCheckListener(transactionCheckListener);
 
-        /**
-         * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br>
-         * 注意：切记不可以在每次发送消息时，都调用start方法
+        /*
+         * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br> 注意：切记不可以在每次发送消息时，都调用start方法
          */
         producer.start();
 
-        log.debug("RocketMq TransactionMQProducer Started.");
+        LOG.debug("RocketMq TransactionMQProducer Started.");
         return producer;
     }
 
     /**
-     * 初始化rocketmq消息监听方式的消费者
-     *
-     * @param messageListenerConcurrently
-     * @param datas
-     * @param consumerGroup2
+     * Description: 初始化rocketmq消息监听方式的消费者<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param consumerGroup
+     * @param isConsumerBroadcasting
+     * @param messageListener
+     * @return <br>
      */
     public static DefaultMQPushConsumer getPushConsumer(String channel, String consumerGroup,
         Boolean isConsumerBroadcasting, MessageListener messageListener) {
 
-        log.debug("getPushConsumer start topic : " + channel);
+        LOG.debug("getPushConsumer start topic : " + channel);
 
         DefaultMQPushConsumer consumer = null;
 
@@ -165,7 +184,7 @@ public final class RocketmqFactory {
         Map<String, DefaultMQPushConsumer> defaultMQPushConsumerMap = getDefaultMQPushConsumerHolder();
         consumer = defaultMQPushConsumerMap.get(consumerGroup);
         if (consumer != null) {
-            log.debug("consumerGroup has exist!");
+            LOG.debug("consumerGroup has exist!");
             return consumer;
         }
 
@@ -189,13 +208,13 @@ public final class RocketmqFactory {
 
         // One time consume max size
         consumer.setConsumeMessageBatchMaxSize(
-            PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 1));// 设置批量消费，以提升消费吞吐量，默认是1
+            PropertyHolder.getIntProperty("message.rocketmq.consumer.consumerBatchMaxSize", 1)); // 设置批量消费，以提升消费吞吐量，默认是1
 
         try {
             consumer.subscribe(channel, "*");
         }
         catch (MQClientException e) {
-            log.error("RocketMq pushConsumer Start failure!!!.");
+            LOG.error("RocketMq pushConsumer Start failure!!!.");
             throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
         }
 
@@ -213,16 +232,16 @@ public final class RocketmqFactory {
             consumer.start();
         }
         catch (Exception e) {
-            log.error("RocketMq pushConsumer Start failure!!!.");
+            LOG.error("RocketMq pushConsumer Start failure!!!.");
             consumer.shutdown();
             throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
         }
 
-        log.debug("RocketMq pushConsumer Started.");
+        LOG.debug("RocketMq pushConsumer Started.");
 
         // Keep customer
         defaultMQPushConsumerMap.put(consumerGroup, consumer);
-        log.debug(consumer.toString());
+        LOG.debug(consumer.toString());
         return consumer;
     }
 
@@ -236,7 +255,7 @@ public final class RocketmqFactory {
     }
 
     public static int calculationLevel(long key) {
-        Long[] longArray = delayTimeArray;
+        Long[] longArray = DELAY_TIME_ARRAY;
         List<Long> longList = Arrays.asList(longArray);
         longList = new ArrayList<Long>(longList);
         if (longList.indexOf(key) >= 0) {

@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.demo;
 
-import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.core.event.EventData;

@@ -12,32 +12,32 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 public class JobEventJsonListener extends JobEventJsonIdentity implements JobEventListener {
 
-	private Logger logger = new Logger(JobEventJsonListener.class);
+    private Logger logger = new Logger(JobEventJsonListener.class);
 
-	@Override
-	public void listen(JobExecutionEvent jobExecutionEvent) {
-		// 开始执行时间
-		long beginTime = System.currentTimeMillis();
-		TransManager manager = TransManager.getInstance();
-		// id
-		String stackId = CommonUtil.getTransactionID();
-		manager.push(stackId, beginTime);
-		MDC.put("stackId", TransManager.getInstance().getStackId());
-		logger.debug(JSON.toJSONString(jobExecutionEvent));
-		MDC.clear();
-	}
+    @Override
+    public void listen(JobExecutionEvent jobExecutionEvent) {
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+        TransManager manager = TransManager.getInstance();
+        // id
+        String stackId = CommonUtil.getTransactionID();
+        manager.push(stackId, beginTime);
+        MDC.put("stackId", TransManager.getInstance().getStackId());
+        logger.debug(JSON.toJSONString(jobExecutionEvent));
+        MDC.clear();
+    }
 
-	@Override
-	public void listen(JobStatusTraceEvent jobStatusTraceEvent) {
-		// 开始执行时间
-		long beginTime = System.currentTimeMillis();
-		TransManager manager = TransManager.getInstance();
-		// id
-		String stackId = CommonUtil.getTransactionID();
-		manager.push(stackId, beginTime);
-		MDC.put("stackId", TransManager.getInstance().getStackId());
-		logger.debug(JSON.toJSONString(jobStatusTraceEvent));
-		MDC.clear();
-	}
+    @Override
+    public void listen(JobStatusTraceEvent jobStatusTraceEvent) {
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+        TransManager manager = TransManager.getInstance();
+        // id
+        String stackId = CommonUtil.getTransactionID();
+        manager.push(stackId, beginTime);
+        MDC.put("stackId", TransManager.getInstance().getStackId());
+        logger.debug(JSON.toJSONString(jobStatusTraceEvent));
+        MDC.clear();
+    }
 
 }

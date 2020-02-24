@@ -94,7 +94,7 @@ public final class MessageHandler {
 
         private byte[] data;
 
-        public Consumer(String transId, String channel, MessageSubscriber subscriber, byte[] data) {
+        Consumer(String transId, String channel, MessageSubscriber subscriber, byte[] data) {
             this.transId = transId;
             this.channel = channel;
             this.subscriber = subscriber;

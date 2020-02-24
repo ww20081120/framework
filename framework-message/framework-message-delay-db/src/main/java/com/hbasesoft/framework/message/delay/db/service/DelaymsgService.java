@@ -7,7 +7,6 @@ package com.hbasesoft.framework.message.delay.db.service;
 
 import java.util.Date;
 
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.db.core.annotation.Param;

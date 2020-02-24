@@ -43,11 +43,13 @@ public class SpringCloudController {
     }
 
     /**
-     * Description: <br>
      * 
+     * Description: <br> 
+     *  
      * @author 王伟<br>
      * @taskId <br>
-     * @param clientInfo <br>
+     * @param clientInfo
+     * @return <br>
      */
     @PostMapping
     public boolean registClient(@RequestBody ClientInfo clientInfo) {

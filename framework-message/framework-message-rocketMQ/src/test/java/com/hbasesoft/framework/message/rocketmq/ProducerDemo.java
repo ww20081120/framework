@@ -28,7 +28,7 @@ public class ProducerDemo {
         Message msg = new Message("TopicTest1", // topic
             "TagA", // tag
             "OrderID00" + i, // key
-            ("Hello zebra mq" + i).getBytes());// body
+            ("Hello zebra mq" + i).getBytes()); // body
         try {
             defaultProducer.send(msg, new SendCallback() {
 
@@ -59,7 +59,7 @@ public class ProducerDemo {
             Message msg = new Message("TopicTest1", // topic
                 "TagA", // tag
                 "OrderID001", // key
-                ("Hello zebra mq").getBytes());// body
+                ("Hello zebra mq").getBytes()); // body
 
             // 发送事务消息，LocalTransactionExecute的executeLocalTransactionBranch方法中执行本地逻辑
             sendResult = transactionProducer.sendMessageInTransaction(msg, 4);
@@ -76,7 +76,7 @@ public class ProducerDemo {
         Message msg = new Message("TopicTest1", // topic
             "TagA", // tag
             "OrderID00" + i, // key
-            ("Hello zebra mq" + i).getBytes());// body
+            ("Hello zebra mq" + i).getBytes()); // body
         try {
             defaultProducer.send(msg, new MessageQueueSelector() {
                 @Override
@@ -85,7 +85,7 @@ public class ProducerDemo {
                     int index = ((Integer) arg) % mqs.size();
                     return mqs.get(index);
                 }
-            }, i);// i==arg
+            }, i); // i==arg
             i++;
         }
         catch (Exception e) {

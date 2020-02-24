@@ -28,7 +28,7 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.core <br>
  */
-public class TransLogUtil {
+public final class TransLogUtil {
 
     private TransLogUtil() {
     }
@@ -168,7 +168,7 @@ public class TransLogUtil {
     /**
      * 获取 方法描述
      * 
-     * @param point <br>
+     * @param method <br>
      * @return <br>
      */
     private static String getMethodSignature(Method method) {

@@ -17,7 +17,9 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * <Description> <br>
@@ -32,26 +34,57 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProtocolUtil {
 
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_FTP_PORT = 21;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_SFTP_PORT = 22;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_SSH_PORT = 22;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_REDIS_PORT = 6379;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_ES_PORT = 9200;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_MYSQL_PORT = 3306;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_ORACLE_PORT = 1521;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_ZK_PORT = 2181;
+
+    /** DEFAULT_PORT */
+    public static final int DEFAULT_KAFKA_PORT = 9092;
+
+    /** "://" */
+    private static final int LEN = "://".length();
+
     /**
      * logger
      */
     private static Logger logger = new Logger(ProtocolUtil.class);
 
+    /** defaultPortMap */
     private static Map<String, Integer> defaultPortMap;
 
     static {
         defaultPortMap = new HashMap<String, Integer>();
-        defaultPortMap.put("http", 80);
-        defaultPortMap.put("https", 443);
-        defaultPortMap.put("ftp", 21);
-        defaultPortMap.put("sftp", 22);
-        defaultPortMap.put("ssh", 22);
-        defaultPortMap.put("redis", 6379);
-        defaultPortMap.put("es", 9200);
-        defaultPortMap.put("mysql", 3306);
-        defaultPortMap.put("oracle", 1521);
-        defaultPortMap.put("zk", 2181);
-        defaultPortMap.put("kafka", 9092);
+        defaultPortMap.put("http", HttpUtil.DEFAULT_HTTP_PORT);
+        defaultPortMap.put("https", HttpUtil.DEFAULT_HTTPS_PORT);
+        defaultPortMap.put("ftp", DEFAULT_FTP_PORT);
+        defaultPortMap.put("sftp", DEFAULT_SFTP_PORT);
+        defaultPortMap.put("ssh", DEFAULT_SSH_PORT);
+        defaultPortMap.put("redis", DEFAULT_REDIS_PORT);
+        defaultPortMap.put("es", DEFAULT_ES_PORT);
+        defaultPortMap.put("mysql", DEFAULT_MYSQL_PORT);
+        defaultPortMap.put("oracle", DEFAULT_ORACLE_PORT);
+        defaultPortMap.put("zk", DEFAULT_ZK_PORT);
+        defaultPortMap.put("kafka", DEFAULT_KAFKA_PORT);
     }
 
     /**
@@ -62,7 +95,7 @@ public final class ProtocolUtil {
      * @param protocolStr
      * @return <br>
      */
-    public static Address[] parseAddress(String protocolStr) {
+    public static Address[] parseAddress(final String protocolStr) {
         String[] strs = StringUtils.split(protocolStr, GlobalConstants.SPLITOR);
         List<Address> protocols = new ArrayList<Address>(strs.length);
         for (String str : strs) {
@@ -71,7 +104,7 @@ public final class ProtocolUtil {
             int end = 0;
             if ((end = str.indexOf("://")) != -1) {
                 protocol.setProtocol(str.substring(0, end).toLowerCase());
-                start = protocol.getProtocol().length() + 3;
+                start = protocol.getProtocol().length() + LEN;
             }
             else {
                 protocol.setProtocol("http");
@@ -122,7 +155,7 @@ public final class ProtocolUtil {
             String[] addresses = StringUtils.split(url, ":");
             if (addresses.length == 1) {
                 protocol.setHost(addresses[0]);
-                protocol.setPort(80);
+                protocol.setPort(HttpUtil.DEFAULT_HTTP_PORT);
             }
             else if (addresses.length == 2) {
                 protocol.setHost(addresses[0]);
@@ -144,77 +177,50 @@ public final class ProtocolUtil {
      * @since V1.0<br>
      * @see com.hbasesoft.framework.common.utils.io <br>
      */
+    @Getter
+    @Setter
     public static class Address {
+
+        /** protocol */
         private String protocol;
 
+        /** host */
         private String host;
 
+        /** port */
         private Integer port;
 
+        /** username */
         private String username;
 
+        /** password */
         private String password;
 
+        /** path */
         private String path;
 
+        /** params */
         private Map<String, String> params;
 
-        public String getProtocol() {
-            return protocol;
-        }
-
-        public void setProtocol(String protocol) {
-            this.protocol = protocol;
-        }
-
-        public String getHost() {
-            return host;
-        }
-
-        public void setHost(String host) {
-            this.host = host;
-        }
-
-        public Integer getPort() {
-            return port;
-        }
-
-        public void setPort(Integer port) {
-            this.port = port;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public Map<String, String> getParams() {
-            return params;
-        }
-
-        public String getParameter(String key) {
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param key
+         * @return <br>
+         */
+        public String getParameter(final String key) {
             return this.params != null ? this.params.get(key) : null;
         }
 
-        public String getPath() {
-            return path;
-        }
-
-        public void setPath(String path) {
-            this.path = path;
-        }
-
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @return <br>
+         */
         @Override
         public String toString() {
             return new StringBuilder().append(protocol).append("://").append(username).append(":").append(password)

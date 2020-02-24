@@ -33,7 +33,7 @@ public class WebApplication extends SpringBootServletInitializer {
      * @return <br>
      */
     @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+    protected SpringApplicationBuilder configure(final SpringApplicationBuilder builder) {
         return builder.sources(Application.class);
     }
 
@@ -46,7 +46,7 @@ public class WebApplication extends SpringBootServletInitializer {
      * @return <br>
      */
     @Override
-    protected WebApplicationContext run(SpringApplication application) {
+    protected WebApplicationContext run(final SpringApplication application) {
         Bootstrap.before();
         WebApplicationContext context = super.run(application);
         Bootstrap.after(context);

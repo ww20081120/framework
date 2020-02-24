@@ -34,7 +34,8 @@ public interface MsgDelaymsgDao extends IBaseDao<MsgDelaymsgEntity> {
     PagerList<MsgDelaymsgEntity> queryByTime(@Param("expireTime") Date expireTime,
         @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);
 
-    @Sql("SELECT ID, EXPIRE_TIME FROM T_MSG_DELAYMSG WHERE SHARD_INFO = :shardInfo AND EXPIRE_TIME <= :expireTime AND MEMERY_FLAG = 'Y'")
+    @Sql("SELECT ID, EXPIRE_TIME FROM T_MSG_DELAYMSG WHERE SHARD_INFO = :shardInfo "
+        + "AND EXPIRE_TIME <= :expireTime AND MEMERY_FLAG = 'Y'")
     PagerList<MsgDelaymsgEntity> queryByTimeAndShard(@Param("expireTime") Date expireTime,
         @Param("shardInfo") String shardInfo, @Param(Param.PAGE_INDEX) int pageIndex,
         @Param(Param.PAGE_SIZE) int pageSize);

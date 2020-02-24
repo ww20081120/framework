@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.demo.component.ts;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.rule.core.FlowComponent;
@@ -36,9 +34,9 @@ public class TSChild01Component implements FlowComponent<TestFlowBean> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param flowBean
+     * @param testFlowBean
      * @param flowContext
-     * @return
+     * @return b
      * @throws Exception <br>
      */
     @Override

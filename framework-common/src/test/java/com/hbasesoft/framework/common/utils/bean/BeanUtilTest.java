@@ -28,6 +28,13 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public class BeanUtilTest {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isAbstract() {
         Method[] methods = Runnable.class.getMethods();
@@ -53,6 +60,13 @@ public class BeanUtilTest {
     // System.out.println("获取到了Bootstrap after方法中的参数名称");
     // }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getMethodSignature() {
         Method[] methods = Bootstrap.class.getDeclaredMethods();
@@ -64,6 +78,13 @@ public class BeanUtilTest {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getClasses() {
         Set<Class<?>> classes = BeanUtil.getClasses("com.hbasesoft.framework.common.utils.bean");
@@ -72,6 +93,13 @@ public class BeanUtilTest {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void toUnderlineName() {
         String str1 = "toUnderlineName";
@@ -79,6 +107,13 @@ public class BeanUtilTest {
         Assert.equals(str2, "to_underline_name", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void toCamelCase() {
         String str1 = "To_CAmEL_CaSE";
@@ -86,6 +121,13 @@ public class BeanUtilTest {
         Assert.equals(str2, "toCamelCase", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void camelStr2underLine() {
         String str1 = "camelStr2underLine";
@@ -93,6 +135,13 @@ public class BeanUtilTest {
         Assert.equals(str2, "camel_str2under_line", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void toCapitalizeCamelCase() {
         String str1 = "to_caPitaLize_CaMel_case";
@@ -100,6 +149,13 @@ public class BeanUtilTest {
         Assert.equals(str2, "ToCapitalizeCamelCase", ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isSimpleValueType() {
         boolean a = BeanUtil.isSimpleValueType(Integer.class);
@@ -124,6 +180,13 @@ public class BeanUtilTest {
         System.out.println("int 数组不是简单类型");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isSimpleProperty() {
 

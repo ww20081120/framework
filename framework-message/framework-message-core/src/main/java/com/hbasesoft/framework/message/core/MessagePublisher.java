@@ -46,7 +46,7 @@ public interface MessagePublisher {
      *
      * @param channel
      * @param data
-     * @param delayLevel
+     * @param seconds
      * @author 大刘杰
      * @since JDK 1.8
      */
@@ -64,7 +64,7 @@ public interface MessagePublisher {
      *
      * @param channel
      * @param data
-     * @param delayLevel
+     * @param produceModel
      * @author 大刘杰
      * @since JDK 1.8
      */

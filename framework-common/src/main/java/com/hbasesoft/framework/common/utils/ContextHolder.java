@@ -25,14 +25,30 @@ import com.hbasesoft.framework.common.StartupListener;
  */
 @Component
 public class ContextHolder implements ApplicationContextAware {
+
+    /** context */
     private static ApplicationContext context;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static ApplicationContext getContext() {
         return ContextHolder.context;
     }
 
-    public static void setContext(ApplicationContext context) {
-        ContextHolder.context = context;
+    /**
+     * Description: context<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param c <br>
+     */
+    public static void setContext(final ApplicationContext c) {
+        ContextHolder.context = c;
     }
 
     public static class ContextHolderListener implements StartupListener {
@@ -54,12 +70,12 @@ public class ContextHolder implements ApplicationContextAware {
          * 
          * @author 王伟<br>
          * @taskId <br>
-         * @param context
+         * @param c
          * @throws FrameworkException <br>
          */
         @Override
-        public void complete(ApplicationContext context) throws FrameworkException {
-            ContextHolder.context = context;
+        public void complete(final ApplicationContext c) throws FrameworkException {
+            ContextHolder.context = c;
         }
     }
 
@@ -68,13 +84,13 @@ public class ContextHolder implements ApplicationContextAware {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param arg0
+     * @param c
      * @throws BeansException <br>
      */
     @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
+    public void setApplicationContext(final ApplicationContext c) throws BeansException {
         if (ContextHolder.context == null) {
-            ContextHolder.context = context;
+            ContextHolder.context = c;
         }
     }
 }

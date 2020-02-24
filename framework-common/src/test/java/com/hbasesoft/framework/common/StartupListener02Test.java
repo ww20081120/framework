@@ -51,7 +51,7 @@ public class StartupListener02Test implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         System.out.println("执行StartupListenerTest02的complete方法");
     }
 

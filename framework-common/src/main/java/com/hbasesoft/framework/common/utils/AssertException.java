@@ -26,7 +26,7 @@ public class AssertException extends FrameworkException {
      * @param code
      * @param params
      */
-    public AssertException(int code, Object... params) {
+    public AssertException(final int code, final Object... params) {
         super(code, params);
     }
 
@@ -34,14 +34,14 @@ public class AssertException extends FrameworkException {
      * @param code
      * @param t
      */
-    public AssertException(int code, Throwable t) {
+    public AssertException(final int code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public AssertException(int code) {
+    public AssertException(final int code) {
         super(code);
     }
 
@@ -50,14 +50,14 @@ public class AssertException extends FrameworkException {
      * @param code
      * @param params
      */
-    public AssertException(Throwable t, int code, Object... params) {
+    public AssertException(final Throwable t, final int code, final Object... params) {
         super(t, code, params);
     }
 
     /**
      * @param t
      */
-    public AssertException(Throwable t) {
+    public AssertException(final Throwable t) {
         super(t);
     }
 

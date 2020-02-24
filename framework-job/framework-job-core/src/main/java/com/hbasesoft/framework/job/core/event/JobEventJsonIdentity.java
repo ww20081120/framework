@@ -3,7 +3,6 @@ package com.hbasesoft.framework.job.core.event;
 import com.dangdang.ddframe.job.event.JobEventIdentity;
 
 /**
- * 
  * <Description> <br>
  * 
  * @author 大刘杰<br>
@@ -13,11 +12,11 @@ import com.dangdang.ddframe.job.event.JobEventIdentity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.job.core.event <br>
  */
-public class JobEventJsonIdentity implements JobEventIdentity{
+public class JobEventJsonIdentity implements JobEventIdentity {
 
-	@Override
-	public String getIdentity() {
-		return "TransLogger";
-	}
+    @Override
+    public String getIdentity() {
+        return "TransLogger";
+    }
 
 }
