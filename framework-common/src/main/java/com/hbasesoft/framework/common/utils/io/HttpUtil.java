@@ -218,8 +218,6 @@ public final class HttpUtil {
     private static OkHttpClient getOkHttpClient() {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
-//            okHttpClient = new OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
-//                .readTimeout(2, TimeUnit.MINUTES).build();
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout",5000L), TimeUnit.MILLISECONDS)
                     .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout",30000L), TimeUnit.MILLISECONDS)
