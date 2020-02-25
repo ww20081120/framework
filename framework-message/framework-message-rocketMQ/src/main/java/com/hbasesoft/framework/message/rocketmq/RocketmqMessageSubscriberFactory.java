@@ -108,6 +108,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 						log.error("消息消费失败不再重试",e);
 						// 就算失败也不再重试
 						//	return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+							return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 					}
 					// 如果没有return success，consumer会重复消费此信息，直到success。
 					return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
