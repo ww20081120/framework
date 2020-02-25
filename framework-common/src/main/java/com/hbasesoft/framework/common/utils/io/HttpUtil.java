@@ -3,10 +3,14 @@ package com.hbasesoft.framework.common.utils.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.*;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -56,6 +60,11 @@ public final class HttpUtil {
 
     public static String doGet(String url, String charset) {
         Request request = new Request.Builder().url(url).build();
+        return getStringRequest(request, charset);
+    }
+
+    public static String doGet(String url, String charset, String authorization) {
+        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).build();
         return getStringRequest(request, charset);
     }
 
@@ -113,6 +122,13 @@ public final class HttpUtil {
 
     public static String doPost(String url, String body, String contentType) {
         return doPost(url, body, contentType, GlobalConstants.DEFAULT_CHARSET);
+    }
+
+    public static String doPost(String url, String body, String contentType, String authorization, String charset) {
+        MediaType mediaType = MediaType.parse(contentType);
+        RequestBody requestBody = RequestBody.create(mediaType, body);
+        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).post(requestBody).build();
+        return getStringRequest(request, charset);
     }
 
     public static String doPost(String url, String body) {
@@ -221,10 +237,50 @@ public final class HttpUtil {
             okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout",5000L), TimeUnit.MILLISECONDS)
                     .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout",30000L), TimeUnit.MILLISECONDS)
+                    .sslSocketFactory(getSSLSocketFactory())
+                    .hostnameVerifier(getHostnameVerifier())
                     .build();
             httpClientHold.set(okHttpClient);
         }
         return okHttpClient;
     }
 
+    private static SSLSocketFactory getSSLSocketFactory() {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, getTrustManager(), new SecureRandom());
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private static TrustManager[] getTrustManager() {
+         TrustManager[] trustAllCerts = new TrustManager[]{
+                 new X509TrustManager() {
+                     @Override
+                     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                     }
+                     @Override
+                     public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                     }
+                     @Override
+                     public X509Certificate[] getAcceptedIssuers() {
+                         return new X509Certificate[0];
+                     }
+                 }
+        };
+        return trustAllCerts;
+    }
+
+    public static HostnameVerifier getHostnameVerifier() {
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String s, SSLSession sslSession) {
+                return true;
+            }
+        };
+        return hostnameVerifier;
+    }
 }
