@@ -110,10 +110,8 @@
 							<hooks>
 								<pre-commit>
 									echo git commit 前进行自动编译,findbugs,checkstyle,提交
-									exec
-									mvn clean install -Dmaven.test.skip=true
-									exec mvn
-									checkstyle:checkstyle
+									exec mvn clean install -Dmaven.test.skip=true
+									exec mvn checkstyle:checkstyle
 								</pre-commit>
 							</hooks>
 						</configuration>
