@@ -120,6 +120,7 @@ public class WeChatOpenApiController extends BaseController {
 
                     logger.info(">>> [微信OAuth2认证授权跳转] location = [{0}]", authUrl);
                     response.sendRedirect(authUrl);
+                    return;
                 }
             }
 
