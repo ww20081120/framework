@@ -27,8 +27,10 @@ import feign.hystrix.FallbackFactory;
 @Component
 public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
 
+    /** logger */
     private static final Logger LOGGER = new Logger("tx");
 
+    /** producer */
     private static final FeginProducer PRODUCER = new FeginProducer() {
 
         /**

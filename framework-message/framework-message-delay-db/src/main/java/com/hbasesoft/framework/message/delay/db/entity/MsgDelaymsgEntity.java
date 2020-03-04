@@ -85,7 +85,7 @@ public class MsgDelaymsgEntity extends BaseEntity {
         this.setDelaySeconds(delayMessage.getSeconds());
         this.setMemeryFlag(GlobalConstants.NO);
         this.setShardInfo(getShardMsg());
-        this.expireTime = new Date(delayMessage.getCurrentTime() + this.getDelaySeconds() * 1000);
+        this.expireTime = new Date(delayMessage.getCurrentTime() + this.getDelaySeconds() * GlobalConstants.SECONDS);
     }
 
     public DelayMessage toVo() {

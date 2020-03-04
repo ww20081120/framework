@@ -74,7 +74,7 @@ public class AbstractAnnotationHandler {
      * @param method <br>
      * @return <br>
      */
-    protected Method getBaseDaoExcutor(Method method) {
+    protected Method getBaseDaoExcutor(final Method method) {
         Method result = null;
         Class<?> daoClazz = daoConfig.getBaseDaoType();
         if (daoClazz != null) {
@@ -99,7 +99,7 @@ public class AbstractAnnotationHandler {
      * @param method <br>
      * @return <br>
      */
-    private String getMethodSignature(Method method) {
+    private String getMethodSignature(final Method method) {
         StringBuilder sbuf = new StringBuilder();
         sbuf.append(method.getName());
         sbuf.append('(');
@@ -122,7 +122,7 @@ public class AbstractAnnotationHandler {
      * @return <br>
      * @throws InitializationException <br>
      */
-    private String checkSqlPath(Method method, String path) throws InitializationException {
+    private String checkSqlPath(final Method method, final String path) throws InitializationException {
         StringBuilder sb = new StringBuilder();
         if (StringUtils.isNotEmpty(path)) {
             sb.append(path);
@@ -185,7 +185,7 @@ public class AbstractAnnotationHandler {
      * @return <br>
      * @throws InitializationException <br>
      */
-    protected ParamMetadata cacheSqlParamMetadata(Method method) throws InitializationException {
+    protected ParamMetadata cacheSqlParamMetadata(final Method method) throws InitializationException {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
@@ -278,16 +278,15 @@ public class AbstractAnnotationHandler {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param method
      * @return String
      * @throws InitializationException <br>
      */
-    protected String cacheSqlTemplate(Method method) throws InitializationException {
+    protected String cacheSqlTemplate(final Method method) throws InitializationException {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         String templateSql = null;
         try {
@@ -330,7 +329,7 @@ public class AbstractAnnotationHandler {
      * 
      * @param dc the daoConfig to set
      */
-    public void setDaoConfig(DaoConfig dc) {
+    public void setDaoConfig(final DaoConfig dc) {
         this.daoConfig = dc;
     }
 }

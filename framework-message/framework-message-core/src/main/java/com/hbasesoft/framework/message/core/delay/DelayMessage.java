@@ -10,8 +10,6 @@ import java.io.Serializable;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * <Description> <br>
@@ -23,8 +21,6 @@ import lombok.Setter;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.delay <br>
  */
-@Getter
-@Setter
 @AllArgsConstructor
 public class DelayMessage implements Serializable {
 
@@ -59,4 +55,45 @@ public class DelayMessage implements Serializable {
         return new StringBuilder().append("{\"messageId\":\"").append(messageId).append("\",\"channel\":\"")
             .append(channel).append("\"}").toString();
     }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
+    }
+
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
+    }
+
 }

@@ -28,10 +28,13 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
  */
 public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory {
 
+    /** log */
     private static final Logger LOG = new Logger(RocketmqMessageSubscriberFactory.class);
 
+    /** is first sub */
     private static boolean isFirstSub = true;
 
+    /** start time */
     private static long startTime = System.currentTimeMillis();
 
     /**
@@ -75,6 +78,15 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param broadcast
+     * @param subscriber <br>
+     */
     private void consumeOrderly(String channel, boolean broadcast, MessageSubscriber subscriber) {
         RocketmqFactory.getPushConsumer(channel, channel, broadcast, (MessageListenerOrderly) (msgs, context) -> {
             // 自动提交 更新消费队列的位置
@@ -91,6 +103,15 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
         });
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param broadcast
+     * @param subscriber <br>
+     */
     private void consumeConcurrently(String channel, boolean broadcast, MessageSubscriber subscriber) {
 
         RocketmqFactory.getPushConsumer(channel, channel, broadcast,
@@ -109,7 +130,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
                     LOG.error("消息消费失败不再重试", e);
                     // 就算失败也不再重试
                     // return ConsumeConcurrentlyStatus.RECONSUME_LATER;
-                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+                    return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }
                 // 如果没有return success，consumer会重复消费此信息，直到success。
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;

@@ -24,8 +24,12 @@ import com.hbasesoft.framework.message.core.delay.DelayMessage;
  */
 public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue implements IndexQueue {
 
+    /** nodeName */
     private String nodeName;
 
+    /**
+     * @param level
+     */
     public CacheStepDelayMessageQueue(int level) {
         super(level);
         nodeName = new StringBuilder().append(QueueManager.CACHE_NODE_NAME).append(level)
@@ -41,7 +45,8 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
      */
     @Override
     public void add(DelayMessage delayMessage) {
-        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + delayMessage.getSeconds() * 1000);
+        addIndex(delayMessage.getMessageId(),
+            delayMessage.getCurrentTime() + delayMessage.getSeconds() * GlobalConstants.SECONDS);
         CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
             delayMessage.getMessageId(), delayMessage);
     }

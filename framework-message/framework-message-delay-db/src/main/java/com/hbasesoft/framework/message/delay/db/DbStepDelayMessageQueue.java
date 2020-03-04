@@ -10,6 +10,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
@@ -32,10 +33,16 @@ import com.hbasesoft.framework.message.delay.db.service.DelaymsgService;
 @Transactional
 public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
 
+    /** delaymsgService */
     private DelaymsgService delaymsgService;
 
+    /** level */
     private int level;
 
+    /**
+     * @param level
+     * @param delaymsgService
+     */
     public DbStepDelayMessageQueue(int level, DelaymsgService delaymsgService) {
         this.delaymsgService = delaymsgService;
         this.level = level;
@@ -90,11 +97,12 @@ public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
     @Override
     public synchronized void check() {
         int pageIndex = 1;
-        int pageSize = 1000;
+        int pageSize = GlobalConstants.DEFAULT_LINES;
         PagerList<MsgDelaymsgEntity> entites = null;
         do {
-            entites = delaymsgService.queryByTime(new Date(System.currentTimeMillis() + this.getLevel() * 1000),
-                pageIndex++, pageSize);
+            entites = delaymsgService.queryByTime(
+                new Date(System.currentTimeMillis() + this.getLevel() * GlobalConstants.SECONDS), pageIndex++,
+                pageSize);
             if (entites.size() > 0 && pageIndex == 2) {
                 LoggerUtil.debug("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", this.getLevel(), entites.getTotalCount());
             }

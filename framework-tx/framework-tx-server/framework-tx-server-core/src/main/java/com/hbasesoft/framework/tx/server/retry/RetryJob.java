@@ -9,6 +9,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.job.core.annotation.Job;
 import com.hbasesoft.framework.tx.core.TxConsumer;
@@ -44,7 +45,7 @@ public class RetryJob implements SimpleJob {
         TxConsumer txConsumer = ContextHolder.getContext().getBean(TxConsumer.class);
 
         int pageIndex = 1;
-        int pageSize = 1000;
+        int pageSize = GlobalConstants.DEFAULT_LINES;
 
         PagerList<ClientInfo> timeoutClientInfos;
         do {

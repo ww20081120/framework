@@ -24,6 +24,24 @@ import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
  */
 public final class ArgsSerializationUtil {
 
+    /** Number */
+    private static final int NUM_FF = 0xff;
+
+    /** Number */
+    private static final int NUM_FFFF = 0xffff;
+
+    /** Number */
+    private static final int NUM_65536 = 65536;
+
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args
+     * @return <br>
+     */
     public static byte[] serializeArgs(Object[] args) {
         if (CommonUtil.isNotEmpty(args)) {
             byte[][] argsData = new byte[args.length][];
@@ -32,7 +50,7 @@ public final class ArgsSerializationUtil {
                 Object arg = args[i];
                 if (arg != null) {
                     byte[] data = SerializationUtil.jdkSerial(arg);
-                    Assert.isTrue(data.length < 65536, ErrorCodeDef.ARGUMENTS_SIZE_TOO_LARGE);
+                    Assert.isTrue(data.length < NUM_65536, ErrorCodeDef.ARGUMENTS_SIZE_TOO_LARGE);
                     argsData[i] = data;
                     bufferSize += data.length;
                 }
@@ -55,13 +73,22 @@ public final class ArgsSerializationUtil {
         return null;
     }
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param data
+     * @return <br>
+     */
     public static Object[] unserialArgs(byte[] data) {
         if (data != null && data.length > 0) {
             ByteBuffer buffer = ByteBuffer.wrap(data);
-            int len = buffer.get() & 0xff;
+            int len = buffer.get() & NUM_FF;
             Object[] args = new Object[len];
             for (int i = 0; i < len; i++) {
-                int objLen = buffer.getShort() & 0xffff;
+                int objLen = buffer.getShort() & NUM_FFFF;
                 if (objLen > 0) {
                     byte[] temp = new byte[objLen];
                     buffer.get(temp);

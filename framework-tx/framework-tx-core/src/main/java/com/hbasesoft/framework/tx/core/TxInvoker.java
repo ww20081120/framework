@@ -20,5 +20,13 @@ import com.hbasesoft.framework.common.FrameworkException;
  */
 @FunctionalInterface
 public interface TxInvoker<T> {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return T
+     * @throws FrameworkException <br>
+     */
     T invoke() throws FrameworkException;
 }

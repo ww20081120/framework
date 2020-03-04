@@ -7,6 +7,14 @@ import org.springframework.context.event.EventListener;
 public class RocketmqConsumerEventListener {
     // @EventListener(condition = "#event.msgs[0].topic=='TopicTest1' &&
     // #event.msgs[0].tags=='TagA'")
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event <br>
+     */
     @EventListener
     public void rocketmqMsgListen(RocketmqEvent event) {
         // DefaultMQPushConsumer consumer = event.getConsumer();

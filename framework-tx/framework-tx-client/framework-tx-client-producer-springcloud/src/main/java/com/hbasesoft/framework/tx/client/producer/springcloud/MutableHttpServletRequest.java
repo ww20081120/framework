@@ -27,18 +27,37 @@ import javax.servlet.http.HttpServletRequestWrapper;
  */
 public class MutableHttpServletRequest extends HttpServletRequestWrapper {
 
-    // holds custom header and value mapping
+    /** holds custom header and value mapping */
     private final Map<String, String> customHeaders;
 
+    /**
+     * @param request
+     */
     public MutableHttpServletRequest(HttpServletRequest request) {
         super(request);
         this.customHeaders = new HashMap<String, String>();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param value <br>
+     */
     public void putHeader(String name, String value) {
         this.customHeaders.put(name, value);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
     public String getHeader(String name) {
         // check the custom headers first
         String headerValue = customHeaders.get(name);
@@ -50,6 +69,13 @@ public class MutableHttpServletRequest extends HttpServletRequestWrapper {
         return ((HttpServletRequest) getRequest()).getHeader(name);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Enumeration<String> getHeaderNames() {
         // create a set of the custom header names
         Set<String> set = new HashSet<String>(customHeaders.keySet());

@@ -26,6 +26,7 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @NoTransLog
 public class SpringCloudProducer implements TxProducer {
 
+    /** fegin producer */
     private static FeginProducer feginProducer;
 
     /**

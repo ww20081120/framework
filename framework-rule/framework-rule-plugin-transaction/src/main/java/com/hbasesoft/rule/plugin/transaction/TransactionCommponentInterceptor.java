@@ -32,6 +32,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  */
 public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterceptor {
 
+    /** status holder */
     private ThreadLocal<Stack<TransactionStatus>> statusHolder = new ThreadLocal<Stack<TransactionStatus>>() {
         protected synchronized Stack<TransactionStatus> initialValue() {
             return new Stack<TransactionStatus>();

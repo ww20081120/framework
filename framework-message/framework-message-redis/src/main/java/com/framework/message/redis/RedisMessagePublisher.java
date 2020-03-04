@@ -27,6 +27,7 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisMessagePublisher implements MessagePublisher {
 
+    /** message queue */
     private MessageQueue messageQueue = new RedisMessageQueue();
 
     /**

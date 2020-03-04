@@ -24,6 +24,7 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
 
+    /** message queue */
     private MessageQueue messageQueue = new RedisMessageQueue();
 
     /**

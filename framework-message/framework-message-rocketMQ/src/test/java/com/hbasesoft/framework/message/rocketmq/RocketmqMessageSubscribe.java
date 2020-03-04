@@ -6,7 +6,6 @@ package com.hbasesoft.framework.message.rocketmq;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
@@ -25,12 +24,14 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
 // @ConditionalOnBean(DefaultMQProducer.class)
 public class RocketmqMessageSubscribe implements MessageSubscriber {
 
-    @Autowired
-    private ApplicationContext app;
+    /** sleep time */
+    private static final int SLEEP_TIME = 5000;
 
+    /** default mq pushconsumer */
     @Autowired
     private DefaultMQPushConsumer defaultMQPushConsumer;
 
+    /** log */
     private Logger log = new Logger(RocketmqMessageSubscribe.class);
 
     // public RocketmqMessageSubscribe() {
@@ -38,9 +39,13 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
     // app.getBean(DefaultMQPushConsumer.class);
     // }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.message.core.MessageSubscriber#onMessage(java.lang. String, byte[])
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data <br>
      */
     @Override
     public void onMessage(String channel, byte[] data) {
@@ -51,7 +56,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
                 public void run() {
                     try {
                         // 延迟5秒再启动，主要是等待spring事件监听相关程序初始化完成，否则，回出现对RocketMQ的消息进行消费后立即发布消息到达的事件，然而此事件的监听程序还未初始化，从而造成消息的丢失
-                        Thread.sleep(5000);
+                        Thread.sleep(SLEEP_TIME);
                         // Consumer对象在使用之前必须要调用start初始化，初始化一次即可<br>
                         try {
                             defaultMQPushConsumer.start();
@@ -77,9 +82,13 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.message.core.MessageSubscriber#onSubscribe(java.lang. String, int)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param subscribeChannels <br>
      */
     @Override
     public void onSubscribe(String channel, int subscribeChannels) {
@@ -94,9 +103,13 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.message.core.MessageSubscriber#onUnsubscribe(java. lang.String, int)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param subscribedChannels <br>
      */
     @Override
     public void onUnsubscribe(String channel, int subscribedChannels) {

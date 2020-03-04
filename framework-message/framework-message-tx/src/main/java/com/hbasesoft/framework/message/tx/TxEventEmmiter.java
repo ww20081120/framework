@@ -27,6 +27,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TxEventEmmiter {
 
+    /** Number */
+    private static final int NUM_5 = 5;
+
     /**
      * Description: 触发事件<br>
      *
@@ -53,6 +56,15 @@ public final class TxEventEmmiter {
         EventEmmiter.emmit(event, data);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param seconds <br>
+     */
     public static void emmit(String event, EventData data, int seconds) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data, seconds
@@ -60,6 +72,15 @@ public final class TxEventEmmiter {
         EventEmmiter.emmit(event, data, seconds);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param produceModel <br>
+     */
     public static void emmit(String event, EventData data, String produceModel) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data, produceModel
@@ -67,11 +88,21 @@ public final class TxEventEmmiter {
         EventEmmiter.emmit(event, data, produceModel);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param args
+     * @param method
+     * @return <br>
+     */
     private static ClientInfo getClientInfo(String id, Object[] args, String method) {
         ClientInfo clientInfo = new ClientInfo(id, TxEventRetryHandler.TX_EVENT_RETRY_HANDLER + method);
         clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(args));
         clientInfo.setClientInfo(TxInvokerProxy.getClientInfoFactory().getClientInfo());
-        clientInfo.setMaxRetryTimes(5);
+        clientInfo.setMaxRetryTimes(NUM_5);
         clientInfo.setRetryConfigs("5,10,30,60,120,720");
         return clientInfo;
     }

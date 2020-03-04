@@ -46,17 +46,17 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
      */
     @Override
     public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
-        Tracer tracer = getTracer();
-        if (tracer != null) {
-            Span span = tracer.currentSpan();
+        Tracer tc = getTracer();
+        if (tc != null) {
+            Span span = tc.currentSpan();
             if (span == null) {
-                span = tracer.newTrace();
+                span = tc.newTrace();
             }
             else if (StringUtils.isNotEmpty(parentStackId)) {
-                span = tracer.newChild(spanMap.get(parentStackId).context());
+                span = tc.newChild(spanMap.get(parentStackId).context());
             }
             else {
-                span = tracer.newChild(tracer.currentSpan().context());
+                span = tc.newChild(tc.currentSpan().context());
             }
             span.tag("stackId", stackId);
             if (StringUtils.isNotEmpty(parentStackId)) {

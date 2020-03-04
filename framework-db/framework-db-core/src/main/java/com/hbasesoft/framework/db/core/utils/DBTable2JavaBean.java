@@ -51,6 +51,66 @@ import com.hbasesoft.framework.common.utils.security.DataUtil;
  */
 public class DBTable2JavaBean extends JFrame {
 
+    /** DEFAULT_LENGTH */
+    private static final int DEFAULT_LENGTH = 100;
+
+    /** DEFAULT_LENGTH */
+    private static final int DEFAULT_HIGHT = 30;
+
+    /** START_LENGTH */
+    private static final int START_LENGTH = 840;
+
+    /** NUM */
+    private static final int NUM_3 = 3;
+
+    /** NUM */
+    private static final int NUM_4 = 4;
+
+    /** NUM */
+    private static final int NUM_5 = 5;
+
+    /** NUM */
+    private static final int NUM_6 = 6;
+
+    /** NUM */
+    private static final int NUM_13 = 13;
+
+    /** NUM */
+    private static final int NUM_15 = 15;
+
+    /** NUM */
+    private static final int NUM_20 = 20;
+
+    /** NUM */
+    private static final int NUM_23 = 23;
+
+    /** NUM */
+    private static final int NUM_40 = 40;
+
+    /** NUM */
+    private static final int NUM_80 = 80;
+
+    /** NUM */
+    private static final int NUM_93 = 93;
+
+    /** NUM */
+    private static final int NUM_120 = 120;
+
+    /** NUM */
+    private static final int NUM_145 = 145;
+
+    /** NUM */
+    private static final int NUM_150 = 150;
+
+    /** NUM */
+    private static final int NUM_153 = 153;
+
+    /** NUM */
+    private static final int NUM_450 = 450;
+
+    /** NUM */
+    private static final int NUM_580 = 580;
+
     /**
      * serialVersionUID
      */
@@ -88,6 +148,7 @@ public class DBTable2JavaBean extends JFrame {
      */
     private String daoTemplate;
 
+    /** entity template */
     private String entityTemplate;
 
     /**
@@ -107,7 +168,7 @@ public class DBTable2JavaBean extends JFrame {
         setResizable(false);
         setTitle(TITLE);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(100, 100, 840, 100 + 30 * filedNames.length);
+        setBounds(DEFAULT_LENGTH, DEFAULT_LENGTH, START_LENGTH, DEFAULT_LENGTH + DEFAULT_HIGHT * filedNames.length);
 
         JPanel panel = new JPanel();
         getContentPane().add(panel, BorderLayout.CENTER);
@@ -117,22 +178,22 @@ public class DBTable2JavaBean extends JFrame {
         JTextField textField = null;
         for (int i = 0; i < filedNames.length; i++) {
             label = new JLabel(filedNames[i]);
-            label.setBounds(40, 13 + (i * 30), 80, 15);
+            label.setBounds(NUM_40, NUM_13 + (i * DEFAULT_HIGHT), NUM_80, NUM_15);
             panel.add(label);
 
-            if (i == 5) {
+            if (i == NUM_5) {
                 textField = new JPasswordField();
             }
             else {
                 textField = new JTextField();
             }
 
-            textField.setBounds(120, 13 + (i * 30), 450, 20);
+            textField.setBounds(NUM_120, NUM_13 + (i * DEFAULT_HIGHT), NUM_450, NUM_20);
             textFields[i] = textField;
             panel.add(textField);
 
             label = new JLabel("");
-            label.setBounds(580, 13 + (i * 30), 150, 15);
+            label.setBounds(NUM_580, NUM_13 + (i * DEFAULT_HIGHT), NUM_150, NUM_15);
             label.setForeground(Color.RED);
             tips[i] = label;
             panel.add(label);
@@ -151,11 +212,11 @@ public class DBTable2JavaBean extends JFrame {
                 }
             }
         });
-        button.setBounds(145, 20 + 30 * filedNames.length, 93, 23);
+        button.setBounds(NUM_145, NUM_20 + DEFAULT_HIGHT * filedNames.length, NUM_93, NUM_23);
         panel.add(button);
 
-        textFields[6].setEditable(false);
-        textFields[5].addKeyListener(new KeyListener() {
+        textFields[NUM_6].setEditable(false);
+        textFields[NUM_5].addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {
@@ -180,7 +241,7 @@ public class DBTable2JavaBean extends JFrame {
     }
 
     private void encryptPwd() {
-        textFields[6].setText("ENC(" + DataUtil.encrypt(textFields[6].getText()) + ")");
+        textFields[NUM_6].setText("ENC(" + DataUtil.encrypt(textFields[NUM_6].getText()) + ")");
     }
 
     /**
@@ -192,24 +253,25 @@ public class DBTable2JavaBean extends JFrame {
      */
     private void setDefaultValue() {
         Map<String, ?> configParam = getConfigParam();
-
-        tips[0].setText((String) configParam.get("tableNameText"));
-        textFields[1].setText((String) configParam.get("package"));
-        textFields[2].setText((String) configParam.get("dirstr"));
-        textFields[3].setText((String) configParam.get("jdbcUrl"));
-        textFields[4].setText((String) configParam.get("username"));
-        textFields[5].setText((String) configParam.get("password"));
+        int i = 0;
+        tips[i++].setText((String) configParam.get("tableNameText"));
+        textFields[i++].setText((String) configParam.get("package"));
+        textFields[i++].setText((String) configParam.get("dirstr"));
+        textFields[i++].setText((String) configParam.get("jdbcUrl"));
+        textFields[i++].setText((String) configParam.get("username"));
+        textFields[i].setText((String) configParam.get("password"));
         encryptPwd();
     }
 
     private void saveConfig() {
         Map<String, String> paramMap = new HashMap<String, String>();
-        paramMap.put("tableNameText", tips[0].getText());
-        paramMap.put("package", textFields[1].getText());
-        paramMap.put("dirstr", textFields[2].getText());
-        paramMap.put("jdbcUrl", textFields[3].getText());
-        paramMap.put("username", textFields[4].getText());
-        paramMap.put("password", textFields[5].getText());
+        int i = 0;
+        paramMap.put("tableNameText", tips[i++].getText());
+        paramMap.put("package", textFields[i++].getText());
+        paramMap.put("dirstr", textFields[i++].getText());
+        paramMap.put("jdbcUrl", textFields[i++].getText());
+        paramMap.put("username", textFields[i++].getText());
+        paramMap.put("password", textFields[i++].getText());
         String content = JSONObject.toJSONString(paramMap);
         try {
             IOUtil.writeFile(content,
@@ -261,16 +323,15 @@ public class DBTable2JavaBean extends JFrame {
     public void export() throws Exception {
 
         saveConfig();
-
         String tablename = textFields[0].getText();
         String packname = textFields[1].getText();
         String dirstr = textFields[2].getText(); // 空表示当前目录
 
         if (dataSource == null) {
             DruidDataSource dbs = new DruidDataSource();
-            dbs.setUrl(textFields[3].getText());
-            dbs.setUsername(textFields[4].getText());
-            dbs.setPassword(textFields[5].getText());
+            dbs.setUrl(textFields[NUM_3].getText());
+            dbs.setUsername(textFields[NUM_4].getText());
+            dbs.setPassword(textFields[NUM_5].getText());
             dbs.setValidationQuery("select 1");
             dbs.init();
             dataSource = dbs;
@@ -415,7 +476,7 @@ public class DBTable2JavaBean extends JFrame {
                     pkColum = null;
                     break;
                 }
-                pkColum = rs.getString(4);
+                pkColum = rs.getString(NUM_4);
             }
 
             for (int i = 0, size = metaData.getColumnCount(); i < size; i++) {

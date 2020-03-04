@@ -30,10 +30,26 @@ import com.hbasesoft.framework.db.core.annotation.DataSource;
 @Component
 public class DynamicDataSourceChangeAdvice implements Ordered {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Pointcut("execution(public * com.hbasesoft..*(..))")
     public void change() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param joinPoint
+     * @return Object
+     * @throws Throwable <br>
+     */
     @Around("change()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 

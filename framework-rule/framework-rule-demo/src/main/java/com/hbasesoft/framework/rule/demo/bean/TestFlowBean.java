@@ -25,8 +25,10 @@ public class TestFlowBean implements Serializable {
      */
     private static final long serialVersionUID = 4710973826238213054L;
 
+    /** name */
     private String name;
 
+    /** age */
     private int age;
 
     public int getAge() {

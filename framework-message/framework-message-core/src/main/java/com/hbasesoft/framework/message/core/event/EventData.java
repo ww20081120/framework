@@ -21,23 +21,38 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
  */
 public class EventData extends HashMap<String, Object> {
 
+    /** msgId */
     private String msgId;
 
+    /** default key */
     private static final String DEFAULT_KEY = "__DATA";
 
+    /**
+     * 
+     */
     public EventData() {
         super();
         this.msgId = CommonUtil.getTransactionID();
     }
 
+    /**
+     * @param msgId
+     */
     public EventData(String msgId) {
         this.msgId = msgId;
     }
 
+    /**
+     * @param data
+     */
     public EventData(Object data) {
         this(CommonUtil.getTransactionID(), data);
     }
 
+    /**
+     * @param msgId
+     * @param data
+     */
     public EventData(String msgId, Object data) {
         this(msgId);
         super.put(DEFAULT_KEY, data);
@@ -48,19 +63,49 @@ public class EventData extends HashMap<String, Object> {
      */
     private static final long serialVersionUID = 2323769185641461392L;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
     public String getParameter(String key) {
         return (String) this.get(key);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T> T
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
     public <T> T getData() {
         return (T) super.get(DEFAULT_KEY);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getMsgId() {
         return msgId;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param msgId <br>
+     */
     public void setMsgId(String msgId) {
         this.msgId = msgId;
     }

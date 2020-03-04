@@ -22,8 +22,10 @@ import com.hbasesoft.framework.db.core.BaseEntity;
 @Entity(name = "T_STUDENT")
 public class StudentEntity extends BaseEntity {
 
+    /** name */
     public static final String NAME = "name";
 
+    /** age */
     public static final String AGE = "age";
 
     /**
@@ -38,15 +40,19 @@ public class StudentEntity extends BaseEntity {
     @Column(name = "ID")
     private String id;
 
+    /** name */
     @Column(name = "NAME")
     private String name;
 
+    /** age */
     @Column(name = "AGE")
     private int age;
 
+    /** score */
     @Transient
     private Integer score;
 
+    /** course name */
     @Transient
     private String courseName;
 

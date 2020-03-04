@@ -23,6 +23,7 @@ import com.hbasesoft.framework.message.core.MessagePublisher;
  */
 public class ClusterRedisMessagePublisher implements MessagePublisher {
 
+    /** message Queue */
     private MessageQueue messageQueue = new ClusterRedisMessageQueue();
 
     /**

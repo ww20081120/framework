@@ -37,6 +37,10 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @Service
 public class RocketMQConsumer implements TxConsumer {
 
+    /** tx.rocketmq.producer.retrytimes */
+    private static final int RETRY_TIMES = 3;
+
+    /** producerHolder */
     private Map<String, DefaultMQProducer> producerHolder = new HashMap<>();
 
     /**
@@ -71,8 +75,8 @@ public class RocketMQConsumer implements TxConsumer {
             String address = PropertyHolder.getProperty("tx.rocketmq.namesrvAddr");
             Assert.notEmpty(address, ErrorCodeDef.TX_ROCKET_MQ_ADDRESS_NOT_FOUND);
             defaultMQProducer.setNamesrvAddr(address);
-            defaultMQProducer
-                .setRetryTimesWhenSendAsyncFailed(PropertyHolder.getIntProperty("tx.rocketmq.producer.retrytimes", 3));
+            defaultMQProducer.setRetryTimesWhenSendAsyncFailed(
+                PropertyHolder.getIntProperty("tx.rocketmq.producer.retrytimes", RETRY_TIMES));
             try {
                 defaultMQProducer.start();
                 producerHolder.put(clientInfo, defaultMQProducer);

@@ -25,6 +25,10 @@ import com.hbasesoft.framework.message.tx.TxEventLinsener;
 @Component
 public class TestEventLinsener implements TxEventLinsener {
 
+    /** Number */
+    private static final int NUM_5 = 5;
+
+    /** index */
     private int i = 0;
 
     /**
@@ -52,7 +56,7 @@ public class TestEventLinsener implements TxEventLinsener {
     @Override
     public void onEmmit(String event, EventData data) {
 
-        if (new Random().nextInt(5) == 1) {
+        if (new Random().nextInt(NUM_5) == 1) {
             throw new RuntimeException();
         }
         System.out.println(i++ + ":" + data.getMsgId());

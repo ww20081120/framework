@@ -132,7 +132,15 @@ public class ParamMetadata extends BaseEntity {
         return callBackPosition;
     }
 
-    public void setCallBackPosition(Integer callBackPosition) {
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param callBackPosition <br>
+     */
+    public void setCallBackPosition(final Integer callBackPosition) {
         this.callBackPosition = callBackPosition;
     }
 

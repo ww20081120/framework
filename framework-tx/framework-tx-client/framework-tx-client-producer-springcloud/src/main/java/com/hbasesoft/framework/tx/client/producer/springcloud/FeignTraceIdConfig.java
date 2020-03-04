@@ -25,6 +25,13 @@ import feign.RequestInterceptor;
 @Configuration
 public class FeignTraceIdConfig {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     public RequestInterceptor feignTraceIdInterceptor() {
         return new FeginTraceIdInterceptor();

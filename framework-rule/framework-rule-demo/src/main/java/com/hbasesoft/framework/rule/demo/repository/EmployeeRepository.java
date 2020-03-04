@@ -26,10 +26,34 @@ import com.hbasesoft.framework.rule.demo.bean.Employee;
  */
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
     List<Employee> findByName(String name);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param age
+     * @return <br>
+     */
     List<Employee> findByAgeGreaterThan(int age);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param employee
+     * @return <br>
+     */
     @Modifying
     @Query(nativeQuery = true)
     int update(@Param("entity") Employee employee);

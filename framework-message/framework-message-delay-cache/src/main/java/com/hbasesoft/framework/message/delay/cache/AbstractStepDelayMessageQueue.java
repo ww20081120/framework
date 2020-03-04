@@ -29,8 +29,12 @@ import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueue;
  */
 public abstract class AbstractStepDelayMessageQueue implements StepDelayMessageQueue {
 
+    /** level */
     private int level;
 
+    /**
+     * @param level
+     */
     public AbstractStepDelayMessageQueue(int level) {
         Assert.isTrue(level >= 1, ErrorCodeDef.DELAY_TIME_TOO_SHORT, level);
         this.level = level;
@@ -48,6 +52,13 @@ public abstract class AbstractStepDelayMessageQueue implements StepDelayMessageQ
         return this.level;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     public synchronized void check() {
         Map<String, Long> delayMessages = getAll();
         if (MapUtils.isNotEmpty(delayMessages)) {

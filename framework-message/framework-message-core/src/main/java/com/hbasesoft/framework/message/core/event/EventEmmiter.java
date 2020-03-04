@@ -49,11 +49,29 @@ public final class EventEmmiter {
         LoggerUtil.debug("触发[event={0},data={1}]事件通知", event, data);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param seconds <br>
+     */
     public static void emmit(String event, EventData data, int seconds) {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
         LoggerUtil.debug("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, seconds);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param produceModel <br>
+     */
     public static void emmit(String event, EventData data, String produceModel) {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
         LoggerUtil.debug("触发[event={0},data={1}, produceModel={2}]事件通知", event, data, produceModel);

@@ -29,8 +29,10 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public final class TxManager {
 
+    /** lock */
     private static final Object LOCK = new Object();
 
+    /** retry flag */
     private static ThreadLocal<String> retryFlag = new ThreadLocal<>();
 
     /**
@@ -59,6 +61,13 @@ public final class TxManager {
         return getTransIdGeneratorFactory().getTraceId();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param traceId <br>
+     */
     public static void setTraceId(String traceId) {
         getTransIdGeneratorFactory().setTraceId(traceId);
     }

@@ -26,7 +26,7 @@ public class DaoException extends FrameworkException {
      * @param code
      * @param params
      */
-    public DaoException(int code, Object... params) {
+    public DaoException(final int code, final Object... params) {
         super(code, params);
     }
 
@@ -34,14 +34,14 @@ public class DaoException extends FrameworkException {
      * @param code
      * @param t
      */
-    public DaoException(int code, Throwable t) {
+    public DaoException(final int code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public DaoException(int code) {
+    public DaoException(final int code) {
         super(code);
     }
 
@@ -50,14 +50,14 @@ public class DaoException extends FrameworkException {
      * @param code
      * @param params
      */
-    public DaoException(Throwable t, int code, Object... params) {
+    public DaoException(final Throwable t, final int code, final Object... params) {
         super(t, code, params);
     }
 
     /**
      * @param t
      */
-    public DaoException(Throwable t) {
+    public DaoException(final Throwable t) {
         super(t);
     }
 

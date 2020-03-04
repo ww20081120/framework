@@ -37,6 +37,7 @@ import com.hbasesoft.framework.tx.core.TxManager;
 @WebFilter(urlPatterns = "/**", filterName = "traceIdFilter")
 public class TraceIdFilter implements javax.servlet.Filter {
 
+    /** trace id */
     public static final String TRACE_ID = "X-B3-TraceId";
 
     /**

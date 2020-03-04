@@ -20,8 +20,17 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public final class SQlCheckUtil {
 
+    /** asterisk */
     public static final String ASTERISK = " * ";
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql <br>
+     */
     public static void checkSql(String sql) {
         Assert.isTrue(sql.indexOf(ASTERISK) == -1, ErrorCodeDef.UNSUUPORT_ASTERISK);
     }

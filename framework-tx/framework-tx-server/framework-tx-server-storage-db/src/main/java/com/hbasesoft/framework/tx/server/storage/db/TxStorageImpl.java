@@ -39,9 +39,14 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
 @Service
 public class TxStorageImpl implements TxStorage {
 
+    /** Number */
+    private static final int NUM_5 = 5;
+
+    /** txClientinfoDao */
     @Resource
     private TxClientinfoDao txClientinfoDao;
 
+    /** txCheckinfoDao */
     @Resource
     private TxCheckinfoDao txCheckinfoDao;
 
@@ -98,7 +103,7 @@ public class TxStorageImpl implements TxStorage {
         bean.setClientInfo(clientInfo.getClientInfo());
 
         String[] retryConfigs = StringUtils.split(clientInfo.getRetryConfigs(), GlobalConstants.SPLITOR);
-        int min = CommonUtil.isEmpty(retryConfigs) ? 5 : Integer.parseInt(retryConfigs[0]);
+        int min = CommonUtil.isEmpty(retryConfigs) ? NUM_5 : Integer.parseInt(retryConfigs[0]);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, min);
         bean.setNextRetryTime(calendar.getTime());

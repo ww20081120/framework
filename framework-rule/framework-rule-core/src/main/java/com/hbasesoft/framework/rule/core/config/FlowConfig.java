@@ -30,17 +30,29 @@ public class FlowConfig implements Serializable {
      */
     private static final long serialVersionUID = 6738624692458576179L;
 
+    /** name */
     private String name;
 
+    /** version */
     private String version;
 
+    /** component */
     @SuppressWarnings("rawtypes")
     private FlowComponent component;
 
+    /** configAttrMap */
     private Map<String, Object> configAttrMap;
 
+    /** hildren config list */
     private List<FlowConfig> childrenConfigList;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @SuppressWarnings("rawtypes")
     public FlowComponent getComponent() {
         return component;

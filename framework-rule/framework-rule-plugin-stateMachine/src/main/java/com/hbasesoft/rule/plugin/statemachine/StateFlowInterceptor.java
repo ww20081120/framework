@@ -25,6 +25,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  */
 public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
 
+    /** skip flag holder */
     private ThreadLocal<Boolean> skipFlagHolder = ThreadLocal.withInitial(() -> true);
 
     /**

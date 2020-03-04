@@ -28,8 +28,10 @@ public class TestStateMachineBean extends FlowBean implements StateMachineFlowBe
      */
     private static final long serialVersionUID = 1L;
 
+    /** state */
     private String state;
 
+    /** event */
     private String event;
 
 }

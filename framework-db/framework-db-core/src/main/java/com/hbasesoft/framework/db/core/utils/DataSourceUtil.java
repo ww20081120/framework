@@ -36,11 +36,19 @@ import com.hbasesoft.framework.db.core.config.DbParam;
  */
 public final class DataSourceUtil {
 
+    /** datasource map */
     private static Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<String, DataSource>();
 
     private DataSourceUtil() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     public static void init() {
         synchronized (dataSourceMap) {
             for (String key : PropertyHolder.getProperties().keySet()) {
@@ -58,18 +66,42 @@ public final class DataSourceUtil {
         return getDataSource(DynamicDataSourceManager.getDataSourceCode());
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
     public static DataSource getDataSource(String name) {
         synchronized (dataSourceMap) {
             return dataSourceMap.get(name);
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param dbParam
+     * @return <br>
+     */
     public static DataSource registDataSource(String name, DbParam dbParam) {
         synchronized (dataSourceMap) {
             return regist(name, dbParam);
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name <br>
+     */
     public static void close(String name) {
         synchronized (dataSourceMap) {
             DataSource dataSource = dataSourceMap.remove(name);

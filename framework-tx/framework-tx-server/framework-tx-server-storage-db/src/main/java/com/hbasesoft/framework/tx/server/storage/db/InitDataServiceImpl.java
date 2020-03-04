@@ -26,6 +26,7 @@ import com.hbasesoft.framework.tx.server.storage.db.dao.TxClientinfoDao;
 @Service
 public class InitDataServiceImpl implements InitDataService {
 
+    /** txClientinfoDao */
     @Resource
     private TxClientinfoDao txClientinfoDao;
 

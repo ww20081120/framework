@@ -24,25 +24,59 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
  */
 public class RocketmqMessagePublisher implements MessagePublisher {
 
+    /** log */
     private static final Logger LOG = new Logger(RocketmqMessagePublisher.class);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public String getName() {
         return RocketmqFactory.ROCKET_MQ_NAME;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data <br>
+     */
     @Override
     public void publish(String channel, byte[] data) {
         // 默认使用普通消费
         publish(channel, data, MessagePublisher.PUBLISH_TYPE_DEFAULT, 0);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data
+     * @param seconds <br>
+     */
     @Override
     public void publish(String channel, byte[] data, int seconds) {
         // 默认使用普通消费
         publish(channel, data, MessagePublisher.PUBLISH_TYPE_DEFAULT, seconds);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data
+     * @param produceModel <br>
+     */
     @Override
     public void publish(String channel, byte[] data, String produceModel) {
         // 指定消费模式

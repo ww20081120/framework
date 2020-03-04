@@ -24,6 +24,7 @@ public class FlowBean implements Serializable {
      */
     private static final long serialVersionUID = 1837859786785097538L;
 
+    /** transid */
     private String transId;
 
     public String getTransId() {

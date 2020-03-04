@@ -117,8 +117,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @param sqlParamsMap <br>
      * @throws DaoException <br>
      */
-    private void installPlaceholderSqlParam(DataParam dataParam, String executeSql, Map<String, Object> sqlParamsMap)
-        throws DaoException {
+    private void installPlaceholderSqlParam(final DataParam dataParam, final String executeSql,
+        final Map<String, Object> sqlParamsMap) throws DaoException {
         Map<String, Object> map = new HashMap<String, Object>();
 
         Matcher m = pat.matcher(executeSql);
@@ -144,7 +144,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws DaoException <br>
      */
-    private Map<String, Object> loadDaoMetaData(Method method, Object[] args, DataParam dataParam) throws DaoException {
+    private Map<String, Object> loadDaoMetaData(final Method method, final Object[] args, final DataParam dataParam)
+        throws DaoException {
         Map<String, Object> paramMap;
         ParamMetadata metadata;
         try {

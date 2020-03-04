@@ -20,6 +20,7 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public class ClusterRedisMessageSubcriberFactory implements MessageSubcriberFactory {
 
+    /** message queue */
     private MessageQueue messageQueue = new ClusterRedisMessageQueue();
 
     /**

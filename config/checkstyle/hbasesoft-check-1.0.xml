@@ -108,7 +108,9 @@
         </module>
         <module name="JavadocVariable"/>
        <!-- <module name="JavadocStyle"/> -->
-        <module name="MissingJavadocMethod"/>
+        <module name="MissingJavadocMethod">
+             <property name="allowMissingPropertyJavadoc" value="true"/>
+        </module>
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->
@@ -168,7 +170,10 @@
         <!-- See https://checkstyle.org/config_coding.html -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+        <module name="HiddenField">
+            <property name="ignoreConstructorParameter" value="true"/>   
+            <property name="ignoreSetter" value="true"/>
+        </module>
         <module name="IllegalInstantiation"/>
         <!--<module name="InnerAssignment"/> -->
         <module name="MagicNumber"/>
@@ -179,7 +184,7 @@
 
         <!-- Checks for class design                         -->
         <!-- See https://checkstyle.org/config_design.html -->
-        <module name="DesignForExtension"/>
+        <!-- <module name="DesignForExtension"/>-->
         <module name="FinalClass"/>
         <!--<module name="HideUtilityClassConstructor"/>-->
         <!-- <module name="InterfaceIsType"/> -->

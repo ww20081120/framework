@@ -17,5 +17,13 @@ package com.hbasesoft.framework.tx.core;
  */
 public interface TxClientInfoFactory {
 
+    /**
+     *     
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getClientInfo();
 }

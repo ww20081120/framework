@@ -31,43 +31,102 @@ public class FlowContext implements Serializable {
      */
     private static final long serialVersionUID = 7704217056875708410L;
 
+    /** flowConfig */
     private FlowConfig flowConfig;
 
+    /** extendUtils */
     private Map<String, Object> extendUtils;
 
+    /** paramMap */
     private Map<String, Object> paramMap;
 
+    /**
+     * @param flowConfig
+     */
     public FlowContext(FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
         this.paramMap = new HashMap<String, Object>();
         this.extendUtils = new HashMap<String, Object>();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value <br>
+     */
     public void setAttribute(String key, Object value) {
         this.paramMap.put(key, value);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param <T> T
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
     public <T> T getAttribute(String key) {
         return (T) this.paramMap.get(key);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowConfig <br>
+     */
     public void setFlowConfig(FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param utilName
+     * @param util <br>
+     */
     public void addExtendUtil(String utilName, Object util) {
         this.extendUtils.put(utilName, util);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public FlowConfig getFlowConfig() {
         return this.flowConfig;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Map<String, Object> getParamMap() {
         return this.paramMap;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Map<String, Object> getExtendUtils() {
         return this.extendUtils;
     }

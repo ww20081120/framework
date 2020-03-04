@@ -30,11 +30,18 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  */
 public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
 
+    /** codes */
     private String[] codes;
 
+    /**
+     * 
+     */
     public CodeMatchInterceptor() {
     }
 
+    /**
+     * @param codes
+     */
     public CodeMatchInterceptor(String... codes) {
         this.codes = codes;
     }
@@ -57,6 +64,15 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
         });
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param code
+     * @param flowBean
+     * @return <br>
+     */
     private String getAttr(String code, Serializable flowBean) {
         try {
             PropertyDescriptor pd = new PropertyDescriptor(code, flowBean.getClass());

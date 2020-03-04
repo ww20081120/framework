@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -30,6 +31,12 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
  */
 public final class TransLogUtil {
 
+    /** Number */
+    private static final long NUM_10L = 10L;
+
+    /** Number */
+    private static final int NUM_100 = 100;
+
     private TransLogUtil() {
     }
 
@@ -45,7 +52,7 @@ public final class TransLogUtil {
 
         TransManager manager = TransManager.getInstance();
 
-        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", 100);
+        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
 
         // 深度检测
         if (manager.getStackSize() > maxDeepLen) {
@@ -89,7 +96,8 @@ public final class TransLogUtil {
         long beginTime = manager.getBeginTime(stackId);
         long consumeTime = endTime - beginTime;
 
-        long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", 10L) * 1000;
+        long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", NUM_10L)
+            * GlobalConstants.SECONDS;
 
         if (consumeTime > maxExcuteTime) {
             manager.setTimeout(true);

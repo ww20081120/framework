@@ -34,9 +34,19 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @RequestMapping("/framework/tx")
 public class SpringCloudController {
 
+    /** txProducer */
     @Resource
     private TxProducer txProducer;
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping("/{id}")
     public boolean containClient(@PathVariable("id") String id) {
         return txProducer.containClient(id);

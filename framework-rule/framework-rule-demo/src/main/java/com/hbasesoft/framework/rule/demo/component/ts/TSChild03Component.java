@@ -27,7 +27,12 @@ import com.hbasesoft.framework.rule.demo.repository.EmployeeRepository;
  */
 @Component("TSChild03Component")
 public class TSChild03Component implements FlowComponent<TestFlowBean> {
-   // @Resource
+
+    /** Number */
+    private static final int NUM_20 = 20;
+
+    /** dao */
+    // @Resource
     private EmployeeRepository employeeDao;
 
     /**
@@ -42,7 +47,7 @@ public class TSChild03Component implements FlowComponent<TestFlowBean> {
      */
     @Override
     public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
-        List<Employee> employeeList = employeeDao.findByAgeGreaterThan(20);
+        List<Employee> employeeList = employeeDao.findByAgeGreaterThan(NUM_20);
         for (Employee employee : employeeList) {
             employee.setAge(employee.getAge() + 1);
             employeeDao.update(employee);

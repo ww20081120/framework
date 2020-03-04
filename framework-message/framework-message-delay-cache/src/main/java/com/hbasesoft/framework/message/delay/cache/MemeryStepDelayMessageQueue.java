@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.ICache;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
@@ -25,8 +26,13 @@ import com.hbasesoft.framework.message.core.delay.DelayMessage;
  */
 public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue implements Runnable, IndexQueue {
 
+    /** holder */
     private Map<String, Long> holder;
 
+    /**
+     * 
+     * @param level
+     */
     public MemeryStepDelayMessageQueue(int level) {
         super(level);
         holder = new ConcurrentHashMap<>();
@@ -41,7 +47,8 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      */
     @Override
     public void add(DelayMessage delayMessage) {
-        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + delayMessage.getSeconds() * 1000);
+        addIndex(delayMessage.getMessageId(),
+            delayMessage.getCurrentTime() + delayMessage.getSeconds() * GlobalConstants.SECONDS);
         CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
             delayMessage.getMessageId(), delayMessage);
     }
@@ -91,12 +98,12 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 this.check();
-                Thread.sleep(this.getLevel() * 1000L);
+                Thread.sleep(this.getLevel() * GlobalConstants.SECONDS * 1L);
             }
             catch (Exception e) {
                 LoggerUtil.error(e);
                 try {
-                    Thread.sleep(1000L);
+                    Thread.sleep(GlobalConstants.SECONDS * 1L);
                 }
                 catch (InterruptedException e1) {
                     LoggerUtil.error(e);

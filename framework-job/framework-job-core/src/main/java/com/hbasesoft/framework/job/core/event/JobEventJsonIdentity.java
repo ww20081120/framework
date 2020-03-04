@@ -14,6 +14,14 @@ import com.dangdang.ddframe.job.event.JobEventIdentity;
  */
 public class JobEventJsonIdentity implements JobEventIdentity {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public String getIdentity() {
         return "TransLogger";

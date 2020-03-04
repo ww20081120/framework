@@ -35,6 +35,7 @@ public class CourseEntity extends BaseEntity {
      */
     private static final long serialVersionUID = 3095712295731014196L;
 
+    /** course */
     public static final String COURSE_NAME = "courseName";
 
     /** ID */
@@ -44,9 +45,11 @@ public class CourseEntity extends BaseEntity {
     @Column(name = "ID")
     private String id;
 
+    /** course name */
     @Column(name = "COURSE_NAME")
     private String courseName;
 
+    /** remark */
     @Column(name = "REMARK")
     private String remark;
 

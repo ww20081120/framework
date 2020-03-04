@@ -22,8 +22,12 @@ import redis.clients.jedis.BinaryJedisPubSub;
  */
 public class BinaryListener extends BinaryJedisPubSub {
 
+    /** subscriber */
     private MessageSubscriber subscriber;
 
+    /**
+     * @param subscriber
+     */
     public BinaryListener(MessageSubscriber subscriber) {
         this.subscriber = subscriber;
     }

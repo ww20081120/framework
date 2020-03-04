@@ -20,6 +20,7 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public class SimpleMessageSubcriberFactory implements MessageSubcriberFactory {
 
+    /** simple */
     public static final String SIMPLE = "SIMPLE";
 
     /**

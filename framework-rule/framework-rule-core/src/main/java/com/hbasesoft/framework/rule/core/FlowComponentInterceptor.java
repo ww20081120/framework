@@ -19,13 +19,39 @@ import java.io.Serializable;
  */
 public interface FlowComponentInterceptor extends Comparable<FlowComponentInterceptor> {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowBean
+     * @param flowContext
+     * @return <br>
+     */
     default boolean before(Serializable flowBean, FlowContext flowContext) {
         return true;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowBean
+     * @param flowContext <br>
+     */
     default void after(Serializable flowBean, FlowContext flowContext) {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param e
+     * @param flowBean
+     * @param flowContext <br>
+     */
     default void error(Exception e, Serializable flowBean, FlowContext flowContext) {
     }
 

@@ -56,6 +56,15 @@ public final class RocketmqFactory {
     /** 事务消费 */
     public static final String ROCKET_MQ_PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
 
+    /** message.executor.coreSize */
+    private static final int DEFAULT_CORESIZE = 20;
+
+    /** message.executor.maxPoolSize */
+    private static final int DEFAULT_MAX_POOLSIZE = 64;
+
+    /** message.rocketmq.producer.retrytimes */
+    private static final int RETRY_TIMES = 10;
+
     /** threadLocalHolder */
     private static ThreadLocal<Map<String, DefaultMQPushConsumer>> threadLocalHolder = 
         new ThreadLocal<Map<String, DefaultMQPushConsumer>>();
@@ -96,7 +105,7 @@ public final class RocketmqFactory {
 
         // Producer retry times
         defaultMQProducer.setRetryTimesWhenSendAsyncFailed(
-            PropertyHolder.getIntProperty("message.rocketmq.producer.retrytimes", 10));
+            PropertyHolder.getIntProperty("message.rocketmq.producer.retrytimes", RETRY_TIMES));
 
         /*
          * Producer对象在使用之前必须要调用start初始化，初始化一次即可<br> 注意：切记不可以在每次发送消息时，都调用start方法
@@ -139,7 +148,7 @@ public final class RocketmqFactory {
         // producer.setInstanceName(properties.getProducerTranInstanceName());
 
         // Retry times
-        producer.setRetryTimesWhenSendAsyncFailed(10);
+        producer.setRetryTimesWhenSendAsyncFailed(RETRY_TIMES);
 
         // 事务回查最小并发数
         // producer.setCheckThreadPoolMinSize(2);
@@ -198,8 +207,9 @@ public final class RocketmqFactory {
         // consumer.setInstanceName(properties.getConsumeCrInstanceName());
 
         // Set Consume Thread
-        consumer.setConsumeThreadMin(PropertyHolder.getIntProperty("message.executor.coreSize", 20));
-        consumer.setConsumeThreadMax(PropertyHolder.getIntProperty("message.executor.maxPoolSize", 64));
+        consumer.setConsumeThreadMin(PropertyHolder.getIntProperty("message.executor.coreSize", DEFAULT_CORESIZE));
+        consumer
+            .setConsumeThreadMax(PropertyHolder.getIntProperty("message.executor.maxPoolSize", DEFAULT_MAX_POOLSIZE));
 
         // Message Model
         if (isConsumerBroadcasting) {
@@ -254,6 +264,15 @@ public final class RocketmqFactory {
         return defaultMQPushConsumerHolder;
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
     public static int calculationLevel(long key) {
         Long[] longArray = DELAY_TIME_ARRAY;
         List<Long> longList = Arrays.asList(longArray);

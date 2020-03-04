@@ -20,6 +20,7 @@ import com.hbasesoft.framework.tx.core.TxClientInfoFactory;
  */
 public class RocketMQClientInfoFactory implements TxClientInfoFactory {
 
+    /** topic */
     private final String topic = PropertyHolder.getProperty("tx.rocketmq.topic",
         PropertyHolder.getProperty("project.name"));
 

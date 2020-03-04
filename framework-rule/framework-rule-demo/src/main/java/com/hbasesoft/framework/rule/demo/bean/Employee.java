@@ -45,9 +45,11 @@ public class Employee {
     @Column(name = "ID")
     private String id;
 
+    /** name */
     @Column(name = "name")
     private String name;
 
+    /** age */
     @Column(name = "age")
     private int age;
 
@@ -75,13 +77,32 @@ public class Employee {
         this.age = age;
     }
 
+    /**
+     * <Description> <br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate Mar 2, 2020 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.rule.demo.bean <br>
+     */
     @Getter
     @Setter
     public static class AAA {
+        
+        /** entity */
         private Employee entity;
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
     public static void main(String[] args) {
 
         // 构造上下文：准备比如变量定义等等表达式运行需要的上下文数据

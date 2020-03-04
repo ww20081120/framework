@@ -28,6 +28,7 @@ import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -50,6 +51,9 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
     "rawtypes", "deprecation", "unchecked"
 })
 public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
+
+    /** Number */
+    private static final int NUM_100 = 100;
 
     /**
      * logger
@@ -315,12 +319,12 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public <T> void batchSave(List<T> entitys) throws DaoException {
-        if (entitys.size() > 1000) {
+        if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
             throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
         for (int i = 0; i < entitys.size(); i++) {
             getSession().save(entitys.get(i));
-            if (i % 100 == 0) {
+            if (i % NUM_100 == 0) {
                 // 1000个对象后才清理缓存，写入数据库
                 getSession().flush();
                 getSession().clear();
@@ -548,9 +552,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param detachedCriteria
@@ -594,9 +597,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param detachedCriteria
@@ -745,12 +747,12 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     }
 
     public <T> void updateBatch(List<T> entitys) {
-        if (entitys.size() > 1000) {
+        if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
             throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
         for (int i = 0; i < entitys.size(); i++) {
             getSession().update(entitys.get(i));
-            if (i % 100 == 0) {
+            if (i % NUM_100 == 0) {
                 // 1000个对象后才清理缓存，写入数据库
                 getSession().flush();
                 getSession().clear();

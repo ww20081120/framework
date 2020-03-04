@@ -24,12 +24,37 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
 @Dao
 public interface TxCheckinfoDao {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark
+     * @return <br>
+     */
     @Sql("SELECT ID, MARK, RESULT FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
     TxCheckinfoEntity getCheckInfoById(@Param("id") String id, @Param("mark") String mark);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity
+     * @return <br>
+     */
     @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT) VALUES (:entity.id, :entity.mark, :entity.result)")
     int saveCheckInfo(@Param("entity") TxCheckinfoEntity entity);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id")
     int deleteCheckInfo(@Param("id") String id);
 }

@@ -7,6 +7,7 @@ package com.hbasesoft.framework.message.core.delay;
 
 import java.util.Collection;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -69,7 +70,7 @@ public class DelayMessageQueue {
 
         int newLevel = -1;
         int[] levels = stepDelayMessageQueueLoader.getLevels();
-        int currentSeconds = new Long((expireTime - System.currentTimeMillis()) / 1000).intValue();
+        int currentSeconds = new Long((expireTime - System.currentTimeMillis()) / GlobalConstants.SECONDS).intValue();
         for (int i = 0, l = levels.length; i < l; i++) {
             int level = levels[i];
             if (currentSeconds > level) {

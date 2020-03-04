@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.demo;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
@@ -20,7 +21,10 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public class MessageLinsener implements MessageSubscriber {
 
-    private String name = CommonUtil.getRandomChar(4);
+    /** Number */
+    private static final int NUM_4 = 4;
+
+    private String name = CommonUtil.getRandomChar(NUM_4);
 
     /**
      * Description: <br>
@@ -35,7 +39,7 @@ public class MessageLinsener implements MessageSubscriber {
         System.out.println(">>>>>>>>>>>>>" + Thread.currentThread().getName() + ">>>>>>>>>>>>>>>>>>>" + name
             + " onMessage: " + channel + "---" + new String(data));
         try {
-            Thread.sleep(1500);
+            Thread.sleep(2 * GlobalConstants.SECONDS);
         }
         catch (InterruptedException e) {
             e.printStackTrace();

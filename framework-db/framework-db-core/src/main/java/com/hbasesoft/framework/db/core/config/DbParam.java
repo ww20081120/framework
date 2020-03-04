@@ -29,10 +29,49 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DbParam extends BaseEntity {
+
     /**
      * serialVersionUID <br>
      */
     private static final long serialVersionUID = -3873382206326039466L;
+
+    /**
+     * 初始化连接大小
+     */
+    private static final int INITIAL_SIZE = 5;
+
+    /**
+     * 连接池最大使用连接数量
+     */
+    private static final int MAX_ACTIVE = 100;
+
+    /**
+     * 连接池最小空闲
+     */
+    private static final int MIN_IDLE = 10;
+
+    /**
+     * 获取连接最大等待时间
+     */
+    private static final long MAX_WAIT = 6000000;
+
+    /**
+     * 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+     */
+    private static final long TIME_BETWEEN_EVICTION_RUNS_MILLIS = 600000;
+
+    /**
+     * 配置一个连接在池中最小生存的时间，单位是毫秒
+     */
+    private static final long MIN_EVICTABLE_IDLE_TIME_MILLIS = 25200000;
+
+    /**
+     * 1800秒，也就是30分钟
+     */
+    private static final int REMOVE_ABANDONED_TIMEOUT = 1800;
+
+    /** ENC_LENGTH */
+    private static final int ENC_LENGTH = "ENC(".length();
 
     /** code */
     private String code;
@@ -60,22 +99,22 @@ public class DbParam extends BaseEntity {
     /**
      * 初始化连接大小
      */
-    private int initialSize = 5;
+    private int initialSize = INITIAL_SIZE;
 
     /**
      * 连接池最大使用连接数量
      */
-    private int maxActive = 100;
+    private int maxActive = MAX_ACTIVE;
 
     /**
      * 连接池最小空闲
      */
-    private int minIdle = 10;
+    private int minIdle = MIN_IDLE;
 
     /**
      * 获取连接最大等待时间
      */
-    private long maxWait = 6000000;
+    private long maxWait = MAX_WAIT;
 
     /**
      * validationQuery
@@ -94,12 +133,12 @@ public class DbParam extends BaseEntity {
     /**
      * 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
      */
-    private long timeBetweenEvictionRunsMillis = 600000;
+    private long timeBetweenEvictionRunsMillis = TIME_BETWEEN_EVICTION_RUNS_MILLIS;
 
     /**
      * 配置一个连接在池中最小生存的时间，单位是毫秒
      */
-    private long minEvictableIdleTimeMillis = 25200000;
+    private long minEvictableIdleTimeMillis = MIN_EVICTABLE_IDLE_TIME_MILLIS;
 
     /**
      * 打开removeAbandoned功能
@@ -109,7 +148,7 @@ public class DbParam extends BaseEntity {
     /**
      * 1800秒，也就是30分钟
      */
-    private int removeAbandonedTimeout = 1800;
+    private int removeAbandonedTimeout = REMOVE_ABANDONED_TIMEOUT;
 
     /**
      * 关闭abanded连接时输出错误日志
@@ -152,20 +191,21 @@ public class DbParam extends BaseEntity {
     private void init(final String prefix) {
         this.code = prefix;
         this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
-        this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", 5);
-        this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", 100);
-        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", 10);
-        this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", 6000000L);
+        this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", INITIAL_SIZE);
+        this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", MAX_ACTIVE);
+        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", MIN_IDLE);
+        this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", MAX_WAIT);
         this.validationQuery = PropertyHolder.getProperty(prefix + ".db.validationQuery", "SELECT 1");
         this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", true);
         this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".db.testOnReturn", false);
         this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".db.testWhileIdle", true);
         this.timeBetweenEvictionRunsMillis = PropertyHolder
-            .getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis", 600000L);
+            .getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis", timeBetweenEvictionRunsMillis);
         this.minEvictableIdleTimeMillis = PropertyHolder.getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis",
-            25200000L);
+            TIME_BETWEEN_EVICTION_RUNS_MILLIS);
         this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.removeAbandoned", true);
-        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout", 1800);
+        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout",
+            REMOVE_ABANDONED_TIMEOUT);
         this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.logAbandoned", true);
         this.driverClass = PropertyHolder.getProperty(prefix + ".db.driverClass");
         this.filters = PropertyHolder.getProperty(prefix + ".db.filters", "stat");
@@ -181,7 +221,7 @@ public class DbParam extends BaseEntity {
     public void setPassword(final String pw) {
         String tempPw = pw;
         if (StringUtils.isNotEmpty(pw) && password.startsWith("ENC(") && pw.endsWith(")")) {
-            tempPw = DataUtil.decrypt(password.substring(4, password.length() - 1));
+            tempPw = DataUtil.decrypt(password.substring(ENC_LENGTH, password.length() - 1));
         }
         this.password = tempPw;
     }

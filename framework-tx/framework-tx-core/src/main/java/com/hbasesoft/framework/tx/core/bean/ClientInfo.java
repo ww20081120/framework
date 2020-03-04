@@ -33,20 +33,31 @@ public class ClientInfo implements Serializable {
      */
     private static final long serialVersionUID = -1186576125746340794L;
 
+    /** id */
     private String id;
 
+    /** mark */
     private String mark;
 
+    /** context */
     private String context;
 
+    /** args */
     private byte[] args;
 
+    /** maxRetryTimes */
     private int maxRetryTimes;
 
+    /** retryConfigs */
     private String retryConfigs;
 
+    /** clientInfo */
     private String clientInfo;
 
+    /**
+     * @param id
+     * @param mark
+     */
     public ClientInfo(String id, String mark) {
         this.id = id;
         this.mark = mark;

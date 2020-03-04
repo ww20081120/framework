@@ -21,6 +21,7 @@ import com.alibaba.druid.proxy.jdbc.JdbcParameter;
 import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
 import com.hbasesoft.framework.common.utils.logger.TransManager;
@@ -268,7 +269,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     protected void statementExecuteAfter(StatementProxy statement, String sql, boolean firstResult) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
-        double millis = nanos / (1000 * 1000);
+        double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
 
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + "} executed. "
             + millis + " millis. " + getExcuteSql(statement);
@@ -285,7 +286,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     protected void statementExecuteBatchAfter(StatementProxy statement, int[] result) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
-        double millis = nanos / (1000 * 1000);
+        double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
 
         String sql;
         if (statement instanceof PreparedStatementProxy) {
@@ -313,7 +314,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     protected void statementExecuteQueryAfter(StatementProxy statement, String sql, ResultSetProxy resultSet) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
-        double millis = nanos / (1000 * 1000);
+        double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
 
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + ", rs-"
             + resultSet.getId() + "} query executed. " + millis + " millis. " + getExcuteSql(statement);
@@ -333,7 +334,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     protected void statementExecuteUpdateAfter(StatementProxy statement, String sql, int updateCount) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
-        double millis = nanos / (1000 * 1000);
+        double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
             + "} update executed. effort " + updateCount + ". " + millis + " millis. " + getExcuteSql(statement);
 
@@ -579,18 +580,18 @@ public class SqlLogFilter extends FilterEventAdapter {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param chain <br>
-     * @param dataSource <br>
-     * @param maxWaitMillis <br>
-     * @return <br>
+     * @param chain
+     * @param ds
+     * @param maxWaitMillis
+     * @return DruidPooledConnection
      * @throws SQLException <br>
      */
     @Override
-    public DruidPooledConnection dataSource_getConnection(FilterChain chain, DruidDataSource dataSource,
-        long maxWaitMillis) throws SQLException {
-        DruidPooledConnection conn = chain.dataSource_connect(dataSource, maxWaitMillis);
+    public DruidPooledConnection dataSource_getConnection(FilterChain chain, DruidDataSource ds, long maxWaitMillis)
+        throws SQLException {
+        DruidPooledConnection conn = chain.dataSource_connect(ds, maxWaitMillis);
         ConnectionProxy connection = (ConnectionProxy) conn.getConnectionHolder().getConnection();
         connectionLog("{conn-" + connection.getId() + "} pool-connect");
 

@@ -40,11 +40,31 @@ public class TxEventRetryHandler {
         EventEmmiter.emmit(event, data);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param seconds <br>
+     */
     @Tx(name = TX_EVENT_RETRY_HANDLER + "emmit2")
     public void emmit2(String event, EventData data, int seconds) {
         EventEmmiter.emmit(event, data, seconds);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param produceModel <br>
+     */
     @Tx(name = TX_EVENT_RETRY_HANDLER + "emmit3")
     public void emmit3(String event, EventData data, String produceModel) {
         EventEmmiter.emmit(event, data, produceModel);

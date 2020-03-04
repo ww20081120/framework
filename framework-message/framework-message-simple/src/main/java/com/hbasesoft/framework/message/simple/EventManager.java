@@ -34,26 +34,65 @@ import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
  */
 public final class EventManager {
 
+    /** number */
+    private static final int NUM_5 = 5;
+
+    /** number */
+    private static final int NUM_10 = 10;
+
+    /** number */
+    private static final long NUM_10L = 10L;
+
+    /** number */
+    private static final int NUM_20 = 20;
+
+    /** number */
+    private static final int NUM_500 = 500;
+
+    /** number */
+    private static final int NUM_600 = 600;
+
+    /** number */
+    private static final long NUM_1000L = 1000L;
+
+    /** number */
+    private static final int NUM_100000 = 100000;
+
+    /** logger */
     private static final Logger LOGGER = new Logger("EventHandlerLogger");
 
+    /** subscriberHolder */
     private Map<String, List<MessageSubscriber>> subscriberHolder;
 
+    /** queueholder */
     private Map<String, ArrayBlockingQueue<byte[]>> queueHolder;
 
+    /** executor */
     private ThreadPoolExecutor executor;
 
+    /** eventManager */
     private static EventManager eventManager;
 
+    /**
+     * 
+     */
     private EventManager() {
         subscriberHolder = new ConcurrentHashMap<>();
         queueHolder = new ConcurrentHashMap<>();
-        executor = new ThreadPoolExecutor(PropertyHolder.getIntProperty("message.scanner.coreSize", 5), // 设置核心线程数量
-            PropertyHolder.getIntProperty("message.scanner.maxPoolSize", 20), // 线程池维护线程的最大数量
-            PropertyHolder.getIntProperty("message.scanner.keepAliveSeconds", 600), TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.scanner.queueCapacity", 10)) // 允许的空闲时间
+        executor = new ThreadPoolExecutor(PropertyHolder.getIntProperty("message.scanner.coreSize", NUM_5), // 设置核心线程数量
+            PropertyHolder.getIntProperty("message.scanner.maxPoolSize", NUM_20), // 线程池维护线程的最大数量
+            PropertyHolder.getIntProperty("message.scanner.keepAliveSeconds", NUM_600), TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.scanner.queueCapacity", NUM_10)) // 允许的空闲时间
         ); // 缓存队列
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static EventManager getInstance() {
         if (eventManager == null) {
             eventManager = new EventManager();
@@ -61,6 +100,15 @@ public final class EventManager {
         return eventManager;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param broadcast
+     * @param messageSubscriber <br>
+     */
     public void regist(String channel, boolean broadcast, MessageSubscriber messageSubscriber) {
         synchronized (subscriberHolder) {
             List<MessageSubscriber> subscribers = subscriberHolder.get(channel);
@@ -73,30 +121,58 @@ public final class EventManager {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data <br>
+     */
     public void addMessage(String channel, byte[] data) {
         getBlockingQueue(channel).add(data == null ? new byte[0] : data);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @return <br>
+     */
     private ArrayBlockingQueue<byte[]> getBlockingQueue(String channel) {
         ArrayBlockingQueue<byte[]> queue = queueHolder.get(channel);
         if (queue == null) {
             queue = new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.scanner.msgCapacity." + channel,
-                PropertyHolder.getIntProperty("message.scanner.msgCapacity", 100000)));
+                PropertyHolder.getIntProperty("message.scanner.msgCapacity", NUM_100000)));
             queueHolder.put(channel, queue);
         }
         return queue;
     }
 
+    /**
+     * <Description> <br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate Mar 2, 2020 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.message.simple <br>
+     */
     private class EventScanner implements Runnable {
 
+        /** channel */
         private String channel;
 
+        /** queue */
         private ArrayBlockingQueue<byte[]> queue;
 
+        /** broadcast */
         private boolean broadcast;
 
         /**
-         * 
          * @param channel
          * @param broadcast
          * @param queue
@@ -121,7 +197,7 @@ public final class EventManager {
                 Random random = new Random();
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
-                        byte[] data = queue.poll(10L, TimeUnit.MILLISECONDS);
+                        byte[] data = queue.poll(NUM_10L, TimeUnit.MILLISECONDS);
                         if (data != null) {
                             List<MessageSubscriber> subscribers = subscriberHolder.get(channel);
                             if (CollectionUtils.isNotEmpty(subscribers)) {
@@ -142,9 +218,9 @@ public final class EventManager {
                     }
                     catch (Exception e) {
                         LoggerUtil.error(e);
-                        Thread.sleep(1000L);
+                        Thread.sleep(NUM_1000L);
                     }
-                    if (++count % 500 == 0) {
+                    if (++count % NUM_500 == 0) {
                         LOGGER.debug("scanner for {0} is alived.", channel);
                     }
                 }

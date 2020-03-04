@@ -33,6 +33,24 @@ import com.hbasesoft.framework.message.demo.Application;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class DelayMessageProviderTest implements ApplicationContextAware {
 
+    /** number */
+    private static final int NUM_3 = 3;
+
+    /** number */
+    private static final int NUM_30 = 30;
+
+    /** number */
+    private static final int NUM_60 = 60;
+
+    /** number */
+    private static final int NUM_120 = 120;
+
+    /** number */
+    private static final int NUM_800 = 800;
+
+    /** number */
+    private static final long MAX_TIME = 10000000L;
+
     private ApplicationContext applicationContext;
 
     @Before
@@ -47,27 +65,27 @@ public class DelayMessageProviderTest implements ApplicationContextAware {
 
         publisher.publish("log-p15", ("立即发送").getBytes());
 
-        for (int i = 1; i < 800; i++) {
-            if (i <= 30) {
+        for (int i = 1; i < NUM_800; i++) {
+            if (i <= NUM_30) {
                 publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
             }
-            else if (i <= 60) {
+            else if (i <= NUM_60) {
                 if (i % 2 == 0) {
                     publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
                 }
             }
-            else if (i <= 120) {
-                if (i % 30 == 1) {
+            else if (i <= NUM_120) {
+                if (i % NUM_30 == 1) {
                     publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
                 }
             }
             else {
-                if (i % 60 == 3) {
+                if (i % NUM_60 == NUM_3) {
                     publisher.publish("log-p15", (i + "秒发送数据").getBytes(), i);
                 }
             }
         }
-        Thread.sleep(10000000L);
+        Thread.sleep(MAX_TIME);
     }
 
     /**

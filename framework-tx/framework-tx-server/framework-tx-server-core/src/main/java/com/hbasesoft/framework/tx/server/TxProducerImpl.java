@@ -26,6 +26,7 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @Service
 public class TxProducerImpl implements TxProducer {
 
+    /** txStorage */
     @Resource
     private TxStorage txStorage;
 

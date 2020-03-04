@@ -40,10 +40,15 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  */
 public class JsonFileFlowLoader implements FlowLoader {
 
+    /** default path */
     private static final String DEFAULT_PATH = "META-INF/rules";
 
+    /** flow config hodler */
     private Map<String, FlowConfig> flowConfigHolder = new ConcurrentHashMap<String, FlowConfig>();
 
+    /**
+     * 
+     */
     public JsonFileFlowLoader() {
         init();
     }

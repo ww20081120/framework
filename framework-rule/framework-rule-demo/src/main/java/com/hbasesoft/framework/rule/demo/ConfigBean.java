@@ -26,21 +26,49 @@ import com.hbasesoft.rule.plugin.statemachine.StateMachineInterceptor;
 @Configuration
 public class ConfigBean {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     public CodeMatchInterceptor codeMatchInterceptor() {
         return new CodeMatchInterceptor("code", "type");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     public ConditionInterceptor conditionInterceptor() {
         return new ConditionInterceptor();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     public ToolsInterceptor toolsInterceptor() {
         return new ToolsInterceptor();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     public StateMachineInterceptor stateMachineInterceptor() {
         return new StateMachineInterceptor();

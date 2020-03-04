@@ -30,12 +30,27 @@ import com.hbasesoft.framework.db.spring.SpringDaoHandler;
 @Configuration
 public class DataBaseConfig {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean(name = "springDaoHandler")
     public MethodInterceptor registDaoHandler() {
         // dao处理类
         return new SpringDaoHandler();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param dbType
+     * @return <br>
+     */
     @Bean
     public AutoProxyBeanFactory registAutoProxyBeanFactory(@Value("${master.db.type}") String dbType) {
 

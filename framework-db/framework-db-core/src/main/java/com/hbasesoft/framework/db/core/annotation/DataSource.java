@@ -28,5 +28,12 @@ import java.lang.annotation.Target;
 })
 public @interface DataSource {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String value();
 }
