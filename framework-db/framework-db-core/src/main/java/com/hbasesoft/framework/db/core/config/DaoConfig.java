@@ -31,16 +31,4 @@ public class DaoConfig {
 
     /** 结果集类型转换回调函数 */
     private Class<?> callBackType;
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param typeName <br>
-     * @throws ClassNotFoundException <br>
-     */
-    public void setCallBackType(final String typeName) throws ClassNotFoundException {
-        this.callBackType = Class.forName(typeName);
-    }
 }

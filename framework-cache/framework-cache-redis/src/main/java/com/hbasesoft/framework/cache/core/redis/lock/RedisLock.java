@@ -88,7 +88,7 @@ public class RedisLock {
         int i = 0;
         try {
             // 在timeout的时间范围内不断轮询锁
-            while (System.currentTimeMillis() - lockTime < timeout * GlobalConstants.ONE_SECONDS) {
+            while (System.currentTimeMillis() - lockTime < timeout * GlobalConstants.SECONDS) {
                 // 锁不存在的话，设置锁并设置锁过期时间，即加锁
                 if (redisCache.setnx(lockName, LOCKED, expireTime)) {
                     // 锁的情况下锁过期后消失，不会造成永久阻塞

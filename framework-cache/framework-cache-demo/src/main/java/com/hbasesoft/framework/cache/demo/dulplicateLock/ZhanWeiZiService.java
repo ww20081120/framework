@@ -22,14 +22,13 @@ import com.hbasesoft.framework.common.GlobalConstants;
 public interface ZhanWeiZiService {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param no
      * @param name <br>
      */
-    @DulplicateLock(name = "zhanwei", key = "${no}", expireTime = GlobalConstants.ONE_SECONDS)
+    @DulplicateLock(name = "zhanwei", key = "${no}", expireTime = GlobalConstants.SECONDS)
     void rob(@Key("no") int no, String name);
 }

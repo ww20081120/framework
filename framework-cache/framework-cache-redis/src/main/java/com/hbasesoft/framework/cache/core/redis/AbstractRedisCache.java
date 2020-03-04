@@ -52,7 +52,7 @@ public abstract class AbstractRedisCache extends AbstractCache {
         config.setMaxIdle(PropertyHolder.getIntProperty("cache.redis.max.idle", MAX_IDLE));
         // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
         config.setMaxWaitMillis(
-            GlobalConstants.ONE_SECONDS * PropertyHolder.getIntProperty("cache.redis.max.wait", MAX_WAIT));
+            GlobalConstants.SECONDS * PropertyHolder.getIntProperty("cache.redis.max.wait", MAX_WAIT));
         // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
         config.setTestOnBorrow(PropertyHolder.getBooleanProperty("cache.redis.testonborrow", VALIDATE));
         return config;
