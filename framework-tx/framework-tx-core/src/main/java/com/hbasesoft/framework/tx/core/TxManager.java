@@ -68,7 +68,7 @@ public final class TxManager {
      * @taskId <br>
      * @param traceId <br>
      */
-    public static void setTraceId(String traceId) {
+    public static void setTraceId(final String traceId) {
         getTransIdGeneratorFactory().setTraceId(traceId);
     }
 
@@ -114,7 +114,7 @@ public final class TxManager {
      * @param obj
      * @param method <br>
      */
-    public static void regist(String mark, Object obj, Method method) {
+    public static void regist(final String mark, final Object obj, final Method method) {
         proxyObject.put(mark, obj);
         proxyMethod.put(mark, method);
     }
@@ -127,7 +127,7 @@ public final class TxManager {
      * @param method
      * @return <br>
      */
-    public static String getMarker(Method method) {
+    public static String getMarker(final Method method) {
         StringBuilder sb = new StringBuilder();
         sb.append(method.getDeclaringClass().getName()).append('.').append(method.getName()).append('(');
         Class<?>[] types = method.getParameterTypes();

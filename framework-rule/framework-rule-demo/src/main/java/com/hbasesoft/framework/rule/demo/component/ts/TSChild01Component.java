@@ -41,7 +41,7 @@ public class TSChild01Component implements FlowComponent<TestFlowBean> {
      * @throws Exception <br>
      */
     @Override
-    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
+    public boolean process(final TestFlowBean testFlowBean, final FlowContext flowContext) throws Exception {
         Employee employee = new Employee();
         employee.setName(testFlowBean.getName());
         employee.setAge(testFlowBean.getAge());

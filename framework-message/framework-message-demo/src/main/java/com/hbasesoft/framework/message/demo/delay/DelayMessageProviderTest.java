@@ -51,14 +51,29 @@ public class DelayMessageProviderTest implements ApplicationContextAware {
     /** number */
     private static final long MAX_TIME = 10000000L;
 
+    /** application context */
     private ApplicationContext applicationContext;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Before
     public void init() {
         Bootstrap.before();
         Bootstrap.after(applicationContext);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws InterruptedException <br>
+     */
     @Test
     public void testDelayMessage() throws InterruptedException {
         MessagePublisher publisher = MessageHelper.createMessagePublisher();
@@ -97,7 +112,7 @@ public class DelayMessageProviderTest implements ApplicationContextAware {
      * @throws BeansException <br>
      */
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 }

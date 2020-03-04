@@ -41,8 +41,9 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
      * @param params <br>
      */
     @Override
-    public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
-        if (alwaysLog) {
+    public void before(final String stackId, final String parentStackId, final long beginTime, final String method,
+        final Object[] params) {
+        if (this.isAlwaysLog()) {
             MDC.put("stackId", stackId);
             MDC.put("parentStackId", parentStackId);
             MDC.put("method", method);
@@ -55,9 +56,21 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param endTime
+     * @param consumeTime
+     * @param method
+     * @param returnValue <br>
+     */
     @Override
-    public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
-        if (alwaysLog) {
+    public void afterReturn(final String stackId, final long endTime, final long consumeTime, final String method,
+        final Object returnValue) {
+        if (this.isAlwaysLog()) {
             MDC.put("stackId", stackId);
             MDC.put("consumeTime", consumeTime + "");
             MDC.put("method", method);
@@ -81,8 +94,9 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
      * @param e <br>
      */
     @Override
-    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
-        if (alwaysLog) {
+    public void afterThrow(final String stackId, final long endTime, final long consumeTime, final String method,
+        final Throwable e) {
+        if (this.isAlwaysLog()) {
             MDC.put("stackId", stackId);
             MDC.put("consumeTime", consumeTime + "");
             MDC.put("method", method);
@@ -95,16 +109,24 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#end(java.lang.String, long, long, long,
-     * java.lang.Object, java.lang.Exception)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param beginTime
+     * @param endTime
+     * @param consumeTime
+     * @param method
+     * @param returnValue
+     * @param e <br>
      */
     @Override
-    public void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Throwable e) {
+    public void end(final String stackId, final long beginTime, final long endTime, final long consumeTime,
+        final String method, final Object returnValue, final Throwable e) {
         TransManager manager = TransManager.getInstance();
-        if (alwaysLog) {
+        if (this.isAlwaysLog()) {
             MDC.put("stackId", stackId);
             MDC.put("consumeTime", consumeTime + "");
             MDC.put("method", method);
@@ -139,12 +161,16 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#sql(java.lang.String, java.lang.String)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param sql <br>
      */
     @Override
-    public void sql(String stackId, String sql) {
+    public void sql(final String stackId, final String sql) {
     }
 
 }

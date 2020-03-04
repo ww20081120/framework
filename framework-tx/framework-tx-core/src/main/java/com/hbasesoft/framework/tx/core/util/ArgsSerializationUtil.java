@@ -33,16 +33,15 @@ public final class ArgsSerializationUtil {
     /** Number */
     private static final int NUM_65536 = 65536;
 
-    /** 
+    /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param args
      * @return <br>
      */
-    public static byte[] serializeArgs(Object[] args) {
+    public static byte[] serializeArgs(final Object[] args) {
         if (CommonUtil.isNotEmpty(args)) {
             byte[][] argsData = new byte[args.length][];
             int bufferSize = args.length * 2 + 1;
@@ -73,16 +72,15 @@ public final class ArgsSerializationUtil {
         return null;
     }
 
-    /** 
+    /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param data
      * @return <br>
      */
-    public static Object[] unserialArgs(byte[] data) {
+    public static Object[] unserialArgs(final byte[] data) {
         if (data != null && data.length > 0) {
             ByteBuffer buffer = ByteBuffer.wrap(data);
             int len = buffer.get() & NUM_FF;

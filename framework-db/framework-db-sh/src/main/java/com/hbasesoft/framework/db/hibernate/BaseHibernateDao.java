@@ -60,11 +60,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     private static Logger logger = new Logger(BaseHibernateDao.class);
 
+    /** entity class */
     private Class<?> entityClazz;
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.SqlExcutor#query(java.lang.String, java.util.Map)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param param
+     * @return
+     * @throws DaoException <br>
      */
     @Override
     public Object query(final String sql, final DataParam param) throws DaoException {
@@ -155,7 +162,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param query <br>
      * @throws DaoException <br>
      */
-    private void setParamMap(Map<String, Object> paramMap, Query query) throws DaoException {
+    private void setParamMap(final Map<String, Object> paramMap, final Query query) throws DaoException {
         if (MapUtils.isNotEmpty(paramMap)) {
             for (Entry<String, Object> entry : paramMap.entrySet()) {
                 Object obj = entry.getValue();
@@ -175,9 +182,15 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.SqlExcutor#excuteSql(java.lang. String, java.util.Map)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param param
+     * @return
+     * @throws DaoException <br>
      */
     @Override
     public int excuteSql(final String sql, final DataParam param) throws DaoException {
@@ -196,9 +209,15 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.dao.support.SqlExcutor#batchExcuteSql(java.lang. String[])
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sqls
+     * @param param
+     * @return
+     * @throws DaoException <br>
      */
     @Override
     public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
@@ -229,7 +248,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param criterions
      * @return Criteria
      */
-    private <T> Criteria createCriteria(Class<T> entityClass, Criterion... criterions) {
+    private <T> Criteria createCriteria(final Class<T> entityClass, final Criterion... criterions) {
         Criteria criteria = getSession().createCriteria(entityClass);
         for (Criterion c : criterions) {
             criteria.add(c);
@@ -259,7 +278,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> Serializable save(T entity) throws DaoException {
+    public <T> Serializable save(final T entity) throws DaoException {
         try {
             Serializable id = getSession().save(entity);
             logger.debug("保存实体成功," + entity.getClass().getName());
@@ -278,7 +297,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param entity
      */
     @Override
-    public <T> void saveOrUpdate(T entity) throws DaoException {
+    public <T> void saveOrUpdate(final T entity) throws DaoException {
         try {
             getSession().saveOrUpdate(entity);
             logger.debug("添加或更新成功," + entity.getClass().getName());
@@ -298,7 +317,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void delete(T entity) throws DaoException {
+    public <T> void delete(final T entity) throws DaoException {
         try {
             getSession().delete(entity);
             logger.debug("删除成功," + entity.getClass().getName());
@@ -318,7 +337,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void batchSave(List<T> entitys) throws DaoException {
+    public <T> void batchSave(final List<T> entitys) throws DaoException {
         if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
             throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
@@ -363,7 +382,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> T getEntity(Class<T> entityName, Serializable id) throws DaoException {
+    public <T> T getEntity(final Class<T> entityName, final Serializable id) throws DaoException {
         return get(entityName, id);
     }
 
@@ -380,7 +399,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> T findUniqueByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
+    public <T> T findUniqueByProperty(final Class<T> entityClass, final String propertyName, final Object value)
+        throws DaoException {
         Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
         return (T) createCriteria(entityClass, Restrictions.eq(propertyName, value)).uniqueResult();
     }
@@ -398,7 +418,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> List<T> findByProperty(Class<T> entityClass, String propertyName, Object value) throws DaoException {
+    public <T> List<T> findByProperty(final Class<T> entityClass, final String propertyName, final Object value)
+        throws DaoException {
         Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
         return (List<T>) createCriteria(entityClass, Restrictions.eq(propertyName, value)).list();
     }
@@ -414,7 +435,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> List<T> loadAll(Class<T> entityClass) throws DaoException {
+    public <T> List<T> loadAll(final Class<T> entityClass) throws DaoException {
         return createCriteria(entityClass).list();
     }
 
@@ -428,7 +449,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void deleteEntityById(Class<T> entityName, Serializable id) throws DaoException {
+    public <T> void deleteEntityById(final Class<T> entityName, final Serializable id) throws DaoException {
         Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
         T entity = get(entityName, id);
         if (entity != null) {
@@ -445,7 +466,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void deleteAllEntitie(Collection<T> entities) throws DaoException {
+    public <T> void deleteAllEntitie(final Collection<T> entities) throws DaoException {
         for (Object entity : entities) {
             getSession().delete(entity);
         }
@@ -461,7 +482,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void deleteAllEntitiesByIds(Class<T> entityName, Collection<? extends Serializable> ids)
+    public <T> void deleteAllEntitiesByIds(final Class<T> entityName, final Collection<? extends Serializable> ids)
         throws DaoException {
         Assert.notEmpty(ids, ErrorCodeDef.ID_IS_NULL);
         for (Serializable id : ids) {
@@ -479,7 +500,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> void updateEntity(T pojo) throws DaoException {
+    public <T> void updateEntity(final T pojo) throws DaoException {
         getSession().update(pojo);
     }
 
@@ -494,7 +515,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> List<T> findByQueryString(String hql) throws DaoException {
+    public <T> List<T> findByQueryString(final String hql) throws DaoException {
         Query queryObject = getSession().createQuery(hql);
         return queryObject.list();
     }
@@ -509,7 +530,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public int updateBySqlString(String sql) throws DaoException {
+    public int updateBySqlString(final String sql) throws DaoException {
         Session session = getSession();
         session.flush();
 
@@ -529,7 +550,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> List<T> findListbySql(String sql) throws DaoException {
+    public <T> List<T> findListbySql(final String sql) throws DaoException {
         Session session = getSession();
         session.flush();
         Query querys = session.createSQLQuery(sql);
@@ -547,7 +568,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> T singleResult(String hql) throws DaoException {
+    public <T> T singleResult(final String hql) throws DaoException {
         return (T) getSession().createQuery(hql).uniqueResult();
     }
 
@@ -557,17 +578,17 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @author 王伟<br>
      * @taskId <br>
      * @param detachedCriteria
-     * @param pageIndex
+     * @param pi
      * @param pageSize
      * @param <T> T
      * @return T
      * @throws DaoException <br>
      */
     @Override
-    public <T> PagerList<T> getPageList(DetachedCriteria detachedCriteria, int pageIndex, int pageSize)
+    public <T> PagerList<T> getPageList(final DetachedCriteria detachedCriteria, final int pi, final int pageSize)
         throws DaoException {
-
-        if (pageIndex == 0) {
+        int pageIndex = pi;
+        if (pi == 0) {
             pageIndex = 1;
         }
 
@@ -607,7 +628,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public <T> List<T> getListByCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
+    public <T> List<T> getListByCriteriaQuery(final DetachedCriteria detachedCriteria) throws DaoException {
         return detachedCriteria.getExecutableCriteria(getSession()).list();
     }
 
@@ -623,7 +644,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> List<T> findHql(String hql, Object... param) throws DaoException {
+    public <T> List<T> findHql(final String hql, final Object... param) throws DaoException {
         Query q = getSession().createQuery(hql);
         if (param != null && param.length > 0) {
             for (int i = 0; i < param.length; i++) {
@@ -645,7 +666,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> List<T> executeProcedure(String procedureSql, Object... params) throws DaoException {
+    public <T> List<T> executeProcedure(final String procedureSql, final Object... params) throws DaoException {
         Session session = getSession();
         session.flush();
         SQLQuery sqlQuery = session.createSQLQuery(procedureSql);
@@ -667,19 +688,30 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
 
     @Override
-    public <T> T getCriteriaQuery(DetachedCriteria detachedCriteria) throws DaoException {
+    public <T> T getCriteriaQuery(final DetachedCriteria detachedCriteria) throws DaoException {
         return (T) detachedCriteria.getExecutableCriteria(getSession()).uniqueResult();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param objcts
+     * @param commitNumber
+     * @throws DaoException <br>
+     */
     @Override
-    public <T> void batchExecute(String sql, Collection<Object[]> objcts, int commitNumber) throws DaoException {
+    public <T> void batchExecute(final String sql, final Collection<Object[]> objcts, final int commitNumber)
+        throws DaoException {
         Session session = getSession();
         session.flush();
 
         session.doWork(new Work() {
 
             @Override
-            public void execute(Connection connection) throws SQLException {
+            public void execute(final Connection connection) throws SQLException {
                 PreparedStatement stmt = null;
                 try {
                     stmt = connection.prepareStatement(sql);
@@ -742,11 +774,27 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
     }
 
-    public <T> void saveBatch(List<T> entitys) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entitys <br>
+     * @param <T> T
+     */
+    public <T> void saveBatch(final List<T> entitys) {
         this.batchSave(entitys);
     }
 
-    public <T> void updateBatch(List<T> entitys) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entitys <br>
+     * @param <T> T
+     */
+    public <T> void updateBatch(final List<T> entitys) {
         if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
             throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
@@ -763,59 +811,182 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         getSession().clear();
     }
 
-    public <T> void update(T pojo) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pojo <br>
+     * @param <T> T
+     */
+    public <T> void update(final T pojo) {
         this.updateEntity(pojo);
     }
 
-    public int updateBySql(String sql) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @return <br>
+     */
+    public int updateBySql(final String sql) {
         return this.updateBySqlString(sql);
     };
 
-    public void deleteById(Serializable id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    public void deleteById(final Serializable id) {
         this.deleteEntityById(getEntityClazz(), id);
     }
 
-    public <T> void delete(Collection<T> entities) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entities <br>
+     * @param <T> T
+     */
+    public <T> void delete(final Collection<T> entities) {
         this.deleteAllEntitie(entities);
     }
 
-    public void deleteByIds(Collection<? extends Serializable> ids) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param ids <br>
+     */
+    public void deleteByIds(final Collection<? extends Serializable> ids) {
         this.deleteAllEntitiesByIds(getEntityClazz(), ids);
     }
 
-    public <T> T get(Serializable id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> T get(final Serializable id) {
         return (T) this.get(getEntityClazz(), id);
     }
 
-    public <T> T getByProperty(String propertyName, Object value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param propertyName
+     * @param value
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> T getByProperty(final String propertyName, final Object value) {
         return (T) this.findUniqueByProperty(getEntityClazz(), propertyName, value);
     }
 
-    public <T> T getByCriteria(DetachedCriteria detachedCriteria) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param detachedCriteria
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> T getByCriteria(final DetachedCriteria detachedCriteria) {
         return this.getCriteriaQuery(detachedCriteria);
     }
 
-    public <T> T getByHql(String hql) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> T getByHql(final String hql) {
         return this.singleResult(hql);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T> T
+     * @return <br>
+     */
     public <T> List<T> queryAll() {
         return (List<T>) this.loadAll(getEntityClazz());
     }
 
-    public <T> List<T> queryByProperty(String propertyName, Object value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param propertyName
+     * @param value
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> List<T> queryByProperty(final String propertyName, final Object value) {
         return (List<T>) this.findByProperty(getEntityClazz(), propertyName, value);
     }
 
-    public <T> PagerList<T> queryPagerByCriteria(DetachedCriteria detachedCriteria, int pageIndex, int pageSize) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param detachedCriteria
+     * @param pageIndex
+     * @param pageSize
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> PagerList<T> queryPagerByCriteria(final DetachedCriteria detachedCriteria, final int pageIndex,
+        final int pageSize) {
         return this.getPageList(detachedCriteria, pageIndex, pageSize);
     }
 
-    public <T> List<T> queryByCriteria(DetachedCriteria detachedCriteria) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param detachedCriteria
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> List<T> queryByCriteria(final DetachedCriteria detachedCriteria) {
         return this.getListByCriteriaQuery(detachedCriteria);
     }
 
-    public <T> List<T> queryBySql(String sql) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> List<T> queryBySql(final String sql) {
 
         Session session = getSession();
         session.flush();
@@ -830,24 +1001,66 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         return query.list();
     }
 
-    public <T> List<T> queryByHqlParam(String hql, Object... param) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param param
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> List<T> queryByHqlParam(final String hql, final Object... param) {
         return findHql(hql, param);
     }
 
-    public <T> List<T> queryByHql(String hql) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param <T> T
+     * @return <br>
+     */
+    public <T> List<T> queryByHql(final String hql) {
         return this.findByQueryString(hql);
     }
 
-    public void executeBatch(String sql, Collection<Object[]> objcts, int commitNumber) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param objcts
+     * @param commitNumber <br>
+     */
+    public void executeBatch(final String sql, final Collection<Object[]> objcts, final int commitNumber) {
         this.batchExecute(sql, objcts, commitNumber);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     private Class<?> getEntityClazz() {
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
         return entityClazz;
     }
 
-    public void setEntityClazz(Class<?> entityClazz) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClazz <br>
+     */
+    public void setEntityClazz(final Class<?> entityClazz) {
         this.entityClazz = entityClazz;
     }
 

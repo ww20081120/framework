@@ -109,7 +109,7 @@ public final class EventManager {
      * @param broadcast
      * @param messageSubscriber <br>
      */
-    public void regist(String channel, boolean broadcast, MessageSubscriber messageSubscriber) {
+    public void regist(final String channel, final boolean broadcast, final MessageSubscriber messageSubscriber) {
         synchronized (subscriberHolder) {
             List<MessageSubscriber> subscribers = subscriberHolder.get(channel);
             if (subscribers == null) {
@@ -129,7 +129,7 @@ public final class EventManager {
      * @param channel
      * @param data <br>
      */
-    public void addMessage(String channel, byte[] data) {
+    public void addMessage(final String channel, final byte[] data) {
         getBlockingQueue(channel).add(data == null ? new byte[0] : data);
     }
 
@@ -141,7 +141,7 @@ public final class EventManager {
      * @param channel
      * @return <br>
      */
-    private ArrayBlockingQueue<byte[]> getBlockingQueue(String channel) {
+    private ArrayBlockingQueue<byte[]> getBlockingQueue(final String channel) {
         ArrayBlockingQueue<byte[]> queue = queueHolder.get(channel);
         if (queue == null) {
             queue = new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.scanner.msgCapacity." + channel,
@@ -177,7 +177,7 @@ public final class EventManager {
          * @param broadcast
          * @param queue
          */
-        EventScanner(String channel, boolean broadcast, ArrayBlockingQueue<byte[]> queue) {
+        EventScanner(final String channel, final boolean broadcast, final ArrayBlockingQueue<byte[]> queue) {
             this.channel = channel;
             this.broadcast = broadcast;
             this.queue = queue;

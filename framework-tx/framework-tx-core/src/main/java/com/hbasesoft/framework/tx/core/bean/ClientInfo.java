@@ -58,7 +58,7 @@ public class ClientInfo implements Serializable {
      * @param id
      * @param mark
      */
-    public ClientInfo(String id, String mark) {
+    public ClientInfo(final String id, final String mark) {
         this.id = id;
         this.mark = mark;
     }

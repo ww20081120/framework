@@ -41,7 +41,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          * @param clientInfo <br>
          */
         @Override
-        public boolean registClient(ClientInfo clientInfo) {
+        public boolean registClient(final ClientInfo clientInfo) {
             LOGGER.warn("registClient|" + JSONObject.toJSONString(clientInfo));
             return false;
         }
@@ -54,7 +54,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          * @param id <br>
          */
         @Override
-        public void removeClient(String id) {
+        public void removeClient(final String id) {
             LOGGER.warn("removeClient|" + id);
         }
 
@@ -68,7 +68,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          * @return <br>
          */
         @Override
-        public CheckInfo check(String id, String mark) {
+        public CheckInfo check(final String id, final String mark) {
             LOGGER.warn("registMsg|" + id + "|" + mark);
             return null;
         }
@@ -81,12 +81,12 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
          * @param checkInfo <br>
          */
         @Override
-        public void saveResult(CheckInfo checkInfo) {
+        public void saveResult(final CheckInfo checkInfo) {
             LOGGER.warn("saveResult|" + JSONObject.toJSONString(checkInfo));
         }
 
         @Override
-        public boolean containClient(String id) {
+        public boolean containClient(final String id) {
             LOGGER.warn("containClient|" + id);
             return false;
         }
@@ -102,7 +102,7 @@ public class FallBackProducerFactory implements FallbackFactory<FeginProducer> {
      * @return <br>
      */
     @Override
-    public FeginProducer create(Throwable cause) {
+    public FeginProducer create(final Throwable cause) {
         return FallBackProducerFactory.PRODUCER;
     }
 

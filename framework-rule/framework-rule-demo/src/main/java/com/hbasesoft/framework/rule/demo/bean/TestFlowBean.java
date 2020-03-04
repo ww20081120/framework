@@ -18,7 +18,6 @@ import java.io.Serializable;
  * @see com.hbasesoft.framework.test.rule.plugin.transaction <br>
  */
 public class TestFlowBean implements Serializable {
-    
 
     /**
      * serialVersionUID <br>
@@ -31,19 +30,47 @@ public class TestFlowBean implements Serializable {
     /** age */
     private int age;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param age <br>
+     */
+    public void setAge(final int age) {
         this.age = age;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name <br>
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 

@@ -43,7 +43,7 @@ public class FlowContext implements Serializable {
     /**
      * @param flowConfig
      */
-    public FlowContext(FlowConfig flowConfig) {
+    public FlowContext(final FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
         this.paramMap = new HashMap<String, Object>();
         this.extendUtils = new HashMap<String, Object>();
@@ -57,7 +57,7 @@ public class FlowContext implements Serializable {
      * @param key
      * @param value <br>
      */
-    public void setAttribute(String key, Object value) {
+    public void setAttribute(final String key, final Object value) {
         this.paramMap.put(key, value);
     }
 
@@ -71,7 +71,7 @@ public class FlowContext implements Serializable {
      * @return <br>
      */
     @SuppressWarnings("unchecked")
-    public <T> T getAttribute(String key) {
+    public <T> T getAttribute(final String key) {
         return (T) this.paramMap.get(key);
     }
 
@@ -82,7 +82,7 @@ public class FlowContext implements Serializable {
      * @taskId <br>
      * @param flowConfig <br>
      */
-    public void setFlowConfig(FlowConfig flowConfig) {
+    public void setFlowConfig(final FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
     }
 
@@ -94,7 +94,7 @@ public class FlowContext implements Serializable {
      * @param utilName
      * @param util <br>
      */
-    public void addExtendUtil(String utilName, Object util) {
+    public void addExtendUtil(final String utilName, final Object util) {
         this.extendUtils.put(utilName, util);
     }
 

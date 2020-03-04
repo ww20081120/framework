@@ -35,7 +35,7 @@ public abstract class AbstractStepDelayMessageQueue implements StepDelayMessageQ
     /**
      * @param level
      */
-    public AbstractStepDelayMessageQueue(int level) {
+    public AbstractStepDelayMessageQueue(final int level) {
         Assert.isTrue(level >= 1, ErrorCodeDef.DELAY_TIME_TOO_SHORT, level);
         this.level = level;
     }

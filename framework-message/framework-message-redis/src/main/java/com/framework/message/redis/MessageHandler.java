@@ -66,7 +66,7 @@ public final class MessageHandler {
      * @param channel
      * @param subscriber <br>
      */
-    public void addConsummer(MessageQueue queue, final String channel, final MessageSubscriber subscriber) {
+    public void addConsummer(final MessageQueue queue, final String channel, final MessageSubscriber subscriber) {
         Thread thread = new Thread(() -> {
             // 建一个线程池
             try {
@@ -147,7 +147,7 @@ public final class MessageHandler {
          * @param subscriber
          * @param data
          */
-        Consumer(String transId, String channel, MessageSubscriber subscriber, byte[] data) {
+        Consumer(final String transId, final String channel, final MessageSubscriber subscriber, final byte[] data) {
             this.transId = transId;
             this.channel = channel;
             this.subscriber = subscriber;

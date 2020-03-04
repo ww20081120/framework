@@ -51,6 +51,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     /** interceptors */
     private String[] interceptors;
 
+    /** config */
     private DaoConfig config;
 
     /**
@@ -62,7 +63,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      * @throws BeansException <br>
      */
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
         logger.info("*************************Dao注入列表***************************");
         SQLHandler sqlHandler = new SQLHandler();
         sqlHandler.setDaoConfig(config);
@@ -109,7 +110,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         logger.info("***********************************************************");
     }
 
-    private DaoHandler getDaoHandler(Class<?> clazz) {
+    private DaoHandler getDaoHandler(final Class<?> clazz) {
         DaoHandler handler = new DaoHandler();
         handler.setDaoConfig(config);
         BaseHibernateDao baseDao = new BaseHibernateDao();
@@ -146,15 +147,36 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         return handler;
     }
 
-    public void setConfig(DaoConfig config) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param config <br>
+     */
+    public void setConfig(final DaoConfig config) {
         this.config = config;
     }
 
-    public void setPackagesToScan(String... packagesToScan) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param packagesToScan <br>
+     */
+    public void setPackagesToScan(final String... packagesToScan) {
         this.packagesToScan = packagesToScan;
     }
 
-    public void setInterceptors(String... interceptors) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param interceptors <br>
+     */
+    public void setInterceptors(final String... interceptors) {
         this.interceptors = interceptors;
     }
 }

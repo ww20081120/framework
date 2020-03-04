@@ -48,7 +48,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
      * @param data <br>
      */
     @Override
-    public void publish(String channel, byte[] data) {
+    public void publish(final String channel, final byte[] data) {
         // 默认使用普通消费
         publish(channel, data, MessagePublisher.PUBLISH_TYPE_DEFAULT, 0);
     }
@@ -63,7 +63,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
      * @param seconds <br>
      */
     @Override
-    public void publish(String channel, byte[] data, int seconds) {
+    public void publish(final String channel, final byte[] data, final int seconds) {
         // 默认使用普通消费
         publish(channel, data, MessagePublisher.PUBLISH_TYPE_DEFAULT, seconds);
     }
@@ -78,7 +78,7 @@ public class RocketmqMessagePublisher implements MessagePublisher {
      * @param produceModel <br>
      */
     @Override
-    public void publish(String channel, byte[] data, String produceModel) {
+    public void publish(final String channel, final byte[] data, final String produceModel) {
         // 指定消费模式
         publish(channel, data, produceModel, 0);
     }

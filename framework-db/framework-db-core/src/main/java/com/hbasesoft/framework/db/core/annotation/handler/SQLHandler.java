@@ -29,7 +29,7 @@ public class SQLHandler extends AbstractAnnotationHandler {
      * @param clazz <br>
      * @throws InitializationException <br>
      */
-    public void invoke(Class<?> clazz) throws InitializationException {
+    public void invoke(final Class<?> clazz) throws InitializationException {
         Method[] methods = clazz.getDeclaredMethods();
         if (CommonUtil.isNotEmpty(methods)) {
             for (Method method : methods) {

@@ -42,7 +42,7 @@ public class TestConsumer {
      * @return <br>
      */
     @GetMapping
-    public synchronized String test(@RequestParam("id") String id) {
+    public synchronized String test(final @RequestParam("id") String id) {
         i++;
         if (new Random().nextInt(NUM_10) == NUM_7) {
             throw new RuntimeException();

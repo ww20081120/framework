@@ -37,21 +37,20 @@ import com.hbasesoft.framework.tx.core.util.ArgsSerializationUtil;
 @Configuration
 public class TxAdvice {
 
-    /** 
+    /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Pointcut("execution(public * com.hbasesoft..*(..))")
     public void tx() {
     }
 
-    /** 
+    /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param thisJoinPoint
@@ -59,7 +58,7 @@ public class TxAdvice {
      * @throws Throwable <br>
      */
     @Around("tx()")
-    public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+    public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {
             MethodSignature msig = (MethodSignature) sig;

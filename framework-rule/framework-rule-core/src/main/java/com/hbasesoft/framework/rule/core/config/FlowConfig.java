@@ -58,42 +58,112 @@ public class FlowConfig implements Serializable {
         return component;
     }
 
-    public void setComponent(FlowComponent<?> component) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param component <br>
+     */
+    public void setComponent(final FlowComponent<?> component) {
         this.component = component;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public List<FlowConfig> getChildrenConfigList() {
         return childrenConfigList;
     }
 
-    public void setChildrenConfigList(List<FlowConfig> childrenConfigList) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param childrenConfigList <br>
+     */
+    public void setChildrenConfigList(final List<FlowConfig> childrenConfigList) {
         this.childrenConfigList = childrenConfigList;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Map<String, Object> getConfigAttrMap() {
         return configAttrMap;
     }
 
-    public void setConfigAttrMap(Map<String, Object> configAttrMap) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param configAttrMap <br>
+     */
+    public void setConfigAttrMap(final Map<String, Object> configAttrMap) {
         this.configAttrMap = configAttrMap;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name <br>
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param version <br>
+     */
+    public void setVersion(final String version) {
         this.version = version;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public String toString() {
         return JSONObject.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss", new SerializerFeature[0]);

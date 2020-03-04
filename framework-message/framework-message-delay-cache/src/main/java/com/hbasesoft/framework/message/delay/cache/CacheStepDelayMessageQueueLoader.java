@@ -43,7 +43,7 @@ public class CacheStepDelayMessageQueueLoader implements StepDelayMessageQueueLo
      * @return <br>
      */
     @Override
-    public StepDelayMessageQueue getDelayMessageQueue(int level) {
+    public StepDelayMessageQueue getDelayMessageQueue(final int level) {
         return QueueManager.getMap().get(level);
     }
 
@@ -69,7 +69,7 @@ public class CacheStepDelayMessageQueueLoader implements StepDelayMessageQueueLo
      * @param newLevel <br>
      */
     @Override
-    public void changeData(String messageId, long expireTime, int oldLevel, int newLevel) {
+    public void changeData(final String messageId, final long expireTime, final int oldLevel, final int newLevel) {
         if (oldLevel != newLevel) {
             ((IndexQueue) getDelayMessageQueue(oldLevel)).removeIndex(messageId);
             ((IndexQueue) getDelayMessageQueue(newLevel)).addIndex(messageId, expireTime);

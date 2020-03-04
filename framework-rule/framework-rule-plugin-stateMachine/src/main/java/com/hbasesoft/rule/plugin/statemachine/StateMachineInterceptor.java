@@ -59,7 +59,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(Serializable bean, FlowContext flowContext) {
+    public boolean before(final Serializable bean, final FlowContext flowContext) {
         FlowConfig config = flowContext.getFlowConfig();
         Map<String, Object> attrMap = config.getConfigAttrMap();
 

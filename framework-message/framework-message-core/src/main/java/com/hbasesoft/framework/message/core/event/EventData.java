@@ -38,14 +38,14 @@ public class EventData extends HashMap<String, Object> {
     /**
      * @param msgId
      */
-    public EventData(String msgId) {
+    public EventData(final String msgId) {
         this.msgId = msgId;
     }
 
     /**
      * @param data
      */
-    public EventData(Object data) {
+    public EventData(final Object data) {
         this(CommonUtil.getTransactionID(), data);
     }
 
@@ -53,7 +53,7 @@ public class EventData extends HashMap<String, Object> {
      * @param msgId
      * @param data
      */
-    public EventData(String msgId, Object data) {
+    public EventData(final String msgId, final Object data) {
         this(msgId);
         super.put(DEFAULT_KEY, data);
     }
@@ -71,7 +71,7 @@ public class EventData extends HashMap<String, Object> {
      * @param key
      * @return <br>
      */
-    public String getParameter(String key) {
+    public String getParameter(final String key) {
         return (String) this.get(key);
     }
 
@@ -106,7 +106,7 @@ public class EventData extends HashMap<String, Object> {
      * @taskId <br>
      * @param msgId <br>
      */
-    public void setMsgId(String msgId) {
+    public void setMsgId(final String msgId) {
         this.msgId = msgId;
     }
 }

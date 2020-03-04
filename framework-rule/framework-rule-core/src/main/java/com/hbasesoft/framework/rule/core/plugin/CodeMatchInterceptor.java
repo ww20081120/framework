@@ -42,7 +42,7 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
     /**
      * @param codes
      */
-    public CodeMatchInterceptor(String... codes) {
+    public CodeMatchInterceptor(final String... codes) {
         this.codes = codes;
     }
 
@@ -56,7 +56,7 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         Map<String, Object> attrMap = flowContext.getFlowConfig().getConfigAttrMap();
         return !Arrays.stream(codes).anyMatch(code -> {
             // 匹配包含 code ，而且值匹配不上的
@@ -73,7 +73,7 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
      * @param flowBean
      * @return <br>
      */
-    private String getAttr(String code, Serializable flowBean) {
+    private String getAttr(final String code, final Serializable flowBean) {
         try {
             PropertyDescriptor pd = new PropertyDescriptor(code, flowBean.getClass());
             Method rM = pd.getReadMethod();
@@ -86,11 +86,25 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String[] getCodes() {
         return codes;
     }
 
-    public void setCodes(String[] codes) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param codes <br>
+     */
+    public void setCodes(final String[] codes) {
         this.codes = codes;
     }
 

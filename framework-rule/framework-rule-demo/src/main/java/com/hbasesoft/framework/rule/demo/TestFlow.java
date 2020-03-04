@@ -80,7 +80,7 @@ public class TestFlow implements ApplicationContextAware {
      * @throws BeansException <br>
      */
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         ContextHolder.setContext(applicationContext);
     }
 }

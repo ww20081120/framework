@@ -21,8 +21,23 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public interface EventLinsener extends MessageSubscriber {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String[] events();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data <br>
+     */
     void onEmmit(String event, EventData data);
 
     /**

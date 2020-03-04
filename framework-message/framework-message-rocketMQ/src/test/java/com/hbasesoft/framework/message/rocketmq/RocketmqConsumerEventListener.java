@@ -16,7 +16,7 @@ public class RocketmqConsumerEventListener {
      * @param event <br>
      */
     @EventListener
-    public void rocketmqMsgListen(RocketmqEvent event) {
+    public void rocketmqMsgListen(final RocketmqEvent event) {
         // DefaultMQPushConsumer consumer = event.getConsumer();
         try {
             System.out.println("监听到一个消息达到：" + event.getMsgs().get(0).getMsgId());

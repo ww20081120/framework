@@ -40,7 +40,7 @@ public class SimpleMessagePublisher implements MessagePublisher {
      * @param data <br>
      */
     @Override
-    public void publish(String channel, byte[] data) {
+    public void publish(final String channel, final byte[] data) {
         EventManager.getInstance().addMessage(channel, data);
     }
 

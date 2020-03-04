@@ -30,10 +30,9 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
     private Map<String, Long> holder;
 
     /**
-     * 
      * @param level
      */
-    public MemeryStepDelayMessageQueue(int level) {
+    public MemeryStepDelayMessageQueue(final int level) {
         super(level);
         holder = new ConcurrentHashMap<>();
     }
@@ -46,7 +45,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @param delayMessage <br>
      */
     @Override
-    public void add(DelayMessage delayMessage) {
+    public void add(final DelayMessage delayMessage) {
         addIndex(delayMessage.getMessageId(),
             delayMessage.getCurrentTime() + delayMessage.getSeconds() * GlobalConstants.SECONDS);
         CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
@@ -62,7 +61,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @return <br>
      */
     @Override
-    public DelayMessage remove(String msgId) {
+    public DelayMessage remove(final String msgId) {
         Long t = holder.remove(msgId);
         if (t != null) {
             ICache cache = CacheHelper.getCache();
@@ -120,7 +119,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @param key <br>
      */
     @Override
-    public void removeIndex(String key) {
+    public void removeIndex(final String key) {
         holder.remove(key);
     }
 
@@ -133,7 +132,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @param expireTime <br>
      */
     @Override
-    public void addIndex(String key, Long expireTime) {
+    public void addIndex(final String key, final Long expireTime) {
         holder.put(key, expireTime);
     }
 

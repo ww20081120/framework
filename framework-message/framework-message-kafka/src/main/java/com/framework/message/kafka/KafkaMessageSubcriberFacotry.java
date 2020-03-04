@@ -66,7 +66,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
      * @param subscriber <br>
      */
     @Override
-    public void registSubscriber(final String channel, boolean broadcast, final MessageSubscriber subscriber) {
+    public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
         new Thread(() -> {
             KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
                 .getKafkaConsumer(broadcast ? channel + CommonUtil.getTransactionID() : channel, channel);
@@ -74,7 +74,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
         }).start();
     }
 
-    private void registSubscriberBroadCast(KafkaConsumer<String, byte[]> kafkaConsumer, String channel,
+    private void registSubscriberBroadCast(final KafkaConsumer<String, byte[]> kafkaConsumer, final String channel,
         final MessageSubscriber subscriber) {
 
         int index = atomicInteger.incrementAndGet();

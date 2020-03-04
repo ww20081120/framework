@@ -48,7 +48,7 @@ public final class MessageThreadPoolExecutor {
      * @param message
      * @throws InterruptedException <br>
      */
-    public static void execute(String channel, Runnable message) {
+    public static void execute(final String channel, final Runnable message) {
         synchronized (channel) {
             ThreadPoolExecutor executor = executorMap.get(channel);
             if (executor == null) {

@@ -40,7 +40,7 @@ public class EventHandlerStartupLinstener implements StartupListener {
      * @throws FrameworkException <br>
      */
     @Override
-    public void complete(ApplicationContext context) throws FrameworkException {
+    public void complete(final ApplicationContext context) throws FrameworkException {
         Map<String, EventLinsener> eventLinseners = context.getBeansOfType(EventLinsener.class);
         if (MapUtils.isNotEmpty(eventLinseners)) {
 

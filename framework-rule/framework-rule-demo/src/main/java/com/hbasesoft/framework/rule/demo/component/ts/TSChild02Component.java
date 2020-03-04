@@ -43,7 +43,7 @@ public class TSChild02Component implements FlowComponent<TestFlowBean> {
      * @throws Exception <br>
      */
     @Override
-    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
+    public boolean process(final TestFlowBean testFlowBean, final FlowContext flowContext) throws Exception {
         List<Employee> employeeList = employeeDao.findByName(testFlowBean.getName());
         for (Employee employee : employeeList) {
             employee.setName(employee.getName() + 1);

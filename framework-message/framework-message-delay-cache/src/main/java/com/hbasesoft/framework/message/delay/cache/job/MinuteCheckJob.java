@@ -31,7 +31,7 @@ public class MinuteCheckJob implements SimpleJob {
      * @param shardingContext <br>
      */
     @Override
-    public void execute(ShardingContext shardingContext) {
+    public void execute(final ShardingContext shardingContext) {
         QueueManager.getMap().get(QueueManager.MINUTE_QUEUE).check();
     }
 

@@ -37,7 +37,7 @@ public final class TxEventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(String event) {
+    public static void emmit(final String event) {
         emmit(event, new EventData());
     }
 
@@ -49,7 +49,7 @@ public final class TxEventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(String event, EventData data) {
+    public static void emmit(final String event, final EventData data) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data
         }, "emmit1"), () -> 0);
@@ -65,7 +65,7 @@ public final class TxEventEmmiter {
      * @param data
      * @param seconds <br>
      */
-    public static void emmit(String event, EventData data, int seconds) {
+    public static void emmit(final String event, final EventData data, final int seconds) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data, seconds
         }, "emmit2"), () -> 0);
@@ -81,7 +81,7 @@ public final class TxEventEmmiter {
      * @param data
      * @param produceModel <br>
      */
-    public static void emmit(String event, EventData data, String produceModel) {
+    public static void emmit(final String event, final EventData data, final String produceModel) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data, produceModel
         }, "emmit3"), () -> 0);
@@ -98,7 +98,7 @@ public final class TxEventEmmiter {
      * @param method
      * @return <br>
      */
-    private static ClientInfo getClientInfo(String id, Object[] args, String method) {
+    private static ClientInfo getClientInfo(final String id, final Object[] args, final String method) {
         ClientInfo clientInfo = new ClientInfo(id, TxEventRetryHandler.TX_EVENT_RETRY_HANDLER + method);
         clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(args));
         clientInfo.setClientInfo(TxInvokerProxy.getClientInfoFactory().getClientInfo());

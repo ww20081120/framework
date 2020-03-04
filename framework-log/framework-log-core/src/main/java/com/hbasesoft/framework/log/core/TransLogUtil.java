@@ -45,7 +45,15 @@ public final class TransLogUtil {
      */
     private static ServiceLoader<TransLoggerService> transLoggerServices;
 
-    public static void before(String methodName, Object[] args) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param methodName
+     * @param args <br>
+     */
+    public static void before(final String methodName, final Object[] args) {
 
         // 开始执行时间
         long beginTime = System.currentTimeMillis();
@@ -73,7 +81,17 @@ public final class TransLogUtil {
 
     }
 
-    public static void before(Object target, Method method, Object[] args) throws FrameworkException {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param target
+     * @param method
+     * @param args
+     * @throws FrameworkException <br>
+     */
+    public static void before(final Object target, final Method method, final Object[] args) throws FrameworkException {
 
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
@@ -83,7 +101,15 @@ public final class TransLogUtil {
         }
     }
 
-    public static void afterReturning(String methodName, Object returnValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param methodName
+     * @param returnValue <br>
+     */
+    public static void afterReturning(final String methodName, final Object returnValue) {
         // 执行完成时间
         long endTime = System.currentTimeMillis();
 
@@ -121,7 +147,16 @@ public final class TransLogUtil {
         }
     }
 
-    public static void afterReturning(Object target, Method method, Object returnValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param target
+     * @param method
+     * @param returnValue <br>
+     */
+    public static void afterReturning(final Object target, final Method method, final Object returnValue) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
             // 执行方法
@@ -130,7 +165,15 @@ public final class TransLogUtil {
         }
     }
 
-    public static void afterThrowing(String methodName, Throwable e) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param methodName
+     * @param e <br>
+     */
+    public static void afterThrowing(final String methodName, final Throwable e) {
         // 执行完成时间
         long endTime = System.currentTimeMillis();
 
@@ -163,7 +206,16 @@ public final class TransLogUtil {
         }
     }
 
-    public static void afterThrowing(Object target, Method method, Throwable e) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param target
+     * @param method
+     * @param e <br>
+     */
+    public static void afterThrowing(final Object target, final Method method, final Throwable e) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
 
@@ -179,7 +231,7 @@ public final class TransLogUtil {
      * @param method <br>
      * @return <br>
      */
-    private static String getMethodSignature(Method method) {
+    private static String getMethodSignature(final Method method) {
         StringBuilder sbuf = new StringBuilder();
         sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
         sbuf.append('(');

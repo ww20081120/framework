@@ -25,7 +25,15 @@ public class MessageProvider {
     /** Number */
     private static final int NUM_10 = 10;
 
-    public static void main(String[] args) throws InterruptedException {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args
+     * @throws InterruptedException <br>
+     */
+    public static void main(final String[] args) throws InterruptedException {
         MessagePublisher publisher = MessageHelper.createMessagePublisher();
         int i = 0;
         while (true) {

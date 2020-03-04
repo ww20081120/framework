@@ -22,17 +22,17 @@ import com.hbasesoft.framework.common.StartupListener;
 public class DelayMessageStartupLinstener implements StartupListener {
 
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
-     */ 
+     */
     @Override
     public LoadOrder getOrder() {
         return LoadOrder.LAST;
     }
-    
+
     /**
      * Description: <br>
      * 
@@ -41,7 +41,7 @@ public class DelayMessageStartupLinstener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         QueueManager.init();
     }
 }

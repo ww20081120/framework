@@ -52,7 +52,7 @@ public class TestConsumer {
      */
     @GetMapping
     @Tx
-    public synchronized String test(@RequestParam("id") String id) {
+    public synchronized String test(final @RequestParam("id") String id) {
         i++;
 
         String value1 = TxInvokerProxy.invoke("client4", () -> {

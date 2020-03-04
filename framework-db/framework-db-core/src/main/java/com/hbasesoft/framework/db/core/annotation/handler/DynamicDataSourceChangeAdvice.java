@@ -51,7 +51,7 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
      * @throws Throwable <br>
      */
     @Around("change()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();

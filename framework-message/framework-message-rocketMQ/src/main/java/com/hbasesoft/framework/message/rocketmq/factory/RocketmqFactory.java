@@ -182,8 +182,8 @@ public final class RocketmqFactory {
      * @param messageListener
      * @return <br>
      */
-    public static DefaultMQPushConsumer getPushConsumer(String channel, String consumerGroup,
-        Boolean isConsumerBroadcasting, MessageListener messageListener) {
+    public static DefaultMQPushConsumer getPushConsumer(final String channel, final String consumerGroup,
+        final Boolean isConsumerBroadcasting, final MessageListener messageListener) {
 
         LOG.debug("getPushConsumer start topic : " + channel);
 
@@ -265,15 +265,14 @@ public final class RocketmqFactory {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param key
      * @return <br>
      */
-    public static int calculationLevel(long key) {
+    public static int calculationLevel(final long key) {
         Long[] longArray = DELAY_TIME_ARRAY;
         List<Long> longList = Arrays.asList(longArray);
         longList = new ArrayList<Long>(longList);

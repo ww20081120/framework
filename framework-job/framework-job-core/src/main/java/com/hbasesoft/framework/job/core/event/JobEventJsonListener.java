@@ -12,10 +12,18 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 public class JobEventJsonListener extends JobEventJsonIdentity implements JobEventListener {
 
+    /** logger */
     private Logger logger = new Logger(JobEventJsonListener.class);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param jobExecutionEvent <br>
+     */
     @Override
-    public void listen(JobExecutionEvent jobExecutionEvent) {
+    public void listen(final JobExecutionEvent jobExecutionEvent) {
         // 开始执行时间
         long beginTime = System.currentTimeMillis();
         TransManager manager = TransManager.getInstance();
@@ -27,8 +35,15 @@ public class JobEventJsonListener extends JobEventJsonIdentity implements JobEve
         MDC.clear();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param jobStatusTraceEvent <br>
+     */
     @Override
-    public void listen(JobStatusTraceEvent jobStatusTraceEvent) {
+    public void listen(final JobStatusTraceEvent jobStatusTraceEvent) {
         // 开始执行时间
         long beginTime = System.currentTimeMillis();
         TransManager manager = TransManager.getInstance();

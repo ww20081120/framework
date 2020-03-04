@@ -29,8 +29,10 @@ import brave.Tracer;
 @Service
 public class TransLoggerService4Kafka extends AbstractTransLoggerService {
 
+    /** tracer */
     private Tracer tracer;
 
+    /** spanMap */
     private Map<String, Span> spanMap = new ConcurrentHashMap<>();
 
     /**
@@ -45,7 +47,8 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
      * @param params <br>
      */
     @Override
-    public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
+    public void before(final String stackId, final String parentStackId, final long beginTime, final String method,
+        final Object[] params) {
         Tracer tc = getTracer();
         if (tc != null) {
             Span span = tc.currentSpan();
@@ -71,8 +74,20 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param endTime
+     * @param consumeTime
+     * @param method
+     * @param returnValue <br>
+     */
     @Override
-    public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
+    public void afterReturn(final String stackId, final long endTime, final long consumeTime, final String method,
+        final Object returnValue) {
         Span span = spanMap.remove(stackId);
         if (span != null) {
             if (returnValue != null) {
@@ -93,7 +108,8 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
      * @param e <br>
      */
     @Override
-    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
+    public void afterThrow(final String stackId, final long endTime, final long consumeTime, final String method,
+        final Throwable e) {
         Span span = spanMap.remove(stackId);
         if (span != null) {
             span.tag("error", "true");
@@ -106,12 +122,16 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#sql(java.lang.String, java.lang.String)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param sql <br>
      */
     @Override
-    public void sql(String stackId, String sql) {
+    public void sql(final String stackId, final String sql) {
         if (stackId != null) {
             Span span = spanMap.get(stackId);
             if (span != null) {
@@ -134,8 +154,8 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
      * @param e <br>
      */
     @Override
-    public void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Throwable e) {
+    public void end(final String stackId, final long beginTime, final long endTime, final long consumeTime,
+        final String method, final Object returnValue, final Throwable e) {
     }
 
     private Tracer getTracer() {

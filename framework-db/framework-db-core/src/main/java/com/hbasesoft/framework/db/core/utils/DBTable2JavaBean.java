@@ -203,7 +203,7 @@ public class DBTable2JavaBean extends JFrame {
 
         JButton button = new JButton("执行");
         button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 try {
                     export();
                 }
@@ -219,21 +219,21 @@ public class DBTable2JavaBean extends JFrame {
         textFields[NUM_5].addKeyListener(new KeyListener() {
 
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyTyped(final KeyEvent e) {
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyReleased(final KeyEvent e) {
                 encryptPwd();
             }
 
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(final KeyEvent e) {
             }
         });
 
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            public void windowClosing(final WindowEvent e) {
                 super.windowClosing(e);
                 System.exit(0);
             }
@@ -357,7 +357,7 @@ public class DBTable2JavaBean extends JFrame {
 
     }
 
-    private void export(String dirstr, String packname, String tablename) throws SQLException {
+    private void export(final String dirstr, final String packname, final String tablename) throws SQLException {
 
         File dir = new File(dirstr + "/" + StringUtils.replace(packname, ".", "/"));
         if (!dir.exists()) {
@@ -403,7 +403,7 @@ public class DBTable2JavaBean extends JFrame {
      * @param outputdir <br>
      * @throws Exception <br>
      */
-    public void parseAllTable(Connection conn, String packname, String outputdir) throws Exception {
+    public void parseAllTable(final Connection conn, final String packname, final String outputdir) throws Exception {
         ResultSet rs = null;
         try {
             DatabaseMetaData metaData = conn.getMetaData();
@@ -428,16 +428,15 @@ public class DBTable2JavaBean extends JFrame {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param conn <br>
-     * @param tablename <br>
+     * @param tn <br>
      * @param packname <br>
      * @param outputdir <br>
      * @throws Exception <br>
      */
-    public void parseTableByShowCreate(Connection conn, String tablename, String packname, String outputdir)
-        throws Exception {
-        String className = BeanUtil
-            .toCapitalizeCamelCase(tablename.toUpperCase().startsWith("T_") ? tablename.substring(2) : tablename);
-        tablename = StringUtils.upperCase(tablename);
+    public void parseTableByShowCreate(final Connection conn, final String tn, final String packname,
+        final String outputdir) throws Exception {
+        String className = BeanUtil.toCapitalizeCamelCase(tn.toUpperCase().startsWith("T_") ? tn.substring(2) : tn);
+        String tablename = StringUtils.upperCase(tn);
 
         File dir = new File(outputdir + "/entity/");
         if (!dir.exists()) {
@@ -519,7 +518,7 @@ public class DBTable2JavaBean extends JFrame {
      * @param type <br>
      * @return <br>
      */
-    private String getMethodStr(String field, String type) {
+    private String getMethodStr(final String field, final String type) {
         StringBuilder get = new StringBuilder('\n');
         get.append("    ").append("public ").append(type).append(" ");
         if ("boolean".equals(type)) {
@@ -554,7 +553,7 @@ public class DBTable2JavaBean extends JFrame {
      * @param src <br>
      * @return <br>
      */
-    private String upperFirestChar(String src) {
+    private String upperFirestChar(final String src) {
         return src.substring(0, 1).toUpperCase().concat(src.substring(1));
     }
 
@@ -569,7 +568,7 @@ public class DBTable2JavaBean extends JFrame {
      * @param pkColum <br>
      * @return <br>
      */
-    private String getFieldStr(String field, String type, String cmt, String pkColum) {
+    private String getFieldStr(final String field, final String type, final String cmt, final String pkColum) {
         StringBuilder sb = new StringBuilder('\n');
         sb.append("    ").append("/** ").append(cmt).append(" */").append('\n');
         if (cmt.equals(pkColum)) {
@@ -591,7 +590,7 @@ public class DBTable2JavaBean extends JFrame {
      * @param type <br>
      * @return <br>
      */
-    private String typeTrans(String type) {
+    private String typeTrans(final String type) {
         if (type.contains("INT")) {
             return "Integer";
         }
@@ -619,7 +618,7 @@ public class DBTable2JavaBean extends JFrame {
      * @taskId <br>
      * @param args <br>
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             EventQueue.invokeLater(new Runnable() {

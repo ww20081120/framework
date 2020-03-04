@@ -14,7 +14,7 @@ package com.hbasesoft.framework.db.spring.datasource;
  * @see com.hbasesoft.framework.dao.datasource <br>
  */
 public class DataSourceContextHolder {
-    
+
     /**
      * contextHolder
      */
@@ -30,7 +30,7 @@ public class DataSourceContextHolder {
      * @author 王伟 <br>
      * @param dataSourceType <br>
      */
-    public static void setDataSourceType(DataSourceType dataSourceType) {
+    public static void setDataSourceType(final DataSourceType dataSourceType) {
         CONTEXT_HOLDER.set(dataSourceType);
     }
 
@@ -45,10 +45,10 @@ public class DataSourceContextHolder {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
-     * @author 王伟 <br> <br>
+     * @author 王伟 <br>
+     *         <br>
      */
     public static void clearDataSourceType() {
         CONTEXT_HOLDER.remove();

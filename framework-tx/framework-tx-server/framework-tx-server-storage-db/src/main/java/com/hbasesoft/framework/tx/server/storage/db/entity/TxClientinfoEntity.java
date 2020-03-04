@@ -66,75 +66,201 @@ public class TxClientinfoEntity extends BaseEntity {
     @Column(name = "client_info")
     private String clientInfo;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    public void setId(final String id) {
         this.id = id;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getMark() {
         return this.mark;
     }
 
-    public void setMark(String mark) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param mark <br>
+     */
+    public void setMark(final String mark) {
         this.mark = mark;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getContext() {
         return this.context;
     }
 
-    public void setContext(String context) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
+    public void setContext(final String context) {
         this.context = context;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public byte[] getArgs() {
         return this.args;
     }
 
-    public void setArgs(byte[] args) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
+    public void setArgs(final byte[] args) {
         this.args = args;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Integer getMaxRetryTimes() {
         return this.maxRetryTimes;
     }
 
-    public void setMaxRetryTimes(Integer maxRetryTimes) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param maxRetryTimes <br>
+     */
+    public void setMaxRetryTimes(final Integer maxRetryTimes) {
         this.maxRetryTimes = maxRetryTimes;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getRetryConfigs() {
         return this.retryConfigs;
     }
 
-    public void setRetryConfigs(String retryConfigs) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param retryConfigs <br>
+     */
+    public void setRetryConfigs(final String retryConfigs) {
         this.retryConfigs = retryConfigs;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public java.util.Date getNextRetryTime() {
         return this.nextRetryTime;
     }
 
-    public void setNextRetryTime(java.util.Date nextRetryTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nextRetryTime <br>
+     */
+    public void setNextRetryTime(final java.util.Date nextRetryTime) {
         this.nextRetryTime = nextRetryTime;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Integer getCurrentRetryTimes() {
         return currentRetryTimes;
     }
 
-    public void setCurrentRetryTimes(Integer currentRetryTimes) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param currentRetryTimes <br>
+     */
+    public void setCurrentRetryTimes(final Integer currentRetryTimes) {
         this.currentRetryTimes = currentRetryTimes;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getClientInfo() {
         return clientInfo;
     }
 
-    public void setClientInfo(String clientInfo) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo <br>
+     */
+    public void setClientInfo(final String clientInfo) {
         this.clientInfo = clientInfo;
     }
 

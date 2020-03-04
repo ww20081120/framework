@@ -49,7 +49,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         Map<String, Object> configAttrMap = flowContext.getFlowConfig().getConfigAttrMap();
 
         String transactional = (String) configAttrMap.get("transactional");
@@ -99,7 +99,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
      * @param flowContext <br>
      */
     @Override
-    public void after(Serializable flowBean, FlowContext flowContext) {
+    public void after(final Serializable flowBean, final FlowContext flowContext) {
         Map<String, Object> configAttrMap = flowContext.getFlowConfig().getConfigAttrMap();
 
         String transactional = (String) configAttrMap.get("transactional");
@@ -121,7 +121,7 @@ public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterc
      * @param flowContext <br>
      */
     @Override
-    public void error(Exception e, Serializable flowBean, FlowContext flowContext) {
+    public void error(final Exception e, final Serializable flowBean, final FlowContext flowContext) {
         Map<String, Object> configAttrMap = flowContext.getFlowConfig().getConfigAttrMap();
 
         String transactional = (String) configAttrMap.get("transactional");

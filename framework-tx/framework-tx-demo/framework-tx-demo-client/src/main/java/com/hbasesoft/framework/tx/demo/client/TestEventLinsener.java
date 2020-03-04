@@ -54,7 +54,7 @@ public class TestEventLinsener implements TxEventLinsener {
      * @param data <br>
      */
     @Override
-    public void onEmmit(String event, EventData data) {
+    public void onEmmit(final String event, final EventData data) {
 
         if (new Random().nextInt(NUM_5) == 1) {
             throw new RuntimeException();

@@ -28,7 +28,7 @@ public class BinaryListener extends BinaryJedisPubSub {
     /**
      * @param subscriber
      */
-    public BinaryListener(MessageSubscriber subscriber) {
+    public BinaryListener(final MessageSubscriber subscriber) {
         this.subscriber = subscriber;
     }
 
@@ -41,7 +41,7 @@ public class BinaryListener extends BinaryJedisPubSub {
      * @param message <br>
      */
     @Override
-    public void onMessage(byte[] channel, byte[] message) {
+    public void onMessage(final byte[] channel, final byte[] message) {
         String channelStr = new String(channel);
         MessageThreadPoolExecutor.execute(channelStr, () -> {
             subscriber.onMessage(new String(channel), message);
@@ -58,7 +58,7 @@ public class BinaryListener extends BinaryJedisPubSub {
      * @param subscribedChannels <br>
      */
     @Override
-    public void onSubscribe(byte[] channel, int subscribedChannels) {
+    public void onSubscribe(final byte[] channel, final int subscribedChannels) {
         subscriber.onSubscribe(new String(channel), subscribedChannels);
     }
 
@@ -71,7 +71,7 @@ public class BinaryListener extends BinaryJedisPubSub {
      * @param subscribedChannels <br>
      */
     @Override
-    public void onUnsubscribe(byte[] channel, int subscribedChannels) {
+    public void onUnsubscribe(final byte[] channel, final int subscribedChannels) {
         subscriber.onUnsubscribe(new String(channel), subscribedChannels);
     }
 

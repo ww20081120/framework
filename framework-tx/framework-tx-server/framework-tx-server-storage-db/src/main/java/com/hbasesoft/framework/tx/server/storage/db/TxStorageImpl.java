@@ -60,7 +60,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(readOnly = true)
-    public boolean containsClientInfo(String id) {
+    public boolean containsClientInfo(final String id) {
         return StringUtils.isNotEmpty(txClientinfoDao.containsClientInfo(id));
     }
 
@@ -75,7 +75,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(readOnly = true)
-    public CheckInfo getCheckInfo(String id, String mark) {
+    public CheckInfo getCheckInfo(final String id, final String mark) {
         TxCheckinfoEntity bean = txCheckinfoDao.getCheckInfoById(id, mark);
         if (bean != null) {
             return new CheckInfo(bean.getId(), bean.getMark(), bean.getResult());
@@ -92,7 +92,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void saveClientInfo(ClientInfo clientInfo) {
+    public void saveClientInfo(final ClientInfo clientInfo) {
         TxClientinfoEntity bean = new TxClientinfoEntity();
         bean.setArgs(clientInfo.getArgs());
         bean.setContext(clientInfo.getContext());
@@ -120,7 +120,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void saveCheckInfo(CheckInfo checkInfo) {
+    public void saveCheckInfo(final CheckInfo checkInfo) {
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
@@ -140,7 +140,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(readOnly = true)
-    public PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize) {
+    public PagerList<ClientInfo> queryTimeoutClientInfo(final int retryTimes, final int pageIndex, final int pageSize) {
         com.hbasesoft.framework.db.core.utils.PagerList<TxClientinfoEntity> beans = txClientinfoDao
             .queryTimeoutClientInfos(retryTimes, pageIndex, pageSize);
         if (beans != null) {
@@ -165,7 +165,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void updateClientRetryTimes(String id) {
+    public void updateClientRetryTimes(final String id) {
         TxClientinfoEntity bean = txClientinfoDao.getRetryConfigs(id);
         if (bean != null) {
             bean.setCurrentRetryTimes(bean.getCurrentRetryTimes() + 1);
@@ -191,7 +191,7 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void delete(String id) {
+    public void delete(final String id) {
         txClientinfoDao.deleteClientinfo(id);
         txCheckinfoDao.deleteCheckInfo(id);
     }

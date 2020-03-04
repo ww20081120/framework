@@ -51,7 +51,7 @@ public class RocketMQConsumer implements TxConsumer {
      * @param clientInfo <br>
      */
     @Override
-    public boolean retry(ClientInfo clientInfo) {
+    public boolean retry(final ClientInfo clientInfo) {
 
         if (clientInfo != null && StringUtils.isNotEmpty(clientInfo.getClientInfo())) {
 
@@ -68,7 +68,7 @@ public class RocketMQConsumer implements TxConsumer {
         return false;
     }
 
-    private synchronized DefaultMQProducer getMQProducer(String clientInfo) {
+    private synchronized DefaultMQProducer getMQProducer(final String clientInfo) {
         DefaultMQProducer defaultMQProducer = producerHolder.get(clientInfo);
         if (defaultMQProducer == null) {
             defaultMQProducer = new DefaultMQProducer(clientInfo);

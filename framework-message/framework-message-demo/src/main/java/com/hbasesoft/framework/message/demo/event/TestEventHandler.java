@@ -58,7 +58,7 @@ public class TestEventHandler implements EventLinsener {
      * @taskId <br>
      */
     @Override
-    public void onEmmit(String event, EventData data) {
+    public void onEmmit(final String event, final EventData data) {
         System.out.println(event + ":" + data);
         try {
             Thread.sleep(NUM_1500);
@@ -68,6 +68,13 @@ public class TestEventHandler implements EventLinsener {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public Map<String, Object> subscriberSetting() {
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
@@ -75,7 +82,14 @@ public class TestEventHandler implements EventLinsener {
         return stringObjectHashMap;
     }
 
-    public static void main(String[] args) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
+    public static void main(final String[] args) {
         for (int i = 0; i < NUM_10000; i++) {
 
             EventData data = new EventData();

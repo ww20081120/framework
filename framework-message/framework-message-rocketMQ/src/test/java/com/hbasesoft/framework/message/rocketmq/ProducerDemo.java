@@ -54,7 +54,7 @@ public class ProducerDemo {
                  * @param sendResult <br>
                  */
                 @Override
-                public void onSuccess(SendResult sendResult) {
+                public void onSuccess(final SendResult sendResult) {
                     System.out.println(sendResult);
                     // TODO 发送成功处理
                 }
@@ -67,7 +67,7 @@ public class ProducerDemo {
                  * @param e <br>
                  */
                 @Override
-                public void onException(Throwable e) {
+                public void onException(final Throwable e) {
                     System.out.println(e);
                     // TODO 发送失败处理
                 }
@@ -133,7 +133,7 @@ public class ProducerDemo {
                  * @return <br>
                  */
                 @Override
-                public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
+                public MessageQueue select(final List<MessageQueue> mqs, final Message msg, final Object arg) {
                     System.out.println("MessageQueue" + arg);
                     int index = ((Integer) arg) % mqs.size();
                     return mqs.get(index);

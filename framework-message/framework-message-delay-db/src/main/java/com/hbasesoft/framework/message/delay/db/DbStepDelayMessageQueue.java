@@ -43,7 +43,7 @@ public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
      * @param level
      * @param delaymsgService
      */
-    public DbStepDelayMessageQueue(int level, DelaymsgService delaymsgService) {
+    public DbStepDelayMessageQueue(final int level, final DelaymsgService delaymsgService) {
         this.delaymsgService = delaymsgService;
         this.level = level;
     }
@@ -68,7 +68,7 @@ public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
      * @param delayMessage <br>
      */
     @Override
-    public void add(DelayMessage delayMessage) {
+    public void add(final DelayMessage delayMessage) {
         MsgDelaymsgEntity entity = new MsgDelaymsgEntity(delayMessage);
         delaymsgService.save(entity);
     }
@@ -82,7 +82,7 @@ public class DbStepDelayMessageQueue implements StepDelayMessageQueue {
      * @return <br>
      */
     @Override
-    public DelayMessage remove(String msgId) {
+    public DelayMessage remove(final String msgId) {
         MsgDelaymsgEntity entity = delaymsgService.delete(msgId);
         return entity != null ? entity.toVo() : null;
     }

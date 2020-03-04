@@ -49,7 +49,7 @@ public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
      * @taskId <br>
      * @param traceId <br>
      */
-    public void setTraceId(String traceId) {
+    public void setTraceId(final String traceId) {
         transIdHolder.set(traceId);
     }
 

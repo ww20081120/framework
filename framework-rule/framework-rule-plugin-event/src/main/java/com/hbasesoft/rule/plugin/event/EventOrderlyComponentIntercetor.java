@@ -36,7 +36,7 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("beforeEvent");
         if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
@@ -56,7 +56,7 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
      * @param flowContext <br>
      */
     @Override
-    public void after(Serializable flowBean, FlowContext flowContext) {
+    public void after(final Serializable flowBean, final FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("orderedEvent");
         if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();
@@ -76,7 +76,7 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
      * @param flowContext <br>
      */
     @Override
-    public void error(Exception e, Serializable flowBean, FlowContext flowContext) {
+    public void error(final Exception e, final Serializable flowBean, final FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("errorEvent");
         if (StringUtils.isNotEmpty(event)) {
             EventData data = new EventData();

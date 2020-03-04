@@ -30,7 +30,7 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
     /**
      * @param level
      */
-    public CacheStepDelayMessageQueue(int level) {
+    public CacheStepDelayMessageQueue(final int level) {
         super(level);
         nodeName = new StringBuilder().append(QueueManager.CACHE_NODE_NAME).append(level)
             .append(GlobalConstants.UNDERLINE).append(PropertyHolder.getProjectName()).toString();
@@ -44,7 +44,7 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
      * @param delayMessage <br>
      */
     @Override
-    public void add(DelayMessage delayMessage) {
+    public void add(final DelayMessage delayMessage) {
         addIndex(delayMessage.getMessageId(),
             delayMessage.getCurrentTime() + delayMessage.getSeconds() * GlobalConstants.SECONDS);
         CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
@@ -60,7 +60,7 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
      * @return <br>
      */
     @Override
-    public DelayMessage remove(String msgId) {
+    public DelayMessage remove(final String msgId) {
         DelayMessage delayMessage = CacheHelper.getCache().get(QueueManager.CACHE_NODE_NAME, msgId);
         if (delayMessage != null) {
             removeIndex(msgId);
@@ -89,7 +89,7 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
      * @param key <br>
      */
     @Override
-    public void removeIndex(String key) {
+    public void removeIndex(final String key) {
         CacheHelper.getCache().evict(nodeName, key);
     }
 
@@ -102,7 +102,7 @@ public class CacheStepDelayMessageQueue extends AbstractStepDelayMessageQueue im
      * @param expireTime <br>
      */
     @Override
-    public void addIndex(String key, Long expireTime) {
+    public void addIndex(final String key, final Long expireTime) {
         CacheHelper.getCache().put(nodeName, key, expireTime);
     }
 }

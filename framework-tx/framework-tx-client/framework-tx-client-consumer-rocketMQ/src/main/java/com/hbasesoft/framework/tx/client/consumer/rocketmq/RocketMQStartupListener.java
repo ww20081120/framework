@@ -53,7 +53,7 @@ public class RocketMQStartupListener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         LoggerUtil.info("开始启动分布式事务Rocket MQ Consumer");
 
         String topic = new RocketMQClientInfoFactory().getClientInfo();
@@ -79,8 +79,8 @@ public class RocketMQStartupListener implements StartupListener {
             consumer.registerMessageListener(new MessageListenerConcurrently() {
 
                 @Override
-                public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
-                    ConsumeConcurrentlyContext context) {
+                public ConsumeConcurrentlyStatus consumeMessage(final List<MessageExt> msgs,
+                    final ConsumeConcurrentlyContext context) {
                     if (CollectionUtils.isNotEmpty(msgs)) {
                         try {
                             for (MessageExt messageExt : msgs) {

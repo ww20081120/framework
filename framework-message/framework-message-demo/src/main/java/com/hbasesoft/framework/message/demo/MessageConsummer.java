@@ -23,7 +23,15 @@ public class MessageConsummer {
     /** Number */
     private static final int NUM_1000000 = 1000000;
 
-    public static void main(String[] args) throws InterruptedException {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args
+     * @throws InterruptedException <br>
+     */
+    public static void main(final String[] args) throws InterruptedException {
         MessageSubcriberFactory factory = MessageHelper.createMessageSubcriberFactory();
         factory.registSubscriber("log-p15", false, new MessageLinsener());
         // factory.registSubscriber("log-p15", true, new MessageLinsener());

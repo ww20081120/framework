@@ -45,7 +45,7 @@ public class SimpleMessageSubcriberFactory implements MessageSubcriberFactory {
      * @param subscriber <br>
      */
     @Override
-    public void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber) {
+    public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
         EventManager.getInstance().regist(channel, broadcast, subscriber);
     }
 

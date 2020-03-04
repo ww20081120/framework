@@ -54,8 +54,15 @@ public class SqlLogFilter extends FilterEventAdapter {
     public SqlLogFilter() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param ds <br>
+     */
     @Override
-    public void init(DataSourceProxy ds) {
+    public void init(final DataSourceProxy ds) {
         this.dataSource = ds;
     }
 
@@ -66,7 +73,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param message <br>
      */
-    protected void connectionLog(String message) {
+    protected void connectionLog(final String message) {
         LoggerUtil.sqlLog(message);
     }
 
@@ -77,7 +84,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param message <br>
      */
-    protected void statementLog(String message) {
+    protected void statementLog(final String message) {
         LoggerUtil.sqlLog(message);
     }
 
@@ -89,7 +96,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param message <br>
      * @param error <br>
      */
-    protected void statementLogError(String message, Throwable error) {
+    protected void statementLogError(final String message, final Throwable error) {
         LoggerUtil.sqlLog(message, error);
     }
 
@@ -100,7 +107,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param message <br>
      */
-    protected void resultSetLog(String message) {
+    protected void resultSetLog(final String message) {
         // LogUtil.sqlInfoLog(message);
     }
 
@@ -112,7 +119,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param message <br>
      * @param error <br>
      */
-    protected void resultSetLogError(String message, Throwable error) {
+    protected void resultSetLogError(final String message, final Throwable error) {
         LoggerUtil.sqlLog(message, error);
     }
 
@@ -140,7 +147,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Savepoint connection_setSavepoint(FilterChain chain, ConnectionProxy connection) throws SQLException {
+    public Savepoint connection_setSavepoint(final FilterChain chain, final ConnectionProxy connection)
+        throws SQLException {
         Savepoint savepoint = chain.connection_setSavepoint(connection);
         return savepoint;
     }
@@ -157,8 +165,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Savepoint connection_setSavepoint(FilterChain chain, ConnectionProxy connection, String name)
-        throws SQLException {
+    public Savepoint connection_setSavepoint(final FilterChain chain, final ConnectionProxy connection,
+        final String name) throws SQLException {
         Savepoint savepoint = chain.connection_setSavepoint(connection, name);
         return savepoint;
     }
@@ -173,7 +181,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void connection_rollback(FilterChain chain, ConnectionProxy connection) throws SQLException {
+    public void connection_rollback(final FilterChain chain, final ConnectionProxy connection) throws SQLException {
         super.connection_rollback(chain, connection);
         connectionLog("{conn " + connection.getId() + "} rollback");
     }
@@ -189,8 +197,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void connection_rollback(FilterChain chain, ConnectionProxy connection, Savepoint savePoint)
-        throws SQLException {
+    public void connection_rollback(final FilterChain chain, final ConnectionProxy connection,
+        final Savepoint savePoint) throws SQLException {
         super.connection_rollback(chain, connection, savePoint);
         connectionLog("{conn " + connection.getId() + "} rollback -> " + savePoint.getSavepointId());
     }
@@ -205,7 +213,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void connection_commit(FilterChain chain, ConnectionProxy connection) throws SQLException {
+    public void connection_commit(final FilterChain chain, final ConnectionProxy connection) throws SQLException {
         super.connection_commit(chain, connection);
         connectionLog("{conn-" + connection.getId() + "} commited");
     }
@@ -221,8 +229,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void connection_setAutoCommit(FilterChain chain, ConnectionProxy connection, boolean autoCommit)
-        throws SQLException {
+    public void connection_setAutoCommit(final FilterChain chain, final ConnectionProxy connection,
+        final boolean autoCommit) throws SQLException {
         connectionLog("{conn-" + connection.getId() + "} setAutoCommit " + autoCommit);
         chain.connection_setAutoCommit(connection, autoCommit);
     }
@@ -237,7 +245,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void connection_close(FilterChain chain, ConnectionProxy connection) throws SQLException {
+    public void connection_close(final FilterChain chain, final ConnectionProxy connection) throws SQLException {
         super.connection_close(chain, connection);
         connectionLog("{conn-" + connection.getId() + "} closed");
     }
@@ -252,21 +260,38 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void statement_close(FilterChain chain, StatementProxy statement) throws SQLException {
+    public void statement_close(final FilterChain chain, final StatementProxy statement) throws SQLException {
         super.statement_close(chain, statement);
         statementLog("{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + "} closed");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param sql <br>
+     */
     @Override
-    protected void statementExecuteBefore(StatementProxy statement, String sql) {
+    protected void statementExecuteBefore(final StatementProxy statement, final String sql) {
         statement.setLastExecuteStartNano();
         if (statement instanceof PreparedStatementProxy) {
             logParameter((PreparedStatementProxy) statement);
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param sql
+     * @param firstResult <br>
+     */
     @Override
-    protected void statementExecuteAfter(StatementProxy statement, String sql, boolean firstResult) {
+    protected void statementExecuteAfter(final StatementProxy statement, final String sql, final boolean firstResult) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
         double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
@@ -277,13 +302,28 @@ public class SqlLogFilter extends FilterEventAdapter {
         saveMsg2Cache(sqlMsg);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement <br>
+     */
     @Override
-    protected void statementExecuteBatchBefore(StatementProxy statement) {
+    protected void statementExecuteBatchBefore(final StatementProxy statement) {
         statement.setLastExecuteStartNano();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param result <br>
+     */
     @Override
-    protected void statementExecuteBatchAfter(StatementProxy statement, int[] result) {
+    protected void statementExecuteBatchAfter(final StatementProxy statement, final int[] result) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
         double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
@@ -302,16 +342,34 @@ public class SqlLogFilter extends FilterEventAdapter {
         saveMsg2Cache(sqlMsg);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param sql <br>
+     */
     @Override
-    protected void statementExecuteQueryBefore(StatementProxy statement, String sql) {
+    protected void statementExecuteQueryBefore(final StatementProxy statement, final String sql) {
         statement.setLastExecuteStartNano();
         if (statement instanceof PreparedStatementProxy) {
             logParameter((PreparedStatementProxy) statement);
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param sql
+     * @param resultSet <br>
+     */
     @Override
-    protected void statementExecuteQueryAfter(StatementProxy statement, String sql, ResultSetProxy resultSet) {
+    protected void statementExecuteQueryAfter(final StatementProxy statement, final String sql,
+        final ResultSetProxy resultSet) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
         double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
@@ -322,16 +380,34 @@ public class SqlLogFilter extends FilterEventAdapter {
         saveMsg2Cache(sqlMsg);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param sql <br>
+     */
     @Override
-    protected void statementExecuteUpdateBefore(StatementProxy statement, String sql) {
+    protected void statementExecuteUpdateBefore(final StatementProxy statement, final String sql) {
         statement.setLastExecuteStartNano();
         if (statement instanceof PreparedStatementProxy) {
             logParameter((PreparedStatementProxy) statement);
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @param sql
+     * @param updateCount <br>
+     */
     @Override
-    protected void statementExecuteUpdateAfter(StatementProxy statement, String sql, int updateCount) {
+    protected void statementExecuteUpdateAfter(final StatementProxy statement, final String sql,
+        final int updateCount) {
         statement.setLastExecuteTimeNano();
         double nanos = statement.getLastExecuteTimeNano();
         double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
@@ -352,7 +428,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void resultSet_close(FilterChain chain, ResultSetProxy resultSet) throws SQLException {
+    public void resultSet_close(final FilterChain chain, final ResultSetProxy resultSet) throws SQLException {
         chain.resultSet_close(resultSet);
     }
 
@@ -367,7 +443,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public boolean resultSet_next(FilterChain chain, ResultSetProxy resultSet) throws SQLException {
+    public boolean resultSet_next(final FilterChain chain, final ResultSetProxy resultSet) throws SQLException {
         return super.resultSet_next(chain, resultSet);
     }
 
@@ -383,8 +459,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, int parameterIndex)
-        throws SQLException {
+    public Object callableStatement_getObject(final FilterChain chain, final CallableStatementProxy statement,
+        final int parameterIndex) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterIndex);
 
         if (obj instanceof ResultSetProxy) {
@@ -407,8 +483,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, int parameterIndex,
-        java.util.Map<String, Class<?>> map) throws SQLException {
+    public Object callableStatement_getObject(final FilterChain chain, final CallableStatementProxy statement,
+        final int parameterIndex, final java.util.Map<String, Class<?>> map) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterIndex, map);
 
         if (obj instanceof ResultSetProxy) {
@@ -430,8 +506,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, String parameterName)
-        throws SQLException {
+    public Object callableStatement_getObject(final FilterChain chain, final CallableStatementProxy statement,
+        final String parameterName) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterName);
 
         if (obj instanceof ResultSetProxy) {
@@ -454,8 +530,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public Object callableStatement_getObject(FilterChain chain, CallableStatementProxy statement, String parameterName,
-        java.util.Map<String, Class<?>> map) throws SQLException {
+    public Object callableStatement_getObject(final FilterChain chain, final CallableStatementProxy statement,
+        final String parameterName, final java.util.Map<String, Class<?>> map) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterName, map);
 
         if (obj instanceof ResultSetProxy) {
@@ -466,7 +542,7 @@ public class SqlLogFilter extends FilterEventAdapter {
     }
 
     @Override
-    protected void resultSetOpenAfter(ResultSetProxy resultSet) {
+    protected void resultSetOpenAfter(final ResultSetProxy resultSet) {
     }
 
     /**
@@ -476,7 +552,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param statement <br>
      */
-    protected void statementCreateAfter(StatementProxy statement) {
+    protected void statementCreateAfter(final StatementProxy statement) {
         statementLog("{conn-" + statement.getConnectionProxy().getId() + ", stmt-" + statement.getId() + "} created");
     }
 
@@ -487,7 +563,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param statement <br>
      */
-    protected void statementPrepareAfter(PreparedStatementProxy statement) {
+    protected void statementPrepareAfter(final PreparedStatementProxy statement) {
         statementLog(
             "{conn-" + statement.getConnectionProxy().getId() + ", pstmt-" + statement.getId() + "} created. ");
     }
@@ -499,7 +575,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param statement <br>
      */
-    protected void statementPrepareCallAfter(CallableStatementProxy statement) {
+    protected void statementPrepareCallAfter(final CallableStatementProxy statement) {
         statementLog(
             "{conn-" + statement.getConnectionProxy().getId() + ", cstmt-" + statement.getId() + "} created. ");
     }
@@ -514,7 +590,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param error <br>
      */
     @Override
-    protected void statement_executeErrorAfter(StatementProxy statement, String sql, Throwable error) {
+    protected void statement_executeErrorAfter(final StatementProxy statement, final String sql,
+        final Throwable error) {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
             + "} execute error. " + getExcuteSql(statement);
         statementLogError(sqlMsg, error);
@@ -529,7 +606,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param statement <br>
      * @return <br>
      */
-    private String stmtId(StatementProxy statement) {
+    private String stmtId(final StatementProxy statement) {
         StringBuffer buf = new StringBuffer();
         if (statement instanceof CallableStatementProxy) {
             buf.append("cstmt-");
@@ -552,7 +629,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @taskId <br>
      * @param statement <br>
      */
-    protected void logParameter(PreparedStatementProxy statement) {
+    protected void logParameter(final PreparedStatementProxy statement) {
     }
 
     /**
@@ -565,7 +642,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void dataSource_releaseConnection(FilterChain chain, DruidPooledConnection conn) throws SQLException {
+    public void dataSource_releaseConnection(final FilterChain chain, final DruidPooledConnection conn)
+        throws SQLException {
         long connectionId = -1;
 
         if (conn.getConnectionHolder() != null) {
@@ -589,8 +667,8 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public DruidPooledConnection dataSource_getConnection(FilterChain chain, DruidDataSource ds, long maxWaitMillis)
-        throws SQLException {
+    public DruidPooledConnection dataSource_getConnection(final FilterChain chain, final DruidDataSource ds,
+        final long maxWaitMillis) throws SQLException {
         DruidPooledConnection conn = chain.dataSource_connect(ds, maxWaitMillis);
         ConnectionProxy connection = (ConnectionProxy) conn.getConnectionHolder().getConnection();
         connectionLog("{conn-" + connection.getId() + "} pool-connect");
@@ -608,7 +686,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @throws SQLException <br>
      */
     @Override
-    public void preparedStatement_clearParameters(FilterChain chain, PreparedStatementProxy statement)
+    public void preparedStatement_clearParameters(final FilterChain chain, final PreparedStatementProxy statement)
         throws SQLException {
         chain.preparedStatement_clearParameters(statement);
     }
@@ -621,7 +699,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * @param statement <br>
      * @return <br>
      */
-    private String getExcuteSql(StatementProxy statement) {
+    private String getExcuteSql(final StatementProxy statement) {
         String sqlStr = statement.getBatchSql();
         if (statement instanceof PreparedStatementProxy) {
             for (JdbcParameter parameter : statement.getParameters().values()) {
@@ -653,7 +731,7 @@ public class SqlLogFilter extends FilterEventAdapter {
      * 
      * @param msg <br>
      */
-    private void saveMsg2Cache(String msg) {
+    private void saveMsg2Cache(final String msg) {
         String statckId = TransManager.getInstance().getStackId();
 
         ServiceLoader<TransLoggerService> services = getTransLoggerServices();

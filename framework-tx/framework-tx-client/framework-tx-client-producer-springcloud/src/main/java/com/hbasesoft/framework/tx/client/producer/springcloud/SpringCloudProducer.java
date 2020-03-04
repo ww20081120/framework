@@ -37,7 +37,7 @@ public class SpringCloudProducer implements TxProducer {
      * @param clientInfo <br>
      */
     @Override
-    public boolean registClient(ClientInfo clientInfo) {
+    public boolean registClient(final ClientInfo clientInfo) {
         LoggerUtil.debug("registClient {0}|{1}", clientInfo.getId(), clientInfo.getMark());
         return getFeginProducer().registClient(clientInfo);
     }
@@ -50,7 +50,7 @@ public class SpringCloudProducer implements TxProducer {
      * @param id <br>
      */
     @Override
-    public void removeClient(String id) {
+    public void removeClient(final String id) {
         LoggerUtil.debug("removeClient {0}", id);
         getFeginProducer().removeClient(id);
     }
@@ -65,7 +65,7 @@ public class SpringCloudProducer implements TxProducer {
      * @return <br>
      */
     @Override
-    public CheckInfo check(String id, String mark) {
+    public CheckInfo check(final String id, final String mark) {
         LoggerUtil.debug("check {0}|{1}", id, mark);
         return getFeginProducer().check(id, mark);
     }
@@ -78,7 +78,7 @@ public class SpringCloudProducer implements TxProducer {
      * @param checkInfo <br>
      */
     @Override
-    public void saveResult(CheckInfo checkInfo) {
+    public void saveResult(final CheckInfo checkInfo) {
         LoggerUtil.debug("saveResult {0}|{1}", checkInfo.getId(), checkInfo.getMark());
         getFeginProducer().saveResult(checkInfo);
     }
@@ -99,7 +99,7 @@ public class SpringCloudProducer implements TxProducer {
      * @return <br>
      */
     @Override
-    public boolean containClient(String id) {
+    public boolean containClient(final String id) {
         LoggerUtil.debug("containClient {0}", id);
         return getFeginProducer().containClient(id);
     }

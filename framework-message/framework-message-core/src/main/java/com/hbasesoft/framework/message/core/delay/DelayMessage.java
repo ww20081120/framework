@@ -29,17 +29,27 @@ public class DelayMessage implements Serializable {
      */
     private static final long serialVersionUID = 1175519261018848513L;
 
+    /** message Id */
     private String messageId;
 
+    /** channel */
     private String channel;
 
+    /** data */
     private byte[] data;
 
+    /** seconds */
     private int seconds;
 
+    /** currentTime */
     private long currentTime;
 
-    public DelayMessage(String channel, byte[] data, int seconds) {
+    /**
+     * @param channel
+     * @param data
+     * @param seconds
+     */
+    public DelayMessage(final String channel, final byte[] data, final int seconds) {
         this(CommonUtil.getTransactionID(), channel, data, seconds, System.currentTimeMillis());
     }
 
@@ -56,43 +66,113 @@ public class DelayMessage implements Serializable {
             .append(channel).append("\"}").toString();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param messageId <br>
+     */
+    public void setMessageId(final String messageId) {
         this.messageId = messageId;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel <br>
+     */
+    public void setChannel(final String channel) {
         this.channel = channel;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public byte[] getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param data <br>
+     */
+    public void setData(final byte[] data) {
         this.data = data;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getSeconds() {
         return seconds;
     }
 
-    public void setSeconds(int seconds) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds <br>
+     */
+    public void setSeconds(final int seconds) {
         this.seconds = seconds;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(long currentTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param currentTime <br>
+     */
+    public void setCurrentTime(final long currentTime) {
         this.currentTime = currentTime;
     }
 

@@ -24,14 +24,13 @@ public final class SQlCheckUtil {
     public static final String ASTERISK = " * ";
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param sql <br>
      */
-    public static void checkSql(String sql) {
+    public static void checkSql(final String sql) {
         Assert.isTrue(sql.indexOf(ASTERISK) == -1, ErrorCodeDef.UNSUUPORT_ASTERISK);
     }
 }

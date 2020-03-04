@@ -38,7 +38,7 @@ public class RetryJob implements SimpleJob {
      * @param shardingContext <br>
      */
     @Override
-    public void execute(ShardingContext shardingContext) {
+    public void execute(final ShardingContext shardingContext) {
         // 按每小时内
 
         TxStorage storage = ContextHolder.getContext().getBean(TxStorage.class);

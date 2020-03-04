@@ -53,7 +53,7 @@ public class DynamicTransactionManagementConfigurer implements TransactionManage
          * @throws TransactionException <br>
          */
         @Override
-        public TransactionStatus getTransaction(TransactionDefinition definition) throws TransactionException {
+        public TransactionStatus getTransaction(final TransactionDefinition definition) throws TransactionException {
             return TransactionManagerHolder.getTransactionManager().getTransaction(definition);
         }
 
@@ -66,7 +66,7 @@ public class DynamicTransactionManagementConfigurer implements TransactionManage
          * @throws TransactionException <br>
          */
         @Override
-        public void commit(TransactionStatus status) throws TransactionException {
+        public void commit(final TransactionStatus status) throws TransactionException {
             TransactionManagerHolder.getTransactionManager().commit(status);
         }
 
@@ -79,7 +79,7 @@ public class DynamicTransactionManagementConfigurer implements TransactionManage
          * @throws TransactionException <br>
          */
         @Override
-        public void rollback(TransactionStatus status) throws TransactionException {
+        public void rollback(final TransactionStatus status) throws TransactionException {
             TransactionManagerHolder.getTransactionManager().rollback(status);
         }
 

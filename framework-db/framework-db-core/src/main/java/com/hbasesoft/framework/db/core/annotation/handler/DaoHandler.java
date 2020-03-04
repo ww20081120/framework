@@ -71,7 +71,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws Throwable <br>
      */
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         // Step1:判断是否是抽象方法，如果是非抽象方法，则不执行代理拦截器
         if (proxy != null && !BeanUtil.isAbstract(method)) {
             return method.invoke(proxy, args);
@@ -188,7 +188,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws DaoException <br>
      */
-    private Object excuteSql(String sql, DataParam param) throws DaoException {
+    private Object excuteSql(final String sql, final DataParam param) throws DaoException {
         Object result = null;
         // 区分查询方法与执行方法
         if (sql.toLowerCase().startsWith(DaoConstants.SQL_SELECT_PREFIX)) {
@@ -212,8 +212,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws UtilException <br>
      */
-    private String parseSqlTemplate(Method method, String templateSql, Map<String, Object> sqlParamsMap)
-        throws UtilException {
+    private String parseSqlTemplate(final Method method, final String templateSql,
+        final Map<String, Object> sqlParamsMap) throws UtilException {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         String executeSql = VelocityParseFactory.parse(key, templateSql, sqlParamsMap);
 
@@ -221,7 +221,14 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
         return executeSql.replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("\\s{1,}", " ").trim();
     }
 
-    public void setSqlExcutor(ISqlExcutor se) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param se <br>
+     */
+    public void setSqlExcutor(final ISqlExcutor se) {
         this.sqlExcutor = se;
     }
 }

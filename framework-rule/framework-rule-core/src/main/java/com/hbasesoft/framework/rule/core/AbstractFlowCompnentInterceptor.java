@@ -29,7 +29,7 @@ public abstract class AbstractFlowCompnentInterceptor implements FlowComponentIn
      * @return <br>
      */
     @Override
-    public int compareTo(FlowComponentInterceptor o) {
+    public int compareTo(final FlowComponentInterceptor o) {
         AbstractFlowCompnentInterceptor ao = (AbstractFlowCompnentInterceptor) o;
         return this.order - ao.order;
     }
@@ -52,7 +52,7 @@ public abstract class AbstractFlowCompnentInterceptor implements FlowComponentIn
      * @taskId <br>
      * @param order <br>
      */
-    public void setOrder(int order) {
+    public void setOrder(final int order) {
         this.order = order;
     }
 

@@ -50,7 +50,7 @@ public class MessageServApplicationTest {
     // @Autowired
     // private RocketmqMessagePublisher rocketmqMessagePublisher;
     //
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Bootstrap.before();
         ConfigurableApplicationContext context = SpringApplication.run(MessageServApplicationTest.class, args);
         Bootstrap.after(context);

@@ -46,7 +46,7 @@ public class CheckInfo implements Serializable {
      * @param id
      * @param mark
      */
-    public CheckInfo(String id, String mark) {
+    public CheckInfo(final String id, final String mark) {
         this.id = id;
         this.mark = mark;
     }

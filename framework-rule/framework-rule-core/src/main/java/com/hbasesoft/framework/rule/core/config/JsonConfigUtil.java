@@ -42,7 +42,7 @@ public final class JsonConfigUtil {
      * @return <br>
      */
     @SuppressWarnings("rawtypes")
-    public static FlowConfig getFlowConfig(JSONObject obj) {
+    public static FlowConfig getFlowConfig(final JSONObject obj) {
 
         FlowConfig config = new FlowConfig();
 

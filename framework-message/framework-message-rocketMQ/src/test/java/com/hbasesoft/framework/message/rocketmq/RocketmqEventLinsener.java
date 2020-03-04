@@ -25,8 +25,16 @@ import com.hbasesoft.framework.message.core.event.EventLinsener;
 @Component
 public class RocketmqEventLinsener implements EventLinsener {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data <br>
+     */
     @Override
-    public void onMessage(String channel, byte[] data) {
+    public void onMessage(final String channel, final byte[] data) {
         System.out.println(channel);
         try {
             System.out.println(new String(data, "utf-8"));
@@ -55,6 +63,13 @@ public class RocketmqEventLinsener implements EventLinsener {
         };
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public boolean subscriber() {
         // TODO Auto-generated method stub
@@ -65,7 +80,7 @@ public class RocketmqEventLinsener implements EventLinsener {
      * @Title: onEmmit @author 大刘杰 @Description: TODO @param @param event @param @param data @return @throws
      */
     @Override
-    public void onEmmit(String event, EventData data) {
+    public void onEmmit(final String event, final EventData data) {
         // TODO Auto-generated method stub
 
     }

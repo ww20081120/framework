@@ -27,15 +27,28 @@ import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueueLoader;
  */
 public final class MessageHelper {
 
+    /** message publisher */
     private static MessagePublisher messagePublisher;
 
+    /** message subcriber factory */
     private static MessageSubcriberFactory messageSubcriberFactory;
 
+    /** delay message queue */
     private static DelayMessageQueue delayMessageQueue;
 
+    /**
+     * 
+     */
     private MessageHelper() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static MessagePublisher createMessagePublisher() {
         if (messagePublisher == null) {
             String messageModel = PropertyHolder.getProperty("message.model");
@@ -56,6 +69,13 @@ public final class MessageHelper {
         return messagePublisher;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static MessageSubcriberFactory createMessageSubcriberFactory() {
         if (messageSubcriberFactory == null) {
             String messageModel = PropertyHolder.getProperty("message.model");
@@ -76,6 +96,13 @@ public final class MessageHelper {
         return messageSubcriberFactory;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static DelayMessageQueue getDelayMessageQueue() {
         if (delayMessageQueue == null) {
             ServiceLoader<StepDelayMessageQueueLoader> serviceLoader = ServiceLoader

@@ -27,27 +27,25 @@ public class RocketmqEvent extends ApplicationEvent {
     private List<MessageExt> msgs;
 
     /**
-     * 
      * @param msgs
      * @param consumer
      * @throws Exception
      */
-    public RocketmqEvent(List<MessageExt> msgs, DefaultMQPushConsumer consumer) throws Exception {
+    public RocketmqEvent(final List<MessageExt> msgs, final DefaultMQPushConsumer consumer) throws Exception {
         super(msgs);
         this.consumer = consumer;
         this.setMsgs(msgs);
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @return <br>
      */
-    public String getMsg(int idx) {
+    public String getMsg(final int idx) {
         try {
             return new String(getMsgs().get(idx).getBody(), "utf-8");
         }
@@ -57,16 +55,15 @@ public class RocketmqEvent extends ApplicationEvent {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @param code
      * @return <br>
      */
-    public String getMsg(int idx, String code) {
+    public String getMsg(final int idx, final String code) {
         try {
             return new String(getMsgs().get(idx).getBody(), code);
         }
@@ -76,9 +73,8 @@ public class RocketmqEvent extends ApplicationEvent {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -88,86 +84,79 @@ public class RocketmqEvent extends ApplicationEvent {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param consumer <br>
      */
-    public void setConsumer(DefaultMQPushConsumer consumer) {
+    public void setConsumer(final DefaultMQPushConsumer consumer) {
         this.consumer = consumer;
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @return <br>
      */
-    public MessageExt getMessageExt(int idx) {
+    public MessageExt getMessageExt(final int idx) {
         return getMsgs().get(idx);
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @return <br>
      */
-    public String getTopic(int idx) {
+    public String getTopic(final int idx) {
         return getMsgs().get(idx).getTopic();
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @return <br>
      */
-    public String getTag(int idx) {
+    public String getTag(final int idx) {
         return getMsgs().get(idx).getTags();
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @return <br>
      */
-    public byte[] getBody(int idx) {
+    public byte[] getBody(final int idx) {
         return getMsgs().get(idx).getBody();
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param idx
      * @return <br>
      */
-    public String getKeys(int idx) {
+    public String getKeys(final int idx) {
         return getMsgs().get(idx).getKeys();
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -177,14 +166,13 @@ public class RocketmqEvent extends ApplicationEvent {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param msgs <br>
      */
-    public void setMsgs(List<MessageExt> msgs) {
+    public void setMsgs(final List<MessageExt> msgs) {
         this.msgs = msgs;
     }
 }

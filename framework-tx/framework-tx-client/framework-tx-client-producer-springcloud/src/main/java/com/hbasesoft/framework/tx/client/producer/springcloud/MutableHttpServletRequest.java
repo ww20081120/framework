@@ -33,7 +33,7 @@ public class MutableHttpServletRequest extends HttpServletRequestWrapper {
     /**
      * @param request
      */
-    public MutableHttpServletRequest(HttpServletRequest request) {
+    public MutableHttpServletRequest(final HttpServletRequest request) {
         super(request);
         this.customHeaders = new HashMap<String, String>();
     }
@@ -46,7 +46,7 @@ public class MutableHttpServletRequest extends HttpServletRequestWrapper {
      * @param name
      * @param value <br>
      */
-    public void putHeader(String name, String value) {
+    public void putHeader(final String name, final String value) {
         this.customHeaders.put(name, value);
     }
 
@@ -58,7 +58,7 @@ public class MutableHttpServletRequest extends HttpServletRequestWrapper {
      * @param name
      * @return <br>
      */
-    public String getHeader(String name) {
+    public String getHeader(final String name) {
         // check the custom headers first
         String headerValue = customHeaders.get(name);
 

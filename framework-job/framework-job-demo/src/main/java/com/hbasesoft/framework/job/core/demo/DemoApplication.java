@@ -16,7 +16,15 @@ import com.hbasesoft.framework.common.Bootstrap;
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.hbasesoft")
 public class DemoApplication {
-    public static void main(String[] args) {
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
+    public static void main(final String[] args) {
         Bootstrap.before();
         ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
         Bootstrap.after(context);

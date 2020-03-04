@@ -52,7 +52,7 @@ public class DataBaseConfig {
      * @return <br>
      */
     @Bean
-    public AutoProxyBeanFactory registAutoProxyBeanFactory(@Value("${master.db.type}") String dbType) {
+    public AutoProxyBeanFactory registAutoProxyBeanFactory(final @Value("${master.db.type}") String dbType) {
 
         AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory();
 

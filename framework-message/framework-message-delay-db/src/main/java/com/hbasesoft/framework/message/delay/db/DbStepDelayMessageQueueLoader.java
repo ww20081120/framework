@@ -69,7 +69,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
      * @taskId <br>
      * @param ds <br>
      */
-    public static void init(DelaymsgService ds) {
+    public static void init(final DelaymsgService ds) {
 
         DbStepDelayMessageQueueLoader.delaymsgService = ds;
 
@@ -103,7 +103,14 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
 
     }
 
-    public static void loadMemery(int level) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param level <br>
+     */
+    public static void loadMemery(final int level) {
 
         int pageIndex = 1;
         int pageSize = GlobalConstants.DEFAULT_LINES;
@@ -154,7 +161,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
      * @return <br>
      */
     @Override
-    public StepDelayMessageQueue getDelayMessageQueue(int level) {
+    public StepDelayMessageQueue getDelayMessageQueue(final int level) {
         return map.get(level);
     }
 
@@ -181,7 +188,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
      * @param newLevel <br>
      */
     @Override
-    public void changeData(String messageId, long expireTime, int oldLevel, int newLevel) {
+    public void changeData(final String messageId, final long expireTime, final int oldLevel, final int newLevel) {
         if (oldLevel != newLevel) {
             StepDelayMessageQueue oldQueue = getDelayMessageQueue(oldLevel);
             if (oldQueue instanceof MemeryStepDelayMessageQueue) {

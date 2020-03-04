@@ -29,6 +29,13 @@ public interface MessagePublisher {
     /** 事务消费 */
     String PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getName();
 
     /**

@@ -74,7 +74,7 @@ public final class DataSourceUtil {
      * @param name
      * @return <br>
      */
-    public static DataSource getDataSource(String name) {
+    public static DataSource getDataSource(final String name) {
         synchronized (dataSourceMap) {
             return dataSourceMap.get(name);
         }
@@ -89,7 +89,7 @@ public final class DataSourceUtil {
      * @param dbParam
      * @return <br>
      */
-    public static DataSource registDataSource(String name, DbParam dbParam) {
+    public static DataSource registDataSource(final String name, final DbParam dbParam) {
         synchronized (dataSourceMap) {
             return regist(name, dbParam);
         }
@@ -102,7 +102,7 @@ public final class DataSourceUtil {
      * @taskId <br>
      * @param name <br>
      */
-    public static void close(String name) {
+    public static void close(final String name) {
         synchronized (dataSourceMap) {
             DataSource dataSource = dataSourceMap.remove(name);
             if (dataSource != null && dataSource instanceof DruidDataSource) {
@@ -111,7 +111,7 @@ public final class DataSourceUtil {
         }
     }
 
-    private static DataSource regist(String name, DbParam dbParam) {
+    private static DataSource regist(final String name, final DbParam dbParam) {
         DataSource dataSource = dataSourceMap.get(name);
         if (dataSource == null) {
             DruidDataSource ds = new DruidDataSource();

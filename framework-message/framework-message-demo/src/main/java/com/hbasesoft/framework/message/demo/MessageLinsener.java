@@ -24,6 +24,7 @@ public class MessageLinsener implements MessageSubscriber {
     /** Number */
     private static final int NUM_4 = 4;
 
+    /** name */
     private String name = CommonUtil.getRandomChar(NUM_4);
 
     /**
@@ -35,7 +36,7 @@ public class MessageLinsener implements MessageSubscriber {
      * @param data <br>
      */
     @Override
-    public void onMessage(String channel, byte[] data) {
+    public void onMessage(final String channel, final byte[] data) {
         System.out.println(">>>>>>>>>>>>>" + Thread.currentThread().getName() + ">>>>>>>>>>>>>>>>>>>" + name
             + " onMessage: " + channel + "---" + new String(data));
         try {
@@ -55,7 +56,7 @@ public class MessageLinsener implements MessageSubscriber {
      * @param subscribeChannels <br>
      */
     @Override
-    public void onSubscribe(String channel, int subscribeChannels) {
+    public void onSubscribe(final String channel, final int subscribeChannels) {
         System.out.println(Thread.currentThread().getId());
         System.out.println(name + " onSubscribe: " + channel + "---" + subscribeChannels);
     }
@@ -69,7 +70,7 @@ public class MessageLinsener implements MessageSubscriber {
      * @param subscribedChannels <br>
      */
     @Override
-    public void onUnsubscribe(String channel, int subscribedChannels) {
+    public void onUnsubscribe(final String channel, final int subscribedChannels) {
         System.out.println(name + " onUnsubscribe: " + channel + "---" + subscribedChannels);
     }
 

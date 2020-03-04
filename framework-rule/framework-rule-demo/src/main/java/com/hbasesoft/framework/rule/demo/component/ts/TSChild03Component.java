@@ -46,7 +46,7 @@ public class TSChild03Component implements FlowComponent<TestFlowBean> {
      * @throws Exception <br>
      */
     @Override
-    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
+    public boolean process(final TestFlowBean testFlowBean, final FlowContext flowContext) throws Exception {
         List<Employee> employeeList = employeeDao.findByAgeGreaterThan(NUM_20);
         for (Employee employee : employeeList) {
             employee.setAge(employee.getAge() + 1);

@@ -35,7 +35,7 @@ public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         System.out.println(flowContext.getFlowConfig().getName() + "===before 03=====" + flowBean + flowContext);
         return true;
     }
@@ -49,7 +49,7 @@ public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
      * @param flowContext <br>
      */
     @Override
-    public void after(Serializable flowBean, FlowContext flowContext) {
+    public void after(final Serializable flowBean, final FlowContext flowContext) {
         System.out.println(flowContext.getFlowConfig().getName() + "===after 03=====" + flowBean + flowContext);
     }
 
@@ -63,7 +63,7 @@ public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
      * @param flowContext <br>
      */
     @Override
-    public void error(Exception e, Serializable flowBean, FlowContext flowContext) {
+    public void error(final Exception e, final Serializable flowBean, final FlowContext flowContext) {
         System.out.println(flowContext.getFlowConfig().getName() + "===throw 03=====" + flowBean + flowContext);
     }
 

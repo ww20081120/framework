@@ -48,7 +48,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
      * @param data <br>
      */
     @Override
-    public void onMessage(String channel, byte[] data) {
+    public void onMessage(final String channel, final byte[] data) {
         try {
 
             new Thread(new Runnable() {
@@ -91,7 +91,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
      * @param subscribeChannels <br>
      */
     @Override
-    public void onSubscribe(String channel, int subscribeChannels) {
+    public void onSubscribe(final String channel, final int subscribeChannels) {
         // subscribe topic and subkeys eg.[channel:subscribeChannels]
         // consumer.subscribe("TopicTest", "TagA || TagC || TagD");
         try {
@@ -112,7 +112,7 @@ public class RocketmqMessageSubscribe implements MessageSubscriber {
      * @param subscribedChannels <br>
      */
     @Override
-    public void onUnsubscribe(String channel, int subscribedChannels) {
+    public void onUnsubscribe(final String channel, final int subscribedChannels) {
         defaultMQPushConsumer.unsubscribe(channel);
     }
 

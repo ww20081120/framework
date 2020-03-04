@@ -44,10 +44,9 @@ public class TestProducter {
     /** index */
     private int i = 0;
 
-    /** 
+    /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param id
@@ -55,7 +54,7 @@ public class TestProducter {
      */
     @GetMapping
     @Tx
-    public synchronized String test(@RequestParam("id") String id) {
+    public synchronized String test(final @RequestParam("id") String id) {
 
         TxInvokerProxy.invoke("client1", () -> {
             TxEventEmmiter.emmit("testEvent");

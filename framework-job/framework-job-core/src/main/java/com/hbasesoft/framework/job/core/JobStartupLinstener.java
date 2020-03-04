@@ -44,6 +44,9 @@ import com.hbasesoft.framework.job.core.event.JobEventJsonConfiguration;
  */
 public class JobStartupLinstener implements StartupListener {
 
+    /**
+     * packages to scan
+     */
     private final String[] packagesToScan = new String[] {
         "com.hbasesoft.*"
     };
@@ -58,7 +61,7 @@ public class JobStartupLinstener implements StartupListener {
      * @throws InstantiationException
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
 
         // 未开启Job则不进行扫描
         if (!PropertyHolder.getBooleanProperty("job.enable", true)) {
@@ -150,7 +153,7 @@ public class JobStartupLinstener implements StartupListener {
 
     }
 
-    private static String getPropery(String propery) {
+    private static String getPropery(final String propery) {
         if (StringUtils.isNotEmpty(propery) && propery.startsWith("${") && propery.endsWith("}")) {
             return PropertyHolder.getProperty(propery.substring(2, propery.length() - 1));
         }

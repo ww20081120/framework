@@ -50,7 +50,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
      *      MessageSubscriber)
      */
     @Override
-    public void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber) {
+    public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
 
         subscriber.onSubscribe(channel, 1);
         Map<String, Object> subscriberSetting = subscriber.subscriberSetting();
@@ -87,7 +87,7 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
      * @param broadcast
      * @param subscriber <br>
      */
-    private void consumeOrderly(String channel, boolean broadcast, MessageSubscriber subscriber) {
+    private void consumeOrderly(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
         RocketmqFactory.getPushConsumer(channel, channel, broadcast, (MessageListenerOrderly) (msgs, context) -> {
             // 自动提交 更新消费队列的位置
             context.setAutoCommit(true);
@@ -112,7 +112,8 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
      * @param broadcast
      * @param subscriber <br>
      */
-    private void consumeConcurrently(String channel, boolean broadcast, MessageSubscriber subscriber) {
+    private void consumeConcurrently(final String channel, final boolean broadcast,
+        final MessageSubscriber subscriber) {
 
         RocketmqFactory.getPushConsumer(channel, channel, broadcast,
             (MessageListenerConcurrently) (List<MessageExt> msgs, ConsumeConcurrentlyContext context) -> {
