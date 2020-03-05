@@ -8,6 +8,7 @@ package com.hbasesoft.framework.rule.demo.component;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 import com.hbasesoft.framework.rule.core.FlowContext;
 import com.hbasesoft.framework.rule.demo.bean.FlowBean;
@@ -22,8 +23,8 @@ import com.hbasesoft.framework.rule.demo.bean.FlowBean;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.file.component <br>
  */
-@Component("Child02Component")
-public class Child02Component implements FlowComponent<FlowBean> {
+@Component("ExceptionComponent")
+public class ExceptionComponent implements FlowComponent<FlowBean> {
 
     /**
      * Description: <br>
@@ -37,8 +38,8 @@ public class Child02Component implements FlowComponent<FlowBean> {
      */
     @Override
     public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
-        System.out.println("----------Child02Component------" + JSONObject.toJSONString(flowBean));
-
+        System.out.println("----------ExceptionComponent------" + JSONObject.toJSONString(flowBean));
+        Assert.isFalse(true, 100);
         return true;
     }
 

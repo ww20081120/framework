@@ -22,7 +22,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.file.interceptor <br>
  */
-@Component
+//@Component
 public class Test03Interceptor extends AbstractFlowCompnentInterceptor {
 
     /**
