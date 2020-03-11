@@ -130,7 +130,7 @@ public class TestProducter {
 
 ```
 
-[快速入门](https://github.com/ww20081120/framework/wiki)
+[---> 点这里走起 <---](https://github.com/ww20081120/framework/wiki)
 
 ---
 - Author:王伟 
