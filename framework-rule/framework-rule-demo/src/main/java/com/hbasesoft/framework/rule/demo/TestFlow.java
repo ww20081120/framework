@@ -44,12 +44,12 @@ public class TestFlow implements ApplicationContextAware {
     @Test
     public void testStateMachineBean() {
         TestStateMachineBean bean = new TestStateMachineBean();
-        bean.setEvent("e1");
+        bean.setAction("e1");
         System.out.println(JSONObject.toJSONString(bean));
         int result = FlowHelper.flowStart(bean, "stateMachine");
         System.out.println(result);
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        bean.setEvent("e2");
+        bean.setAction("e2");
         bean.setState("A");
         System.out.println(JSONObject.toJSONString(bean));
         result = FlowHelper.flowStart(bean, "stateMachine");

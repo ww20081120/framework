@@ -30,6 +30,6 @@ public class TestStateMachineBean extends FlowBean implements StateMachineFlowBe
 
     private String state;
 
-    private String event;
+    private String action;
 
 }
