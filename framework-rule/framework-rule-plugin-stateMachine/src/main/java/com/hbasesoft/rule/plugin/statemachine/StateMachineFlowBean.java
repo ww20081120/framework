@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 public interface StateMachineFlowBean extends Serializable {
 
-    String getEvent();
+    String getAction();
 
     String getState();
 

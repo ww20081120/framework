@@ -68,7 +68,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
 
             StateMachineFlowBean flowBean = (StateMachineFlowBean) bean;
 
-            String currentEvent = flowBean.getEvent();
+            String currentEvent = flowBean.getAction();
             Assert.notEmpty(currentEvent, ErrorCodeDef.EVENT_NOT_EMPTY);
 
             String state = (String) attrMap.get("begin");
@@ -92,7 +92,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
 
                 for (int i = 0, size = matchEvents.size(); i < size; i++) {
                     JSONObject eventObj = matchEvents.getJSONObject(i);
-                    String event = eventObj.getString("event");
+                    String event = eventObj.getString("action");
                     Assert.notEmpty(event, ErrorCodeDef.EVENT_NOT_EMPTY);
                     String endState = eventObj.getString("end");
                     String gError = eventObj.getString("error");
