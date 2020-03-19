@@ -284,9 +284,6 @@ public class RedisCache extends AbstractRedisCache {
             try {
                 jedis = jedisPool.getResource();
                 jedis.hset(nodeName, key, t);
-                if (seconds > 0) {
-                    jedis.expire(new String(nodeName), seconds);
-                }
             }
             finally {
                 if (jedis != null) {

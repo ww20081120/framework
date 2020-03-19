@@ -92,8 +92,8 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
 
                 for (int i = 0, size = matchEvents.size(); i < size; i++) {
                     JSONObject eventObj = matchEvents.getJSONObject(i);
-                    String event = eventObj.getString("event");
-                    Assert.notEmpty(event, ErrorCodeDef.EVENT_NOT_EMPTY);
+                    String action = eventObj.getString("action");
+                    Assert.notEmpty(action, ErrorCodeDef.EVENT_NOT_EMPTY);
                     String endState = eventObj.getString("end");
                     String gError = eventObj.getString("error");
 
@@ -106,7 +106,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                         errorState = StringUtils.isEmpty(gError) ? gError : currentState;
                     }
 
-                    if (CommonUtil.match(event, currentEvent)) {
+                    if (CommonUtil.match(action, currentEvent)) {
                         FlowConfig flowConfig = JsonConfigUtil.getFlowConfig(eventObj);
                         FlowContext newFlowContext = new FlowContext(flowConfig, flowContext.getExtendUtils(),
                             flowContext.getParamMap());

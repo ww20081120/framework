@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
@@ -266,9 +266,6 @@ public class ShardedRedisCache extends AbstractRedisCache {
             try {
                 shardedJedis = shardedPool.getResource();
                 shardedJedis.hset(nodeName, key, t);
-                if (seconds > 0) {
-                    shardedJedis.expire(nodeName, seconds);
-                }
             }
             finally {
                 if (shardedJedis != null) {

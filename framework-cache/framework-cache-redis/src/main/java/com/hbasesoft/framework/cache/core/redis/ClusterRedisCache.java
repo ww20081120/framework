@@ -213,9 +213,6 @@ public class ClusterRedisCache extends AbstractRedisCache {
     protected void put(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             cluster.hset(nodeName, key, t);
-            if (seconds > 0) {
-                cluster.expire(nodeName, seconds);
-            }
         }
     }
 
