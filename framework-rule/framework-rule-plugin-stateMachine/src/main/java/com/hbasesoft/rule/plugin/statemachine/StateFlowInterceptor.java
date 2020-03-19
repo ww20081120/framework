@@ -25,6 +25,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  */
 public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
 
+    /** skip flag holder */
     private ThreadLocal<Boolean> skipFlagHolder = ThreadLocal.withInitial(() -> true);
 
     /**
@@ -37,7 +38,7 @@ public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         String lcName = flowContext.getFlowConfig().getName();
         // 初始化节点
         if (lcName.endsWith("_1")) {

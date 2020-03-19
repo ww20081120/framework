@@ -41,8 +41,12 @@ public class EhcacheImpl implements ICache {
      */
     public static final String CACHE_MODEL = "EHCACHE";
 
+    /** cacheManager */
     private CacheManager cacheManager;
 
+    /**
+     * EhcacheImpl
+     */
     public EhcacheImpl() {
         URL url = EhcacheImpl.class.getResource("ehcache.xml");
         this.cacheManager = (url != null) ? CacheManager.create(url) : CacheManager.create();
@@ -66,39 +70,87 @@ public class EhcacheImpl implements ICache {
         return this.cacheManager;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
     @Override
-    public ValueWrapper get(Object key) {
+    public ValueWrapper get(final Object key) {
         Element element = getCache(CacheConstant.DEFAULT_CACHE_DIR).get(key);
         return toWrapper(element);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param type
+     * @return <br>
+     */
     @Override
-    public <T> T get(Object key, Class<T> type) {
+    public <T> T get(final Object key, final Class<T> type) {
         return get(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value <br>
+     */
     @Override
-    public void put(Object key, Object value) {
+    public void put(final Object key, final Object value) {
         put(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), value);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value
+     * @return <br>
+     */
     @Override
-    public ValueWrapper putIfAbsent(Object key, Object value) {
+    public ValueWrapper putIfAbsent(final Object key, final Object value) {
         Element existingElement = getCache(CacheConstant.DEFAULT_CACHE_DIR).putIfAbsent(new Element(key, value));
         return toWrapper(existingElement);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
     @Override
-    public void evict(Object key) {
+    public void evict(final Object key) {
         getCache(CacheConstant.DEFAULT_CACHE_DIR).remove(key);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Override
     public void clear() {
         cacheManager.clearAll();
     }
 
-    private ValueWrapper toWrapper(Element element) {
+    private ValueWrapper toWrapper(final Element element) {
         return (element != null ? new SimpleValueWrapper(element.getObjectValue()) : null);
     }
 
@@ -113,7 +165,7 @@ public class EhcacheImpl implements ICache {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Map<String, T> getNode(String nodeName, Class<T> type) {
+    public <T> Map<String, T> getNode(final String nodeName, final Class<T> type) {
         Cache cache = getCache(nodeName);
         List<String> keys = cache.getKeysWithExpiryCheck();
         Map<String, T> cacheMap = new HashMap<String, T>();
@@ -140,7 +192,7 @@ public class EhcacheImpl implements ICache {
      * @param node <br>
      */
     @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) {
+    public <T> void putNode(final String nodeName, final Map<String, T> node) {
         putNode(nodeName, 0, node);
     }
 
@@ -150,10 +202,9 @@ public class EhcacheImpl implements ICache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     * @return <br>
      */
     @Override
-    public void removeNode(String nodeName) {
+    public void removeNode(final String nodeName) {
         cacheManager.removeCache(nodeName);
     }
 
@@ -168,7 +219,7 @@ public class EhcacheImpl implements ICache {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T get(String nodeName, String key) {
+    public <T> T get(final String nodeName, final String key) {
         Element element = getCache(nodeName).get(key);
         Object value = (element != null ? element.getObjectValue() : null);
         return (T) value;
@@ -184,7 +235,7 @@ public class EhcacheImpl implements ICache {
      * @param t <br>
      */
     @Override
-    public <T> void put(String nodeName, String key, T t) {
+    public <T> void put(final String nodeName, final String key, final T t) {
         getCache(nodeName).put(new Element(key, t));
     }
 
@@ -197,15 +248,15 @@ public class EhcacheImpl implements ICache {
      * @param key <br>
      */
     @Override
-    public void evict(String nodeName, String key) {
+    public void evict(final String nodeName, final String key) {
         getCache(nodeName).remove(key.toString());
     }
 
-    private Cache getCache(String nodeName) {
+    private Cache getCache(final String nodeName) {
         return getCache(nodeName, 0, 0);
     }
 
-    private Cache getCache(String nodeName, long timeToLiveSeconds, long timeToIdleSeconds) {
+    private Cache getCache(final String nodeName, final long timeToLiveSeconds, final long timeToIdleSeconds) {
         Cache cache = cacheManager.getCache(nodeName);
         if (cache == null) {
             cache = new Cache(nodeName, 0, true, false, timeToLiveSeconds, timeToIdleSeconds);
@@ -224,7 +275,7 @@ public class EhcacheImpl implements ICache {
      * @param node <br>
      */
     @Override
-    public <T> void putNode(String nodeName, int expireTimes, Map<String, T> node) {
+    public <T> void putNode(final String nodeName, final int expireTimes, final Map<String, T> node) {
         if (MapUtils.isNotEmpty(node)) {
             Cache cache = getCache(nodeName, expireTimes, 0);
             for (Entry<String, T> entry : node.entrySet()) {
@@ -244,7 +295,7 @@ public class EhcacheImpl implements ICache {
      * @param t <br>
      */
     @Override
-    public <T> void put(String nodeName, int expireTimes, String key, T t) {
+    public <T> void put(final String nodeName, final int expireTimes, final String key, final T t) {
         getCache(nodeName, expireTimes, 0).put(new Element(key, t));
     }
 
@@ -258,7 +309,7 @@ public class EhcacheImpl implements ICache {
      * @return <br>
      */
     @Override
-    public <T> T get(Object key, Callable<T> valueLoader) {
+    public <T> T get(final Object key, final Callable<T> valueLoader) {
         T result = get(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
         if (result == null) {
             try {

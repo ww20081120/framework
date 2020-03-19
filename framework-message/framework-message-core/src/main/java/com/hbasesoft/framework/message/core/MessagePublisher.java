@@ -29,6 +29,13 @@ public interface MessagePublisher {
     /** 事务消费 */
     String PUBLISH_TYPE_TRANSACTION = "TRANSACTION";
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getName();
 
     /**
@@ -46,7 +53,7 @@ public interface MessagePublisher {
      *
      * @param channel
      * @param data
-     * @param delayLevel
+     * @param seconds
      * @author 大刘杰
      * @since JDK 1.8
      */
@@ -64,7 +71,7 @@ public interface MessagePublisher {
      *
      * @param channel
      * @param data
-     * @param delayLevel
+     * @param produceModel
      * @author 大刘杰
      * @since JDK 1.8
      */

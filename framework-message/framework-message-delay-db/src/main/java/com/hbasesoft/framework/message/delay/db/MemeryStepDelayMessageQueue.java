@@ -33,13 +33,20 @@ import com.hbasesoft.framework.message.delay.db.service.DelaymsgService;
 @Transactional
 public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, IndexQueue, Runnable {
 
+    /** delaymsgService */
     private DelaymsgService delaymsgService;
 
+    /** holder */
     private Map<String, Long> holder;
 
+    /** level */
     private int level;
 
-    public MemeryStepDelayMessageQueue(int level, DelaymsgService delaymsgService) {
+    /**
+     * @param level
+     * @param delaymsgService
+     */
+    public MemeryStepDelayMessageQueue(final int level, final DelaymsgService delaymsgService) {
         this.level = level;
         this.delaymsgService = delaymsgService;
         holder = new ConcurrentHashMap<>();
@@ -65,11 +72,11 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
      * @param delayMessage <br>
      */
     @Override
-    public void add(DelayMessage delayMessage) {
+    public void add(final DelayMessage delayMessage) {
         MsgDelaymsgEntity entity = new MsgDelaymsgEntity(delayMessage);
         entity.setMemeryFlag(GlobalConstants.YES);
         delaymsgService.save(entity);
-        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + this.level * 1000);
+        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + this.level * GlobalConstants.SECONDS);
     }
 
     /**
@@ -81,7 +88,7 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
      * @return <br>
      */
     @Override
-    public DelayMessage remove(String msgId) {
+    public DelayMessage remove(final String msgId) {
         if (holder.remove(msgId) != null) {
             return delaymsgService.delete(msgId).toVo();
         }
@@ -121,7 +128,7 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
      * @param key <br>
      */
     @Override
-    public void removeIndex(String key) {
+    public void removeIndex(final String key) {
         holder.remove(key);
     }
 
@@ -134,7 +141,7 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
      * @param expireTime <br>
      */
     @Override
-    public void addIndex(String key, Long expireTime) {
+    public void addIndex(final String key, final Long expireTime) {
         holder.put(key, expireTime);
     }
 
@@ -151,12 +158,12 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 this.check();
-                Thread.sleep(this.getLevel() * 1000L);
+                Thread.sleep(this.getLevel() * GlobalConstants.SECONDS * 1L);
             }
             catch (Exception e) {
                 LoggerUtil.error(e);
                 try {
-                    Thread.sleep(1000L);
+                    Thread.sleep(GlobalConstants.SECONDS * 1L);
                 }
                 catch (InterruptedException e1) {
                     LoggerUtil.error(e);

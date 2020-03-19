@@ -30,17 +30,31 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
 @RestController
 public class TestProducter {
 
+    /** Number */
+    private static final int NUM_5 = 5;
+
+    /** fe */
     @Resource
     private FeginClient2Consumer feClient2Consumer;
 
+    /** fe */
     @Resource
     private FeginClient3Consumer feClient3Consumer;
 
+    /** index */
     private int i = 0;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping
     @Tx
-    public synchronized String test(@RequestParam("id") String id) {
+    public synchronized String test(final @RequestParam("id") String id) {
 
         TxInvokerProxy.invoke("client1", () -> {
             TxEventEmmiter.emmit("testEvent");
@@ -58,7 +72,7 @@ public class TestProducter {
         });
         System.out.println(value2);
 
-        if (new Random().nextInt(5) == 1) {
+        if (new Random().nextInt(NUM_5) == 1) {
             throw new RuntimeException();
         }
         System.out.println(i++ + ":" + id);

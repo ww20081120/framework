@@ -17,7 +17,22 @@ package com.hbasesoft.framework.message.delay.db;
  */
 public interface IndexQueue {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key <br>
+     */
     void removeIndex(String key);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param expireTime <br>
+     */
     void addIndex(String key, Long expireTime);
 }

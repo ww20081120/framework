@@ -22,12 +22,27 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @SuppressWarnings("rawtypes")
 public class WordFilter {
 
-    private static final char endTag = (char) (1);
+    /** NUM_16 */
+    private static final int NUM_16 = 16;
 
-    private Map<Character, Map> filterMap = new HashMap<Character, Map>(1024);
+    /** NUM */
+    private static final int NUM_1024 = 1024;
 
+    /** endTag */
+    private static final char END_TAG = (char) (1);
+
+    /** filterMap */
+    private Map<Character, Map> filterMap = new HashMap<Character, Map>(NUM_1024);
+
+    /**
+     * Description: init<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param filterWordList <br>
+     */
     @SuppressWarnings("unchecked")
-    public void init(Collection<String> filterWordList) {
+    public void init(final Collection<String> filterWordList) {
         if (filterMap != null && filterMap.size() > 0) {
             filterMap.clear();
         }
@@ -42,7 +57,7 @@ public class WordFilter {
                         Map<Character, Map> obj = subMap.get(charArray[i]);
                         if (obj == null) {
                             // 新索引，增加HashMap
-                            int size = (int) Math.max(2, 16 / Math.pow(2, i));
+                            int size = (int) Math.max(2, NUM_16 / Math.pow(2, i));
                             Map<Character, Map> subMapTmp = new HashMap<Character, Map>(size);
                             subMap.put(charArray[i], subMapTmp);
                             subMap = subMapTmp;
@@ -56,23 +71,30 @@ public class WordFilter {
                     Map<Character, HashMap> obj = subMap.get(charArray[len - 1]);
                     if (obj == null) {
                         // 新索引，增加HashMap，并设置结束符
-                        int size = (int) Math.max(2, 16 / Math.pow(2, len - 1));
+                        int size = (int) Math.max(2, NUM_16 / Math.pow(2, len - 1));
                         HashMap<Character, HashMap> subMapTmp = new HashMap<Character, HashMap>(size);
-                        subMapTmp.put(endTag, null);
+                        subMapTmp.put(END_TAG, null);
                         subMap.put(charArray[len - 1], subMapTmp);
                     }
                     else {
                         // 索引已经存在,设置结束符
-                        obj.put(endTag, null);
+                        obj.put(END_TAG, null);
                     }
                 }
             }
         }
     }
 
-    // 返回是否包含需要过滤的词
+    /**
+     * Description: 返回是否包含需要过滤的词<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param info
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
-    public boolean hasFilterWord(String info) {
+    public boolean hasFilterWord(final String info) {
         if (info == null || info.length() == 0) {
             return false;
         }
@@ -82,7 +104,7 @@ public class WordFilter {
             int index = i;
             Map<Character, Map> sub = filterMap.get(charArray[index]);
             while (sub != null) {
-                if (sub.containsKey(endTag)) {
+                if (sub.containsKey(END_TAG)) {
                     // 匹配结束
                     return true;
                 }
@@ -99,9 +121,17 @@ public class WordFilter {
         return false;
     }
 
-    // 将字符串中包含的关键词过滤并替换为指定字符串
+    /**
+     * Description:将字符串中包含的关键词过滤并替换为指定字符串 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param info
+     * @param replaceTag
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
-    public String getFilterString(String info, String replaceTag) {
+    public String getFilterString(final String info, final String replaceTag) {
         if (info == null || info.length() == 0 || replaceTag == null) {
             return info;
         }
@@ -133,7 +163,7 @@ public class WordFilter {
                     }
                 }
                 else {
-                    if (sub.containsKey(endTag)) {
+                    if (sub.containsKey(END_TAG)) {
                         // 匹配
                         end = index;
                     }
@@ -158,8 +188,16 @@ public class WordFilter {
         return newInfo.toString();
     }
 
+    /**
+     * Description: getKeyword <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param statement
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
-    public String getKeyword(String statement) {
+    public String getKeyword(final String statement) {
         if (StringUtils.isEmpty(statement)) {
             return statement;
         }
@@ -188,7 +226,7 @@ public class WordFilter {
                     }
                 }
                 else {
-                    if (sub.containsKey(endTag)) {
+                    if (sub.containsKey(END_TAG)) {
                         end = index;
                     }
                 }

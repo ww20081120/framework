@@ -30,8 +30,19 @@ import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
  */
 public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
 
+    /** number */
+    private static final int NUM_3 = 3;
+
+    /** number */
+    private static final int NUM_500 = 500;
+
+    /** number */
+    private static final long NUM_1000L = 1000L;
+
+    /** logger */
     private static final Logger LOGGER = new Logger("EventHandlerLogger");
 
+    /** atomic integer */
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
 
     /**
@@ -55,7 +66,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
      * @param subscriber <br>
      */
     @Override
-    public void registSubscriber(final String channel, boolean broadcast, final MessageSubscriber subscriber) {
+    public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
         new Thread(() -> {
             KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
                 .getKafkaConsumer(broadcast ? channel + CommonUtil.getTransactionID() : channel, channel);
@@ -63,7 +74,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
         }).start();
     }
 
-    private void registSubscriberBroadCast(KafkaConsumer<String, byte[]> kafkaConsumer, String channel,
+    private void registSubscriberBroadCast(final KafkaConsumer<String, byte[]> kafkaConsumer, final String channel,
         final MessageSubscriber subscriber) {
 
         int index = atomicInteger.incrementAndGet();
@@ -73,7 +84,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
             long count = 0;
             while (!Thread.currentThread().isInterrupted()) {
                 try {
-                    ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(Duration.ofSeconds(3));
+                    ConsumerRecords<String, byte[]> records = kafkaConsumer.poll(Duration.ofSeconds(NUM_3));
                     if (records != null) {
 
                         for (ConsumerRecord<String, byte[]> record : records) {
@@ -85,9 +96,9 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
                 }
                 catch (Exception e) {
                     LOGGER.error(e);
-                    Thread.sleep(1000L);
+                    Thread.sleep(NUM_1000L);
                 }
-                if (++count % 500 == 0) {
+                if (++count % NUM_500 == 0) {
                     LOGGER.debug("subscriber for {0}|{1} is alived.", channel, subscriber.getClass().getName());
                 }
             }

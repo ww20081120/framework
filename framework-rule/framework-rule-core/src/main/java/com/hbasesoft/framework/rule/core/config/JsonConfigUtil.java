@@ -33,8 +33,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class JsonConfigUtil {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param obj
+     * @return <br>
+     */
     @SuppressWarnings("rawtypes")
-    public static FlowConfig getFlowConfig(JSONObject obj) {
+    public static FlowConfig getFlowConfig(final JSONObject obj) {
 
         FlowConfig config = new FlowConfig();
 

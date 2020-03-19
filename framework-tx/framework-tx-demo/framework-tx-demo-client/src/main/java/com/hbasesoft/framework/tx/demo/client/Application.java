@@ -37,7 +37,7 @@ public class Application {
      * @param args <br>
      * @throws InterruptedException
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(final String[] args) throws InterruptedException {
         Bootstrap.before();
         ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         Bootstrap.after(context);

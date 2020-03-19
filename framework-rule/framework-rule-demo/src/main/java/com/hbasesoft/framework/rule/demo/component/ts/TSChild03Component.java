@@ -7,8 +7,6 @@ package com.hbasesoft.framework.rule.demo.component.ts;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.rule.core.FlowComponent;
@@ -29,7 +27,12 @@ import com.hbasesoft.framework.rule.demo.repository.EmployeeRepository;
  */
 @Component("TSChild03Component")
 public class TSChild03Component implements FlowComponent<TestFlowBean> {
-   // @Resource
+
+    /** Number */
+    private static final int NUM_20 = 20;
+
+    /** dao */
+    // @Resource
     private EmployeeRepository employeeDao;
 
     /**
@@ -37,14 +40,14 @@ public class TSChild03Component implements FlowComponent<TestFlowBean> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param flowBean
+     * @param testFlowBean
      * @param flowContext
-     * @return
+     * @return b
      * @throws Exception <br>
      */
     @Override
-    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
-        List<Employee> employeeList = employeeDao.findByAgeGreaterThan(20);
+    public boolean process(final TestFlowBean testFlowBean, final FlowContext flowContext) throws Exception {
+        List<Employee> employeeList = employeeDao.findByAgeGreaterThan(NUM_20);
         for (Employee employee : employeeList) {
             employee.setAge(employee.getAge() + 1);
             employeeDao.update(employee);

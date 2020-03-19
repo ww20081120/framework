@@ -7,8 +7,6 @@ package com.hbasesoft.framework.rule.demo.component.ts;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.rule.core.FlowComponent;
@@ -29,7 +27,9 @@ import com.hbasesoft.framework.rule.demo.repository.EmployeeRepository;
  */
 @Component("TSChild02Component")
 public class TSChild02Component implements FlowComponent<TestFlowBean> {
-   // @Resource
+
+    /** dao */
+    // @Resource
     private EmployeeRepository employeeDao;
 
     /**
@@ -37,13 +37,13 @@ public class TSChild02Component implements FlowComponent<TestFlowBean> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param flowBean
+     * @param testFlowBean
      * @param flowContext
-     * @return
+     * @return b
      * @throws Exception <br>
      */
     @Override
-    public boolean process(TestFlowBean testFlowBean, FlowContext flowContext) throws Exception {
+    public boolean process(final TestFlowBean testFlowBean, final FlowContext flowContext) throws Exception {
         List<Employee> employeeList = employeeDao.findByName(testFlowBean.getName());
         for (Employee employee : employeeList) {
             employee.setName(employee.getName() + 1);

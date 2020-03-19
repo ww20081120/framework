@@ -13,7 +13,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
 
 /**
  * <Description> <br>
@@ -27,6 +26,13 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public class AssertTest {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void notNull() {
         Object obj = new Object();
@@ -34,6 +40,13 @@ public class AssertTest {
         System.out.println("obj 不是null");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isNull() {
         Object obj = null;
@@ -41,6 +54,13 @@ public class AssertTest {
         System.out.println("obj 是null对象");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void notEmpty() {
         String str = "hello world";
@@ -64,6 +84,13 @@ public class AssertTest {
         System.out.println("strMap 不是空Map");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isEmpty() {
         String str = null;
@@ -99,6 +126,13 @@ public class AssertTest {
         System.out.println("strMap 是空 Map");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void equals() {
         String a = "abc";
@@ -112,6 +146,13 @@ public class AssertTest {
         System.out.println("对象c equals 对象d");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void notEquals() {
         String a = "abc";
@@ -125,6 +166,13 @@ public class AssertTest {
         System.out.println("对象c not equals 对象d");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isTrue() {
         String a = "abc";
@@ -136,10 +184,17 @@ public class AssertTest {
         System.out.println("字符串a != 字符串b");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isFalse() {
-        int a = 2;
-        int b = 3;
+        int a = 1;
+        int b = 2;
         Assert.isFalse(a > b, ErrorCodeDef.SYSTEM_ERROR_10001);
         System.out.println("数字a > 数字b 是错误的");
     }

@@ -9,7 +9,6 @@ import java.util.TimeZone;
 
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -21,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.hbasesoft.framework.common.annotation.NoTransLog;
 
 /**
  * <Description> <br>
@@ -37,7 +35,14 @@ import com.hbasesoft.framework.common.annotation.NoTransLog;
 //@NoTransLog
 public class MessageConfig {
 
-    // Spring MVC 项目请实现 org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
         // 1、需要先定义一个 convert 转换消息对象；
@@ -50,6 +55,14 @@ public class MessageConfig {
         return new HttpMessageConverters(new StringHttpMessageConverter(), fastConverter);
     }
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Bean
     @Primary
     public ObjectMapper objectMapper() {

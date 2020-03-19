@@ -20,6 +20,7 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public class SimpleMessageSubcriberFactory implements MessageSubcriberFactory {
 
+    /** simple */
     public static final String SIMPLE = "SIMPLE";
 
     /**
@@ -44,7 +45,7 @@ public class SimpleMessageSubcriberFactory implements MessageSubcriberFactory {
      * @param subscriber <br>
      */
     @Override
-    public void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber) {
+    public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
         EventManager.getInstance().regist(channel, broadcast, subscriber);
     }
 

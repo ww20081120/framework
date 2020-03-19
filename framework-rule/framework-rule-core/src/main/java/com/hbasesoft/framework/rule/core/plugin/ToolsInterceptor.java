@@ -38,7 +38,7 @@ public class ToolsInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         String tools = (String) flowContext.getFlowConfig().getConfigAttrMap().get("tools");
         if (StringUtils.isNotEmpty(tools)) {
             String[] ts = StringUtils.split(tools, GlobalConstants.SPLITOR);

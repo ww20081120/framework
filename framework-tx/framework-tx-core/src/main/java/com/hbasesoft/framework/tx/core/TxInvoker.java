@@ -13,11 +13,20 @@ import com.hbasesoft.framework.common.FrameworkException;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
+ * @param <T> T
  * @CreateDate Jan 10, 2020 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.core <br>
  */
 @FunctionalInterface
 public interface TxInvoker<T> {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return T
+     * @throws FrameworkException <br>
+     */
     T invoke() throws FrameworkException;
 }

@@ -42,7 +42,7 @@ public class TxAnnotationMethodRegistStartupListener implements StartupListener 
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         try {
             for (String pack : getBasePackage()) {
                 LoggerUtil.info("***********************扫描{0}包,注册分布式事务************************************", pack);

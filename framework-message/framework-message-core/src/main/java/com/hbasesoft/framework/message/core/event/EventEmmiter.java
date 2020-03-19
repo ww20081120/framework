@@ -32,7 +32,7 @@ public final class EventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(String event) {
+    public static void emmit(final String event) {
         emmit(event, new EventData());
     }
 
@@ -44,17 +44,35 @@ public final class EventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(String event, EventData data) {
+    public static void emmit(final String event, final EventData data) {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
         LoggerUtil.debug("触发[event={0},data={1}]事件通知", event, data);
     }
 
-    public static void emmit(String event, EventData data, int seconds) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param seconds <br>
+     */
+    public static void emmit(final String event, final EventData data, final int seconds) {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
         LoggerUtil.debug("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, seconds);
     }
 
-    public static void emmit(String event, EventData data, String produceModel) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param produceModel <br>
+     */
+    public static void emmit(final String event, final EventData data, final String produceModel) {
         MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
         LoggerUtil.debug("触发[event={0},data={1}, produceModel={2}]事件通知", event, data, produceModel);
     }

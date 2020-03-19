@@ -17,6 +17,7 @@ package com.hbasesoft.framework.rule.core;
  */
 public abstract class AbstractFlowCompnentInterceptor implements FlowComponentInterceptor {
 
+    /** order */
     private int order = 0;
 
     /**
@@ -28,16 +29,30 @@ public abstract class AbstractFlowCompnentInterceptor implements FlowComponentIn
      * @return <br>
      */
     @Override
-    public int compareTo(FlowComponentInterceptor o) {
+    public int compareTo(final FlowComponentInterceptor o) {
         AbstractFlowCompnentInterceptor ao = (AbstractFlowCompnentInterceptor) o;
         return this.order - ao.order;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param order <br>
+     */
+    public void setOrder(final int order) {
         this.order = order;
     }
 

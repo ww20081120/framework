@@ -37,20 +37,42 @@ import com.hbasesoft.framework.common.utils.Assert;
 @Configuration
 public class DulplicateLockAdvice {
 
+    /** LOCKED */
     public static final String LOCKED = "DULPLICATE_LOCKED";
 
+    /** AbstractRedisCache */
     private AbstractRedisCache redisCache;
 
+    /**
+     * DulplicateLockAdvice
+     */
     public DulplicateLockAdvice() {
         this.redisCache = (AbstractRedisCache) CacheHelper.getCache();
     }
 
+    /**
+     * 
+     * Description: dulplicateLock <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br> <br>
+     */
     @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
     public void dulplicateLock() {
     }
 
+    /**
+     * 
+     * Description: invoke<br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param thisJoinPoint
+     * @return Object
+     * @throws Throwable <br>
+     */
     @Around("dulplicateLock()")
-    public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+    public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {
             MethodSignature msig = (MethodSignature) sig;

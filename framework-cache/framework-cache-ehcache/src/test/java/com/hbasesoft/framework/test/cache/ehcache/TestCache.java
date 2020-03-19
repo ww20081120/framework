@@ -13,6 +13,11 @@ import org.junit.Test;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * <Description> <br>
  * 
@@ -23,23 +28,29 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
  */
 public class TestCache {
 
+    /** age */
+    private static final int AGE_23 = 23;
+
+    /** age */
+    private static final int AGE_24 = 24;
+
+    /** age */
+    private static final int AGE_26 = 26;
+
+    /** age */
+    private static final int AGE_27 = 27;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Person {
+
+        /** name */
         private String name;
 
+        /** age */
         private int age;
-
-        public Person() {
-        }
-
-        /**
-         * @param name
-         * @param age
-         */
-        public Person(String name, int age) {
-            super();
-            this.name = name;
-            this.age = age;
-        }
 
         /**
          * Description: <br>
@@ -64,9 +75,9 @@ public class TestCache {
     public void putNode() {
         PropertyHolder.setProperty("cache.model", "EHCACHE");
         Map<String, Person> map = new HashMap<String, Person>();
-        map.put("zhangsan", new Person("张三", 23));
-        map.put("lisi", new Person("李四", 24));
-        map.put("wangwu", new Person("王五", 24));
+        map.put("zhangsan", new Person("张三", AGE_23));
+        map.put("lisi", new Person("李四", AGE_24));
+        map.put("wangwu", new Person("王五", AGE_24));
         CacheHelper.getCache().putNode("person", map);
     }
 
@@ -103,7 +114,7 @@ public class TestCache {
      */
     @Test
     public void putValue() {
-        CacheHelper.getCache().put("person", "liuliu", new Person("溜溜", 26));
+        CacheHelper.getCache().put("person", "liuliu", new Person("溜溜", AGE_26));
     }
 
     /**
@@ -114,7 +125,7 @@ public class TestCache {
      */
     @Test
     public void updateValue() {
-        CacheHelper.getCache().put("person", "liuliu", new Person("溜溜", 27));
+        CacheHelper.getCache().put("person", "liuliu", new Person("溜溜", AGE_27));
     }
 
     /**

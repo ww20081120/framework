@@ -71,7 +71,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws Throwable <br>
      */
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         // Step1:判断是否是抽象方法，如果是非抽象方法，则不执行代理拦截器
         if (proxy != null && !BeanUtil.isAbstract(method)) {
             return method.invoke(proxy, args);
@@ -101,7 +101,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
 
         // Step5:组装sql参数
         installPlaceholderSqlParam(dataParam, executeSql, sqlParamsMap);
-        
+
         // Step6: 替换：的关键字
         executeSql = StringUtils.replace(executeSql, "：", ":");
 
@@ -117,16 +117,16 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @param sqlParamsMap <br>
      * @throws DaoException <br>
      */
-    private void installPlaceholderSqlParam(DataParam dataParam, String executeSql, Map<String, Object> sqlParamsMap)
-        throws DaoException {
+    private void installPlaceholderSqlParam(final DataParam dataParam, final String executeSql,
+        final Map<String, Object> sqlParamsMap) throws DaoException {
         Map<String, Object> map = new HashMap<String, Object>();
 
         Matcher m = pat.matcher(executeSql);
         try {
             while (m.find()) {
                 logger.debug(" Match [" + m.group() + "] at positions " + m.start() + "-" + (m.end() - 1));
-                String ognl_key = m.group().replace(":", "").trim();
-                map.put(ognl_key, OgnlUtil.getValue(ognl_key, sqlParamsMap));
+                String ognlKey = m.group().replace(":", "").trim();
+                map.put(ognlKey, OgnlUtil.getValue(ognlKey, sqlParamsMap));
             }
         }
         catch (Exception e) {
@@ -144,7 +144,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws DaoException <br>
      */
-    private Map<String, Object> loadDaoMetaData(Method method, Object[] args, DataParam dataParam) throws DaoException {
+    private Map<String, Object> loadDaoMetaData(final Method method, final Object[] args, final DataParam dataParam)
+        throws DaoException {
         Map<String, Object> paramMap;
         ParamMetadata metadata;
         try {
@@ -187,7 +188,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws DaoException <br>
      */
-    private Object excuteSql(String sql, DataParam param) throws DaoException {
+    private Object excuteSql(final String sql, final DataParam param) throws DaoException {
         Object result = null;
         // 区分查询方法与执行方法
         if (sql.toLowerCase().startsWith(DaoConstants.SQL_SELECT_PREFIX)) {
@@ -211,8 +212,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @return <br>
      * @throws UtilException <br>
      */
-    private String parseSqlTemplate(Method method, String templateSql, Map<String, Object> sqlParamsMap)
-        throws UtilException {
+    private String parseSqlTemplate(final Method method, final String templateSql,
+        final Map<String, Object> sqlParamsMap) throws UtilException {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         String executeSql = VelocityParseFactory.parse(key, templateSql, sqlParamsMap);
 
@@ -220,7 +221,14 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
         return executeSql.replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("\\s{1,}", " ").trim();
     }
 
-    public void setSqlExcutor(ISqlExcutor sqlExcutor) {
-        this.sqlExcutor = sqlExcutor;
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param se <br>
+     */
+    public void setSqlExcutor(final ISqlExcutor se) {
+        this.sqlExcutor = se;
     }
 }

@@ -21,8 +21,23 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public interface EventLinsener extends MessageSubscriber {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String[] events();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data <br>
+     */
     void onEmmit(String event, EventData data);
 
     /**
@@ -37,23 +52,25 @@ public interface EventLinsener extends MessageSubscriber {
     }
 
     /**
-     * Description: 接收到消息 <br>
+     * Description: 接收到消息<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param channel
      * @param data <br>
      */
-    default void onMessage(String channel, byte[] data) {
+    default void onMessage(final String channel, final byte[] data) {
         EventData eventData = SerializationUtil.unserial(EventData.class, data);
         LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().getId(), channel, eventData);
         onEmmit(channel, eventData);
     }
 
     /**
-     * Description: 开始订阅<br>
+     * Description: 开始订阅 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param channel
      * @param subscribeChannels <br>
      */
     default void onSubscribe(String channel, int subscribeChannels) {
@@ -61,10 +78,11 @@ public interface EventLinsener extends MessageSubscriber {
     }
 
     /**
-     * Description: 取消订阅<br>
+     * Description: 取消订阅 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param channel
      * @param subscribedChannels <br>
      */
     default void onUnsubscribe(String channel, int subscribedChannels) {

@@ -22,7 +22,7 @@ public interface FlowLoader {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param flowBean
+     * @param flowName
      * @return <br>
      */
     FlowConfig load(String flowName);

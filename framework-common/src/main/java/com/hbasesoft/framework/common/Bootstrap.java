@@ -36,15 +36,23 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common <br>
  */
-public class Bootstrap {
+public final class Bootstrap {
 
     /**
      * logger
      */
     private static Logger logger = new Logger(Bootstrap.class);
 
+    /** listenerList */
     private static List<StartupListener> listenerList = null;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     public static void before() {
         // 检测并设置http\https\ftp\socks的代理
         setHttpProxy();
@@ -61,7 +69,7 @@ public class Bootstrap {
 
             Collections.sort(listenerList, new Comparator<StartupListener>() {
                 @Override
-                public int compare(StartupListener o1, StartupListener o2) {
+                public int compare(final StartupListener o1, final StartupListener o2) {
                     return o1.getOrder().compareTo(o2.getOrder());
                 }
             });
@@ -78,7 +86,14 @@ public class Bootstrap {
         logger.info("====================>准备加载Spring配置文件<====================");
     }
 
-    public static void after(ApplicationContext context) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
+    public static void after(final ApplicationContext context) {
         logger.info("====================>Spring配置文件加载完毕<====================");
 
         if (CollectionUtils.isNotEmpty(listenerList)) {

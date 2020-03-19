@@ -39,6 +39,12 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public class RocketMQStartupListener implements StartupListener {
 
+    /** tx.executor.coreSize */
+    private static final int CORE_SIZE = 20;
+
+    /** tx.executor.maxPoolSize */
+    private static final int MAX_POOLSIZE = 64;
+
     /**
      * Description: <br>
      * 
@@ -47,7 +53,7 @@ public class RocketMQStartupListener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         LoggerUtil.info("开始启动分布式事务Rocket MQ Consumer");
 
         String topic = new RocketMQClientInfoFactory().getClientInfo();
@@ -60,8 +66,8 @@ public class RocketMQStartupListener implements StartupListener {
         Assert.notEmpty(address, ErrorCodeDef.TX_ROCKET_MQ_ADDRESS_NOT_FOUND);
         consumer.setNamesrvAddr(address);
         // Set Consume Thread
-        consumer.setConsumeThreadMin(PropertyHolder.getIntProperty("tx.executor.coreSize", 20));
-        consumer.setConsumeThreadMax(PropertyHolder.getIntProperty("tx.executor.maxPoolSize", 64));
+        consumer.setConsumeThreadMin(PropertyHolder.getIntProperty("tx.executor.coreSize", CORE_SIZE));
+        consumer.setConsumeThreadMax(PropertyHolder.getIntProperty("tx.executor.maxPoolSize", MAX_POOLSIZE));
         // One time consume max size
         consumer.setConsumeMessageBatchMaxSize(1);
 
@@ -73,8 +79,8 @@ public class RocketMQStartupListener implements StartupListener {
             consumer.registerMessageListener(new MessageListenerConcurrently() {
 
                 @Override
-                public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
-                    ConsumeConcurrentlyContext context) {
+                public ConsumeConcurrentlyStatus consumeMessage(final List<MessageExt> msgs,
+                    final ConsumeConcurrentlyContext context) {
                     if (CollectionUtils.isNotEmpty(msgs)) {
                         try {
                             for (MessageExt messageExt : msgs) {

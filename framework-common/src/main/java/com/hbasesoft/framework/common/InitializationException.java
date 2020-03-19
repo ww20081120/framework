@@ -24,7 +24,7 @@ public class InitializationException extends FrameworkException {
      * @param code
      * @param params
      */
-    public InitializationException(int code, Object... params) {
+    public InitializationException(final int code, final Object... params) {
         super(code, params);
     }
 
@@ -32,14 +32,14 @@ public class InitializationException extends FrameworkException {
      * @param code
      * @param t
      */
-    public InitializationException(int code, Throwable t) {
+    public InitializationException(final int code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public InitializationException(int code) {
+    public InitializationException(final int code) {
         super(code);
     }
 
@@ -48,14 +48,14 @@ public class InitializationException extends FrameworkException {
      * @param code
      * @param params
      */
-    public InitializationException(Throwable t, int code, Object... params) {
+    public InitializationException(final Throwable t, final int code, final Object... params) {
         super(t, code, params);
     }
 
     /**
      * @param t
      */
-    public InitializationException(Throwable t) {
+    public InitializationException(final Throwable t) {
         super(t);
     }
 

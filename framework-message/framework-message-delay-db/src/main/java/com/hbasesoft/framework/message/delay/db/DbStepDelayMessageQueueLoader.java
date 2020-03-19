@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
@@ -55,34 +56,41 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
         HALF_HOUR_QUEUE, TEN_MINUTE_QUEUE, MINUTE_QUEUE, TEN_SECONDS_QUEUE, SECONDS_QUEUE
     };
 
+    /** map */
     private static Map<Integer, StepDelayMessageQueue> map = new HashMap<>();
 
+    /** delaymsgService */
     private static DelaymsgService delaymsgService;
 
-    public static void init(DelaymsgService delaymsgService) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param ds <br>
+     */
+    public static void init(final DelaymsgService ds) {
 
-        DbStepDelayMessageQueueLoader.delaymsgService = delaymsgService;
+        DbStepDelayMessageQueueLoader.delaymsgService = ds;
 
         // 初始化存储表
-        delaymsgService.createTable();
+        ds.createTable();
 
         // 初始化队列
-        MemeryStepDelayMessageQueue secondsQueue = new MemeryStepDelayMessageQueue(SECONDS_QUEUE, delaymsgService);
+        MemeryStepDelayMessageQueue secondsQueue = new MemeryStepDelayMessageQueue(SECONDS_QUEUE, ds);
         map.put(SECONDS_QUEUE, secondsQueue);
 
-        MemeryStepDelayMessageQueue tenSecondsQueue = new MemeryStepDelayMessageQueue(TEN_SECONDS_QUEUE,
-            delaymsgService);
+        MemeryStepDelayMessageQueue tenSecondsQueue = new MemeryStepDelayMessageQueue(TEN_SECONDS_QUEUE, ds);
         map.put(TEN_SECONDS_QUEUE, tenSecondsQueue);
 
-        MemeryStepDelayMessageQueue minuteSecondsQueue = new MemeryStepDelayMessageQueue(MINUTE_QUEUE, delaymsgService);
+        MemeryStepDelayMessageQueue minuteSecondsQueue = new MemeryStepDelayMessageQueue(MINUTE_QUEUE, ds);
         map.put(MINUTE_QUEUE, minuteSecondsQueue);
 
-        MemeryStepDelayMessageQueue tenMinuteSecondsQueue = new MemeryStepDelayMessageQueue(TEN_MINUTE_QUEUE,
-            delaymsgService);
+        MemeryStepDelayMessageQueue tenMinuteSecondsQueue = new MemeryStepDelayMessageQueue(TEN_MINUTE_QUEUE, ds);
 
         map.put(TEN_MINUTE_QUEUE, tenMinuteSecondsQueue);
 
-        map.put(HALF_HOUR_QUEUE, new DbStepDelayMessageQueue(HALF_HOUR_QUEUE, delaymsgService));
+        map.put(HALF_HOUR_QUEUE, new DbStepDelayMessageQueue(HALF_HOUR_QUEUE, ds));
 
         // 启动监控
         new Thread(secondsQueue).start();
@@ -95,15 +103,23 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
 
     }
 
-    public static void loadMemery(int level) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param level <br>
+     */
+    public static void loadMemery(final int level) {
 
         int pageIndex = 1;
-        int pageSize = 1000;
+        int pageSize = GlobalConstants.DEFAULT_LINES;
         PagerList<MsgDelaymsgEntity> entites = null;
         String shardMsg = MsgDelaymsgEntity.getShardMsg();
         do {
-            entites = delaymsgService.queryByTimeAndShard(new Date(System.currentTimeMillis() + level * 1000), shardMsg,
-                pageIndex++, pageSize);
+            entites = delaymsgService.queryByTimeAndShard(
+                new Date(System.currentTimeMillis() + level * GlobalConstants.SECONDS), shardMsg, pageIndex++,
+                pageSize);
             if (entites.size() > 0 && pageIndex == 2) {
                 LoggerUtil.debug("{0}级别的队列开始检查，当前队列中延迟消息的条数为{1}", level, entites.getTotalCount());
             }
@@ -145,7 +161,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
      * @return <br>
      */
     @Override
-    public StepDelayMessageQueue getDelayMessageQueue(int level) {
+    public StepDelayMessageQueue getDelayMessageQueue(final int level) {
         return map.get(level);
     }
 
@@ -172,7 +188,7 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
      * @param newLevel <br>
      */
     @Override
-    public void changeData(String messageId, long expireTime, int oldLevel, int newLevel) {
+    public void changeData(final String messageId, final long expireTime, final int oldLevel, final int newLevel) {
         if (oldLevel != newLevel) {
             StepDelayMessageQueue oldQueue = getDelayMessageQueue(oldLevel);
             if (oldQueue instanceof MemeryStepDelayMessageQueue) {

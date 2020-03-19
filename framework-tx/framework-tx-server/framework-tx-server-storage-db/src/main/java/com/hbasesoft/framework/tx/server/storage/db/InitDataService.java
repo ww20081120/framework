@@ -5,9 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.server.storage.db;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -17,5 +17,12 @@ package com.hbasesoft.framework.tx.server.storage.db;
  */
 public interface InitDataService {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     void createTableIfNotExist();
 }

@@ -29,7 +29,7 @@ public class CreateTableLinstener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         context.getBean(InitDataService.class).createTableIfNotExist();
     }
 }

@@ -34,6 +34,13 @@ import com.hbasesoft.framework.rule.demo.bean.TestStateMachineBean;
 @SpringBootTest(classes = Application.class)
 public class TestFlow implements ApplicationContextAware {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void flowStart() {
         FlowBean flowBean = new FlowBean();
@@ -41,6 +48,13 @@ public class TestFlow implements ApplicationContextAware {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void testStateMachineBean() {
         TestStateMachineBean bean = new TestStateMachineBean();
@@ -66,7 +80,7 @@ public class TestFlow implements ApplicationContextAware {
      * @throws BeansException <br>
      */
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         ContextHolder.setContext(applicationContext);
     }
 }

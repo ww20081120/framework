@@ -5,16 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.annotation;
 
-import com.hbasesoft.framework.cache.core.CacheHelper;
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.bean.BeanUtil;
-import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
-import com.hbasesoft.framework.common.utils.logger.Logger;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -25,10 +20,16 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.bean.BeanUtil;
+import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
  * <Description> <br>
@@ -44,14 +45,31 @@ import java.util.Map;
 @Configuration
 public class CacheAdvice {
 
+    /** logger */
     private static Logger logger = new Logger(CacheAdvice.class);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
     public void cache() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param thisJoinPoint
+     * @return Object
+     * @throws Throwable <br>
+     */
     @Around("cache()")
-    public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+    public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Object result = null;
 
         Signature sig = thisJoinPoint.getSignature();
@@ -88,8 +106,8 @@ public class CacheAdvice {
         }
     }
 
-    private Object cache(Cache cache, ProceedingJoinPoint thisJoinPoint, Method method, Class<?> returnType)
-        throws Throwable {
+    private Object cache(final Cache cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
+        final Class<?> returnType) throws Throwable {
         String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
         Object result = CacheHelper.getCache().get(cache.node(), key);
         if (result == null) {
@@ -112,8 +130,8 @@ public class CacheAdvice {
     }
 
     @SuppressWarnings("unchecked")
-    private Object cacheNode(CacheNode cache, ProceedingJoinPoint thisJoinPoint, Method method, Class<?> returnType)
-        throws Throwable {
+    private Object cacheNode(final CacheNode cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
+        final Class<?> returnType) throws Throwable {
         if (!Map.class.isAssignableFrom(returnType)) {
             throw new ServiceException(ErrorCodeDef.CACHE_KEY_ERROR);
         }
@@ -137,7 +155,7 @@ public class CacheAdvice {
         return null;
     }
 
-    private void rmCache(RmCache rmCache, Method method, Object[] args) throws Exception {
+    private void rmCache(final RmCache rmCache, final Method method, final Object[] args) throws Exception {
         if (rmCache.clean()) {
             for (String node : rmCache.node()) {
                 CacheHelper.getCache().removeNode(node);
@@ -154,7 +172,8 @@ public class CacheAdvice {
         }
     }
 
-    private String getCacheKey(String template, Method method, Object[] args) throws FrameworkException {
+    private String getCacheKey(final String template, final Method method, final Object[] args)
+        throws FrameworkException {
         if (StringUtils.isEmpty(template) && CommonUtil.isEmpty(args)) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002);
         }

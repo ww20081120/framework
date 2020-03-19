@@ -26,103 +26,253 @@ public class TransBean implements Serializable {
      */
     private static final long serialVersionUID = -7472460952684365657L;
 
+    /** stackId */
     private String stackId;
 
+    /** parentStackId */
     private String parentStackId;
 
+    /** params */
     private String params;
 
+    /** method */
     private String method;
 
+    /** begin Time */
     private Long beginTime;
 
+    /** endTime */
     private Long endTime;
 
+    /** consumeTime */
     private Long consumeTime;
 
+    /** return Value */
     private String returnValue;
 
+    /** reusult */
     private String result;
 
+    /** exception */
     private String exception;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getStackId() {
         return stackId;
     }
 
-    public void setStackId(String stackId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId <br>
+     */
+    public void setStackId(final String stackId) {
         this.stackId = stackId;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getParentStackId() {
         return parentStackId;
     }
 
-    public void setParentStackId(String parentStackId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param parentStackId <br>
+     */
+    public void setParentStackId(final String parentStackId) {
         this.parentStackId = parentStackId;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Long getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Long beginTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param beginTime <br>
+     */
+    public void setBeginTime(final Long beginTime) {
         this.beginTime = beginTime;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Long endTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param endTime <br>
+     */
+    public void setEndTime(final Long endTime) {
         this.endTime = endTime;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Long getConsumeTime() {
         return consumeTime;
     }
 
-    public void setConsumeTime(Long consumeTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param consumeTime <br>
+     */
+    public void setConsumeTime(final Long consumeTime) {
         this.consumeTime = consumeTime;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getReturnValue() {
         return returnValue;
     }
 
-    public void setReturnValue(String returnValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param returnValue <br>
+     */
+    public void setReturnValue(final String returnValue) {
         this.returnValue = returnValue;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param result <br>
+     */
+    public void setResult(final String result) {
         this.result = result;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getException() {
         return exception;
     }
 
-    public void setException(String exception) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param exception <br>
+     */
+    public void setException(final String exception) {
         this.exception = exception;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getMethod() {
         return method;
     }
 
-    public void setMethod(String method) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param method <br>
+     */
+    public void setMethod(final String method) {
         this.method = method;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getParams() {
         return params;
     }
 
-    public void setParams(String params) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param params <br>
+     */
+    public void setParams(final String params) {
         this.params = params;
     }
 

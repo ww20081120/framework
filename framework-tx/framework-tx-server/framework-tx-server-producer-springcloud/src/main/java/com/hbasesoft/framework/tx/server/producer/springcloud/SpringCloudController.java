@@ -34,11 +34,20 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @RequestMapping("/framework/tx")
 public class SpringCloudController {
 
+    /** txProducer */
     @Resource
     private TxProducer txProducer;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping("/{id}")
-    public boolean containClient(@PathVariable("id") String id) {
+    public boolean containClient(final @PathVariable("id") String id) {
         return txProducer.containClient(id);
     }
 
@@ -47,10 +56,11 @@ public class SpringCloudController {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param clientInfo <br>
+     * @param clientInfo
+     * @return <br>
      */
     @PostMapping
-    public boolean registClient(@RequestBody ClientInfo clientInfo) {
+    public boolean registClient(final @RequestBody ClientInfo clientInfo) {
         return txProducer.registClient(clientInfo);
     }
 
@@ -62,7 +72,7 @@ public class SpringCloudController {
      * @param id <br>
      */
     @DeleteMapping("/{id}")
-    public void removeClient(@PathVariable("id") String id) {
+    public void removeClient(final @PathVariable("id") String id) {
         txProducer.removeClient(id);
     }
 
@@ -76,7 +86,7 @@ public class SpringCloudController {
      * @return <br>
      */
     @GetMapping("/{id}/{mark}")
-    public CheckInfo check(@PathVariable("id") String id, @PathVariable("mark") String mark) {
+    public CheckInfo check(final @PathVariable("id") String id, final @PathVariable("mark") String mark) {
         return txProducer.check(id, mark);
     }
 
@@ -88,7 +98,7 @@ public class SpringCloudController {
      * @param checkInfo <br>
      */
     @PutMapping
-    public void saveResult(@RequestBody CheckInfo checkInfo) {
+    public void saveResult(final @RequestBody CheckInfo checkInfo) {
         txProducer.saveResult(checkInfo);
     }
 

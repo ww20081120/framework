@@ -6,7 +6,7 @@
     "error": "E",
     "stateMachine": {
         "A": [{
-                "event": "e1",
+                "action": "e1",
                 "end": "C",
                 "children": [{
                         "component": "Child02Component",
@@ -23,19 +23,19 @@
                 ]
             },
             {
-                "event": "e2",
+                "action": "e2",
                 "end": "D",
                 "error": "1001=C, 1002=D, *=E",
                 "component": "Child02Component"
             }
         ],
         "B": [{
-            "event": "e1",
+            "action": "e1",
             "end": "A",
             "component": "Child02Component"
         }],
         "C": [{
-            "event": "e1",
+            "action": "e1",
             "end": "D",
             "component": "Child01Component"
         }]

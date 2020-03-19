@@ -36,11 +36,19 @@ import com.hbasesoft.framework.db.core.config.DbParam;
  */
 public final class DataSourceUtil {
 
+    /** datasource map */
     private static Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<String, DataSource>();
 
     private DataSourceUtil() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     public static void init() {
         synchronized (dataSourceMap) {
             for (String key : PropertyHolder.getProperties().keySet()) {
@@ -58,19 +66,52 @@ public final class DataSourceUtil {
         return getDataSource(DynamicDataSourceManager.getDataSourceCode());
     }
 
-    public static DataSource getDataSource(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
+    public static DataSource getDataSource(final String name) {
         synchronized (dataSourceMap) {
             return dataSourceMap.get(name);
         }
     }
 
-    public static DataSource registDataSource(String name, DbParam dbParam) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param dbParam
+     * @return <br>
+     */
+    public static DataSource registDataSource(final String name, final DbParam dbParam) {
         synchronized (dataSourceMap) {
             return regist(name, dbParam);
         }
     }
 
-    private static DataSource regist(String name, DbParam dbParam) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name <br>
+     */
+    public static void close(final String name) {
+        synchronized (dataSourceMap) {
+            DataSource dataSource = dataSourceMap.remove(name);
+            if (dataSource != null && dataSource instanceof DruidDataSource) {
+                ((DruidDataSource) dataSource).close();
+            }
+        }
+    }
+
+    private static DataSource regist(final String name, final DbParam dbParam) {
         DataSource dataSource = dataSourceMap.get(name);
         if (dataSource == null) {
             DruidDataSource ds = new DruidDataSource();

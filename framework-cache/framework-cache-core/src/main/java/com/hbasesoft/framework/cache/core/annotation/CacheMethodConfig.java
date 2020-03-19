@@ -25,11 +25,43 @@ import java.lang.annotation.RetentionPolicy;
 @Repeatable(CacheProxy.class)
 public @interface CacheMethodConfig {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     boolean cacheAble() default true;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String value();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String[] removeMethods() default {};
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     int expireTime() default 0;
 }

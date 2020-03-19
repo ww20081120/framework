@@ -22,6 +22,13 @@ import org.junit.Test;
  */
 public class HttpUtilTest {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void doGet() {
         System.out
@@ -29,16 +36,31 @@ public class HttpUtilTest {
         System.out.println(HttpUtil.doGet("https://www.towngasvcc.com", "utf-8"));
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void doPost() {
         Map<String, String> param = new HashMap<>();
         System.out.println(HttpUtil.doPost("http://www.baidu.com", param));
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void doGetDowloadFile() {
-        HttpUtil.doGetDowloadFile(
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506669107&di=3f964616fbb30dc8e9090f3921ce6dbf&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fbaike%2Fpic%2Fitem%2Fcb8065380cd79123ea3a4a45af345982b2b7802d.jpg",
-            "a2.jpg");
+        HttpUtil.doGetDowloadFile("https://timgsa.baidu.com/timg?image"
+            + "&quality=80&size=b9999_10000&sec=1506669107&di=3f964616fbb30dc8e9090f3921ce6dbf"
+            + "&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fbaike%2Fpic%"
+            + "2Fitem%2Fcb8065380cd79123ea3a4a45af345982b2b7802d.jpg", "a2.jpg");
     }
 }

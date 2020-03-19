@@ -29,23 +29,41 @@ import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestLuckDraw {
 
+    /** MAX_SIZE */
+    private static final int MAX_SIZE = 10;
+
+    /** MAX_TIMES */
+    private static final int MAX_TIMES = 100;
+
+    /** SLEEP_TIME */
+    private static final int MAX_SLEEP_TIME = 100000;
+
+    /** luckDrawService */
     @Resource
     private LuckDrawService luckDrawService;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @throws InterruptedException <br>
+     */
     @Test
     public void testLock() throws InterruptedException {
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_SIZE; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for (int j = 0; j < 100; j++) {
+                    for (int j = 0; j < MAX_TIMES; j++) {
                         luckDrawService.luckDraw("1", "xxxx");
                     }
                 }
             }).start();
         }
-        Thread.sleep(100000);
+        Thread.sleep(MAX_SLEEP_TIME);
 
     }
 }

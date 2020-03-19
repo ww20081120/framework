@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.demo;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
@@ -20,7 +21,11 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  */
 public class MessageLinsener implements MessageSubscriber {
 
-    private String name = CommonUtil.getRandomChar(4);
+    /** Number */
+    private static final int NUM_4 = 4;
+
+    /** name */
+    private String name = CommonUtil.getRandomChar(NUM_4);
 
     /**
      * Description: <br>
@@ -31,11 +36,11 @@ public class MessageLinsener implements MessageSubscriber {
      * @param data <br>
      */
     @Override
-    public void onMessage(String channel, byte[] data) {
+    public void onMessage(final String channel, final byte[] data) {
         System.out.println(">>>>>>>>>>>>>" + Thread.currentThread().getName() + ">>>>>>>>>>>>>>>>>>>" + name
             + " onMessage: " + channel + "---" + new String(data));
         try {
-            Thread.sleep(1500);
+            Thread.sleep(2 * GlobalConstants.SECONDS);
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -51,7 +56,7 @@ public class MessageLinsener implements MessageSubscriber {
      * @param subscribeChannels <br>
      */
     @Override
-    public void onSubscribe(String channel, int subscribeChannels) {
+    public void onSubscribe(final String channel, final int subscribeChannels) {
         System.out.println(Thread.currentThread().getId());
         System.out.println(name + " onSubscribe: " + channel + "---" + subscribeChannels);
     }
@@ -65,7 +70,7 @@ public class MessageLinsener implements MessageSubscriber {
      * @param subscribedChannels <br>
      */
     @Override
-    public void onUnsubscribe(String channel, int subscribedChannels) {
+    public void onUnsubscribe(final String channel, final int subscribedChannels) {
         System.out.println(name + " onUnsubscribe: " + channel + "---" + subscribedChannels);
     }
 

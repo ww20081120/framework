@@ -15,6 +15,7 @@ import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.cache.core.annotation.CacheLock;
 import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
+import com.hbasesoft.framework.common.GlobalConstants;
 
 /**
  * <Description> <br>
@@ -29,12 +30,30 @@ import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
 @Service
 public class LuckDrawServiceImpl implements LuckDrawService {
 
+    /** DEFAULT_LEVEL */
+    private static final int DEFAULT_LEVEL = 2000;
+
+    /** expire_time */
+    private static final int EXPIRE_TIME = 70;
+
+    /** gifs */
+    private static final int GIFS_10 = 10;
+
+    /** gifs */
+    private static final int GIFS_30 = 30;
+
+    /** gifs */
+    private static final int GIFS_100 = 100;
+
+    /** random */
     private Random random = new Random();
 
-    private static int level = 2000;
+    /** level */
+    private static int level = DEFAULT_LEVEL;
 
+    /** gifs */
     private static int[] gifs = new int[] {
-        10, 30, 100
+        GIFS_10, GIFS_30, GIFS_100
     };
 
     /**
@@ -47,11 +66,12 @@ public class LuckDrawServiceImpl implements LuckDrawService {
      * @return <br>
      */
     @Override
-    @CacheLock(value = "ShakeActivity", timeOut = 60000, expireTime = 70, key = "${activityCode}")
-    public int luckDraw(@Key("activityCode") String activityCode, String userCode) {
-        // TODO: 获取用户还有几次抽奖机会
+    @CacheLock(value = "ShakeActivity", timeOut = GlobalConstants.MINUTES * GlobalConstants.SECONDS,
+        expireTime = EXPIRE_TIME, key = "${activityCode}")
+    public int luckDraw(@Key("activityCode") final String activityCode, final String userCode) {
+        // 获取用户还有几次抽奖机会
 
-        // TODO: 判断能否抽奖
+        // 判断能否抽奖
         int count = 0;
         for (int c : gifs) {
             count += c;
@@ -77,17 +97,17 @@ public class LuckDrawServiceImpl implements LuckDrawService {
         return 0;
     }
 
-    private int getWinner(String activityCode, int count, int level) {
+    private int getWinner(final String activityCode, final int count, final int l) {
         ICache cache = CacheHelper.getCache();
         Integer oldLevel = cache.get("LUCK_DRAW_LEVEL", activityCode);
         int key = 0;
 
         int[] winners;
-        if (oldLevel == null || oldLevel - level != 0) {
+        if (oldLevel == null || oldLevel - l != 0) {
             winners = new int[count];
             int index = 0;
             while (index < count) {
-                int win = random.nextInt(level) + 1;
+                int win = random.nextInt(l) + 1;
 
                 boolean flag = false;
                 for (int k = 0; k < index; k++) {
@@ -102,7 +122,7 @@ public class LuckDrawServiceImpl implements LuckDrawService {
                 winners[index++] = win;
             }
             Arrays.sort(winners);
-            cache.put("LUCK_DRAW_LEVEL", activityCode, level);
+            cache.put("LUCK_DRAW_LEVEL", activityCode, l);
             cache.put("LUCK_DRAW", activityCode, winners);
         }
         else {

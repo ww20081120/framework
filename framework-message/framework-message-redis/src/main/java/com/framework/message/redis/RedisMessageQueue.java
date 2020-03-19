@@ -35,7 +35,7 @@ public class RedisMessageQueue implements MessageQueue {
      * @param value <br>
      */
     @Override
-    public void push(String key, byte[] value) {
+    public void push(final String key, final byte[] value) {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();
@@ -61,7 +61,7 @@ public class RedisMessageQueue implements MessageQueue {
      * @return <br>
      */
     @Override
-    public List<byte[]> popList(String key) {
+    public List<byte[]> popList(final String key) {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();
@@ -87,7 +87,7 @@ public class RedisMessageQueue implements MessageQueue {
      * @return <br>
      */
     @Override
-    public List<byte[]> pop(int timeout, String key) {
+    public List<byte[]> pop(final int timeout, final String key) {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();

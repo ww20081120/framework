@@ -33,6 +33,10 @@ import com.hbasesoft.framework.message.core.event.EventData;
 @ImportResource("classpath*:META-INF/spring/*.xml")
 @Configuration
 public class MessageServApplicationTest {
+
+    /** Number */
+    private static final int NUM_10 = 10;
+
     /**
      * Description: <br>
      * 
@@ -46,13 +50,13 @@ public class MessageServApplicationTest {
     // @Autowired
     // private RocketmqMessagePublisher rocketmqMessagePublisher;
     //
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Bootstrap.before();
         ConfigurableApplicationContext context = SpringApplication.run(MessageServApplicationTest.class, args);
         Bootstrap.after(context);
 
         EventData eventData = new EventData();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < NUM_10; i++) {
             eventData.put("topic1", "Hello word" + i);
 
         }

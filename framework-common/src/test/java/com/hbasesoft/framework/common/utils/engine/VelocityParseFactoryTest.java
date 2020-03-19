@@ -26,9 +26,19 @@ import com.hbasesoft.framework.common.utils.bean.Bean;
  */
 public class VelocityParseFactoryTest {
 
+    /** number */
+    private static final int NUM_18 = 18;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void parse() {
-        Bean bean = new Bean("张三", 18);
+        Bean bean = new Bean("张三", NUM_18);
         Map<String, Object> params = new HashMap<>();
         params.put("b", bean);
 

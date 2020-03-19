@@ -56,7 +56,7 @@ public class AutoResultTransformer implements ResultTransformer {
      * 
      * @param resultClass <br>
      */
-    public AutoResultTransformer(Class<?> resultClass) {
+    public AutoResultTransformer(final Class<?> resultClass) {
         if (resultClass == null) {
             throw new IllegalArgumentException("resultClass cannot be null");
         }
@@ -74,7 +74,7 @@ public class AutoResultTransformer implements ResultTransformer {
      * @return <br>
      */
     @SuppressWarnings("deprecation")
-    public Object transformTuple(Object[] tuple, String[] aliases) {
+    public Object transformTuple(final Object[] tuple, final String[] aliases) {
         if (CommonUtil.isEmpty(tuple)) {
             return null;
         }
@@ -145,7 +145,7 @@ public class AutoResultTransformer implements ResultTransformer {
      * @param value <br>
      * @return <br>
      */
-    private Object getValue(Class<?> clazz, Object value) {
+    private Object getValue(final Class<?> clazz, final Object value) {
         if (value == null || clazz.isAssignableFrom(value.getClass())) {
             return value;
         }
@@ -189,7 +189,7 @@ public class AutoResultTransformer implements ResultTransformer {
      */
     @SuppressWarnings("rawtypes")
     @Override
-    public List transformList(List collection) {
+    public List transformList(final List collection) {
         return collection;
     }
 

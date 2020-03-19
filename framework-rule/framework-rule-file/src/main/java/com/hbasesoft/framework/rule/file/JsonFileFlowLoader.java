@@ -40,10 +40,15 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  */
 public class JsonFileFlowLoader implements FlowLoader {
 
+    /** default path */
     private static final String DEFAULT_PATH = "META-INF/rules";
 
+    /** flow config hodler */
     private Map<String, FlowConfig> flowConfigHolder = new ConcurrentHashMap<String, FlowConfig>();
 
+    /**
+     * 
+     */
     public JsonFileFlowLoader() {
         init();
     }
@@ -57,7 +62,7 @@ public class JsonFileFlowLoader implements FlowLoader {
      * @return <br>
      */
     @Override
-    public FlowConfig load(String flowName) {
+    public FlowConfig load(final String flowName) {
         return flowConfigHolder.get(flowName);
     }
 
@@ -101,7 +106,7 @@ public class JsonFileFlowLoader implements FlowLoader {
 
     }
 
-    private void findFlowFile(File dir) throws Exception {
+    private void findFlowFile(final File dir) throws Exception {
         // 获取此包的目录 建立一个File
         // 如果不存在或者 也不是目录就直接返回
         if (!dir.exists() || !dir.isDirectory()) {
@@ -110,7 +115,7 @@ public class JsonFileFlowLoader implements FlowLoader {
 
         File[] dirfiles = dir.listFiles(new FileFilter() {
             // 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
-            public boolean accept(File file) {
+            public boolean accept(final File file) {
                 return file.isDirectory() || file.getName().toLowerCase().endsWith(".json");
             }
         });
@@ -125,7 +130,7 @@ public class JsonFileFlowLoader implements FlowLoader {
         }
     }
 
-    private void fileFlowFileInJar(String dir, URL url) throws Exception {
+    private void fileFlowFileInJar(final String dir, final URL url) throws Exception {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         // 获取jar
@@ -145,7 +150,7 @@ public class JsonFileFlowLoader implements FlowLoader {
         }
     }
 
-    private void addFlowFile(String content, String fileName) {
+    private void addFlowFile(final String content, final String fileName) {
         if (StringUtils.isNotEmpty(content)) {
             LoggerUtil.info("find workflow file [{0}]", fileName);
             JSONObject json = JSONObject.parseObject(content);

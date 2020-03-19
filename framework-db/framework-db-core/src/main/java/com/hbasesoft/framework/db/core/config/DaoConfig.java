@@ -3,6 +3,9 @@
  */
 package com.hbasesoft.framework.db.core.config;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * <Description> <br>
  * 
@@ -13,6 +16,8 @@ package com.hbasesoft.framework.db.core.config;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.dao.config <br>
  */
+@Getter
+@Setter
 public class DaoConfig {
 
     /** 是否开启缓存 */
@@ -26,68 +31,4 @@ public class DaoConfig {
 
     /** 结果集类型转换回调函数 */
     private Class<?> callBackType;
-
-    /**
-     * isCache
-     * 
-     * @return the cache
-     */
-    public boolean isCache() {
-        return cache;
-    }
-
-    /**
-     * setCache
-     * 
-     * @param cache the cache to set
-     */
-    public void setCache(boolean cache) {
-        this.cache = cache;
-    }
-
-    /**
-     * getDbType
-     * 
-     * @return the dbType
-     */
-    public String getDbType() {
-        return dbType;
-    }
-
-    /**
-     * setDbType
-     * 
-     * @param dbType the dbType to set
-     */
-    public void setDbType(String dbType) {
-        this.dbType = dbType;
-    }
-
-    public Class<?> getBaseDaoType() {
-        return baseDaoType;
-    }
-
-    public void setBaseDaoType(Class<?> baseDaoType) {
-        this.baseDaoType = baseDaoType;
-    }
-
-    public Class<?> getCallBackType() {
-        return callBackType;
-    }
-
-    public void setCallBackType(Class<?> callBackType) {
-        this.callBackType = callBackType;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param typeName <br>
-     * @throws ClassNotFoundException <br>
-     */
-    public void setCallBackType(String typeName) throws ClassNotFoundException {
-        this.callBackType = Class.forName(typeName);
-    }
 }

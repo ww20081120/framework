@@ -30,7 +30,7 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      * @param value <br>
      */
     @Override
-    public void push(String key, byte[] value) {
+    public void push(final String key, final byte[] value) {
         RedisClientFactory.getBinaryJedisCluster().lpush(key.getBytes(), value);
     }
 
@@ -44,7 +44,7 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      * @return <br>
      */
     @Override
-    public List<byte[]> popList(String key) {
+    public List<byte[]> popList(final String key) {
         return RedisClientFactory.getBinaryJedisCluster().lrange(key.getBytes(), 0, -1);
     }
 
@@ -58,7 +58,7 @@ public class ClusterRedisMessageQueue implements MessageQueue {
      * @return <br>
      */
     @Override
-    public List<byte[]> pop(int timeout, String key) {
+    public List<byte[]> pop(final int timeout, final String key) {
 
         List<byte[]> result = RedisClientFactory.getBinaryJedisCluster().brpop(timeout, key.getBytes());
         if (CollectionUtils.isNotEmpty(result) && result.size() >= 2) {

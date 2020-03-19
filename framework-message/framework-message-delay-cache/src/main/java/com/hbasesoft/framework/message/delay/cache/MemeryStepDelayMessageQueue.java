@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.ICache;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
@@ -25,9 +26,13 @@ import com.hbasesoft.framework.message.core.delay.DelayMessage;
  */
 public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue implements Runnable, IndexQueue {
 
+    /** holder */
     private Map<String, Long> holder;
 
-    public MemeryStepDelayMessageQueue(int level) {
+    /**
+     * @param level
+     */
+    public MemeryStepDelayMessageQueue(final int level) {
         super(level);
         holder = new ConcurrentHashMap<>();
     }
@@ -40,8 +45,9 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @param delayMessage <br>
      */
     @Override
-    public void add(DelayMessage delayMessage) {
-        addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + delayMessage.getSeconds() * 1000);
+    public void add(final DelayMessage delayMessage) {
+        addIndex(delayMessage.getMessageId(),
+            delayMessage.getCurrentTime() + delayMessage.getSeconds() * GlobalConstants.SECONDS);
         CacheHelper.getCache().put(QueueManager.CACHE_NODE_NAME, delayMessage.getSeconds() * 2,
             delayMessage.getMessageId(), delayMessage);
     }
@@ -55,7 +61,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @return <br>
      */
     @Override
-    public DelayMessage remove(String msgId) {
+    public DelayMessage remove(final String msgId) {
         Long t = holder.remove(msgId);
         if (t != null) {
             ICache cache = CacheHelper.getCache();
@@ -91,12 +97,12 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 this.check();
-                Thread.sleep(this.getLevel() * 1000L);
+                Thread.sleep(this.getLevel() * GlobalConstants.SECONDS * 1L);
             }
             catch (Exception e) {
                 LoggerUtil.error(e);
                 try {
-                    Thread.sleep(1000L);
+                    Thread.sleep(GlobalConstants.SECONDS * 1L);
                 }
                 catch (InterruptedException e1) {
                     LoggerUtil.error(e);
@@ -113,7 +119,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @param key <br>
      */
     @Override
-    public void removeIndex(String key) {
+    public void removeIndex(final String key) {
         holder.remove(key);
     }
 
@@ -126,7 +132,7 @@ public class MemeryStepDelayMessageQueue extends AbstractStepDelayMessageQueue i
      * @param expireTime <br>
      */
     @Override
-    public void addIndex(String key, Long expireTime) {
+    public void addIndex(final String key, final Long expireTime) {
         holder.put(key, expireTime);
     }
 

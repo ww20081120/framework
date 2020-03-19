@@ -29,14 +29,27 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @NoTransLog
 public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAware {
 
+    /** SET_LENGTH */
+    private static final int SET_LENGTH = "set".length();
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean 对象
+     * @param beanName 对象名称
+     * @return 代理对象
+     * @throws BeansException <br>
+     */
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(final Object bean, final String beanName) throws BeansException {
 
         Method[] methods = bean.getClass().getMethods();
 
         for (Method method : methods) {
             String name = method.getName();
-            if (name.length() > 3 && name.startsWith("set") && method.getParameterTypes().length == 1
+            if (name.length() > SET_LENGTH && name.startsWith("set") && method.getParameterTypes().length == 1
                 && Modifier.isPublic(method.getModifiers()) && !Modifier.isStatic(method.getModifiers())) {
                 try {
                     CacheProxy cacheProxy = method.getAnnotation(CacheProxy.class);
@@ -77,8 +90,18 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
         return bean;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean bean
+     * @param beanName beanName
+     * @return Object
+     * @throws BeansException <br>
+     */
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(final Object bean, final String beanName) throws BeansException {
         return bean;
     }
 
@@ -91,7 +114,7 @@ public class CacheProxyAdvice implements BeanPostProcessor, ApplicationContextAw
      * @throws BeansException <br>
      */
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         ContextHolder.setContext(applicationContext);
     }
 }

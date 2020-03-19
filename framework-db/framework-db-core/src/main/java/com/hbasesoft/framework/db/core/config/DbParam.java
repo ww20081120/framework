@@ -13,6 +13,9 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * <Description> <br>
  * 
@@ -23,11 +26,52 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core.config <br>
  */
+@Getter
+@Setter
 public class DbParam extends BaseEntity {
+
     /**
      * serialVersionUID <br>
      */
     private static final long serialVersionUID = -3873382206326039466L;
+
+    /**
+     * 初始化连接大小
+     */
+    private static final int INITIAL_SIZE = 5;
+
+    /**
+     * 连接池最大使用连接数量
+     */
+    private static final int MAX_ACTIVE = 100;
+
+    /**
+     * 连接池最小空闲
+     */
+    private static final int MIN_IDLE = 10;
+
+    /**
+     * 获取连接最大等待时间
+     */
+    private static final long MAX_WAIT = 6000000;
+
+    /**
+     * 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+     */
+    private static final long TIME_BETWEEN_EVICTION_RUNS_MILLIS = 600000;
+
+    /**
+     * 配置一个连接在池中最小生存的时间，单位是毫秒
+     */
+    private static final long MIN_EVICTABLE_IDLE_TIME_MILLIS = 25200000;
+
+    /**
+     * 1800秒，也就是30分钟
+     */
+    private static final int REMOVE_ABANDONED_TIMEOUT = 1800;
+
+    /** ENC_LENGTH */
+    private static final int ENC_LENGTH = "ENC(".length();
 
     /** code */
     private String code;
@@ -55,43 +99,46 @@ public class DbParam extends BaseEntity {
     /**
      * 初始化连接大小
      */
-    private int initialSize = 5;
+    private int initialSize = INITIAL_SIZE;
 
     /**
      * 连接池最大使用连接数量
      */
-    private int maxActive = 100;
+    private int maxActive = MAX_ACTIVE;
 
     /**
      * 连接池最小空闲
      */
-    private int minIdle = 10;
+    private int minIdle = MIN_IDLE;
 
     /**
      * 获取连接最大等待时间
      */
-    private long maxWait = 6000000;
+    private long maxWait = MAX_WAIT;
 
     /**
-     * 
+     * validationQuery
      */
     private String validationQuery = "SELECT 1";
 
+    /** testOnBorrow */
     private boolean testOnBorrow = true;
 
+    /** testOnReturn */
     private boolean testOnReturn = false;
 
+    /** testWhileIdle */
     private boolean testWhileIdle = true;
 
     /**
      * 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
      */
-    private long timeBetweenEvictionRunsMillis = 600000;
+    private long timeBetweenEvictionRunsMillis = TIME_BETWEEN_EVICTION_RUNS_MILLIS;
 
     /**
      * 配置一个连接在池中最小生存的时间，单位是毫秒
      */
-    private long minEvictableIdleTimeMillis = 25200000;
+    private long minEvictableIdleTimeMillis = MIN_EVICTABLE_IDLE_TIME_MILLIS;
 
     /**
      * 打开removeAbandoned功能
@@ -101,218 +148,82 @@ public class DbParam extends BaseEntity {
     /**
      * 1800秒，也就是30分钟
      */
-    private int removeAbandonedTimeout = 1800;
+    private int removeAbandonedTimeout = REMOVE_ABANDONED_TIMEOUT;
 
     /**
      * 关闭abanded连接时输出错误日志
      */
     private boolean logAbandoned;
 
+    /** filters */
     private String filters = "stat";
 
+    /** driverClass */
     private String driverClass;
 
-    public DbParam(String prefix, String url, String username, String password) {
-        setUrl(url);
-        setUsername(username);
-        setPassword(password);
+    /**
+     * @param prefix
+     * @param u
+     * @param un
+     * @param pw
+     */
+    public DbParam(final String prefix, final String u, final String un, final String pw) {
+        setUrl(u);
+        setUsername(un);
+        setPassword(pw);
         init(prefix);
     }
 
-    public DbParam(String prefix) {
+    /**
+     * @param prefix
+     */
+    public DbParam(final String prefix) {
         this.url = PropertyHolder.getProperty(prefix + ".db.url");
         Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET);
         this.username = PropertyHolder.getProperty(prefix + ".db.username");
         // Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
-        String password = PropertyHolder.getProperty(prefix + ".db.password");
+        String pw = PropertyHolder.getProperty(prefix + ".db.password");
         // Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
-        setPassword(password);
+        setPassword(pw);
         init(prefix);
     }
 
-    private void init(String prefix) {
+    private void init(final String prefix) {
         this.code = prefix;
         this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
-        this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", 5);
-        this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", 100);
-        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", 10);
-        this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", 6000000L);
+        this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", INITIAL_SIZE);
+        this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", MAX_ACTIVE);
+        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", MIN_IDLE);
+        this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", MAX_WAIT);
         this.validationQuery = PropertyHolder.getProperty(prefix + ".db.validationQuery", "SELECT 1");
         this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", true);
         this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".db.testOnReturn", false);
         this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".db.testWhileIdle", true);
         this.timeBetweenEvictionRunsMillis = PropertyHolder
-            .getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis", 600000L);
+            .getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis", timeBetweenEvictionRunsMillis);
         this.minEvictableIdleTimeMillis = PropertyHolder.getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis",
-            25200000L);
+            TIME_BETWEEN_EVICTION_RUNS_MILLIS);
         this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.removeAbandoned", true);
-        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout", 1800);
+        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout",
+            REMOVE_ABANDONED_TIMEOUT);
         this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.logAbandoned", true);
         this.driverClass = PropertyHolder.getProperty(prefix + ".db.driverClass");
         this.filters = PropertyHolder.getProperty(prefix + ".db.filters", "stat");
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        if (StringUtils.isNotEmpty(password) && password.startsWith("ENC(") && password.endsWith(")")) {
-            password = DataUtil.decrypt(password.substring(4, password.length() - 1));
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pw <br>
+     */
+    public void setPassword(final String pw) {
+        String tempPw = pw;
+        if (StringUtils.isNotEmpty(pw) && password.startsWith("ENC(") && pw.endsWith(")")) {
+            tempPw = DataUtil.decrypt(password.substring(ENC_LENGTH, password.length() - 1));
         }
-        this.password = password;
-    }
-
-    public String getDbType() {
-        return dbType;
-    }
-
-    public void setDbType(String dbType) {
-        this.dbType = dbType;
-    }
-
-    public int getInitialSize() {
-        return initialSize;
-    }
-
-    public void setInitialSize(int initialSize) {
-        this.initialSize = initialSize;
-    }
-
-    public int getMaxActive() {
-        return maxActive;
-    }
-
-    public void setMaxActive(int maxActive) {
-        this.maxActive = maxActive;
-    }
-
-    public int getMinIdle() {
-        return minIdle;
-    }
-
-    public void setMinIdle(int minIdle) {
-        this.minIdle = minIdle;
-    }
-
-    public long getMaxWait() {
-        return maxWait;
-    }
-
-    public void setMaxWait(long maxWait) {
-        this.maxWait = maxWait;
-    }
-
-    public String getValidationQuery() {
-        return validationQuery;
-    }
-
-    public void setValidationQuery(String validationQuery) {
-        this.validationQuery = validationQuery;
-    }
-
-    public boolean isTestOnBorrow() {
-        return testOnBorrow;
-    }
-
-    public void setTestOnBorrow(boolean testOnBorrow) {
-        this.testOnBorrow = testOnBorrow;
-    }
-
-    public boolean isTestOnReturn() {
-        return testOnReturn;
-    }
-
-    public void setTestOnReturn(boolean testOnReturn) {
-        this.testOnReturn = testOnReturn;
-    }
-
-    public boolean isTestWhileIdle() {
-        return testWhileIdle;
-    }
-
-    public void setTestWhileIdle(boolean testWhileIdle) {
-        this.testWhileIdle = testWhileIdle;
-    }
-
-    public long getTimeBetweenEvictionRunsMillis() {
-        return timeBetweenEvictionRunsMillis;
-    }
-
-    public void setTimeBetweenEvictionRunsMillis(long timeBetweenEvictionRunsMillis) {
-        this.timeBetweenEvictionRunsMillis = timeBetweenEvictionRunsMillis;
-    }
-
-    public long getMinEvictableIdleTimeMillis() {
-        return minEvictableIdleTimeMillis;
-    }
-
-    public void setMinEvictableIdleTimeMillis(long minEvictableIdleTimeMillis) {
-        this.minEvictableIdleTimeMillis = minEvictableIdleTimeMillis;
-    }
-
-    public boolean isRemoveAbandoned() {
-        return removeAbandoned;
-    }
-
-    public void setRemoveAbandoned(boolean removeAbandoned) {
-        this.removeAbandoned = removeAbandoned;
-    }
-
-    public int getRemoveAbandonedTimeout() {
-        return removeAbandonedTimeout;
-    }
-
-    public void setRemoveAbandonedTimeout(int removeAbandonedTimeout) {
-        this.removeAbandonedTimeout = removeAbandonedTimeout;
-    }
-
-    public boolean isLogAbandoned() {
-        return logAbandoned;
-    }
-
-    public void setLogAbandoned(boolean logAbandoned) {
-        this.logAbandoned = logAbandoned;
-    }
-
-    public String getFilters() {
-        return filters;
-    }
-
-    public void setFilters(String filters) {
-        this.filters = filters;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDriverClass() {
-        return driverClass;
-    }
-
-    public void setDriverClass(String driverClass) {
-        this.driverClass = driverClass;
+        this.password = tempPw;
     }
 
 }

@@ -31,8 +31,8 @@ public class TestServiceImpl implements TestService {
      * @param key
      * @return <br>
      */
-    public String getTestContent(String key) {
-        System.out.println(1111);
+    public String getTestContent(final String key) {
+        System.out.println("test");
         return DateUtil.getCurrentTimestamp() + ":" + key;
     }
 

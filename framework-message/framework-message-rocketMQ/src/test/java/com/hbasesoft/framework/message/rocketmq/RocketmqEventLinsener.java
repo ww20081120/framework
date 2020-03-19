@@ -25,47 +25,64 @@ import com.hbasesoft.framework.message.core.event.EventLinsener;
 @Component
 public class RocketmqEventLinsener implements EventLinsener {
 
-	@Override
-	public void onMessage(String channel, byte[] data) {
-		System.out.println(channel);
-		try {
-			System.out.println(new String(data, "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// TODO Auto-generated method stub
-		// EventLinsener.super.onMessage(channel, data);
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel
+     * @param data <br>
+     */
+    @Override
+    public void onMessage(final String channel, final byte[] data) {
+        System.out.println(channel);
+        try {
+            System.out.println(new String(data, "utf-8"));
+        }
+        catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // TODO Auto-generated method stub
+        // EventLinsener.super.onMessage(channel, data);
+    }
 
-	// @Override
-	// public void onSubscribe(String channel, int subscribeChannels) {
-	// // TODO Auto-generated method stub
-	// EventLinsener.super.onSubscribe(channel, subscribeChannels);
-	// }
+    // @Override
+    // public void onSubscribe(String channel, int subscribeChannels) {
+    // // TODO Auto-generated method stub
+    // EventLinsener.super.onSubscribe(channel, subscribeChannels);
+    // }
 
-	/**
-	 * @Title: events @author 大刘杰 @Description: TODO @param @return @return @throws
-	 */
-	@Override
-	public String[] events() {
-		return new String[] { "topic1" };
-	}
+    /**
+     * @Title: events @author 大刘杰 @Description: TODO @param @return @return @throws
+     */
+    @Override
+    public String[] events() {
+        return new String[] {
+            "topic1"
+        };
+    }
 
-	@Override
-	public boolean subscriber() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public boolean subscriber() {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	/**
-	 * @Title: onEmmit @author 大刘杰 @Description: TODO @param @param
-	 *         event @param @param data @return @throws
-	 */
-	@Override
-	public void onEmmit(String event, EventData data) {
-		// TODO Auto-generated method stub
+    /**
+     * @Title: onEmmit @author 大刘杰 @Description: TODO @param @param event @param @param data @return @throws
+     */
+    @Override
+    public void onEmmit(final String event, final EventData data) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
 }

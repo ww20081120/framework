@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.log.core;
 
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -38,15 +37,23 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      */
     private Logger logger = new Logger(AbstractTransLoggerService.class);
 
-    protected boolean alwaysLog;
+    /** always log */
+    private boolean alwaysLog;
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#before(java.lang.String, java.lang.String, long,
-     * java.lang.String, java.lang.Object[])
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param parentStackId
+     * @param beginTime
+     * @param method
+     * @param params <br>
      */
     @Override
-    public void before(String stackId, String parentStackId, long beginTime, String method, Object[] params) {
+    public void before(final String stackId, final String parentStackId, final long beginTime, final String method,
+        final Object[] params) {
         try {
             TransBean bean = getTransBean(stackId);
             if (bean == null) {
@@ -64,13 +71,20 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#afterReturn(java.lang.String, long, long,
-     * java.lang.Object)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param endTime
+     * @param consumeTime
+     * @param method
+     * @param returnValue <br>
      */
     @Override
-    public void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue) {
+    public void afterReturn(final String stackId, final long endTime, final long consumeTime, final String method,
+        final Object returnValue) {
         try {
             TransBean bean = getTransBean(stackId);
             if (bean != null) {
@@ -85,13 +99,20 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.hbasesoft.framework.log.core.TransLoggerService#afterThrow(java.lang.String, long, long,
-     * java.lang.Exception)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param endTime
+     * @param consumeTime
+     * @param method
+     * @param e <br>
      */
     @Override
-    public void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e) {
+    public void afterThrow(final String stackId, final long endTime, final long consumeTime, final String method,
+        final Throwable e) {
         try {
             TransBean bean = getTransBean(stackId);
             if (bean != null) {
@@ -107,11 +128,26 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         }
     }
 
-    protected TransBean getTransBean(String stackId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @return <br>
+     */
+    protected TransBean getTransBean(final String stackId) {
         return CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
     }
 
-    protected void putTransBean(TransBean bean) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean <br>
+     */
+    protected void putTransBean(final TransBean bean) {
         CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, bean.getStackId(), bean);
     }
 
@@ -122,9 +158,8 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @taskId <br>
      * @param ex <br>
      * @return <br>
-     * @throws IOException <br>
      */
-    protected String getExceptionMsg(Throwable ex) {
+    protected String getExceptionMsg(final Throwable ex) {
         if (ex == null) {
             return GlobalConstants.BLANK;
         }
@@ -161,7 +196,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @param sql <br>
      */
     @Override
-    public void sql(String stackId, String sql) {
+    public void sql(final String stackId, final String sql) {
         try {
             CacheHelper.getCache().put(CacheConstant.CACHE_LOGS,
                 stackId + "_SQL_" + TransManager.getInstance().getSeq(), sql);
@@ -171,6 +206,13 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Override
     public void clean() {
         TransManager manager = TransManager.getInstance();
@@ -201,10 +243,21 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @return alwaysLog <br>
+     */
+    public boolean isAlwaysLog() {
+        return alwaysLog;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param alwaysLog <br>
      */
     @Override
-    public void setAlwaysLog(boolean alwaysLog) {
+    public void setAlwaysLog(final boolean alwaysLog) {
         this.alwaysLog = alwaysLog;
     }
 }

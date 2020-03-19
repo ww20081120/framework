@@ -75,9 +75,19 @@ public interface GlobalConstants {
     /** 开发模式 */
     String DEV_MODEL = "dev";
 
+    /** 符号校验 */
     String SYMBOL_REGULAR = "[\\pP\\p{Punct}]";
 
+    /** 取值表达式 */
     String DOLLAR_BRACE = "${";
 
+    /** MINUTES */
+    int MINUTES = 60;
+
+    /** 一秒等于1000毫秒 */
+    int SECONDS = 1000;
+
+    /** 默认行 */
+    int DEFAULT_LINES = 1000;
 
 }

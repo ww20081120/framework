@@ -32,7 +32,19 @@ import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
  */
 public final class KeyUtil {
 
-    public static String getLockKey(String template, Method method, Object[] args) throws FrameworkException {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param template
+     * @param method
+     * @param args
+     * @return String
+     * @throws FrameworkException <br>
+     */
+    public static String getLockKey(final String template, final Method method, final Object[] args)
+        throws FrameworkException {
         if (CommonUtil.isNotEmpty(args)) {
             Annotation[][] parameterAnnotations = method.getParameterAnnotations();
             Map<String, Object> paramMap = new TreeMap<String, Object>();

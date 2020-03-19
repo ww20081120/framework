@@ -39,27 +39,69 @@ public class TxCheckinfoEntity extends BaseEntity {
     @Column(name = "result")
     private byte[] result;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    public void setId(final String id) {
         this.id = id;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getMark() {
         return this.mark;
     }
 
-    public void setMark(String mark) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param mark <br>
+     */
+    public void setMark(final String mark) {
         this.mark = mark;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public byte[] getResult() {
         return this.result;
     }
 
-    public void setResult(byte[] result) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param result <br>
+     */
+    public void setResult(final byte[] result) {
         this.result = result;
     }
 

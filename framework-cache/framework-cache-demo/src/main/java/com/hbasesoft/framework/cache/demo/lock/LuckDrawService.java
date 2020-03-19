@@ -17,5 +17,15 @@ package com.hbasesoft.framework.cache.demo.lock;
  */
 public interface LuckDrawService {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param activityCode
+     * @param userCode
+     * @return <br>
+     */
     int luckDraw(String activityCode, String userCode);
 }

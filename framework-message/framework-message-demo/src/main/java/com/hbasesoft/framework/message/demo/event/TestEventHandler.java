@@ -29,6 +29,12 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 @Service
 public class TestEventHandler implements EventLinsener {
 
+    /** Number */
+    private static final int NUM_1500 = 1500;
+
+    /** Number */
+    private static final int NUM_10000 = 10000;
+
     /**
      * Description: <br>
      *
@@ -52,16 +58,23 @@ public class TestEventHandler implements EventLinsener {
      * @taskId <br>
      */
     @Override
-    public void onEmmit(String event, EventData data) {
+    public void onEmmit(final String event, final EventData data) {
         System.out.println(event + ":" + data);
         try {
-            Thread.sleep(1500);
+            Thread.sleep(NUM_1500);
         }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Override
     public Map<String, Object> subscriberSetting() {
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
@@ -69,8 +82,15 @@ public class TestEventHandler implements EventLinsener {
         return stringObjectHashMap;
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 10000; i++) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
+    public static void main(final String[] args) {
+        for (int i = 0; i < NUM_10000; i++) {
 
             EventData data = new EventData();
             data.put("key", "value" + i);

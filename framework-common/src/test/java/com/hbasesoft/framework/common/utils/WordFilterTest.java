@@ -24,6 +24,13 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
  */
 public class WordFilterTest {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void isHasFilterWord() {
         WordFilter filter = new WordFilter();
@@ -42,6 +49,13 @@ public class WordFilterTest {
         System.out.println("字符串str2中不包含关键字");
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getFilterString() {
         WordFilter filter = new WordFilter();
@@ -58,6 +72,13 @@ public class WordFilterTest {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void getKeyword() {
         WordFilter filter = new WordFilter();

@@ -27,19 +27,32 @@ import com.hbasesoft.framework.common.utils.bean.Bean;
  */
 public class JavaScriptUtilTest {
 
+    /** number */
+    private static final int NUM_18 = 18;
+
+    /** number */
+    private static final int NUM_20 = 20;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Test
     public void eval() {
         String script = "1+1";
         Double result = Double.valueOf(CommonUtil.getString(JavaScriptUtil.eval(script, null)));
         Assert.isTrue(result - 2 == 0, ErrorCodeDef.SYSTEM_ERROR_10001);
 
-        Bean bean = new Bean("张三", 18);
+        Bean bean = new Bean("张三", NUM_18);
         Map<String, Object> params = new HashMap<>();
         params.put("b", bean);
 
         script = "b.getAge() + 2";
         result = Double.valueOf(CommonUtil.getString(JavaScriptUtil.eval(script, params)));
-        Assert.isTrue(result - 20 == 0, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(result - NUM_20 == 0, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
 
 }

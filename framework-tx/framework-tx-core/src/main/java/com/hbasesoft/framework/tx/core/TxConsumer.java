@@ -19,6 +19,15 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public interface TxConsumer {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo
+     * @return <br>
+     */
     boolean retry(ClientInfo clientInfo);
 
 }

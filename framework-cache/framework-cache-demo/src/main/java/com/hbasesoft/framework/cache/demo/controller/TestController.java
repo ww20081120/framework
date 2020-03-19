@@ -26,23 +26,49 @@ import com.hbasesoft.framework.cache.demo.service.TestService;
 @Controller
 public class TestController {
 
+    /** 默认超时时间 */
+    private static final int DEFAULT_EXPIRETIME = 10;
+
+    /** testService */
     private TestService testService;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name name
+     * @return <br>
+     */
     @RequestMapping(value = "/test")
     @ResponseBody
-    public String say(String name) {
+    public String say(final String name) {
         return testService.getTestContent(name);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public TestService getTestService() {
         return testService;
     }
 
-    @CacheProxy(expireTime = 10, value = {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param service <br>
+     */
+    @CacheProxy(expireTime = DEFAULT_EXPIRETIME, value = {
         @CacheMethodConfig("getTestContent")
     })
-    public void setTestService(TestService testService) {
-        this.testService = testService;
+    public void setTestService(final TestService service) {
+        this.testService = service;
     }
 
 }

@@ -35,12 +35,28 @@ import com.hbasesoft.framework.common.ServiceException;
 @Configuration
 public class CacheLockAdvice {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
     public void cacheLock() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param thisJoinPoint
+     * @return Object
+     * @throws Throwable <br>
+     */
     @Around("cacheLock()")
-    public Object invoke(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+    public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {
             MethodSignature msig = (MethodSignature) sig;

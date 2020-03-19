@@ -20,12 +20,23 @@ import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
  */
 public class MessageConsummer {
 
-    public static void main(String[] args) throws InterruptedException {
+    /** Number */
+    private static final int NUM_1000000 = 1000000;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args
+     * @throws InterruptedException <br>
+     */
+    public static void main(final String[] args) throws InterruptedException {
         MessageSubcriberFactory factory = MessageHelper.createMessageSubcriberFactory();
         factory.registSubscriber("log-p15", false, new MessageLinsener());
-        //factory.registSubscriber("log-p15", true, new MessageLinsener());
+        // factory.registSubscriber("log-p15", true, new MessageLinsener());
         // factory.registSubscriber("log-p21", true, new MessageLinsener());
-        Thread.sleep(1000000);
+        Thread.sleep(NUM_1000000);
         System.out.println("消费者者启动完成！");
     }
 }

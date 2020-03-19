@@ -69,7 +69,7 @@ public class ParamMetadata extends BaseEntity {
      * 
      * @param size <br>
      */
-    public ParamMetadata(int size) {
+    public ParamMetadata(final int size) {
         paramNames = new String[size];
     }
 
@@ -87,7 +87,7 @@ public class ParamMetadata extends BaseEntity {
      * 
      * @param indexPosition <br>
      */
-    public void setIndexPosition(Integer indexPosition) {
+    public void setIndexPosition(final Integer indexPosition) {
         this.indexPosition = indexPosition;
     }
 
@@ -105,7 +105,7 @@ public class ParamMetadata extends BaseEntity {
      * 
      * @param sizePosition <br>
      */
-    public void setSizePosition(Integer sizePosition) {
+    public void setSizePosition(final Integer sizePosition) {
         this.sizePosition = sizePosition;
     }
 
@@ -124,43 +124,106 @@ public class ParamMetadata extends BaseEntity {
      * @param index <br>
      * @param name <br>
      */
-    public void setParamName(Integer index, String name) {
+    public void setParamName(final Integer index, final String name) {
         this.paramNames[index] = name;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getCallBackPosition() {
         return callBackPosition;
     }
 
-    public void setCallBackPosition(Integer callBackPosition) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param callBackPosition <br>
+     */
+    public void setCallBackPosition(final Integer callBackPosition) {
         this.callBackPosition = callBackPosition;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Class<?> getBeanType() {
         return beanType;
     }
 
-    public void setBeanType(Class<?> beanType) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param beanType <br>
+     */
+    public void setBeanType(final Class<?> beanType) {
         this.beanType = beanType;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Class<?> getReturnType() {
         return returnType;
     }
 
-    public void setReturnType(Class<?> returnType) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param returnType <br>
+     */
+    public void setReturnType(final Class<?> returnType) {
         this.returnType = returnType;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getDbId() {
         return dbId;
     }
 
-    public void setDbId(String dbId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param dbId <br>
+     */
+    public void setDbId(final String dbId) {
         this.dbId = dbId;
     }
 
-    public void setParamNames(String[] paramNames) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param paramNames <br>
+     */
+    public void setParamNames(final String[] paramNames) {
         this.paramNames = paramNames;
     }
 

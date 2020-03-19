@@ -41,7 +41,7 @@ public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
      * @return <br>
      */
     @Override
-    public boolean before(Serializable flowBean, FlowContext flowContext) {
+    public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         String condition = (String) flowContext.getFlowConfig().getConfigAttrMap().get("condition");
         if (StringUtils.isNotEmpty(condition)) {
 

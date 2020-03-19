@@ -7,6 +7,7 @@ package com.hbasesoft.framework.cache.demo.dulplicateLock;
 
 import com.hbasesoft.framework.cache.core.annotation.DulplicateLock;
 import com.hbasesoft.framework.cache.core.annotation.Key;
+import com.hbasesoft.framework.common.GlobalConstants;
 
 /**
  * <Description> 抢位子服务<br>
@@ -20,6 +21,14 @@ import com.hbasesoft.framework.cache.core.annotation.Key;
  */
 public interface ZhanWeiZiService {
 
-    @DulplicateLock(name = "zhanwei", key = "${no}", expireTime = 1000)
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param no
+     * @param name <br>
+     */
+    @DulplicateLock(name = "zhanwei", key = "${no}", expireTime = GlobalConstants.SECONDS)
     void rob(@Key("no") int no, String name);
 }

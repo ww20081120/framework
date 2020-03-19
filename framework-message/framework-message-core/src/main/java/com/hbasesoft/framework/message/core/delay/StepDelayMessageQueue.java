@@ -26,10 +26,32 @@ public interface StepDelayMessageQueue {
      */
     int getLevel();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param delayMessage <br>
+     */
     void add(DelayMessage delayMessage);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param msgId
+     * @return <br>
+     */
     DelayMessage remove(String msgId);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     void check();
 
 }

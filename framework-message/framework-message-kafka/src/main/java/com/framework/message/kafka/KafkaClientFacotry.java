@@ -26,18 +26,37 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
  * @see com.framework.message.kafka <br>
  */
 public final class KafkaClientFacotry {
+    /** message.kafka.batch.size */
+    private static final int BATCH_SIZE = 16384;
 
+    /** message.kafka.buffer.memory */
+    private static final long BUFFER_MEMORY = 33554432L;
+
+    /** kafka name */
     public static final String KAFKA_NAME = "KAFKA";
 
+    /** lock */
     private static Object lock = new Object();
 
+    /** kafka producer */
     private static KafkaProducer<String, byte[]> kafkaProducer;
 
-    private static ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>> threadLocalHolder = new ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>>();
+    /**
+     * 
+     */
+    private static ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>> threadLocalHolder = 
+        new ThreadLocal<Map<String, KafkaConsumer<String, byte[]>>>();
 
     private KafkaClientFacotry() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static KafkaProducer<String, byte[]> getProducer() {
         synchronized (lock) {
             if (kafkaProducer == null) {
@@ -45,9 +64,10 @@ public final class KafkaClientFacotry {
                 props.put("bootstrap.servers", PropertyHolder.getProperty("message.kafka.bootstrap.servers"));
                 props.put("acks", PropertyHolder.getProperty("message.kafka.acks", "all"));
                 props.put("retries", PropertyHolder.getIntProperty("message.kafka.retries", 0));
-                props.put("batch.size", PropertyHolder.getIntProperty("message.kafka.batch.size", 16384));
+                props.put("batch.size", PropertyHolder.getIntProperty("message.kafka.batch.size", BATCH_SIZE));
                 props.put("linger.ms", PropertyHolder.getIntProperty("message.kafka.linger.ms", 1));
-                props.put("buffer.memory", PropertyHolder.getLongProperty("message.kafka.buffer.memory", 33554432L));
+                props.put("buffer.memory",
+                    PropertyHolder.getLongProperty("message.kafka.buffer.memory", BUFFER_MEMORY));
                 props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
                 props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
                 kafkaProducer = new KafkaProducer<String, byte[]>(props);
@@ -56,7 +76,16 @@ public final class KafkaClientFacotry {
         return kafkaProducer;
     }
 
-    public static KafkaConsumer<String, byte[]> getKafkaConsumer(String group, String topic) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param group
+     * @param topic
+     * @return <br>
+     */
+    public static KafkaConsumer<String, byte[]> getKafkaConsumer(final String group, final String topic) {
         Map<String, KafkaConsumer<String, byte[]>> consumerConnectorHolder = getConsumerConnectorHolder();
         KafkaConsumer<String, byte[]> consumer = consumerConnectorHolder.get(group);
         if (consumer == null) {
@@ -68,13 +97,13 @@ public final class KafkaClientFacotry {
         return consumer;
     }
 
-    private static KafkaConsumer<String, byte[]> newKafkaConsumer(String group) {
+    private static KafkaConsumer<String, byte[]> newKafkaConsumer(final String group) {
         Properties props = new Properties();
 
         props.put("bootstrap.servers", PropertyHolder.getProperty("message.kafka.bootstrap.servers"));
 
         // 消费者的组id
-        props.put("group.id", group);// 这里是GroupA或者GroupB
+        props.put("group.id", group); // 这里是GroupA或者GroupB
 
         props.put("enable.auto.commit", PropertyHolder.getProperty("message.kafka.enable.auto.commit", "true"));
         props.put("auto.commit.interval.ms",

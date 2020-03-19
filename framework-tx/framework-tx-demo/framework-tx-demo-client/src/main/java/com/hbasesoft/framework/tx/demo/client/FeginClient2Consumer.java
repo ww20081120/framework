@@ -25,6 +25,14 @@ import com.hbasesoft.framework.tx.client.producer.springcloud.client.FallBackPro
     fallbackFactory = FallBackProducerFactory.class)
 public interface FeginClient2Consumer {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping
     String test(@RequestParam("id") String id);
 }

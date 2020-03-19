@@ -7,6 +7,7 @@ package com.hbasesoft.framework.message.core.delay;
 
 import java.util.Collection;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -21,13 +22,25 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 public class DelayMessageQueue {
 
+    /** stepDelayMessageQueueLoader */
     private StepDelayMessageQueueLoader stepDelayMessageQueueLoader;
 
-    public DelayMessageQueue(StepDelayMessageQueueLoader stepDelayMessageQueueLoader) {
+    /**
+     * @param stepDelayMessageQueueLoader
+     */
+    public DelayMessageQueue(final StepDelayMessageQueueLoader stepDelayMessageQueueLoader) {
         this.stepDelayMessageQueueLoader = stepDelayMessageQueueLoader;
     }
 
-    public String add(DelayMessage message) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param message
+     * @return <br>
+     */
+    public String add(final DelayMessage message) {
         int newLevel = -1;
         int[] levels = stepDelayMessageQueueLoader.getLevels();
         for (int i = 0, l = levels.length; i < l; i++) {
@@ -55,7 +68,7 @@ public class DelayMessageQueue {
      * @taskId <br>
      * @param msgId <br>
      */
-    public void delete(String msgId) {
+    public void delete(final String msgId) {
         Collection<StepDelayMessageQueue> delayMessageQueues = stepDelayMessageQueueLoader.loadDelayMessageQueues();
         for (StepDelayMessageQueue queue : delayMessageQueues) {
             if (queue.remove(msgId) != null) {
@@ -65,11 +78,20 @@ public class DelayMessageQueue {
         }
     }
 
-    public void update(String msgId, Long expireTime, int oldLevel) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param msgId
+     * @param expireTime
+     * @param oldLevel <br>
+     */
+    public void update(final String msgId, final Long expireTime, final int oldLevel) {
 
         int newLevel = -1;
         int[] levels = stepDelayMessageQueueLoader.getLevels();
-        int currentSeconds = new Long((expireTime - System.currentTimeMillis()) / 1000).intValue();
+        int currentSeconds = new Long((expireTime - System.currentTimeMillis()) / GlobalConstants.SECONDS).intValue();
         for (int i = 0, l = levels.length; i < l; i++) {
             int level = levels[i];
             if (currentSeconds > level) {

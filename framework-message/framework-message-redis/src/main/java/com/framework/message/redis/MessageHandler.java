@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -27,12 +28,28 @@ import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
  */
 public final class MessageHandler {
 
+    /** Number */
+    private static final int NUM_3 = 3;
+
+    /** Number */
+    private static final int NUM_500 = 500;
+
+    /** logger */
     private static final Logger LOGGER = new Logger("MessageHandlerLogger");
 
+    /** flag */
     private boolean flag = true;
 
+    /** handler */
     private static MessageHandler handler;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static MessageHandler getInstance() {
         if (handler == null) {
             handler = new MessageHandler();
@@ -40,7 +57,16 @@ public final class MessageHandler {
         return handler;
     }
 
-    public void addConsummer(MessageQueue queue, final String channel, final MessageSubscriber subscriber) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param queue
+     * @param channel
+     * @param subscriber <br>
+     */
+    public void addConsummer(final MessageQueue queue, final String channel, final MessageSubscriber subscriber) {
         Thread thread = new Thread(() -> {
             // 建一个线程池
             try {
@@ -48,7 +74,7 @@ public final class MessageHandler {
                 while (flag) {
                     try {
                         // 每次从redis的队列中消费3条数据
-                        List<byte[]> datas = queue.pop(3, channel);
+                        List<byte[]> datas = queue.pop(NUM_3, channel);
                         if (CollectionUtils.isNotEmpty(datas)) {
 
                             String transId = CommonUtil.getTransactionID();
@@ -61,14 +87,14 @@ public final class MessageHandler {
                             }
                         }
                         else {
-                            if (++count % 500 == 0) {
+                            if (++count % NUM_500 == 0) {
                                 LOGGER.debug("channel {0} consumer is alived.", channel);
                             }
                         }
                     }
                     catch (Exception e) {
                         LoggerUtil.error(e);
-                        Thread.sleep(1000);
+                        Thread.sleep(GlobalConstants.SECONDS);
                     }
                 }
             }
@@ -80,27 +106,61 @@ public final class MessageHandler {
         thread.start();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     public void destory() {
         flag = false;
     }
 
+    /**
+     * <Description> <br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate Mar 2, 2020 <br>
+     * @since V1.0<br>
+     * @see com.framework.message.redis <br>
+     */
     private static class Consumer implements Runnable {
 
+        /** transid */
         private String transId;
 
+        /** channel */
         private String channel;
 
+        /** subscriber */
         private MessageSubscriber subscriber;
 
+        /** data */
         private byte[] data;
 
-        public Consumer(String transId, String channel, MessageSubscriber subscriber, byte[] data) {
+        /**
+         * @param transId
+         * @param channel
+         * @param subscriber
+         * @param data
+         */
+        Consumer(final String transId, final String channel, final MessageSubscriber subscriber, final byte[] data) {
             this.transId = transId;
             this.channel = channel;
             this.subscriber = subscriber;
             this.data = data;
         }
 
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         *         <br>
+         */
         public void run() {
             try {
                 LOGGER.debug("{0}|{1} before execute event.", transId, channel);

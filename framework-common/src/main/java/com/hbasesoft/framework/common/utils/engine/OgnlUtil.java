@@ -25,7 +25,16 @@ import ognl.OgnlException;
  */
 public final class OgnlUtil {
 
-    public static Object getValue(String script, Map<String, Object> paramMap) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param script
+     * @param paramMap
+     * @return <br>
+     */
+    public static Object getValue(final String script, final Map<String, Object> paramMap) {
         OgnlContext context = new OgnlContext(null, null, new DefaultMemberAccess(true));
         try {
             return Ognl.getValue(script, context, paramMap);

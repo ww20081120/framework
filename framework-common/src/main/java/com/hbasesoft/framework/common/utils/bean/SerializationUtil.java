@@ -43,8 +43,18 @@ public final class SerializationUtil {
      */
     private static final int INIT_SIZE = 1024;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param obj
+     * @param <T> T
+     * @return T
+     * @throws UtilException <br>
+     */
     @SuppressWarnings("unchecked")
-    public static <T> byte[] serial(T obj) throws UtilException {
+    public static <T> byte[] serial(final T obj) throws UtilException {
         if (obj != null && !(obj instanceof Void)) {
             try {
                 if (obj instanceof Map) {
@@ -72,7 +82,7 @@ public final class SerializationUtil {
      * @param obj <br>
      * @return <br>
      */
-    public static byte[] jdkSerial(Object obj) throws UtilException {
+    public static byte[] jdkSerial(final Object obj) throws UtilException {
         byte[] bytes = null;
         ObjectOutputStream out = null;
         try {
@@ -91,8 +101,19 @@ public final class SerializationUtil {
         return bytes;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clazz
+     * @param data
+     * @param <T> T
+     * @return T
+     * @throws UtilException <br>
+     */
     @SuppressWarnings("unchecked")
-    public static <T> T unserial(Class<T> clazz, byte[] data) throws UtilException {
+    public static <T> T unserial(final Class<T> clazz, final byte[] data) throws UtilException {
         T result = null;
         if (data != null && data.length > 0) {
             try {
@@ -122,7 +143,7 @@ public final class SerializationUtil {
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public static Object jdkUnserial(byte[] data) throws UtilException {
+    public static Object jdkUnserial(final byte[] data) throws UtilException {
         Object result = null;
         if (data != null && data.length > 0) {
             ObjectInputStream in = null;

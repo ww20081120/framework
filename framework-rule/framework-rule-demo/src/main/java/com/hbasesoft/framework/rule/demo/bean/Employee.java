@@ -45,44 +45,107 @@ public class Employee {
     @Column(name = "ID")
     private String id;
 
+    /** name */
     @Column(name = "name")
     private String name;
 
+    /** age */
     @Column(name = "age")
     private int age;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    public void setId(final String id) {
         this.id = id;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name <br>
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param age <br>
+     */
+    public void setAge(final int age) {
         this.age = age;
     }
 
+    /**
+     * <Description> <br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate Mar 2, 2020 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.rule.demo.bean <br>
+     */
     @Getter
     @Setter
     public static class AAA {
+
+        /** entity */
         private Employee entity;
 
     }
 
-    public static void main(String[] args) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
+    public static void main(final String[] args) {
 
         // 构造上下文：准备比如变量定义等等表达式运行需要的上下文数据
         EvaluationContext context = new StandardEvaluationContext();

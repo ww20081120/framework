@@ -25,23 +25,35 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 public class CachePorxyInvocationHandler implements InvocationHandler {
 
+    /** target */
     private Object target;
 
+    /** cacheProxy */
     private CacheProxy cacheProxy;
 
+    /** cacheMethodConfigMap */
     private Map<String, CacheMethodConfig> cacheMethodConfigMap;
 
+    /** clazz */
     private Class<?> clazz;
 
+    /** nodeNamePrefix */
     private String nodeNamePrefix;
 
-    public CachePorxyInvocationHandler(Object target, CacheProxy cacheProxy, Class<?> clazz) {
-        this.target = target;
-        this.cacheProxy = cacheProxy;
-        this.clazz = clazz;
+    /**
+     * CachePorxyInvocationHandler
+     * 
+     * @param t
+     * @param cp
+     * @param c
+     */
+    public CachePorxyInvocationHandler(final Object t, final CacheProxy cp, final Class<?> c) {
+        this.target = t;
+        this.cacheProxy = cp;
+        this.clazz = c;
         this.cacheMethodConfigMap = new HashMap<>();
 
-        CacheMethodConfig[] configs = cacheProxy.value();
+        CacheMethodConfig[] configs = cp.value();
         if (CommonUtil.isNotEmpty(configs)) {
             for (CacheMethodConfig config : configs) {
                 this.cacheMethodConfigMap.put(config.value(), config);
@@ -49,12 +61,23 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         }
 
         nodeNamePrefix = new StringBuilder().append("__CACHE_PROXY_").append(clazz.getName()).append('@')
-            .append(target.hashCode()).toString();
+            .append(t.hashCode()).toString();
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param proxy proxy
+     * @param method method
+     * @param args args
+     * @return Object
+     * @throws Throwable <br>
+     */
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         Object result = null;
         CacheMethodConfig config = cacheMethodConfigMap.get(method.getName());
         if (config == null || Void.class.equals(method.getAnnotatedReturnType().getType().getTypeName())) {
@@ -81,7 +104,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         return result;
     }
 
-    private String getCacheKey(Method method, Object[] args) {
+    private String getCacheKey(final Method method, final Object[] args) {
         StringBuilder sb = new StringBuilder();
         sb.append(method.getName());
         if (CommonUtil.isNotEmpty(args)) {
@@ -95,7 +118,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         return sb.toString();
     }
 
-    private Object getAndCache(Method method, Object[] args, int expireTime)
+    private Object getAndCache(final Method method, final Object[] args, final int expireTime)
         throws InvocationTargetException, IllegalAccessException {
         Object result = method.invoke(target, args);
         if (result != null) {

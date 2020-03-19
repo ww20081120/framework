@@ -9,15 +9,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import redis.clients.jedis.BinaryJedisCluster;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
@@ -37,10 +36,19 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * 缓存模式
      */
     public static final String CACHE_MODEL = "REDIS_CLUSTER";
+
+    /** MAX_TIMEOUT */
+    private static final int MAX_TIMEOUT = 100000;
+
+    /** DEFAULT_MAX_REDIRECTIONS */
     private static final int DEFAULT_MAX_REDIRECTIONS = 5;
 
+    /** cluster */
     private JedisCluster cluster;
 
+    /**
+     * ClusterRedisCache
+     */
     public ClusterRedisCache() {
         String cacheModel = PropertyHolder.getProperty("cache.model");
         if (CACHE_MODEL.equals(cacheModel)) {
@@ -53,12 +61,13 @@ public class ClusterRedisCache extends AbstractRedisCache {
             }
             if (StringUtils.isEmpty(passwd)) {
                 cluster = new JedisCluster(readSet,
-                        PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000));
-            } else {
+                    PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT));
+            }
+            else {
                 cluster = new JedisCluster(readSet,
-                        PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                        PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", 100000),
-                        DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+                    PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT),
+                    PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT),
+                    DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
             }
         }
     }
@@ -108,7 +117,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(byte[] key) {
+    protected byte[] get(final byte[] key) {
         return cluster.get(key);
     }
 
@@ -121,7 +130,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(byte[] key, byte[] value) {
+    protected void put(final byte[] key, final byte[] value) {
         cluster.set(key, value);
     }
 
@@ -133,7 +142,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(byte[] key) {
+    protected void evict(final byte[] key) {
         cluster.del(key);
     }
 
@@ -146,7 +155,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected Map<byte[], byte[]> getNode(byte[] node) {
+    protected Map<byte[], byte[]> getNode(final byte[] node) {
         return cluster.hgetAll(node);
     }
 
@@ -159,7 +168,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(byte[] key, Map<byte[], byte[]> dataMap) {
+    protected void putNode(final byte[] key, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             cluster.hmset(key, dataMap);
         }
@@ -171,10 +180,9 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     * @return <br>
      */
     @Override
-    protected void removeNode(byte[] nodeName) {
+    protected void removeNode(final byte[] nodeName) {
         cluster.del(nodeName);
     }
 
@@ -188,7 +196,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(byte[] nodeName, byte[] key) {
+    protected byte[] get(final byte[] nodeName, final byte[] key) {
         return cluster.hget(nodeName, key);
     }
 
@@ -202,12 +210,9 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(byte[] nodeName, int seconds, byte[] key, byte[] t) {
+    protected void put(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             cluster.hset(nodeName, key, t);
-            if (seconds > 0) {
-                cluster.expire(nodeName, seconds);
-            }
         }
     }
 
@@ -220,7 +225,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(byte[] nodeName, byte[] key) {
+    protected void evict(final byte[] nodeName, final byte[] key) {
         cluster.hdel(nodeName, key);
     }
 
@@ -235,7 +240,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public boolean setnx(String key, String value, int expireTime) {
+    public boolean setnx(final String key, final String value, final int expireTime) {
         if (cluster.setnx(key.getBytes(), value.getBytes()) - 1 == 0) {
             cluster.expire(key.getBytes(), expireTime);
             return true;

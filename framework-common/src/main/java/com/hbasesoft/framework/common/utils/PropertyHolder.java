@@ -1,22 +1,8 @@
-/**
- * 
- * APDPlat - Application Product Development Platform
- * Copyright (c) 2013, 杨尚川, yang-shangchuan@qq.com
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- */
+/****************************************************************************************
+ Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
+ transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
+ or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+ ****************************************************************************************/
 
 package com.hbasesoft.framework.common.utils;
 
@@ -54,22 +40,41 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PropertyHolder {
 
+    /** log */
     private static Logger log = new Logger(PropertyHolder.class);
 
+    /** properties */
     private static final Map<String, String> PROPERTIES = new HashMap<>();
 
+    /** error message */
     private static final Map<String, String> ERROR_MESSAGE = new HashMap<>();
 
     static {
         init();
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static Map<String, String> getProperties() {
         return PROPERTIES;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param inputStream
+     * @param map
+     * @throws IOException <br>
+     */
     @SuppressWarnings("unchecked")
-    private static void loadYml(InputStream inputStream, Map<String, String> map) throws IOException {
+    private static void loadYml(final InputStream inputStream, final Map<String, String> map) throws IOException {
         try {
 
             Yaml yaml = new Yaml();
@@ -86,7 +91,7 @@ public final class PropertyHolder {
     }
 
     @SuppressWarnings("unchecked")
-    private static void transfer(String key, Object value, Map<String, String> map) {
+    private static void transfer(final String key, final Object value, final Map<String, String> map) {
         if (value != null) {
             if (value instanceof Map) {
                 Map<String, Object> m = (Map<String, Object>) value;
@@ -102,7 +107,8 @@ public final class PropertyHolder {
         }
     }
 
-    private static void loadProperties(InputStream inputStream, Map<String, String> map) throws IOException {
+    private static void loadProperties(final InputStream inputStream, final Map<String, String> map)
+        throws IOException {
         try {
             Properties properties = new Properties();
             properties.load(new InputStreamReader(inputStream, "utf-8"));
@@ -217,34 +223,93 @@ public final class PropertyHolder {
 
     }
 
-    public static Boolean getBooleanProperty(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
+    public static Boolean getBooleanProperty(final String name) {
         return getBooleanProperty(name, null);
     }
 
-    public static Boolean getBooleanProperty(String name, Boolean defaultValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param defaultValue
+     * @return <br>
+     */
+    public static Boolean getBooleanProperty(final String name, final Boolean defaultValue) {
         String value = PROPERTIES.get(name);
         return StringUtils.isNotEmpty(value) ? "true".equals(value) : defaultValue;
     }
 
-    public static Integer getIntProperty(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
+    public static Integer getIntProperty(final String name) {
         return getIntProperty(name, null);
     }
 
-    public static Integer getIntProperty(String name, Integer defaultValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param defaultValue
+     * @return <br>
+     */
+    public static Integer getIntProperty(final String name, final Integer defaultValue) {
         String value = PROPERTIES.get(name);
         return StringUtils.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
     }
 
-    public static Long getLongProperty(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
+    public static Long getLongProperty(final String name) {
         return getLongProperty(name, null);
     }
 
-    public static Long getLongProperty(String name, Long defaultValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param defaultValue
+     * @return <br>
+     */
+    public static Long getLongProperty(final String name, final Long defaultValue) {
         String value = PROPERTIES.get(name);
         return StringUtils.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
     }
 
-    public static String getProperty(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @return <br>
+     */
+    public static String getProperty(final String name) {
         String value = PROPERTIES.get(name);
         if (org.apache.commons.lang3.StringUtils.isNotEmpty(value)) {
             int startIndex = value.indexOf("${");
@@ -261,16 +326,42 @@ public final class PropertyHolder {
         return value;
     }
 
-    public static String getProperty(String name, String defaultValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param defaultValue
+     * @return <br>
+     */
+    public static String getProperty(final String name, final String defaultValue) {
         String value = getProperty(name);
         return StringUtils.isNotEmpty(value) ? value : defaultValue;
     }
 
-    public static void setProperty(String name, String value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name
+     * @param value <br>
+     */
+    public static void setProperty(final String name, final String value) {
         PROPERTIES.put(name, value);
     }
 
-    public static String getErrorMessage(int code, Object... params) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param code
+     * @param params
+     * @return <br>
+     */
+    public static String getErrorMessage(final int code, final Object... params) {
         String message = ERROR_MESSAGE.get(code + GlobalConstants.BLANK);
         if (StringUtils.isNotEmpty(message)) {
             if (CommonUtil.isNotEmpty(params)) {
@@ -281,6 +372,13 @@ public final class PropertyHolder {
         return GlobalConstants.BLANK + code;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static String getProjectName() {
         String name = getProperty("project.name");
         if (StringUtils.isEmpty(name)) {

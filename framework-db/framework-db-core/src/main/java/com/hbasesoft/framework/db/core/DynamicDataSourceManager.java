@@ -22,19 +22,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class DynamicDataSourceManager {
 
+    /** default datasource code */
     public static final String DEFAULT_DATASOURCE_CODE = "master";
 
+    /** data source code holder */
     private static ThreadLocal<String> dataSourceCodeHolder = new ThreadLocal<String>() {
         protected synchronized String initialValue() {
             return DEFAULT_DATASOURCE_CODE;
         }
     };
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static String getDataSourceCode() {
         return dataSourceCodeHolder.get();
     }
 
-    public static void setDataSourceCode(String code) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param code <br>
+     */
+    public static void setDataSourceCode(final String code) {
         dataSourceCodeHolder.set(code);
         LoggerUtil.debug("datasource change to " + code);
     }

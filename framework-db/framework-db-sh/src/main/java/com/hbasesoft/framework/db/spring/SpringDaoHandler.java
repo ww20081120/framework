@@ -38,7 +38,7 @@ public class SpringDaoHandler implements MethodInterceptor {
      * @throws Throwable <br>
      */
     @Override
-    public Object invoke(MethodInvocation invocation) throws Throwable {
+    public Object invoke(final MethodInvocation invocation) throws Throwable {
         Method method = invocation.getMethod();
         Object[] args = invocation.getArguments();
 

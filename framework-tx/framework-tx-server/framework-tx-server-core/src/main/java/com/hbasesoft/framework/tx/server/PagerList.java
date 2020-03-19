@@ -73,27 +73,69 @@ public class PagerList<E> extends CopyOnWriteArrayList<E> {
         }
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getPageIndex() {
         return pageIndex;
     }
 
-    public void setPageIndex(int pageIndex) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pageIndex <br>
+     */
+    public void setPageIndex(final int pageIndex) {
         this.pageIndex = pageIndex;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pageSize <br>
+     */
+    public void setPageSize(final int pageSize) {
         this.pageSize = pageSize;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(long totalCount) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param totalCount <br>
+     */
+    public void setTotalCount(final long totalCount) {
         this.totalCount = totalCount;
     }
 

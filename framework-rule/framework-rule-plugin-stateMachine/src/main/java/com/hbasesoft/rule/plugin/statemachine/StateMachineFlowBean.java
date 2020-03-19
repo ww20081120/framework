@@ -19,9 +19,30 @@ import java.io.Serializable;
  */
 public interface StateMachineFlowBean extends Serializable {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getEvent();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getState();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param state <br>
+     */
     void setState(String state);
 }

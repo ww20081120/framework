@@ -27,6 +27,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TxEventEmmiter {
 
+    /** Number */
+    private static final int NUM_5 = 5;
+
     /**
      * Description: 触发事件<br>
      *
@@ -34,7 +37,7 @@ public final class TxEventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(String event) {
+    public static void emmit(final String event) {
         emmit(event, new EventData());
     }
 
@@ -46,32 +49,60 @@ public final class TxEventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(String event, EventData data) {
+    public static void emmit(final String event, final EventData data) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data
         }, "emmit1"), () -> 0);
         EventEmmiter.emmit(event, data);
     }
 
-    public static void emmit(String event, EventData data, int seconds) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param seconds <br>
+     */
+    public static void emmit(final String event, final EventData data, final int seconds) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data, seconds
         }, "emmit2"), () -> 0);
         EventEmmiter.emmit(event, data, seconds);
     }
 
-    public static void emmit(String event, EventData data, String produceModel) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param event
+     * @param data
+     * @param produceModel <br>
+     */
+    public static void emmit(final String event, final EventData data, final String produceModel) {
         TxInvokerProxy.registInvoke(getClientInfo(data.getMsgId(), new Object[] {
             event, data, produceModel
         }, "emmit3"), () -> 0);
         EventEmmiter.emmit(event, data, produceModel);
     }
 
-    private static ClientInfo getClientInfo(String id, Object[] args, String method) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param args
+     * @param method
+     * @return <br>
+     */
+    private static ClientInfo getClientInfo(final String id, final Object[] args, final String method) {
         ClientInfo clientInfo = new ClientInfo(id, TxEventRetryHandler.TX_EVENT_RETRY_HANDLER + method);
         clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(args));
         clientInfo.setClientInfo(TxInvokerProxy.getClientInfoFactory().getClientInfo());
-        clientInfo.setMaxRetryTimes(5);
+        clientInfo.setMaxRetryTimes(NUM_5);
         clientInfo.setRetryConfigs("5,10,30,60,120,720");
         return clientInfo;
     }

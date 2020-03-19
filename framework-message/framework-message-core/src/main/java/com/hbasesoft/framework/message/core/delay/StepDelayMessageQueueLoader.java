@@ -19,8 +19,23 @@ import java.util.Collection;
  */
 public interface StepDelayMessageQueueLoader {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     int[] getLevels();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param level
+     * @return <br>
+     */
     StepDelayMessageQueue getDelayMessageQueue(int level);
 
     /**
@@ -32,5 +47,15 @@ public interface StepDelayMessageQueueLoader {
      */
     Collection<StepDelayMessageQueue> loadDelayMessageQueues();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param messageId
+     * @param expireTime
+     * @param oldLevel
+     * @param newLevel <br>
+     */
     void changeData(String messageId, long expireTime, int oldLevel, int newLevel);
 }

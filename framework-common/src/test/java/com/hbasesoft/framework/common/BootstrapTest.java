@@ -22,7 +22,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class BootstrapTest {
 
-    public static void main(String[] args) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args <br>
+     */
+    public static void main(final String[] args) {
         // 项目启动时
 
         Bootstrap.before();

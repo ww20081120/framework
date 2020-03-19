@@ -18,7 +18,6 @@ import org.dom4j.Element;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
  * <Description> XML 工具<br>
@@ -32,18 +31,18 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  */
 public class XmlBeanUtil {
 
-    protected static Logger logger = new Logger(XmlBeanUtil.class);
-
-    private static final XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
+    /** xmlOutputFactory */
+    private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
 
     /**
      * @param xmlStr 字符串
      * @param c 对象Class类型
+     * @param <T> T
      * @return 对象实例
      * @throws UtilException
      */
     @SuppressWarnings("unchecked")
-    public static <T> T xml2Object(String xmlStr, Class<T> c) throws UtilException {
+    public static <T> T xml2Object(final String xmlStr, final Class<T> c) throws UtilException {
         if (StringUtils.isEmpty(xmlStr)) {
             return null;
         }
@@ -64,15 +63,15 @@ public class XmlBeanUtil {
      * @return 返回xmlStr
      * @throws UtilException
      */
-    public static String object2Xml(Object object) throws UtilException {
+    public static String object2Xml(final Object object) throws UtilException {
         try {
             JAXBContext context = JAXBContext.newInstance(object.getClass());
 
             Marshaller marshaller = context.createMarshaller();
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式,默认为utf-8
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);// 是否省略xml头信息
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8"); // 编码格式,默认为utf-8o
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // 是否省略xml头信息
             Writer writer = new CharArrayWriter();
             XMLStreamWriter xmlStreamWriter = xmlOutputFactory.createXMLStreamWriter(writer);
             xmlStreamWriter.writeStartDocument((String) marshaller.getProperty(Marshaller.JAXB_ENCODING), "1.0");
@@ -93,15 +92,24 @@ public class XmlBeanUtil {
 
     }
 
-    public static Element object2Element(Object object) throws UtilException {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param object
+     * @return Element
+     * @throws UtilException <br>
+     */
+    public static Element object2Element(final Object object) throws UtilException {
         try {
             JAXBContext context = JAXBContext.newInstance(object.getClass());
 
             Marshaller marshaller = context.createMarshaller();
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式,默认为utf-8
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);// 是否省略xml头信息
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8"); // 编码格式,默认为utf-8
+            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // 是否省略xml头信息
 
             Writer writer = new CharArrayWriter();
             marshaller.marshal(object, writer);

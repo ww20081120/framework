@@ -26,11 +26,43 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Target(ElementType.METHOD)
 public @interface CacheNode {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String node();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     Class<?> bean();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     int expireTime() default 0;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String key() default GlobalConstants.BLANK;
 }

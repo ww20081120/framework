@@ -29,6 +29,9 @@ import com.hbasesoft.framework.message.delay.db.service.DelaymsgService;
 @Service
 public class DelaymsgServiceImpl implements DelaymsgService {
 
+    /**
+     * msg delay msg dao
+     */
     @Resource
     private MsgDelaymsgDao msgDelaymsgDao;
 
@@ -40,7 +43,7 @@ public class DelaymsgServiceImpl implements DelaymsgService {
      * @param entity <br>
      */
     @Override
-    public void save(MsgDelaymsgEntity entity) {
+    public void save(final MsgDelaymsgEntity entity) {
         msgDelaymsgDao.save(entity);
     }
 
@@ -52,7 +55,7 @@ public class DelaymsgServiceImpl implements DelaymsgService {
      * @param id <br>
      */
     @Override
-    public MsgDelaymsgEntity delete(String id) {
+    public MsgDelaymsgEntity delete(final String id) {
         MsgDelaymsgEntity entity = msgDelaymsgDao.get(id);
         if (entity != null) {
             msgDelaymsgDao.deleteById(id);
@@ -83,7 +86,7 @@ public class DelaymsgServiceImpl implements DelaymsgService {
      * @return <br>
      */
     @Override
-    public PagerList<MsgDelaymsgEntity> queryByTime(Date expireTime, int pageIndex, int pageSize) {
+    public PagerList<MsgDelaymsgEntity> queryByTime(final Date expireTime, final int pageIndex, final int pageSize) {
         return msgDelaymsgDao.queryByTime(expireTime, pageIndex, pageSize);
     }
 
@@ -99,8 +102,8 @@ public class DelaymsgServiceImpl implements DelaymsgService {
      * @return <br>
      */
     @Override
-    public PagerList<MsgDelaymsgEntity> queryByTimeAndShard(Date expireTime, String shardInfo, int pageIndex,
-        int pageSize) {
+    public PagerList<MsgDelaymsgEntity> queryByTimeAndShard(final Date expireTime, final String shardInfo,
+        final int pageIndex, final int pageSize) {
         return msgDelaymsgDao.queryByTimeAndShard(expireTime, shardInfo, pageIndex, pageSize);
     }
 
@@ -113,7 +116,7 @@ public class DelaymsgServiceImpl implements DelaymsgService {
      * @return <br>
      */
     @Override
-    public int updateMemeryFlag(String id) {
+    public int updateMemeryFlag(final String id) {
         return msgDelaymsgDao.updateMemeryFlag(id);
     }
 

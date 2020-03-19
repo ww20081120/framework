@@ -1,33 +1,8 @@
-//--------------------------------------------------------------------------
-//	Copyright (c) 1998-2004, Drew Davidson and Luke Blanshard
-//  All rights reserved.
-//
-//	Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are
-//  met:
-//
-//	Redistributions of source code must retain the above copyright notice,
-//  this list of conditions and the following disclaimer.
-//	Redistributions in binary form must reproduce the above copyright
-//  notice, this list of conditions and the following disclaimer in the
-//  documentation and/or other materials provided with the distribution.
-//	Neither the name of the Drew Davidson nor the names of its contributors
-//  may be used to endorse or promote products derived from this software
-//  without specific prior written permission.
-//
-//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-//  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-//  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-//  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-//  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-//  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
-//  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
-//  AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-//  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
-//  THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-//  DAMAGE.
-//--------------------------------------------------------------------------
+/**************************************************************************************** 
+ Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
+ transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
+ or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+ ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.engine;
 
 import java.lang.reflect.AccessibleObject;
@@ -48,61 +23,117 @@ import ognl.MemberAccess;
  */
 @SuppressWarnings("rawtypes")
 public class DefaultMemberAccess implements MemberAccess {
-    public boolean allowPrivateAccess = false;
 
-    public boolean allowProtectedAccess = false;
+    /** allowPrivateAccess */
+    private boolean allowPrivateAccess = false;
 
-    public boolean allowPackageProtectedAccess = false;
+    /** allowProtectedAccess */
+    private boolean allowProtectedAccess = false;
 
-    /*
-     * =================================================================== Constructors
-     * ===================================================================
+    /** allowPackageProtectedAccess */
+    private boolean allowPackageProtectedAccess = false;
+
+    /**
+     * DefaultMemberAccess
+     * 
+     * @param allowAllAccess
      */
-    public DefaultMemberAccess(boolean allowAllAccess) {
+    public DefaultMemberAccess(final boolean allowAllAccess) {
         this(allowAllAccess, allowAllAccess, allowAllAccess);
     }
 
-    public DefaultMemberAccess(boolean allowPrivateAccess, boolean allowProtectedAccess,
-        boolean allowPackageProtectedAccess) {
+    /**
+     * DefaultMemberAccess
+     * 
+     * @param ap
+     * @param access
+     * @param allowPackage
+     */
+    public DefaultMemberAccess(final boolean ap, final boolean access, final boolean allowPackage) {
         super();
-        this.allowPrivateAccess = allowPrivateAccess;
-        this.allowProtectedAccess = allowProtectedAccess;
-        this.allowPackageProtectedAccess = allowPackageProtectedAccess;
+        this.allowPrivateAccess = ap;
+        this.allowProtectedAccess = access;
+        this.allowPackageProtectedAccess = allowPackage;
     }
 
-    /*
-     * =================================================================== Public methods
-     * ===================================================================
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
      */
     public boolean getAllowPrivateAccess() {
         return allowPrivateAccess;
     }
 
-    public void setAllowPrivateAccess(boolean value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param value <br>
+     */
+    public void setAllowPrivateAccess(final boolean value) {
         allowPrivateAccess = value;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public boolean getAllowProtectedAccess() {
         return allowProtectedAccess;
     }
 
-    public void setAllowProtectedAccess(boolean value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param value <br>
+     */
+    public void setAllowProtectedAccess(final boolean value) {
         allowProtectedAccess = value;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public boolean getAllowPackageProtectedAccess() {
         return allowPackageProtectedAccess;
     }
 
-    public void setAllowPackageProtectedAccess(boolean value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param value <br>
+     */
+    public void setAllowPackageProtectedAccess(final boolean value) {
         allowPackageProtectedAccess = value;
     }
 
-    /*
-     * =================================================================== MemberAccess interface
-     * ===================================================================
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context
+     * @param target
+     * @param member
+     * @param propertyName
+     * @return <br>
      */
-    public Object setup(Map context, Object target, Member member, String propertyName) {
+    public Object setup(final Map context, final Object target, final Member member, final String propertyName) {
         Object result = null;
 
         if (isAccessible(context, target, member, propertyName)) {
@@ -116,16 +147,37 @@ public class DefaultMemberAccess implements MemberAccess {
         return result;
     }
 
-    public void restore(Map context, Object target, Member member, String propertyName, Object state) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context
+     * @param target
+     * @param member
+     * @param propertyName
+     * @param state <br>
+     */
+    public void restore(final Map context, final Object target, final Member member, final String propertyName,
+        final Object state) {
         if (state != null) {
             ((AccessibleObject) member).setAccessible(((Boolean) state).booleanValue());
         }
     }
 
     /**
-     * Returns true if the given member is accessible or can be made accessible by this object.
+     * Description: Returns true if the given member is accessible or can be made accessible by this object.<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context
+     * @param target
+     * @param member
+     * @param propertyName
+     * @return <br>
      */
-    public boolean isAccessible(Map context, Object target, Member member, String propertyName) {
+    public boolean isAccessible(final Map context, final Object target, final Member member,
+        final String propertyName) {
         int modifiers = member.getModifiers();
         boolean result = Modifier.isPublic(modifiers);
 

@@ -22,6 +22,7 @@ import com.hbasesoft.framework.message.core.delay.StepDelayMessageQueue;
  */
 public final class QueueManager {
 
+    /** cache node name */
     public static final String CACHE_NODE_NAME = "t_msg_delaymsg";
 
     /** 秒级队列 */
@@ -50,8 +51,16 @@ public final class QueueManager {
         DAY_QUEUE, HOUR_QUEUE, HALF_HOUR_QUEUE, TEN_MINUTE_QUEUE, MINUTE_QUEUE, TEN_SECONDS_QUEUE, SECONDS_QUEUE
     };
 
+    /** map */
     private static Map<Integer, StepDelayMessageQueue> map = new HashMap<>();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     public static void init() {
 
         // 初始化队列

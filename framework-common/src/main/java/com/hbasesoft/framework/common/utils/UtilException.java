@@ -26,7 +26,7 @@ public class UtilException extends FrameworkException {
      * @param code
      * @param params
      */
-    public UtilException(int code, Object... params) {
+    public UtilException(final int code, final Object... params) {
         super(code, params);
     }
 
@@ -34,14 +34,14 @@ public class UtilException extends FrameworkException {
      * @param code
      * @param t
      */
-    public UtilException(int code, Throwable t) {
+    public UtilException(final int code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public UtilException(int code) {
+    public UtilException(final int code) {
         super(code);
     }
 
@@ -50,14 +50,14 @@ public class UtilException extends FrameworkException {
      * @param code
      * @param params
      */
-    public UtilException(Throwable t, int code, Object... params) {
+    public UtilException(final Throwable t, final int code, final Object... params) {
         super(t, code, params);
     }
 
     /**
      * @param t
      */
-    public UtilException(Throwable t) {
+    public UtilException(final Throwable t) {
         super(t);
     }
 

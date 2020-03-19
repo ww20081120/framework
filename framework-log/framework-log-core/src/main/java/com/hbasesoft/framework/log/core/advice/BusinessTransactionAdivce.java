@@ -28,12 +28,28 @@ import com.hbasesoft.framework.log.core.TransLogUtil;
 @Component
 public class BusinessTransactionAdivce {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     @Pointcut("execution(public * com.hbasesoft..*(..))")
     public void log() {
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param joinPoint
+     * @return Object
+     * @throws Throwable <br>
+     */
     @Around("log()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object target = joinPoint.getTarget();

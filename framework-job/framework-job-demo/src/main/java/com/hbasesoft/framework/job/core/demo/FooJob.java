@@ -32,7 +32,7 @@ public class FooJob implements SimpleJob {
      * @param shardingContext <br>
      */
     @Override
-    public void execute(ShardingContext shardingContext) {
+    public void execute(final ShardingContext shardingContext) {
         System.out.println(DateUtil.getCurrentTimestamp() + JSONObject.toJSONString(shardingContext));
     }
 

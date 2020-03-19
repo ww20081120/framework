@@ -72,10 +72,16 @@ public class MsgDelaymsgEntity extends BaseEntity {
     @Column(name = "shard_info")
     private String shardInfo;
 
+    /**
+     * 
+     */
     public MsgDelaymsgEntity() {
     }
 
-    public MsgDelaymsgEntity(DelayMessage delayMessage) {
+    /**
+     * @param delayMessage
+     */
+    public MsgDelaymsgEntity(final DelayMessage delayMessage) {
         this.setId(delayMessage.getMessageId());
         this.setChannel(delayMessage.getChannel());
         if (delayMessage.getData() != null) {
@@ -85,15 +91,29 @@ public class MsgDelaymsgEntity extends BaseEntity {
         this.setDelaySeconds(delayMessage.getSeconds());
         this.setMemeryFlag(GlobalConstants.NO);
         this.setShardInfo(getShardMsg());
-        this.expireTime = new Date(delayMessage.getCurrentTime() + this.getDelaySeconds() * 1000);
+        this.expireTime = new Date(delayMessage.getCurrentTime() + this.getDelaySeconds() * GlobalConstants.SECONDS);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public DelayMessage toVo() {
         return new DelayMessage(this.id, this.channel,
             StringUtils.isNotEmpty(content) ? DataUtil.hexStr2Byte(content) : null, this.delaySeconds,
             this.createTime.getTime());
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public static String getShardMsg() {
         String shardInfo = PropertyHolder.getProjectName();
         try {
@@ -106,67 +126,179 @@ public class MsgDelaymsgEntity extends BaseEntity {
         return shardInfo;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    public void setId(final String id) {
         this.id = id;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getChannel() {
         return this.channel;
     }
 
-    public void setChannel(String channel) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param channel <br>
+     */
+    public void setChannel(final String channel) {
         this.channel = channel;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public java.util.Date getCreateTime() {
         return this.createTime;
     }
 
-    public void setCreateTime(java.util.Date createTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param createTime <br>
+     */
+    public void setCreateTime(final java.util.Date createTime) {
         this.createTime = createTime;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Integer getDelaySeconds() {
         return this.delaySeconds;
     }
 
-    public void setDelaySeconds(Integer delaySeconds) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param delaySeconds <br>
+     */
+    public void setDelaySeconds(final Integer delaySeconds) {
         this.delaySeconds = delaySeconds;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getMemeryFlag() {
         return this.memeryFlag;
     }
 
-    public void setMemeryFlag(String memeryFlag) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param memeryFlag <br>
+     */
+    public void setMemeryFlag(final String memeryFlag) {
         this.memeryFlag = memeryFlag;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getContent() {
         return this.content;
     }
 
-    public void setContent(String content) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param content <br>
+     */
+    public void setContent(final String content) {
         this.content = content;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public java.util.Date getExpireTime() {
         return this.expireTime;
     }
 
-    public void setExpireTime(java.util.Date expireTime) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param expireTime <br>
+     */
+    public void setExpireTime(final java.util.Date expireTime) {
         this.expireTime = expireTime;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getShardInfo() {
         return shardInfo;
     }
 
-    public void setShardInfo(String shardInfo) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param shardInfo <br>
+     */
+    public void setShardInfo(final String shardInfo) {
         this.shardInfo = shardInfo;
     }
 

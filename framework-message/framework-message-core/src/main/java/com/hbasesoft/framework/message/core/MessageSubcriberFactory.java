@@ -17,14 +17,22 @@ package com.hbasesoft.framework.message.core;
  */
 public interface MessageSubcriberFactory {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getName();
 
     /**
-     * Description: 注册消息订阅者（广播）<br>
+     * Description:注册消息订阅者（广播） <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
+     * @param broadcast
      * @param subscriber <br>
      */
     void registSubscriber(String channel, boolean broadcast, MessageSubscriber subscriber);

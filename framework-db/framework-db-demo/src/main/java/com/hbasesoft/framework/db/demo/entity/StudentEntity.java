@@ -22,8 +22,10 @@ import com.hbasesoft.framework.db.core.BaseEntity;
 @Entity(name = "T_STUDENT")
 public class StudentEntity extends BaseEntity {
 
+    /** name */
     public static final String NAME = "name";
 
+    /** age */
     public static final String AGE = "age";
 
     /**
@@ -38,55 +40,129 @@ public class StudentEntity extends BaseEntity {
     @Column(name = "ID")
     private String id;
 
+    /** name */
     @Column(name = "NAME")
     private String name;
 
+    /** age */
     @Column(name = "AGE")
     private int age;
 
+    /** score */
     @Transient
     private Integer score;
 
+    /** course name */
     @Transient
     private String courseName;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    public void setId(final String id) {
         this.id = id;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param name <br>
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param age <br>
+     */
+    public void setAge(final int age) {
         this.age = age;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Integer getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param score <br>
+     */
+    public void setScore(final Integer score) {
         this.score = score;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public String getCourseName() {
         return courseName;
     }
 
-    public void setCourseName(String courseName) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param courseName <br>
+     */
+    public void setCourseName(final String courseName) {
         this.courseName = courseName;
     }
 

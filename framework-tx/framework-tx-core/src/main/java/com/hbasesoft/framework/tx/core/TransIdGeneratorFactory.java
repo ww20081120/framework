@@ -17,7 +17,21 @@ package com.hbasesoft.framework.tx.core;
  */
 public interface TransIdGeneratorFactory {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String getTraceId();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param traceId <br>
+     */
     void setTraceId(String traceId);
 }

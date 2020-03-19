@@ -20,18 +20,80 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  */
 public interface TxStorage {
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     boolean containsClientInfo(String id);
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark
+     * @return <br>
+     */
     CheckInfo getCheckInfo(String id, String mark);
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo <br>
+     */
     void saveClientInfo(ClientInfo clientInfo);
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param checkInfo <br>
+     */
     void saveCheckInfo(CheckInfo checkInfo);
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param retryTimes
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
     PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize);
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
     void updateClientRetryTimes(String id);
 
+    /** 
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
     void delete(String id);
 
 }

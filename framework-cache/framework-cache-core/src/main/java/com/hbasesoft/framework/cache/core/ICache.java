@@ -21,6 +21,15 @@ import org.springframework.cache.support.SimpleValueWrapper;
  */
 public interface ICache extends Cache {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
     default ValueWrapper get(Object key) {
         return new SimpleValueWrapper(get(key, String.class));
     }
@@ -42,6 +51,7 @@ public interface ICache extends Cache {
      * @author 王伟<br>
      * @param clazz 数据类型
      * @param nodeName 节点名称
+     * @param <T> T
      * @return 缓存数据
      */
     <T> Map<String, T> getNode(String nodeName, Class<T> clazz);
@@ -51,26 +61,29 @@ public interface ICache extends Cache {
      * 
      * @author 王伟 <br>
      * @param nodeName <br>
+     * @param <T> T
      * @param node <br>
      */
     <T> void putNode(String nodeName, Map<String, T> node);
 
     /**
-     * Description: putNode<br>
+     * Description: <br>
      * 
-     * @author 王伟 <br>
-     * @param nodeName <br>
-     * @param seconds <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param nodeName 节点名称
+     * @param seconds 缓存秒数
+     * @param <T> T
      * @param node <br>
      */
     <T> void putNode(String nodeName, int seconds, Map<String, T> node);
 
     /**
-     * Description: removeNode<br>
+     * Description: <br>
      * 
-     * @author 王伟 <br>
+     * @author 王伟<br>
+     * @taskId <br>
      * @param nodeName <br>
-     * @return <br>
      */
     void removeNode(String nodeName);
 
@@ -80,6 +93,7 @@ public interface ICache extends Cache {
      * @author 王伟 <br>
      * @param nodeName <br>
      * @param key <br>
+     * @param <T> T
      * @return <br>
      */
     <T> T get(String nodeName, String key);
@@ -91,6 +105,7 @@ public interface ICache extends Cache {
      * @param clazz 数据类型
      * @param nodeName 节点名称
      * @param key 缓存的key
+     * @param <T> T
      * @return 返回类型
      */
     @Deprecated
@@ -104,6 +119,7 @@ public interface ICache extends Cache {
      * @author 王伟 <br>
      * @param nodeName <br>
      * @param key <br>
+     * @param <T> T
      * @param t <br>
      */
     <T> void put(String nodeName, String key, T t);
@@ -115,6 +131,7 @@ public interface ICache extends Cache {
      * @param nodeName <br>
      * @param seconds <br>
      * @param key <br>
+     * @param <T> T
      * @param t <br>
      */
     <T> void put(String nodeName, int seconds, String key, T t);

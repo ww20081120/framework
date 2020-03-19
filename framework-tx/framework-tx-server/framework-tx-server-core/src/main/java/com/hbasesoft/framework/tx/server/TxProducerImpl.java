@@ -26,6 +26,7 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 @Service
 public class TxProducerImpl implements TxProducer {
 
+    /** txStorage */
     @Resource
     private TxStorage txStorage;
 
@@ -37,7 +38,7 @@ public class TxProducerImpl implements TxProducer {
      * @param clientInfo <br>
      */
     @Override
-    public boolean registClient(ClientInfo clientInfo) {
+    public boolean registClient(final ClientInfo clientInfo) {
         if (!txStorage.containsClientInfo(clientInfo.getId())) {
             txStorage.saveClientInfo(clientInfo);
             return true;
@@ -53,7 +54,7 @@ public class TxProducerImpl implements TxProducer {
      * @param id <br>
      */
     @Override
-    public void removeClient(String id) {
+    public void removeClient(final String id) {
         txStorage.delete(id);
     }
 
@@ -67,7 +68,7 @@ public class TxProducerImpl implements TxProducer {
      * @return <br>
      */
     @Override
-    public CheckInfo check(String id, String mark) {
+    public CheckInfo check(final String id, final String mark) {
         return txStorage.getCheckInfo(id, mark);
     }
 
@@ -79,7 +80,7 @@ public class TxProducerImpl implements TxProducer {
      * @param checkInfo <br>
      */
     @Override
-    public void saveResult(CheckInfo checkInfo) {
+    public void saveResult(final CheckInfo checkInfo) {
         txStorage.saveCheckInfo(checkInfo);
     }
 
@@ -92,7 +93,7 @@ public class TxProducerImpl implements TxProducer {
      * @return <br>
      */
     @Override
-    public boolean containClient(String id) {
+    public boolean containClient(final String id) {
         return txStorage.containsClientInfo(id);
     }
 }

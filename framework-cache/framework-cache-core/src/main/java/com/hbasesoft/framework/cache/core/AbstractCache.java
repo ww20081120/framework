@@ -33,12 +33,12 @@ public abstract class AbstractCache implements ICache {
      * @return <br>
      */
     @Override
-    public <T> T get(Object key, Class<T> type) {
+    public <T> T get(final Object key, final Class<T> type) {
         byte[] datas = get(key.toString().getBytes());
         return getValue(datas);
     }
 
-    private <T> T getValue(byte[] datas) {
+    private <T> T getValue(final byte[] datas) {
         try {
             CacheObject cacheObj = SerializationUtil.unserial(CacheObject.class, datas);
             if (cacheObj != null) {
@@ -51,7 +51,7 @@ public abstract class AbstractCache implements ICache {
         return null;
     }
 
-    private byte[] getData(Object value) {
+    private byte[] getData(final Object value) {
         try {
             return SerializationUtil.serial(new CacheObject(value));
         }
@@ -60,7 +60,7 @@ public abstract class AbstractCache implements ICache {
         }
     }
 
-    private byte[] getData(int seconds, Object value) {
+    private byte[] getData(final int seconds, final Object value) {
         try {
             return SerializationUtil.serial(new CacheObject(seconds, value));
         }
@@ -80,7 +80,7 @@ public abstract class AbstractCache implements ICache {
      * @param value <br>
      */
     @Override
-    public void put(Object key, Object value) {
+    public void put(final Object key, final Object value) {
         byte[] keys = key.toString().getBytes();
         put(keys, getData(value));
     }
@@ -95,7 +95,7 @@ public abstract class AbstractCache implements ICache {
      * @param key <br>
      */
     @Override
-    public void evict(Object key) {
+    public void evict(final Object key) {
         evict(key.toString().getBytes());
     }
 
@@ -111,7 +111,7 @@ public abstract class AbstractCache implements ICache {
      * @return <br>
      */
     @Override
-    public <T> Map<String, T> getNode(String nodeName, Class<T> clazz) {
+    public <T> Map<String, T> getNode(final String nodeName, final Class<T> clazz) {
         Map<byte[], byte[]> dataMap = getNode(nodeName.getBytes());
         Map<String, T> map = null;
         if (MapUtils.isNotEmpty(dataMap)) {
@@ -134,7 +134,7 @@ public abstract class AbstractCache implements ICache {
      * @param node <br>
      */
     @Override
-    public <T> void putNode(String nodeName, Map<String, T> node) {
+    public <T> void putNode(final String nodeName, final Map<String, T> node) {
         Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
         for (Entry<String, T> entry : node.entrySet()) {
             byte[] value = getData(entry.getValue());
@@ -150,12 +150,12 @@ public abstract class AbstractCache implements ICache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param nodeName
-     * @param clazz
-     * @return <br>
+     * @param nodeName 节点名称
+     * @param seconds 超时秒数
+     * @param node 节点数据<br>
      */
     @Override
-    public <T> void putNode(String nodeName, int seconds, Map<String, T> node) {
+    public <T> void putNode(final String nodeName, final int seconds, final Map<String, T> node) {
         Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
         for (Entry<String, T> entry : node.entrySet()) {
             byte[] value = getData(seconds, entry.getValue());
@@ -172,11 +172,10 @@ public abstract class AbstractCache implements ICache {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param nodeName
-     * @return <br>
+     * @param nodeName <br>
      */
     @Override
-    public void removeNode(String nodeName) {
+    public void removeNode(final String nodeName) {
         removeNode(nodeName.getBytes());
     }
 
@@ -189,11 +188,10 @@ public abstract class AbstractCache implements ICache {
      * @taskId <br>
      * @param nodeName
      * @param key
-     * @param clazz
      * @return <br>
      */
     @Override
-    public <T> T get(String nodeName, String key) {
+    public <T> T get(final String nodeName, final String key) {
         byte[] datas = get(nodeName.getBytes(), key.getBytes());
         return getValue(datas);
     }
@@ -210,7 +208,7 @@ public abstract class AbstractCache implements ICache {
      * @param t <br>
      */
     @Override
-    public <T> void put(String nodeName, String key, T t) {
+    public <T> void put(final String nodeName, final String key, final T t) {
         put(nodeName.getBytes(), 0, key.getBytes(), getData(t));
     }
 
@@ -225,7 +223,7 @@ public abstract class AbstractCache implements ICache {
      * @param t <br>
      */
     @Override
-    public <T> void put(String nodeName, int seconds, String key, T t) {
+    public <T> void put(final String nodeName, final int seconds, final String key, final T t) {
         put(nodeName.getBytes(), seconds, key.getBytes(), getData(seconds, t));
     }
 
@@ -240,7 +238,7 @@ public abstract class AbstractCache implements ICache {
      * @param key <br>
      */
     @Override
-    public void evict(String nodeName, String key) {
+    public void evict(final String nodeName, final String key) {
         evict(nodeName.getBytes(), key.getBytes());
     }
 
@@ -256,7 +254,7 @@ public abstract class AbstractCache implements ICache {
      * @return <br>
      */
     @Override
-    public <T> T get(Object key, Callable<T> valueLoader) {
+    public <T> T get(final Object key, final Callable<T> valueLoader) {
         T result = get(CacheConstant.DEFAULT_CACHE_DIR, key.toString());
         if (result == null) {
             try {

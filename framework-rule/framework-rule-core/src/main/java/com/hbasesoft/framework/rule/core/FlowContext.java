@@ -31,43 +31,102 @@ public class FlowContext implements Serializable {
      */
     private static final long serialVersionUID = 7704217056875708410L;
 
+    /** flowConfig */
     private FlowConfig flowConfig;
 
+    /** extendUtils */
     private Map<String, Object> extendUtils;
 
+    /** paramMap */
     private Map<String, Object> paramMap;
 
-    public FlowContext(FlowConfig flowConfig) {
+    /**
+     * @param flowConfig
+     */
+    public FlowContext(final FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
         this.paramMap = new HashMap<String, Object>();
         this.extendUtils = new HashMap<String, Object>();
     }
 
-    public void setAttribute(String key, Object value) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value <br>
+     */
+    public void setAttribute(final String key, final Object value) {
         this.paramMap.put(key, value);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param <T> T
+     * @return <br>
+     */
     @SuppressWarnings("unchecked")
-    public <T> T getAttribute(String key) {
+    public <T> T getAttribute(final String key) {
         return (T) this.paramMap.get(key);
     }
 
-    public void setFlowConfig(FlowConfig flowConfig) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowConfig <br>
+     */
+    public void setFlowConfig(final FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
     }
 
-    public void addExtendUtil(String utilName, Object util) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param utilName
+     * @param util <br>
+     */
+    public void addExtendUtil(final String utilName, final Object util) {
         this.extendUtils.put(utilName, util);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public FlowConfig getFlowConfig() {
         return this.flowConfig;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Map<String, Object> getParamMap() {
         return this.paramMap;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     public Map<String, Object> getExtendUtils() {
         return this.extendUtils;
     }

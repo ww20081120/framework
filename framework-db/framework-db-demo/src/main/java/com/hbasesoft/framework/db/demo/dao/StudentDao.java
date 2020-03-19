@@ -26,15 +26,47 @@ import com.hbasesoft.framework.db.hibernate.IGenericBaseDao;
 @Dao
 public interface StudentDao extends IGenericBaseDao {
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
     void createTable();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param courseName
+     * @return <br>
+     */
     @Sql("select count(1) from t_student_course sc, t_course c "
         + "where sc.course_id = c.id and sc.score >= 60 and c.course_name = :courseName")
     int countCoursePass(@Param("courseName") String courseName);
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     @Sql("select count(1) from t_student")
     int countStudentSize();
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param studentEntity
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
     @Sql(bean = StudentEntity.class)
     List<StudentEntity> queryStudentCourse(@Param("entity") StudentEntity studentEntity,
         @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);

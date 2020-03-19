@@ -26,12 +26,30 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Target(ElementType.METHOD)
 public @interface Tx {
 
-    /** 名称 */
+    /**
+     * Description: 名称<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String name() default GlobalConstants.BLANK;
 
-    /** 最大重试几次 */
+    /**
+     * Description: 最大重试几次<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     int maxRetryTimes() default 5;
 
-    /** 重试的配置，单位为分钟 */
+    /**
+     * Description: 重试的配置，单位为分钟<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String retryConfigs() default "5,10,30,60,120,720";
 }

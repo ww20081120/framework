@@ -58,6 +58,12 @@ public final class BeanUtil {
      */
     private static final String SUB_PACKAGE_SCREEN_SUFFIX_RE = ".\\*"; // 替换使用
 
+    /** CLAZZ_LENGTH */
+    private static final int CLAZZ_LENGTH = ".class".length();
+
+    /** MAX_CHAR */
+    private static final int MAX_CHAR = 32;
+
     /**
      * logger
      */
@@ -69,7 +75,7 @@ public final class BeanUtil {
      * @param method <br>
      * @return <br>
      */
-    public static boolean isAbstract(Method method) {
+    public static boolean isAbstract(final Method method) {
         int mod = method.getModifiers();
         return Modifier.isAbstract(mod);
     }
@@ -84,7 +90,7 @@ public final class BeanUtil {
      * @throws NotFoundException 如果类或者方法不存在 <br>
      * @throws UtilException 如果最终编译的class文件不包含局部变量表信息 <br>
      */
-    public static String[] getMethodParamNames(Class<?> clazz, String method, Class<?>... paramTypes)
+    public static String[] getMethodParamNames(final Class<?> clazz, final String method, final Class<?>... paramTypes)
         throws NotFoundException, UtilException {
 
         ClassPool pool = ClassPool.getDefault();
@@ -105,7 +111,7 @@ public final class BeanUtil {
      * @throws NotFoundException 如果类或者方法不存在 <br>
      * @throws UtilException <br>
      */
-    public static String[] getMethodParamNames(Method method) throws NotFoundException, UtilException {
+    public static String[] getMethodParamNames(final Method method) throws NotFoundException, UtilException {
         return getMethodParamNames(method.getDeclaringClass(), method.getName(), method.getParameterTypes());
     }
 
@@ -117,7 +123,7 @@ public final class BeanUtil {
      * @throws NotFoundException <br>
      * @throws UtilException 如果最终编译的class文件不包含局部变量表信息 <br>
      */
-    protected static String[] getMethodParamNames(CtMethod cm) throws NotFoundException, UtilException {
+    protected static String[] getMethodParamNames(final CtMethod cm) throws NotFoundException, UtilException {
         CtClass cc = cm.getDeclaringClass();
         MethodInfo methodInfo = cm.getMethodInfo();
         CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
@@ -142,7 +148,7 @@ public final class BeanUtil {
      * @param method <br>
      * @return <br>
      */
-    public static String getMethodSignature(Method method) {
+    public static String getMethodSignature(final Method method) {
         StringBuilder sbuf = new StringBuilder();
         sbuf.append(method.getName());
         sbuf.append('(');
@@ -159,14 +165,16 @@ public final class BeanUtil {
     /**
      * 从包package中获取所有的Class
      * 
-     * @param pack <br>
+     * @param pk <br>
      * @return <br>
      * @throws UtilException <br>
      */
-    public static Set<Class<?>> getClasses(String pack) throws UtilException {
+    public static Set<Class<?>> getClasses(final String pk) throws UtilException {
         // 是否循环迭代
         boolean recursive = false;
         String[] packArr = {};
+
+        String pack = pk;
 
         if (pack.lastIndexOf(SUB_PACKAGE_SCREEN_SUFFIX) != -1) {
             packArr = pack.split(SUB_PACKAGE_SCREEN_SUFFIX_RE);
@@ -231,8 +239,8 @@ public final class BeanUtil {
      * @param recursive <br>
      * @param classes <br>
      */
-    private static void findAndAddClassesInPackageByFile(String packageName, String[] packArr, String packagePath,
-        final boolean recursive, Set<Class<?>> classes) {
+    private static void findAndAddClassesInPackageByFile(final String packageName, final String[] packArr,
+        final String packagePath, final boolean recursive, final Set<Class<?>> classes) {
         // 获取此包的目录 建立一个File
         File dir = new File(packagePath);
         // 如果不存在或者 也不是目录就直接返回
@@ -243,7 +251,7 @@ public final class BeanUtil {
         // 如果存在 就获取包下的所有文件 包括目录
         File[] dirfiles = dir.listFiles(new FileFilter() {
             // 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
-            public boolean accept(File file) {
+            public boolean accept(final File file) {
                 return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
             }
         });
@@ -256,7 +264,7 @@ public final class BeanUtil {
             }
             else {
                 // 如果是java类文件 去掉后面的.class 只留下类名
-                String className = file.getName().substring(0, file.getName().length() - 6);
+                String className = file.getName().substring(0, file.getName().length() - CLAZZ_LENGTH);
                 try {
                     // 添加到集合中去
                     // classes.add(Class.forName(packageName + '.' +
@@ -296,15 +304,17 @@ public final class BeanUtil {
      * 
      * @author cmh <br>
      * @version 2014-2-16 下午7:51:05 <br>
-     * @param packageName <br>
+     * @param pn <br>
      * @param url <br>
      * @param packArr <br>
      * @param packageDirName <br>
      * @param recursive <br>
      * @param classes <br>
      */
-    private static void findAndAddClassesInPackageByJarFile(String packageName, String[] packArr, URL url,
-        String packageDirName, final boolean recursive, Set<Class<?>> classes) {
+    private static void findAndAddClassesInPackageByJarFile(final String pn, final String[] packArr, final URL url,
+        final String packageDirName, final boolean recursive, final Set<Class<?>> classes) {
+
+        String packageName = pn;
         // 如果是jar包文件
         // 定义一个JarFile
         logger.debug("------------------------ scan type jar ----------------------");
@@ -337,7 +347,7 @@ public final class BeanUtil {
                         // 如果是一个.class文件 而且不是目录
                         if (name.endsWith(".class") && !entry.isDirectory()) {
                             // 去掉后面的".class" 获取真正的类名
-                            String className = name.substring(packageName.length() + 1, name.length() - 6);
+                            String className = name.substring(packageName.length() + 1, name.length() - CLAZZ_LENGTH);
                             try {
                                 // 添加到classes
 
@@ -378,7 +388,7 @@ public final class BeanUtil {
      * @param s <br>
      * @return <br>
      */
-    public static String toUnderlineName(String s) {
+    public static String toUnderlineName(final String s) {
         if (s == null) {
             return null;
         }
@@ -417,15 +427,15 @@ public final class BeanUtil {
      * 
      * @author yang.zhipeng <br>
      * @taskId <br>
-     * @param s <br>
+     * @param str <br>
      * @return <br>
      */
-    public static String toCamelCase(String s) {
-        if (s == null) {
+    public static String toCamelCase(final String str) {
+        if (str == null) {
             return null;
         }
 
-        s = s.toLowerCase();
+        String s = str.toLowerCase();
 
         StringBuilder sb = new StringBuilder(s.length());
         boolean upperCase = false;
@@ -447,12 +457,20 @@ public final class BeanUtil {
         return sb.toString();
     }
 
-    public static String camelStr2underLine(String camelStr) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param camelStr
+     * @return <br>
+     */
+    public static String camelStr2underLine(final String camelStr) {
         StringBuilder sb = new StringBuilder(camelStr);
         for (int i = 0; i < sb.length(); i++) {
             char c = sb.charAt(i);
             if (c >= 'A' && c <= 'Z') {
-                sb.replace(i, i + 1, Character.toString((char) (c + 32)));
+                sb.replace(i, i + 1, Character.toString((char) (c + MAX_CHAR)));
                 sb.insert(i, GlobalConstants.UNDERLINE);
                 i++;
             }
@@ -465,14 +483,14 @@ public final class BeanUtil {
      * 
      * @author yang.zhipeng <br>
      * @taskId <br>
-     * @param s <br>
+     * @param str <br>
      * @return <br>
      */
-    public static String toCapitalizeCamelCase(String s) {
-        if (s == null) {
+    public static String toCapitalizeCamelCase(final String str) {
+        if (str == null) {
             return null;
         }
-        s = toCamelCase(s);
+        String s = toCamelCase(str);
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
@@ -484,7 +502,7 @@ public final class BeanUtil {
      * @param clazz <br>
      * @return <br>
      */
-    public static boolean isSimpleValueType(Class<?> clazz) {
+    public static boolean isSimpleValueType(final Class<?> clazz) {
         return BeanUtils.isSimpleValueType(clazz);
     }
 
@@ -496,7 +514,7 @@ public final class BeanUtil {
      * @param clazz <br>
      * @return <br>
      */
-    public static boolean isSimpleProperty(Class<?> clazz) {
+    public static boolean isSimpleProperty(final Class<?> clazz) {
         return BeanUtils.isSimpleProperty(clazz);
     }
 }

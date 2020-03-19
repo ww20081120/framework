@@ -40,8 +40,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class TransactionManagerHolder {
 
+    /** transaction */
     private static Map<String, PlatformTransactionManager> transactionManagerHolder = new ConcurrentHashMap<>();
 
+    /** session factory */
     private static Map<String, SessionFactory> sessionFactoryHolder = new ConcurrentHashMap<>();
 
     /**

@@ -29,14 +29,30 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
 @RestController
 public class TestConsumer {
 
+    /** Number */
+    private static final int NUM_3 = 3;
+
+    /** Number */
+    private static final int NUM_9 = 9;
+
+    /** fe */
     @Resource
     private FeginClient3Consumer feClient3Consumer;
 
+    /** index */
     private int i = 0;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping
     @Tx
-    public synchronized String test(@RequestParam("id") String id) {
+    public synchronized String test(final @RequestParam("id") String id) {
         i++;
 
         String value1 = TxInvokerProxy.invoke("client4", () -> {
@@ -44,7 +60,7 @@ public class TestConsumer {
         });
         System.out.println(value1);
 
-        if (new Random().nextInt(9) == 3) {
+        if (new Random().nextInt(NUM_9) == NUM_3) {
             throw new RuntimeException();
         }
         System.out.println(i + ":" + id);

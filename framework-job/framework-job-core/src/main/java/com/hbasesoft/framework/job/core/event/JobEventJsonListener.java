@@ -12,32 +12,47 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 public class JobEventJsonListener extends JobEventJsonIdentity implements JobEventListener {
 
-	private Logger logger = new Logger(JobEventJsonListener.class);
+    /** logger */
+    private Logger logger = new Logger(JobEventJsonListener.class);
 
-	@Override
-	public void listen(JobExecutionEvent jobExecutionEvent) {
-		// 开始执行时间
-		long beginTime = System.currentTimeMillis();
-		TransManager manager = TransManager.getInstance();
-		// id
-		String stackId = CommonUtil.getTransactionID();
-		manager.push(stackId, beginTime);
-		MDC.put("stackId", TransManager.getInstance().getStackId());
-		logger.debug(JSON.toJSONString(jobExecutionEvent));
-		MDC.clear();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param jobExecutionEvent <br>
+     */
+    @Override
+    public void listen(final JobExecutionEvent jobExecutionEvent) {
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+        TransManager manager = TransManager.getInstance();
+        // id
+        String stackId = CommonUtil.getTransactionID();
+        manager.push(stackId, beginTime);
+        MDC.put("stackId", TransManager.getInstance().getStackId());
+        logger.debug(JSON.toJSONString(jobExecutionEvent));
+        MDC.clear();
+    }
 
-	@Override
-	public void listen(JobStatusTraceEvent jobStatusTraceEvent) {
-		// 开始执行时间
-		long beginTime = System.currentTimeMillis();
-		TransManager manager = TransManager.getInstance();
-		// id
-		String stackId = CommonUtil.getTransactionID();
-		manager.push(stackId, beginTime);
-		MDC.put("stackId", TransManager.getInstance().getStackId());
-		logger.debug(JSON.toJSONString(jobStatusTraceEvent));
-		MDC.clear();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param jobStatusTraceEvent <br>
+     */
+    @Override
+    public void listen(final JobStatusTraceEvent jobStatusTraceEvent) {
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+        TransManager manager = TransManager.getInstance();
+        // id
+        String stackId = CommonUtil.getTransactionID();
+        manager.push(stackId, beginTime);
+        MDC.put("stackId", TransManager.getInstance().getStackId());
+        logger.debug(JSON.toJSONString(jobStatusTraceEvent));
+        MDC.clear();
+    }
 
 }

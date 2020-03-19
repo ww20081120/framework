@@ -40,12 +40,16 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  */
 public final class FlowHelper {
 
+    /** serviceLoader */
     private static ServiceLoader<FlowLoader> serviceLoader;
 
+    /** interceptors */
     private static List<FlowComponentInterceptor> interceptors;
 
+    /** reverseInterceptors */
     private static List<FlowComponentInterceptor> reverseInterceptors;
 
+    /** processMethod */
     private static Method processMethod;
 
     /**
@@ -56,9 +60,11 @@ public final class FlowHelper {
      * @param bean
      * @param flowConfig
      * @param throwable
+     * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> int flowStart(T bean, JSONObject flowConfig, boolean throwable) {
+    public static <T extends Serializable> int flowStart(final T bean, final JSONObject flowConfig,
+        final boolean throwable) {
 
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
 
@@ -94,9 +100,10 @@ public final class FlowHelper {
      * @param bean
      * @param flowName
      * @param throwable
+     * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> int flowStart(T bean, String flowName, boolean throwable) {
+    public static <T extends Serializable> int flowStart(final T bean, final String flowName, final boolean throwable) {
         Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
 
         int result = ErrorCodeDef.SUCCESS;
@@ -120,16 +127,47 @@ public final class FlowHelper {
         return result;
     }
 
-    public static <T extends Serializable> int flowStart(T bean, String flowName) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean
+     * @param flowName
+     * @param <T> T
+     * @return <br>
+     */
+    public static <T extends Serializable> int flowStart(final T bean, final String flowName) {
         return flowStart(bean, flowName, false);
     }
 
-    public static <T extends Serializable> int flowStart(T bean, JSONObject flowConfig) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param bean
+     * @param flowConfig
+     * @param <T> T
+     * @return <br>
+     */
+    public static <T extends Serializable> int flowStart(final T bean, final JSONObject flowConfig) {
         return flowStart(bean, flowConfig, false);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowBean
+     * @param flowContext
+     * @param <T> T
+     * @throws Exception <br>
+     */
     @SuppressWarnings("unchecked")
-    public static <T extends Serializable> void execute(T flowBean, FlowContext flowContext) throws Exception {
+    public static <T extends Serializable> void execute(final T flowBean, final FlowContext flowContext)
+        throws Exception {
         FlowConfig flowConfig = flowContext.getFlowConfig();
         Assert.notNull(flowConfig, ErrorCodeDef.FLOW_COMPONENT_NOT_FOUND);
 
@@ -202,7 +240,15 @@ public final class FlowHelper {
         }
     }
 
-    private static FlowConfig match(String flowName) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param flowName
+     * @return <br>
+     */
+    private static FlowConfig match(final String flowName) {
         if (serviceLoader == null) {
             serviceLoader = ServiceLoader.load(FlowLoader.class);
         }
@@ -217,11 +263,20 @@ public final class FlowHelper {
         return flowConfig;
     }
 
-    private static boolean before(Serializable flowBean, FlowContext flowContext) {
-        List<FlowComponentInterceptor> interceptors = loadInterceptor(false);
-        if (CollectionUtils.isNotEmpty(interceptors)) {
-            for (FlowComponentInterceptor interceptor : interceptors) {
-                if (!interceptor.before(flowBean, flowContext)) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fb
+     * @param fc
+     * @return <br>
+     */
+    private static boolean before(final Serializable fb, final FlowContext fc) {
+        List<FlowComponentInterceptor> its = loadInterceptor(false);
+        if (CollectionUtils.isNotEmpty(its)) {
+            for (FlowComponentInterceptor interceptor : its) {
+                if (!interceptor.before(fb, fc)) {
                     return false;
                 }
             }
@@ -229,25 +284,50 @@ public final class FlowHelper {
         return true;
     }
 
-    private static void after(Serializable flowBean, FlowContext flowContext) {
-        List<FlowComponentInterceptor> interceptors = loadInterceptor(true);
-        if (CollectionUtils.isNotEmpty(interceptors)) {
-            for (FlowComponentInterceptor interceptor : interceptors) {
-                interceptor.after(flowBean, flowContext);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fb
+     * @param fc <br>
+     */
+    private static void after(final Serializable fb, final FlowContext fc) {
+        List<FlowComponentInterceptor> its = loadInterceptor(true);
+        if (CollectionUtils.isNotEmpty(its)) {
+            for (FlowComponentInterceptor interceptor : its) {
+                interceptor.after(fb, fc);
             }
         }
     }
 
-    private static void error(Exception e, Serializable flowBean, FlowContext flowContext) {
-        List<FlowComponentInterceptor> interceptors = loadInterceptor(true);
-        if (CollectionUtils.isNotEmpty(interceptors)) {
-            for (FlowComponentInterceptor interceptor : interceptors) {
-                interceptor.error(e, flowBean, flowContext);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param e
+     * @param fb
+     * @param fc <br>
+     */
+    private static void error(final Exception e, final Serializable fb, final FlowContext fc) {
+        List<FlowComponentInterceptor> its = loadInterceptor(true);
+        if (CollectionUtils.isNotEmpty(its)) {
+            for (FlowComponentInterceptor interceptor : its) {
+                interceptor.error(e, fb, fc);
             }
         }
     }
 
-    private static List<FlowComponentInterceptor> loadInterceptor(boolean reverse) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param reverse
+     * @return <br>
+     */
+    private static List<FlowComponentInterceptor> loadInterceptor(final boolean reverse) {
         if (CollectionUtils.isEmpty(interceptors)) {
             Map<String, FlowComponentInterceptor> interceptorMap = ContextHolder.getContext()
                 .getBeansOfType(FlowComponentInterceptor.class);
@@ -266,6 +346,15 @@ public final class FlowHelper {
         return reverse ? reverseInterceptors : interceptors;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return method
+     * @throws NoSuchMethodException
+     * @throws SecurityException <br>
+     */
     private static Method getMethod() throws NoSuchMethodException, SecurityException {
         if (processMethod == null) {
             processMethod = FlowComponent.class.getDeclaredMethod("process", Object.class, FlowContext.class);

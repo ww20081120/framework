@@ -30,12 +30,12 @@ public class Child03Component implements FlowComponent<FlowBean> {
      * @author 王伟<br>
      * @taskId <br>
      * @param flowBean
-     * @param paramMap
-     * @return
+     * @param flowContext
+     * @return b
      * @throws Exception <br>
      */
     @Override
-    public boolean process(FlowBean flowBean, FlowContext flowContext) throws Exception {
+    public boolean process(final FlowBean flowBean, final FlowContext flowContext) throws Exception {
         System.out.println("----------Child03Component------");
         return true;
     }

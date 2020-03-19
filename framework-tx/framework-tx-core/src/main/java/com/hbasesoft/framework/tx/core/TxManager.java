@@ -29,8 +29,10 @@ import com.hbasesoft.framework.common.utils.Assert;
  */
 public final class TxManager {
 
+    /** lock */
     private static final Object LOCK = new Object();
 
+    /** retry flag */
     private static ThreadLocal<String> retryFlag = new ThreadLocal<>();
 
     /**
@@ -59,7 +61,14 @@ public final class TxManager {
         return getTransIdGeneratorFactory().getTraceId();
     }
 
-    public static void setTraceId(String traceId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param traceId <br>
+     */
+    public static void setTraceId(final String traceId) {
         getTransIdGeneratorFactory().setTraceId(traceId);
     }
 
@@ -68,6 +77,7 @@ public final class TxManager {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param id
      * @param mark
      * @param context
      * @param args
@@ -75,8 +85,8 @@ public final class TxManager {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException <br>
      */
-    public static void execute(String id, String mark, Map<String, String> context, Object[] args)
-        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static void execute(final String id, final String mark, final Map<String, String> context,
+        final Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         try {
             retryFlag.set(id);
             setTraceId(id);
@@ -104,7 +114,7 @@ public final class TxManager {
      * @param obj
      * @param method <br>
      */
-    public static void regist(String mark, Object obj, Method method) {
+    public static void regist(final String mark, final Object obj, final Method method) {
         proxyObject.put(mark, obj);
         proxyMethod.put(mark, method);
     }
@@ -117,7 +127,7 @@ public final class TxManager {
      * @param method
      * @return <br>
      */
-    public static String getMarker(Method method) {
+    public static String getMarker(final Method method) {
         StringBuilder sb = new StringBuilder();
         sb.append(method.getDeclaringClass().getName()).append('.').append(method.getName()).append('(');
         Class<?>[] types = method.getParameterTypes();

@@ -21,32 +21,42 @@ import java.util.Map;
 public interface MessageSubscriber {
 
     /**
-     * Description: 接收到消息 <br>
-     *
-     * @param data <br>
+     * Description:接收到消息 <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param channel
+     * @param data <br>
      */
     void onMessage(String channel, byte[] data);
 
     /**
      * Description: 开始订阅<br>
-     *
-     * @param subscribeChannels <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param channel
+     * @param subscribeChannels <br>
      */
     void onSubscribe(String channel, int subscribeChannels);
 
     /**
-     * Description: 取消订阅<br>
-     *
-     * @param subscribedChannels <br>
+     * Description:取消订阅 <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param channel
+     * @param subscribedChannels <br>
      */
     void onUnsubscribe(String channel, int subscribedChannels);
 
+    /**
+     * Description: subscriberSetting<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     default Map<String, Object> subscriberSetting() {
         return new HashMap<>();
     }

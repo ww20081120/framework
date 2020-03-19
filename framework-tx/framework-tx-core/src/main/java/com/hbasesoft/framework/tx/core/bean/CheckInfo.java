@@ -33,13 +33,20 @@ public class CheckInfo implements Serializable {
      */
     private static final long serialVersionUID = -2786923426306997256L;
 
+    /** id */
     private String id;
 
+    /** mark */
     private String mark;
 
+    /** result */
     private byte[] result;
 
-    public CheckInfo(String id, String mark) {
+    /**
+     * @param id
+     * @param mark
+     */
+    public CheckInfo(final String id, final String mark) {
         this.id = id;
         this.mark = mark;
     }

@@ -28,9 +28,33 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Target(ElementType.METHOD)
 public @interface RmCache {
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String[] node();
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     String key() default GlobalConstants.BLANK;
 
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
     boolean clean() default false;
 }

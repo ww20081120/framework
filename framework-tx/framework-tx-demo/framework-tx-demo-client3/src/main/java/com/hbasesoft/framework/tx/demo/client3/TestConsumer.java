@@ -24,12 +24,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestConsumer {
 
+    /** Number */
+    private static final int NUM_7 = 7;
+
+    /** Number */
+    private static final int NUM_10 = 10;
+
+    /** index */
     private int i = 0;
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
     @GetMapping
-    public synchronized String test(@RequestParam("id") String id) {
+    public synchronized String test(final @RequestParam("id") String id) {
         i++;
-        if (new Random().nextInt(10) == 7) {
+        if (new Random().nextInt(NUM_10) == NUM_7) {
             throw new RuntimeException();
         }
         System.out.println(i + ":" + id);

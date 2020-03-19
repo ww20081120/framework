@@ -16,5 +16,14 @@ package com.hbasesoft.framework.cache.demo.service;
  * @see com.hbasesoft.test.cache <br>
  */
 public interface TestService {
+    
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
     String getTestContent(String key);
 }

@@ -10,14 +10,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.Thumbnails.Builder;
-
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.Thumbnails.Builder;
 
 /**
  * <Description> <br>
@@ -32,6 +31,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ImageUtil {
 
+    /** DEFAULT_QUALITY */
+    private static final float DEFAULT_QUALITY = 0.25f;
+
+    /** DEFAULT_HEIGHT */
+    private static final int DEFAULT_HEIGHT = 100;
+
     /**
      * Description: 缩放图片<br>
      * 
@@ -41,14 +46,15 @@ public final class ImageUtil {
      * @param height <br>
      * @throws UtilException <br>
      */
-    public static void pictureZoom(String source, String dist, int height) throws UtilException {
+    public static void pictureZoom(final String source, final String dist, final int height) throws UtilException {
+        String tempDist = dist;
         try {
             Builder<BufferedImage> file = Thumbnails.of(cutByShort(source));
             if (source.toLowerCase().indexOf("jpg") == -1 || source.toLowerCase().indexOf("jpeg") == -1) {
                 file.outputFormat("jpg");
-                dist = dist.substring(0, dist.lastIndexOf("."));
+                tempDist = dist.substring(0, dist.lastIndexOf("."));
             }
-            file.outputQuality(0.25f).height(height).toFile(dist);
+            file.outputQuality(DEFAULT_QUALITY).height(height).toFile(tempDist);
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.IMAGE_ZOOM_10020, e);
@@ -63,31 +69,30 @@ public final class ImageUtil {
      * @param dist <br>
      * @throws UtilException <br>
      */
-    public static void pictureZoom(String source, String dist) throws UtilException {
-        pictureZoom(source, dist, 100);
+    public static void pictureZoom(final String source, final String dist) throws UtilException {
+        pictureZoom(source, dist, DEFAULT_HEIGHT);
     }
-    
+
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param source <br>
      * @return <br>
      * @throws UtilException <br>
      */
-    private static BufferedImage cutByShort(String source) throws UtilException {
-        
+    private static BufferedImage cutByShort(final String source) throws UtilException {
+
         try {
             BufferedImage src = ImageIO.read(new File(source));
             int width = src.getWidth();
             int height = src.getHeight();
             int size = width > height ? height : width;
-            BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);  
-            Graphics g = dest.getGraphics();  
-            g.drawImage(src, 0, 0, size, size, 0, 0, size, size, null);  
-            
+            BufferedImage dest = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+            Graphics g = dest.getGraphics();
+            g.drawImage(src, 0, 0, size, size, 0, 0, size, size, null);
+
             return dest;
         }
         catch (IOException e) {

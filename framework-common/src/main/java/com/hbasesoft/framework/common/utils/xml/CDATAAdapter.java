@@ -21,8 +21,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CDATAAdapter extends XmlAdapter<String, String> {
 
+    /** CDATA_END */
     private static final String CDATA_END = "]]>";
 
+    /** CDATA_BEGIN */
     private static final String CDATA_BEGIN = "<![CDATA[";
 
     /**
@@ -35,7 +37,7 @@ public class CDATAAdapter extends XmlAdapter<String, String> {
      * @throws Exception <br>
      */
     @Override
-    public String unmarshal(String v) throws Exception {
+    public String unmarshal(final String v) throws Exception {
         return StringUtils.isNotEmpty(v) && v.startsWith(CDATA_BEGIN) && v.endsWith(CDATA_END)
             ? v.substring(CDATA_BEGIN.length(), v.length() - CDATA_END.length())
             : v;
@@ -51,7 +53,7 @@ public class CDATAAdapter extends XmlAdapter<String, String> {
      * @throws Exception <br>
      */
     @Override
-    public String marshal(String v) throws Exception {
+    public String marshal(final String v) throws Exception {
         return CDATA_BEGIN + v + CDATA_END;
     }
 

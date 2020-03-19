@@ -22,6 +22,7 @@ import com.hbasesoft.framework.tx.core.TransIdGeneratorFactory;
  */
 public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
 
+    /** trans id holder */
     private static ThreadLocal<String> transIdHolder = new InheritableThreadLocal<String>();
 
     /**
@@ -41,7 +42,14 @@ public class WebTransIdGeneratorFactory implements TransIdGeneratorFactory {
         return traceId;
     }
 
-    public void setTraceId(String traceId) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param traceId <br>
+     */
+    public void setTraceId(final String traceId) {
         transIdHolder.set(traceId);
     }
 
