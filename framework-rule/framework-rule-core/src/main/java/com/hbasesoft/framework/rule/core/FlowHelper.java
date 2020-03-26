@@ -209,6 +209,7 @@ public final class FlowHelper {
 
         FlowConfig flowConfig = null;
         for (FlowLoader flowLoader : serviceLoader) {
+            LoggerUtil.info("加载流程配置加载器 " + flowLoader.getClass().getName());
             flowConfig = flowLoader.load(flowName);
             if (flowConfig != null) {
                 break;
