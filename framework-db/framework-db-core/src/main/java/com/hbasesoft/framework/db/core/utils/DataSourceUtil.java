@@ -63,7 +63,7 @@ public final class DataSourceUtil {
     public static DataSource getDataSource(String name) {
         synchronized (dataSourceMap) {
             String uid = dataSourceMap.get(name);
-            return uid == null ? null : dsMap.get(name);
+            return uid == null ? null : dsMap.get(uid);
         }
     }
 
