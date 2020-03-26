@@ -37,7 +37,10 @@ import com.hbasesoft.framework.db.core.config.DbParam;
 public final class DataSourceUtil {
 
     /** datasource map */
-    private static Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<String, DataSource>();
+    private static Map<String, String> dataSourceMap = new ConcurrentHashMap<>();
+
+    /** dsMap */
+    private static Map<String, DataSource> dsMap = new ConcurrentHashMap<>();
 
     private DataSourceUtil() {
     }
@@ -76,7 +79,8 @@ public final class DataSourceUtil {
      */
     public static DataSource getDataSource(final String name) {
         synchronized (dataSourceMap) {
-            return dataSourceMap.get(name);
+            String uid = dataSourceMap.get(name);
+            return uid == null ? null : dsMap.get(uid);
         }
     }
 
@@ -104,15 +108,22 @@ public final class DataSourceUtil {
      */
     public static void close(final String name) {
         synchronized (dataSourceMap) {
-            DataSource dataSource = dataSourceMap.remove(name);
-            if (dataSource != null && dataSource instanceof DruidDataSource) {
-                ((DruidDataSource) dataSource).close();
+            String uid = dataSourceMap.remove(name);
+
+            if (!dataSourceMap.containsValue(uid)) {
+                DataSource dataSource = dsMap.remove(uid);
+                if (dataSource != null && dataSource instanceof DruidDataSource) {
+                    ((DruidDataSource) dataSource).close();
+                }
             }
         }
     }
 
     private static DataSource regist(final String name, final DbParam dbParam) {
-        DataSource dataSource = dataSourceMap.get(name);
+        String uid = new StringBuilder().append(dbParam.getUsername()).append(dbParam.getPassword())
+            .append(dbParam.getUrl()).toString();
+        dataSourceMap.put(name, uid);
+        DataSource dataSource = dsMap.get(uid);
         if (dataSource == null) {
             DruidDataSource ds = new DruidDataSource();
             ds.setDbType(dbParam.getDbType());
@@ -154,11 +165,12 @@ public final class DataSourceUtil {
             try {
                 ds.setFilters(dbParam.getFilters());
                 ds.init();
-                dataSourceMap.put(name, ds);
+                dsMap.put(uid, ds);
                 dataSource = ds;
             }
             catch (SQLException e) {
                 LoggerUtil.error(e);
+                dataSourceMap.remove(name);
                 if (ds != null) {
                     ds.close();
                 }
