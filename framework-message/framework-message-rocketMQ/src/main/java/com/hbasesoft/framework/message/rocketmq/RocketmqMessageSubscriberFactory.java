@@ -78,15 +78,21 @@ public class RocketmqMessageSubscriberFactory implements MessageSubcriberFactory
 	private void consumeOrderly(String channel, boolean broadcast, MessageSubscriber subscriber) {
 		RocketmqFactory.getPushConsumer(channel, channel, broadcast, (MessageListenerOrderly) (msgs, context) -> {
 			// 自动提交 更新消费队列的位置
-			context.setAutoCommit(true);
-			if (msgs.size() == 0) {
+			try {
+				context.setAutoCommit(true);
+				if (msgs.size() == 0) {
+					return ConsumeOrderlyStatus.SUCCESS;
+				}
+
+				// 事件监听
+				for (MessageExt messageExt : msgs) {
+					subscriber.onMessage(messageExt.getTopic(), messageExt.getBody());
+				}
+			} catch (Exception e) {
+				log.error("顺序消息消费失败不再重试",e);
 				return ConsumeOrderlyStatus.SUCCESS;
 			}
 
-			// 事件监听
-			for (MessageExt messageExt : msgs) {
-				subscriber.onMessage(messageExt.getTopic(), messageExt.getBody());
-			}
 			return ConsumeOrderlyStatus.SUCCESS;
 		});
 	}
