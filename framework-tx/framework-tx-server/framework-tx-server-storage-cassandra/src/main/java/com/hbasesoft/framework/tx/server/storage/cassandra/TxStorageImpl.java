@@ -140,16 +140,19 @@ public class TxStorageImpl implements TxStorage {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param clientInfo
      * @param retryTimes
      * @param pageIndex
      * @param pageSize
      * @return <br>
      */
     @Override
-    public PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize) {
+    public PagerList<ClientInfo> queryTimeoutClientInfo(final String clientInfo, final int retryTimes,
+        final int pageIndex, final int pageSize) {
 
         Query q = Query.query(Criteria.where("currentRetryTimes").is(retryTimes),
-            Criteria.where("nextRetryTime").lte(DateUtil.getCurrentDate())).withAllowFiltering().limit(pageSize);
+            Criteria.where("clientInfo").is(clientInfo), Criteria.where("nextRetryTime").lte(DateUtil.getCurrentDate()))
+            .withAllowFiltering().limit(pageSize);
 
         if (pageIndex > 1) {
             String id = holder.get();

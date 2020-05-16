@@ -135,6 +135,7 @@ public class TxStorageImpl implements TxStorage {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param clientInfo
      * @param retryTimes
      * @param pageIndex
      * @param pageSize
@@ -142,9 +143,10 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(readOnly = true)
-    public PagerList<ClientInfo> queryTimeoutClientInfo(final int retryTimes, final int pageIndex, final int pageSize) {
+    public PagerList<ClientInfo> queryTimeoutClientInfo(final String clientInfo, final int retryTimes,
+        final int pageIndex, final int pageSize) {
         com.hbasesoft.framework.db.core.utils.PagerList<TxClientinfoEntity> beans = txClientinfoDao
-            .queryTimeoutClientInfos(retryTimes, pageIndex, pageSize);
+            .queryTimeoutClientInfos(clientInfo, retryTimes, pageIndex, pageSize);
         if (beans != null) {
             PagerList<ClientInfo> pagerList = new PagerList<>();
             pagerList.setPageIndex(beans.getPageIndex());

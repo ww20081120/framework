@@ -12,9 +12,12 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.job.core.annotation.Job;
+import com.hbasesoft.framework.tx.core.TxClientInfoFactory;
 import com.hbasesoft.framework.tx.core.TxConsumer;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.server.PagerList;
@@ -43,6 +46,9 @@ public class RetryJob implements SimpleJob {
      */
     private static TxStorage storage;
 
+    /** clientInfoFactory */
+    private static TxClientInfoFactory clientInfoFactory;
+
     /**
      * Description: <br>
      * 
@@ -64,8 +70,8 @@ public class RetryJob implements SimpleJob {
 
             PagerList<ClientInfo> timeoutClientInfos;
             do {
-                timeoutClientInfos = storage.queryTimeoutClientInfo(shardingContext.getShardingItem(), pageIndex++,
-                    pageSize);
+                timeoutClientInfos = storage.queryTimeoutClientInfo(clientInfoFactory.getClientInfo(),
+                    shardingContext.getShardingItem(), pageIndex++, pageSize);
                 if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
                     for (ClientInfo clientInfo : timeoutClientInfos) {
                         if (txConsumer.retry(clientInfo)) {
@@ -108,6 +114,23 @@ public class RetryJob implements SimpleJob {
             storage = ContextHolder.getContext().getBean(TxStorage.class);
         }
         return storage;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    private static TxClientInfoFactory getClientInfoFactory() {
+        if (clientInfoFactory == null) {
+            ServiceLoader<TxClientInfoFactory> loader = ServiceLoader.load(TxClientInfoFactory.class);
+            Iterator<TxClientInfoFactory> it = loader.iterator();
+            Assert.isTrue(it.hasNext(), ErrorCodeDef.TRANS_CLIENT_INFO_FACTORY_NOT_FOUND);
+            clientInfoFactory = it.next();
+        }
+        return clientInfoFactory;
     }
 
 }
