@@ -30,6 +30,13 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
  */
 public class TransLogUtil {
 
+    /** framework 的日志是否打印 */
+    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.debug",
+        false);
+
+    /** 框架日志的方法 */
+    private static final String FRAMEWORK_PACKAGE = "com.hbasesoft.framework.";
+
     private TransLogUtil() {
     }
 
@@ -72,7 +79,9 @@ public class TransLogUtil {
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            before(methodName, args);
+            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+                before(methodName, args);
+            }
         }
     }
 
@@ -118,7 +127,9 @@ public class TransLogUtil {
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            afterReturning(methodName, returnValue);
+            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+                afterReturning(methodName, returnValue);
+            }
         }
     }
 
@@ -161,7 +172,9 @@ public class TransLogUtil {
 
             // 执行方法
             String methodName = getMethodSignature(method);
-            afterThrowing(methodName, e);
+            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+                afterThrowing(methodName, e);
+            }
         }
     }
 
