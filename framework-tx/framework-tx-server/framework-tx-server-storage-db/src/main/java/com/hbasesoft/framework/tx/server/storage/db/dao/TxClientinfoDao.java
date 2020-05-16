@@ -93,7 +93,7 @@ public interface TxClientinfoDao extends IBaseDao<TxClientinfoEntity> {
      * @taskId <br>
      * @return <br>
      */
-    @Sql("SELECT 1 FROM T_TX_CLIENTINFO")
+    @Sql("SELECT COUNT(1) FROM T_TX_CLIENTINFO")
     int checkTable();
 
     /**

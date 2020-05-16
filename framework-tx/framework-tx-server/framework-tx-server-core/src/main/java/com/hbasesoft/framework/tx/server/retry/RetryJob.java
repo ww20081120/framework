@@ -5,6 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.server.retry;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
 import org.apache.commons.collections.CollectionUtils;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
@@ -31,6 +34,16 @@ import com.hbasesoft.framework.tx.server.TxStorage;
 public class RetryJob implements SimpleJob {
 
     /**
+     * txConsumer
+     */
+    private static TxConsumer txConsumer;
+
+    /**
+     * storage
+     */
+    private static TxStorage storage;
+
+    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -41,25 +54,60 @@ public class RetryJob implements SimpleJob {
     public void execute(final ShardingContext shardingContext) {
         // 按每小时内
 
-        TxStorage storage = ContextHolder.getContext().getBean(TxStorage.class);
-        TxConsumer txConsumer = ContextHolder.getContext().getBean(TxConsumer.class);
+        TxConsumer txConsumer = getConsumer();
+        TxStorage storage = getTxStorage();
 
-        int pageIndex = 1;
-        int pageSize = 1; //GlobalConstants.DEFAULT_LINES;
+        if (txConsumer != null && storage != null) {
 
-        PagerList<ClientInfo> timeoutClientInfos;
-        do {
-            timeoutClientInfos = storage.queryTimeoutClientInfo(shardingContext.getShardingItem(), pageIndex++,
-                pageSize);
-            if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
-                for (ClientInfo clientInfo : timeoutClientInfos) {
-                    if (txConsumer.retry(clientInfo)) {
-                        storage.updateClientRetryTimes(clientInfo.getId());
+            int pageIndex = 1;
+            int pageSize = GlobalConstants.DEFAULT_LINES;
+
+            PagerList<ClientInfo> timeoutClientInfos;
+            do {
+                timeoutClientInfos = storage.queryTimeoutClientInfo(shardingContext.getShardingItem(), pageIndex++,
+                    pageSize);
+                if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
+                    for (ClientInfo clientInfo : timeoutClientInfos) {
+                        if (txConsumer.retry(clientInfo)) {
+                            storage.updateClientRetryTimes(clientInfo.getId());
+                        }
                     }
                 }
             }
+            while (timeoutClientInfos != null && timeoutClientInfos.hasNextPage());
         }
-        while (timeoutClientInfos != null && timeoutClientInfos.hasNextPage());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    private static TxConsumer getConsumer() {
+        if (txConsumer == null) {
+            ServiceLoader<TxConsumer> serviceLoader = ServiceLoader.load(TxConsumer.class);
+            Iterator<TxConsumer> iterator = serviceLoader.iterator();
+            if (iterator.hasNext()) {
+                txConsumer = iterator.next();
+            }
+        }
+        return txConsumer;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    private static TxStorage getTxStorage() {
+        if (storage == null) {
+            storage = ContextHolder.getContext().getBean(TxStorage.class);
+        }
+        return storage;
     }
 
 }

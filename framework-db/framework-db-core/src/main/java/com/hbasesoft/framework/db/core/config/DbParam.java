@@ -220,8 +220,8 @@ public class DbParam extends BaseEntity {
      */
     public void setPassword(final String pw) {
         String tempPw = pw;
-        if (StringUtils.isNotEmpty(pw) && password.startsWith("ENC(") && pw.endsWith(")")) {
-            tempPw = DataUtil.decrypt(password.substring(ENC_LENGTH, password.length() - 1));
+        if (StringUtils.isNotEmpty(tempPw) && tempPw.startsWith("ENC(") && tempPw.endsWith(")")) {
+            tempPw = DataUtil.decrypt(tempPw.substring(ENC_LENGTH, tempPw.length() - 1));
         }
         this.password = tempPw;
     }

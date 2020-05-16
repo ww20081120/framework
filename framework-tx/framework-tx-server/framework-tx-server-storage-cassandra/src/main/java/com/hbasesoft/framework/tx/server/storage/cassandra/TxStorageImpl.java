@@ -7,16 +7,15 @@ package com.hbasesoft.framework.tx.server.storage.cassandra;
 
 import java.nio.ByteBuffer;
 import java.util.Calendar;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
-import org.springframework.data.cassandra.core.query.CassandraPageRequest;
 import org.springframework.data.cassandra.core.query.Criteria;
 import org.springframework.data.cassandra.core.query.Query;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import com.datastax.driver.core.querybuilder.QueryBuilder;
@@ -44,7 +43,7 @@ import com.hbasesoft.framework.tx.server.storage.cassandra.entity.TxClientinfoEn
 @Service
 public class TxStorageImpl implements TxStorage {
 
-    private ThreadLocal<Pageable> holder = new ThreadLocal<>();
+    private ThreadLocal<String> holder = new ThreadLocal<>();
 
     /** Number */
     private static final int NUM_5 = 5;
@@ -148,35 +147,19 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     public PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize) {
+
         Query q = Query.query(Criteria.where("currentRetryTimes").is(retryTimes),
-            Criteria.where("nextRetryTime").lte(DateUtil.getCurrentDate())).withAllowFiltering();
+            Criteria.where("nextRetryTime").lte(DateUtil.getCurrentDate())).withAllowFiltering().limit(pageSize);
 
-        Pageable pageable;
         if (pageIndex > 1) {
-            pageable = holder.get();
-            if (pageable != null) {
-                q.pageRequest(pageable.next());
-            }
-            else {
-                return null;
+            String id = holder.get();
+            if (id != null) {
+                q.and(Criteria.where("token(id)").gt("token('" + id + "')"));
             }
         }
-        else if (pageIndex == 1) {
-            q.pageRequest(CassandraPageRequest.first(pageSize));
-        }
-
-        Slice<TxClientinfoEntity> entities = cassandraOperations.slice(q, TxClientinfoEntity.class);
-
-        pageable = entities.getPageable();
-        if (entities.hasNext() && pageable != null) {
-            holder.set(pageable);
-        }
-        else {
-            holder.remove();
-        }
-
-        if (entities.getSize() > 0) {
-
+        List<TxClientinfoEntity> entities = cassandraOperations.select(q, TxClientinfoEntity.class);
+        if (CollectionUtils.isNotEmpty(entities)) {
+            holder.set(entities.get(entities.size() - 1).getId());
             PagerList<ClientInfo> pagerList = new PagerList<>();
             pagerList.setPageIndex(pageIndex);
             pagerList.setPageSize(pageSize);
@@ -186,6 +169,9 @@ public class TxStorageImpl implements TxStorage {
                     b.getArgs() == null ? null : b.getArgs().array(), 0, null, b.getClientInfo()))
                 .collect(Collectors.toList()));
             return pagerList;
+        }
+        else {
+            holder.remove();
         }
         return null;
     }
