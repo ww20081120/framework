@@ -14,5 +14,6 @@
   	<module>framework-tx-server-producer-springcloud</module>
   	<module>framework-tx-server-storage-db</module>
   	<module>framework-tx-server-consumer-rocketMQ</module>
+  	<module>framework-tx-server-storage-cassandra</module>
   </modules>
 </project>

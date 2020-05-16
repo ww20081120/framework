@@ -45,7 +45,7 @@ public class RetryJob implements SimpleJob {
         TxConsumer txConsumer = ContextHolder.getContext().getBean(TxConsumer.class);
 
         int pageIndex = 1;
-        int pageSize = GlobalConstants.DEFAULT_LINES;
+        int pageSize = 1; //GlobalConstants.DEFAULT_LINES;
 
         PagerList<ClientInfo> timeoutClientInfos;
         do {

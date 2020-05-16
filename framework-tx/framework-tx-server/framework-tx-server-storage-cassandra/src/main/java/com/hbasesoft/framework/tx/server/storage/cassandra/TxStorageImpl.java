@@ -3,18 +3,24 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tx.server.storage.db;
+package com.hbasesoft.framework.tx.server.storage.cassandra;
 
+import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.stream.Collectors;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.core.CassandraOperations;
+import org.springframework.data.cassandra.core.query.CassandraPageRequest;
+import org.springframework.data.cassandra.core.query.Criteria;
+import org.springframework.data.cassandra.core.query.Query;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.core.querybuilder.Select.Where;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
@@ -22,10 +28,8 @@ import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.server.PagerList;
 import com.hbasesoft.framework.tx.server.TxStorage;
-import com.hbasesoft.framework.tx.server.storage.db.dao.TxCheckinfoDao;
-import com.hbasesoft.framework.tx.server.storage.db.dao.TxClientinfoDao;
-import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
-import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
+import com.hbasesoft.framework.tx.server.storage.cassandra.entity.TxCheckinfoEntity;
+import com.hbasesoft.framework.tx.server.storage.cassandra.entity.TxClientinfoEntity;
 
 /**
  * <Description> <br>
@@ -33,23 +37,20 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Feb 1, 2020 <br>
+ * @CreateDate Apr 2, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tx.server <br>
+ * @see com.hbasesoft.framework.tx.server.storage.cassandra <br>
  */
 @Service
 public class TxStorageImpl implements TxStorage {
 
+    private ThreadLocal<Pageable> holder = new ThreadLocal<>();
+
     /** Number */
     private static final int NUM_5 = 5;
 
-    /** txClientinfoDao */
-    @Resource
-    private TxClientinfoDao txClientinfoDao;
-
-    /** txCheckinfoDao */
-    @Resource
-    private TxCheckinfoDao txCheckinfoDao;
+    @Autowired
+    private CassandraOperations cassandraOperations;
 
     /**
      * Description: <br>
@@ -60,9 +61,8 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
-    @Transactional(readOnly = true)
-    public boolean containsClientInfo(final String id) {
-        return StringUtils.isNotEmpty(txClientinfoDao.containsClientInfo(id));
+    public boolean containsClientInfo(String id) {
+        return cassandraOperations.exists(id, TxClientinfoEntity.class);
     }
 
     /**
@@ -75,11 +75,16 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
-    @Transactional(readOnly = true)
-    public CheckInfo getCheckInfo(final String id, final String mark) {
-        TxCheckinfoEntity bean = txCheckinfoDao.getCheckInfoById(id, mark);
-        if (bean != null) {
-            return new CheckInfo(bean.getId(), bean.getMark(), bean.getResult());
+    public CheckInfo getCheckInfo(String id, String mark) {
+
+        Where select = QueryBuilder.select().from("t_tx_check_info").where(QueryBuilder.eq("id", id))
+            .and(QueryBuilder.eq("mark", mark));
+
+        TxCheckinfoEntity entity = cassandraOperations.selectOne(select, TxCheckinfoEntity.class);
+
+        if (entity != null) {
+            return new CheckInfo(entity.getId(), entity.getMark(),
+                entity.getResult() == null ? null : entity.getResult().array());
         }
         return null;
     }
@@ -92,10 +97,10 @@ public class TxStorageImpl implements TxStorage {
      * @param clientInfo <br>
      */
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void saveClientInfo(final ClientInfo clientInfo) {
+    public void saveClientInfo(ClientInfo clientInfo) {
+
         TxClientinfoEntity bean = new TxClientinfoEntity();
-        bean.setArgs(clientInfo.getArgs());
+        bean.setArgs(array2Buffer(clientInfo.getArgs()));
         bean.setContext(clientInfo.getContext());
         bean.setCurrentRetryTimes(0);
         bean.setId(clientInfo.getId());
@@ -110,7 +115,8 @@ public class TxStorageImpl implements TxStorage {
         calendar.add(Calendar.MINUTE, min);
         bean.setNextRetryTime(calendar.getTime());
         bean.setRetryConfigs(clientInfo.getRetryConfigs());
-        txClientinfoDao.save(bean);
+        cassandraOperations.insert(bean);
+
     }
 
     /**
@@ -121,13 +127,13 @@ public class TxStorageImpl implements TxStorage {
      * @param checkInfo <br>
      */
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void saveCheckInfo(final CheckInfo checkInfo) {
+    public void saveCheckInfo(CheckInfo checkInfo) {
+
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
-        bean.setResult(checkInfo.getResult());
-        txCheckinfoDao.saveCheckInfo(bean);
+        bean.setResult(array2Buffer(checkInfo.getResult()));
+        cassandraOperations.insert(bean);
     }
 
     /**
@@ -141,19 +147,54 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
-    @Transactional(readOnly = true)
-    public PagerList<ClientInfo> queryTimeoutClientInfo(final int retryTimes, final int pageIndex, final int pageSize) {
-        com.hbasesoft.framework.db.core.utils.PagerList<TxClientinfoEntity> beans = txClientinfoDao
-            .queryTimeoutClientInfos(retryTimes, pageIndex, pageSize);
-        if (beans != null) {
+    public PagerList<ClientInfo> queryTimeoutClientInfo(int retryTimes, int pageIndex, int pageSize) {
+        Query q = Query.query(Criteria.where("currentRetryTimes").is(retryTimes),
+            Criteria.where("nextRetryTime").lte(DateUtil.getCurrentDate())).withAllowFiltering();
+
+        Pageable pageable;
+        if (pageIndex > 1) {
+            pageable = holder.get();
+            if (pageable != null) {
+                q.pageRequest(pageable.next());
+            }
+            else {
+                return null;
+            }
+        }
+        else if (pageIndex == 1) {
+            q.pageRequest(CassandraPageRequest.first(pageSize));
+        }
+
+        Slice<TxClientinfoEntity> entities = cassandraOperations.slice(q, TxClientinfoEntity.class);
+
+        pageable = entities.getPageable();
+        if (entities.hasNext() && pageable != null) {
+            holder.set(pageable);
+        }
+        else {
+            holder.remove();
+        }
+
+        if (entities.getSize() > 0) {
+
             PagerList<ClientInfo> pagerList = new PagerList<>();
-            pagerList.setPageIndex(beans.getPageIndex());
-            pagerList.setPageSize(beans.getPageSize());
-            pagerList.setTotalCount(beans.getTotalCount());
-            pagerList.addAll(beans.stream().map(
-                b -> new ClientInfo(b.getId(), b.getMark(), b.getContext(), b.getArgs(), 0, null, b.getClientInfo()))
+            pagerList.setPageIndex(pageIndex);
+            pagerList.setPageSize(pageSize);
+            pagerList.setTotalCount(100000);
+            pagerList.addAll(entities.stream()
+                .map(b -> new ClientInfo(b.getId(), b.getMark(), b.getContext(),
+                    b.getArgs() == null ? null : b.getArgs().array(), 0, null, b.getClientInfo()))
                 .collect(Collectors.toList()));
             return pagerList;
+        }
+        return null;
+    }
+
+    private ByteBuffer array2Buffer(byte[] array) {
+        if (array != null) {
+            ByteBuffer args = ByteBuffer.allocate(array.length);
+            args.put(array);
+            return args;
         }
         return null;
     }
@@ -166,9 +207,8 @@ public class TxStorageImpl implements TxStorage {
      * @param id <br>
      */
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void updateClientRetryTimes(final String id) {
-        TxClientinfoEntity bean = txClientinfoDao.getRetryConfigs(id);
+    public void updateClientRetryTimes(String id) {
+        TxClientinfoEntity bean = cassandraOperations.selectOneById(id, TxClientinfoEntity.class);
         if (bean != null) {
             bean.setCurrentRetryTimes(bean.getCurrentRetryTimes() + 1);
             if (bean.getMaxRetryTimes() > bean.getCurrentRetryTimes()) {
@@ -180,8 +220,9 @@ public class TxStorageImpl implements TxStorage {
                 calendar.add(Calendar.MINUTE, min);
                 bean.setNextRetryTime(calendar.getTime());
             }
-            txClientinfoDao.updateRetryTimes(bean);
+            cassandraOperations.update(bean);
         }
+
     }
 
     /**
@@ -192,9 +233,8 @@ public class TxStorageImpl implements TxStorage {
      * @param id <br>
      */
     @Override
-    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-    public void delete(final String id) {
-        txClientinfoDao.deleteClientinfo(id);
-        txCheckinfoDao.deleteCheckInfo(id);
+    public void delete(String id) {
+        cassandraOperations.deleteById(id, TxClientinfoEntity.class);
+        cassandraOperations.delete(Query.query(Criteria.where("id").is(id)), TxCheckinfoEntity.class);
     }
 }

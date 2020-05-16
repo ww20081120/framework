@@ -12,5 +12,6 @@
   <modules>
   	<module>framework-tx-client-producer-springcloud</module>
   	<module>framework-tx-client-consumer-rocketMQ</module>
+  	<module>framework-tx-client-consumer-cassandra</module>
   </modules>
 </project>

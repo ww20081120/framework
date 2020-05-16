@@ -44,7 +44,8 @@ public interface TxCheckinfoDao {
      * @param entity
      * @return <br>
      */
-    @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT) VALUES (:entity.id, :entity.mark, :entity.result)")
+    @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT, CREATE_TIME) VALUES "
+        + "(:entity.id, :entity.mark, :entity.result, now())")
     int saveCheckInfo(@Param("entity") TxCheckinfoEntity entity);
 
     /**

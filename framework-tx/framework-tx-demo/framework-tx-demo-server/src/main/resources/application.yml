@@ -6,13 +6,19 @@ server.port: 8937
 spring: #应用配置
   application:
     name: ${project.name} 
+  
+  data:
+    cassandra:
+      keyspace-name: sgp_tx
+      contactPoints: localhost
+      port: 9042
     
-master: #主数据库配置
- db:
-  type: mysql
-  url: jdbc:mysql://vcc.hbasesoft.com:8316/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
-  username: root
-  password: ENC(XL4vc+/5GgQuRtpN1/nhog==)
+#master: #主数据库配置
+# db:
+#  type: mysql
+#  url: jdbc:mysql://vcc.hbasesoft.com:8316/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
+#  username: root
+#  password: ENC(XL4vc+/5GgQuRtpN1/nhog==)
   
 cache: #缓存配置
   model: SIMPLE

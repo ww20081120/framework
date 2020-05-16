@@ -39,6 +39,10 @@ public class TxCheckinfoEntity extends BaseEntity {
     @Column(name = "result")
     private byte[] result;
 
+    /** next_retry_time */
+    @Column(name = "create_time")
+    private java.util.Date createTime;
+
     /**
      * Description: <br>
      * 
@@ -103,6 +107,28 @@ public class TxCheckinfoEntity extends BaseEntity {
      */
     public void setResult(final byte[] result) {
         this.result = result;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return createTime <br>
+     */
+    public java.util.Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param createTime <br>
+     */
+    public void setCreateTime(final java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
 }

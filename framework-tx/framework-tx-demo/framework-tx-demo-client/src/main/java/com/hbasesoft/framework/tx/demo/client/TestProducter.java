@@ -56,11 +56,11 @@ public class TestProducter {
     @Tx
     public synchronized String test(final @RequestParam("id") String id) {
 
-        TxInvokerProxy.invoke("client1", () -> {
-            TxEventEmmiter.emmit("testEvent");
-            return null;
-        });
-        System.out.println("emmit event");
+//        TxInvokerProxy.invoke("client1", () -> {
+//            TxEventEmmiter.emmit("testEvent");
+//            return null;
+//        });
+//        System.out.println("emmit event");
 
         String value1 = TxInvokerProxy.invoke("client2", () -> {
             return feClient2Consumer.test(id);
