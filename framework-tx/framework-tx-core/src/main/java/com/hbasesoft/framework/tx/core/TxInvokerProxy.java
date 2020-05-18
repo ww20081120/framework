@@ -58,13 +58,11 @@ public final class TxInvokerProxy {
         TxProducer sd = getSender();
 
         Object[] args = ArgsSerializationUtil.unserialArgs(clientInfo.getArgs());
+        LOGGER.info("registClient|{0}|{1}|{2}|{3}|{4}|{5}", clientInfo.getId(), clientInfo.getMark(),
+            clientInfo.getContext(), args == null ? GlobalConstants.BLANK : JSONArray.toJSONString(args),
+            clientInfo.getMaxRetryTimes(), clientInfo.getRetryConfigs());
 
         boolean flag = sd.registClient(clientInfo);
-        if (flag) {
-            LOGGER.info("registClient|{0}|{1}|{2}|{3}|{4}|{5}", clientInfo.getId(), clientInfo.getMark(),
-                clientInfo.getContext(), args == null ? GlobalConstants.BLANK : JSONArray.toJSONString(args),
-                clientInfo.getMaxRetryTimes(), clientInfo.getRetryConfigs());
-        }
 
         T msg = invoker.invoke();
         if (flag) {
@@ -105,8 +103,6 @@ public final class TxInvokerProxy {
 
         CheckInfo checkInfo = sd.check(id, marker);
         if (checkInfo == null) {
-            LOGGER.info("check|{0}|{1}", id, marker);
-
             T msg = invoker.invoke();
             checkInfo = new CheckInfo(id, marker);
             if (msg != null) {
