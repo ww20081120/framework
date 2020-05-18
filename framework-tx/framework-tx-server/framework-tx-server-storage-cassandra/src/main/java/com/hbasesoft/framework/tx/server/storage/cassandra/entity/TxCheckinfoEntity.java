@@ -6,8 +6,6 @@
 
 package com.hbasesoft.framework.tx.server.storage.cassandra.entity;
 
-import java.nio.ByteBuffer;
-
 import org.springframework.data.cassandra.core.cql.Ordering;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
@@ -37,15 +35,15 @@ public class TxCheckinfoEntity extends BaseEntity {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKeyColumn(name = "id", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "id", ordinal = 1, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
     private String id;
 
-    @PrimaryKeyColumn(name = "mark", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "mark", ordinal = 2, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
     /** mark */
     private String mark;
 
     /** result */
-    private ByteBuffer result;
+    private String result;
 
     /** next_retry_time */
     private java.util.Date createTime;

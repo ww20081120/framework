@@ -6,8 +6,6 @@
 
 package com.hbasesoft.framework.tx.server.storage.cassandra.entity;
 
-import java.nio.ByteBuffer;
-
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -46,7 +44,7 @@ public class TxClientinfoEntity extends BaseEntity {
     private String context;
 
     /** args */
-    private ByteBuffer args;
+    private String args;
 
     /** max_retry_times */
     private Integer maxRetryTimes;

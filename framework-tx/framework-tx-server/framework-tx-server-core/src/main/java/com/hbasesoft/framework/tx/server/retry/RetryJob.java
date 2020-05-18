@@ -70,7 +70,7 @@ public class RetryJob implements SimpleJob {
 
             PagerList<ClientInfo> timeoutClientInfos;
             do {
-                timeoutClientInfos = storage.queryTimeoutClientInfo(clientInfoFactory.getClientInfo(),
+                timeoutClientInfos = storage.queryTimeoutClientInfo(getClientInfoFactory().getClientInfo(),
                     shardingContext.getShardingItem(), pageIndex++, pageSize);
                 if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
                     for (ClientInfo clientInfo : timeoutClientInfos) {

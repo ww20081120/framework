@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.server.storage.cassandra;
 
-import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ import com.datastax.driver.core.querybuilder.Select.Where;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.server.PagerList;
@@ -83,7 +83,7 @@ public class TxStorageImpl implements TxStorage {
 
         if (entity != null) {
             return new CheckInfo(entity.getId(), entity.getMark(),
-                entity.getResult() == null ? null : entity.getResult().array());
+                entity.getResult() == null ? null : DataUtil.hexStr2Byte(entity.getResult()));
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class TxStorageImpl implements TxStorage {
     public void saveClientInfo(ClientInfo clientInfo) {
 
         TxClientinfoEntity bean = new TxClientinfoEntity();
-        bean.setArgs(array2Buffer(clientInfo.getArgs()));
+        bean.setArgs(DataUtil.byte2HexStr(clientInfo.getArgs()));
         bean.setContext(clientInfo.getContext());
         bean.setCurrentRetryTimes(0);
         bean.setId(clientInfo.getId());
@@ -131,7 +131,8 @@ public class TxStorageImpl implements TxStorage {
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
-        bean.setResult(array2Buffer(checkInfo.getResult()));
+        bean.setResult(DataUtil.byte2HexStr(checkInfo.getResult()));
+        bean.setCreateTime(DateUtil.getCurrentDate());
         cassandraOperations.insert(bean);
     }
 
@@ -169,21 +170,12 @@ public class TxStorageImpl implements TxStorage {
             pagerList.setTotalCount(100000);
             pagerList.addAll(entities.stream()
                 .map(b -> new ClientInfo(b.getId(), b.getMark(), b.getContext(),
-                    b.getArgs() == null ? null : b.getArgs().array(), 0, null, b.getClientInfo()))
+                    b.getArgs() == null ? null : DataUtil.hexStr2Byte(b.getArgs()), 0, null, b.getClientInfo()))
                 .collect(Collectors.toList()));
             return pagerList;
         }
         else {
             holder.remove();
-        }
-        return null;
-    }
-
-    private ByteBuffer array2Buffer(byte[] array) {
-        if (array != null) {
-            ByteBuffer args = ByteBuffer.allocate(array.length);
-            args.put(array);
-            return args;
         }
         return null;
     }

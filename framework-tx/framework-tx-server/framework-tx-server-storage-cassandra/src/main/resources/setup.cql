@@ -1,7 +1,7 @@
 CREATE TABLE t_tx_check_info (
   id text,
   mark text,
-  result blob,
+  result text,
   createTime timestamp,
   PRIMARY KEY(id, mark));
   
@@ -9,7 +9,7 @@ CREATE TABLE t_tx_clientinfo (
   id text PRIMARY KEY, 
   mark text,
   context text,
-  args blob,
+  args text,
   maxRetryTimes int,
   currentRetryTimes int,
   retryConfigs text,

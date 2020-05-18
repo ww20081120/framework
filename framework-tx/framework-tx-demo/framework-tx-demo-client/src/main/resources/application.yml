@@ -14,6 +14,11 @@ server.port: 8936
 spring: #应用配置
   application:
     name: ${project.name} 
+  data:
+    cassandra:
+      keyspace-name: sgp_tx
+      contactPoints: 127.0.0.1
+      port: 9042
     
 feign:
   hystrix:
@@ -24,15 +29,15 @@ message: #消息服务
   rocketmq:
     namesrvAddr: localhost:9876 
     
-master: #主数据库配置
- db:
-  type: mysql
-  url: jdbc:mysql://192.168.10.73:3306/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
-  username: root
-  password: hbasesoft.com
-  
-cache: #缓存配置
-  model: SIMPLE
+#master: #主数据库配置
+# db:
+#  type: mysql
+#  url: jdbc:mysql://192.168.10.73:3306/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
+#  username: root
+#  password: hbasesoft.com
+
+#cache: #缓存配置
+#  model: SIMPLE
   
 job:
   register:
