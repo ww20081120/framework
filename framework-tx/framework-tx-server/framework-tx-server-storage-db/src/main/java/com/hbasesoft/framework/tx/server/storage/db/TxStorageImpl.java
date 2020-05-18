@@ -199,4 +199,65 @@ public class TxStorageImpl implements TxStorage {
         txClientinfoDao.deleteClientinfo(id);
         txCheckinfoDao.deleteCheckInfo(id);
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public ClientInfo getClientInfo(String id) {
+        TxClientinfoEntity bean = txClientinfoDao.get(id);
+        return bean == null ? null
+            : new ClientInfo(id, bean.getMark(), bean.getContext(), bean.getArgs(), bean.getMaxRetryTimes(),
+                bean.getRetryConfigs(), bean.getClientInfo());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void updateClientinfo(ClientInfo clientInfo) {
+        TxClientinfoEntity bean = txClientinfoDao.get(clientInfo.getId());
+        if (bean != null) {
+            bean.setArgs(clientInfo.getArgs());
+            txClientinfoDao.update(bean);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param checkInfo <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void updateCheckInfo(CheckInfo checkInfo) {
+        txCheckinfoDao.updateCheckInfo(checkInfo);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void deleteCheckInfo(String id, String mark) {
+        txCheckinfoDao.delCheckInfo(id, mark);
+    }
 }

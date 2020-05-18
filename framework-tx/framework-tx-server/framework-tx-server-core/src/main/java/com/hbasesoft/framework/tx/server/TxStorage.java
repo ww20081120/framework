@@ -60,9 +60,8 @@ public interface TxStorage {
     void saveCheckInfo(CheckInfo checkInfo);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param clientInfo
@@ -90,5 +89,43 @@ public interface TxStorage {
      * @param id <br>
      */
     void delete(String id);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    ClientInfo getClientInfo(String id);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo <br>
+     */
+    void updateClientinfo(ClientInfo clientInfo);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param checkInfo <br>
+     */
+    void updateCheckInfo(CheckInfo checkInfo);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark <br>
+     */
+    void deleteCheckInfo(String id, String mark);
 
 }

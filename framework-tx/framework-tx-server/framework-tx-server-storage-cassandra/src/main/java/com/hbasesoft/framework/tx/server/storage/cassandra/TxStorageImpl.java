@@ -218,4 +218,76 @@ public class TxStorageImpl implements TxStorage {
         cassandraOperations.deleteById(id, TxClientinfoEntity.class);
         cassandraOperations.delete(Query.query(Criteria.where("id").is(id)), TxCheckinfoEntity.class);
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    public ClientInfo getClientInfo(String id) {
+        TxClientinfoEntity bean = cassandraOperations.selectOneById(id, TxClientinfoEntity.class);
+        return bean == null ? null
+            : new ClientInfo(id, bean.getMark(), bean.getContext(),
+                bean.getArgs() == null ? null : DataUtil.hexStr2Byte(bean.getArgs()), bean.getMaxRetryTimes(),
+                bean.getRetryConfigs(), bean.getContext());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo <br>
+     */
+    @Override
+    public void updateClientinfo(ClientInfo clientInfo) {
+        TxClientinfoEntity bean = cassandraOperations.selectOneById(clientInfo.getId(), TxClientinfoEntity.class);
+        if (bean != null) {
+            bean.setArgs(clientInfo.getArgs() == null ? null : DataUtil.byte2HexStr(clientInfo.getArgs()));
+            cassandraOperations.update(bean);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param checkInfo <br>
+     */
+    @Override
+    public void updateCheckInfo(CheckInfo checkInfo) {
+        Where select = QueryBuilder.select().from("t_tx_check_info").where(QueryBuilder.eq("id", checkInfo.getId()))
+            .and(QueryBuilder.eq("mark", checkInfo.getMark()));
+
+        TxCheckinfoEntity entity = cassandraOperations.selectOne(select, TxCheckinfoEntity.class);
+        if (entity != null) {
+            entity.setResult(checkInfo.getResult() == null ? null : DataUtil.byte2HexStr(checkInfo.getResult()));
+            cassandraOperations.update(entity);
+        }
+
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark <br>
+     */
+    @Override
+    public void deleteCheckInfo(String id, String mark) {
+        Where select = QueryBuilder.select().from("t_tx_check_info").where(QueryBuilder.eq("id", id))
+            .and(QueryBuilder.eq("mark", mark));
+
+        TxCheckinfoEntity entity = cassandraOperations.selectOne(select, TxCheckinfoEntity.class);
+        if (entity != null) {
+            cassandraOperations.delete(entity);
+        }
+    }
 }
