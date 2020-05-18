@@ -7,6 +7,7 @@ package com.hbasesoft.framework.tx.core.util;
 
 import java.nio.ByteBuffer;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
@@ -96,5 +97,98 @@ public final class ArgsSerializationUtil {
             return args;
         }
         return null;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param data
+     * @param index
+     * @param obj
+     * @return <br>
+     */
+    public static byte[] updateArg(final byte[] data, final int index, Object obj) {
+        if (data != null) {
+            Object[] args = unserialArgs(data);
+            if (index >= 0 && args.length >= index + 1) {
+                args[index] = obj;
+                return serializeArgs(args);
+
+            }
+        }
+        throw new IllegalArgumentException("输入参数有误");
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param data
+     * @param index
+     * @param type
+     * @param param
+     * @return <br>
+     */
+    public static byte[] updateArg(final byte[] data, final int index, final String type, final String param) {
+        return updateArg(data, index, parseObj(type, param));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param type
+     * @param param
+     * @return <br>
+     */
+    public static Object parseObj(final String type, final String param) {
+        Object obj = null;
+        if (param != null) {
+            switch (type) {
+                case "byte":
+                    obj = Byte.parseByte(param);
+                    break;
+                case "short":
+                    obj = Short.parseShort(param);
+                    break;
+                case "int":
+                    obj = Integer.parseInt(param);
+                    break;
+                case "long":
+                    obj = Long.parseLong(param);
+                    break;
+                case "float":
+                    obj = Float.parseFloat(param);
+                    break;
+                case "double":
+                    obj = Double.parseDouble(param);
+                    break;
+                case "char":
+                    obj = param.charAt(0);
+                    break;
+                case "boolean":
+                    obj = Boolean.parseBoolean(param);
+                    break;
+                case "java.lang.String":
+                    obj = param;
+                    break;
+                case "java.lang.Integer":
+                    obj = new Integer(param);
+                    break;
+                default:
+                    try {
+                        obj = JSONObject.parseObject(param, Class.forName(type));
+                    }
+                    catch (ClassNotFoundException e) {
+                        throw new IllegalArgumentException("输入参数有误", e);
+                    }
+                    break;
+            }
+        }
+        return obj;
     }
 }

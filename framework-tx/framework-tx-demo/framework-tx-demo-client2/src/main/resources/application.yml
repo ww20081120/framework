@@ -12,15 +12,29 @@ server.port: 8938
 spring: #应用配置
   application:
     name: ${project.name} 
+  data:
+    cassandra:
+      keyspace-name: sgp_tx
+      contactPoints: 127.0.0.1
+      port: 9042
     
 feign:
   hystrix:
     enabled: true
     
-tx:
-  rocketmq:
-    topic: ${project.name}
-    namesrvAddr: localhost:9876   #rocketMq的地址
-  executor:  #consumer的线程池配置
-    coreSize: 10 
-    maxPoolSize: 20
+#master: #主数据库配置
+# db:
+#  type: mysql
+#  url: jdbc:mysql://192.168.10.73:3306/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
+#  username: root
+#  password: hbasesoft.com
+
+#cache: #缓存配置
+#  model: SIMPLE
+  
+job:
+  register:
+    url: localhost:2181
+    namespace: ${project.name}
+  event:
+    enable: false

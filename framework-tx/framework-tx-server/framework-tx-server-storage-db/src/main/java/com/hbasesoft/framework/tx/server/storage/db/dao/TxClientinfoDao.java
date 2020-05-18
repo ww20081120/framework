@@ -70,10 +70,11 @@ public interface TxClientinfoDao extends IBaseDao<TxClientinfoEntity> {
      * @param pageSize
      * @return <br>
      */
-    @Sql("SELECT ID, MARK, CONTEXT, ARGS, CLIENT_INFO FROM T_TX_CLIENTINFO WHERE NEXT_RETRY_TIME <= NOW() "
-        + "AND MAX_RETRY_TIMES > CURRENT_RETRY_TIMES AND CURRENT_RETRY_TIMES = :retryTimes ")
-    PagerList<TxClientinfoEntity> queryTimeoutClientInfos(@Param("retryTimes") int retryTimes,
-        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);
+    @Sql("SELECT ID, MARK, CONTEXT, ARGS, CLIENT_INFO FROM T_TX_CLIENTINFO WHERE CLIENT_INFO = :clientInfo AND "
+        + "NEXT_RETRY_TIME <= NOW() AND MAX_RETRY_TIMES > CURRENT_RETRY_TIMES AND CURRENT_RETRY_TIMES = :retryTimes ")
+    PagerList<TxClientinfoEntity> queryTimeoutClientInfos(@Param("clientInfo") String clientInfo,
+        @Param("retryTimes") int retryTimes, @Param(Param.PAGE_INDEX) int pageIndex,
+        @Param(Param.PAGE_SIZE) int pageSize);
 
     /**
      * Description: <br>
@@ -93,7 +94,7 @@ public interface TxClientinfoDao extends IBaseDao<TxClientinfoEntity> {
      * @taskId <br>
      * @return <br>
      */
-    @Sql("SELECT 1 FROM T_TX_CLIENTINFO")
+    @Sql("SELECT COUNT(1) FROM T_TX_CLIENTINFO")
     int checkTable();
 
     /**

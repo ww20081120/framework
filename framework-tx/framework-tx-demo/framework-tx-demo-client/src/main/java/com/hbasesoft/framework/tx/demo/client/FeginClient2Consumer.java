@@ -9,8 +9,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.hbasesoft.framework.tx.client.producer.springcloud.client.FallBackProducerFactory;
-
 /**
  * <Description> <br>
  * 
@@ -21,8 +19,7 @@ import com.hbasesoft.framework.tx.client.producer.springcloud.client.FallBackPro
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.demo.client <br>
  */
-@FeignClient(name = "${project.server.client2}", url = "${project.server-url.client2:}",
-    fallbackFactory = FallBackProducerFactory.class)
+@FeignClient(name = "${project.server.client2}", url = "${project.server-url.client2:}")
 public interface FeginClient2Consumer {
 
     /**

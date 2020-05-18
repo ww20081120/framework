@@ -9,6 +9,7 @@ package com.hbasesoft.framework.tx.server.storage.db.dao;
 import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
+import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
 
 /**
@@ -44,7 +45,8 @@ public interface TxCheckinfoDao {
      * @param entity
      * @return <br>
      */
-    @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT) VALUES (:entity.id, :entity.mark, :entity.result)")
+    @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT, CREATE_TIME) VALUES "
+        + "(:entity.id, :entity.mark, :entity.result, now())")
     int saveCheckInfo(@Param("entity") TxCheckinfoEntity entity);
 
     /**
@@ -57,4 +59,25 @@ public interface TxCheckinfoDao {
      */
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id")
     int deleteCheckInfo(@Param("id") String id);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param checkInfo <br>
+     */
+    @Sql("UPDATE FROM T_TX_CHECKINFO SET RESULT = :bean.result WHERE ID = :bean.id AND MARK = :bean.mark")
+    int updateCheckInfo(@Param("bean") CheckInfo checkInfo);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark <br>
+     */
+    @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
+    int delCheckInfo(@Param("id") String id, @Param("mark") String mark);
 }

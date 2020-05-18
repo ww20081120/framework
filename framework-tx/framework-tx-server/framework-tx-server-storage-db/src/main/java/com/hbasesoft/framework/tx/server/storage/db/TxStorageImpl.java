@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.server.PagerList;
@@ -101,6 +102,7 @@ public class TxStorageImpl implements TxStorage {
         bean.setMark(clientInfo.getMark());
         bean.setMaxRetryTimes(clientInfo.getMaxRetryTimes());
         bean.setClientInfo(clientInfo.getClientInfo());
+        bean.setCreateTime(DateUtil.getCurrentDate());
 
         String[] retryConfigs = StringUtils.split(clientInfo.getRetryConfigs(), GlobalConstants.SPLITOR);
         int min = CommonUtil.isEmpty(retryConfigs) ? NUM_5 : Integer.parseInt(retryConfigs[0]);
@@ -133,6 +135,7 @@ public class TxStorageImpl implements TxStorage {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param clientInfo
      * @param retryTimes
      * @param pageIndex
      * @param pageSize
@@ -140,9 +143,10 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     @Transactional(readOnly = true)
-    public PagerList<ClientInfo> queryTimeoutClientInfo(final int retryTimes, final int pageIndex, final int pageSize) {
+    public PagerList<ClientInfo> queryTimeoutClientInfo(final String clientInfo, final int retryTimes,
+        final int pageIndex, final int pageSize) {
         com.hbasesoft.framework.db.core.utils.PagerList<TxClientinfoEntity> beans = txClientinfoDao
-            .queryTimeoutClientInfos(retryTimes, pageIndex, pageSize);
+            .queryTimeoutClientInfos(clientInfo, retryTimes, pageIndex, pageSize);
         if (beans != null) {
             PagerList<ClientInfo> pagerList = new PagerList<>();
             pagerList.setPageIndex(beans.getPageIndex());
@@ -194,5 +198,66 @@ public class TxStorageImpl implements TxStorage {
     public void delete(final String id) {
         txClientinfoDao.deleteClientinfo(id);
         txCheckinfoDao.deleteCheckInfo(id);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public ClientInfo getClientInfo(String id) {
+        TxClientinfoEntity bean = txClientinfoDao.get(id);
+        return bean == null ? null
+            : new ClientInfo(id, bean.getMark(), bean.getContext(), bean.getArgs(), bean.getMaxRetryTimes(),
+                bean.getRetryConfigs(), bean.getClientInfo());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param clientInfo <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void updateClientinfo(ClientInfo clientInfo) {
+        TxClientinfoEntity bean = txClientinfoDao.get(clientInfo.getId());
+        if (bean != null) {
+            bean.setArgs(clientInfo.getArgs());
+            txClientinfoDao.update(bean);
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param checkInfo <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void updateCheckInfo(CheckInfo checkInfo) {
+        txCheckinfoDao.updateCheckInfo(checkInfo);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @param mark <br>
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    public void deleteCheckInfo(String id, String mark) {
+        txCheckinfoDao.delCheckInfo(id, mark);
     }
 }

@@ -13,12 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-tx-client-producer-springcloud</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-tx-client-consumer-rocketMQ</artifactId>
+			<artifactId>framework-message-rocketMQ</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
@@ -28,7 +23,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-message-rocketMQ</artifactId>
+			<artifactId>framework-tx-integration</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-tx-server-storage-cassandra</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>

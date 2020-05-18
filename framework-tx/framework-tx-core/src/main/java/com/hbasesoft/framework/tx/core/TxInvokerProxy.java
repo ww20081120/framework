@@ -8,11 +8,15 @@ package com.hbasesoft.framework.tx.core;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import com.alibaba.fastjson.JSONArray;
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
+import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
+import com.hbasesoft.framework.tx.core.util.ArgsSerializationUtil;
 
 /**
  * <Description> 代理执行类<br>
@@ -25,6 +29,9 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @see com.hbasesoft.framework.tx.core <br>
  */
 public final class TxInvokerProxy {
+
+    /** logger */
+    private static final Logger LOGGER = new Logger("TxLogger");
 
     /** LOCK */
     private static final Object LOCK = new Object();
@@ -49,7 +56,14 @@ public final class TxInvokerProxy {
     public static <T> T registInvoke(final ClientInfo clientInfo, final TxInvoker<T> invoker) {
         clientInfo.setClientInfo(getClientInfoFactory().getClientInfo());
         TxProducer sd = getSender();
+
+        Object[] args = ArgsSerializationUtil.unserialArgs(clientInfo.getArgs());
+        LOGGER.info("registClient|{0}|{1}|{2}|{3}|{4}|{5}", clientInfo.getId(), clientInfo.getMark(),
+            clientInfo.getContext(), args == null ? GlobalConstants.BLANK : JSONArray.toJSONString(args),
+            clientInfo.getMaxRetryTimes(), clientInfo.getRetryConfigs());
+
         boolean flag = sd.registClient(clientInfo);
+
         T msg = invoker.invoke();
         if (flag) {
             sd.removeClient(clientInfo.getId());

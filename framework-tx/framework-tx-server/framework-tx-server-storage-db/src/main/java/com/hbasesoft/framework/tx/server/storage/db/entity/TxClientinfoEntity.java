@@ -66,6 +66,10 @@ public class TxClientinfoEntity extends BaseEntity {
     @Column(name = "client_info")
     private String clientInfo;
 
+    /** next_retry_time */
+    @Column(name = "create_time")
+    private java.util.Date createTime;
+
     /**
      * Description: <br>
      * 
@@ -262,6 +266,30 @@ public class TxClientinfoEntity extends BaseEntity {
      */
     public void setClientInfo(final String clientInfo) {
         this.clientInfo = clientInfo;
+    }
+
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public java.util.Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param createTime <br>
+     */
+    public void setCreateTime(final java.util.Date createTime) {
+        this.createTime = createTime;
     }
 
 }

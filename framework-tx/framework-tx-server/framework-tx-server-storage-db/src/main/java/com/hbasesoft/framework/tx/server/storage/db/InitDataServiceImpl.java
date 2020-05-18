@@ -45,6 +45,7 @@ public class InitDataServiceImpl implements InitDataService {
             return;
         }
         catch (Exception e) {
+            LoggerUtil.warn(e);
         }
         LoggerUtil.info("创建分布式事务相关的表");
         txClientinfoDao.createTable();

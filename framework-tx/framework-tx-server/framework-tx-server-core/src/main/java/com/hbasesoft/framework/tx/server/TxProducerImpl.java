@@ -5,10 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.server;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.tx.core.TxProducer;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
@@ -23,12 +20,10 @@ import com.hbasesoft.framework.tx.core.bean.ClientInfo;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.server <br>
  */
-@Service
 public class TxProducerImpl implements TxProducer {
 
     /** txStorage */
-    @Resource
-    private TxStorage txStorage;
+    private static TxStorage txStorage;
 
     /**
      * Description: <br>
@@ -39,6 +34,7 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public boolean registClient(final ClientInfo clientInfo) {
+        TxStorage txStorage = getTxStorage();
         if (!txStorage.containsClientInfo(clientInfo.getId())) {
             txStorage.saveClientInfo(clientInfo);
             return true;
@@ -55,7 +51,7 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public void removeClient(final String id) {
-        txStorage.delete(id);
+        getTxStorage().delete(id);
     }
 
     /**
@@ -69,7 +65,7 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public CheckInfo check(final String id, final String mark) {
-        return txStorage.getCheckInfo(id, mark);
+        return getTxStorage().getCheckInfo(id, mark);
     }
 
     /**
@@ -81,7 +77,7 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public void saveResult(final CheckInfo checkInfo) {
-        txStorage.saveCheckInfo(checkInfo);
+        getTxStorage().saveCheckInfo(checkInfo);
     }
 
     /**
@@ -94,6 +90,13 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public boolean containClient(final String id) {
-        return txStorage.containsClientInfo(id);
+        return getTxStorage().containsClientInfo(id);
+    }
+
+    private static TxStorage getTxStorage() {
+        if (txStorage == null) {
+            txStorage = ContextHolder.getContext().getBean(TxStorage.class);
+        }
+        return txStorage;
     }
 }
