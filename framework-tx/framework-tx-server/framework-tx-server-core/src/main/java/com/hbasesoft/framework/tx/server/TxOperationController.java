@@ -109,7 +109,7 @@ public class TxOperationController {
     public ClientInfo retry(@PathVariable("id") final String id) {
         ClientInfo clientInfo = txStorage.getClientInfo(id);
         if (clientInfo != null) {
-            if (getConsumer().retry(clientInfo)) {
+            if (!getConsumer().retry(clientInfo)) {
                 txStorage.updateClientRetryTimes(id);
             }
         }

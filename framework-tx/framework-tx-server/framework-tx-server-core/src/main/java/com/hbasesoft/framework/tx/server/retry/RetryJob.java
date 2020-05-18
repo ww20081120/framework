@@ -74,7 +74,7 @@ public class RetryJob implements SimpleJob {
                     shardingContext.getShardingItem(), pageIndex++, pageSize);
                 if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
                     for (ClientInfo clientInfo : timeoutClientInfos) {
-                        if (txConsumer.retry(clientInfo)) {
+                        if (!txConsumer.retry(clientInfo)) {
                             storage.updateClientRetryTimes(clientInfo.getId());
                         }
                     }
