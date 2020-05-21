@@ -28,7 +28,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Greenwich.SR5</spring-cloud.version>
-		<tomcat.version>9.0.31</tomcat.version>
+		<tomcat.version>9.0.35</tomcat.version>
 	</properties>
 
 	<dependencies>
