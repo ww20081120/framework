@@ -29,4 +29,6 @@ import java.lang.annotation.Target;
 public @interface DataSource {
 
     String value();
+
+    String enhanceDynamicDataSource();
 }
