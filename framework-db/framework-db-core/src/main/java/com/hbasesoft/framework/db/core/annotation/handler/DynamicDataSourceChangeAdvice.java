@@ -67,7 +67,7 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
     }
 
     private void changeDatasource(DataSource dataSource) {
-        // 先判断有无实现增强切换数据源接口
+        // 判断增强的字段是否被覆盖，覆盖则走增强的切换数据源
         String enhanceDynamicDataSource = dataSource.enhanceDynamicDataSource();
         if (StringUtils.isNotBlank(enhanceDynamicDataSource)) {
             EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler = (EnhanceDynamicDataSourceHandler) ContextHolder.getContext().getBean(enhanceDynamicDataSource);

@@ -30,5 +30,5 @@ public @interface DataSource {
 
     String value();
 
-    String enhanceDynamicDataSource();
+    String enhanceDynamicDataSource() default "";
 }
