@@ -210,6 +210,21 @@ public final class HttpUtil {
         return getStringRequest(request, charset);
     }
 
+    public static String doPost(final String url, final String body, final String contentType,
+                                final Map<String, String> paramMap, final String charset) {
+        Request.Builder builder = new Request.Builder();
+        builder.url(url);
+        if (MapUtils.isNotEmpty(paramMap)) {
+            for (Entry<String, String> param : paramMap.entrySet()) {
+                builder.addHeader(param.getKey(), param.getValue());
+            }
+        }
+        MediaType mediaType = MediaType.parse(contentType);
+        RequestBody requestBody = RequestBody.create(mediaType, body);
+        Request request = builder.post(requestBody).build();
+        return getStringRequest(request, charset);
+    }
+
     /**
      * Description:doPost <br>
      * 
