@@ -5,6 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
@@ -62,7 +66,28 @@ public interface EventLinsener extends MessageSubscriber {
     default void onMessage(final String channel, final byte[] data) {
         EventData eventData = SerializationUtil.unserial(EventData.class, data);
         LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().getId(), channel, eventData);
-        onEmmit(channel, eventData);
+
+        List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(channel);
+        if (CollectionUtils.isNotEmpty(interceptors)) {
+            for (EventInterceptor interceptor : interceptors) {
+                interceptor.receiveBefore(channel, eventData);
+            }
+
+            try {
+                onEmmit(channel, eventData);
+                for (int i = interceptors.size() - 1; i >= 0; i--) {
+                    interceptors.get(i).receiveAfter(channel, eventData);
+                }
+            }
+            catch (Exception e) {
+                for (int i = interceptors.size() - 1; i >= 0; i--) {
+                    interceptors.get(i).receiveError(channel, eventData, e);
+                }
+            }
+        }
+        else {
+            onEmmit(channel, eventData);
+        }
     }
 
     /**
