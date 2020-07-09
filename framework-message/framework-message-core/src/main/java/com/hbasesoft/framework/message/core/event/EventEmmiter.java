@@ -37,29 +37,7 @@ public final class EventEmmiter {
      * @taskId <br>
      */
     public static void emmit(final String event) {
-        EventData data = new EventData();
-
-        List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
-        if (CollectionUtils.isNotEmpty(interceptors)) {
-            for (EventInterceptor interceptor : interceptors) {
-                interceptor.sendBefore(event, data);
-            }
-
-            try {
-                emmit(event, data);
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendAfter(event, data);
-                }
-            }
-            catch (Exception e) {
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendError(event, data, e);
-                }
-            }
-        }
-        else {
-            emmit(event, data);
-        }
+        emmit(event, new EventData());
     }
 
     /**
