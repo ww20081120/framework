@@ -26,10 +26,12 @@ public interface EventInterceptor {
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
-     * @param data
+     * @param eventData
+     * @param seconds
+     * @param produceModel
      * @return <br>
      */
-    default boolean sendBefore(String channel, EventData eventData) {
+    default boolean sendBefore(String channel, EventData eventData, Integer seconds, String produceModel) {
         return true;
     }
 
@@ -39,9 +41,11 @@ public interface EventInterceptor {
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
-     * @param data <br>
+     * @param eventData
+     * @param seconds
+     * @param produceModel <br>
      */
-    default void sendAfter(String channel, EventData eventData) {
+    default void sendAfter(String channel, EventData eventData, Integer seconds, String produceModel) {
     }
 
     /**
@@ -51,9 +55,11 @@ public interface EventInterceptor {
      * @taskId <br>
      * @param channel
      * @param eventData
+     * @param seconds
+     * @param produceModel
      * @param e <br>
      */
-    default void sendError(String channel, EventData eventData, Exception e) {
+    default void sendError(String channel, EventData eventData, Integer seconds, String produceModel, Exception e) {
     }
 
     /**

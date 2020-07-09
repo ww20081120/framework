@@ -42,7 +42,9 @@ public final class EventIntercetorHolder {
             if (interceptors == null) {
                 interceptors = new ArrayList<>();
             }
-            interceptors.add(interceptor);
+            if (!interceptors.contains(interceptor)) {
+                interceptors.add(interceptor);
+            }
             if (interceptors.size() >= 2) {
                 Collections.sort(interceptors, (i1, i2) -> i1.order() - i2.order());
             }

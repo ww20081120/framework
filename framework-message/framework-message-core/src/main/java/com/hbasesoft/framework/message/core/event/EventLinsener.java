@@ -69,19 +69,25 @@ public interface EventLinsener extends MessageSubscriber {
 
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(channel);
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                interceptor.receiveBefore(channel, eventData);
-            }
-
-            try {
-                onEmmit(channel, eventData);
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).receiveAfter(channel, eventData);
+                if (!interceptor.receiveBefore(channel, eventData)) {
+                    flag = false;
+                    break;
                 }
             }
-            catch (Exception e) {
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).receiveError(channel, eventData, e);
+
+            if (flag) {
+                try {
+                    onEmmit(channel, eventData);
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).receiveAfter(channel, eventData);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).receiveError(channel, eventData, e);
+                    }
                 }
             }
         }
