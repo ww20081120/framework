@@ -131,7 +131,9 @@ public class TxStorageImpl implements TxStorage {
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setId(checkInfo.getId());
         bean.setMark(checkInfo.getMark());
-        bean.setResult(DataUtil.byte2HexStr(checkInfo.getResult()));
+        if (checkInfo.getResult() != null) {
+            bean.setResult(DataUtil.byte2HexStr(checkInfo.getResult()));
+        }
         bean.setCreateTime(DateUtil.getCurrentDate());
         cassandraOperations.insert(bean);
     }
