@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections.MapUtils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -45,7 +46,8 @@ public class TxEventStartupListener implements StartupListener {
             for (Entry<String, Object> entry : beans.entrySet()) {
                 if (entry.getValue() instanceof EventLinsener) {
                     EventLinsener eventLinsener = (EventLinsener) entry.getValue();
-                    Tx tx = eventLinsener.getClass().getDeclaredAnnotation(Tx.class);
+                    Tx tx = AnnotationUtils.findAnnotation(eventLinsener.getClass(), Tx.class);
+
                     if (tx != null) {
                         EventIntercetorHolder.registInterceptor(interceptor, eventLinsener.events());
                         for (String event : eventLinsener.events()) {
