@@ -46,6 +46,7 @@ public final class EventIntercetorHolder {
             if (interceptors.size() >= 2) {
                 Collections.sort(interceptors, (i1, i2) -> i1.order() - i2.order());
             }
+            intercetorHolder.put(event, interceptors);
         }
     }
 

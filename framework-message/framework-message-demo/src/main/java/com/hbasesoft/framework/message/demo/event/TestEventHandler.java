@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
+import com.hbasesoft.framework.message.core.event.EventInterceptor;
+import com.hbasesoft.framework.message.core.event.EventIntercetorHolder;
 import com.hbasesoft.framework.message.core.event.EventLinsener;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 
@@ -70,12 +72,28 @@ public class TestEventHandler implements EventLinsener {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 10000; i++) {
+        EventIntercetorHolder.registInterceptor(new EventInterceptor() {
+            @Override
+            public boolean sendBefore(String channel, EventData eventData) {
+                System.out.println("sendBefore");
+                return true;
+            }
+            
+            @Override
+            public void sendAfter(String channel, EventData eventData) {
+                System.out.println("sendAfter");
+            }
+            
+        }, "testEvent");
+        
+        EventEmmiter.emmit("testEvent");
 
-            EventData data = new EventData();
-            data.put("key", "value" + i);
-            EventEmmiter.emmit("testEvent", data);
-        }
+        // for (int i = 0; i < 10000; i++) {
+        //
+        // EventData data = new EventData();
+        // data.put("key", "value" + i);
+        // EventEmmiter.emmit("testEvent", data);
+        // }
     }
 
 }

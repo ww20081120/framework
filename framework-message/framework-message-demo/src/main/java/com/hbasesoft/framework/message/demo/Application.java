@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 import com.hbasesoft.framework.common.Bootstrap;
+import com.hbasesoft.framework.message.core.event.EventIntercetorHolder;
 
 /**
  * <Description> <br>
