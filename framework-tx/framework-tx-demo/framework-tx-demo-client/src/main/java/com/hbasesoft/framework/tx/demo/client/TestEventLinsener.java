@@ -10,7 +10,8 @@ import java.util.Random;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.message.core.event.EventData;
-import com.hbasesoft.framework.message.tx.TxEventLinsener;
+import com.hbasesoft.framework.message.core.event.EventLinsener;
+import com.hbasesoft.framework.tx.core.annotation.Tx;
 
 /**
  * <Description> <br>
@@ -23,7 +24,8 @@ import com.hbasesoft.framework.message.tx.TxEventLinsener;
  * @see com.hbasesoft.framework.tx.demo.client <br>
  */
 @Component
-public class TestEventLinsener implements TxEventLinsener {
+@Tx
+public class TestEventLinsener implements EventLinsener {
 
     /** Number */
     private static final int NUM_5 = 5;
