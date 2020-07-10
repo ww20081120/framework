@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 

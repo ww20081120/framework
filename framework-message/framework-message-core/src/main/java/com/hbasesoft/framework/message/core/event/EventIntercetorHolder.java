@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+
 /**
  * <Description> <br>
  * 
@@ -46,6 +48,7 @@ public final class EventIntercetorHolder {
             if (interceptors.size() >= 2) {
                 Collections.sort(interceptors, (i1, i2) -> i1.order() - i2.order());
             }
+            LoggerUtil.info("{0}事件注册了拦截器{1}", event, interceptor.getClass().getName());
             intercetorHolder.put(event, interceptors);
         }
     }
