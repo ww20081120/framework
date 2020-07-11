@@ -51,20 +51,26 @@ public final class EventEmmiter {
     public static void emmit(final String event, final EventData data) {
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                interceptor.sendBefore(event, data);
-            }
-
-            try {
-                MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
-
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendAfter(event, data);
+                if (!interceptor.sendBefore(event, data)) {
+                    flag = false;
+                    break;
                 }
             }
-            catch (Exception e) {
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendError(event, data, e);
+
+            if (flag) {
+                try {
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendAfter(event, data);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendError(event, data, e);
+                    }
                 }
             }
         }
@@ -86,20 +92,26 @@ public final class EventEmmiter {
     public static void emmit(final String event, final EventData data, final int seconds) {
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                interceptor.sendBefore(event, data);
-            }
-
-            try {
-                MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
-
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendAfter(event, data);
+                if (!interceptor.sendBefore(event, data)) {
+                    flag = false;
+                    break;
                 }
             }
-            catch (Exception e) {
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendError(event, data, e);
+
+            if (flag) {
+                try {
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
+
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendAfter(event, data);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendError(event, data, e);
+                    }
                 }
             }
         }
@@ -121,20 +133,26 @@ public final class EventEmmiter {
     public static void emmit(final String event, final EventData data, final String produceModel) {
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                interceptor.sendBefore(event, data);
-            }
-
-            try {
-                MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
-
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendAfter(event, data);
+                if (!interceptor.sendBefore(event, data)) {
+                    flag = false;
+                    break;
                 }
             }
-            catch (Exception e) {
-                for (int i = interceptors.size() - 1; i >= 0; i--) {
-                    interceptors.get(i).sendError(event, data, e);
+
+            if (flag) {
+                try {
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
+
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendAfter(event, data);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendError(event, data, e);
+                    }
                 }
             }
         }
