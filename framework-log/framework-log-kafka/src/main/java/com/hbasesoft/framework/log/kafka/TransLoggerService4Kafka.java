@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
@@ -26,7 +25,6 @@ import brave.Tracer;
  * @CreateDate 2015年6月27日 <br>
  * @see com.hbasesoft.framework.log.file <br>
  */
-@Service
 public class TransLoggerService4Kafka extends AbstractTransLoggerService {
 
     /** tracer */
