@@ -106,7 +106,7 @@
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%m</pattern>
+			<pattern>%m%n</pattern>
 			<charset>utf8</charset>
 		</encoder>
 	</appender>
