@@ -1,0 +1,16 @@
+project: #项目信息
+ name: log-demo
+  
+spring: #应用配置
+  application:
+    name: ${project.name}
+  sleuth:
+    traceId128: true
+    sampler:
+      probability: 1.0    
+ 
+server: #系统配置
+  port: 10000
+  
+cache: #缓存配置
+  model: SIMPLE
