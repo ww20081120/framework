@@ -393,4 +393,15 @@ public final class PropertyHolder {
         }
         return name;
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static String getVersion() {
+        return getProperty("project.version", GlobalConstants.BLANK);
+    }
 }
