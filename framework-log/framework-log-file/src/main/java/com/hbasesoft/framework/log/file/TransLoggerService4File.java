@@ -4,14 +4,18 @@
 package com.hbasesoft.framework.log.file;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.MDC;
-import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.common.utils.logger.TransManager;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
+
+import brave.Span;
+import brave.Tracer;
 
 /**
  * <Description> <br>
@@ -21,13 +25,13 @@ import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
  * @CreateDate 2015年6月27日 <br>
  * @see com.hbasesoft.framework.log.file <br>
  */
-@Service
 public class TransLoggerService4File extends AbstractTransLoggerService {
 
-    /**
-     * logger
-     */
-    private Logger logger = new Logger(TransLoggerService4File.class);
+    /** tracer */
+    private Tracer tracer;
+
+    /** spanMap */
+    private Map<String, Span> spanMap = new ConcurrentHashMap<>();
 
     /**
      * Description: <br>
@@ -43,16 +47,28 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void before(final String stackId, final String parentStackId, final long beginTime, final String method,
         final Object[] params) {
-        if (this.isAlwaysLog()) {
-            MDC.put("stackId", stackId);
-            MDC.put("parentStackId", parentStackId);
-            MDC.put("method", method);
-            MDC.put("params", Arrays.toString(params));
-            logger.info("BEFORE");
-            MDC.clear();
-        }
-        else {
-            super.before(stackId, parentStackId, beginTime, method, params);
+        Tracer tc = getTracer();
+        if (tc != null) {
+            Span span = tc.currentSpan();
+            if (span == null) {
+                span = tc.newTrace();
+            }
+            else if (StringUtils.isNotEmpty(parentStackId)) {
+                span = tc.newChild(spanMap.get(parentStackId).context());
+            }
+            else {
+                span = tc.newChild(tc.currentSpan().context());
+            }
+            span.tag("stackId", stackId);
+            if (StringUtils.isNotEmpty(parentStackId)) {
+                span.tag("parentStackId", parentStackId);
+            }
+            span.tag("method", method);
+            if (params != null) {
+                span.tag("params", Arrays.toString(params));
+            }
+            span.start();
+            spanMap.put(stackId, span);
         }
     }
 
@@ -70,16 +86,12 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterReturn(final String stackId, final long endTime, final long consumeTime, final String method,
         final Object returnValue) {
-        if (this.isAlwaysLog()) {
-            MDC.put("stackId", stackId);
-            MDC.put("consumeTime", consumeTime + "");
-            MDC.put("method", method);
-            MDC.put("returnValue", CommonUtil.getString(returnValue));
-            logger.info("AFTER");
-            MDC.clear();
-        }
-        else {
-            super.afterReturn(stackId, endTime, consumeTime, method, returnValue);
+        Span span = spanMap.remove(stackId);
+        if (span != null) {
+            if (returnValue != null) {
+                span.tag("returnValue", CommonUtil.getString(returnValue));
+            }
+            span.finish();
         }
     }
 
@@ -96,16 +108,33 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void afterThrow(final String stackId, final long endTime, final long consumeTime, final String method,
         final Throwable e) {
-        if (this.isAlwaysLog()) {
-            MDC.put("stackId", stackId);
-            MDC.put("consumeTime", consumeTime + "");
-            MDC.put("method", method);
-            MDC.put("exception", e.getMessage());
-            logger.error(e, "ERROR");
-            MDC.clear();
+        Span span = spanMap.remove(stackId);
+        if (span != null) {
+            span.tag("error", "true");
+            span.tag("exception", e.getClass().getName());
+            String errorMsg = e.getMessage();
+            if (StringUtils.isNotEmpty(errorMsg)) {
+                span.tag("errorMsg", errorMsg);
+            }
+            span.finish();
         }
-        else {
-            super.afterThrow(stackId, endTime, consumeTime, method, e);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param stackId
+     * @param sql <br>
+     */
+    @Override
+    public void sql(final String stackId, final String sql) {
+        if (stackId != null) {
+            Span span = spanMap.get(stackId);
+            if (span != null) {
+                span.tag(System.nanoTime() + "", sql);
+            }
         }
     }
 
@@ -125,52 +154,16 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     @Override
     public void end(final String stackId, final long beginTime, final long endTime, final long consumeTime,
         final String method, final Object returnValue, final Throwable e) {
-        TransManager manager = TransManager.getInstance();
-        if (this.isAlwaysLog()) {
-            MDC.put("stackId", stackId);
-            MDC.put("consumeTime", consumeTime + "");
-            MDC.put("method", method);
-            MDC.put("returnValue", CommonUtil.getString(returnValue));
-
-            if (manager.isError()) {
-                if (e != null) {
-                    MDC.put("exception", e.getMessage());
-                    logger.error(e, "FAIL");
-                }
-            }
-            else if (manager.isTimeout()) {
-                logger.warn("TIMEOUT");
-            }
-            else {
-                logger.info("SUCCESS");
-            }
-            MDC.clear();
-        }
-        else {
-            try {
-                for (String key : manager.getIdSet()) {
-                    if (manager.isError() || manager.isTimeout()) {
-                        logger.warn(CommonUtil.getString(getTransBean(key)));
-                    }
-
-                }
-            }
-            catch (Exception ex) {
-                logger.error(ex);
-            }
-        }
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param stackId
-     * @param sql <br>
-     */
-    @Override
-    public void sql(final String stackId, final String sql) {
+    private Tracer getTracer() {
+        if (tracer == null) {
+            ApplicationContext context = ContextHolder.getContext();
+            if (context != null) {
+                tracer = context.getBean(Tracer.class);
+            }
+        }
+        return tracer;
     }
 
 }

@@ -3,13 +3,12 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.core.annotation;
+package com.hbasesoft.framework.message.tx;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.hbasesoft.framework.tx.core.annotation.Tx;
 
 /**
  * <Description> <br>
@@ -17,18 +16,19 @@ import java.lang.annotation.Target;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年9月23日 <br>
+ * @CreateDate Jul 9, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db <br>
+ * @see com.hbasesoft.framework.message.tx <br>
  */
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target({
-    ElementType.TYPE, ElementType.METHOD
-})
-public @interface DataSource {
+public final class TxEventHolder {
 
-    String value();
+    private static final Map<String, Tx> txHolder = new HashMap<String, Tx>();
 
-    String enhanceDynamicDataSource() default "";
+    public static synchronized void put(String event, Tx tx) {
+        txHolder.put(event, tx);
+    }
+
+    public static Tx get(String event) {
+        return txHolder.get(event);
+    }
 }

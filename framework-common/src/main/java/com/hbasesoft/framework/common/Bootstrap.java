@@ -107,8 +107,8 @@ public final class Bootstrap {
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
-            .append(PropertyHolder.getProjectName()).append("模块启动成功！").append('\n')
-            .append("***************************************"));
+            .append(PropertyHolder.getProjectName()).append('-').append(PropertyHolder.getVersion()).append(" 模块启动成功！")
+            .append('\n').append("***************************************"));
         logger.info("====================>系统正常启动<====================");
 
     }

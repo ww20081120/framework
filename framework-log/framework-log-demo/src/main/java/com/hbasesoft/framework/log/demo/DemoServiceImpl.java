@@ -3,13 +3,9 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.core.annotation;
+package com.hbasesoft.framework.log.demo;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.stereotype.Service;
 
 /**
  * <Description> <br>
@@ -17,18 +13,23 @@ import java.lang.annotation.Target;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年9月23日 <br>
+ * @CreateDate Jul 13, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db <br>
+ * @see com.hbasesoft.framework.log.demo <br>
  */
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target({
-    ElementType.TYPE, ElementType.METHOD
-})
-public @interface DataSource {
+@Service
+public class DemoServiceImpl implements DemoService {
 
-    String value();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String say(String name) {
+        return name + ": hello!";
+    }
 
-    String enhanceDynamicDataSource() default "";
 }

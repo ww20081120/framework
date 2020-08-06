@@ -5,6 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
@@ -45,7 +49,34 @@ public final class EventEmmiter {
      * @taskId <br>
      */
     public static void emmit(final String event, final EventData data) {
-        MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+        List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
+        if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
+            for (EventInterceptor interceptor : interceptors) {
+                if (!interceptor.sendBefore(event, data, null, null)) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                try {
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendAfter(event, data, null, null);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendError(event, data, null, null, e);
+                    }
+                }
+            }
+        }
+        else {
+            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+        }
         LoggerUtil.debug("触发[event={0},data={1}]事件通知", event, data);
     }
 
@@ -59,7 +90,34 @@ public final class EventEmmiter {
      * @param seconds <br>
      */
     public static void emmit(final String event, final EventData data, final int seconds) {
-        MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
+        List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
+        if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
+            for (EventInterceptor interceptor : interceptors) {
+                if (!interceptor.sendBefore(event, data, seconds, null)) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                try {
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
+
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendAfter(event, data, seconds, null);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendError(event, data, seconds, null, e);
+                    }
+                }
+            }
+        }
+        else {
+            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
+        }
         LoggerUtil.debug("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, seconds);
     }
 
@@ -73,7 +131,34 @@ public final class EventEmmiter {
      * @param produceModel <br>
      */
     public static void emmit(final String event, final EventData data, final String produceModel) {
-        MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
+        List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
+        if (CollectionUtils.isNotEmpty(interceptors)) {
+            boolean flag = true;
+            for (EventInterceptor interceptor : interceptors) {
+                if (!interceptor.sendBefore(event, data, null, produceModel)) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (flag) {
+                try {
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
+
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendAfter(event, data, null, produceModel);
+                    }
+                }
+                catch (Exception e) {
+                    for (int i = interceptors.size() - 1; i >= 0; i--) {
+                        interceptors.get(i).sendError(event, data, null, produceModel, e);
+                    }
+                }
+            }
+        }
+        else {
+            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
+        }
         LoggerUtil.debug("触发[event={0},data={1}, produceModel={2}]事件通知", event, data, produceModel);
     }
 }
