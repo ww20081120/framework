@@ -12,5 +12,7 @@
   <modules>
   	<module>framework-shell-core</module>
   	<module>framework-shell-demo</module>
+  	<module>framework-shell-tx</module>
+  	<module>framework-shell-job</module>
   </modules>
 </project>

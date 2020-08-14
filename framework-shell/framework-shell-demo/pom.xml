@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-shell-core</artifactId>
+			<artifactId>framework-shell-tx</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
