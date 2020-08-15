@@ -5,26 +5,20 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.shell.tx;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.query.Criteria;
-import org.springframework.data.cassandra.core.query.CriteriaDefinition;
 import org.springframework.data.cassandra.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.shell.core.Assert;
 import com.hbasesoft.framework.shell.core.CommandHandler;
 import com.hbasesoft.framework.shell.core.Shell;
 import com.hbasesoft.framework.shell.core.vo.AbstractOption;
-import com.hbasesoft.framework.shell.tx.TxGet.Option;
+import com.hbasesoft.framework.shell.tx.TxUpdate.Option;
 import com.hbasesoft.framework.shell.tx.entity.TxCheckinfoEntity;
 import com.hbasesoft.framework.shell.tx.entity.TxClientinfoEntity;
 
@@ -42,7 +36,7 @@ import lombok.Setter;
  * @see com.hbasesoft.framework.shell.tx <br>
  */
 @Component
-public class TxGet implements CommandHandler<Option> {
+public class TxUpdate implements CommandHandler<Option> {
 
     @Autowired
     private CassandraOperations cassandraOperations;
@@ -59,40 +53,35 @@ public class TxGet implements CommandHandler<Option> {
     @Override
     public void execute(JCommander cmd, Option option, Shell shell) {
 
-        List<CriteriaDefinition> cds = new ArrayList<>();
-
         Assert.notEmpty(option.id, "ID必填");
 
-        cds.add(Criteria.where("id").is(option.id));
+        if (StringUtils.isNotEmpty(option.result)) {
+            Assert.notEmpty(option.mark, "标记必填");
+            Query q = Query.query(Criteria.where("id").is(option.id), Criteria.where("mark").is(option.mark));
+            TxCheckinfoEntity entity = cassandraOperations.selectOne(q, TxCheckinfoEntity.class);
+            Assert.notNull(entity, "未查询到数据");
 
-        if (StringUtils.isNotEmpty(option.mark)) {
-            cds.add(Criteria.where("mark").is(option.mark));
+            entity.setResult(option.result);
+            cassandraOperations.update(entity);
+            shell.out.println("更新Checkinfo成功！");
+
         }
 
-        if (option.isCount()) {
-            Query q = Query.query(cds.toArray(new CriteriaDefinition[0]));
+        if (StringUtils.isNotEmpty(option.args) || StringUtils.isNotEmpty(option.context)) {
+            TxClientinfoEntity entity = cassandraOperations.selectOneById(option.id, TxClientinfoEntity.class);
+            Assert.notNull(entity, "未查询到数据");
 
-            long s = cassandraOperations.count(q, TxClientinfoEntity.class);
-            shell.out.println("统计到：" + s + "条数据。");
-        }
-        else {
-            Query q = Query.query(cds.toArray(new CriteriaDefinition[0]));
-            List<TxCheckinfoEntity> entities = cassandraOperations.select(q, TxCheckinfoEntity.class);
-
-            shell.out.println("ID\t\t标记(mark)\t\t结果(args)\t\t创建时间(createTime)");
-
-            if (CollectionUtils.isNotEmpty(entities)) {
-                for (TxCheckinfoEntity entity : entities) {
-                    shell.out.print(entity.getId());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getMark());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getResult());
-                    shell.out.print("\t\t");
-                    shell.out.println(DateUtil.date2String(entity.getCreateTime()));
-                }
+            if (StringUtils.isNotEmpty(option.args)) {
+                entity.setArgs(option.args);
             }
+
+            if (StringUtils.isNotEmpty(option.context)) {
+                entity.setContext(option.context);
+            }
+            cassandraOperations.update(entity);
+            shell.out.println("更新Clientinfo成功！");
         }
+
     }
 
     /**
@@ -104,7 +93,7 @@ public class TxGet implements CommandHandler<Option> {
      */
     @Override
     public String toString() {
-        return "获取具体某个执行过程的结果";
+        return "修改重试的参数";
     }
 
     @Getter
@@ -113,18 +102,28 @@ public class TxGet implements CommandHandler<Option> {
 
         @Parameter(names = {
             "-id"
-        }, help = true, order = 1, description = "根据ID查询，必填")
+        }, help = true, order = 1, description = "根据ID修改")
         private String id;
 
         @Parameter(names = {
             "--mark", "-m"
-        }, help = true, order = 2, description = "根据标记查询")
+        }, help = true, order = 2, description = "根据标记修改")
         private String mark;
 
         @Parameter(names = {
-            "--count", "-c"
-        }, help = true, order = 5, description = "统计数量")
-        private boolean count = false;
+            "--args", "-a"
+        }, help = true, order = 3, description = "修改输入参数")
+        private String args;
+
+        @Parameter(names = {
+            "--context", "-c"
+        }, help = true, order = 4, description = "修改上下文")
+        private String context;
+
+        @Parameter(names = {
+            "--result", "-r"
+        }, help = true, order = 5, description = "修改结果")
+        private String result;
 
     }
 }

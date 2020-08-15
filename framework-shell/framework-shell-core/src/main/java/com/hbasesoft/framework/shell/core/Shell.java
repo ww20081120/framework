@@ -101,7 +101,7 @@ public class Shell {
                         }
                     }
                     catch (Exception e) {
-                        out.print(e.getMessage());
+                        out.println(e.getMessage());
                     }
                     out.print(">>> ");
                 }
