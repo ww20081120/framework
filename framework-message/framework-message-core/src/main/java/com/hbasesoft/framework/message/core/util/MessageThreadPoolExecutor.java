@@ -90,6 +90,7 @@ public final class MessageThreadPoolExecutor {
                 public Thread newThread(Runnable r) {
                     Thread thread = new Thread(r);
                     thread.setDaemon(true);
+                    thread.setName(channel + thread.getId());
                     return thread;
                 }
             }); // 缓存队列
