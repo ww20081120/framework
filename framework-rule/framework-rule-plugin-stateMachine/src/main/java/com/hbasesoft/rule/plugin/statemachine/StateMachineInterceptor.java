@@ -17,6 +17,7 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.AssertException;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
@@ -136,6 +137,9 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                                 }
 
                                 Assert.notEmpty(es, ErrorCodeDef.ERROR_STATE_NOT_FOUND);
+                                if ("throw".equals(es)) {
+                                    throw new AssertException(e);
+                                }
                                 flowBean.setState(es);
                             }
                         }
