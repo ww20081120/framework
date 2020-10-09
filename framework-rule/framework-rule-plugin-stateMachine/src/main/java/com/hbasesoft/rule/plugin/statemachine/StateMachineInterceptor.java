@@ -54,7 +54,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param flowBean
+     * @param bean
      * @param flowContext
      * @return <br>
      */
@@ -116,6 +116,8 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                         }
                         catch (Exception e) {
                             LoggerUtil.error("flow process error.", e);
+
+                            flowContext.setException(e);
 
                             String code = GlobalConstants.BLANK
                                 + (e instanceof FrameworkException ? ((FrameworkException) e).getCode()
