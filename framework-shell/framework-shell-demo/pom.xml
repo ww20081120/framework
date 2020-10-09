@@ -11,9 +11,19 @@
 	<name>demo</name>
 	<description>demo程序</description>
 	<dependencies>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.hbasesoft.framework</groupId> -->
+<!-- 			<artifactId>framework-shell-tx</artifactId> -->
+<!-- 			<version>${project.parent.version}</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-shell-tx</artifactId>
+			<artifactId>framework-shell-log</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-shell-job</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>

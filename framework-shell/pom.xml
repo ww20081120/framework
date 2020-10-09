@@ -14,5 +14,6 @@
   	<module>framework-shell-demo</module>
   	<module>framework-shell-tx</module>
   	<module>framework-shell-job</module>
+  	<module>framework-shell-log</module>
   </modules>
 </project>
