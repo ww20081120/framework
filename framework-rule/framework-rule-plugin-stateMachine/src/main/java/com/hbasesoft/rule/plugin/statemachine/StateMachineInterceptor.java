@@ -117,6 +117,8 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                         catch (Exception e) {
                             LoggerUtil.error("flow process error.", e);
 
+                            flowContext.setException(e);
+
                             String code = GlobalConstants.BLANK
                                 + (e instanceof FrameworkException ? ((FrameworkException) e).getCode()
                                     : ErrorCodeDef.SYSTEM_ERROR_10001);

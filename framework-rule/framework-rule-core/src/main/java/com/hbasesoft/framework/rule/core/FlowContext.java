@@ -23,7 +23,6 @@ import lombok.AllArgsConstructor;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
-@AllArgsConstructor
 public class FlowContext implements Serializable {
 
     /**
@@ -40,10 +39,15 @@ public class FlowContext implements Serializable {
     /** paramMap */
     private Map<String, Object> paramMap;
 
-    /**
-     * @param flowConfig
-     */
-    public FlowContext(final FlowConfig flowConfig) {
+    private Exception exception;
+
+    public FlowContext(FlowConfig flowConfig, Map<String, Object> extendUtils, Map<String, Object> paramMap) {
+        this.flowConfig = flowConfig;
+        this.extendUtils = extendUtils;
+        this.paramMap = paramMap;
+    }
+
+    public FlowContext(FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
         this.paramMap = new HashMap<String, Object>();
         this.extendUtils = new HashMap<String, Object>();
@@ -129,5 +133,13 @@ public class FlowContext implements Serializable {
      */
     public Map<String, Object> getExtendUtils() {
         return this.extendUtils;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }

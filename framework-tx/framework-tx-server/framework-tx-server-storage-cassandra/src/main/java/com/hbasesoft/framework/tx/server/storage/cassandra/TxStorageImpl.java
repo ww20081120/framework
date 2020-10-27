@@ -17,8 +17,6 @@ import org.springframework.data.cassandra.core.query.Criteria;
 import org.springframework.data.cassandra.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select.Where;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
@@ -76,10 +74,8 @@ public class TxStorageImpl implements TxStorage {
     @Override
     public CheckInfo getCheckInfo(String id, String mark) {
 
-        Where select = QueryBuilder.select().from("t_tx_check_info").where(QueryBuilder.eq("id", id))
-            .and(QueryBuilder.eq("mark", mark));
-
-        TxCheckinfoEntity entity = cassandraOperations.selectOne(select, TxCheckinfoEntity.class);
+        Query q = Query.query(Criteria.where("id").is(id), Criteria.where("mark").is(mark));
+        TxCheckinfoEntity entity = cassandraOperations.selectOne(q, TxCheckinfoEntity.class);
 
         if (entity != null) {
             return new CheckInfo(entity.getId(), entity.getMark(),
@@ -263,10 +259,11 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     public void updateCheckInfo(CheckInfo checkInfo) {
-        Where select = QueryBuilder.select().from("t_tx_check_info").where(QueryBuilder.eq("id", checkInfo.getId()))
-            .and(QueryBuilder.eq("mark", checkInfo.getMark()));
 
-        TxCheckinfoEntity entity = cassandraOperations.selectOne(select, TxCheckinfoEntity.class);
+        Query q = Query.query(Criteria.where("id").is(checkInfo.getId()),
+            Criteria.where("mark").is(checkInfo.getMark()));
+        TxCheckinfoEntity entity = cassandraOperations.selectOne(q, TxCheckinfoEntity.class);
+
         if (entity != null) {
             entity.setResult(checkInfo.getResult() == null ? null : DataUtil.byte2HexStr(checkInfo.getResult()));
             cassandraOperations.update(entity);
@@ -284,10 +281,9 @@ public class TxStorageImpl implements TxStorage {
      */
     @Override
     public void deleteCheckInfo(String id, String mark) {
-        Where select = QueryBuilder.select().from("t_tx_check_info").where(QueryBuilder.eq("id", id))
-            .and(QueryBuilder.eq("mark", mark));
 
-        TxCheckinfoEntity entity = cassandraOperations.selectOne(select, TxCheckinfoEntity.class);
+        Query q = Query.query(Criteria.where("id").is(id), Criteria.where("mark").is(mark));
+        TxCheckinfoEntity entity = cassandraOperations.selectOne(q, TxCheckinfoEntity.class);
         if (entity != null) {
             cassandraOperations.delete(entity);
         }

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -82,7 +83,16 @@ public final class MessageThreadPoolExecutor {
             PropertyHolder.getIntProperty("message.executor." + channel + ".keepAliveSeconds", NUM_600),
             TimeUnit.SECONDS, // 允许的空闲时间
             new ArrayBlockingQueue<>(
-                PropertyHolder.getIntProperty("message.executor." + channel + ".queueCapacity", NUM_10))); // 缓存队列
+                PropertyHolder.getIntProperty("message.executor." + channel + ".queueCapacity", NUM_10)),
+            new ThreadFactory() {
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread thread = new Thread(r);
+                    thread.setDaemon(true);
+                    thread.setName(channel + thread.getId());
+                    return thread;
+                }
+            }); // 缓存队列
         return executor;
     }
 }
