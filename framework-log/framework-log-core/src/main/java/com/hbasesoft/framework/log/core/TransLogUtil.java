@@ -170,7 +170,7 @@ public final class TransLogUtil {
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 afterReturning(methodName, returnValue);
             }
         }
@@ -232,7 +232,7 @@ public final class TransLogUtil {
 
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 afterThrowing(methodName, e);
             }
         }
