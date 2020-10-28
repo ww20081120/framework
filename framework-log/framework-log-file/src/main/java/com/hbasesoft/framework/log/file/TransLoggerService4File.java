@@ -41,7 +41,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     private Map<String, Span> spanMap = new ConcurrentHashMap<>();
 
     /** 是否显示http header */
-    private static final boolean HTTP_HEADER = PropertyHolder.getBooleanProperty("logservice.httpHeader.show", false);
+    private static final boolean HTTP_HEADER = PropertyHolder.getBooleanProperty("logservice.httpHeader.show", true);
 
     /** http header 的前缀 */
     private static final String PREFIX = "http.header.";
