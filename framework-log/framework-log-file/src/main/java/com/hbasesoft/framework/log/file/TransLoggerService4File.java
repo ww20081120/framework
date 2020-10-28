@@ -4,14 +4,21 @@
 package com.hbasesoft.framework.log.file;
 
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.log.core.AbstractTransLoggerService;
 
 import brave.Span;
@@ -32,6 +39,12 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
 
     /** spanMap */
     private Map<String, Span> spanMap = new ConcurrentHashMap<>();
+
+    /** 是否显示http header */
+    private static final boolean HTTP_HEADER = PropertyHolder.getBooleanProperty("logservice.httpHeader.show", false);
+
+    /** http header 的前缀 */
+    private static final String PREFIX = "http.header.";
 
     /**
      * Description: <br>
@@ -67,6 +80,23 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
             if (params != null) {
                 span.tag("params", Arrays.toString(params));
             }
+
+            if (HTTP_HEADER) {
+                RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+                if (attributes != null && attributes instanceof ServletRequestAttributes) {
+                    HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
+                    if (request != null) {
+                        Enumeration<String> names = request.getHeaderNames();
+                        if (names != null) {
+                            while (names.hasMoreElements()) {
+                                String name = names.nextElement();
+                                span.tag(PREFIX + name, request.getHeader(name));
+                            }
+                        }
+                    }
+                }
+            }
+
             span.start();
             spanMap.put(stackId, span);
         }
