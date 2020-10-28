@@ -38,7 +38,7 @@ public final class TransLogUtil {
     private static final int NUM_100 = 100;
 
     /** framework 的日志是否打印 */
-    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.debug",
+    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.show",
         false);
 
     /** 框架日志的方法 */
@@ -104,7 +104,7 @@ public final class TransLogUtil {
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 before(methodName, args);
             }
         }

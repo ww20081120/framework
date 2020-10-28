@@ -14,3 +14,5 @@ server: #系统配置
   
 cache: #缓存配置
   model: SIMPLE
+  
+logservice.framework.show: true
