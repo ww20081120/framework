@@ -43,8 +43,9 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
     private Map<String, Span> spanMap = new ConcurrentHashMap<>();
 
     /** 允许展示的头 */
-    private static final List<String> ACCEPT_HEADERS = Arrays.asList(StringUtils
-        .split(PropertyHolder.getProperty("logservice.httpHeaders", "Authorization,cookie"), GlobalConstants.SPLITOR));
+    private static final List<String> ACCEPT_HEADERS = Arrays.asList(
+        StringUtils.split(PropertyHolder.getProperty("logservice.httpHeaders", "Authorization,cookie").toUpperCase(),
+            GlobalConstants.SPLITOR));
 
     /** http header 的前缀 */
     private static final String PREFIX = "http.header.";
@@ -92,7 +93,7 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
                     if (names != null) {
                         while (names.hasMoreElements()) {
                             String name = names.nextElement();
-                            if (ACCEPT_HEADERS.contains(name) || name.startsWith("H_")) {
+                            if (ACCEPT_HEADERS.contains(name.toUpperCase()) || name.toUpperCase().startsWith("H_")) {
                                 span.tag(PREFIX + name, request.getHeader(name));
                             }
                         }
