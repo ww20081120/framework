@@ -86,7 +86,7 @@ public class Shell {
                     login(scanner);
                 }
 
-               // out.print(">>> ");
+                // out.print(">>> ");
 
                 while (!exit && scanner.hasNextLine()) {
                     try {
@@ -270,6 +270,14 @@ public class Shell {
             }
         }
         return null;
+    }
+
+    public Scanner getScanner() {
+        return scanner;
+    }
+
+    public boolean isExit() {
+        return exit;
     }
 
 }

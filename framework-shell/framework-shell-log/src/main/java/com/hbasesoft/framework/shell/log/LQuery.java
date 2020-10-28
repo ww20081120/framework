@@ -5,17 +5,18 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.shell.log;
 
-import java.util.List;
+import java.io.File;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.druid.sql.SQLUtils;
-import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.ast.statement.SQLSelectQuery;
-import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.shell.core.Assert;
 import com.hbasesoft.framework.shell.core.CommandHandler;
 import com.hbasesoft.framework.shell.core.Shell;
@@ -31,9 +32,9 @@ import lombok.Setter;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2020年8月14日 <br>
+ * @CreateDate 2020年10月28日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.shell.tx <br>
+ * @see com.hbasesoft.framework.shell.log <br>
  */
 @Component
 public class LQuery implements CommandHandler<Option> {
@@ -49,16 +50,57 @@ public class LQuery implements CommandHandler<Option> {
      */
     @Override
     public void execute(JCommander cmd, Option option, Shell shell) {
-        Assert.notEmpty(option.sql, "SQL语句不存在");
-        StringBuilder sb = new StringBuilder();
-        option.sql.forEach(s -> sb.append(s).append(' '));
+        Assert.notEmpty(option.filePath, "-f 文件路径为参数必填参数");
 
-        List<SQLStatement> statementList = SQLUtils.parseStatements(sb.toString(), "json");
-        if (CollectionUtils.isNotEmpty(statementList)) {
-            SQLStatement statement = statementList.get(0);
-            Assert.isTrue(statement instanceof SQLSelectStatement, "只支持查询语句");
-            
-            
+        File file = new File(option.filePath);
+        Assert.isTrue(file.exists(), "日志文件不存在");
+
+        String fileName = file.getName();
+        int index = fileName.indexOf(".");
+        if (index != -1) {
+            fileName = fileName.substring(0, index);
+        }
+        shell.out.print("...正在加载");
+        shell.out.print(option.filePath);
+        shell.out.println("文件...");
+
+        SparkSession spark = SparkSession.builder().appName(PropertyHolder.getProjectName()).master("local")
+            .getOrCreate();
+
+        try {
+            Dataset<Row> df = spark.read().json(option.filePath);
+            df.createTempView(fileName);
+            shell.out.print("加载文件成功，表名：");
+            shell.out.println(fileName);
+            shell.out.print(">> ");
+            while (!shell.isExit() && shell.getScanner().hasNextLine()) {
+                String sql = StringUtils.trim(shell.getScanner().nextLine());
+                if (StringUtils.isNotEmpty(sql)) {
+                    if ("exit".equalsIgnoreCase(sql)) {
+                        break;
+                    }
+                    else if ("show".equalsIgnoreCase(sql)) {
+                        df.printSchema();
+                    }
+                    else {
+                        try {
+                            Dataset<Row> sqlDF = spark.sql(sql);
+                            sqlDF.show(option.truncate);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                shell.out.print("\n>> ");
+            }
+
+        }
+        catch (AnalysisException e) {
+            e.printStackTrace();
+        }
+        finally {
+            spark.close();
         }
     }
 
@@ -77,7 +119,14 @@ public class LQuery implements CommandHandler<Option> {
     @Getter
     @Setter
     public static class Option extends AbstractOption {
-        @Parameter(help = true, order = 1, description = "查询的SQL语句")
-        private List<String> sql;
+        @Parameter(names = {
+            "--file", "-f"
+        }, help = true, order = 1, description = "日志文件的位置")
+        private String filePath;
+
+        @Parameter(names = {
+            "--truncate", "-t"
+        }, help = true, order = 2, description = "加上该参数，则只显示一部分数据")
+        private boolean truncate;
     }
 }
