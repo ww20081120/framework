@@ -28,10 +28,16 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.core <br>
  */
-public class TransLogUtil {
+public final class TransLogUtil {
+
+    /** Number */
+    private static final long NUM_10L = 10L;
+
+    /** Number */
+    private static final int NUM_100 = 100;
 
     /** framework 的日志是否打印 */
-    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.debug",
+    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.show",
         false);
 
     /** 框架日志的方法 */
@@ -45,14 +51,22 @@ public class TransLogUtil {
      */
     private static ServiceLoader<TransLoggerService> transLoggerServices;
 
-    public static void before(String methodName, Object[] args) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param methodName
+     * @param args <br>
+     */
+    public static void before(final String methodName, final Object[] args) {
 
         // 开始执行时间
         long beginTime = System.currentTimeMillis();
 
         TransManager manager = TransManager.getInstance();
 
-        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", 100);
+        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
 
         // 深度检测
         if (manager.getStackSize() > maxDeepLen) {
@@ -73,19 +87,37 @@ public class TransLogUtil {
 
     }
 
-    public static void before(Object target, Method method, Object[] args) throws FrameworkException {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param target
+     * @param method
+     * @param args
+     * @throws FrameworkException <br>
+     */
+    public static void before(final Object target, final Method method, final Object[] args) throws FrameworkException {
 
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 before(methodName, args);
             }
         }
     }
 
-    public static void afterReturning(String methodName, Object returnValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param methodName
+     * @param returnValue <br>
+     */
+    public static void afterReturning(final String methodName, final Object returnValue) {
         // 执行完成时间
         long endTime = System.currentTimeMillis();
 
@@ -98,7 +130,7 @@ public class TransLogUtil {
         long beginTime = manager.getBeginTime(stackId);
         long consumeTime = endTime - beginTime;
 
-        long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", 10L) * 1000;
+        long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", NUM_10L) * 1000;
 
         if (consumeTime > maxExcuteTime) {
             manager.setTimeout(true);
@@ -122,18 +154,35 @@ public class TransLogUtil {
         }
     }
 
-    public static void afterReturning(Object target, Method method, Object returnValue) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param target
+     * @param method
+     * @param returnValue <br>
+     */
+    public static void afterReturning(final Object target, final Method method, final Object returnValue) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 afterReturning(methodName, returnValue);
             }
         }
     }
 
-    public static void afterThrowing(String methodName, Throwable e) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param methodName
+     * @param e <br>
+     */
+    public static void afterThrowing(final String methodName, final Throwable e) {
         // 执行完成时间
         long endTime = System.currentTimeMillis();
 
@@ -166,13 +215,22 @@ public class TransLogUtil {
         }
     }
 
-    public static void afterThrowing(Object target, Method method, Throwable e) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param target
+     * @param method
+     * @param e <br>
+     */
+    public static void afterThrowing(final Object target, final Method method, final Throwable e) {
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
         if (noTransLog == null) {
 
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 afterThrowing(methodName, e);
             }
         }
@@ -181,10 +239,10 @@ public class TransLogUtil {
     /**
      * 获取 方法描述
      * 
-     * @param point <br>
+     * @param method <br>
      * @return <br>
      */
-    private static String getMethodSignature(Method method) {
+    private static String getMethodSignature(final Method method) {
         StringBuilder sbuf = new StringBuilder();
         sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
         sbuf.append('(');
