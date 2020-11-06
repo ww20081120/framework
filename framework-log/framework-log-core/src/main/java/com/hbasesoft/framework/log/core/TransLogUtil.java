@@ -66,12 +66,12 @@ public final class TransLogUtil {
 
         TransManager manager = TransManager.getInstance();
 
-        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
+//        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
 
-        // 深度检测
-        if (manager.getStackSize() > maxDeepLen) {
-            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
-        }
+//        // 深度检测
+//        if (manager.getStackSize() > maxDeepLen) {
+//            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
+//        }
 
         // 父id
         String parentStackId = manager.peek();
