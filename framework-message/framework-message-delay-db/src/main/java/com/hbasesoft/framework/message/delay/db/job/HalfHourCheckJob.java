@@ -5,8 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.delay.db.job;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import org.apache.shardingsphere.elasticjob.api.ShardingContext;
+import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
+
 import com.hbasesoft.framework.job.core.annotation.Job;
 import com.hbasesoft.framework.message.delay.db.DbStepDelayMessageQueueLoader;
 

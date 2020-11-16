@@ -5,9 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.job.core.demo;
 
+import org.apache.shardingsphere.elasticjob.api.ShardingContext;
+import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
+
 import com.alibaba.fastjson.JSONObject;
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.job.core.annotation.Job;
 

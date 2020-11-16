@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
@@ -9,7 +11,7 @@
 	<name>framework job core</name>
 	<description>job核心</description>
 	<properties>
-		<lasted.release.version>2.1.6</lasted.release.version>
+		<lasted.release.version>3.0.0-beta</lasted.release.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -18,13 +20,8 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.dangdang</groupId>
-			<artifactId>elastic-job-lite-core</artifactId>
-			<version>${lasted.release.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.dangdang</groupId>
-			<artifactId>elastic-job-lite-spring</artifactId>
+			<groupId>org.apache.shardingsphere.elasticjob</groupId>
+			<artifactId>elasticjob-lite-core</artifactId>
 			<version>${lasted.release.version}</version>
 		</dependency>
 	</dependencies>
