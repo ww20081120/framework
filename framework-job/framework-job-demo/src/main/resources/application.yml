@@ -8,12 +8,7 @@ job:
   register:
     url: localhost:2181
     namespace: framework-job-core
-  event:
-    enable: false
-    
+
 master: #主数据库配置
  db:
   type: mysql
-  url: jdbc:mysql://www.hbasesoft.com:3306/sgp_job?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
-  username: sgp
-  password: sgp
