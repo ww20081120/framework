@@ -38,7 +38,7 @@ public final class TransLogUtil {
     private static final int NUM_100 = 100;
 
     /** framework 的日志是否打印 */
-    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.debug",
+    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.show",
         false);
 
     /** 框架日志的方法 */
@@ -67,12 +67,12 @@ public final class TransLogUtil {
 
         TransManager manager = TransManager.getInstance();
 
-        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
+//        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
 
-        // 深度检测
-        if (manager.getStackSize() > maxDeepLen) {
-            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
-        }
+//        // 深度检测
+//        if (manager.getStackSize() > maxDeepLen) {
+//            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
+//        }
 
         // 父id
         String parentStackId = manager.peek();
@@ -104,7 +104,7 @@ public final class TransLogUtil {
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 before(methodName, args);
             }
         }
@@ -170,7 +170,7 @@ public final class TransLogUtil {
         if (noTransLog == null) {
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 afterReturning(methodName, returnValue);
             }
         }
@@ -232,7 +232,7 @@ public final class TransLogUtil {
 
             // 执行方法
             String methodName = getMethodSignature(method);
-            if (!DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
+            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
                 afterThrowing(methodName, e);
             }
         }

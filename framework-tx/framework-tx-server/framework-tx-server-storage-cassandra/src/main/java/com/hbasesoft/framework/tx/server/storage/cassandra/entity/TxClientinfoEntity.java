@@ -9,8 +9,6 @@ package com.hbasesoft.framework.tx.server.storage.cassandra.entity;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-import com.hbasesoft.framework.db.core.BaseEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 
