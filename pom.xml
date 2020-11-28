@@ -123,11 +123,11 @@
 				<version>${thumbnailator.version}</version>
 			</dependency>
 			<!-- //end 处理图片 -->
-<!-- 			<dependency> -->
-<!-- 				<groupId>javassist</groupId> -->
-<!-- 				<artifactId>javassist</artifactId> -->
-<!-- 				<version>${javassist.version}</version> -->
-<!-- 			</dependency> -->
+			<!-- <dependency> -->
+			<!-- <groupId>javassist</groupId> -->
+			<!-- <artifactId>javassist</artifactId> -->
+			<!-- <version>${javassist.version}</version> -->
+			<!-- </dependency> -->
 
 			<!-- 数据库密码加密工具 -->
 			<dependency>
@@ -159,6 +159,12 @@
 				<version>1.6.1</version>
 			</dependency>
 
+			<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.4</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
