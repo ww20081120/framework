@@ -46,7 +46,6 @@ public class EhcacheImpl implements ICache {
     public EhcacheImpl() {
         URL url = EhcacheImpl.class.getResource("ehcache.xml");
         this.cacheManager = (url != null) ? CacheManager.create(url) : CacheManager.create();
-
     }
 
     /**
@@ -80,6 +79,21 @@ public class EhcacheImpl implements ICache {
     @Override
     public void put(Object key, Object value) {
         put(CacheConstant.DEFAULT_CACHE_DIR, key.toString(), value);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param key
+     * @param seconds
+     * @param data <br>
+     */
+    @Override
+    public <T> void put(String key, int seconds, T data) {
+        getCache(CacheConstant.DEFAULT_CACHE_DIR, seconds, 0).put(new Element(key, data));
     }
 
     @Override
@@ -271,5 +285,4 @@ public class EhcacheImpl implements ICache {
         }
         return result;
     }
-
 }

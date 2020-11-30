@@ -45,7 +45,7 @@ public interface ICache extends Cache {
      * @return 缓存数据
      */
     <T> Map<String, T> getNode(String nodeName, Class<T> clazz);
-
+    
     /**
      * Description: putNode<br>
      * 
@@ -107,6 +107,20 @@ public interface ICache extends Cache {
      * @param t <br>
      */
     <T> void put(String nodeName, String key, T t);
+    
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param key
+     * @param seconds
+     * @param data <br>
+     */
+    <T> void put(String key, int seconds, T data);
+
 
     /**
      * Description: putValue<br>

@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-import org.apache.commons.lang.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisShardInfo;
@@ -51,9 +51,10 @@ public class RedisCache extends AbstractRedisCache {
             }
             if (StringUtils.isEmpty(passwd)) {
                 jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
-            } else {
-                jedisPool = new JedisPool(getConfig(),  addresses[0].getHost(),
-                        addresses[0].getPort(), Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
+            }
+            else {
+                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort(),
+                    Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
             }
         }
     }
@@ -136,12 +137,17 @@ public class RedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(byte[] key, byte[] value) {
+    protected void put(byte[] key, int seconds, byte[] value) {
         if (value != null && value.length > 0) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
-                jedis.set(key, value);
+                if (seconds > 0) {
+                    jedis.setex(key, seconds, value);
+                }
+                else {
+                    jedis.set(key, value);
+                }
             }
             finally {
                 if (jedis != null) {

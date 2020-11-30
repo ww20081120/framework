@@ -81,11 +81,26 @@ public abstract class AbstractCache implements ICache {
      */
     @Override
     public void put(Object key, Object value) {
-        byte[] keys = key.toString().getBytes();
-        put(keys, getData(value));
+        put(key.toString(), 0, value);
     }
 
-    protected abstract void put(byte[] key, byte[] value);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param key
+     * @param seconds
+     * @param data <br>
+     */
+    @Override
+    public <T> void put(String key, int seconds, T data) {
+        byte[] keys = key.getBytes();
+        put(keys, seconds, getData(data));
+    }
+
+    protected abstract void put(byte[] key, int seconds, byte[] value);
 
     /**
      * Description: <br>

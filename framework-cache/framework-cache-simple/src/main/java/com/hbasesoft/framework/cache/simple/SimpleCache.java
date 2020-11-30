@@ -95,8 +95,8 @@ public class SimpleCache extends AbstractCache {
      * @param value <br>
      */
     @Override
-    protected void put(byte[] key, byte[] value) {
-        put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), 0, key, value);
+    protected void put(byte[] key, int seconds, byte[] value) {
+        put(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), seconds, key, value);
     }
 
     /**
