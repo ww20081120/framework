@@ -15,7 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.tx.core.annotation.Tx;
@@ -92,9 +94,8 @@ public class TxAnnotationMethodRegistStartupListener implements StartupListener 
     }
 
     public static String[] getBasePackage() {
-        return new String[] {
-            "com.hbasesoft.**"
-        };
+        return StringUtils.split(PropertyHolder.getProperty("tx.basepackage", "com.hbasesoft.**"),
+            GlobalConstants.SPLITOR);
     }
 
     /**

@@ -13,12 +13,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -116,7 +118,8 @@ public final class TransactionManagerHolder {
         }
     }
 
-    public static String getBasePackage() {
-        return "com.hbasesoft.*";
+    public static String[] getBasePackage() {
+        return StringUtils.split(PropertyHolder.getProperty("db.basepackage", "com.hbasesoft.*"),
+            GlobalConstants.SPLITOR);
     }
 }
