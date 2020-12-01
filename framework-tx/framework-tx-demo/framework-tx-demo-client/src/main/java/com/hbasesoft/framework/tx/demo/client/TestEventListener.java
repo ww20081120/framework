@@ -25,7 +25,7 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
  */
 @Component
 @Tx
-public class TestEventLinsener implements EventListener {
+public class TestEventListener implements EventListener {
 
     /** Number */
     private static final int NUM_5 = 5;
