@@ -10,7 +10,7 @@ import java.io.UnsupportedEncodingException;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.message.core.event.EventData;
-import com.hbasesoft.framework.message.core.event.EventLinsener;
+import com.hbasesoft.framework.message.core.event.EventListener;
 
 /**
  * <Description> <br>
@@ -23,7 +23,7 @@ import com.hbasesoft.framework.message.core.event.EventLinsener;
  * @see com.hbasesoft.vcc.sgp.ability.oauth.server.event <br>
  */
 @Component
-public class RocketmqEventLinsener implements EventLinsener {
+public class RocketmqEventLinsener implements EventListener {
 
     /**
      * Description: <br>

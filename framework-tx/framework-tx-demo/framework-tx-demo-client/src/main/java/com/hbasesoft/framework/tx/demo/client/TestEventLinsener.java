@@ -10,7 +10,7 @@ import java.util.Random;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.message.core.event.EventData;
-import com.hbasesoft.framework.message.core.event.EventLinsener;
+import com.hbasesoft.framework.message.core.event.EventListener;
 import com.hbasesoft.framework.tx.core.annotation.Tx;
 
 /**
@@ -25,7 +25,7 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
  */
 @Component
 @Tx
-public class TestEventLinsener implements EventLinsener {
+public class TestEventLinsener implements EventListener {
 
     /** Number */
     private static final int NUM_5 = 5;
