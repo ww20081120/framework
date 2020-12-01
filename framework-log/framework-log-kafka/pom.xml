@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-log</artifactId>
-		<version>3.4</version>
+		<version>3.5</version>
 	</parent>
 	<artifactId>framework-log-kafka</artifactId>
 	<name>framework log kafka</name>

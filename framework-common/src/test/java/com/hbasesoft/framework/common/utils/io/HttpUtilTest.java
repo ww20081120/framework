@@ -31,8 +31,6 @@ public class HttpUtilTest {
      */
     @Test
     public void doGet() {
-        System.out
-            .println(HttpUtil.doGet("https://jintan.towngasvcc.com/?null&ticket=2ccd00830d4448668b573c803f599c0f"));
         System.out.println(HttpUtil.doGet("https://www.towngasvcc.com", "utf-8"));
     }
 
