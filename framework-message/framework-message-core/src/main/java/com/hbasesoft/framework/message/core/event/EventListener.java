@@ -23,7 +23,7 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.event <br>
  */
-public interface EventLinsener extends MessageSubscriber {
+public interface EventListener extends MessageSubscriber {
 
     /**
      * Description: <br>

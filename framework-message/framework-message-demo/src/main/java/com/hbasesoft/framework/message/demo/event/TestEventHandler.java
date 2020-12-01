@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
-import com.hbasesoft.framework.message.core.event.EventLinsener;
+import com.hbasesoft.framework.message.core.event.EventListener;
 import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
 
 /**
@@ -27,7 +27,7 @@ import com.hbasesoft.framework.message.rocketmq.factory.RocketmqFactory;
  * @since V1.0<br>
  */
 @Service
-public class TestEventHandler implements EventLinsener {
+public class TestEventHandler implements EventListener {
 
     /** Number */
     private static final int NUM_1500 = 1500;

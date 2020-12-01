@@ -15,7 +15,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.event.EventIntercetorHolder;
-import com.hbasesoft.framework.message.core.event.EventLinsener;
+import com.hbasesoft.framework.message.core.event.EventListener;
 import com.hbasesoft.framework.tx.core.annotation.Tx;
 
 /**
@@ -44,8 +44,8 @@ public class TxEventStartupListener implements StartupListener {
             TxEventInterceptor interceptor = new TxEventInterceptor();
 
             for (Entry<String, Object> entry : beans.entrySet()) {
-                if (entry.getValue() instanceof EventLinsener) {
-                    EventLinsener eventLinsener = (EventLinsener) entry.getValue();
+                if (entry.getValue() instanceof EventListener) {
+                    EventListener eventLinsener = (EventListener) entry.getValue();
                     Tx tx = AnnotationUtils.findAnnotation(eventLinsener.getClass(), Tx.class);
 
                     if (tx != null) {

@@ -41,13 +41,13 @@ public class EventHandlerStartupLinstener implements StartupListener {
      */
     @Override
     public void complete(final ApplicationContext context) throws FrameworkException {
-        Map<String, EventLinsener> eventLinseners = context.getBeansOfType(EventLinsener.class);
+        Map<String, EventListener> eventLinseners = context.getBeansOfType(EventListener.class);
         if (MapUtils.isNotEmpty(eventLinseners)) {
 
             MessageSubcriberFactory factory = MessageHelper.createMessageSubcriberFactory();
 
-            for (Entry<String, EventLinsener> entry : eventLinseners.entrySet()) {
-                EventLinsener linsener = entry.getValue();
+            for (Entry<String, EventListener> entry : eventLinseners.entrySet()) {
+                EventListener linsener = entry.getValue();
                 String[] events = linsener.events();
                 if (CommonUtil.isNotEmpty(events)) {
                     // 注册事件
