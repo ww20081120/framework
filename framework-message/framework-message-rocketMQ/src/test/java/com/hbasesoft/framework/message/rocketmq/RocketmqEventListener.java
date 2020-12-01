@@ -23,7 +23,7 @@ import com.hbasesoft.framework.message.core.event.EventListener;
  * @see com.hbasesoft.vcc.sgp.ability.oauth.server.event <br>
  */
 @Component
-public class RocketmqEventLinsener implements EventListener {
+public class RocketmqEventListener implements EventListener {
 
     /**
      * Description: <br>
