@@ -42,9 +42,8 @@ public class JobStartupLinstener implements StartupListener {
     /**
      * packages to scan
      */
-    private final String[] packagesToScan = new String[] {
-        "com.hbasesoft.*"
-    };
+    private final String[] packagesToScan = StringUtils
+        .split(PropertyHolder.getProperty("job.basepackage", "com.hbasesoft.*"), GlobalConstants.SPLITOR);
 
     /**
      * Description: <br>
