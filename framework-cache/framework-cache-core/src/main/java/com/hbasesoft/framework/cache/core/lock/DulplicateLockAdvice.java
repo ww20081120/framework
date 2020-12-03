@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.cache.core.redis.lock;
+package com.hbasesoft.framework.cache.core.lock;
 
 import java.lang.reflect.Method;
 
@@ -16,10 +16,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import com.hbasesoft.framework.cache.core.annotation.CacheLock;
-import com.hbasesoft.framework.cache.core.redis.util.KeyUtil;
+import com.hbasesoft.framework.cache.core.CacheHelper;
+import com.hbasesoft.framework.cache.core.annotation.DulplicateLock;
+import com.hbasesoft.framework.cache.core.util.KeyUtil;
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.utils.Assert;
 
 /**
  * <Description> <br>
@@ -27,27 +28,30 @@ import com.hbasesoft.framework.common.ServiceException;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2015年12月2日 <br>
+ * @CreateDate 2018年3月23日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.cache.core.annotation <br>
+ * @see com.hbasesoft.framework.cache.core.redis.lock <br>
  */
 @Aspect
 @Configuration
-public class CacheLockAdvice {
+public class DulplicateLockAdvice {
+
+    /** LOCKED */
+    public static final String LOCKED = "DULPLICATE_LOCKED";
 
     /**
-     * Description: <br>
+     * Description: dulplicateLock <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      *         <br>
      */
     @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
-    public void cacheLock() {
+    public void dulplicateLock() {
     }
 
     /**
-     * Description: <br>
+     * Description: invoke<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -55,7 +59,7 @@ public class CacheLockAdvice {
      * @return Object
      * @throws Throwable <br>
      */
-    @Around("cacheLock()")
+    @Around("dulplicateLock()")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {
@@ -63,28 +67,22 @@ public class CacheLockAdvice {
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
-            CacheLock cacheLock = AnnotationUtils.findAnnotation(currentMethod, CacheLock.class);
-            if (cacheLock != null) {
-                // 新建一个锁
-                RedisLock lock = new RedisLock(
-                    cacheLock.value() + KeyUtil.getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
+            DulplicateLock dulplicateLock = AnnotationUtils.findAnnotation(currentMethod, DulplicateLock.class);
+            if (dulplicateLock != null) {
+                String key = dulplicateLock.name()
+                    + KeyUtil.getLockKey(dulplicateLock.key(), currentMethod, thisJoinPoint.getArgs());
 
-                // 加锁
-                boolean result = lock.lock(
-                    cacheLock.timeOut() > cacheLock.expireTime() ? cacheLock.timeOut() : cacheLock.expireTime(),
-                    cacheLock.expireTime());
-                if (!result) {
-                    throw new ServiceException(ErrorCodeDef.GET_CACHE_LOCK_ERROR, lock);
-                }
+                Lock lock = CacheHelper.getLock(key);
+
+                Assert.isTrue(lock.tryLock(dulplicateLock.expireTime()), ErrorCodeDef.DULPLICATE_MESSAGE, key);
 
                 try {
                     // 加锁成功，执行方法
                     return thisJoinPoint.proceed();
                 }
-                finally {
+                catch (Exception e) {
                     lock.unlock();
                 }
-
             }
         }
         return thisJoinPoint.proceed();
