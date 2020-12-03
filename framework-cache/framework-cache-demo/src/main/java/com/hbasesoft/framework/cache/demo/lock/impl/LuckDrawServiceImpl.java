@@ -67,7 +67,7 @@ public class LuckDrawServiceImpl implements LuckDrawService {
      */
     @Override
     @CacheLock(value = "ShakeActivity", timeOut = GlobalConstants.MINUTES * GlobalConstants.SECONDS,
-        expireTime = EXPIRE_TIME, key = "${activityCode}")
+        key = "${activityCode}")
     public int luckDraw(@Key("activityCode") final String activityCode, final String userCode) {
         // 获取用户还有几次抽奖机会
 

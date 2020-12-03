@@ -43,15 +43,6 @@ public @interface CacheLock {
     String key();
 
     /**
-     * Description: 锁过期时间<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    int expireTime() default 10;
-
-    /**
      * Description: 锁超时时间<br>
      * 
      * @author 王伟<br>

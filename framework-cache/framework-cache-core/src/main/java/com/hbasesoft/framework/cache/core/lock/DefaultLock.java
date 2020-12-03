@@ -3,13 +3,12 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.cache.core.redis.lock;
+package com.hbasesoft.framework.cache.core.lock;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
-import com.hbasesoft.framework.cache.core.CacheHelper;
-import com.hbasesoft.framework.cache.core.lock.Lock;
-import com.hbasesoft.framework.cache.core.redis.AbstractRedisCache;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
@@ -19,19 +18,12 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2017年1月5日 <br>
+ * @CreateDate 2020年12月3日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.cache.core.redis.lock <br>
+ * @see com.hbasesoft.framework.cache.core.lock <br>
  */
-public class RedisLock implements Lock {
+public class DefaultLock implements Lock {
 
-    /** MILLI_NANO_TIME */
-    public static final int MILLI_NANO_TIME = 1000000;
-
-    /** LOCKED */
-    public static final String LOCKED = "LOCKED";
-
-    /** DEFAULT_IDEL_TIME */
     private static final int DEFAULT_IDEL_TIME = 100;
 
     /** DEFAULT_MIN_IDEL_TIME */
@@ -43,23 +35,12 @@ public class RedisLock implements Lock {
     /** RANDOM */
     private static final Random RANDOM = new Random();
 
-    /** lockName */
+    private ReentrantLock reentrantLock = new ReentrantLock();
+
     private String lockName;
 
-    /** redisCache */
-    private AbstractRedisCache redisCache;
-
-    /** lock */
-    private boolean lock;
-
-    /**
-     * RedisLock
-     * 
-     * @param ln
-     */
-    public RedisLock(final String ln) {
-        this.lockName = ln;
-        this.redisCache = (AbstractRedisCache) CacheHelper.getCache();
+    public DefaultLock(String lockName) {
+        this.lockName = lockName;
     }
 
     /**
@@ -70,7 +51,8 @@ public class RedisLock implements Lock {
      * @param timeout <br>
      */
     @Override
-    public void lock(final int timeout) {
+    public void lock(int timeout) {
+
         LoggerUtil.debug("开始锁住{0},timeout={1},expireTime={2}", lockName, timeout);
         long lockTime = System.currentTimeMillis();
         int i = 0;
@@ -80,7 +62,6 @@ public class RedisLock implements Lock {
                 // 锁不存在的话，设置锁并设置锁过期时间，即加锁
                 if (tryLock(timeout)) {
                     // 锁的情况下锁过期后消失，不会造成永久阻塞
-                    this.lock = true;
                     LoggerUtil.debug("获取锁成功{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
                     return;
                 }
@@ -96,31 +77,24 @@ public class RedisLock implements Lock {
             throw new RuntimeException("locking error", e);
         }
         LoggerUtil.debug("获取锁失败{0},共耗时{1}毫秒", lockName, System.currentTimeMillis() - lockTime);
+
     }
 
     /**
-     * Description: 获取锁<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param timeout
-     * @param expireTime
      * @return <br>
      */
-    public boolean tryLock(final int timeout) {
-        return redisCache.setnx(lockName, LOCKED, timeout);
-    }
-
-    /**
-     * Description: 施放锁<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    public void unlock() {
-        if (this.lock) {
-            redisCache.evict(this.lockName);
+    @Override
+    public boolean tryLock(int timeout) {
+        try {
+            return reentrantLock.tryLock(timeout, TimeUnit.SECONDS);
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException("locking error", e);
         }
     }
 
@@ -129,10 +103,10 @@ public class RedisLock implements Lock {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
+     *         <br>
      */
     @Override
-    public String toString() {
-        return lockName;
+    public void unlock() {
+        reentrantLock.unlock();
     }
 }
