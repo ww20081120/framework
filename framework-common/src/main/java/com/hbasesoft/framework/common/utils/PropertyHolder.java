@@ -402,6 +402,6 @@ public final class PropertyHolder {
      * @return <br>
      */
     public static String getVersion() {
-        return getProperty("project.version", GlobalConstants.BLANK);
+        return getProperty("project.version", "1.0");
     }
 }

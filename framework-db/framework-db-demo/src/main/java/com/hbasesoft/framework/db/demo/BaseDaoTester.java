@@ -28,6 +28,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
+import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
@@ -46,7 +47,6 @@ import com.hbasesoft.framework.db.demo.entity.StudentEntity;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
 public class BaseDaoTester {
 
     /** Number */
@@ -78,6 +78,13 @@ public class BaseDaoTester {
     @Resource
     private ICourseDao iCourseDao;
 
+    /** 
+     *  
+     */
+    public BaseDaoTester() {
+        DataSourceUtil.init();
+    }
+
     /**
      * Description: <br>
      * 
@@ -86,6 +93,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Before
+    @Transactional
     public void createTable() {
         iStudentDao.createTable();
     }
@@ -98,6 +106,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void countCoursePass() {
         int count = iStudentDao.countCoursePass("语文");
         Assert.isTrue(count == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -112,6 +121,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void queryStudentCourse() {
         List<StudentEntity> entityes = iStudentDao.queryStudentCourse(null, 1, NUM_5);
         Assert.isTrue(entityes.size() == NUM_5, ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -139,6 +149,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void save() {
         StudentEntity entity = new StudentEntity();
         entity.setAge(NUM_16);
@@ -159,6 +170,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void delete() {
         StudentEntity entity = new StudentEntity();
         entity.setAge(NUM_16);
@@ -182,6 +194,7 @@ public class BaseDaoTester {
      * @throws FileNotFoundException <br>
      */
     @Test
+    @Transactional
     public void saveBatch() throws UnsupportedEncodingException, FileNotFoundException {
         int s1 = iStudentDao.countStudentSize();
         IOUtil.batchProcessFile(new File("Student.csv"), line -> {
@@ -211,6 +224,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void executeBatch() {
         int s1 = iStudentDao.countStudentSize();
         IOUtil.batchProcessFile(new File("Student.csv"), line -> {
@@ -240,6 +254,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void get() {
         StudentEntity entity = iStudentDao.get("1");
         Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -253,6 +268,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void getByProperty() {
         CourseEntity entity = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
         Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -266,6 +282,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void queryByProperty() {
         List<StudentEntity> entities = iStudentDao.queryByProperty(StudentEntity.AGE, NUM_18);
         Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -279,6 +296,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void queryAll() {
         List<StudentEntity> entities = iStudentDao.queryAll();
         int size = iStudentDao.countStudentSize();
@@ -293,6 +311,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void deleteById() {
         StudentEntity entity = new StudentEntity();
         entity.setAge(NUM_16);
@@ -315,6 +334,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void deleteAll() {
         List<StudentEntity> entities = iStudentDao.queryAll();
         iStudentDao.delete(entities);
@@ -330,6 +350,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void deleteAllEntitiesByIds() {
         int s1 = iStudentDao.countStudentSize();
         iStudentDao.deleteByIds(Arrays.asList("1", "2", "3"));
@@ -345,6 +366,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void update() {
         StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -363,6 +385,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void queryByHql() {
         List<StudentEntity> entities = iStudentDao
             .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
@@ -377,6 +400,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void updateBySql() {
         StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
@@ -398,6 +422,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void getByHql() {
         StudentEntity entity = iStudentDao
             .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
@@ -413,6 +438,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void queryPagerByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
         PagerList<StudentEntity> entities = iStudentDao.queryPagerByCriteria(criteria, 1, 1);
@@ -427,6 +453,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void queryByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
         criteria.add(Restrictions.eq(StudentEntity.AGE, NUM_18));
@@ -444,6 +471,7 @@ public class BaseDaoTester {
      *         <br>
      */
     @Test
+    @Transactional
     public void getByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(CourseEntity.class);
         criteria.add(Restrictions.eq(CourseEntity.COURSE_NAME, "语文"));
