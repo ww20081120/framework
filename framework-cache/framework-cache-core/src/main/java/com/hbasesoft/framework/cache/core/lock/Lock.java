@@ -17,10 +17,17 @@ package com.hbasesoft.framework.cache.core.lock;
  */
 public interface Lock {
 
+    /**
+     * Description: 阻塞的锁 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param timeout <br>
+     */
     void lock(int timeout);
 
     /**
-     * Description: 锁 <br>
+     * Description: 非阻塞的锁 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
