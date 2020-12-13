@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework-job</artifactId>
+		<version>3.5</version>
+	</parent>
+	<artifactId>framework-job-elasticjob</artifactId>
+	<description> </description>
+	<properties>
+		<lasted.release.version>3.0.0-beta</lasted.release.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-job-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shardingsphere.elasticjob</groupId>
+			<artifactId>elasticjob-lite-core</artifactId>
+			<version>${lasted.release.version}</version>
+		</dependency>
+	</dependencies>
+</project>

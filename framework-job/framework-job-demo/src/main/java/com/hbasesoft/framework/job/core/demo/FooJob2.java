@@ -22,7 +22,7 @@ import com.hbasesoft.framework.job.core.annotation.Job;
  * @see com.hbasesoft.framework.job.core.demo <br>
  */
 @Job(cron = "0/5 * * * * ?")
-public class FooJob implements SimpleJob {
+public class FooJob2 implements SimpleJob {
 
     /**
      * Description: <br>
