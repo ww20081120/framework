@@ -10,19 +10,11 @@
 	<artifactId>framework-job-core</artifactId>
 	<name>framework job core</name>
 	<description>job核心</description>
-	<properties>
-		<lasted.release.version>3.0.0-beta</lasted.release.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shardingsphere.elasticjob</groupId>
-			<artifactId>elasticjob-lite-core</artifactId>
-			<version>${lasted.release.version}</version>
 		</dependency>
 	</dependencies>
 </project>

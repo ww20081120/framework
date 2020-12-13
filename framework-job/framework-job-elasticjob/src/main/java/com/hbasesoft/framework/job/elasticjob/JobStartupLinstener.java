@@ -3,12 +3,11 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.job.core;
+package com.hbasesoft.framework.job.elasticjob;
 
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shardingsphere.elasticjob.api.ElasticJob;
 import org.apache.shardingsphere.elasticjob.api.JobConfiguration;
 import org.apache.shardingsphere.elasticjob.lite.api.bootstrap.impl.ScheduleJobBootstrap;
 import org.apache.shardingsphere.elasticjob.reg.base.CoordinatorRegistryCenter;
@@ -25,6 +24,7 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.job.core.SimpleJob;
 import com.hbasesoft.framework.job.core.annotation.Job;
 
 /**
@@ -103,9 +103,10 @@ public class JobStartupLinstener implements StartupListener {
 
                             JobConfiguration coreConfig = JobConfiguration.newBuilder(name, shardingTotalCount)
                                 .cron(getPropery(job.cron())).shardingItemParameters(shardingItemParameters).build();
-
+                            
                             ScheduleJobBootstrap bootstrap = new ScheduleJobBootstrap(regCenter,
-                                (ElasticJob) clazz.newInstance(), coreConfig);
+                                new ProxyJob((SimpleJob) clazz.newInstance()), coreConfig);
+                            
                             bootstrap.schedule();
 
                             LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(), name);
