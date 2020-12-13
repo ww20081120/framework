@@ -38,10 +38,3 @@ message: #消息服务
 
 #cache: #缓存配置
 #  model: SIMPLE
-  
-job:
-  register:
-    url: localhost:2181
-    namespace: ${project.name}
-  event:
-    enable: false

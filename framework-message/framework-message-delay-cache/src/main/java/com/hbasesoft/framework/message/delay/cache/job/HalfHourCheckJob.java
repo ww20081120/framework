@@ -5,9 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.delay.cache.job;
 
-import org.apache.shardingsphere.elasticjob.api.ShardingContext;
-import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
-
+import com.hbasesoft.framework.job.core.JobContext;
+import com.hbasesoft.framework.job.core.SimpleJob;
 import com.hbasesoft.framework.job.core.annotation.Job;
 import com.hbasesoft.framework.message.delay.cache.QueueManager;
 
@@ -29,10 +28,10 @@ public class HalfHourCheckJob implements SimpleJob {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param shardingContext <br>
+     * @param jobContext <br>
      */
     @Override
-    public void execute(final ShardingContext shardingContext) {
+    public void execute(final JobContext jobContext) {
         QueueManager.getMap().get(QueueManager.HALF_HOUR_QUEUE).check();
     }
 
