@@ -9,13 +9,13 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shardingsphere.elasticjob.api.ShardingContext;
-import org.apache.shardingsphere.elasticjob.simple.job.SimpleJob;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.job.core.JobContext;
+import com.hbasesoft.framework.job.core.SimpleJob;
 import com.hbasesoft.framework.job.core.annotation.Job;
 import com.hbasesoft.framework.tx.core.TxClientInfoFactory;
 import com.hbasesoft.framework.tx.core.TxConsumer;
@@ -54,10 +54,10 @@ public class RetryJob implements SimpleJob {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param shardingContext <br>
+     * @param jobContext <br>
      */
     @Override
-    public void execute(final ShardingContext shardingContext) {
+    public void execute(final JobContext jobContext) {
         // 按每小时内
 
         TxConsumer txConsumer = getConsumer();
@@ -71,7 +71,7 @@ public class RetryJob implements SimpleJob {
             PagerList<ClientInfo> timeoutClientInfos;
             do {
                 timeoutClientInfos = storage.queryTimeoutClientInfo(getClientInfoFactory().getClientInfo(),
-                    shardingContext.getShardingItem(), pageIndex++, pageSize);
+                    jobContext.getShardingItem(), pageIndex++, pageSize);
                 if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
                     for (ClientInfo clientInfo : timeoutClientInfos) {
                         if (!txConsumer.retry(clientInfo)) {

@@ -16,13 +16,6 @@ cache: #缓存配置
   model: REDIS
   redis:
     address: 127.0.0.1:6379
-    
-job:
-  register:
-    url: localhost:2181
-    namespace: framework-message-demo
-  event:
-    enable: false
 
 message: #消息服务
   model: REDIS
