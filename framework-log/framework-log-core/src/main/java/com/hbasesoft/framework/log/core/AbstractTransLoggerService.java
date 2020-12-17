@@ -10,16 +10,14 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
-import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
 import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 /**
@@ -39,6 +37,8 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
 
     /** always log */
     private boolean alwaysLog;
+
+    private static Map<String, TransBean> transBeanHolder = new HashMap<>();
 
     /**
      * Description: <br>
@@ -137,7 +137,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @return <br>
      */
     protected TransBean getTransBean(final String stackId) {
-        return CacheHelper.getCache().get(CacheConstant.CACHE_LOGS, stackId);
+        return transBeanHolder.get(stackId);
     }
 
     /**
@@ -148,7 +148,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      * @param bean <br>
      */
     protected void putTransBean(final TransBean bean) {
-        CacheHelper.getCache().put(CacheConstant.CACHE_LOGS, bean.getStackId(), bean);
+        transBeanHolder.put(bean.getStackId(), bean);
     }
 
     /**
@@ -190,25 +190,6 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param stackId <br>
-     * @param sql <br>
-     */
-    @Override
-    public void sql(final String stackId, final String sql) {
-        try {
-            CacheHelper.getCache().put(CacheConstant.CACHE_LOGS,
-                stackId + "_SQL_" + TransManager.getInstance().getSeq(), sql);
-        }
-        catch (Exception e) {
-            logger.warn("缓存sql失败", e);
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
      * @author 王伟<br>
      * @taskId <br>
      *         <br>
@@ -216,25 +197,8 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
     @Override
     public void clean() {
         TransManager manager = TransManager.getInstance();
-        String stackId = manager.peek();
-        if (StringUtils.isNotEmpty(stackId)) {
-            for (int i = 0, size = manager.getSeq(); i < size; i++) {
-                try {
-                    CacheHelper.getCache().evict(CacheConstant.CACHE_LOGS, stackId + "_SQL_" + i);
-                }
-                catch (Exception e) {
-                    logger.warn("删除cache日志失败", e);
-                }
-            }
-        }
-
         for (String key : manager.getIdSet()) {
-            try {
-                CacheHelper.getCache().evict(CacheConstant.CACHE_LOGS, key);
-            }
-            catch (Exception ex) {
-                logger.warn("删除cache日志失败2", ex);
-            }
+            transBeanHolder.remove(key);
         }
     }
 

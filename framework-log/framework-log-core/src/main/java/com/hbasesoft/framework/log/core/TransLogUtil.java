@@ -16,7 +16,6 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
 import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 /**

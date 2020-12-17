@@ -11,23 +11,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-cache-core</artifactId>
+			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>net.logstash.logback</groupId>
-			<artifactId>logstash-logback-encoder</artifactId>
-			<version>4.11</version>
 		</dependency>
 	</dependencies>
 </project>

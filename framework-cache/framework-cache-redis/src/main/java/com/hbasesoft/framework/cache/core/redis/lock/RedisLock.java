@@ -120,7 +120,7 @@ public class RedisLock implements Lock {
      */
     public void unlock() {
         if (this.lock) {
-            redisCache.evict(this.lockName);
+            redisCache.remove(this.lockName);
         }
     }
 

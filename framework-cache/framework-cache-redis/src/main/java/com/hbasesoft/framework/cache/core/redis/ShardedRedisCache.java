@@ -124,11 +124,16 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(final byte[] key, final byte[] value) {
+    protected void put(final byte[] key, int seconds, final byte[] value) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
-            shardedJedis.set(key, value);
+            if (seconds > 0) {
+                shardedJedis.setex(key, seconds, value);
+            }
+            else {
+                shardedJedis.set(key, value);
+            }
         }
         finally {
             if (shardedJedis != null) {
@@ -146,7 +151,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(final byte[] key) {
+    protected void remove(final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -190,12 +195,15 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(final byte[] key, final Map<byte[], byte[]> dataMap) {
+    protected void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             ShardedJedis shardedJedis = null;
             try {
                 shardedJedis = shardedPool.getResource();
                 shardedJedis.hmset(key, dataMap);
+                if (seconds > 0) {
+                    shardedJedis.expire(key, seconds);
+                }
             }
             finally {
                 if (shardedJedis != null) {
@@ -212,32 +220,11 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     */
-    @Override
-    protected void removeNode(final byte[] nodeName) {
-        ShardedJedis shardedJedis = null;
-        try {
-            shardedJedis = shardedPool.getResource();
-            shardedJedis.del(nodeName);
-        }
-        finally {
-            if (shardedJedis != null) {
-                shardedJedis.close();
-            }
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
      * @param key
      * @return <br>
      */
     @Override
-    protected byte[] get(final byte[] nodeName, final byte[] key) {
+    protected byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -260,12 +247,15 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
+    protected void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             ShardedJedis shardedJedis = null;
             try {
                 shardedJedis = shardedPool.getResource();
                 shardedJedis.hset(nodeName, key, t);
+                if (seconds > 0) {
+                    shardedJedis.expire(key, seconds);
+                }
             }
             finally {
                 if (shardedJedis != null) {
@@ -285,7 +275,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(final byte[] nodeName, final byte[] key) {
+    protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();

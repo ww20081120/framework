@@ -189,7 +189,7 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
-            metadata = daoConfig.isCache() ? CacheHelper.getCache().get(CacheConstant.SQL_PARAM_DIR, key) : null;
+            metadata = daoConfig.isCache() ? CacheHelper.getCache().getNodeValue(CacheConstant.SQL_PARAM_DIR, key) : null;
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -264,7 +264,7 @@ public class AbstractAnnotationHandler {
                         method.getDeclaringClass().getName(), method.getName());
                 }
                 if (daoConfig.isCache()) {
-                    CacheHelper.getCache().put(CacheConstant.SQL_PARAM_DIR, key, metadata);
+                    CacheHelper.getCache().putNodeValue(CacheConstant.SQL_PARAM_DIR, key, metadata);
                 }
             }
         }
@@ -290,7 +290,7 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         String templateSql = null;
         try {
-            templateSql = daoConfig.isCache() ? CacheHelper.getCache().get(CacheConstant.SQL_DIR, key) : null;
+            templateSql = daoConfig.isCache() ? CacheHelper.getCache().getNodeValue(CacheConstant.SQL_DIR, key) : null;
             if (StringUtils.isEmpty(templateSql)) {
                 String path = null;
 
@@ -305,7 +305,7 @@ public class AbstractAnnotationHandler {
                     templateSql = checkSqlPath(method, path);
                 }
                 if (daoConfig.isCache()) {
-                    CacheHelper.getCache().put(CacheConstant.SQL_DIR, key, templateSql);
+                    CacheHelper.getCache().putNodeValue(CacheConstant.SQL_DIR, key, templateSql);
                 }
             }
         }

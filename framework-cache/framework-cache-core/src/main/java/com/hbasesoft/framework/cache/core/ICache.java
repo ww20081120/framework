@@ -7,9 +7,6 @@ package com.hbasesoft.framework.cache.core;
 
 import java.util.Map;
 
-import org.springframework.cache.Cache;
-import org.springframework.cache.support.SimpleValueWrapper;
-
 /**
  * <Description> <br>
  * 缓存接口
@@ -19,138 +16,43 @@ import org.springframework.cache.support.SimpleValueWrapper;
  * @CreateDate 2014年10月24日 <br>
  * @see com.hbasesoft.framework.core.cache <br>
  */
-public interface ICache extends Cache {
+public interface ICache {
+    
+    String getName();
 
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param key
-     * @return <br>
-     */
-    default ValueWrapper get(Object key) {
-        return new SimpleValueWrapper(get(key, String.class));
-    }
+    <T> T get(String key);
 
-    /**
-     * Description: 获取节点<br>
-     * 
-     * @author 王伟 <br>
-     * @param nodeName 节点名称
-     * @return <br>
-     */
+    default <T> void put(String key, T t) {
+        put(key, 0, t);
+    };
+
+    <T> void put(String key, int seconds, T t);
+
+    void remove(String key);
+
     default Map<String, String> getNode(String nodeName) {
         return getNode(nodeName, String.class);
     };
 
-    /**
-     * Description: 获取节点<br>
-     * 
-     * @author 王伟<br>
-     * @param clazz 数据类型
-     * @param nodeName 节点名称
-     * @param <T> T
-     * @return 缓存数据
-     */
     <T> Map<String, T> getNode(String nodeName, Class<T> clazz);
 
-    /**
-     * Description: putNode<br>
-     * 
-     * @author 王伟 <br>
-     * @param nodeName <br>
-     * @param <T> T
-     * @param node <br>
-     */
-    <T> void putNode(String nodeName, Map<String, T> node);
+    default <T> void putNode(String nodeName, Map<String, T> node) {
+        putNode(nodeName, 0, node);
+    }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName 节点名称
-     * @param seconds 缓存秒数
-     * @param <T> T
-     * @param node <br>
-     */
     <T> void putNode(String nodeName, int seconds, Map<String, T> node);
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName <br>
-     */
-    void removeNode(String nodeName);
+    <T> T getNodeValue(String nodeName, String key);
 
-    /**
-     * Description: getValue<br>
-     * 
-     * @author 王伟 <br>
-     * @param nodeName <br>
-     * @param key <br>
-     * @param <T> T
-     * @return <br>
-     */
-    <T> T get(String nodeName, String key);
+    <T> void putNodeValue(String nodeName, int seconds, String key, T t);
 
-    /**
-     * Description: 获取数据<br>
-     * 
-     * @author 王伟<br>
-     * @param clazz 数据类型
-     * @param nodeName 节点名称
-     * @param key 缓存的key
-     * @param <T> T
-     * @return 返回类型
-     */
-    @Deprecated
-    default <T> T get(String nodeName, String key, Class<T> clazz) {
-        return get(nodeName, key);
-    }
+    default <T> void putNodeValue(String nodeName, String key, T t) {
+        putNodeValue(nodeName, 0, key, t);
+    };
 
-    /**
-     * Description: putValue<br>
-     * 
-     * @author 王伟 <br>
-     * @param nodeName <br>
-     * @param key <br>
-     * @param <T> T
-     * @param t <br>
-     */
-    <T> void put(String nodeName, String key, T t);
+    void removeNodeValue(String nodeName, String key);
 
-    /**
-     * Description: putValue<br>
-     * 
-     * @author 王伟 <br>
-     * @param nodeName <br>
-     * @param seconds <br>
-     * @param key <br>
-     * @param <T> T
-     * @param t <br>
-     */
-    <T> void put(String nodeName, int seconds, String key, T t);
-
-    /**
-     * Description: removeValue<br>
-     * 
-     * @author 王伟 <br>
-     * @param nodeName <br>
-     * @param key <br>
-     */
-    void evict(String nodeName, String key);
-
-    @Override
-    default ValueWrapper putIfAbsent(Object key, Object value) {
-        ValueWrapper vrapper = get(key);
-        if (vrapper == null) {
-            put(key, value);
-        }
-        return vrapper;
-    }
+    void clear();
+    
+    Object getNativeCache();
 }

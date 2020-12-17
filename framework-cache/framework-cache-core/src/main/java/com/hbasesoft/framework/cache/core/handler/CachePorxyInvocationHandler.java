@@ -76,6 +76,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
      * @return Object
      * @throws Throwable <br>
      */
+    @SuppressWarnings("unlikely-arg-type")
     @Override
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
         Object result = null;
@@ -85,7 +86,8 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         }
         else {
             if (config.cacheAble()) {
-                result = CacheHelper.getCache().get(nodeNamePrefix + method.getName(), getCacheKey(method, args));
+                result = CacheHelper.getCache().getNodeValue(nodeNamePrefix + method.getName(),
+                    getCacheKey(method, args));
                 if (result == null) {
                     result = getAndCache(method, args, cacheProxy.expireTime());
                 }
@@ -96,7 +98,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
 
             if (CommonUtil.isNotEmpty(config.removeMethods())) {
                 for (String methodName : config.removeMethods()) {
-                    CacheHelper.getCache().evict(nodeNamePrefix + methodName);
+                    CacheHelper.getCache().remove(nodeNamePrefix + methodName);
                     LoggerUtil.debug("Success evict proxy cache [class={0}, method={1}]", clazz, methodName);
                 }
             }
@@ -122,7 +124,7 @@ public class CachePorxyInvocationHandler implements InvocationHandler {
         throws InvocationTargetException, IllegalAccessException {
         Object result = method.invoke(target, args);
         if (result != null) {
-            CacheHelper.getCache().put(nodeNamePrefix + method.getName(), expireTime, getCacheKey(method, args),
+            CacheHelper.getCache().putNodeValue(nodeNamePrefix + method.getName(), expireTime, getCacheKey(method, args),
                 result);
             LoggerUtil.debug("Success proxy cache [class={0}, method={1}, expireTime={2}]", clazz, method.getName(),
                 expireTime);

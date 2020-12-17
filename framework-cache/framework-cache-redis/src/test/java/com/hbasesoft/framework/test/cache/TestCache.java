@@ -106,7 +106,8 @@ public class TestCache {
      */
     @Test
     public void getValue() {
-        System.out.println(CacheHelper.getCache().get("person", "zhangsan", Person.class));
+        Person preson = CacheHelper.getCache().getNodeValue("person", "zhangsan");
+        System.out.println(preson);
     }
 
     /**
@@ -118,7 +119,7 @@ public class TestCache {
      */
     @Test
     public void putValue() {
-        CacheHelper.getCache().put("person", "liuliu", new Person("溜溜", AGE_26));
+        CacheHelper.getCache().putNodeValue("person", "liuliu", new Person("溜溜", AGE_26));
     }
 
     /**
@@ -129,7 +130,7 @@ public class TestCache {
      */
     @Test
     public void updateValue() {
-        CacheHelper.getCache().put("person", "liuliu", new Person("溜溜", AGE_27));
+        CacheHelper.getCache().putNodeValue("person", "liuliu", new Person("溜溜", AGE_27));
     }
 
     /**
@@ -140,7 +141,7 @@ public class TestCache {
      */
     @Test
     public void removeValue() {
-        CacheHelper.getCache().evict("person", "zhangsan");
+        CacheHelper.getCache().removeNodeValue("person", "zhangsan");
     }
 
     /**
@@ -151,7 +152,7 @@ public class TestCache {
      */
     @Test
     public void removeNode() {
-        CacheHelper.getCache().removeNode("person");
+        CacheHelper.getCache().remove("person");
     }
 
     /**
