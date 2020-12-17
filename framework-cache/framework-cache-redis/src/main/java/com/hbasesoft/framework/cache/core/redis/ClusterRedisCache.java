@@ -130,8 +130,13 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(final byte[] key, final byte[] value) {
-        cluster.set(key, value);
+    protected void put(final byte[] key, final int seconds, final byte[] value) {
+        if (seconds > 0) {
+            cluster.setex(key, seconds, value);
+        }
+        else {
+            cluster.set(key, value);
+        }
     }
 
     /**
@@ -142,7 +147,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(final byte[] key) {
+    protected void remove(final byte[] key) {
         cluster.del(key);
     }
 
@@ -168,22 +173,13 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(final byte[] key, final Map<byte[], byte[]> dataMap) {
+    protected void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             cluster.hmset(key, dataMap);
+            if (seconds > 0) {
+                cluster.expire(key, seconds);
+            }
         }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
-     */
-    @Override
-    protected void removeNode(final byte[] nodeName) {
-        cluster.del(nodeName);
     }
 
     /**
@@ -196,7 +192,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(final byte[] nodeName, final byte[] key) {
+    protected byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
         return cluster.hget(nodeName, key);
     }
 
@@ -210,9 +206,12 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
+    protected void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             cluster.hset(nodeName, key, t);
+            if (seconds > 0) {
+                cluster.expire(nodeName, seconds);
+            }
         }
     }
 
@@ -225,7 +224,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(final byte[] nodeName, final byte[] key) {
+    protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
         cluster.hdel(nodeName, key);
     }
 

@@ -126,24 +126,6 @@ public class TransLoggerService4Kafka extends AbstractTransLoggerService {
      * @author 王伟<br>
      * @taskId <br>
      * @param stackId
-     * @param sql <br>
-     */
-    @Override
-    public void sql(final String stackId, final String sql) {
-        if (stackId != null) {
-            Span span = spanMap.get(stackId);
-            if (span != null) {
-                span.tag(System.nanoTime() + "", sql);
-            }
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param stackId
      * @param beginTime
      * @param endTime
      * @param consumeTime

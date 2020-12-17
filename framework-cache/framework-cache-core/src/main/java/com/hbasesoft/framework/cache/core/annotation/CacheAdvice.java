@@ -109,16 +109,16 @@ public class CacheAdvice {
     private Object cache(final Cache cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
         final Class<?> returnType) throws Throwable {
         String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
-        Object result = CacheHelper.getCache().get(cache.node(), key);
+        Object result = CacheHelper.getCache().getNodeValue(cache.node(), key);
         if (result == null) {
             result = thisJoinPoint.proceed();
             if (result != null) {
                 int expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
-                    CacheHelper.getCache().put(cache.node(), expireTimes, key, result);
+                    CacheHelper.getCache().putNodeValue(cache.node(), expireTimes, key, result);
                 }
                 else {
-                    CacheHelper.getCache().put(cache.node(), key, result);
+                    CacheHelper.getCache().putNodeValue(cache.node(), key, result);
                 }
 
                 logger.debug("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
@@ -136,7 +136,7 @@ public class CacheAdvice {
             throw new ServiceException(ErrorCodeDef.CACHE_KEY_ERROR);
         }
 
-        Object result = CacheHelper.getCache().get(cache.node(), cache.bean());
+        Object result = CacheHelper.getCache().getNode(cache.node(), cache.bean());
         if (result == null) {
             result = thisJoinPoint.proceed();
             if (result != null) {
@@ -158,14 +158,14 @@ public class CacheAdvice {
     private void rmCache(final RmCache rmCache, final Method method, final Object[] args) throws Exception {
         if (rmCache.clean()) {
             for (String node : rmCache.node()) {
-                CacheHelper.getCache().removeNode(node);
+                CacheHelper.getCache().remove(node);
                 logger.debug("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), node);
             }
         }
         else {
             String key = getCacheKey(rmCache.key(), method, args);
             for (String node : rmCache.node()) {
-                CacheHelper.getCache().evict(node, key);
+                CacheHelper.getCache().removeNodeValue(node, key);
                 logger.debug("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
                     rmCache.node(), key);
             }

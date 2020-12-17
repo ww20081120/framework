@@ -69,8 +69,8 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         sqlHandler.setDaoConfig(config);
 
         ICache cache = CacheHelper.getCache();
-        cache.removeNode(CacheConstant.SQL_PARAM_DIR);
-        cache.removeNode(CacheConstant.SQL_DIR);
+        cache.remove(CacheConstant.SQL_PARAM_DIR);
+        cache.remove(CacheConstant.SQL_DIR);
 
         try {
             for (String pack : packagesToScan) {

@@ -6,7 +6,6 @@ package com.hbasesoft.framework.db.core.utils;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Types;
-import java.util.ServiceLoader;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -23,8 +22,6 @@ import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.common.utils.logger.TransLoggerService;
-import com.hbasesoft.framework.common.utils.logger.TransManager;
 
 /**
  * <Description> <br>
@@ -37,16 +34,6 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
  * @see com.hbasesoft.framework.log.core.filter <br>
  */
 public class SqlLogFilter extends FilterEventAdapter {
-
-    /**
-     * transLoggerServices
-     */
-    private ServiceLoader<TransLoggerService> transLoggerServices;
-
-    /**
-     * dataSource
-     */
-    private DataSourceProxy dataSource;
 
     /**
      * SqlLogFilter
@@ -63,7 +50,6 @@ public class SqlLogFilter extends FilterEventAdapter {
      */
     @Override
     public void init(final DataSourceProxy ds) {
-        this.dataSource = ds;
     }
 
     /**
@@ -299,7 +285,6 @@ public class SqlLogFilter extends FilterEventAdapter {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + "} executed. "
             + millis + " millis. " + getExcuteSql(statement);
         statementLog(sqlMsg);
-        saveMsg2Cache(sqlMsg);
     }
 
     /**
@@ -339,7 +324,6 @@ public class SqlLogFilter extends FilterEventAdapter {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
             + "} batch executed. " + millis + " millis. " + sql;
         statementLog(sqlMsg);
-        saveMsg2Cache(sqlMsg);
     }
 
     /**
@@ -377,7 +361,6 @@ public class SqlLogFilter extends FilterEventAdapter {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement) + ", rs-"
             + resultSet.getId() + "} query executed. " + millis + " millis. " + getExcuteSql(statement);
         statementLog(sqlMsg);
-        saveMsg2Cache(sqlMsg);
     }
 
     /**
@@ -415,7 +398,6 @@ public class SqlLogFilter extends FilterEventAdapter {
             + "} update executed. effort " + updateCount + ". " + millis + " millis. " + getExcuteSql(statement);
 
         statementLog(sqlMsg);
-        saveMsg2Cache(sqlMsg);
     }
 
     /**
@@ -595,7 +577,6 @@ public class SqlLogFilter extends FilterEventAdapter {
         String sqlMsg = "{conn-" + statement.getConnectionProxy().getId() + ", " + stmtId(statement)
             + "} execute error. " + getExcuteSql(statement);
         statementLogError(sqlMsg, error);
-        saveMsg2Cache(sqlMsg);
     }
 
     /**
@@ -724,35 +705,5 @@ public class SqlLogFilter extends FilterEventAdapter {
         }
 
         return sqlStr;
-    }
-
-    /**
-     * 保存日志信息岛缓存
-     * 
-     * @param msg <br>
-     */
-    private void saveMsg2Cache(final String msg) {
-        String statckId = TransManager.getInstance().getStackId();
-
-        ServiceLoader<TransLoggerService> services = getTransLoggerServices();
-        if (services != null) {
-            for (TransLoggerService service : services) {
-                service.sql(statckId, msg);
-            }
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @return <br>
-     */
-    private ServiceLoader<TransLoggerService> getTransLoggerServices() {
-        if (transLoggerServices == null) {
-            transLoggerServices = ServiceLoader.load(TransLoggerService.class);
-        }
-        return transLoggerServices;
     }
 }

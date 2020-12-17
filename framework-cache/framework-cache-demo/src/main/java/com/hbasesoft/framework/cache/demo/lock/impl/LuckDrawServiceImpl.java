@@ -99,7 +99,7 @@ public class LuckDrawServiceImpl implements LuckDrawService {
 
     private int getWinner(final String activityCode, final int count, final int l) {
         ICache cache = CacheHelper.getCache();
-        Integer oldLevel = cache.get("LUCK_DRAW_LEVEL", activityCode);
+        Integer oldLevel = cache.getNodeValue("LUCK_DRAW_LEVEL", activityCode);
         int key = 0;
 
         int[] winners;
@@ -122,14 +122,14 @@ public class LuckDrawServiceImpl implements LuckDrawService {
                 winners[index++] = win;
             }
             Arrays.sort(winners);
-            cache.put("LUCK_DRAW_LEVEL", activityCode, l);
-            cache.put("LUCK_DRAW", activityCode, winners);
+            cache.putNodeValue("LUCK_DRAW_LEVEL", activityCode, l);
+            cache.putNodeValue("LUCK_DRAW", activityCode, winners);
         }
         else {
-            winners = cache.get("LUCK_DRAW", activityCode);
-            key = CacheHelper.getCache().get("LUCK_DRAW_CURRENT", activityCode);
+            winners = cache.getNodeValue("LUCK_DRAW", activityCode);
+            key = CacheHelper.getCache().getNodeValue("LUCK_DRAW_CURRENT", activityCode);
         }
-        CacheHelper.getCache().put("LUCK_DRAW_CURRENT", activityCode, ++key);
+        CacheHelper.getCache().putNodeValue("LUCK_DRAW_CURRENT", activityCode, ++key);
         System.out.println("你是第" + key + "位访问者");
         return Arrays.binarySearch(winners, key);
     }

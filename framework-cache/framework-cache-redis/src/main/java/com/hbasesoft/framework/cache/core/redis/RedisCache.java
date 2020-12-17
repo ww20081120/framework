@@ -141,12 +141,17 @@ public class RedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(final byte[] key, final byte[] value) {
+    protected void put(final byte[] key, int seconds, final byte[] value) {
         if (value != null && value.length > 0) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
-                jedis.set(key, value);
+                if (seconds > 0) {
+                    jedis.setex(key, seconds, value);
+                }
+                else {
+                    jedis.set(key, value);
+                }
             }
             finally {
                 if (jedis != null) {
@@ -164,7 +169,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(final byte[] key) {
+    protected void remove(final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -208,12 +213,15 @@ public class RedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(final byte[] key, final Map<byte[], byte[]> dataMap) {
+    protected void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
                 jedis.hmset(key, dataMap);
+                if (seconds > 0) {
+                    jedis.expire(key, seconds);
+                }
             }
             finally {
                 if (jedis != null) {
@@ -230,32 +238,11 @@ public class RedisCache extends AbstractRedisCache {
      * @author 王伟<br>
      * @taskId <br>
      * @param nodeName
-     */
-    @Override
-    protected void removeNode(final byte[] nodeName) {
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            jedis.del(nodeName);
-        }
-        finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param nodeName
      * @param key
      * @return <br>
      */
     @Override
-    protected byte[] get(final byte[] nodeName, final byte[] key) {
+    protected byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -278,12 +265,15 @@ public class RedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void put(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
+    protected void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
                 jedis.hset(nodeName, key, t);
+                if (seconds > 0) {
+                    jedis.expire(nodeName, seconds);
+                }
             }
             finally {
                 if (jedis != null) {
@@ -302,7 +292,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void evict(final byte[] nodeName, final byte[] key) {
+    protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();

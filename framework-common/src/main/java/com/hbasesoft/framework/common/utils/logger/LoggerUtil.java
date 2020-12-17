@@ -200,7 +200,7 @@ public final class LoggerUtil {
      * @param message 日志信息
      */
     public static void sqlLog(final String message) {
-        LoggerFactory.getLogger(SQL_LOG_NAME).info(message);
+        LoggerFactory.getLogger(SQL_LOG_NAME).info(TransManager.getInstance().peek() + "|" + message);
     }
 
     /**
@@ -210,7 +210,8 @@ public final class LoggerUtil {
      * @param message 日志信息 <br>
      */
     public static void sqlLog(final String message, final Throwable t) {
-        LoggerFactory.getLogger(SQL_LOG_NAME).error(getErrorMessage(message, t), t);
+        LoggerFactory.getLogger(SQL_LOG_NAME)
+            .error(TransManager.getInstance().peek() + "|" + getErrorMessage(message, t), t);
     }
 
     /**

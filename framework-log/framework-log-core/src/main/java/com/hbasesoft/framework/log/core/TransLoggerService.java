@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.common.utils.logger;
+package com.hbasesoft.framework.log.core;
 
 /**
  * <Description> <br>
@@ -70,16 +70,6 @@ public interface TransLoggerService {
      */
     void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
         Throwable e);
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param stackId <br>
-     * @param sql <br>
-     */
-    void sql(String stackId, String sql);
 
     /**
      * Description: <br>
