@@ -12,9 +12,6 @@ spring: #应用配置
 server: #系统配置
   port: 10000
   
-cache: #缓存配置
-  model: SIMPLE
-  
 logservice:
   framework:
     show: true
