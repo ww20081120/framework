@@ -1,7 +1,7 @@
 package com.hbasesoft.framework.common.utils.io;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -16,11 +16,11 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
-import com.hbasesoft.framework.common.utils.PropertyHolder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
@@ -189,7 +189,6 @@ public final class HttpUtil {
         return doPost(url, body, contentType, GlobalConstants.DEFAULT_CHARSET);
     }
 
-
     /**
      * Description: doPost<br>
      *
@@ -202,16 +201,16 @@ public final class HttpUtil {
      * @return String
      */
     public static String doPost(final String url, final String body, final String contentType,
-                                final String authorization, final String charset) {
+        final String authorization, final String charset) {
         MediaType mediaType = MediaType.parse(contentType);
         RequestBody requestBody = RequestBody.create(mediaType, body);
-        Request request = new Request.Builder().url(url)
-                .addHeader("Authorization", authorization).post(requestBody).build();
+        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).post(requestBody)
+            .build();
         return getStringRequest(request, charset);
     }
 
     public static String doPost(final String url, final String body, final String contentType,
-                                final Map<String, String> paramMap, final String charset) {
+        final Map<String, String> paramMap, final String charset) {
         Request.Builder builder = new Request.Builder();
         builder.url(url);
         if (MapUtils.isNotEmpty(paramMap)) {
@@ -253,20 +252,30 @@ public final class HttpUtil {
      * @param url
      * @param absolutePath <br>
      */
-    public static void doGetDowloadFile(final String url, final String absolutePath) {
-        File f = new File(absolutePath);
-        if (!f.exists()) {
-            Request request = new Request.Builder().url(url).build();
-            OkHttpClient okHttpClient = getOkHttpClient();
-            Call call = okHttpClient.newCall(request);
-            try {
-                Response response = call.execute();
-                IOUtil.copyFileFromInputStream(absolutePath, response.body().byteStream());
-            }
-            catch (IOException e) {
-                throw new UtilException(e);
-            }
+    public static void downloadFile(final String url, final String absolutePath) {
+        IOUtil.copyFileFromInputStream(absolutePath, downloadFile(url));
+    }
+
+    /**
+     * Description: 执行get请求<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param absolutePath <br>
+     */
+    public static InputStream downloadFile(final String url) {
+        Request request = new Request.Builder().url(url).build();
+        OkHttpClient okHttpClient = getOkHttpClient();
+        Call call = okHttpClient.newCall(request);
+        try {
+            Response response = call.execute();
+            return response.body().byteStream();
         }
+        catch (IOException e) {
+            throw new UtilException(e);
+        }
+
     }
 
     /**
@@ -383,13 +392,12 @@ public final class HttpUtil {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", CONNECT_TIMEOUT),
-                            TimeUnit.MILLISECONDS)
-                    .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout", READDING_TIMEOUT),
-                            TimeUnit.MILLISECONDS)
-                    .sslSocketFactory(getSSLSocketFactory())
-                    .hostnameVerifier(getHostnameVerifier())
-                    .build();
+                .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", CONNECT_TIMEOUT),
+                    TimeUnit.MILLISECONDS)
+                .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout", READDING_TIMEOUT),
+                    TimeUnit.MILLISECONDS)
+                .sslSocketFactory(getSSLSocketFactory(), TrustManagerUtils.getAcceptAllTrustManager())
+                .hostnameVerifier(getHostnameVerifier()).build();
             httpClientHold.set(okHttpClient);
         }
         return okHttpClient;
@@ -406,21 +414,22 @@ public final class HttpUtil {
         }
     }
 
-
     private static TrustManager[] getTrustManager() {
-         TrustManager[] trustAllCerts = new TrustManager[]{
-                 new X509TrustManager() {
-                     @Override
-                     public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s) {
-                     }
-                     @Override
-                     public void checkServerTrusted(final X509Certificate[] x509Certificates, final String s) {
-                     }
-                     @Override
-                     public X509Certificate[] getAcceptedIssuers() {
-                         return new X509Certificate[0];
-                     }
-                 }
+        TrustManager[] trustAllCerts = new TrustManager[] {
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s) {
+                }
+
+                @Override
+                public void checkServerTrusted(final X509Certificate[] x509Certificates, final String s) {
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            }
         };
         return trustAllCerts;
     }
