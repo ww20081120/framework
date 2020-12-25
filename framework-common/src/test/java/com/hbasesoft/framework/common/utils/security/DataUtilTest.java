@@ -103,6 +103,7 @@ public class DataUtilTest {
     public void encrypt() {
         String str1 = "123456";
         String str2 = DataUtil.encrypt(str1);
+        System.out.println(str2);
         String str3 = DataUtil.decrypt(str2);
         Assert.equals(str1, str3, ErrorCodeDef.SYSTEM_ERROR_10001);
     }
