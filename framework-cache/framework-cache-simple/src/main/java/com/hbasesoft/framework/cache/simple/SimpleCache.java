@@ -146,10 +146,8 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void remove(final byte[] nodeName) {
-        Map<String, byte[]> node = this.cachesMap.remove(new String(nodeName));
-        if (node == null) {
-            removeNodeValue(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), nodeName);
-        }
+        this.cachesMap.remove(new String(nodeName));
+        removeNodeValue(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), nodeName);
     }
 
     /**
