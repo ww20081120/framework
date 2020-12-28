@@ -5,8 +5,8 @@
  ****************************************************************************************/
 package com.framework.message.redis;
 
+import com.hbasesoft.framework.common.utils.thread.MessageThreadPoolExecutor;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
-import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
 
 import redis.clients.jedis.BinaryJedisPubSub;
 
