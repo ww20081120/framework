@@ -107,6 +107,8 @@ public class DefaultLock implements Lock {
      */
     @Override
     public void unlock() {
-        reentrantLock.unlock();
+        if (reentrantLock.isLocked()) {
+            reentrantLock.unlock();
+        }
     }
 }
