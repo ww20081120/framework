@@ -10,14 +10,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
-import com.hbasesoft.framework.common.utils.PropertyHolder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
@@ -254,6 +259,7 @@ public final class HttpUtil {
                     .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout",30000L), TimeUnit.MILLISECONDS)
                     .sslSocketFactory(getSSLSocketFactory())
                     .hostnameVerifier(getHostnameVerifier())
+                    .retryOnConnectionFailure(false)
                     .build();
             httpClientHold.set(okHttpClient);
         }
