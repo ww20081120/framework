@@ -61,6 +61,12 @@ public final class ProtocolUtil {
     /** DEFAULT_PORT */
     public static final int DEFAULT_KAFKA_PORT = 9092;
 
+    /** DEFAULT_SMTP_PORT */
+    public static final int DEFAULT_SMTP_PORT = 25;
+
+    /** DEFAULT_SMTP_PORT */
+    public static final int DEFAULT_SMTPS_PORT = 465;
+
     /** "://" */
     private static final int LEN = "://".length();
 
@@ -76,6 +82,8 @@ public final class ProtocolUtil {
         defaultPortMap = new HashMap<String, Integer>();
         defaultPortMap.put("http", HttpUtil.DEFAULT_HTTP_PORT);
         defaultPortMap.put("https", HttpUtil.DEFAULT_HTTPS_PORT);
+        defaultPortMap.put("smtp", DEFAULT_SMTP_PORT);
+        defaultPortMap.put("smtps", DEFAULT_SMTPS_PORT);
         defaultPortMap.put("ftp", DEFAULT_FTP_PORT);
         defaultPortMap.put("sftp", DEFAULT_SFTP_PORT);
         defaultPortMap.put("ssh", DEFAULT_SSH_PORT);

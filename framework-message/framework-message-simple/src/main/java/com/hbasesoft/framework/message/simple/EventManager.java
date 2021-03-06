@@ -19,8 +19,8 @@ import org.apache.commons.collections.CollectionUtils;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.common.utils.thread.MessageThreadPoolExecutor;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
-import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
 
 /**
  * <Description> <br>

@@ -23,6 +23,17 @@ import com.hbasesoft.framework.cache.core.CacheConstant;
  * @see com.hbasesoft.framework.core.cache.simple <br>
  */
 public class SimpleCache extends AbstractCache {
+
+    public static void main(String[] args) {
+        SimpleCache cache = new SimpleCache();
+        cache.put("test", 0, "test123");
+        String value = cache.get("test");
+        System.out.println(value);
+        cache.remove("test");
+        value = cache.get("test");
+        System.out.println(value);
+    }
+
     /**
      * 缓存模式
      */
@@ -147,6 +158,7 @@ public class SimpleCache extends AbstractCache {
     @Override
     protected void remove(final byte[] nodeName) {
         this.cachesMap.remove(new String(nodeName));
+        removeNodeValue(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), nodeName);
     }
 
     /**
@@ -193,6 +205,9 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
-        getNode(nodeName).remove(key);
+        Map<String, byte[]> nodeMap = this.cachesMap.get(new String(nodeName));
+        if (nodeMap != null) {
+            nodeMap.remove(new String(key));
+        }
     }
 }
