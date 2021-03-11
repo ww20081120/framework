@@ -259,7 +259,7 @@ public final class HttpUtil {
                     .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout",30000L), TimeUnit.MILLISECONDS)
                     .sslSocketFactory(getSSLSocketFactory())
                     .hostnameVerifier(getHostnameVerifier())
-                    .retryOnConnectionFailure(false)
+//                    .retryOnConnectionFailure(false)
                     .build();
             httpClientHold.set(okHttpClient);
         }
