@@ -12,5 +12,7 @@
   	<module>framework-log-core</module>
   	<module>framework-log-file</module>
   	<module>framework-log-kafka</module>
+  	<module>framework-log-demo</module>
+  	<module>framework-log-demo2</module>
   </modules>
 </project>

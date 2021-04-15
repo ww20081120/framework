@@ -278,6 +278,9 @@ public final class PropertyHolder {
             }
             return message;
         }
+        if (params != null && params.length > 0) {
+            return CommonUtil.getString(params[0]);
+        }
         return GlobalConstants.BLANK + code;
     }
 
