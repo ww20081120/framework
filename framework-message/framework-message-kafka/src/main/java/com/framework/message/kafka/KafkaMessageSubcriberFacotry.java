@@ -14,9 +14,9 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.common.utils.thread.MessageThreadPoolExecutor;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
+import com.hbasesoft.framework.message.core.util.MessageThreadPoolExecutor;
 
 /**
  * <Description> <br>
@@ -67,11 +67,14 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
      */
     @Override
     public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
                 .getKafkaConsumer(broadcast ? channel + CommonUtil.getTransactionID() : channel, channel);
             registSubscriberBroadCast(kafkaConsumer, channel, subscriber);
-        }).start();
+        });
+        thread.setName("Scanner_" + channel + thread.getId());
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private void registSubscriberBroadCast(final KafkaConsumer<String, byte[]> kafkaConsumer, final String channel,
