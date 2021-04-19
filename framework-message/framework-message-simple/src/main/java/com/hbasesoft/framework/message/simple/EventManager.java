@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -40,18 +39,11 @@ public class EventManager {
 
     private Map<String, ArrayBlockingQueue<byte[]>> queueHolder;
 
-    private ThreadPoolExecutor executor;
-
     private static EventManager eventManager;
 
     private EventManager() {
         subscriberHolder = new ConcurrentHashMap<>();
         queueHolder = new ConcurrentHashMap<>();
-        executor = new ThreadPoolExecutor(PropertyHolder.getIntProperty("message.scanner.coreSize", 5), // 设置核心线程数量
-            PropertyHolder.getIntProperty("message.scanner.maxPoolSize", 20), // 线程池维护线程的最大数量
-            PropertyHolder.getIntProperty("message.scanner.keepAliveSeconds", 600), TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("message.scanner.queueCapacity", 10)) // 允许的空闲时间
-        ); // 缓存队列
     }
 
     public static EventManager getInstance() {
@@ -67,7 +59,10 @@ public class EventManager {
             if (subscribers == null) {
                 subscribers = new ArrayList<>();
                 subscriberHolder.put(channel, subscribers);
-                executor.execute(new EventScanner(channel, broadcast, getBlockingQueue(channel)));
+                Thread thread = new Thread(new EventScanner(channel, broadcast, getBlockingQueue(channel)));
+                thread.setName("Scanner_" + channel + thread.getId());
+                thread.setDaemon(true);
+                thread.start();
             }
             subscribers.add(messageSubscriber);
         }

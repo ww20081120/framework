@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -53,6 +54,9 @@ public class EventHandlerStartupLinstener implements StartupListener {
                     for (String channel : linsener.events()) {
                         factory.registSubscriber(channel, linsener.subscriber(), linsener);
                     }
+                    
+                    LoggerUtil.info("regist event success {0}|{1}", Arrays.toString(events),
+                        linsener.getClass().getName());
                 }
             }
         }
