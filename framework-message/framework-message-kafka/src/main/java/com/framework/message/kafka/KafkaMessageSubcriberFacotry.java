@@ -56,11 +56,13 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
      */
     @Override
     public void registSubscriber(final String channel, boolean broadcast, final MessageSubscriber subscriber) {
-        new Thread(() -> {
+        Thread thread =  new Thread(() -> {
             KafkaConsumer<String, byte[]> kafkaConsumer = KafkaClientFacotry
                 .getKafkaConsumer(broadcast ? channel + CommonUtil.getTransactionID() : channel, channel);
             registSubscriberBroadCast(kafkaConsumer, channel, subscriber);
-        }).start();
+        });
+        thread.setName("Scanner_" + channel + thread.getId());
+        thread.start();
     }
 
     private void registSubscriberBroadCast(KafkaConsumer<String, byte[]> kafkaConsumer, String channel,
