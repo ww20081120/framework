@@ -7,6 +7,8 @@ package com.hbasesoft.framework.rule.core;
 
 import java.io.Serializable;
 
+import com.hbasesoft.framework.common.annotation.NoTransLog;
+
 /**
  * <Description> <br>
  * 
@@ -17,6 +19,7 @@ import java.io.Serializable;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
+@NoTransLog
 public interface FlowComponentInterceptor extends Comparable<FlowComponentInterceptor> {
 
     default boolean before(Serializable flowBean, FlowContext flowContext) {
