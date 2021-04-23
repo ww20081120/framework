@@ -29,6 +29,7 @@
 		<spring-cloud.version>Greenwich.SR5</spring-cloud.version>
 		<tomcat.version>9.0.45</tomcat.version>
 		<spring.version>5.1.20.RELEASE</spring.version>
+		<jackson.version>2.9.10.20210106</jackson.version>
 	</properties>
 
 	<dependencies>
