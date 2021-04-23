@@ -51,7 +51,7 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
     public void registSubscriber(final String channel, final boolean broadcast, final MessageSubscriber subscriber) {
 
         if (broadcast) {
-            new Thread(() -> {
+            Thread thread = new Thread(() -> {
                 Jedis jedis = null;
                 try {
                     jedis = RedisClientFactory.getJedisPool().getResource();
@@ -65,7 +65,10 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
                         jedis.close();
                     }
                 }
-            }).start();
+            });
+            thread.setName("Scanner_" + channel + thread.getId());
+            thread.setDaemon(true);
+            thread.start();
         }
         else {
             MessageHandler.getInstance().addConsummer(messageQueue, channel, subscriber);
