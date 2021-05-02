@@ -135,15 +135,13 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                                         : ErrorCodeDef.SYSTEM_ERROR_10001)));
                             }
                         }
-                        return false;
+                        return true;
                     }
                 }
                 throw new ServiceException(ErrorCodeDef.EVENT_NOT_FOUND, currentState, currentEvent);
             }
-            return false;
         }
         return true;
-
     }
 
     private String getState(String errorState, int code) {
