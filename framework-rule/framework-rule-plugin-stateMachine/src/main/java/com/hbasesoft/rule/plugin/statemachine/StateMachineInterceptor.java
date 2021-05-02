@@ -112,46 +112,53 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                             flowContext.getParamMap());
                         try {
                             FlowHelper.execute(flowBean, newFlowContext);
-                            flowBean.setState(endState);
+
+                            int code = newFlowContext.getCode();
+                            if (code == 0) {
+                                flowBean.setState(endState);
+                            }
+                            else {
+                                flowBean.setState(getState(errorState, code));
+                            }
                         }
                         catch (Exception e) {
                             LoggerUtil.error("flow process error.", e);
 
                             flowContext.setException(e);
 
-                            String code = GlobalConstants.BLANK
-                                + (e instanceof FrameworkException ? ((FrameworkException) e).getCode()
-                                    : ErrorCodeDef.SYSTEM_ERROR_10001);
-
                             if (errorState.indexOf(GlobalConstants.EQUAL_SPLITER) == -1) {
                                 flowBean.setState(errorState);
                             }
                             else {
-                                String[] errCodes = StringUtils.split(errorState, GlobalConstants.SPLITOR);
-                                String es = null;
-                                for (String errCode : errCodes) {
-                                    String[] codeAndState = StringUtils.split(errCode, GlobalConstants.EQUAL_SPLITER);
-                                    if (codeAndState.length == 2 && CommonUtil.match(codeAndState[0], code)) {
-                                        es = codeAndState[1];
-                                        break;
-                                    }
-                                }
-
-                                Assert.notEmpty(es, ErrorCodeDef.ERROR_STATE_NOT_FOUND);
-                                flowBean.setState(es);
+                                flowBean.setState(getState(errorState,
+                                    (e instanceof FrameworkException ? ((FrameworkException) e).getCode()
+                                        : ErrorCodeDef.SYSTEM_ERROR_10001)));
                             }
                         }
                         return false;
                     }
                 }
-
                 throw new ServiceException(ErrorCodeDef.EVENT_NOT_FOUND, currentState, currentEvent);
-
             }
             return false;
         }
         return true;
 
+    }
+
+    private String getState(String errorState, int code) {
+        String[] errCodes = StringUtils.split(errorState, GlobalConstants.SPLITOR);
+        String es = null;
+        String _code = GlobalConstants.BLANK + code;
+        for (String errCode : errCodes) {
+            String[] codeAndState = StringUtils.split(errCode, GlobalConstants.EQUAL_SPLITER);
+            if (codeAndState.length == 2 && CommonUtil.match(codeAndState[0], _code)) {
+                es = codeAndState[1];
+                break;
+            }
+        }
+        Assert.notEmpty(es, ErrorCodeDef.ERROR_STATE_NOT_FOUND);
+        return es;
     }
 
 }
