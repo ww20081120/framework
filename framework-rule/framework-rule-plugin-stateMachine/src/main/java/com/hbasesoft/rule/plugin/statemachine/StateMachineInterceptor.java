@@ -138,8 +138,8 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                         return true;
                     }
                 }
-                throw new ServiceException(ErrorCodeDef.EVENT_NOT_FOUND, currentState, currentEvent);
             }
+            throw new ServiceException(ErrorCodeDef.EVENT_NOT_FOUND, currentState, currentEvent);
         }
         return true;
     }
