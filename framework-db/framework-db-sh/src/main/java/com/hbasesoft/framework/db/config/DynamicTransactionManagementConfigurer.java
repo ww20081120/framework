@@ -67,7 +67,9 @@ public class DynamicTransactionManagementConfigurer implements TransactionManage
          */
         @Override
         public void commit(final TransactionStatus status) throws TransactionException {
-            TransactionManagerHolder.getTransactionManager().commit(status);
+            if (!status.isRollbackOnly()) {
+                TransactionManagerHolder.getTransactionManager().commit(status);
+            }
         }
 
         /**
