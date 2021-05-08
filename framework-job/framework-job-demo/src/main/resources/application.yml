@@ -10,6 +10,7 @@ job:
     namespace: framework-job-core
   event:
     enable: false
+  FooJob: true
     
 master: #主数据库配置
  db:
