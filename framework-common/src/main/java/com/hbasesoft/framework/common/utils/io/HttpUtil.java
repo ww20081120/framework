@@ -3,9 +3,11 @@ package com.hbasesoft.framework.common.utils.io;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +17,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 
@@ -132,12 +135,13 @@ public final class HttpUtil {
     public static String doPost(String url, String body, String contentType, String authorization, String charset) {
         MediaType mediaType = MediaType.parse(contentType);
         RequestBody requestBody = RequestBody.create(mediaType, body);
-        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).post(requestBody).build();
+        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).post(requestBody)
+            .build();
         return getStringRequest(request, charset);
     }
 
-
-    public static String doPost(String url, String body, String contentType, Map<String, String> paramMap, String charset) {
+    public static String doPost(String url, String body, String contentType, Map<String, String> paramMap,
+        String charset) {
         Request.Builder builder = new Request.Builder();
         builder.url(url);
         if (MapUtils.isNotEmpty(paramMap)) {
@@ -255,12 +259,11 @@ public final class HttpUtil {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout",5000L), TimeUnit.MILLISECONDS)
-                    .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout",30000L), TimeUnit.MILLISECONDS)
-                    .sslSocketFactory(getSSLSocketFactory())
-                    .hostnameVerifier(getHostnameVerifier())
-//                    .retryOnConnectionFailure(false)
-                    .build();
+                .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", 5000L), TimeUnit.MILLISECONDS)
+                .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout", 30000L), TimeUnit.MILLISECONDS)
+                .sslSocketFactory(getSSLSocketFactory(), getX509TrustManager()).hostnameVerifier(getHostnameVerifier())
+                // .retryOnConnectionFailure(false)
+                .build();
             httpClientHold.set(okHttpClient);
         }
         return okHttpClient;
@@ -271,28 +274,51 @@ public final class HttpUtil {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, getTrustManager(), new SecureRandom());
             return sslContext.getSocketFactory();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-
     private static TrustManager[] getTrustManager() {
-         TrustManager[] trustAllCerts = new TrustManager[]{
-                 new X509TrustManager() {
-                     @Override
-                     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                     }
-                     @Override
-                     public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                     }
-                     @Override
-                     public X509Certificate[] getAcceptedIssuers() {
-                         return new X509Certificate[0];
-                     }
-                 }
+        TrustManager[] trustAllCerts = new TrustManager[] {
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(X509Certificate[] x509Certificates, String s)
+                    throws CertificateException {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] x509Certificates, String s)
+                    throws CertificateException {
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            }
         };
         return trustAllCerts;
+    }
+
+    public static X509TrustManager getX509TrustManager() {
+        X509TrustManager trustManager = null;
+        try {
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory
+                .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init((KeyStore) null);
+            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+                throw new IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers));
+            }
+            trustManager = (X509TrustManager) trustManagers[0];
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return trustManager;
     }
 
     public static HostnameVerifier getHostnameVerifier() {
