@@ -125,8 +125,8 @@ public interface ErrorCodeDef {
     /** 短信发送失败 */
     int SMS_SEND_ERROR_10033 = 10033;
 
-    /** 百度云推送错误 */
-    int BAIDUYUN_SEND_ERROR_10034 = 10034;
+    /** APP推送错误 */
+    int APP_SEND_ERROR_10034 = 10034;
 
     /** http请求错误 */
     int HTTP_REQUEST_ERROR_10035 = 10035;
@@ -220,6 +220,9 @@ public interface ErrorCodeDef {
 
     /** 解密错误 */
     int DECRYPTION_ERROR = 10066;
+
+    /** SHA256 ERROR */
+    int SHA256_ERROR = 10067;
 
     // ************************************************************************************
     // * ---------------------------------用户错误区域 必须大于20000的5位数-------------------------------------------
