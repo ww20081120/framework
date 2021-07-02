@@ -146,7 +146,8 @@ public final class PropertyHolder {
         }
         catch (Exception e) {
             log.error("装入主配置文件" + systemConfig + "失败!", e);
-            throw new InitializationException(e);
+            //throw new InitializationException(e);
+            return;
         }
 
         String extendPropertyFiles = PROPERTIES.get("extend.property.files");

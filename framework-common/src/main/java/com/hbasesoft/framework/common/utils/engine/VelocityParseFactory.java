@@ -70,6 +70,8 @@ public final class VelocityParseFactory {
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
             properties.setProperty("input.encoding", GlobalConstants.DEFAULT_CHARSET);
             properties.setProperty("output.encoding", GlobalConstants.DEFAULT_CHARSET);
+            properties.setProperty("directive.foreach.counter.name", "velocityCount");
+            properties.setProperty("directive.foreach.counter.initial.value", "1");
 
             for (Entry<String, String> entry : PropertyHolder.getProperties().entrySet()) {
                 String key = entry.getKey();
