@@ -86,7 +86,16 @@ public class UUIDUtil {
      * @return the new UUID
      */
     public static UUID create() {
-        long timeMillis = (System.currentTimeMillis() * 10000) + 0x01B21DD213814000L;
+        return create(System.currentTimeMillis());
+    }
+
+    /**
+     * Create a new time-based UUID.
+     *
+     * @return the new UUID
+     */
+    public static UUID create(long currentTimeMillis) {
+        long timeMillis = (currentTimeMillis * 10000) + 0x01B21DD213814000L;
 
         lock.lock();
         try {

@@ -44,7 +44,7 @@ public class JsonFileFlowLoader implements FlowLoader {
     private static final String DEFAULT_PATH = "META-INF/rules";
 
     /** flow config hodler */
-    private Map<String, FlowConfig> flowConfigHolder = new ConcurrentHashMap<String, FlowConfig>();
+    private Map<String, String> flowConfigHolder = new ConcurrentHashMap<String, String>();
 
     /**
      * 
@@ -63,7 +63,11 @@ public class JsonFileFlowLoader implements FlowLoader {
      */
     @Override
     public FlowConfig load(final String flowName) {
-        return flowConfigHolder.get(flowName);
+        String content = flowConfigHolder.get(flowName);
+        if (StringUtils.isNotEmpty(content)) {
+            return JsonConfigUtil.getFlowConfig(JSONObject.parseObject(content));
+        }
+        return null;
     }
 
     private void init() {
@@ -154,13 +158,11 @@ public class JsonFileFlowLoader implements FlowLoader {
         if (StringUtils.isNotEmpty(content)) {
             LoggerUtil.info("find workflow file [{0}]", fileName);
             JSONObject json = JSONObject.parseObject(content);
-
-            FlowConfig config = JsonConfigUtil.getFlowConfig(json);
-            String name = config.getName();
+            String name = json.getString("name");
             if (StringUtils.isEmpty(name)) {
                 name = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("."));
             }
-            flowConfigHolder.put(name, config);
+            flowConfigHolder.put(name, content);
             LoggerUtil.info("add workflow file [{0}]|[{1}] success.", name, fileName);
         }
 

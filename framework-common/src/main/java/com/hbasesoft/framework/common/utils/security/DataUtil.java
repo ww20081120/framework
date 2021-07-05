@@ -43,9 +43,6 @@ public final class DataUtil {
     private static final int NUM_0XF = 0x0f;
 
     /** NUM */
-    private static final int NUM_3 = 3;
-
-    /** NUM */
     private static final int NUM_4 = 4;
 
     /** NUM */
@@ -117,6 +114,25 @@ public final class DataUtil {
             throw new UtilException(ErrorCodeDef.MD5_ERROR_10036, e);
         }
 
+    }
+
+    /**
+     * Description: sha256 加密 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param msg
+     * @return <br>
+     */
+    public static String sha256(final String msg) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(msg.getBytes(GlobalConstants.DEFAULT_CHARSET));
+            return byte2HexStr(messageDigest.digest());
+        }
+        catch (Exception e) {
+            throw new UtilException(ErrorCodeDef.SHA256_ERROR, e);
+        }
     }
 
     /**

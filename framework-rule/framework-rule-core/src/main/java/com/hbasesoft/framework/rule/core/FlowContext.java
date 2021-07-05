@@ -11,8 +11,6 @@ import java.util.Map;
 
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
 
-import lombok.AllArgsConstructor;
-
 /**
  * <Description> <br>
  * 
@@ -40,6 +38,8 @@ public class FlowContext implements Serializable {
     private Map<String, Object> paramMap;
 
     private Exception exception;
+
+    private int code = 0;
 
     public FlowContext(FlowConfig flowConfig, Map<String, Object> extendUtils, Map<String, Object> paramMap) {
         this.flowConfig = flowConfig;
@@ -142,4 +142,14 @@ public class FlowContext implements Serializable {
     public void setException(Exception exception) {
         this.exception = exception;
     }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+    
+    
 }
