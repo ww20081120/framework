@@ -7,7 +7,7 @@ package com.hbasesoft.framework.job.core;
 
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 
