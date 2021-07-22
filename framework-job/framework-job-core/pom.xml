@@ -22,12 +22,11 @@
 			<groupId>com.dangdang</groupId>
 			<artifactId>elastic-job-lite-core</artifactId>
 			<version>${lasted.release.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.curator</groupId>
-					<artifactId>curator-framework</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.dangdang</groupId>
+			<artifactId>elastic-job-common-core</artifactId>
+			<version>${lasted.release.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.dangdang</groupId>
@@ -36,8 +35,22 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-client</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>2.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
 			<artifactId>curator-framework</artifactId>
 			<version>2.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
 	</dependencies>
 </project>
