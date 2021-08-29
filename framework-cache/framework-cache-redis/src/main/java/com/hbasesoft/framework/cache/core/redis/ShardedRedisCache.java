@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -53,7 +54,10 @@ public class ShardedRedisCache extends AbstractRedisCache {
                 jedisShardInfo.setPassword(passwd);
                 shards.add(jedisShardInfo);
             }
-            shardedPool = new ShardedJedisPool(getConfig(), shards);
+            
+            GenericObjectPoolConfig<ShardedJedis> config = new GenericObjectPoolConfig<>();
+            super.setConfig(config);
+            shardedPool = new ShardedJedisPool(config, shards);
         }
     }
 

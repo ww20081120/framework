@@ -18,6 +18,7 @@ import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.Protocol;
 
@@ -53,11 +54,14 @@ public class RedisCache extends AbstractRedisCache {
             for (Address addr : addresses) {
                 shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
             }
+            JedisPoolConfig config = new JedisPoolConfig();
+            super.setConfig(config);
             if (StringUtils.isEmpty(passwd)) {
-                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
+
+                jedisPool = new JedisPool(config, addresses[0].getHost(), addresses[0].getPort());
             }
             else {
-                jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort(),
+                jedisPool = new JedisPool(config, addresses[0].getHost(), addresses[0].getPort(),
                     Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
             }
         }
