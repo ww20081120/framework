@@ -7,7 +7,7 @@ Framework 3.X 框架说明
 3.0 | 1.更新了spring boot 版本至2.0 <br> 2.去除dubbox框架，引入spring cloud框架 <br> 3. 重新定义了common 模块的API <br> 4. 支持JPA <br> 5. 支持yml格式的配置文件| 2017年9月24 | 王伟
 3.4 | 增加了framework-tx模块 | 2020年2月4日 | 王伟
 3.5 | 更新了springboot至2.3.6.RELEASE | 2020年12月1日 | 王伟
-3.6 | 更新了springboot至2.5.4, spring-cloud更新至2020.0.3 | 2020年12月1日 | 王伟
+3.6 | 更新了springboot至2.5.4, spring-cloud更新至2020.0.3 | 2021年8月31日 | 王伟
 
 # 框架介绍
 
