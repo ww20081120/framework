@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-message</artifactId>
-		<version>3.5</version>
+		<version>3.6</version>
 	</parent>
 	<artifactId>framework-message-tx</artifactId>
 	<dependencies>

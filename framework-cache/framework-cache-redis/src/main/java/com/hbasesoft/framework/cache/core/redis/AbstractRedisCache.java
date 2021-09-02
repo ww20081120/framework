@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.redis;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+
 import com.hbasesoft.framework.cache.core.AbstractCache;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -13,7 +15,7 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.ShardedJedis;
 
 /**
  * <Description> <br>
@@ -46,16 +48,21 @@ public abstract class AbstractRedisCache extends AbstractCache {
      * @taskId <br>
      * @return <br>
      */
-    protected JedisPoolConfig getConfig() {
-        JedisPoolConfig config = new JedisPoolConfig();
+    protected <T> void setConfig(GenericObjectPoolConfig<T> config) {
+        config.setTestWhileIdle(PropertyHolder.getBooleanProperty("cache.redis.testWhileIdle", true));
+        config.setMinEvictableIdleTimeMillis(
+            PropertyHolder.getIntProperty("cache.redis.minEvictableIdleTimeMillis", 60000));
+        config.setTimeBetweenEvictionRunsMillis(
+            PropertyHolder.getIntProperty("cache.redis.timeBetweenEvictionRunsMillis", 30000));
+        config.setNumTestsPerEvictionRun(PropertyHolder.getIntProperty("cache.redis.numTestsPerEvictionRun", -1));
+
         // 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。
-        config.setMaxIdle(PropertyHolder.getIntProperty("cache.redis.max.idle", MAX_IDLE));
+        config.setMaxIdle(PropertyHolder.getIntProperty("cache.redis.maxIdle", MAX_IDLE));
         // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
         config.setMaxWaitMillis(
-            GlobalConstants.SECONDS * PropertyHolder.getIntProperty("cache.redis.max.wait", MAX_WAIT));
+            GlobalConstants.SECONDS * PropertyHolder.getIntProperty("cache.redis.maxWaitMillis", MAX_WAIT));
         // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
-        config.setTestOnBorrow(PropertyHolder.getBooleanProperty("cache.redis.testonborrow", VALIDATE));
-        return config;
+        config.setTestOnBorrow(PropertyHolder.getBooleanProperty("cache.redis.testOnBorrow", VALIDATE));
     }
 
     /**
