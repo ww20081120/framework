@@ -30,6 +30,7 @@
 		<tomcat.version>9.0.52</tomcat.version>
 		<spring.version>5.1.20.RELEASE</spring.version>
 		<jackson.version>2.12.5</jackson.version>
+		<fastjson.version>1.2.78</fastjson.version>
 	</properties>
 
 	<dependencies>
@@ -84,6 +85,11 @@
 				<groupId>org.apache.curator</groupId>
 				<artifactId>curator-recipes</artifactId>
 				<version>2.10.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${fastjson.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

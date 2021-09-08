@@ -10,7 +10,6 @@
 	<name>${project.artifactId}</name>
 	<description>公共模块</description>
 	<properties>
-		<fastjson.version>1.2.78</fastjson.version>
 		<!-- 模版解析 -->
 		<ognl.version>3.2.9</ognl.version>
 		<velocity.version>2.0</velocity.version>
