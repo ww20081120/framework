@@ -77,11 +77,6 @@
 			<groupId>net.coobird</groupId>
 			<artifactId>thumbnailator</artifactId>
 		</dependency>
-		<!-- //end 处理图片 -->
-		<!-- <dependency> -->
-		<!-- <groupId>javassist</groupId> -->
-		<!-- <artifactId>javassist</artifactId> -->
-		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>com.jcraft</groupId>
