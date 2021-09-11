@@ -2,6 +2,7 @@ package com.hbasesoft.framework.common.utils.xml;
 
 import java.io.CharArrayWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
@@ -33,8 +34,6 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 public class XmlBeanUtil {
 
     protected static Logger logger = new Logger(XmlBeanUtil.class);
-
-    private static final XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
 
     /**
      * @param xmlStr 字符串
@@ -73,13 +72,8 @@ public class XmlBeanUtil {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式,默认为utf-8
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);// 是否省略xml头信息
-            Writer writer = new CharArrayWriter();
-            XMLStreamWriter xmlStreamWriter = xmlOutputFactory.createXMLStreamWriter(writer);
-            xmlStreamWriter.writeStartDocument((String) marshaller.getProperty(Marshaller.JAXB_ENCODING), "1.0");
-
-            marshaller.marshal(object, xmlStreamWriter);
-            xmlStreamWriter.writeEndDocument();
-            xmlStreamWriter.close();
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(object, writer);
             String xml = writer.toString();
             xml = StringUtils.replace(xml, "&lt;", "<");
             xml = StringUtils.replace(xml, "&gt;", ">");
@@ -103,7 +97,7 @@ public class XmlBeanUtil {
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式,默认为utf-8
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);// 是否省略xml头信息
 
-            Writer writer = new CharArrayWriter();
+            Writer writer = new StringWriter();
             marshaller.marshal(object, writer);
 
             Document document = DocumentHelper.parseText(writer.toString()); // 创建根节点
