@@ -361,6 +361,12 @@ public final class HttpUtil {
         if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
+        if (StringUtils.isNotEmpty(ip)) {
+            int index = ip.indexOf(GlobalConstants.SPLITOR);
+            if (index != -1) {
+                ip = ip.substring(0, index);
+            }
+        }
         return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
