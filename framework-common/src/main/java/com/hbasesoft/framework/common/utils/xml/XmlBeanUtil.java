@@ -1,14 +1,12 @@
 package com.hbasesoft.framework.common.utils.xml;
 
-import java.io.CharArrayWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -18,6 +16,9 @@ import org.dom4j.Element;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * <Description> XML 工具<br>
@@ -29,10 +30,8 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.xml <br>
  */
-public class XmlBeanUtil {
-
-    /** xmlOutputFactory */
-    private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class XmlBeanUtil {
 
     /**
      * @param xmlStr 字符串
@@ -49,7 +48,6 @@ public class XmlBeanUtil {
         try {
             JAXBContext context = JAXBContext.newInstance(c);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-
             T t = (T) unmarshaller.unmarshal(new StringReader(xmlStr));
             return t;
         }
@@ -72,19 +70,15 @@ public class XmlBeanUtil {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8"); // 编码格式,默认为utf-8o
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // 是否省略xml头信息
-            Writer writer = new CharArrayWriter();
-            XMLStreamWriter xmlStreamWriter = xmlOutputFactory.createXMLStreamWriter(writer);
-            xmlStreamWriter.writeStartDocument((String) marshaller.getProperty(Marshaller.JAXB_ENCODING), "1.0");
-
-            marshaller.marshal(object, xmlStreamWriter);
-            xmlStreamWriter.writeEndDocument();
-            xmlStreamWriter.close();
-            String xml = writer.toString();
-            xml = StringUtils.replace(xml, "&lt;", "<");
-            xml = StringUtils.replace(xml, "&gt;", ">");
-            xml = StringUtils.replace(xml, "&amp;", "&");
-            xml = StringUtils.replace(xml, "&#xd;", GlobalConstants.BLANK);
-            return xml;
+            try (StringWriter writer = new StringWriter();) {
+                marshaller.marshal(object, writer);
+                String xml = writer.toString();
+                xml = StringUtils.replace(xml, "&lt;", "<");
+                xml = StringUtils.replace(xml, "&gt;", ">");
+                xml = StringUtils.replace(xml, "&amp;", "&");
+                xml = StringUtils.replace(xml, "&#xd;", GlobalConstants.BLANK);
+                return xml;
+            }
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.XML_TRANS_ERROR, e);
@@ -111,7 +105,7 @@ public class XmlBeanUtil {
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8"); // 编码格式,默认为utf-8
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // 是否省略xml头信息
 
-            Writer writer = new CharArrayWriter();
+            Writer writer = new StringWriter();
             marshaller.marshal(object, writer);
 
             Document document = DocumentHelper.parseText(writer.toString()); // 创建根节点
