@@ -70,7 +70,7 @@ public class BusinessTransactionAdivce {
 
         // 带有NoTranslog的不打印
         NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
-        if (noTransLog == null) {
+        if (noTransLog != null) {
             return joinPoint.proceed();
         }
 
