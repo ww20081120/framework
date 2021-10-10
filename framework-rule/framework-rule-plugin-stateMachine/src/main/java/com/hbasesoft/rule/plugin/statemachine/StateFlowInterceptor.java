@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
@@ -23,6 +24,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.rule.plugin.statemachine <br>
  */
+@NoTransLog
 public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
 
     /** skip flag holder */

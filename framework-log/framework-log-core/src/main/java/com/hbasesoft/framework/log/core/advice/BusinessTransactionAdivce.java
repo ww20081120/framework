@@ -5,6 +5,7 @@ package com.hbasesoft.framework.log.core.advice;
 
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,6 +13,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.log.core.TransLogUtil;
 
 /**
@@ -27,6 +31,16 @@ import com.hbasesoft.framework.log.core.TransLogUtil;
 @Aspect
 @Component
 public class BusinessTransactionAdivce {
+
+    /** framework 的日志是否打印 */
+    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.show",
+        false);
+
+    private static final String[] EXCLOUDS = StringUtils.split(PropertyHolder.getProperty("logservice.nologs.package"),
+        GlobalConstants.SPLITOR);
+
+    /** 框架日志的方法 */
+    private static final String FRAMEWORK_PACKAGE = "com.hbasesoft.framework.";
 
     /**
      * Description: <br>
@@ -53,10 +67,31 @@ public class BusinessTransactionAdivce {
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object target = joinPoint.getTarget();
+
+        // 带有NoTranslog的不打印
+        NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
+        if (noTransLog == null) {
+            return joinPoint.proceed();
+        }
+
+        // 框架不打印
         Method method = methodSignature.getMethod();
+        String clazzName = method.getDeclaringClass().getName();
+        if (!DEBUG_OPEN_FLAG && StringUtils.startsWith(clazzName, FRAMEWORK_PACKAGE)) {
+            return joinPoint.proceed();
+        }
+
+        // 排除掉的包不打印
+        if (EXCLOUDS != null && EXCLOUDS.length > 0) {
+            for (String pack : EXCLOUDS) {
+                if (StringUtils.startsWith(clazzName, pack)) {
+                    return joinPoint.proceed();
+                }
+            }
+        }
+
         Object[] args = joinPoint.getArgs();
         TransLogUtil.before(target, method, args);
-
         try {
             Object returnValue = joinPoint.proceed();
             TransLogUtil.afterReturning(target, method, returnValue);

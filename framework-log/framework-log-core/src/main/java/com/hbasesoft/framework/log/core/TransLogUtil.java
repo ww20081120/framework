@@ -10,10 +10,8 @@ import java.util.ServiceLoader;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.TransManager;
@@ -32,16 +30,6 @@ public final class TransLogUtil {
 
     /** Number */
     private static final long NUM_10L = 10L;
-
-    /** Number */
-    private static final int NUM_100 = 100;
-
-    /** framework 的日志是否打印 */
-    private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.show",
-        false);
-
-    /** 框架日志的方法 */
-    private static final String FRAMEWORK_PACKAGE = "com.hbasesoft.framework.";
 
     private TransLogUtil() {
     }
@@ -65,13 +53,6 @@ public final class TransLogUtil {
         long beginTime = System.currentTimeMillis();
 
         TransManager manager = TransManager.getInstance();
-
-//        int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
-
-//        // 深度检测
-//        if (manager.getStackSize() > maxDeepLen) {
-//            throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
-//        }
 
         // 父id
         String parentStackId = manager.peek();
@@ -98,15 +79,7 @@ public final class TransLogUtil {
      * @throws FrameworkException <br>
      */
     public static void before(final Object target, final Method method, final Object[] args) throws FrameworkException {
-
-        NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
-        if (noTransLog == null) {
-            // 执行方法
-            String methodName = getMethodSignature(method);
-            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
-                before(methodName, args);
-            }
-        }
+        before(getMethodSignature(method), args);
     }
 
     /**
@@ -165,14 +138,7 @@ public final class TransLogUtil {
      * @param returnValue <br>
      */
     public static void afterReturning(final Object target, final Method method, final Object returnValue) {
-        NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
-        if (noTransLog == null) {
-            // 执行方法
-            String methodName = getMethodSignature(method);
-            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
-                afterReturning(methodName, returnValue);
-            }
-        }
+        afterReturning(getMethodSignature(method), returnValue);
     }
 
     /**
@@ -226,15 +192,7 @@ public final class TransLogUtil {
      * @param e <br>
      */
     public static void afterThrowing(final Object target, final Method method, final Throwable e) {
-        NoTransLog noTransLog = target.getClass().getAnnotation(NoTransLog.class);
-        if (noTransLog == null) {
-
-            // 执行方法
-            String methodName = getMethodSignature(method);
-            if (DEBUG_OPEN_FLAG || !StringUtils.startsWith(methodName, FRAMEWORK_PACKAGE)) {
-                afterThrowing(methodName, e);
-            }
-        }
+        afterThrowing(getMethodSignature(method), e);
     }
 
     /**
