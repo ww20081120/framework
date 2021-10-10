@@ -5,15 +5,17 @@
  ****************************************************************************************/
 package com.hbasesoft.rule.plugin.event;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
-import org.apache.commons.lang.StringUtils;
-
-import java.io.Serializable;
 
 /**
  * <Description> <br>
@@ -24,6 +26,7 @@ import java.io.Serializable;
  * @CreateDate 2017年9月4日 <br>
  * @since V1.0<br>
  */
+@NoTransLog
 public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterceptor {
 
     /**
