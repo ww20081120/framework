@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.util.Assert;
 
 import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
@@ -28,6 +29,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.plugin.condition <br>
  */
+@NoTransLog
 public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
 
     /** codes */

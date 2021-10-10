@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
@@ -26,6 +27,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.plugin.tools <br>
  */
+@NoTransLog
 public class ToolsInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**

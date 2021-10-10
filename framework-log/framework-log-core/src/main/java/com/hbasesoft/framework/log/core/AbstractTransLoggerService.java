@@ -35,9 +35,6 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      */
     private Logger logger = new Logger(AbstractTransLoggerService.class);
 
-    /** always log */
-    private boolean alwaysLog;
-
     private static Map<String, TransBean> transBeanHolder = new HashMap<>();
 
     /**
@@ -202,26 +199,4 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
         }
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return alwaysLog <br>
-     */
-    public boolean isAlwaysLog() {
-        return alwaysLog;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param alwaysLog <br>
-     */
-    @Override
-    public void setAlwaysLog(final boolean alwaysLog) {
-        this.alwaysLog = alwaysLog;
-    }
 }
