@@ -28,7 +28,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @see com.hbasesoft.framework.test.rule.plugin.event <br>
  */
 @NoTransLog
-public class EventComponentIntercetor extends AbstractFlowCompnentInterceptor {
+public class EventComponentInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>
