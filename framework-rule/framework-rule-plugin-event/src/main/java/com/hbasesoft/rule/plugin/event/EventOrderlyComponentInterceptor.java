@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @since V1.0<br>
  */
 @NoTransLog
-public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterceptor {
+public class EventOrderlyComponentInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**
      * Description: <br>
