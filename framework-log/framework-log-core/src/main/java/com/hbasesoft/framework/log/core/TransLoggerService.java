@@ -27,9 +27,8 @@ public interface TransLoggerService {
     void before(String stackId, String parentStackId, long beginTime, String method, Object[] params);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param stackId
@@ -41,9 +40,8 @@ public interface TransLoggerService {
     void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param stackId
@@ -55,9 +53,8 @@ public interface TransLoggerService {
     void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e);
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param stackId
@@ -79,14 +76,4 @@ public interface TransLoggerService {
      *         <br>
      */
     void clean();
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param alwaysLog <br>
-     */
-    void setAlwaysLog(boolean alwaysLog);
 }
