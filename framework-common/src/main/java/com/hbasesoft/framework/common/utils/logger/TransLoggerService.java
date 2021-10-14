@@ -83,6 +83,4 @@ public interface TransLoggerService {
      *         <br>
      */
     void clean();
-
-    void setAlwaysLog(boolean alwaysLog);
 }

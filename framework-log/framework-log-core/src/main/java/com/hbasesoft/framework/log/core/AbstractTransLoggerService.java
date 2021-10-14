@@ -195,16 +195,4 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
             }
         }
     }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param alwaysLog <br>
-     */
-    @Override
-    public void setAlwaysLog(boolean alwaysLog) {
-        this.alwaysLog = alwaysLog;
-    }
 }

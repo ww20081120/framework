@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.log.core;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.ServiceLoader;
 
 import org.apache.commons.lang.StringUtils;
@@ -37,7 +38,7 @@ public final class TransLogUtil {
     /**
      * transLoggerServices
      */
-    private static ServiceLoader<TransLoggerService> transLoggerServices;
+    private static Iterable<TransLoggerService> transLoggerServices;
 
     /**
      * Description: <br>
@@ -53,13 +54,6 @@ public final class TransLogUtil {
         long beginTime = System.currentTimeMillis();
 
         TransManager manager = TransManager.getInstance();
-
-        // int maxDeepLen = PropertyHolder.getIntProperty("logservice.max.deep.size", NUM_100);
-
-        // // 深度检测
-        // if (manager.getStackSize() > maxDeepLen) {
-        // throw new FrameworkException(ErrorCodeDef.STACK_OVERFLOW_ERROR_10030);
-        // }
 
         // 父id
         String parentStackId = manager.peek();
@@ -232,12 +226,14 @@ public final class TransLogUtil {
      * @taskId <br>
      * @return <br>
      */
-    private static ServiceLoader<TransLoggerService> getTransLoggerServices() {
+    private static Iterable<TransLoggerService> getTransLoggerServices() {
         if (transLoggerServices == null) {
             boolean alwaysLog = PropertyHolder.getBooleanProperty("logservice.aways.log", true);
-            transLoggerServices = ServiceLoader.load(TransLoggerService.class);
-            for (TransLoggerService transLoggerService : transLoggerServices) {
-                transLoggerService.setAlwaysLog(alwaysLog);
+            if (alwaysLog) {
+                transLoggerServices = ServiceLoader.load(TransLoggerService.class);
+            }
+            else {
+                transLoggerServices = new ArrayList<>();
             }
         }
         return transLoggerServices;
