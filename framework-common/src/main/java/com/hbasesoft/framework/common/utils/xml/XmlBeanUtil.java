@@ -71,7 +71,6 @@ public class XmlBeanUtil {
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式,默认为utf-8
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);// 是否省略xml头信息
             StringWriter writer = new StringWriter();
             marshaller.marshal(object, writer);
             String xml = writer.toString();
@@ -95,7 +94,6 @@ public class XmlBeanUtil {
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");// 编码格式,默认为utf-8
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);// 是否省略xml头信息
 
             Writer writer = new StringWriter();
             marshaller.marshal(object, writer);
