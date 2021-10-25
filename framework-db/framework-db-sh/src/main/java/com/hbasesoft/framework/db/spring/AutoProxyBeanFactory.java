@@ -20,6 +20,7 @@ import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.Dao;
@@ -132,12 +133,17 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
             if (entityClazz == null) {
                 Type[] interfacesTypes = clazz.getGenericInterfaces();
                 for (Type t : interfacesTypes) {
-                    Type[] genericType2 = ((ParameterizedType) t).getActualTypeArguments();
-                    for (Type t2 : genericType2) {
-                        Class<?> t3 = (Class<?>) t2;
-                        if (BaseEntity.class.isAssignableFrom(t3)) {
-                            entityClazz = t3;
+                    if (t instanceof ParameterizedType) {
+                        Type[] genericType2 = ((ParameterizedType) t).getActualTypeArguments();
+                        for (Type t2 : genericType2) {
+                            Class<?> t3 = (Class<?>) t2;
+                            if (BaseEntity.class.isAssignableFrom(t3)) {
+                                entityClazz = t3;
+                            }
                         }
+                    }
+                    else {
+                        throw new UtilException(ErrorCodeDef.GENERIC_TYPE_ERROR, clazz.getName());
                     }
                 }
             }
