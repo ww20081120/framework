@@ -1,6 +1,5 @@
 package com.hbasesoft.framework.common.utils.xml;
 
-import java.io.CharArrayWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -8,8 +7,6 @@ import java.io.Writer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
@@ -77,6 +74,7 @@ public class XmlBeanUtil {
             xml = StringUtils.replace(xml, "&lt;", "<");
             xml = StringUtils.replace(xml, "&gt;", ">");
             xml = StringUtils.replace(xml, "&amp;", "&");
+            xml = StringUtils.replace(xml, "&#13;", "\n");
             xml = StringUtils.replace(xml, "&#xd;", GlobalConstants.BLANK);
             return xml;
         }
