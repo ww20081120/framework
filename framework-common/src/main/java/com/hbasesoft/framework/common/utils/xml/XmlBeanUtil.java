@@ -69,13 +69,13 @@ public final class XmlBeanUtil {
 
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true); // 格式化输出
             marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8"); // 编码格式,默认为utf-8o
-            marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true); // 是否省略xml头信息
             try (StringWriter writer = new StringWriter();) {
                 marshaller.marshal(object, writer);
                 String xml = writer.toString();
                 xml = StringUtils.replace(xml, "&lt;", "<");
                 xml = StringUtils.replace(xml, "&gt;", ">");
                 xml = StringUtils.replace(xml, "&amp;", "&");
+                xml = StringUtils.replace(xml, "&#13;", "\n");
                 xml = StringUtils.replace(xml, "&#xd;", GlobalConstants.BLANK);
                 return xml;
             }
