@@ -65,7 +65,7 @@ public class DataBase4JdbcConfig {
         dataConfig.setBaseDaoType(BaseJdbcDao.class);
         dataConfig.setCallBackType(RowMapper.class);
         beanFactory.setConfig(dataConfig);
-        beanFactory.setInterceptors("springDaoHandler");
+        beanFactory.setInterceptors("springDaoHandler4Jdbc");
         beanFactory.setPackagesToScan(getBasePackage());
 
         return beanFactory;
