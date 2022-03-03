@@ -31,7 +31,7 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
-public class JarFileSpliterator implements Spliterator<URL> {
+public class JarFileSpliterator implements Spliterator<String> {
     private final String prefix;
 
     private Enumeration<URL> dirs;
@@ -44,12 +44,14 @@ public class JarFileSpliterator implements Spliterator<URL> {
 
     private Stack<File> files;
 
+    private int filePrefixLength;
+
     public JarFileSpliterator(String prefix) throws IOException {
         this.prefix = prefix;
         dirs = this.getClass().getClassLoader().getResources(prefix);
     }
 
-    private URL getNextURL() throws IOException {
+    private String getNextURL() throws IOException {
         // 循环便利第一层
         if (current == null) {
             if (!dirs.hasMoreElements()) {
@@ -63,7 +65,7 @@ public class JarFileSpliterator implements Spliterator<URL> {
             initFind();
         }
 
-        URL url = null;
+        String url = null;
 
         // 查看文件夹的数据
         if (subState == 0) {
@@ -89,9 +91,10 @@ public class JarFileSpliterator implements Spliterator<URL> {
         current = null;
         entries = null;
         files = null;
+        filePrefixLength = 0;
     }
 
-    private URL findInJar() throws IOException {
+    private String findInJar() throws IOException {
         if (entries == null) {
             // 获取jar
             JarFile jar = ((JarURLConnection) current.openConnection()).getJarFile();
@@ -103,17 +106,18 @@ public class JarFileSpliterator implements Spliterator<URL> {
             JarEntry entry = entries.nextElement();
             String name = entry.getName();
             if (!entry.isDirectory() && name.startsWith(prefix)) {
-                return new URL("jar", "localhost", entry.getName());
+                return name;
             }
         }
         return null;
     }
 
-    private URL findInFiles() throws IOException {
+    private String findInFiles() throws IOException {
         if (files == null) {
             files = new Stack<File>();
             String filePath = URLDecoder.decode(current.getFile(), "UTF-8");
             File f = new File(filePath);
+            filePrefixLength = filePath.length() - prefix.length();
             files.push(f);
         }
 
@@ -129,7 +133,7 @@ public class JarFileSpliterator implements Spliterator<URL> {
                     }
                 }
                 else {
-                    return f.toURI().toURL();
+                    return f.getAbsolutePath().substring(filePrefixLength);
                 }
             }
         }
@@ -159,12 +163,12 @@ public class JarFileSpliterator implements Spliterator<URL> {
      * @return <br>
      */
     @Override
-    public boolean tryAdvance(Consumer<? super URL> action) {
+    public boolean tryAdvance(Consumer<? super String> action) {
         if (action == null) {
             throw new NullPointerException();
         }
         try {
-            URL url = getNextURL();
+            String url = getNextURL();
             if (url != null) {
                 action.accept(url);
                 return true;
@@ -184,7 +188,7 @@ public class JarFileSpliterator implements Spliterator<URL> {
      * @return <br>
      */
     @Override
-    public Spliterator<URL> trySplit() {
+    public Spliterator<String> trySplit() {
         return null;
     }
 

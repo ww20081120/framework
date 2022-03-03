@@ -76,10 +76,12 @@ public class JsonFileFlowLoader implements FlowLoader {
                 findFlowFile(new File(path));
             }
             else {
+                ClassLoader classLoader = this.getClass().getClassLoader();
+
                 StreamSupport.stream(new JarFileSpliterator(DEFAULT_PATH), false)
-                    .filter(url -> url.getFile().toLowerCase().endsWith(".json")).forEach(url -> {
-                        try (InputStream in = url.openStream();) {
-                            addFlowFile(IOUtil.readString(in), url.getFile());
+                    .filter(url -> url.toLowerCase().endsWith(".json")).forEach(url -> {
+                        try (InputStream in = classLoader.getResourceAsStream(url);) {
+                            addFlowFile(IOUtil.readString(in), url);
                         }
                         catch (Exception e) {
                             throw new UtilException(e);
