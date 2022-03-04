@@ -5,7 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.jdbc;
 
+import java.util.Collection;
+
 import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.DaoException;
 
 /**
  * <Description> <br>
@@ -19,4 +22,17 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
 public interface IBaseDao4Jdbc<T extends BaseEntity> {
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param objcts
+     * @param commitNumber
+     * @param <T> T
+     * @throws DaoException <br>
+     */
+    int[] batchExecute(final String sql, final Collection<T> objcts, final int commitNumber);
 }

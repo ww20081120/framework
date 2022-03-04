@@ -6,16 +6,27 @@
 package com.hbasesoft.framework.db.jdbc;
 
 import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
+import org.springframework.jdbc.core.namedparam.ParsedSql;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -195,6 +206,44 @@ public class BaseJdbcDao implements ISqlExcutor {
             logger.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, e);
         }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @param objcts
+     * @param commitNumber
+     * @throws DaoException <br>
+     */
+    public int[] batchExecute(final String sql, final Collection<?> objcts, final int commitNumber) {
+        if (CollectionUtils.isEmpty(objcts)) {
+            return new int[0];
+        }
+
+        SqlParameterSource[] datas = SqlParameterSourceUtils.createBatch(objcts);
+        ParsedSql parsedSql = NamedParameterUtils.parseSqlStatement(sql);
+        SqlParameterSource paramSource = datas[0];
+
+        String sqlToUse = NamedParameterUtils.substituteNamedParameters(parsedSql, paramSource);
+        List<SqlParameter> declaredParameters = NamedParameterUtils.buildSqlParameterList(parsedSql, paramSource);
+        PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sqlToUse, declaredParameters);
+
+        return getJdbcTemplate().getJdbcOperations().batchUpdate(pscf.getSql(), new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                Object[] values = NamedParameterUtils.buildValueArray(parsedSql, datas[i], null);
+                pscf.newPreparedStatementSetter(values).setValues(ps);
+            }
+
+            @Override
+            public int getBatchSize() {
+                return commitNumber;
+            }
+        });
+
     }
 
     /**
