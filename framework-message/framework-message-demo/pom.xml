@@ -68,6 +68,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
 					<mainClass>com.hbasesoft.framework.message.demo.Application</mainClass>
 					<layout>ZIP</layout>
 				</configuration>
