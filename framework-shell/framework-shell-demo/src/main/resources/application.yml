@@ -4,7 +4,7 @@ project: #项目信息
  artifactId: @project.artifactId@
  groupId: @project.groupId@
  server: 
-   logserver: http://lab.towngasvcc.cn:8888/vcc/vcc-tools-log.git
+   logserver: https://lab.mingqijia.com/vcc/vcc-tools-log.git
    nexus: http://vccnexus.towngasvcc.com:8081
    
 #server:
