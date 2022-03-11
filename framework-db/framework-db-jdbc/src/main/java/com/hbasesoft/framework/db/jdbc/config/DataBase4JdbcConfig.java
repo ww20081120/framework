@@ -53,7 +53,7 @@ public class DataBase4JdbcConfig {
      * @param dbType
      * @return <br>
      */
-    @Bean
+    @Bean(name = "autoProxyBeanFactory4Jdbc")
     public AutoProxyBeanFactory registAutoProxyBeanFactory(final @Value("${master.db.type}") String dbType) {
 
         AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory();
@@ -70,7 +70,7 @@ public class DataBase4JdbcConfig {
 
         return beanFactory;
     }
-    
+
     public static String[] getBasePackage() {
         return StringUtils.split(PropertyHolder.getProperty("db.basepackage", "com.hbasesoft.*"),
             GlobalConstants.SPLITOR);
