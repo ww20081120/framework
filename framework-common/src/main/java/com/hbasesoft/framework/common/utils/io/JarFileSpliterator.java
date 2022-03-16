@@ -117,7 +117,7 @@ public class JarFileSpliterator implements Spliterator<String> {
             files = new Stack<File>();
             String filePath = URLDecoder.decode(current.getFile(), "UTF-8");
             File f = new File(filePath);
-            filePrefixLength = filePath.length() - prefix.length();
+            filePrefixLength = f.getAbsolutePath().length() - prefix.length();
             files.push(f);
         }
 
