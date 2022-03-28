@@ -10,7 +10,7 @@
 	<artifactId>framework-job-elasticjob</artifactId>
 	<description> </description>
 	<properties>
-		<lasted.release.version>3.0.1</lasted.release.version>
+		<lasted.release.version>3.0.0-beta</lasted.release.version>
 	</properties>
 	<dependencies>
 		<dependency>
