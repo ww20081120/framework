@@ -44,33 +44,33 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
         Method method = methodSignature.getMethod();
 
         DataSource dataSource = method.getDeclaredAnnotation(DataSource.class);
-
-        if (dataSource != null) {
-            changeDatasource(dataSource);
-        } else {
+        if (dataSource == null) {
             Object target = joinPoint.getTarget();
             dataSource = target.getClass().getDeclaredAnnotation(DataSource.class);
-            if (dataSource != null) {
-                changeDatasource(dataSource);
-            }
         }
 
+        // 获取当前的datasourceCode
+        String currentDS = DynamicDataSourceManager.DEFAULT_DATASOURCE_CODE;
         try {
+            if (dataSource != null) {
+                currentDS = DynamicDataSourceManager.getDataSourceCode();
+                changeDatasource(dataSource);
+            }
             return joinPoint.proceed();
         }
         finally {
             if (dataSource != null) {
-                DynamicDataSourceManager.setDataSourceCode(DynamicDataSourceManager.DEFAULT_DATASOURCE_CODE);
+                DynamicDataSourceManager.setDataSourceCode(currentDS);
             }
         }
-
     }
 
     private void changeDatasource(DataSource dataSource) {
         // 判断增强的字段是否被覆盖，覆盖则走增强的切换数据源
         String enhanceDynamicDataSource = dataSource.enhanceDynamicDataSource();
         if (StringUtils.isNotBlank(enhanceDynamicDataSource)) {
-            EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler = (EnhanceDynamicDataSourceHandler) ContextHolder.getContext().getBean(enhanceDynamicDataSource);
+            EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler = (EnhanceDynamicDataSourceHandler) ContextHolder
+                .getContext().getBean(enhanceDynamicDataSource);
             enhanceDynamicDataSourceHandler.enhanceChangeDbByCode(dataSource.value());
         }
         else {
