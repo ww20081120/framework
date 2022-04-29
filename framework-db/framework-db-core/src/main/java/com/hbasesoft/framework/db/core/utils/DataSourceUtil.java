@@ -8,6 +8,7 @@ package com.hbasesoft.framework.db.core.utils;
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
@@ -180,4 +181,7 @@ public final class DataSourceUtil {
         return dataSource;
     }
 
+    public static Collection<String> getAllDatasourceCode() {
+        return dataSourceMap.keySet();
+    }
 }

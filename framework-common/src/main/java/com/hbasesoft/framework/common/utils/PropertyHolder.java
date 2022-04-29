@@ -146,13 +146,49 @@ public final class PropertyHolder {
         }
         catch (Exception e) {
             log.error("装入主配置文件" + systemConfig + "失败!", e);
-            //throw new InitializationException(e);
+            // throw new InitializationException(e);
             return;
         }
 
+        // 加载扩展文件
+        loadExtendFiles();
+
+        log.info("系统配置属性装载完毕");
+        log.info("******************属性列表***************************");
+        PROPERTIES.keySet().forEach(propertyName -> {
+            log.info("  " + propertyName + " = " + PROPERTIES.get(propertyName));
+        });
+        log.info("***********************************************************");
+
+        loadErrorMessage();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    private static void loadExtendFiles() {
         String extendPropertyFiles = PROPERTIES.get("extend.property.files");
+        String springIncloud = PROPERTIES.get("spring.profiles.include");
+        if (StringUtils.isNotEmpty(springIncloud)) {
+            StringBuilder sb = new StringBuilder();
+            if (sb != null) {
+                sb.append(extendPropertyFiles);
+            }
+
+            String[] fs = StringUtils.split(springIncloud, GlobalConstants.SPLITOR);
+            for (String f : fs) {
+                sb.append(GlobalConstants.SPLITOR).append("application_").append(f).append(".yml");
+            }
+            extendPropertyFiles = sb.toString();
+        }
+
         if (StringUtils.isNotEmpty(extendPropertyFiles)) {
             String[] files = StringUtils.split(extendPropertyFiles, GlobalConstants.SPLITOR);
+            ClassPathResource cr = null;
             for (String file : files) {
                 try {
                     file = StringUtils.trim(file);
@@ -173,14 +209,6 @@ public final class PropertyHolder {
                 }
             }
         }
-        log.info("系统配置属性装载完毕");
-        log.info("******************属性列表***************************");
-        PROPERTIES.keySet().forEach(propertyName -> {
-            log.info("  " + propertyName + " = " + PROPERTIES.get(propertyName));
-        });
-        log.info("***********************************************************");
-
-        loadErrorMessage();
     }
 
     private static void loadErrorMessage() {

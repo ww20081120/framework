@@ -19,13 +19,3 @@ spring: #应用配置
 feign:
   hystrix:
     enabled: true
-    
-#master: #主数据库配置
-# db:
-#  type: mysql
-#  url: jdbc:mysql://192.168.10.73:3306/sgp_tx?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
-#  username: root
-#  password: hbasesoft.com
-
-#cache: #缓存配置
-#  model: SIMPLE
