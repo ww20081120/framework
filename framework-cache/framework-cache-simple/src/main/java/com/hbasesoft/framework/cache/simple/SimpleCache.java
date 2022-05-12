@@ -8,11 +8,13 @@ package com.hbasesoft.framework.cache.simple;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.collections.MapUtils;
-
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.hbasesoft.framework.cache.core.AbstractCache;
 import com.hbasesoft.framework.cache.core.CacheConstant;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
  * <Description> <br>
@@ -24,15 +26,7 @@ import com.hbasesoft.framework.cache.core.CacheConstant;
  */
 public class SimpleCache extends AbstractCache {
 
-    public static void main(String[] args) {
-        SimpleCache cache = new SimpleCache();
-        cache.put("test", 0, "test123");
-        String value = cache.get("test");
-        System.out.println(value);
-        cache.remove("test");
-        value = cache.get("test");
-        System.out.println(value);
-    }
+    private static final int MAX_SIZE = PropertyHolder.getIntProperty("cache.max_size", 10000);
 
     /**
      * 缓存模式
@@ -40,13 +34,13 @@ public class SimpleCache extends AbstractCache {
     public static final String CACHE_MODEL = "SIMPLE";
 
     /** cachesMap */
-    private Map<String, Map<String, byte[]>> cachesMap;
+    private Map<String, Cache<String, byte[]>> cachesMap;
 
     /**
      * 默认构造
      */
     public SimpleCache() {
-        this.cachesMap = new HashMap<String, Map<String, byte[]>>();
+        this.cachesMap = new HashMap<String, Cache<String, byte[]>>();
     }
 
     /**
@@ -119,14 +113,8 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected Map<byte[], byte[]> getNode(final byte[] node) {
-        Map<byte[], byte[]> cache = new HashMap<>();
-        Map<String, byte[]> temp = this.cachesMap.get(new String(node));
-        if (MapUtils.isNotEmpty(temp)) {
-            for (Entry<String, byte[]> entry : temp.entrySet()) {
-                cache.put(entry.getKey().getBytes(), entry.getValue());
-            }
-        }
-        return cache;
+        Cache<String, byte[]> temp = this.cachesMap.get(new String(node));
+        return temp == null ? null : string2ByteMap(temp.asMap());
     }
 
     /**
@@ -139,13 +127,9 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
-        Map<String, byte[]> temp = new HashMap<>();
-        if (MapUtils.isNotEmpty(dataMap)) {
-            for (Entry<byte[], byte[]> entry : dataMap.entrySet()) {
-                temp.put(new String(entry.getKey()), entry.getValue());
-            }
-        }
-        this.cachesMap.put(new String(key), temp);
+        Cache<String, byte[]> cache = buildCache(seconds);
+        cache.putAll(byte2StringMap(dataMap));
+        this.cachesMap.put(new String(key), cache);
     }
 
     /**
@@ -172,8 +156,8 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
-        Map<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
-        return defaultCache == null ? null : defaultCache.get(new String(key));
+        Cache<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
+        return defaultCache == null ? null : defaultCache.getIfPresent(new String(key));
     }
 
     /**
@@ -187,9 +171,9 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
-        Map<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
+        Cache<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
         if (defaultCache == null) {
-            defaultCache = new HashMap<String, byte[]>();
+            defaultCache = buildCache(seconds);
             this.cachesMap.put(new String(nodeName), defaultCache);
         }
         defaultCache.put(new String(key), t);
@@ -205,9 +189,37 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
-        Map<String, byte[]> nodeMap = this.cachesMap.get(new String(nodeName));
+        Cache<String, byte[]> nodeMap = this.cachesMap.get(new String(nodeName));
         if (nodeMap != null) {
-            nodeMap.remove(new String(key));
+            nodeMap.invalidate(new String(key));
         }
+    }
+
+    private Cache<String, byte[]> buildCache(int seconds) {
+        Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
+        if (seconds > 0) {
+            builder.expireAfterWrite(seconds, TimeUnit.SECONDS);
+        }
+        return builder.build();
+    }
+
+    private Map<String, byte[]> byte2StringMap(Map<byte[], byte[]> map) {
+        Map<String, byte[]> m = new HashMap<>();
+        if (map != null) {
+            for (Entry<byte[], byte[]> entry : map.entrySet()) {
+                m.put(new String(entry.getKey()), entry.getValue());
+            }
+        }
+        return m;
+    }
+
+    private Map<byte[], byte[]> string2ByteMap(Map<String, byte[]> map) {
+        Map<byte[], byte[]> m = new HashMap<>();
+        if (map != null) {
+            for (Entry<String, byte[]> entry : map.entrySet()) {
+                m.put(entry.getKey().getBytes(), entry.getValue());
+            }
+        }
+        return m;
     }
 }
