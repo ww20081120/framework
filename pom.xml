@@ -43,7 +43,8 @@
 		<jasypt.version>1.9.3</jasypt.version>
 		<protostuff.version>1.7.2</protostuff.version>
 		<druid.version>1.2.3</druid.version>
-        <caffeine.version>2.9.3</caffeine.version>
+		<caffeine.version>2.9.3</caffeine.version>
+		<okhttp3.version>4.9.3</okhttp3.version>
 	</properties>
 
 	<dependencies>
