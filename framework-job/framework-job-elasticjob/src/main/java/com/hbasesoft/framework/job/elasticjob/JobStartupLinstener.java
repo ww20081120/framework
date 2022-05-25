@@ -130,7 +130,7 @@ public class JobStartupLinstener implements StartupListener {
         Assert.notEmpty(jobNamespace, ErrorCodeDef.JOB_REGISTER_NAMESPACE_IS_NULL);
 
         ZookeeperConfiguration zkConfig = new ZookeeperConfiguration(url, jobNamespace);
-
+        zkConfig.setDigest(PropertyHolder.getProperty("job.register.digest"));
         zkConfig.setConnectionTimeoutMilliseconds(
             PropertyHolder.getIntProperty("job.register.connectionTimeout", 10) * 1000);
         zkConfig.setMaxSleepTimeMilliseconds(PropertyHolder.getIntProperty("job.register.maxSleepTime", 10) * 1000);
