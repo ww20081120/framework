@@ -28,7 +28,7 @@
 	</modules>
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+		<spring-cloud.version>Hoxton.SR12</spring-cloud.version>
 		<fastjson.version>1.2.75</fastjson.version>
 		<!-- 模版解析 -->
 		<ognl.version>3.2.16</ognl.version>
