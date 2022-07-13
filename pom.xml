@@ -163,6 +163,13 @@
 				<artifactId>commons-beanutils</artifactId>
 				<version>${commons-beanutils.version}</version>
 			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+			<dependency>
+				<groupId>com.github.ben-manes.caffeine</groupId>
+				<artifactId>caffeine</artifactId>
+				<version>${caffeine.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -212,12 +219,12 @@
 		<repository>
 			<id>releases</id>
 			<name>Nexus Release Repository</name>
-			<url>http://vccnexus.towngasvcc.com:8081/repository/maven-releases/</url>
+			<url>http://nexus.hbasesoft.com:8888/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>Nexus Snapshot Repository</name>
-			<url>http://vccnexus.towngasvcc.com:8081/repository/maven-snapshots/</url>
+			<url>http://nexus.hbasesoft.com:8888/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
