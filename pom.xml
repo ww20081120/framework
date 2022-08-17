@@ -45,6 +45,7 @@
 		<druid.version>1.2.3</druid.version>
 		<caffeine.version>2.9.3</caffeine.version>
 		<okhttp3.version>4.9.3</okhttp3.version>
+		<flumn.version>1.10.0</flumn.version>
 	</properties>
 
 	<dependencies>
@@ -173,6 +174,29 @@
 				<artifactId>caffeine</artifactId>
 				<version>${caffeine.version}</version>
 			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.apache.flume/flume-ng-core -->
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-core</artifactId>
+				<version>${flumn.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-configuration</artifactId>
+				<version>${flumn.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-node</artifactId>
+				<version>${flumn.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume.flume-ng-sources</groupId>
+				<artifactId>flume-taildir-source</artifactId>
+				<version>${flumn.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

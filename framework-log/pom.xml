@@ -11,7 +11,8 @@
   <modules>
   	<module>framework-log-core</module>
   	<module>framework-log-file</module>
-  	<module>framework-log-kafka</module>
   	<module>framework-log-demo</module>
+  	<module>framework-log-flume-clickhouse</module>
+  	<module>framework-log-flume-core</module>
   </modules>
 </project>
