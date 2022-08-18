@@ -33,7 +33,9 @@ public interface JdbcSinkConstants {
 
     String DATASOURCE_CODE = "datasourceCode";
 
-    String CLIENT_PREFIX = "client";
+    String CLIENT_TYPE = "client";
+
+    String CLIENT_PREFIX = CLIENT_TYPE + ".";
 
     String DEFAULT_DATASOURCE_CODE = "master";
 

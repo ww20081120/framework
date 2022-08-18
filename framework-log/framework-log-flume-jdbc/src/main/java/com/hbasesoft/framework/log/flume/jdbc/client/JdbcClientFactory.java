@@ -7,9 +7,9 @@ package com.hbasesoft.framework.log.flume.jdbc.client;
 
 import com.hbasesoft.framework.log.flume.core.EventSerializer;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -20,18 +20,17 @@ import com.hbasesoft.framework.log.flume.core.EventSerializer;
 public class JdbcClientFactory {
 
     /**
-     * Description: <br> 
-     *  
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param tableName
      * @param datasourceCode
      * @param eventSerializer
      * @return <br>
-     */ 
+     */
     public JdbcClient getClient(String tableName, String datasourceCode, EventSerializer eventSerializer) {
-        // TODO Auto-generated method stub
-        return null;
+        return new SpringJdbcTemplateClient(datasourceCode, tableName, eventSerializer);
     }
 
 }

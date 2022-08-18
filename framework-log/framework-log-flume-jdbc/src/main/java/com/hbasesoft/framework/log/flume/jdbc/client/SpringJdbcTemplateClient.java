@@ -10,11 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
@@ -32,6 +34,7 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.log.flume.core.EventSerializer;
@@ -48,8 +51,6 @@ import com.hbasesoft.framework.log.flume.core.EventSerializer;
  */
 public class SpringJdbcTemplateClient implements JdbcClient {
 
-    private static final int commitNumber = 1000;
-
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     private final EventSerializer serializer;
@@ -59,6 +60,8 @@ public class SpringJdbcTemplateClient implements JdbcClient {
     private final String insertSql;
 
     private String idKey;
+
+    private String createTimeKey;
 
     /** 
      *  
@@ -95,6 +98,9 @@ public class SpringJdbcTemplateClient implements JdbcClient {
                 if ("id".equalsIgnoreCase(cmt)) {
                     idKey = cmt;
                 }
+                else if ("create_time".equalsIgnoreCase(cmt)) {
+                    createTimeKey = cmt;
+                }
                 if (i != 0) {
                     builder.append(", ");
                     valueBuilder.append(", ");
@@ -126,6 +132,16 @@ public class SpringJdbcTemplateClient implements JdbcClient {
         if (StringUtils.isNotEmpty(idKey) && !obj.containsKey(idKey)) {
             obj.put(idKey, CommonUtil.getTransactionID());
         }
+
+        if (StringUtils.isNotEmpty(createTimeKey)) {
+            if (obj.containsKey(createTimeKey)) {
+                obj.put(createTimeKey, DateUtil.string2Date(obj.getString(createTimeKey)));
+            }
+            else {
+                obj.put(createTimeKey, new Date());
+            }
+        }
+
         datas.add(obj);
     }
 
@@ -139,15 +155,19 @@ public class SpringJdbcTemplateClient implements JdbcClient {
     @SuppressWarnings("unchecked")
     @Override
     public void execute() throws Exception {
+        if (CollectionUtils.isEmpty(datas)) {
+            return;
+        }
+
         Map<String, Object>[] tempDatas;
         synchronized (datas) {
             tempDatas = datas.toArray(new Map[0]);
             datas = new ArrayList<>();
         }
 
-        SqlParameterSource[] datas = SqlParameterSourceUtils.createBatch(tempDatas);
+        SqlParameterSource[] sources = SqlParameterSourceUtils.createBatch(tempDatas);
         ParsedSql parsedSql = NamedParameterUtils.parseSqlStatement(insertSql);
-        SqlParameterSource paramSource = datas[0];
+        SqlParameterSource paramSource = sources[0];
 
         String sqlToUse = NamedParameterUtils.substituteNamedParameters(parsedSql, paramSource);
         List<SqlParameter> declaredParameters = NamedParameterUtils.buildSqlParameterList(parsedSql, paramSource);
@@ -157,13 +177,13 @@ public class SpringJdbcTemplateClient implements JdbcClient {
             jdbcTemplate.getJdbcOperations().batchUpdate(pscf.getSql(), new BatchPreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
-                    Object[] values = NamedParameterUtils.buildValueArray(parsedSql, datas[i], null);
+                    Object[] values = NamedParameterUtils.buildValueArray(parsedSql, sources[i], null);
                     pscf.newPreparedStatementSetter(values).setValues(ps);
                 }
 
                 @Override
                 public int getBatchSize() {
-                    return commitNumber;
+                    return sources.length;
                 }
             });
         }

@@ -15,8 +15,15 @@ server: #系统配置
 logservice:
   flume: # 日志采集任务配置
     name: a1
-    config: flume-taildir-es.conf
+    config: flume-taildir-jdbc.conf
   framework: # 框架的日志是否打印
     show: true
     
+cache.model: SIMPLE
     
+master:
+  db:
+   type: mysql
+   url: jdbc:mysql://rdb.hbasesoft.com:63306/framework-cloud-venus?useUnicode=true&characterEncoding=UTF-8&generateSimpleParameterMetadata=true&serverTimezone=Asia/Shanghai
+   username: framework
+   password: framework
