@@ -7,6 +7,7 @@ package com.hbasesoft.framework.log.flume.elasticsearch;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,6 +18,7 @@ import org.apache.flume.conf.ComponentConfiguration;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
  * <Description> <br>
@@ -88,11 +90,9 @@ public class ElasticSearchLogStashEventSerializer implements ElasticSearchEventS
         String timestamp = headers.get("timestamp");
         if (!StringUtils.isBlank(timestamp) && StringUtils.isBlank(headers.get("@timestamp"))) {
             long timestampMs = Long.parseLong(timestamp);
-            builder.put("timestamp", timestampMs);
+            builder.put("@timestamp", DateUtil.date2String(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
         }
-        else {
-            builder.put("timestamp", System.currentTimeMillis());
-        }
+
     }
 
     private void appendBody(JSONObject builder, Event event) throws IOException, UnsupportedEncodingException {

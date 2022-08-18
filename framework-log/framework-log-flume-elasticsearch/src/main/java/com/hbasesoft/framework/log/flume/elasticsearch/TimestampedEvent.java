@@ -44,6 +44,7 @@ public class TimestampedEvent extends SimpleEvent {
             this.timestamp = Long.valueOf(timestampString);
         }
         setHeaders(headers);
+        base.setHeaders(headers);
     }
 
     long getTimestamp() {
