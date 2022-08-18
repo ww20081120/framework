@@ -16,7 +16,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-log-flume-clickhouse</artifactId>
+			<artifactId>framework-log-flume-elasticsearch</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>

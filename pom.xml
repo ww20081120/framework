@@ -46,6 +46,8 @@
 		<caffeine.version>2.9.3</caffeine.version>
 		<okhttp3.version>4.9.3</okhttp3.version>
 		<flumn.version>1.10.0</flumn.version>
+		
+		<elasticsearch.version>7.9.3</elasticsearch.version>
 	</properties>
 
 	<dependencies>
@@ -189,6 +191,11 @@
 			<dependency>
 				<groupId>org.apache.flume</groupId>
 				<artifactId>flume-ng-node</artifactId>
+				<version>${flumn.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.flume</groupId>
+				<artifactId>flume-ng-sdk</artifactId>
 				<version>${flumn.version}</version>
 			</dependency>
 			<dependency>

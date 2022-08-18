@@ -394,7 +394,7 @@ public final class HttpUtil {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
     }
 
-    private static OkHttpClient getOkHttpClient() {
+    public static OkHttpClient getOkHttpClient() {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient.Builder()

@@ -14,5 +14,6 @@
   	<module>framework-log-demo</module>
   	<module>framework-log-flume-clickhouse</module>
   	<module>framework-log-flume-core</module>
+  	<module>framework-log-flume-elasticsearch</module>
   </modules>
 </project>

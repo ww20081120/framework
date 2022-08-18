@@ -15,7 +15,7 @@ server: #系统配置
 logservice:
   flume: # 日志采集任务配置
     name: a1
-    config: flume-taildir-log.conf
+    config: flume-taildir-es.conf
   framework: # 框架的日志是否打印
     show: true
     
