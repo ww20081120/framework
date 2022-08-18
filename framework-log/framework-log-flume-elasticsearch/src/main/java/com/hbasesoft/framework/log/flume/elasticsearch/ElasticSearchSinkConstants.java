@@ -106,7 +106,7 @@ public interface ElasticSearchSinkConstants {
 
     String TTL_REGEX = "^(\\d+)(\\D*)";
 
-    String DEFAULT_SERIALIZER_CLASS = "com.hbasesoft.framework.log.flume.elasticsearch.ElasticSearchLogStashEventSerializer";
+    String DEFAULT_SERIALIZER_CLASS = "com.hbasesoft.framework.log.flume.core.LogStashEventSerializer";
 
     String DEFAULT_INDEX_NAME_BUILDER_CLASS = "com.hbasesoft.framework.log.flume.elasticsearch.TimeBasedIndexNameBuilder";
 }

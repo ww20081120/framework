@@ -14,6 +14,7 @@ import org.apache.flume.conf.ComponentConfiguration;
 import org.apache.flume.formatter.output.BucketPath;
 
 import com.hbasesoft.framework.common.utils.date.DateUtil;
+import com.hbasesoft.framework.log.flume.core.TimestampedEvent;
 
 /**
  * <Description> <br>

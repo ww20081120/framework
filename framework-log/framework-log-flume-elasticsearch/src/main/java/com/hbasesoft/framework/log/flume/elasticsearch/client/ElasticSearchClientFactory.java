@@ -6,7 +6,7 @@
 package com.hbasesoft.framework.log.flume.elasticsearch.client;
 
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
-import com.hbasesoft.framework.log.flume.elasticsearch.ElasticSearchEventSerializer;
+import com.hbasesoft.framework.log.flume.core.EventSerializer;
 
 /**
  * <Description> <br>
@@ -28,7 +28,7 @@ public class ElasticSearchClientFactory {
      * @return
      */
     public ElasticSearchClient getClient(String clientType, Address[] hostNames, String clusterName,
-        ElasticSearchEventSerializer serializer) {
+        EventSerializer serializer) {
         return new ElasticSearchRestClient(hostNames, serializer);
     }
 }

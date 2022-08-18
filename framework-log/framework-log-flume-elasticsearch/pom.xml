@@ -16,10 +16,5 @@
 			<artifactId>framework-log-flume-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.elasticsearch</groupId> -->
-<!-- 			<artifactId>elasticsearch</artifactId> -->
-<!-- 			<version>${elasticsearch.version}</version> -->
-<!-- 		</dependency> -->
 	</dependencies>
 </project>

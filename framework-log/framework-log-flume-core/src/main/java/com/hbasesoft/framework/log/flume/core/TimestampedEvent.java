@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.log.flume.elasticsearch;
+package com.hbasesoft.framework.log.flume.core;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class TimestampedEvent extends SimpleEvent {
 
     private final long timestamp;
 
-    TimestampedEvent(Event base) {
+    public TimestampedEvent(Event base) {
         setBody(base.getBody());
         Map<String, String> headers = Maps.newHashMap(base.getHeaders());
         String timestampString = headers.get("timestamp");
@@ -47,7 +47,7 @@ public class TimestampedEvent extends SimpleEvent {
         base.setHeaders(headers);
     }
 
-    long getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 }

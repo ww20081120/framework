@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.log.flume.elasticsearch;
+package com.hbasesoft.framework.log.flume.core;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -64,7 +64,7 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.flume.elasticsearch <br>
  */
-public class ElasticSearchLogStashEventSerializer implements ElasticSearchEventSerializer {
+public class LogStashEventSerializer implements EventSerializer {
 
     /**
      * Description: <br>

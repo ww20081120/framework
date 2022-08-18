@@ -28,6 +28,7 @@ import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.log.flume.core.EventSerializer;
 import com.hbasesoft.framework.log.flume.elasticsearch.client.ElasticSearchClient;
 import com.hbasesoft.framework.log.flume.elasticsearch.client.ElasticSearchClientFactory;
 
@@ -65,7 +66,7 @@ public class ElasticSearchSink extends AbstractSink implements Configurable, Bat
 
     private Context elasticSearchClientContext = null;
 
-    private ElasticSearchEventSerializer eventSerializer;
+    private EventSerializer eventSerializer;
 
     private SinkCounter sinkCounter;
 
@@ -216,8 +217,8 @@ public class ElasticSearchSink extends AbstractSink implements Configurable, Bat
             Class<? extends Configurable> clazz = (Class<? extends Configurable>) Class.forName(serializerClazz);
             Configurable serializer = clazz.newInstance();
 
-            if (serializer instanceof ElasticSearchEventSerializer) {
-                eventSerializer = (ElasticSearchEventSerializer) serializer;
+            if (serializer instanceof EventSerializer) {
+                eventSerializer = (EventSerializer) serializer;
                 eventSerializer.configure(serializerContext);
             }
             else {

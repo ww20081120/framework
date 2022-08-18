@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.log.flume.elasticsearch;
+package com.hbasesoft.framework.log.flume.core;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ import org.apache.flume.conf.ConfigurableComponent;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.flume.elasticsearch <br>
  */
-public interface ElasticSearchEventSerializer extends Configurable, ConfigurableComponent {
+public interface EventSerializer extends Configurable, ConfigurableComponent {
 
     /**
      * Return an {@link BytesStream} made up of the serialized flume event

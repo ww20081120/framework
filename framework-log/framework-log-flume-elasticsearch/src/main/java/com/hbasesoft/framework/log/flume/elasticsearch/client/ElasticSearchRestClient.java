@@ -23,7 +23,7 @@ import com.hbasesoft.framework.common.utils.io.HttpUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.log.flume.elasticsearch.ElasticSearchEventSerializer;
+import com.hbasesoft.framework.log.flume.core.EventSerializer;
 import com.hbasesoft.framework.log.flume.elasticsearch.IndexNameBuilder;
 
 import okhttp3.Call;
@@ -56,13 +56,13 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
 
     private static final String BULK_ENDPOINT = "_bulk";
 
-    private final ElasticSearchEventSerializer serializer;
+    private final EventSerializer serializer;
 
     private final RoundRobinList<Address> serversList;
 
     private StringBuilder bulkBuilder;
 
-    public ElasticSearchRestClient(Address[] address, ElasticSearchEventSerializer serializer) {
+    public ElasticSearchRestClient(Address[] address, EventSerializer serializer) {
 
         this.serializer = serializer;
 
