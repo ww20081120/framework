@@ -66,6 +66,8 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  */
 public class LogStashEventSerializer implements EventSerializer {
 
+    private String timestamp = "@timestamp";
+
     /**
      * Description: <br>
      * 
@@ -87,10 +89,14 @@ public class LogStashEventSerializer implements EventSerializer {
         Map<String, String> headers = Maps.newHashMap(event.getHeaders());
         builder.putAll(headers);
 
-        String timestamp = headers.get("timestamp");
-        if (!StringUtils.isBlank(timestamp) && StringUtils.isBlank(headers.get("@timestamp"))) {
-            long timestampMs = Long.parseLong(timestamp);
-            builder.put("@timestamp", DateUtil.date2String(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+        String ts = headers.get("timestamp");
+        if (StringUtils.isEmpty(ts)) {
+            ts = headers.get("@timestamp");
+        }
+
+        if (StringUtils.isNotEmpty(ts)) {
+            long timestampMs = Long.parseLong(ts);
+            builder.put(timestamp, DateUtil.date2String(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
         }
 
     }
@@ -130,6 +136,9 @@ public class LogStashEventSerializer implements EventSerializer {
      */
     @Override
     public void configure(Context context) {
+        if (StringUtils.isNotEmpty(context.getString("timestamp"))) {
+            this.timestamp = context.getString("timestamp");
+        }
     }
 
     /**
