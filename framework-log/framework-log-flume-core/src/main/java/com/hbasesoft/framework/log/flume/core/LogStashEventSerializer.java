@@ -89,16 +89,17 @@ public class LogStashEventSerializer implements EventSerializer {
         Map<String, String> headers = Maps.newHashMap(event.getHeaders());
         builder.putAll(headers);
 
-        String ts = headers.get("timestamp");
-        if (StringUtils.isEmpty(ts)) {
-            ts = headers.get("@timestamp");
-        }
+        if (!builder.containsKey(timestamp)) {
+            String ts = headers.get("timestamp");
+            if (StringUtils.isEmpty(ts)) {
+                ts = headers.get("@timestamp");
+            }
 
-        if (StringUtils.isNotEmpty(ts)) {
-            long timestampMs = Long.parseLong(ts);
-            builder.put(timestamp, DateUtil.date2String(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+            if (StringUtils.isNotEmpty(ts)) {
+                long timestampMs = Long.parseLong(ts);
+                builder.put(timestamp, DateUtil.date2String(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+            }
         }
-
     }
 
     private void appendBody(JSONObject builder, Event event) throws IOException, UnsupportedEncodingException {
