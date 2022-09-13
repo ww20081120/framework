@@ -181,7 +181,7 @@ public final class PropertyHolder {
 
             String[] fs = StringUtils.split(springIncloud, GlobalConstants.SPLITOR);
             for (String f : fs) {
-                sb.append(GlobalConstants.SPLITOR).append("application_").append(f).append(".yml");
+                sb.append(GlobalConstants.SPLITOR).append("application-").append(f).append(".yml");
             }
             extendPropertyFiles = sb.toString();
         }

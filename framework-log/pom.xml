@@ -12,5 +12,8 @@
   	<module>framework-log-core</module>
   	<module>framework-log-file</module>
   	<module>framework-log-demo</module>
+  	<module>framework-log-flume-core</module>
+  	<module>framework-log-flume-elasticsearch</module>
+  	<module>framework-log-flume-jdbc</module>
   </modules>
 </project>

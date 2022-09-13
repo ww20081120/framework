@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common;
 
+import com.hbasesoft.framework.common.utils.PropertyHolder;
+
 /**
  * <Description> <br>
  * 
@@ -90,4 +92,7 @@ public interface GlobalConstants {
     /** 默认行 */
     int DEFAULT_LINES = 1000;
 
+    /** 全局文件路径 */
+    String FILE_STORAGE_PATH = PropertyHolder.getProperty("server.fileupload.filePath", System.getProperty("user.home"))
+        + "/uploadFiles";
 }
