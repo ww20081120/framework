@@ -1,13 +1,10 @@
-Framework 3.X 框架说明
+Framework 4.X 框架说明
 =======
 
 # 更新说明
 版本|更新内容| 时间|修改人
 --- | --- | --- | ---
-3.0 | 1.更新了spring boot 版本至2.0 <br> 2.去除dubbox框架，引入spring cloud框架 <br> 3. 重新定义了common 模块的API <br> 4. 支持JPA <br> 5. 支持yml格式的配置文件| 2017年9月24 | 王伟
-3.4 | 增加了framework-tx模块 | 2020年2月4日 | 王伟
-3.5 | 更新了springboot至2.3.6.RELEASE | 2020年12月1日 | 王伟
-3.6 | 更新了springboot至2.5.4, spring-cloud更新至2020.0.3 | 2021年8月31日 | 王伟
+4.0 | 使用jdk17版本，spring cloud使用2021.0.4版本| 2020年9月20 | 王伟
 
 # 框架介绍
 
@@ -20,6 +17,7 @@ Framework框架集成了log、cache、db、message、rule、tx，每块都以模
 + framework-job 基于[ElasticJob](http://elasticjob.io)简单封装的定时器，支持分布式、分片等功能
 + framework-message 消息模块，通过简单的api发布和订阅事件， 目前支持kafka、redis、rocketMq
 + framework-rule 规则引擎，基于json的简单规则引擎， 支持多种插件及扩展， 例如：基于状态机的工作流引擎
++ framework-shell 命令行工具，用户做项目的维护和一些小工具
 + [framework-tx](#framework-tx) 分布式事务，支持各种远程接口、同步异步消息。
 
 -------
