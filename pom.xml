@@ -19,7 +19,6 @@
 		<module>framework-message</module>
 		<module>framework-log</module>
 		<module>framework-rule</module>
-		<module>framework-bootstrap</module>
 		<module>framework-job</module>
 		<module>framework-tx</module>
 		<module>framework-shell</module>
