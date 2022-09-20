@@ -247,7 +247,18 @@
 			</resource>
 		</resources>
 	</build>
-
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://nexus.hbasesoft.com:8888/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://nexus.hbasesoft.com:8888/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<reporting>
 		<plugins>
 			<plugin>
