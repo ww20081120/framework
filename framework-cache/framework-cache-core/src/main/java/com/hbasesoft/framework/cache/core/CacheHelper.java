@@ -5,24 +5,16 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core;
 
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.hbasesoft.framework.cache.core.annotation.CacheProxy;
-import com.hbasesoft.framework.cache.core.handler.CachePorxyInvocationHandler;
 import com.hbasesoft.framework.cache.core.lock.Lock;
 import com.hbasesoft.framework.cache.core.lock.LockLoader;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -103,42 +95,6 @@ public final class CacheHelper {
             sb.append(GlobalConstants.PATH_SPLITOR).append(path);
         }
         return sb.toString();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param clazz
-     * @param cacheProxy
-     * @param <T> T
-     * @return <br>
-     */
-    public static <T> T proxy(final Class<T> clazz, final CacheProxy cacheProxy) {
-
-        if (Modifier.isAbstract(clazz.getModifiers())) {
-            T target = null;
-            if (StringUtils.isNotEmpty(cacheProxy.name())) {
-                target = ContextHolder.getContext().getBean(cacheProxy.name(), clazz);
-            }
-            else {
-                target = ContextHolder.getContext().getBean(clazz);
-            }
-
-            Assert.notNull(target, ErrorCodeDef.PROXY_TARGET_NOT_FOUND, clazz);
-
-            CachePorxyInvocationHandler invocationHandler = new CachePorxyInvocationHandler(target, cacheProxy, clazz);
-
-            @SuppressWarnings("unchecked")
-            T proxyObj = (T) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.isInterface() ? new Class[] {
-                clazz
-            } : clazz.getInterfaces(), invocationHandler);
-
-            LoggerUtil.debug("Success cache proxy clazz[{0}].", clazz);
-            return proxyObj;
-        }
-        return null;
     }
 
 }
