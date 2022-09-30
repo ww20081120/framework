@@ -22,7 +22,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -39,9 +38,6 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PropertyHolder {
-
-    /** log */
-    private static Logger log = new Logger(PropertyHolder.class);
 
     /** properties */
     private static final Map<String, String> PROPERTIES = new HashMap<>();
@@ -142,10 +138,11 @@ public final class PropertyHolder {
                 cr = new ClassPathResource(systemConfig);
                 loadProperties(cr.getInputStream(), PROPERTIES);
             }
-            log.info("装入主配置文件:" + systemConfig);
+            System.out.println("装入主配置文件:" + systemConfig);
         }
         catch (Exception e) {
-            log.error("装入主配置文件" + systemConfig + "失败!", e);
+            System.out.println("装入主配置文件" + systemConfig + "失败!");
+            e.printStackTrace();
             // throw new InitializationException(e);
             return;
         }
@@ -153,12 +150,12 @@ public final class PropertyHolder {
         // 加载扩展文件
         loadExtendFiles();
 
-        log.info("系统配置属性装载完毕");
-        log.info("******************属性列表***************************");
+        System.out.println("系统配置属性装载完毕");
+        System.out.println("******************属性列表***************************");
         PROPERTIES.keySet().forEach(propertyName -> {
-            log.info("  " + propertyName + " = " + PROPERTIES.get(propertyName));
+            System.out.println("  " + propertyName + " = " + PROPERTIES.get(propertyName));
         });
-        log.info("***********************************************************");
+        System.out.println("***********************************************************");
 
         loadErrorMessage();
     }
@@ -200,11 +197,12 @@ public final class PropertyHolder {
                         else {
                             loadProperties(cr.getInputStream(), PROPERTIES);
                         }
-                        log.info("装入扩展配置文件：" + file);
+                        System.out.println("装入扩展配置文件：" + file);
                     }
                 }
                 catch (Exception e) {
-                    log.info("装入扩展配置文件" + file + "失败！", e);
+                    System.out.println("装入扩展配置文件" + file + "失败！");
+                    e.printStackTrace();
                     throw new InitializationException(e);
                 }
             }
@@ -217,10 +215,11 @@ public final class PropertyHolder {
         try {
             cr = new ClassPathResource(systemErrorMessagePath);
             loadProperties(cr.getInputStream(), ERROR_MESSAGE);
-            log.info("装入系统错误码文件:" + systemErrorMessagePath);
+            System.out.println("装入系统错误码文件:" + systemErrorMessagePath);
         }
         catch (Exception e) {
-            log.info("装入系统错误码文件" + systemErrorMessagePath + "失败!", e);
+            System.out.println("装入系统错误码文件" + systemErrorMessagePath + "失败!");
+            e.printStackTrace();
         }
 
         String projectErrorMessagePath = getProjectName() + "_errorMessage.properties";
@@ -228,11 +227,12 @@ public final class PropertyHolder {
             cr = new ClassPathResource(projectErrorMessagePath);
             if (cr.exists()) {
                 loadProperties(cr.getInputStream(), ERROR_MESSAGE);
-                log.info("装入项目错误码文件:" + projectErrorMessagePath);
+                System.out.println("装入项目错误码文件:" + projectErrorMessagePath);
             }
         }
         catch (Exception e) {
-            log.info("装入系统错误码文件" + projectErrorMessagePath + "失败!", e);
+            System.out.println("装入系统错误码文件" + projectErrorMessagePath + "失败!");
+            e.printStackTrace();
         }
 
         String selfPaths = getProperty("extend.errorMessage.files");
@@ -242,10 +242,11 @@ public final class PropertyHolder {
                 try {
                     cr = new ClassPathResource(file);
                     loadProperties(cr.getInputStream(), ERROR_MESSAGE);
-                    log.info("装入错误码文件：" + file);
+                    System.out.println("装入错误码文件：" + file);
                 }
                 catch (Exception e) {
-                    log.info("装入错误码文件" + file + "失败！", e);
+                    System.out.println("装入错误码文件" + file + "失败！");
+                    e.printStackTrace();
                 }
             }
         }
