@@ -20,7 +20,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
-import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -37,11 +37,6 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  * @see com.hbasesoft.framework.common <br>
  */
 public final class Bootstrap {
-
-    /**
-     * logger
-     */
-    private static Logger logger = new Logger(Bootstrap.class);
 
     /** listenerList */
     private static List<StartupListener> listenerList = null;
@@ -75,15 +70,14 @@ public final class Bootstrap {
             });
         }
 
-        logger.info("*********************初始化StartupListener*************************");
         if (CollectionUtils.isNotEmpty(listenerList)) {
             for (StartupListener listener : listenerList) {
                 listener.init();
-                logger.info("   {0} 初始化", listener.getClass().getName());
+                LoggerUtil.info("   {0} 初始化", listener.getClass().getName());
             }
         }
 
-        logger.info("====================>准备加载Spring配置文件<====================");
+        LoggerUtil.info("====================>准备加载Spring配置文件<====================");
     }
 
     /**
@@ -94,22 +88,22 @@ public final class Bootstrap {
      * @param context <br>
      */
     public static void after(final ApplicationContext context) {
-        logger.info("====================>Spring配置文件加载完毕<====================");
+        LoggerUtil.info("====================>Spring配置文件加载完毕<====================");
 
         if (CollectionUtils.isNotEmpty(listenerList)) {
             for (StartupListener listener : listenerList) {
                 listener.complete(context);
-                logger.info("   {0} 初始化成功。", listener.getClass().getName());
+                LoggerUtil.info("   {0} 初始化成功。", listener.getClass().getName());
             }
         }
 
-        logger.info("**********************************************************");
+        LoggerUtil.info("**********************************************************");
 
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
             .append(PropertyHolder.getProjectName()).append('-').append(PropertyHolder.getVersion()).append(" 模块启动成功！")
             .append('\n').append("***************************************"));
-        logger.info("====================>系统正常启动<====================");
+        LoggerUtil.info("====================>系统正常启动<====================");
 
     }
 
@@ -131,7 +125,7 @@ public final class Bootstrap {
                 if (StringUtils.isNotEmpty(nonProxyHosts)) {
                     System.setProperty("http.nonProxyHosts", nonProxyHosts);
                 }
-                logger.info("set http proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+                LoggerUtil.info("set http proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
         // }
@@ -155,7 +149,7 @@ public final class Bootstrap {
                 if (StringUtils.isNotEmpty(nonProxyHosts)) {
                     System.setProperty("https.nonProxyHosts", nonProxyHosts);
                 }
-                logger.info("set https proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+                LoggerUtil.info("set https proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
         // }
@@ -179,7 +173,7 @@ public final class Bootstrap {
                 if (StringUtils.isNotEmpty(nonProxyHosts)) {
                     System.setProperty("ftp.nonProxyHosts", nonProxyHosts);
                 }
-                logger.info("set ftp proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+                LoggerUtil.info("set ftp proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
         // }
@@ -200,7 +194,7 @@ public final class Bootstrap {
                 System.setProperty("socksProxyHost", addr.getHost());
                 System.setProperty("socksProxyPort", addr.getPort() + GlobalConstants.BLANK);
 
-                logger.info("set socks proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
+                LoggerUtil.info("set socks proxy[{0}:{1}] success", addr.getHost(), addr.getPort());
             }
         }
         // }
