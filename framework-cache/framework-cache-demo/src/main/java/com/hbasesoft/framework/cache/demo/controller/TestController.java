@@ -9,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.hbasesoft.framework.cache.core.annotation.CacheMethodConfig;
-import com.hbasesoft.framework.cache.core.annotation.CacheProxy;
 import com.hbasesoft.framework.cache.demo.service.TestService;
 
 /**
@@ -64,9 +62,6 @@ public class TestController {
      * @taskId <br>
      * @param service <br>
      */
-    @CacheProxy(expireTime = DEFAULT_EXPIRETIME, value = {
-        @CacheMethodConfig("getTestContent")
-    })
     public void setTestService(final TestService service) {
         this.testService = service;
     }

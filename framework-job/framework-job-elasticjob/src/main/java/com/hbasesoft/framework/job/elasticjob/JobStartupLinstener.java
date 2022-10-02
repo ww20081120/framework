@@ -103,10 +103,10 @@ public class JobStartupLinstener implements StartupListener {
 
                             JobConfiguration coreConfig = JobConfiguration.newBuilder(name, shardingTotalCount)
                                 .cron(getPropery(job.cron())).shardingItemParameters(shardingItemParameters).build();
-                            
+
                             ScheduleJobBootstrap bootstrap = new ScheduleJobBootstrap(regCenter,
                                 new ProxyJob((SimpleJob) clazz.newInstance()), coreConfig);
-                            
+
                             bootstrap.schedule();
 
                             LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(), name);
@@ -130,6 +130,12 @@ public class JobStartupLinstener implements StartupListener {
         Assert.notEmpty(jobNamespace, ErrorCodeDef.JOB_REGISTER_NAMESPACE_IS_NULL);
 
         ZookeeperConfiguration zkConfig = new ZookeeperConfiguration(url, jobNamespace);
+        zkConfig.setDigest(PropertyHolder.getProperty("job.register.digest"));
+        zkConfig.setConnectionTimeoutMilliseconds(
+            PropertyHolder.getIntProperty("job.register.connectionTimeout", 10) * 1000);
+        zkConfig.setMaxSleepTimeMilliseconds(PropertyHolder.getIntProperty("job.register.maxSleepTime", 10) * 1000);
+        zkConfig.setMaxRetries(PropertyHolder.getIntProperty("job.register.maxRetries", 3));
+
         CoordinatorRegistryCenter result = new ZookeeperRegistryCenter(zkConfig);
         result.init();
         return result;

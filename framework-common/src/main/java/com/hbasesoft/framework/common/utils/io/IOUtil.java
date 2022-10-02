@@ -115,7 +115,7 @@ public final class IOUtil {
      */
     public static String readString(final InputStream in) {
         try {
-            return IOUtils.toString(in);
+            return IOUtils.toString(in, GlobalConstants.DEFAULT_CHARSET);
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR_10027, e);

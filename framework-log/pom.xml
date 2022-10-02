@@ -3,14 +3,17 @@
   <parent>
     <groupId>com.hbasesoft.framework</groupId>
     <artifactId>framework</artifactId>
-    <version>3.6</version>
+    <version>4.0</version>
   </parent>
   <artifactId>framework-log</artifactId>
-  <version>3.6</version>
+  <version>4.0</version>
   <packaging>pom</packaging>
   <modules>
   	<module>framework-log-core</module>
   	<module>framework-log-file</module>
   	<module>framework-log-demo</module>
+  	<module>framework-log-flume-core</module>
+  	<module>framework-log-flume-elasticsearch</module>
+  	<module>framework-log-flume-jdbc</module>
   </modules>
 </project>

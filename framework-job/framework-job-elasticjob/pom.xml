@@ -5,13 +5,10 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-job</artifactId>
-		<version>3.6</version>
+		<version>4.0</version>
 	</parent>
 	<artifactId>framework-job-elasticjob</artifactId>
 	<description> </description>
-	<properties>
-		<lasted.release.version>3.0.0-beta</lasted.release.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -21,7 +18,6 @@
 		<dependency>
 			<groupId>org.apache.shardingsphere.elasticjob</groupId>
 			<artifactId>elasticjob-lite-core</artifactId>
-			<version>${lasted.release.version}</version>
 		</dependency>
 	</dependencies>
 </project>

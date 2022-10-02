@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-message</artifactId>
-		<version>3.6</version>
+		<version>4.0</version>
 	</parent>
 	<artifactId>framework-message-demo</artifactId>
 	<name>message demo</name>
@@ -66,9 +66,17 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
 					<mainClass>com.hbasesoft.framework.message.demo.Application</mainClass>
 					<layout>ZIP</layout>
 				</configuration>

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-cache</artifactId>
-		<version>3.6</version>
+		<version>4.0</version>
 	</parent>
 	<artifactId>framework-cache-simple</artifactId>
 	<properties>
@@ -15,6 +15,11 @@
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-cache-core</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
 		</dependency>
 	</dependencies>
 </project>

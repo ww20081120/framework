@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>3.6</version>
+		<version>4.0</version>
 	</parent>
 	<artifactId>framework-common</artifactId>
-	<version>3.6</version>
+	<version>4.0</version>
 	<name>${project.artifactId}</name>
 	<description>公共模块</description>
 	<dependencies>
@@ -120,14 +120,18 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-
-		<dependency>
+	    <dependency>
+	        <groupId>com.sun.xml.bind</groupId>
+	        <artifactId>jaxb-impl</artifactId>
+	    </dependency>
+     	<dependency>
 			<groupId>org.dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.logging.log4j</groupId>

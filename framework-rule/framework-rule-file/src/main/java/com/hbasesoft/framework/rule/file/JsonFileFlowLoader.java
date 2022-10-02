@@ -8,21 +8,19 @@ package com.hbasesoft.framework.rule.file;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Enumeration;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
+import com.hbasesoft.framework.common.utils.io.JarFileSpliterator;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
 import com.hbasesoft.framework.rule.core.config.FlowLoader;
@@ -78,36 +76,23 @@ public class JsonFileFlowLoader implements FlowLoader {
                 findFlowFile(new File(path));
             }
             else {
-                Enumeration<URL> dirs = Thread.currentThread().getContextClassLoader().getResources(DEFAULT_PATH);
+                ClassLoader classLoader = this.getClass().getClassLoader();
 
-                // 循环迭代下去
-                while (dirs.hasMoreElements()) {
-                    // 获取下一个元素
-                    URL url = dirs.nextElement();
-                    // 得到协议的名称
-                    String protocol = url.getProtocol();
-                    // 如果是以文件的形式保存在服务器上
-                    if ("file".equals(protocol)) {
-                        LoggerUtil.info("-------------- scan workfow type file ----------------");
-                        // 获取包的物理路径
-                        String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
-
-                        // 以文件的方式扫描整个包下的文件 并添加到集合中
-                        findFlowFile(new File(filePath));
-                    }
-                    else if ("jar".equals(protocol)) {
-                        LoggerUtil.info("-------------- scan workfow type jar ----------------");
-                        fileFlowFileInJar(DEFAULT_PATH, url);
-                    }
-                }
-
+                StreamSupport.stream(new JarFileSpliterator(DEFAULT_PATH), false)
+                    .filter(url -> url.toLowerCase().endsWith(".json")).forEach(url -> {
+                        try (InputStream in = classLoader.getResourceAsStream(url);) {
+                            addFlowFile(IOUtil.readString(in), url);
+                        }
+                        catch (Exception e) {
+                            throw new UtilException(e);
+                        }
+                    });
             }
         }
         catch (Exception e) {
             LoggerUtil.error("load resource error.", e);
             throw new InitializationException(e);
         }
-
     }
 
     private void findFlowFile(final File dir) throws Exception {
@@ -130,26 +115,6 @@ public class JsonFileFlowLoader implements FlowLoader {
             }
             else {
                 addFlowFile(IOUtil.readString(new FileInputStream(file)), file.getAbsolutePath());
-            }
-        }
-    }
-
-    private void fileFlowFileInJar(final String dir, final URL url) throws Exception {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        // 获取jar
-        JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
-        // 从此jar包 得到一个枚举类
-        Enumeration<JarEntry> entries = jar.entries();
-
-        // 同样的进行循环迭代
-        while (entries.hasMoreElements()) {
-            // 获取jar里的一个实体 可以是目录 和一些jar包里的其他文件 如META-INF等文件
-            JarEntry entry = entries.nextElement();
-            String name = entry.getName();
-            // 如果前半部分和定义的包名相同
-            if (!entry.isDirectory() && name.startsWith(dir) && name.toLowerCase().endsWith(".json")) {
-                addFlowFile(IOUtil.readString(classLoader.getResourceAsStream(name)), name);
             }
         }
     }
