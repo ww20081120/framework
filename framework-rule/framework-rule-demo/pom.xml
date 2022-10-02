@@ -9,6 +9,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-db-sh</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-cache-simple</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-rule-file</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -27,14 +37,6 @@
 		<!-- <artifactId>framework-rule-plugin-transaction</artifactId> -->
 		<!-- <version>${project.parent.version}</version> -->
 		<!-- </dependency> -->
-
-
-		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-bootstrap-normal</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -67,6 +69,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
 				</configuration>

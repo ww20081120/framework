@@ -8,13 +8,11 @@ package com.hbasesoft.framework.rule.demo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hbasesoft.framework.boostrap.normal.Application;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.rule.core.FlowHelper;
 import com.hbasesoft.framework.rule.demo.bean.FlowBean;
@@ -31,7 +29,6 @@ import com.hbasesoft.framework.rule.demo.bean.TestStateMachineBean;
  * @see com.hbasesoft.framework.test.rule.file <br>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
 public class TestFlow implements ApplicationContextAware {
 
     /**

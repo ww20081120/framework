@@ -126,7 +126,7 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
             String url = new StringBuilder().append(addr.getProtocol()).append("://").append(addr.getHost()).append(':')
                 .append(addr.getPort()).append('/').append(BULK_ENDPOINT).toString();
             MediaType mediaType = MediaType.parse("application/x-ndjson");
-            RequestBody requestBody = RequestBody.create(mediaType, entity);
+            RequestBody requestBody = RequestBody.create(entity.getBytes(), mediaType);
             Builder builder = new Request.Builder().url(url).post(requestBody);
             String authorization = null;
             if (StringUtils.isNotEmpty(addr.getUsername()) && StringUtils.isNotEmpty(addr.getPassword())) {
