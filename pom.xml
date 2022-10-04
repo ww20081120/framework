@@ -205,9 +205,9 @@
 
 			<!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
 			<dependency>
-			    <groupId>com.sun.xml.bind</groupId>
-			    <artifactId>jaxb-impl</artifactId>
-			    <version>${jaxb.version}</version>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>${jaxb.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -227,6 +227,18 @@
 				<configuration>
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -266,13 +278,4 @@
 			<url>http://nexus.hbasesoft.com:8888/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>3.3.0</version>
-			</plugin>
-		</plugins>
-	</reporting>
 </project> 
