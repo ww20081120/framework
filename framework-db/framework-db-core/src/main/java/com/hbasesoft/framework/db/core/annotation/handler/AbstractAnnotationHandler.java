@@ -27,6 +27,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
@@ -189,7 +190,8 @@ public class AbstractAnnotationHandler {
         String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
-            metadata = daoConfig.isCache() ? CacheHelper.getCache().getNodeValue(CacheConstant.SQL_PARAM_DIR, key) : null;
+            metadata = daoConfig.isCache() ? CacheHelper.getCache().getNodeValue(CacheConstant.SQL_PARAM_DIR, key)
+                : null;
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -310,6 +312,7 @@ public class AbstractAnnotationHandler {
             }
         }
         catch (Exception e) {
+            LoggerUtil.error(e);
             throw new InitializationException(ErrorCodeDef.CACHE_ERROR_10002, e);
         }
         return StringUtils.trim(templateSql);
