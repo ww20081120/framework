@@ -123,9 +123,9 @@ public class Shell {
                 Assert.isTrue(ups.length == 2, "用户名密码不存在, 格式 jar -jar vcc-tools.jar 用户名:密码@命令 -命令参数 ");
                 login(ups[0], ups[1]);
                 args[0] = c.substring(index + 1);
+                
+                gitUtil.addSyncLog(StringUtils.join(args, " "));
             }
-
-            gitUtil.addSyncLog(StringUtils.join(args, " "));
 
             execute(commandHolder, paramsHolder, args);
             out.println(DateUtil.getCurrentTimestamp() + ":任务执行结束。");
