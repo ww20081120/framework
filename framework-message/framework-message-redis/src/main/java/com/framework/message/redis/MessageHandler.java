@@ -35,7 +35,7 @@ public final class MessageHandler {
     private static final int NUM_500 = 500;
 
     /** logger */
-    private static final Logger LOGGER = new Logger("MessageHandlerLogger");
+    private static final Logger LOGGER = new Logger(MessageHandler.class);
 
     /** flag */
     private boolean flag = true;
