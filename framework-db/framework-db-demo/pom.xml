@@ -18,12 +18,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-cache-simple</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
