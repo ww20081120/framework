@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
@@ -214,7 +213,8 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      */
     private String parseSqlTemplate(final Method method, final String templateSql,
         final Map<String, Object> sqlParamsMap) throws UtilException {
-        String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
+        String key = SqlCacheManager.buildKey(method.getDeclaringClass().getName(),
+            BeanUtil.getMethodSignature(method));
         String executeSql = VelocityParseFactory.parse(key, templateSql, sqlParamsMap);
 
         // 除去无效字段，不然批量处理可能报错

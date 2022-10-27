@@ -18,8 +18,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
@@ -187,11 +185,11 @@ public class AbstractAnnotationHandler {
      * @throws InitializationException <br>
      */
     protected ParamMetadata cacheSqlParamMetadata(final Method method) throws InitializationException {
-        String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
+        String key = SqlCacheManager.buildKey(method.getDeclaringClass().getName(),
+            BeanUtil.getMethodSignature(method));
         ParamMetadata metadata = null;
         try {
-            metadata = daoConfig.isCache() ? CacheHelper.getCache().getNodeValue(CacheConstant.SQL_PARAM_DIR, key)
-                : null;
+            metadata = SqlCacheManager.getParamMetadata(key);
             if (metadata == null) {
                 Class<?>[] typeClazz = method.getParameterTypes();
                 Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -265,9 +263,7 @@ public class AbstractAnnotationHandler {
                     throw new InitializationException(ErrorCodeDef.PAGE_SIZE_PAGE_INDEX_BOTH_10008,
                         method.getDeclaringClass().getName(), method.getName());
                 }
-                if (daoConfig.isCache()) {
-                    CacheHelper.getCache().putNodeValue(CacheConstant.SQL_PARAM_DIR, key, metadata);
-                }
+                SqlCacheManager.putParamMetadata(key, metadata);
             }
         }
         catch (UtilException e) {
@@ -289,10 +285,11 @@ public class AbstractAnnotationHandler {
      * @throws InitializationException <br>
      */
     protected String cacheSqlTemplate(final Method method) throws InitializationException {
-        String key = CacheHelper.buildKey(method.getDeclaringClass().getName(), BeanUtil.getMethodSignature(method));
+        String key = SqlCacheManager.buildKey(method.getDeclaringClass().getName(),
+            BeanUtil.getMethodSignature(method));
         String templateSql = null;
         try {
-            templateSql = daoConfig.isCache() ? CacheHelper.getCache().getNodeValue(CacheConstant.SQL_DIR, key) : null;
+            templateSql = SqlCacheManager.getSqlTemplate(key);
             if (StringUtils.isEmpty(templateSql)) {
                 String path = null;
 
@@ -306,9 +303,7 @@ public class AbstractAnnotationHandler {
                 if (StringUtils.isEmpty(templateSql)) {
                     templateSql = checkSqlPath(method, path);
                 }
-                if (daoConfig.isCache()) {
-                    CacheHelper.getCache().putNodeValue(CacheConstant.SQL_DIR, key, templateSql);
-                }
+                SqlCacheManager.putSqlTemplate(key, templateSql);
             }
         }
         catch (Exception e) {
