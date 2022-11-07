@@ -6,12 +6,11 @@
 		<version>4.0</version>
 	</parent>
 	<artifactId>framework-db-core</artifactId>
-	<properties>
-	</properties>
+	<properties></properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-cache-core</artifactId>
+			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

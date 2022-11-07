@@ -1,3 +1,0 @@
-com.hbasesoft.framework.cache.core.redis.RedisCache
-com.hbasesoft.framework.cache.core.redis.ClusterRedisCache
-com.hbasesoft.framework.cache.core.redis.ShardedRedisCache

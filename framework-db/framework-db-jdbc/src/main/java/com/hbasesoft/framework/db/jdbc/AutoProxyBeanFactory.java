@@ -15,9 +15,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import com.hbasesoft.framework.cache.core.CacheConstant;
-import com.hbasesoft.framework.cache.core.CacheHelper;
-import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
@@ -65,10 +62,6 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         logger.info("*************************Dao注入列表***************************");
         SQLHandler sqlHandler = new SQLHandler();
         sqlHandler.setDaoConfig(config);
-
-        ICache cache = CacheHelper.getCache();
-        cache.remove(CacheConstant.SQL_PARAM_DIR);
-        cache.remove(CacheConstant.SQL_DIR);
 
         try {
             for (String pack : packagesToScan) {

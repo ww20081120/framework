@@ -60,7 +60,6 @@ public class DataBase4JdbcConfig {
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();
-        dataConfig.setCache(true);
         dataConfig.setDbType(dbType);
         dataConfig.setBaseDaoType(BaseJdbcDao.class);
         dataConfig.setCallBackType(RowMapper.class);

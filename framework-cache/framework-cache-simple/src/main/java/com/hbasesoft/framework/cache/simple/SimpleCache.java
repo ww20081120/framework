@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.hbasesoft.framework.cache.core.AbstractCache;
-import com.hbasesoft.framework.cache.core.CacheConstant;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
@@ -25,6 +24,11 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
  * @see com.hbasesoft.framework.core.cache.simple <br>
  */
 public class SimpleCache extends AbstractCache {
+
+    /**
+     * 默认缓存目录
+     */
+    private static final String DEFAULT_CACHE_DIR = "/";
 
     private static final int MAX_SIZE = PropertyHolder.getIntProperty("cache.max_size", 10000);
 
@@ -87,7 +91,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected byte[] get(final byte[] key) {
-        return getNodeValue(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), key);
+        return getNodeValue(DEFAULT_CACHE_DIR.getBytes(), key);
     }
 
     /**
@@ -100,7 +104,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     protected void put(final byte[] key, int seconds, final byte[] value) {
-        putNodeValue(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), 0, key, value);
+        putNodeValue(DEFAULT_CACHE_DIR.getBytes(), 0, key, value);
     }
 
     /**
@@ -142,7 +146,7 @@ public class SimpleCache extends AbstractCache {
     @Override
     protected void remove(final byte[] nodeName) {
         this.cachesMap.remove(new String(nodeName));
-        removeNodeValue(CacheConstant.DEFAULT_CACHE_DIR.getBytes(), nodeName);
+        removeNodeValue(DEFAULT_CACHE_DIR.getBytes(), nodeName);
     }
 
     /**

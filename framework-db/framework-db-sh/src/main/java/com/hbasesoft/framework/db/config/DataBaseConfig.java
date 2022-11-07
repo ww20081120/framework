@@ -58,7 +58,6 @@ public class DataBaseConfig {
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();
-        dataConfig.setCache(true);
         dataConfig.setDbType(dbType);
         dataConfig.setBaseDaoType(BaseHibernateDao.class);
         dataConfig.setCallBackType(ResultTransformer.class);

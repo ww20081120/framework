@@ -20,9 +20,6 @@ import lombok.Setter;
 @Setter
 public class DaoConfig {
 
-    /** 是否开启缓存 */
-    private boolean cache = true;
-
     /** 数据库类型 */
     private String dbType;
 

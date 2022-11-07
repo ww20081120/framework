@@ -4,9 +4,6 @@ project: #项目信息
 spring: #应用配置
   application:
     name: ${project.name}
-    
-cache: #缓存配置
-  model: SIMPLE
   
 master: #主数据库配置
  db:
