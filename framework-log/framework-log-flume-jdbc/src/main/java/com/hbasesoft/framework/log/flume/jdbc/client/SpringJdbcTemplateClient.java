@@ -162,7 +162,7 @@ public class SpringJdbcTemplateClient implements JdbcClient {
         Map<String, Object>[] tempDatas;
         synchronized (datas) {
             tempDatas = datas.toArray(new Map[0]);
-            datas = new ArrayList<>();
+            datas.clear();
         }
 
         SqlParameterSource[] sources = SqlParameterSourceUtils.createBatch(tempDatas);
