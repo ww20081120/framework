@@ -25,6 +25,11 @@ public interface JdbcSinkConstants {
      * The fully qualified class name of the serializer the sink should use.
      */
     String SERIALIZER = "serializer";
+    
+    /**
+     * 当报错后，事务会不会回滚
+     */
+    String ROLLBACK = "rollback";
 
     /**
      * Configuration to pass to the serializer.
