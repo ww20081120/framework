@@ -14,5 +14,6 @@
 		<module>framework-job-demo</module>
 		<module>framework-job-elasticjob</module>
 		<module>framework-job-quartz</module>
+		<module>framework-job-xxl</module>
 	</modules>
 </project>

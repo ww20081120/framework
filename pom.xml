@@ -45,6 +45,7 @@
 		<jsch.version>0.1.55</jsch.version>
 		<elasticjob.version>3.0.1</elasticjob.version>
 		<jaxb.version>4.0.0</jaxb.version>
+		<xxl-job.version>2.3.1</xxl-job.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -194,6 +195,13 @@
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
 				<version>${jaxb.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
+			<dependency>
+				<groupId>com.xuxueli</groupId>
+				<artifactId>xxl-job-core</artifactId>
+				<version>${xxl-job.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
