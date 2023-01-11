@@ -41,6 +41,8 @@ public class JdbcSink extends AbstractSink implements Configurable, BatchSizeSup
 
     private int batchSize = defaultBatchSize;
 
+    private boolean rollback = true;
+
     private String datasourceCode = JdbcSinkConstants.DEFAULT_DATASOURCE_CODE;
 
     private String tableName = JdbcSinkConstants.DEFAULT_TABLE_NAME;
@@ -101,23 +103,27 @@ public class JdbcSink extends AbstractSink implements Configurable, BatchSizeSup
             counterGroup.incrementAndGet("transaction.success");
         }
         catch (Throwable e) {
-            try {
-                txn.rollback();
-                counterGroup.incrementAndGet("transaction.rollback");
-            }
-            catch (Exception ex2) {
-                LoggerUtil.error("Exception in rollback. Rollback might not have been successful.", ex2);
-            }
+            if (rollback) {
+                try {
+                    txn.rollback();
+                    counterGroup.incrementAndGet("transaction.rollback");
+                }
+                catch (Exception ex2) {
+                    LoggerUtil.error("Exception in rollback. Rollback might not have been successful.", ex2);
+                }
 
-            if (e instanceof Error || e instanceof RuntimeException) {
-                LoggerUtil.error("Failed to commit transaction. Transaction rolled back.", e);
-                throw new ServiceException(e);
+                if (e instanceof Error || e instanceof RuntimeException) {
+                    LoggerUtil.error("Failed to commit transaction. Transaction rolled back.", e);
+                    throw new ServiceException(e);
+                }
+                else {
+                    LoggerUtil.error("Failed to commit transaction. Transaction rolled back.", e);
+                    throw new EventDeliveryException("Failed to commit transaction. Transaction rolled back.", e);
+                }
             }
             else {
-                LoggerUtil.error("Failed to commit transaction. Transaction rolled back.", e);
-                throw new EventDeliveryException("Failed to commit transaction. Transaction rolled back.", e);
+                txn.commit();
             }
-
         }
         finally {
             txn.close();
@@ -157,6 +163,10 @@ public class JdbcSink extends AbstractSink implements Configurable, BatchSizeSup
 
         if (StringUtils.isNotBlank(context.getString(JdbcSinkConstants.BATCH_SIZE))) {
             this.batchSize = Integer.parseInt(context.getString(JdbcSinkConstants.BATCH_SIZE));
+        }
+
+        if (StringUtils.isNotBlank(context.getString(JdbcSinkConstants.ROLLBACK))) {
+            this.rollback = !"false".equalsIgnoreCase(context.getString(JdbcSinkConstants.ROLLBACK));
         }
 
         clientContext = new Context();
