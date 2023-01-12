@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.rule.core.FlowHelper;
 import com.hbasesoft.framework.rule.demo.bean.FlowBean;
@@ -57,7 +58,7 @@ public class TestFlow implements ApplicationContextAware {
         TestStateMachineBean bean = new TestStateMachineBean();
         bean.setEvent("e1");
         System.out.println(JSONObject.toJSONString(bean));
-        int result = FlowHelper.flowStart(bean, "stateMachine");
+        ErrorCode result = FlowHelper.flowStart(bean, "stateMachine");
         System.out.println(result);
         System.out.println(JSONObject.toJSONString(bean));
         result = FlowHelper.flowStart(bean, "stateMachine");

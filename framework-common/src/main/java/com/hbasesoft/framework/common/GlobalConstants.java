@@ -95,4 +95,7 @@ public interface GlobalConstants {
     /** 全局文件路径 */
     String FILE_STORAGE_PATH = PropertyHolder.getProperty("server.fileupload.filePath", System.getProperty("user.home"))
         + "/uploadFiles";
+
+    /** 系统错错误码前缀 */
+    int SYSTEM_PREFIX = 0;
 }

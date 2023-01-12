@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core;
 
+import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.common.FrameworkException;
 
 /**
@@ -26,7 +27,7 @@ public class DaoException extends FrameworkException {
      * @param code
      * @param params
      */
-    public DaoException(final int code, final Object... params) {
+    public DaoException(final ErrorCode code, final Object... params) {
         super(code, params);
     }
 
@@ -34,14 +35,14 @@ public class DaoException extends FrameworkException {
      * @param code
      * @param t
      */
-    public DaoException(final int code, final Throwable t) {
+    public DaoException(final ErrorCode code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public DaoException(final int code) {
+    public DaoException(final ErrorCode code) {
         super(code);
     }
 
@@ -50,7 +51,7 @@ public class DaoException extends FrameworkException {
      * @param code
      * @param params
      */
-    public DaoException(final Throwable t, final int code, final Object... params) {
+    public DaoException(final Throwable t, final ErrorCode code, final Object... params) {
         super(t, code, params);
     }
 

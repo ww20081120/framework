@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.common;
 
-import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.CommonUtil;
 
 /**
  * <Description> <br>
@@ -25,15 +25,15 @@ public class FrameworkException extends RuntimeException {
     /**
      * 错误码
      */
-    private int code;
+    private ErrorCode code;
 
     /**
      * FrameworkException
      * 
      * @param ocode <br>
      */
-    public FrameworkException(final int ocode) {
-        super(ocode + GlobalConstants.BLANK);
+    public FrameworkException(final ErrorCode ocode) {
+        super(ocode.getMsg());
         this.code = ocode;
     }
 
@@ -43,8 +43,8 @@ public class FrameworkException extends RuntimeException {
      * @param ocode
      * @param params
      */
-    public FrameworkException(final int ocode, final Object... params) {
-        super(PropertyHolder.getErrorMessage(ocode, params));
+    public FrameworkException(final ErrorCode ocode, final Object... params) {
+        super(CommonUtil.messageFormat(ocode.getMsg(), params));
         this.code = ocode;
     }
 
@@ -70,8 +70,8 @@ public class FrameworkException extends RuntimeException {
      * @param tempCode
      * @param t
      */
-    public FrameworkException(final int tempCode, final Throwable t) {
-        super(PropertyHolder.getErrorMessage(tempCode), t);
+    public FrameworkException(final ErrorCode tempCode, final Throwable t) {
+        super(tempCode.getMsg(), t);
         this.code = tempCode;
     }
 
@@ -82,8 +82,8 @@ public class FrameworkException extends RuntimeException {
      * @param ocode
      * @param params
      */
-    public FrameworkException(final Throwable t, final int ocode, final Object... params) {
-        super(PropertyHolder.getErrorMessage(ocode, params), t);
+    public FrameworkException(final Throwable t, final ErrorCode ocode, final Object... params) {
+        super(CommonUtil.messageFormat(ocode.getMsg(), params), t);
         this.code = ocode;
     }
 
@@ -94,7 +94,7 @@ public class FrameworkException extends RuntimeException {
      * @taskId <br>
      * @return <br>
      */
-    public int getCode() {
+    public ErrorCode getCode() {
         return code;
     }
 }

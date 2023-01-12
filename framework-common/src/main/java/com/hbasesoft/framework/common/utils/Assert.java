@@ -13,6 +13,8 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.hbasesoft.framework.common.ErrorCode;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -36,7 +38,7 @@ public final class Assert {
      * @param errorCode
      * @param params <br>
      */
-    public static void notNull(final Object obj, final int errorCode, final Object... params) {
+    public static void notNull(final Object obj, final ErrorCode errorCode, final Object... params) {
         if (obj == null) {
             throw new AssertException(errorCode, params);
         }
@@ -52,7 +54,8 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void isNull(final Object obj, final int errorCode, final Object... params) throws AssertException {
+    public static void isNull(final Object obj, final ErrorCode errorCode, final Object... params)
+        throws AssertException {
         if (obj != null) {
             throw new AssertException(errorCode, params);
         }
@@ -68,7 +71,8 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void notEmpty(final String str, final int errorCode, final Object... params) throws AssertException {
+    public static void notEmpty(final String str, final ErrorCode errorCode, final Object... params)
+        throws AssertException {
         if (StringUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -84,7 +88,8 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void isEmpty(final String str, final int errorCode, final Object... params) throws AssertException {
+    public static void isEmpty(final String str, final ErrorCode errorCode, final Object... params)
+        throws AssertException {
         if (StringUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -101,7 +106,8 @@ public final class Assert {
      * @param <T> T
      * @throws AssertException <br>
      */
-    public static <T> void notEmpty(final T[] str, final int errorCode, final Object... params) throws AssertException {
+    public static <T> void notEmpty(final T[] str, final ErrorCode errorCode, final Object... params)
+        throws AssertException {
         if (ArrayUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -118,7 +124,8 @@ public final class Assert {
      * @param <T> T
      * @throws AssertException <br>
      */
-    public static <T> void isEmpty(final T[] str, final int errorCode, final Object... params) throws AssertException {
+    public static <T> void isEmpty(final T[] str, final ErrorCode errorCode, final Object... params)
+        throws AssertException {
         if (!ArrayUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
         }
@@ -134,7 +141,7 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void notEmpty(final Collection<?> str, final int errorCode, final Object... params)
+    public static void notEmpty(final Collection<?> str, final ErrorCode errorCode, final Object... params)
         throws AssertException {
         if (CollectionUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
@@ -151,7 +158,7 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void isEmpty(final Collection<?> str, final int errorCode, final Object... params)
+    public static void isEmpty(final Collection<?> str, final ErrorCode errorCode, final Object... params)
         throws AssertException {
         if (CollectionUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
@@ -168,7 +175,7 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void notEmpty(final Map<?, ?> str, final int errorCode, final Object... params)
+    public static void notEmpty(final Map<?, ?> str, final ErrorCode errorCode, final Object... params)
         throws AssertException {
         if (MapUtils.isEmpty(str)) {
             throw new AssertException(errorCode, params);
@@ -185,7 +192,7 @@ public final class Assert {
      * @param params
      * @throws AssertException <br>
      */
-    public static void isEmpty(final Map<?, ?> str, final int errorCode, final Object... params)
+    public static void isEmpty(final Map<?, ?> str, final ErrorCode errorCode, final Object... params)
         throws AssertException {
         if (MapUtils.isNotEmpty(str)) {
             throw new AssertException(errorCode, params);
@@ -202,7 +209,7 @@ public final class Assert {
      * @param errorCode
      * @param params <br>
      */
-    public static void equals(final Object obj1, final Object obj2, final int errorCode, final Object... params) {
+    public static void equals(final Object obj1, final Object obj2, final ErrorCode errorCode, final Object... params) {
         if (!(obj1 != null && obj1.equals(obj2))) {
             throw new AssertException(errorCode, params);
         }
@@ -218,7 +225,8 @@ public final class Assert {
      * @param errorCode
      * @param params <br>
      */
-    public static void notEquals(final Object obj1, final Object obj2, final int errorCode, final Object... params) {
+    public static void notEquals(final Object obj1, final Object obj2, final ErrorCode errorCode,
+        final Object... params) {
         if ((obj1 != null && obj1.equals(obj2)) || (obj2 != null && obj2.equals(obj1))) {
             throw new AssertException(errorCode, params);
         }
@@ -233,7 +241,7 @@ public final class Assert {
      * @param errorCode
      * @param params <br>
      */
-    public static void isTrue(final boolean result, final int errorCode, final Object... params) {
+    public static void isTrue(final boolean result, final ErrorCode errorCode, final Object... params) {
         if (!result) {
             throw new AssertException(errorCode, params);
         }
@@ -248,7 +256,7 @@ public final class Assert {
      * @param errorCode
      * @param params <br>
      */
-    public static void isFalse(final boolean result, final int errorCode, final Object... params) {
+    public static void isFalse(final boolean result, final ErrorCode errorCode, final Object... params) {
         if (result) {
             throw new AssertException(errorCode, params);
         }

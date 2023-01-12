@@ -42,9 +42,6 @@ public final class PropertyHolder {
     /** properties */
     private static final Map<String, String> PROPERTIES = new HashMap<>();
 
-    /** error message */
-    private static final Map<String, String> ERROR_MESSAGE = new HashMap<>();
-
     static {
         init();
     }
@@ -156,8 +153,6 @@ public final class PropertyHolder {
             System.out.println("  " + propertyName + " = " + PROPERTIES.get(propertyName));
         });
         System.out.println("***********************************************************");
-
-        loadErrorMessage();
     }
 
     /**
@@ -207,50 +202,6 @@ public final class PropertyHolder {
                 }
             }
         }
-    }
-
-    private static void loadErrorMessage() {
-        String systemErrorMessagePath = "/errorMessage.properties";
-        ClassPathResource cr = null;
-        try {
-            cr = new ClassPathResource(systemErrorMessagePath);
-            loadProperties(cr.getInputStream(), ERROR_MESSAGE);
-            System.out.println("装入系统错误码文件:" + systemErrorMessagePath);
-        }
-        catch (Exception e) {
-            System.out.println("装入系统错误码文件" + systemErrorMessagePath + "失败!");
-            e.printStackTrace();
-        }
-
-        String projectErrorMessagePath = getProjectName() + "_errorMessage.properties";
-        try {
-            cr = new ClassPathResource(projectErrorMessagePath);
-            if (cr.exists()) {
-                loadProperties(cr.getInputStream(), ERROR_MESSAGE);
-                System.out.println("装入项目错误码文件:" + projectErrorMessagePath);
-            }
-        }
-        catch (Exception e) {
-            System.out.println("装入系统错误码文件" + projectErrorMessagePath + "失败!");
-            e.printStackTrace();
-        }
-
-        String selfPaths = getProperty("extend.errorMessage.files");
-        if (StringUtils.isNotEmpty(selfPaths)) {
-            String[] files = StringUtils.split(selfPaths, GlobalConstants.SPLITOR);
-            for (String file : files) {
-                try {
-                    cr = new ClassPathResource(file);
-                    loadProperties(cr.getInputStream(), ERROR_MESSAGE);
-                    System.out.println("装入错误码文件：" + file);
-                }
-                catch (Exception e) {
-                    System.out.println("装入错误码文件" + file + "失败！");
-                    e.printStackTrace();
-                }
-            }
-        }
-
     }
 
     /**
@@ -380,29 +331,6 @@ public final class PropertyHolder {
      */
     public static void setProperty(final String name, final String value) {
         PROPERTIES.put(name, value);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param code
-     * @param params
-     * @return <br>
-     */
-    public static String getErrorMessage(final int code, final Object... params) {
-        String message = ERROR_MESSAGE.get(code + GlobalConstants.BLANK);
-        if (StringUtils.isNotEmpty(message)) {
-            if (CommonUtil.isNotEmpty(params)) {
-                return CommonUtil.messageFormat(message, params);
-            }
-            return message;
-        }
-        if (params != null && params.length > 0) {
-            return CommonUtil.getString(params[0]);
-        }
-        return GlobalConstants.BLANK + code;
     }
 
     /**

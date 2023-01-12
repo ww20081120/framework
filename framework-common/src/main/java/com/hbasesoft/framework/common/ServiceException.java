@@ -25,7 +25,7 @@ public class ServiceException extends FrameworkException {
      * @param code
      * @param params
      */
-    public ServiceException(final int code, final Object... params) {
+    public ServiceException(final ErrorCode code, final Object... params) {
         super(code, params);
     }
 
@@ -33,14 +33,14 @@ public class ServiceException extends FrameworkException {
      * @param code
      * @param t
      */
-    public ServiceException(final int code, final Throwable t) {
+    public ServiceException(final ErrorCode code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public ServiceException(final int code) {
+    public ServiceException(final ErrorCode code) {
         super(code);
     }
 
@@ -49,7 +49,7 @@ public class ServiceException extends FrameworkException {
      * @param code
      * @param params
      */
-    public ServiceException(final Throwable t, final int code, final Object... params) {
+    public ServiceException(final Throwable t, final ErrorCode code, final Object... params) {
         super(t, code, params);
     }
 
