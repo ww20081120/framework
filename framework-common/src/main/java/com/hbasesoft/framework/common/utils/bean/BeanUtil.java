@@ -128,11 +128,11 @@ public final class BeanUtil {
         MethodInfo methodInfo = cm.getMethodInfo();
         CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
         if (codeAttribute == null) {
-            throw new UtilException(ErrorCodeDef.CAN_NOT_FIND_VER_NAME_10003, cc.getName());
+            throw new UtilException(ErrorCodeDef.CAN_NOT_FIND_VER_NAME, cc.getName());
         }
         LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
         if (null == attr) {
-            throw new UtilException(ErrorCodeDef.CAN_NOT_FIND_VER_NAME_10003, cc.getName());
+            throw new UtilException(ErrorCodeDef.CAN_NOT_FIND_VER_NAME, cc.getName());
         }
         String[] paramNames = new String[cm.getParameterTypes().length];
         int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
@@ -222,7 +222,7 @@ public final class BeanUtil {
             }
         }
         catch (IOException e) {
-            throw new UtilException(ErrorCodeDef.READ_FILE_ERROR_10028);
+            throw new UtilException(ErrorCodeDef.READ_FILE_ERROR);
         }
 
         return classes;

@@ -60,7 +60,7 @@ public class RedisMessagePublisher implements MessagePublisher {
                 jedis.publish(channel.getBytes(), data);
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+                throw new UtilException(ErrorCodeDef.CACHE_ERROR, e);
             }
             finally {
                 if (jedis != null) {

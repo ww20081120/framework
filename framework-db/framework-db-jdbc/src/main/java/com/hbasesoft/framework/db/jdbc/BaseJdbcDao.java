@@ -153,7 +153,7 @@ public class BaseJdbcDao implements ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, e);
+            throw new DaoException(ErrorCodeDef.QUERY_ERROR, e);
         }
     }
 
@@ -175,7 +175,7 @@ public class BaseJdbcDao implements ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.EXECUTE_ERROR_10011, e);
+            throw new DaoException(ErrorCodeDef.EXECUTE_ERROR, e);
         }
     }
 
@@ -204,7 +204,7 @@ public class BaseJdbcDao implements ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, e);
+            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR, e);
         }
     }
 

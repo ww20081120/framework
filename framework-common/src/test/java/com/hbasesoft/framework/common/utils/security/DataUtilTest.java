@@ -33,7 +33,7 @@ public class DataUtilTest {
     public void md5For16() {
         String str1 = "123456";
         String str2 = DataUtil.md5For16(str1);
-        Assert.equals(str2, "49BA59ABBE56E057", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str2, "49BA59ABBE56E057", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -47,7 +47,7 @@ public class DataUtilTest {
     public void md5() {
         String str1 = "123456";
         String str2 = DataUtil.md5(str1);
-        Assert.equals(str2, "E10ADC3949BA59ABBE56E057F20F883E", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str2, "E10ADC3949BA59ABBE56E057F20F883E", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -61,7 +61,7 @@ public class DataUtilTest {
     public void base64Decode() {
         String str1 = "MTIzNDU2";
         String str2 = new String(DataUtil.base64Decode(str1));
-        Assert.equals(str2, "123456", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str2, "123456", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -75,7 +75,7 @@ public class DataUtilTest {
     public void base64Encode() {
         String str1 = "123456";
         String str2 = DataUtil.base64Encode(str1.getBytes());
-        Assert.equals(str2, "MTIzNDU2", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str2, "MTIzNDU2", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -89,7 +89,7 @@ public class DataUtilTest {
     public void encryptPassowrd() {
         String str1 = "123456";
         String str2 = DataUtil.encryptPassowrd(str1);
-        Assert.isTrue(DataUtil.matchPassword(str1, str2), ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(DataUtil.matchPassword(str1, str2), ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -105,7 +105,7 @@ public class DataUtilTest {
         String str2 = DataUtil.encrypt(str1);
         System.out.println(str2);
         String str3 = DataUtil.decrypt(str2);
-        Assert.equals(str1, str3, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str1, str3, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -119,7 +119,7 @@ public class DataUtilTest {
     public void byte2HexStr() {
         String str1 = "abcdefg";
         String str2 = DataUtil.byte2HexStr(str1.getBytes());
-        Assert.equals(str2, "61626364656667", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str2, "61626364656667", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -133,6 +133,6 @@ public class DataUtilTest {
     public void hexStr2Byte() {
         String str1 = "61626364656667";
         String str2 = new String(DataUtil.hexStr2Byte(str1));
-        Assert.equals(str2, "abcdefg", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str2, "abcdefg", ErrorCodeDef.SYSTEM_ERROR);
     }
 }

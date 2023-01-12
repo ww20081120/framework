@@ -59,7 +59,7 @@ public final class IOUtil {
             IOUtils.copy(in, out);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+            throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
         }
         finally {
             IOUtils.closeQuietly(out);
@@ -96,7 +96,7 @@ public final class IOUtil {
             IOUtils.copy(in, out);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+            throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
         }
         finally {
             IOUtils.closeQuietly(out);
@@ -118,7 +118,7 @@ public final class IOUtil {
             return IOUtils.toString(in, GlobalConstants.DEFAULT_CHARSET);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR_10027, e);
+            throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         finally {
             IOUtils.closeQuietly(in);
@@ -139,7 +139,7 @@ public final class IOUtil {
             return IOUtils.toString(in);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR_10027, e);
+            throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         finally {
             IOUtils.closeQuietly(in);
@@ -215,7 +215,7 @@ public final class IOUtil {
                 }
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
                 IOUtils.closeQuietly(in);
@@ -291,7 +291,7 @@ public final class IOUtil {
                 }
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
                 IOUtils.closeQuietly(in);
@@ -317,7 +317,7 @@ public final class IOUtil {
                 out.flush();
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
                 IOUtils.closeQuietly(out);
@@ -342,7 +342,7 @@ public final class IOUtil {
                 out.flush();
             }
             catch (Exception e) {
-                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR_10029, e);
+                throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
                 IOUtils.closeQuietly(out);

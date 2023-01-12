@@ -175,7 +175,7 @@ public class CacheAdvice {
     private String getCacheKey(final String template, final Method method, final Object[] args)
         throws FrameworkException {
         if (StringUtils.isEmpty(template) && CommonUtil.isEmpty(args)) {
-            throw new ServiceException(ErrorCodeDef.CACHE_ERROR_10002);
+            throw new ServiceException(ErrorCodeDef.CACHE_ERROR);
         }
         String key;
         if (StringUtils.isNotEmpty(template)) {
@@ -190,7 +190,7 @@ public class CacheAdvice {
                 }
             }
             key = VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap);
-            Assert.isFalse(key.contains(GlobalConstants.DOLLAR_BRACE), ErrorCodeDef.CACHE_ERROR_10002);
+            Assert.isFalse(key.contains(GlobalConstants.DOLLAR_BRACE), ErrorCodeDef.CACHE_ERROR);
         }
         else {
             StringBuilder sb = new StringBuilder();

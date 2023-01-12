@@ -36,7 +36,7 @@ public class AssertTest {
     @Test
     public void notNull() {
         Object obj = new Object();
-        Assert.notNull(obj, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notNull(obj, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("obj 不是null");
     }
 
@@ -50,7 +50,7 @@ public class AssertTest {
     @Test
     public void isNull() {
         Object obj = null;
-        Assert.isNull(obj, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isNull(obj, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("obj 是null对象");
     }
 
@@ -64,23 +64,23 @@ public class AssertTest {
     @Test
     public void notEmpty() {
         String str = "hello world";
-        Assert.notEmpty(str, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEmpty(str, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("str 不是空字符串");
 
         List<String> strList = new ArrayList<>();
         strList.add(str);
-        Assert.notEmpty(strList, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEmpty(strList, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strList 不是空集合");
 
         String[] strs = new String[] {
             str
         };
-        Assert.notEmpty(strs, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEmpty(strs, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strs 不是空数组");
 
         Map<String, String> strMap = new HashMap<>();
         strMap.put("a", str);
-        Assert.notEmpty(strMap, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEmpty(strMap, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strMap 不是空Map");
     }
 
@@ -94,35 +94,35 @@ public class AssertTest {
     @Test
     public void isEmpty() {
         String str = null;
-        Assert.isEmpty(str, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(str, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("str 是null字符串");
 
         str = "";
-        Assert.isEmpty(str, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(str, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("str 是空字符串");
 
         List<String> strList = null;
-        Assert.isEmpty(strList, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(strList, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strList 是null集合");
 
         strList = new ArrayList<>();
-        Assert.isEmpty(strList, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(strList, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strList 是空集合");
 
         String[] strs = null;
-        Assert.isEmpty(strs, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(strs, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strs 是null数组");
 
         strs = new String[0];
-        Assert.isEmpty(strs, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(strs, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strs 是空数组");
 
         Map<String, String> strMap = null;
-        Assert.isEmpty(strMap, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(strMap, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strMap 是null Map");
 
         strMap = new HashMap<>();
-        Assert.isEmpty(strMap, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isEmpty(strMap, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("strMap 是空 Map");
     }
 
@@ -137,12 +137,12 @@ public class AssertTest {
     public void equals() {
         String a = "abc";
         String b = "abc";
-        Assert.equals(a, b, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(a, b, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("字符串a equals 字符串b");
 
         Object c = new Object();
         Object d = c;
-        Assert.equals(c, d, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(c, d, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("对象c equals 对象d");
     }
 
@@ -157,12 +157,12 @@ public class AssertTest {
     public void notEquals() {
         String a = "abc";
         String b = "abd";
-        Assert.notEquals(a, b, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEquals(a, b, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("字符串a not equals 字符串b");
 
         Object c = new Object();
         Object d = new Object();
-        Assert.notEquals(c, d, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEquals(c, d, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("对象c not equals 对象d");
     }
 
@@ -177,10 +177,10 @@ public class AssertTest {
     public void isTrue() {
         String a = "abc";
         String b = new String("abc");
-        Assert.isTrue(a.equals(b), ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(a.equals(b), ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("字符串a equals 字符串b");
 
-        Assert.isTrue(a != b, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(a != b, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("字符串a != 字符串b");
     }
 
@@ -195,7 +195,7 @@ public class AssertTest {
     public void isFalse() {
         int a = 1;
         int b = 2;
-        Assert.isFalse(a > b, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isFalse(a > b, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("数字a > 数字b 是错误的");
     }
 }

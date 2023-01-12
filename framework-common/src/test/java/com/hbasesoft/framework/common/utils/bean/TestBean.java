@@ -26,7 +26,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Bean implements Serializable {
+public class TestBean implements Serializable {
     /**
      * serialVersionUID <br>
      */

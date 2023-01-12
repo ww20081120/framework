@@ -66,7 +66,7 @@ public final class FlowHelper {
     public static <T extends Serializable> int flowStart(final T bean, final JSONObject flowConfig,
         final boolean throwable) {
 
-        Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
+        Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");
 
         int result = ErrorCodeDef.SUCCESS;
 
@@ -104,7 +104,7 @@ public final class FlowHelper {
      * @return <br>
      */
     public static <T extends Serializable> int flowStart(final T bean, final String flowName, final boolean throwable) {
-        Assert.notNull(bean, ErrorCodeDef.NOT_NULL, "FlowBean");
+        Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");
 
         int result = ErrorCodeDef.SUCCESS;
 

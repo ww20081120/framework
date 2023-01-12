@@ -143,7 +143,7 @@ public class AbstractAnnotationHandler {
                     sb.replace(sb.lastIndexOf(dbType), sb.lastIndexOf(SQL_SUFFIX), GlobalConstants.BLANK);
                     sqlFileUrl = this.getClass().getClassLoader().getResource(sb.toString());
                     if (sqlFileUrl == null) {
-                        throw new InitializationException(ErrorCodeDef.INIT_SQL_ERROR_10005,
+                        throw new InitializationException(ErrorCodeDef.INIT_SQL_ERROR,
                             method.getDeclaringClass().getName(), method.getName());
                     }
                 }
@@ -163,7 +163,7 @@ public class AbstractAnnotationHandler {
             return sb.toString();
         }
         catch (Exception e) {
-            throw new InitializationException(ErrorCodeDef.CAN_NOT_FIND_SQL_FILE_10006, sqlPath);
+            throw new InitializationException(ErrorCodeDef.CAN_NOT_FIND_SQL_FILE, sqlPath);
         }
         finally {
             if (reader != null) {
@@ -217,7 +217,7 @@ public class AbstractAnnotationHandler {
                     if (daoConfig.getCallBackType() != null
                         && daoConfig.getCallBackType().isAssignableFrom(typeClazz[i])) {
                         if (metadata.getCallBackPosition() != -1) {
-                            throw new InitializationException(ErrorCodeDef.ERROR_RESULT_CALL_BACK_10007,
+                            throw new InitializationException(ErrorCodeDef.ERROR_RESULT_CALL_BACK,
                                 method.getDeclaringClass().getName(), method.getName());
                         }
                         metadata.setCallBackPosition(i);
@@ -260,7 +260,7 @@ public class AbstractAnnotationHandler {
                 }
                 if ((metadata.getIndexPosition() == -1 && metadata.getSizePosition() != -1)
                     || (metadata.getIndexPosition() != -1 && metadata.getSizePosition() == -1)) {
-                    throw new InitializationException(ErrorCodeDef.PAGE_SIZE_PAGE_INDEX_BOTH_10008,
+                    throw new InitializationException(ErrorCodeDef.PAGE_SIZE_PAGE_INDEX_BOTH,
                         method.getDeclaringClass().getName(), method.getName());
                 }
                 SqlCacheManager.putParamMetadata(key, metadata);
@@ -270,7 +270,7 @@ public class AbstractAnnotationHandler {
             throw new InitializationException(e);
         }
         catch (Exception e) {
-            throw new InitializationException(ErrorCodeDef.SYSTEM_ERROR_10001, e);
+            throw new InitializationException(ErrorCodeDef.SYSTEM_ERROR, e);
         }
         return metadata;
     }
@@ -308,7 +308,7 @@ public class AbstractAnnotationHandler {
         }
         catch (Exception e) {
             LoggerUtil.error(e);
-            throw new InitializationException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            throw new InitializationException(ErrorCodeDef.CACHE_ERROR, e);
         }
         return StringUtils.trim(templateSql);
     }

@@ -53,7 +53,7 @@ public final class JavaScriptUtil {
             return engine.eval(script, context);
         }
         catch (ScriptException e) {
-            throw new UtilException(ErrorCodeDef.EVAL_JAVASCRIPT_ERROR_10042, e);
+            throw new UtilException(ErrorCodeDef.EVAL_JAVASCRIPT_ERROR, e);
         }
     }
 }

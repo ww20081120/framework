@@ -111,7 +111,7 @@ public final class DataUtil {
             return new String(str);
         }
         catch (NoSuchAlgorithmException e) {
-            throw new UtilException(ErrorCodeDef.MD5_ERROR_10036, e);
+            throw new UtilException(ErrorCodeDef.MD5_ERROR, e);
         }
 
     }
@@ -149,7 +149,7 @@ public final class DataUtil {
             return Base64.decodeBase64(content.getBytes(GlobalConstants.DEFAULT_CHARSET));
         }
         catch (UnsupportedEncodingException e) {
-            throw new UtilException(ErrorCodeDef.BASE64_ERROR_10037, e);
+            throw new UtilException(ErrorCodeDef.BASE64_ERROR, e);
         }
     }
 
@@ -167,7 +167,7 @@ public final class DataUtil {
             return new String(Base64.encodeBase64(content), GlobalConstants.DEFAULT_CHARSET);
         }
         catch (UnsupportedEncodingException e) {
-            throw new UtilException(ErrorCodeDef.BASE64_ERROR_10037, e);
+            throw new UtilException(ErrorCodeDef.BASE64_ERROR, e);
         }
     }
 

@@ -149,7 +149,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.QUERY_ERROR_10010, e);
+            throw new DaoException(ErrorCodeDef.QUERY_ERROR, e);
         }
     }
 
@@ -205,7 +205,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.EXECUTE_ERROR_10011, e);
+            throw new DaoException(ErrorCodeDef.EXECUTE_ERROR, e);
         }
     }
 
@@ -236,7 +236,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR_10012, e);
+            throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR, e);
         }
     }
 
@@ -286,7 +286,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (Exception e) {
             logger.error("保存实体异常", e);
-            throw new DaoException(ErrorCodeDef.SAVE_ERROR_10013, e);
+            throw new DaoException(ErrorCodeDef.SAVE_ERROR, e);
         }
     }
 
@@ -304,7 +304,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
         catch (RuntimeException e) {
             logger.error("添加或更新异常", e);
-            throw new DaoException(ErrorCodeDef.SAVE_ERROR_10013, e);
+            throw new DaoException(ErrorCodeDef.SAVE_ERROR, e);
         }
     }
 
