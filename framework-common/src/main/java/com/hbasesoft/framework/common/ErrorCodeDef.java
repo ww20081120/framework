@@ -5,6 +5,10 @@ package com.hbasesoft.framework.common;
 
 import static com.hbasesoft.framework.common.GlobalConstants.SYSTEM_PREFIX;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * <Description> 框架的错误码定义，0～999 为框架保留区域的错误码<br>
  * 
@@ -15,6 +19,8 @@ import static com.hbasesoft.framework.common.GlobalConstants.SYSTEM_PREFIX;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common <br>
  */
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum ErrorCodeDef implements ErrorCode {
 
     /** 成功 */
@@ -224,30 +230,4 @@ public enum ErrorCodeDef implements ErrorCode {
     /** msg */
     private final String msg;
 
-    private ErrorCodeDef(int code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return code <br>
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return msg <br>
-     */
-    public String getMsg() {
-        return msg;
-    }
 }
