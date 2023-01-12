@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
+import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.common.FrameworkException;
 
 /**
@@ -26,7 +27,7 @@ public class AssertException extends FrameworkException {
      * @param code
      * @param params
      */
-    public AssertException(final int code, final Object... params) {
+    public AssertException(final ErrorCode code, final Object... params) {
         super(code, params);
     }
 
@@ -34,14 +35,14 @@ public class AssertException extends FrameworkException {
      * @param code
      * @param t
      */
-    public AssertException(final int code, final Throwable t) {
+    public AssertException(final ErrorCode code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public AssertException(final int code) {
+    public AssertException(final ErrorCode code) {
         super(code);
     }
 
@@ -50,7 +51,7 @@ public class AssertException extends FrameworkException {
      * @param code
      * @param params
      */
-    public AssertException(final Throwable t, final int code, final Object... params) {
+    public AssertException(final Throwable t, final ErrorCode code, final Object... params) {
         super(t, code, params);
     }
 

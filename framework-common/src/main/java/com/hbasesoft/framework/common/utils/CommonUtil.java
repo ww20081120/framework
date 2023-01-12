@@ -58,7 +58,8 @@ public final class CommonUtil {
      * @return String <br>
      */
     public static String messageFormat(final String message, final Object... params) {
-        return (params == null || params.length == 0) ? message : MessageFormat.format(message, params);
+        return (StringUtils.isEmpty(message) || params == null || params.length == 0) ? message
+            : MessageFormat.format(message, params);
     }
 
     /**

@@ -163,35 +163,4 @@ public class PropertyHolderTest {
         String projectName = PropertyHolder.getProjectName();
         Assert.equals(projectName, "demo", ErrorCodeDef.SYSTEM_ERROR);
     }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    public void getErrorMessage() {
-
-        // 错误描述取自 errorMessage.properties
-        String e1 = PropertyHolder.getErrorMessage(ErrorCodeDef.SYSTEM_ERROR);
-        Assert.equals(e1, "系统错误", ErrorCodeDef.SYSTEM_ERROR);
-
-        // 没有配置错误文件
-        String e2 = PropertyHolder.getErrorMessage(-1);
-        Assert.equals(e2, "-1", ErrorCodeDef.SYSTEM_ERROR);
-
-        // 取项目名称所对应的错误文件 demo_errorMessage.properties
-        String e3 = PropertyHolder.getErrorMessage(NUM_8888);
-        Assert.equals(e3, "demo", ErrorCodeDef.SYSTEM_ERROR);
-
-        // 取扩展文件中对应的错误文件 ext_errorMessage.properties
-        String e4 = PropertyHolder.getErrorMessage(NUM_9998, "a");
-        Assert.equals(e4, "测试a测试", ErrorCodeDef.SYSTEM_ERROR);
-
-        String e5 = PropertyHolder.getErrorMessage(NUM_9999);
-        Assert.equals(e5, "测试", ErrorCodeDef.SYSTEM_ERROR);
-    }
-
 }

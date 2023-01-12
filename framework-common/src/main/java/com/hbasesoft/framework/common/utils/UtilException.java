@@ -3,6 +3,7 @@
  */
 package com.hbasesoft.framework.common.utils;
 
+import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.common.FrameworkException;
 
 /**
@@ -26,7 +27,7 @@ public class UtilException extends FrameworkException {
      * @param code
      * @param params
      */
-    public UtilException(final int code, final Object... params) {
+    public UtilException(final ErrorCode code, final Object... params) {
         super(code, params);
     }
 
@@ -34,14 +35,14 @@ public class UtilException extends FrameworkException {
      * @param code
      * @param t
      */
-    public UtilException(final int code, final Throwable t) {
+    public UtilException(final ErrorCode code, final Throwable t) {
         super(code, t);
     }
 
     /**
      * @param code
      */
-    public UtilException(final int code) {
+    public UtilException(final ErrorCode code) {
         super(code);
     }
 
@@ -50,7 +51,7 @@ public class UtilException extends FrameworkException {
      * @param code
      * @param params
      */
-    public UtilException(final Throwable t, final int code, final Object... params) {
+    public UtilException(final Throwable t, final ErrorCode code, final Object... params) {
         super(t, code, params);
     }
 

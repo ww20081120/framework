@@ -18,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -63,12 +64,12 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> int flowStart(final T bean, final JSONObject flowConfig,
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final JSONObject flowConfig,
         final boolean throwable) {
 
         Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");
 
-        int result = ErrorCodeDef.SUCCESS;
+        ErrorCode result = ErrorCodeDef.SUCCESS;
 
         Assert.notNull(flowConfig, ErrorCodeDef.FLOW_NOT_MATCH, bean);
 
@@ -103,10 +104,10 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> int flowStart(final T bean, final String flowName, final boolean throwable) {
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final String flowName, final boolean throwable) {
         Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");
 
-        int result = ErrorCodeDef.SUCCESS;
+        ErrorCode result = ErrorCodeDef.SUCCESS;
 
         // match flow config
         FlowConfig config = match(flowName);
@@ -137,7 +138,7 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> int flowStart(final T bean, final String flowName) {
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final String flowName) {
         return flowStart(bean, flowName, false);
     }
 
@@ -151,7 +152,7 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> int flowStart(final T bean, final JSONObject flowConfig) {
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final JSONObject flowConfig) {
         return flowStart(bean, flowConfig, false);
     }
 
