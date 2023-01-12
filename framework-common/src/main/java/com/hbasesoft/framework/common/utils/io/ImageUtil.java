@@ -57,7 +57,7 @@ public final class ImageUtil {
             file.outputQuality(DEFAULT_QUALITY).height(height).toFile(tempDist);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.IMAGE_ZOOM_10020, e);
+            throw new UtilException(ErrorCodeDef.IMAGE_ZOOM_ERROR, e);
         }
     }
 
@@ -96,7 +96,7 @@ public final class ImageUtil {
             return dest;
         }
         catch (IOException e) {
-            throw new UtilException(ErrorCodeDef.IMAGE_ZOOM_10020, e);
+            throw new UtilException(ErrorCodeDef.IMAGE_ZOOM_ERROR, e);
         }
     }
 }

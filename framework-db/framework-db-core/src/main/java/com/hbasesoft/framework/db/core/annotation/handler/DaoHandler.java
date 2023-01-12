@@ -129,7 +129,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
             }
         }
         catch (Exception e) {
-            throw new DaoException(ErrorCodeDef.OGNL_ERROR_10009, e);
+            throw new DaoException(ErrorCodeDef.OGNL_ERROR, e);
         }
         dataParam.setParamMap(map);
     }

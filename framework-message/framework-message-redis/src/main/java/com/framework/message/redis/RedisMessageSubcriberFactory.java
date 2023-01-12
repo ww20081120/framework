@@ -58,7 +58,7 @@ public class RedisMessageSubcriberFactory implements MessageSubcriberFactory {
                     jedis.subscribe(new BinaryListener(subscriber), channel.getBytes());
                 }
                 catch (Exception e) {
-                    throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+                    throw new UtilException(ErrorCodeDef.CACHE_ERROR, e);
                 }
                 finally {
                     if (jedis != null) {

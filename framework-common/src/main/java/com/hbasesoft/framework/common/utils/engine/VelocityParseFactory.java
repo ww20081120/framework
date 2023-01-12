@@ -117,7 +117,7 @@ public final class VelocityParseFactory {
             return new String(out.toByteArray(), GlobalConstants.DEFAULT_CHARSET);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR_10004, e);
+            throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
         }
         finally {
             if (out != null) {
@@ -125,7 +125,7 @@ public final class VelocityParseFactory {
                     out.close();
                 }
                 catch (IOException e) {
-                    throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR_10004, e);
+                    throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
                 }
             }
         }

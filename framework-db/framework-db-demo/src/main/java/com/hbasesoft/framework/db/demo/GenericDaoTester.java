@@ -101,7 +101,7 @@ public class GenericDaoTester {
     @Test
     public void countCoursePass() {
         int count = studentDao.countCoursePass("语文");
-        Assert.isTrue(count == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(count == 2, ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("语文考及格的有两人");
     }
 
@@ -115,21 +115,21 @@ public class GenericDaoTester {
     @Test
     public void queryStudentCourse() {
         List<StudentEntity> entityes = studentDao.queryStudentCourse(null, 1, NUM_5);
-        Assert.isTrue(entityes.size() == NUM_5, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entityes.size() == NUM_5, ErrorCodeDef.SYSTEM_ERROR);
 
         entityes = studentDao.queryStudentCourse(null, 1, NUM_3);
-        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
 
         StudentEntity entity = new StudentEntity();
         entity.setAge(NUM_19);
         entityes = studentDao.queryStudentCourse(entity, 1, NUM_10);
-        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
 
         entity = new StudentEntity();
         entity.setAge(NUM_18);
         entity.setName("张%");
         entityes = studentDao.queryStudentCourse(entity, 1, NUM_10);
-        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -149,7 +149,7 @@ public class GenericDaoTester {
         String id = entity.getId();
 
         entity = studentDao.get(StudentEntity.class, id);
-        Assert.equals(entity.getName(), "张三丰", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(entity.getName(), "张三丰", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -171,7 +171,7 @@ public class GenericDaoTester {
         studentDao.delete(entity);
 
         entity = studentDao.get(StudentEntity.class, id);
-        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -201,7 +201,7 @@ public class GenericDaoTester {
             return true;
         }, GlobalConstants.DEFAULT_LINES);
         int s2 = studentDao.countStudentSize();
-        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -230,7 +230,7 @@ public class GenericDaoTester {
             return true;
         });
         int s2 = studentDao.countStudentSize();
-        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -243,7 +243,7 @@ public class GenericDaoTester {
     @Test
     public void get() {
         StudentEntity entity = studentDao.get(StudentEntity.class, "1");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -256,7 +256,7 @@ public class GenericDaoTester {
     @Test
     public void findUniqueByProperty() {
         CourseEntity entity = courseDao.findUniqueByProperty(CourseEntity.class, CourseEntity.COURSE_NAME, "语文");
-        Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -269,7 +269,7 @@ public class GenericDaoTester {
     @Test
     public void findByProperty() {
         List<StudentEntity> entities = studentDao.findByProperty(StudentEntity.class, StudentEntity.AGE, NUM_18);
-        Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -283,7 +283,7 @@ public class GenericDaoTester {
     public void loadAll() {
         List<StudentEntity> entities = studentDao.loadAll(StudentEntity.class);
         int size = studentDao.countStudentSize();
-        Assert.isTrue(entities.size() == size, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entities.size() == size, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -305,7 +305,7 @@ public class GenericDaoTester {
         studentDao.deleteEntityById(StudentEntity.class, id);
 
         entity = studentDao.get(StudentEntity.class, id);
-        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -320,7 +320,7 @@ public class GenericDaoTester {
         List<StudentEntity> entities = studentDao.loadAll(StudentEntity.class);
         studentDao.deleteAllEntitie(entities);
         int size = studentDao.countStudentSize();
-        Assert.isTrue(size == 0, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(size == 0, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -335,7 +335,7 @@ public class GenericDaoTester {
         int s1 = studentDao.countStudentSize();
         studentDao.deleteAllEntitiesByIds(StudentEntity.class, Arrays.asList("1", "2", "3"));
         int s2 = studentDao.countStudentSize();
-        Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -348,12 +348,12 @@ public class GenericDaoTester {
     @Test
     public void updateEntity() {
         StudentEntity entity = studentDao.get(StudentEntity.class, "1");
-        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
         entity.setName("李四");
         studentDao.updateEntity(entity);
 
         StudentEntity e2 = studentDao.get(StudentEntity.class, "1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -367,7 +367,7 @@ public class GenericDaoTester {
     public void findByQueryString() {
         List<StudentEntity> entities = studentDao
             .findByQueryString("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -380,7 +380,7 @@ public class GenericDaoTester {
     @Test
     public void updateBySqlString() {
         StudentEntity entity = studentDao.get(StudentEntity.class, "1");
-        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
 
         studentDao.updateBySqlString("update t_student set name = '李四' where id = '1'");
 
@@ -388,7 +388,7 @@ public class GenericDaoTester {
         studentDao.clear();
 
         StudentEntity e2 = studentDao.get(StudentEntity.class, "1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -402,7 +402,7 @@ public class GenericDaoTester {
     public void singleResult() {
         StudentEntity entity = studentDao
             .singleResult("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR);
 
     }
 
@@ -417,7 +417,7 @@ public class GenericDaoTester {
     public void getPageList() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
         PagerList<StudentEntity> entities = studentDao.getPageList(criteria, 1, 1);
-        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -434,7 +434,7 @@ public class GenericDaoTester {
         List<StudentEntity> es1 = studentDao.getListByCriteriaQuery(criteria);
 
         List<StudentEntity> es2 = studentDao.findByProperty(StudentEntity.class, StudentEntity.AGE, NUM_18);
-        Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -452,6 +452,6 @@ public class GenericDaoTester {
 
         CourseEntity e2 = courseDao.findUniqueByProperty(CourseEntity.class, CourseEntity.COURSE_NAME, "语文");
 
-        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR);
     }
 }

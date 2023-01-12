@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.bean.Bean;
+import com.hbasesoft.framework.common.utils.bean.TestBean;
 
 /**
  * <Description> <br>
@@ -38,12 +38,12 @@ public class VelocityParseFactoryTest {
      */
     @Test
     public void parse() {
-        Bean bean = new Bean("张三", NUM_18);
+        TestBean bean = new TestBean("张三", NUM_18);
         Map<String, Object> params = new HashMap<>();
         params.put("b", bean);
 
         String template = "你好，我的名字叫${b.name}";
         String str = VelocityParseFactory.parse("template01", template, params);
-        Assert.equals(str, "你好，我的名字叫张三", ErrorCodeDef.SYSTEM_ERROR_10001);
+        Assert.equals(str, "你好，我的名字叫张三", ErrorCodeDef.SYSTEM_ERROR);
     }
 }

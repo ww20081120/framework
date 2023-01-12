@@ -42,7 +42,7 @@ public class RedisMessageQueue implements MessageQueue {
             jedis.lpush(key.getBytes(), value);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            throw new UtilException(ErrorCodeDef.CACHE_ERROR, e);
         }
         finally {
             if (jedis != null) {
@@ -68,7 +68,7 @@ public class RedisMessageQueue implements MessageQueue {
             return jedis.lrange(key.getBytes(), 0, -1);
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            throw new UtilException(ErrorCodeDef.CACHE_ERROR, e);
         }
         finally {
             if (jedis != null) {
@@ -98,7 +98,7 @@ public class RedisMessageQueue implements MessageQueue {
             return result;
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.CACHE_ERROR_10002, e);
+            throw new UtilException(ErrorCodeDef.CACHE_ERROR, e);
         }
         finally {
             if (jedis != null) {
