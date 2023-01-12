@@ -34,22 +34,22 @@ public interface ErrorCodeDef {
     /** 缓存失败 */
     int CACHE_ERROR = SYSTEM_PREFIX + 2;
 
-    /** 不包含局部变量表信息，请使用编译器选项 javac -g */
+    /** class:{0} 不包含局部变量表信息，请使用编译器选项 javac -g:'{'vars'}'来编译源文件。 */
     int CAN_NOT_FIND_VER_NAME = SYSTEM_PREFIX + 3;
 
     /** 解析模板失败 */
     int PARSE_TEPLATE_ERROR = SYSTEM_PREFIX + 4;
 
-    /** 初始化SQL失败 */
+    /** 初始化sql失败，未找到{0}_{1}的sql */
     int INIT_SQL_ERROR = SYSTEM_PREFIX + 5;
 
-    /** 找不到SQL文件 */
+    /** 读取sql文件失败,路径[{0}] */
     int CAN_NOT_FIND_SQL_FILE = SYSTEM_PREFIX + 6;
 
-    /** 多个ResultCallback参数 */
+    /** Clazz[{0}] Method[{1}]含有多个ResultCallback参数 */
     int ERROR_RESULT_CALL_BACK = SYSTEM_PREFIX + 7;
 
-    /** Pagesize 和 PageIndex 必须同时设置 */
+    /** Clazz[{0}] Method[{1}]中Pagesize 和 PageIndex 必须同时设置 */
     int PAGE_SIZE_PAGE_INDEX_BOTH = SYSTEM_PREFIX + 8;
 
     /** OGNL 处理错误 */
@@ -67,10 +67,10 @@ public interface ErrorCodeDef {
     /** 保存失败 */
     int SAVE_ERROR = SYSTEM_PREFIX + 13;
 
-    /** 序列化失败 */
+    /** 序列化失败{0} */
     int SERIALIZE_ERROR = SYSTEM_PREFIX + 14;
 
-    /** 反序列化失败 */
+    /** 反序列化失败{0} */
     int UNSERIALIZE_ERROR = SYSTEM_PREFIX + 15;
 
     /** XML 转换失败 */
@@ -79,10 +79,10 @@ public interface ErrorCodeDef {
     /** 缓存模式没有设置 */
     int CACHE_MODEL_NOT_SET = SYSTEM_PREFIX + 17;
 
-    /** redis 地址没有配置 */
+    /** redis地址{0}未配置 */
     int REDIS_ADDRESS_NOT_SET = SYSTEM_PREFIX + 18;
 
-    /** 数据库链接没有设置 */
+    /** 数据库链接不存在 name=[{0}] */
     int DB_DATASOURCE_NOT_SET = SYSTEM_PREFIX + 19;
 
     /** 缩放图片失败 */
@@ -106,29 +106,29 @@ public interface ErrorCodeDef {
     /** 执行JS脚本错误 */
     int EVAL_JAVASCRIPT_ERROR = SYSTEM_PREFIX + 26;
 
-    /** 不能为空 */
+    /** {0}不能为空 */
     int PARAM_NOT_NULL = SYSTEM_PREFIX + 27;
 
     /** 缓存Key设置失败 */
     int CACHE_KEY_ERROR = SYSTEM_PREFIX + 28;
 
-    /** 代理目标不存在 */
+    /** 代理目标不存在{0} */
     int PROXY_TARGET_NOT_FOUND = SYSTEM_PREFIX + 29;
 
-    /** 重复消息 */
+    /** 重复消息{0} */
     int DULPLICATE_MESSAGE = SYSTEM_PREFIX + 30;
 
     /** 保存的数量过多，请采用batchExecute替代 */
     int TOO_MANY_OBJECTS = SYSTEM_PREFIX + 31;
 
-    /** DAO泛型设置有问题 */
+    /** DAO接口{0}中泛型未设置，请检查 */
     int GENERIC_TYPE_ERROR = SYSTEM_PREFIX + 32;
 
     /** 不支持延迟消息 */
-    int UNSPORT_DELAY_MESSAGE = SYSTEM_PREFIX + 32;
+    int UNSPORT_DELAY_MESSAGE = SYSTEM_PREFIX + 33;
 
-    /** 延迟消息必须大于1s */
-    int DELAY_TIME_TOO_SHORT = SYSTEM_PREFIX + 34;
+    /** ID 不能为空 */
+    int ID_IS_NULL = SYSTEM_PREFIX + 34;
 
     /** 未找到分布式事务的发送者 */
     int TRASCATION_SENDER_NOT_FOUND = SYSTEM_PREFIX + 35;
@@ -151,39 +151,37 @@ public interface ErrorCodeDef {
     /** SHA256 ERROR */
     int SHA256_ERROR = SYSTEM_PREFIX + 41;
 
-    /** 数据库地址没有配置 */
+    /** {0}.db.url未配置 */
     int DB_URL_NOT_SET = SYSTEM_PREFIX + 42;
 
     /** 查询的属性名是空的 */
     int DAO_PROPERTY_IS_EMPTY = SYSTEM_PREFIX + 43;
 
-    /** 缓存未配置 */
+    /** 缓存未配置,请参考cache.mode配置 */
     int CACHE_NOT_FOUND = SYSTEM_PREFIX + 44;
 
-    /** 消息模式没有设置 */
+    /** 消息模式没有设置，请参考message.model配置 */
     int MESSAGE_MODEL_NOT_SET = SYSTEM_PREFIX + 45;
 
     /** 未找到消息中间件 */
     int MESSAGE_MIDDLE_NOT_FOUND = SYSTEM_PREFIX + 46;
 
-    /** 流程未匹配 */
+    /** 流程未匹配{0} */
     int FLOW_NOT_MATCH = SYSTEM_PREFIX + 47;
 
     /** 流程组件未找到 */
     int FLOW_COMPONENT_NOT_FOUND = SYSTEM_PREFIX + 48;
 
-    /**
-     * 不支持的事务类型
-     */
+    /** 不支持的事务类型{0} */
     int UNSUPPORT_TRASACTION_TYPE = SYSTEM_PREFIX + 49;
 
     /** SQL不支持星号 */
     int UNSUUPORT_ASTERISK = SYSTEM_PREFIX + 50;
 
-    /** Job 服务的注册中心未配置 */
+    /** Job 服务的注册中心未配置,请参考job.register.url配置 */
     int JOB_REGISTER_URL_IS_NULL = SYSTEM_PREFIX + 51;
 
-    /** 注册中心的命名空间未配置 */
+    /** 注册中心的命名空间未配置，请参考job.register.namespace配置 */
     int JOB_REGISTER_NAMESPACE_IS_NULL = SYSTEM_PREFIX + 52;
 
     /** 消息中心的生产者创建失败 */
@@ -207,7 +205,7 @@ public interface ErrorCodeDef {
     /** 流程中事件不能为空 */
     int EVENT_NOT_EMPTY = SYSTEM_PREFIX + 59;
 
-    /** 状态未匹配上 */
+    /** 状态未匹配上{0} */
     int STATE_NOT_MATCH = SYSTEM_PREFIX + 60;
 
     /** 未找到失败状态的配置 */
@@ -216,19 +214,16 @@ public interface ErrorCodeDef {
     /** STATE MACHINE的FlowBean 必须实现 StateMachineFlowBean */
     int FLOW_MUST_HAS_STATE = SYSTEM_PREFIX + 62;
 
-    /** 未找到状态所对应的事件 */
+    /** 未找到状态{0}对应的事件{1} */
     int EVENT_NOT_FOUND = SYSTEM_PREFIX + 63;
 
-    /** JDK 序列化失败 */
+    /** JDK 序列化失败[{0}] */
     int JDK_SERIALIZE_ERROR = SYSTEM_PREFIX + 64;
 
-    /** JDK 反序列化失败 */
+    /** JDK 反序列化失败[{0}] */
     int JDK_UNSERIALIZE_ERROR = SYSTEM_PREFIX + 65;
 
     /** 参数的内容大小超过65535个字节 */
     int ARGUMENTS_SIZE_TOO_LARGE = SYSTEM_PREFIX + 66;
-
-    /** ID 不能为空 */
-    int ID_IS_NULL = SYSTEM_PREFIX + 67;
 
 }
