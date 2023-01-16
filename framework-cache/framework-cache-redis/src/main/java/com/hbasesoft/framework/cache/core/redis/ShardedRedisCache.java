@@ -54,7 +54,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
                 jedisShardInfo.setPassword(passwd);
                 shards.add(jedisShardInfo);
             }
-            
+
             GenericObjectPoolConfig<ShardedJedis> config = new GenericObjectPoolConfig<>();
             super.setConfig(config);
             shardedPool = new ShardedJedisPool(config, shards);
@@ -105,7 +105,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(final byte[] key) {
+    public byte[] get(final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -128,7 +128,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    protected void put(final byte[] key, int seconds, final byte[] value) {
+    public void put(final byte[] key, int seconds, final byte[] value) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -155,7 +155,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void remove(final byte[] key) {
+    public void remove(final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -177,7 +177,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected Map<byte[], byte[]> getNode(final byte[] node) {
+    public Map<byte[], byte[]> getNode(final byte[] node) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -199,7 +199,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
+    public void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             ShardedJedis shardedJedis = null;
             try {
@@ -228,7 +228,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    protected byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
+    public byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -251,7 +251,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param t <br>
      */
     @Override
-    protected void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
+    public void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         if (t != null) {
             ShardedJedis shardedJedis = null;
             try {
@@ -279,7 +279,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param key <br>
      */
     @Override
-    protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
+    public void removeNodeValue(final byte[] nodeName, final byte[] key) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();

@@ -90,7 +90,7 @@ public class SimpleCache extends AbstractCache {
      * @return <br>
      */
     @Override
-    protected byte[] get(final byte[] key) {
+    public byte[] get(final byte[] key) {
         return getNodeValue(DEFAULT_CACHE_DIR.getBytes(), key);
     }
 
@@ -103,7 +103,7 @@ public class SimpleCache extends AbstractCache {
      * @param value <br>
      */
     @Override
-    protected void put(final byte[] key, int seconds, final byte[] value) {
+    public void put(final byte[] key, int seconds, final byte[] value) {
         putNodeValue(DEFAULT_CACHE_DIR.getBytes(), 0, key, value);
     }
 
@@ -116,7 +116,7 @@ public class SimpleCache extends AbstractCache {
      * @return <br>
      */
     @Override
-    protected Map<byte[], byte[]> getNode(final byte[] node) {
+    public Map<byte[], byte[]> getNode(final byte[] node) {
         Cache<String, byte[]> temp = this.cachesMap.get(new String(node));
         return temp == null ? null : string2ByteMap(temp.asMap());
     }
@@ -130,7 +130,7 @@ public class SimpleCache extends AbstractCache {
      * @param dataMap <br>
      */
     @Override
-    protected void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
+    public void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
         Cache<String, byte[]> cache = buildCache(seconds);
         cache.putAll(byte2StringMap(dataMap));
         this.cachesMap.put(new String(key), cache);
@@ -144,7 +144,7 @@ public class SimpleCache extends AbstractCache {
      * @param nodeName
      */
     @Override
-    protected void remove(final byte[] nodeName) {
+    public void remove(final byte[] nodeName) {
         this.cachesMap.remove(new String(nodeName));
         removeNodeValue(DEFAULT_CACHE_DIR.getBytes(), nodeName);
     }
@@ -159,7 +159,7 @@ public class SimpleCache extends AbstractCache {
      * @return <br>
      */
     @Override
-    protected byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
+    public byte[] getNodeValue(final byte[] nodeName, final byte[] key) {
         Cache<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
         return defaultCache == null ? null : defaultCache.getIfPresent(new String(key));
     }
@@ -174,7 +174,7 @@ public class SimpleCache extends AbstractCache {
      * @param t <br>
      */
     @Override
-    protected void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
+    public void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
         Cache<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
         if (defaultCache == null) {
             defaultCache = buildCache(seconds);
@@ -192,7 +192,7 @@ public class SimpleCache extends AbstractCache {
      * @param key <br>
      */
     @Override
-    protected void removeNodeValue(final byte[] nodeName, final byte[] key) {
+    public void removeNodeValue(final byte[] nodeName, final byte[] key) {
         Cache<String, byte[]> nodeMap = this.cachesMap.get(new String(nodeName));
         if (nodeMap != null) {
             nodeMap.invalidate(new String(key));

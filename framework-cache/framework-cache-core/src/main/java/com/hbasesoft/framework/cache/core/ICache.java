@@ -55,4 +55,20 @@ public interface ICache {
     void clear();
     
     Object getNativeCache();
+    
+    byte[] get(byte[] key);
+
+    void put(byte[] key, int seconds, byte[] value);
+
+    void remove(byte[] key);
+
+    Map<byte[], byte[]> getNode(byte[] node);
+
+    void putNode(byte[] key, int seconds, Map<byte[], byte[]> dataMap);
+
+    byte[] getNodeValue(byte[] nodeName, byte[] key);
+
+    void putNodeValue(byte[] nodeName, int seconds, byte[] key, byte[] t);
+
+    void removeNodeValue(byte[] nodeName, byte[] key);
 }
