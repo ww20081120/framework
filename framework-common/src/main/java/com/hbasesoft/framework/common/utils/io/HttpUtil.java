@@ -54,10 +54,10 @@ public final class HttpUtil {
     public static final int DEFAULT_HTTPS_PORT = 443;
 
     /** CONNECT_TIMEOUT */
-    private static final Long CONNECT_TIMEOUT = 5000L;
+    public static final Long CONNECT_TIMEOUT = 5000L;
 
     /** READ_TIMEOUT */
-    private static final Long READDING_TIMEOUT = 30000L;
+    public static final Long READDING_TIMEOUT = 30000L;
 
     /** httpClientHold */
     private static ThreadLocal<OkHttpClient> httpClientHold = new ThreadLocal<>();
@@ -409,7 +409,7 @@ public final class HttpUtil {
         return okHttpClient;
     }
 
-    private static SSLSocketFactory getSSLSocketFactory() {
+    public static SSLSocketFactory getSSLSocketFactory() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, getTrustManager(), new SecureRandom());
@@ -420,7 +420,7 @@ public final class HttpUtil {
         }
     }
 
-    private static TrustManager[] getTrustManager() {
+    public static TrustManager[] getTrustManager() {
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {
                 @Override
@@ -440,7 +440,7 @@ public final class HttpUtil {
         return trustAllCerts;
     }
 
-    private static HostnameVerifier getHostnameVerifier() {
+    public static HostnameVerifier getHostnameVerifier() {
         return (s, sslSession) -> true;
     }
 }
