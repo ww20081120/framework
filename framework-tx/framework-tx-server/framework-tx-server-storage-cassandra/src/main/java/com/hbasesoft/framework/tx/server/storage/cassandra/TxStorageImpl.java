@@ -41,11 +41,16 @@ import com.hbasesoft.framework.tx.server.storage.cassandra.entity.TxClientinfoEn
 @Service
 public class TxStorageImpl implements TxStorage {
 
+    /** */
     private ThreadLocal<String> holder = new ThreadLocal<>();
 
     /** Number */
     private static final int NUM_5 = 5;
 
+    /** */
+    private static final int NUM100000 = 100000;
+
+    /** */
     @Autowired
     private CassandraOperations cassandraOperations;
 
@@ -58,7 +63,7 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
-    public boolean containsClientInfo(String id) {
+    public boolean containsClientInfo(final String id) {
         return cassandraOperations.exists(id, TxClientinfoEntity.class);
     }
 
@@ -72,7 +77,7 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
-    public CheckInfo getCheckInfo(String id, String mark) {
+    public CheckInfo getCheckInfo(final String id, final String mark) {
 
         Query q = Query.query(Criteria.where("id").is(id), Criteria.where("mark").is(mark));
         TxCheckinfoEntity entity = cassandraOperations.selectOne(q, TxCheckinfoEntity.class);
@@ -92,7 +97,7 @@ public class TxStorageImpl implements TxStorage {
      * @param clientInfo <br>
      */
     @Override
-    public void saveClientInfo(ClientInfo clientInfo) {
+    public void saveClientInfo(final ClientInfo clientInfo) {
 
         TxClientinfoEntity bean = new TxClientinfoEntity();
         bean.setArgs(DataUtil.byte2HexStr(clientInfo.getArgs()));
@@ -122,7 +127,7 @@ public class TxStorageImpl implements TxStorage {
      * @param checkInfo <br>
      */
     @Override
-    public void saveCheckInfo(CheckInfo checkInfo) {
+    public void saveCheckInfo(final CheckInfo checkInfo) {
 
         TxCheckinfoEntity bean = new TxCheckinfoEntity();
         bean.setId(checkInfo.getId());
@@ -165,7 +170,7 @@ public class TxStorageImpl implements TxStorage {
             PagerList<ClientInfo> pagerList = new PagerList<>();
             pagerList.setPageIndex(pageIndex);
             pagerList.setPageSize(pageSize);
-            pagerList.setTotalCount(100000);
+            pagerList.setTotalCount(NUM100000);
             pagerList.addAll(entities.stream()
                 .map(b -> new ClientInfo(b.getId(), b.getMark(), b.getContext(),
                     b.getArgs() == null ? null : DataUtil.hexStr2Byte(b.getArgs()), 0, null, b.getClientInfo()))
@@ -186,7 +191,7 @@ public class TxStorageImpl implements TxStorage {
      * @param id <br>
      */
     @Override
-    public void updateClientRetryTimes(String id) {
+    public void updateClientRetryTimes(final String id) {
         TxClientinfoEntity bean = cassandraOperations.selectOneById(id, TxClientinfoEntity.class);
         if (bean != null) {
             bean.setCurrentRetryTimes(bean.getCurrentRetryTimes() + 1);
@@ -206,13 +211,13 @@ public class TxStorageImpl implements TxStorage {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param id <br>
      */
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         cassandraOperations.deleteById(id, TxClientinfoEntity.class);
         cassandraOperations.delete(Query.query(Criteria.where("id").is(id)), TxCheckinfoEntity.class);
     }
@@ -226,7 +231,7 @@ public class TxStorageImpl implements TxStorage {
      * @return <br>
      */
     @Override
-    public ClientInfo getClientInfo(String id) {
+    public ClientInfo getClientInfo(final String id) {
         TxClientinfoEntity bean = cassandraOperations.selectOneById(id, TxClientinfoEntity.class);
         return bean == null ? null
             : new ClientInfo(id, bean.getMark(), bean.getContext(),
@@ -242,7 +247,7 @@ public class TxStorageImpl implements TxStorage {
      * @param clientInfo <br>
      */
     @Override
-    public void updateClientinfo(ClientInfo clientInfo) {
+    public void updateClientinfo(final ClientInfo clientInfo) {
         TxClientinfoEntity bean = cassandraOperations.selectOneById(clientInfo.getId(), TxClientinfoEntity.class);
         if (bean != null) {
             bean.setArgs(clientInfo.getArgs() == null ? null : DataUtil.byte2HexStr(clientInfo.getArgs()));
@@ -258,7 +263,7 @@ public class TxStorageImpl implements TxStorage {
      * @param checkInfo <br>
      */
     @Override
-    public void updateCheckInfo(CheckInfo checkInfo) {
+    public void updateCheckInfo(final CheckInfo checkInfo) {
 
         Query q = Query.query(Criteria.where("id").is(checkInfo.getId()),
             Criteria.where("mark").is(checkInfo.getMark()));
@@ -280,7 +285,7 @@ public class TxStorageImpl implements TxStorage {
      * @param mark <br>
      */
     @Override
-    public void deleteCheckInfo(String id, String mark) {
+    public void deleteCheckInfo(final String id, final String mark) {
 
         Query q = Query.query(Criteria.where("id").is(id), Criteria.where("mark").is(mark));
         TxCheckinfoEntity entity = cassandraOperations.selectOne(q, TxCheckinfoEntity.class);
