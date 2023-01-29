@@ -36,7 +36,7 @@ public interface ElasticSearchClient extends Configurable {
      * @param ttlMs Time to live expressed in milliseconds. Value <= 0 is ignored
      * @throws Exception
      */
-    public void addEvent(Event event, IndexNameBuilder indexNameBuilder, String indexType, long ttlMs) throws Exception;
+    void addEvent(Event event, IndexNameBuilder indexNameBuilder, String indexType, long ttlMs) throws Exception;
 
     /**
      * Sends bulk to the elasticsearch cluster

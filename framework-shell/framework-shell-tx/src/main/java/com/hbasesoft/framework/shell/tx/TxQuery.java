@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.shell.tx;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +43,30 @@ import lombok.Setter;
 @Component
 public class TxQuery implements CommandHandler<Option> {
 
+    /** */
     @Autowired
     private CassandraOperations cassandraOperations;
+
+    /** */
+    private static final int NUM3 = 3;
+
+    /** */
+    private static final int NUM4 = 4;
+
+    /** */
+    private static final int NUM5 = 5;
+
+    /** */
+    private static final int NUM6 = 6;
+
+    /** */
+    private static final int NUM_10 = 10;
+
+    /** */
+    private static final int NUM10 = 10;
+
+    /** */
+    private static final int NUM100 = 100;
 
     /**
      * Description: <br>
@@ -55,9 +78,11 @@ public class TxQuery implements CommandHandler<Option> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
 
         List<CriteriaDefinition> cds = new ArrayList<>();
+
+        PrintStream shellOut = shell.getOut();
 
         if (StringUtils.isNotEmpty(option.id)) {
             cds.add(Criteria.where("id").is(option.id));
@@ -79,41 +104,41 @@ public class TxQuery implements CommandHandler<Option> {
             Query q = Query.query(cds.toArray(new CriteriaDefinition[0])).withAllowFiltering();
 
             long s = cassandraOperations.count(q, TxClientinfoEntity.class);
-            shell.out.println("统计到：" + s + "条数据。");
+            shellOut.println("统计到：" + s + "条数据。");
         }
         else {
-            if (option.pageSize > 100 || option.pageSize < 1) {
-                option.pageSize = 10;
+            if (option.pageSize > NUM100 || option.pageSize < 1) {
+                option.pageSize = NUM10;
             }
             Query q = Query.query(cds.toArray(new CriteriaDefinition[0])).withAllowFiltering().limit(option.pageSize);
             List<TxClientinfoEntity> entities = cassandraOperations.select(q, TxClientinfoEntity.class);
 
-            shell.out.println(
+            shellOut.println(
                 "ID\t\t标记(mark)\t\t参数(args)\t\t上下文(context)\t\t最大重试次数(maxRetryTimes)\t\t当前已重试次数(currentRetryTimes)\t\t"
                     + "重试配置(retryConfigs)\t\t下次重试时间(nextRetryTime)\t\t客户端信息（clientInfo）\t\t创建时间(createTime)");
 
             if (CollectionUtils.isNotEmpty(entities)) {
                 for (TxClientinfoEntity entity : entities) {
-                    shell.out.print(entity.getId());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getMark());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getArgs());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getContext());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getMaxRetryTimes());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getCurrentRetryTimes());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getRetryConfigs());
-                    shell.out.print("\t\t");
-                    shell.out.print(
+                    shellOut.print(entity.getId());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getMark());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getArgs());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getContext());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getMaxRetryTimes());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getCurrentRetryTimes());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getRetryConfigs());
+                    shellOut.print("\t\t");
+                    shellOut.print(
                         entity.getNextRetryTime() == null ? null : DateUtil.date2String(entity.getNextRetryTime()));
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getClientInfo());
-                    shell.out.print("\t\t");
-                    shell.out.println(DateUtil.date2String(entity.getCreateTime()));
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getClientInfo());
+                    shellOut.print("\t\t");
+                    shellOut.println(DateUtil.date2String(entity.getCreateTime()));
                 }
             }
         }
@@ -136,35 +161,41 @@ public class TxQuery implements CommandHandler<Option> {
     @Setter
     public static class Option extends AbstractOption {
 
+        /** */
         @Parameter(names = {
             "-id"
         }, help = true, order = 1, description = "根据ID查询")
         private String id;
 
+        /** */
         @Parameter(names = {
             "--mark", "-m"
         }, help = true, order = 2, description = "根据标记查询")
         private String mark;
 
+        /** */
         @Parameter(names = {
             "--clientInfo", "-ci"
-        }, help = true, order = 3, description = "根据客户端信息查询")
+        }, help = true, order = NUM3, description = "根据客户端信息查询")
         private String clientInfo;
 
+        /** */
         @Parameter(names = {
             "--all", "-a"
-        }, help = true, order = 4, description = "查询所有，包含未过期的内容")
+        }, help = true, order = NUM4, description = "查询所有，包含未过期的内容")
         private boolean all = false;
 
+        /** */
         @Parameter(names = {
             "--count", "-c"
-        }, help = true, order = 5, description = "统计数量")
+        }, help = true, order = NUM5, description = "统计数量")
         private boolean count = false;
 
+        /** */
         @Parameter(names = {
             "--size", "-s"
-        }, help = true, order = 6, description = "每页的数量")
-        private int pageSize = 10;
+        }, help = true, order = NUM6, description = "每页的数量")
+        private int pageSize = NUM_10;
 
     }
 }

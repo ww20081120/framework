@@ -69,7 +69,7 @@ public final class CacheHelper {
      * @param lockName
      * @return <br>
      */
-    public static Lock getLock(String lockName) {
+    public static Lock getLock(final String lockName) {
         if (lockLoader == null) {
             ServiceLoader<LockLoader> serviceLoader = ServiceLoader.load(LockLoader.class);
             if (serviceLoader != null) {

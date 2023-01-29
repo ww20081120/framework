@@ -23,8 +23,10 @@ import com.hbasesoft.framework.db.core.config.ParamMetadata;
  */
 public class SqlCacheManager {
 
+    /** */
     private static Map<String, ParamMetadata> metadataCache = new ConcurrentHashMap<>();
 
+    /** */
     private static Map<String, String> sqlTemplateCache = new ConcurrentHashMap<>();
 
     /**
@@ -42,19 +44,51 @@ public class SqlCacheManager {
         return sb.toString();
     }
 
-    public static ParamMetadata getParamMetadata(String key) {
+    /**
+     * @Method getParamMetadata
+     * @param key
+     * @return com.hbasesoft.framework.db.core.config.ParamMetadata
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:26
+    */
+    public static ParamMetadata getParamMetadata(final String key) {
         return metadataCache.get(key);
     }
 
-    public static void putParamMetadata(String key, ParamMetadata metadata) {
+    /**
+     * @Method putParamMetadata
+     * @param key
+     * @param metadata
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:26
+    */
+    public static void putParamMetadata(final String key, final ParamMetadata metadata) {
         metadataCache.put(key, metadata);
     }
 
-    public static String getSqlTemplate(String key) {
+    /**
+     * @Method getSqlTemplate
+     * @param key
+     * @return java.lang.String
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:26
+    */
+    public static String getSqlTemplate(final String key) {
         return sqlTemplateCache.get(key);
     }
 
-    public static void putSqlTemplate(String key, String sql) {
+    /**
+     * @Method putSqlTemplate
+     * @param key
+     * @param sql
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:27
+    */
+    public static void putSqlTemplate(final String key, final String sql) {
         sqlTemplateCache.put(key, sql);
     }
 }

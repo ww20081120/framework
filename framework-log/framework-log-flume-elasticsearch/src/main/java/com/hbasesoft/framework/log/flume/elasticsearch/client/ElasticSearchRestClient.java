@@ -46,23 +46,40 @@ import okhttp3.Response;
  */
 public class ElasticSearchRestClient implements ElasticSearchClient {
 
+    /** */
     private static final String INDEX_OPERATION_NAME = "index";
 
+    /** */
     private static final String INDEX_PARAM = "_index";
 
+    /** */
     private static final String TYPE_PARAM = "_type";
 
+    /** */
     private static final String TTL_PARAM = "_ttl";
 
+    /** */
     private static final String BULK_ENDPOINT = "_bulk";
 
+    /** */
     private final EventSerializer serializer;
 
+    /** */
     private final RoundRobinList<Address> serversList;
 
+    /** */
     private StringBuilder bulkBuilder;
 
-    public ElasticSearchRestClient(Address[] address, EventSerializer serializer) {
+    /**
+     * @Method ElasticSearchRestClient
+     * @param address
+     * @param serializer
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:06
+     */
+    public ElasticSearchRestClient(final Address[] address, final EventSerializer serializer) {
 
         this.serializer = serializer;
 
@@ -82,8 +99,8 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
      * @throws Exception <br>
      */
     @Override
-    public void addEvent(Event event, IndexNameBuilder indexNameBuilder, String indexType, long ttlMs)
-        throws Exception {
+    public void addEvent(final Event event, final IndexNameBuilder indexNameBuilder, final String indexType,
+        final long ttlMs) throws Exception {
         Map<String, Map<String, String>> parameters = new HashMap<String, Map<String, String>>();
         Map<String, String> indexParameters = new HashMap<String, String>();
         indexParameters.put(INDEX_PARAM, indexNameBuilder.getIndexName(event));
@@ -92,7 +109,7 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
             indexParameters.put(TTL_PARAM, Long.toString(ttlMs));
         }
         parameters.put(INDEX_OPERATION_NAME, indexParameters);
-        
+
         String content = serializer.getContentBuilder(event);
 
         Gson gson = new Gson();
@@ -114,7 +131,8 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
      */
     @Override
     public void execute() throws Exception {
-        int statusCode = 0, triesCount = 0;
+        int statusCode = 0;
+        int triesCount = 0;
         String entity;
         synchronized (bulkBuilder) {
             entity = bulkBuilder.toString();
@@ -163,7 +181,7 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
      * @param context <br>
      */
     @Override
-    public void configure(Context context) {
+    public void configure(final Context context) {
 
     }
 

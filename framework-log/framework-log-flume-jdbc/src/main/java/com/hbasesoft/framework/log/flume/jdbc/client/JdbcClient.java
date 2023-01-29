@@ -29,12 +29,9 @@ public interface JdbcClient extends Configurable {
      * Add new event to the bulk
      *
      * @param event Flume Event
-     * @param indexNameBuilder Index name builder which generates name of index to feed
-     * @param indexType Name of type of document which will be sent to the elasticsearch cluster
-     * @param ttlMs Time to live expressed in milliseconds. Value <= 0 is ignored
      * @throws Exception
      */
-    public void addEvent(Event event) throws Exception;
+    void addEvent(Event event) throws Exception;
 
     /**
      * Sends bulk to the elasticsearch cluster

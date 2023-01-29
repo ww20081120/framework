@@ -28,29 +28,64 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UUIDUtil {
-    private static boolean IS_THREADLOCALRANDOM_AVAILABLE = false;
+    /** */
+    private static boolean isThreadlocalrandomAvailable = false;
 
+    /** */
     private static Random random;
 
-    private static final long leastSigBits;
+    /** */
+    private static final long LEAST_SIG_BITS;
 
-    private static final ReentrantLock lock = new ReentrantLock();
+    /** */
+    private static final ReentrantLock LOCK = new ReentrantLock();
 
+    /** */
     private static long lastTime;
+
+    /** */
+    private static final int NUM_8 = 8;
+
+    /** */
+    private static final int NUM_16 = 16;
+
+    /** */
+    private static final int NUM_32 = 32;
+
+    /** */
+    private static final int NUM_48 = 48;
+
+    /** */
+    private static final int NUM = 0xff;
+
+    /** */
+    private static final int NUM_0 = 0x1000;
+
+    /** */
+    private static final int NUMF_0 = 0x0FFF;
+
+    /** */
+    private static final int NUM_10000 = 10000;
+
+    /** */
+    private static final long NUMS = 0x01B21DD213814000L;
+
+    /** */
+    private static final long NUMSL = 0xFFFF00000000L;
 
     static {
         try {
-            IS_THREADLOCALRANDOM_AVAILABLE = null != UUIDUtil.class.getClassLoader()
+            isThreadlocalrandomAvailable = null != UUIDUtil.class.getClassLoader()
                 .loadClass("java.util.concurrent.ThreadLocalRandom");
         }
         catch (ClassNotFoundException e) {
             LoggerUtil.error(e);
         }
 
-        byte[] seed = new SecureRandom().generateSeed(8);
-        leastSigBits = new BigInteger(seed).longValue();
-        if (!IS_THREADLOCALRANDOM_AVAILABLE) {
-            random = new Random(leastSigBits);
+        byte[] seed = new SecureRandom().generateSeed(NUM_8);
+        LEAST_SIG_BITS = new BigInteger(seed).longValue();
+        if (!isThreadlocalrandomAvailable) {
+            random = new Random(LEAST_SIG_BITS);
         }
     }
 
@@ -60,8 +95,8 @@ public class UUIDUtil {
      * @return the new UUID
      */
     public static UUID random() {
-        byte[] randomBytes = new byte[16];
-        if (IS_THREADLOCALRANDOM_AVAILABLE) {
+        byte[] randomBytes = new byte[NUM_16];
+        if (isThreadlocalrandomAvailable) {
             java.util.concurrent.ThreadLocalRandom.current().nextBytes(randomBytes);
         }
         else {
@@ -69,12 +104,12 @@ public class UUIDUtil {
         }
 
         long mostSigBits = 0;
-        for (int i = 0; i < 8; i++) {
-            mostSigBits = (mostSigBits << 8) | (randomBytes[i] & 0xff);
+        for (int i = 0; i < NUM_8; i++) {
+            mostSigBits = (mostSigBits << NUM_8) | (randomBytes[i] & NUM);
         }
         long leastSigBits = 0;
-        for (int i = 8; i < 16; i++) {
-            leastSigBits = (leastSigBits << 8) | (randomBytes[i] & 0xff);
+        for (int i = NUM_8; i < NUM_16; i++) {
+            leastSigBits = (leastSigBits << NUM_8) | (randomBytes[i] & NUM);
         }
 
         return new UUID(mostSigBits, leastSigBits);
@@ -91,13 +126,13 @@ public class UUIDUtil {
 
     /**
      * Create a new time-based UUID.
-     *
+     * @param currentTimeMillis
      * @return the new UUID
      */
-    public static UUID create(long currentTimeMillis) {
-        long timeMillis = (currentTimeMillis * 10000) + 0x01B21DD213814000L;
+    public static UUID create(final long currentTimeMillis) {
+        long timeMillis = (currentTimeMillis * NUM_10000) + NUMS;
 
-        lock.lock();
+        LOCK.lock();
         try {
             if (timeMillis > lastTime) {
                 lastTime = timeMillis;
@@ -107,19 +142,19 @@ public class UUIDUtil {
             }
         }
         finally {
-            lock.unlock();
+            LOCK.unlock();
         }
 
         // time low
-        long mostSigBits = timeMillis << 32;
+        long mostSigBits = timeMillis << NUM_32;
 
         // time mid
-        mostSigBits |= (timeMillis & 0xFFFF00000000L) >> 16;
+        mostSigBits |= (timeMillis & NUMSL) >> NUM_16;
 
         // time hi and version
-        mostSigBits |= 0x1000 | ((timeMillis >> 48) & 0x0FFF); // version 1
+        mostSigBits |= NUM_0 | ((timeMillis >> NUM_48) & NUMF_0); // version 1
 
-        return new UUID(mostSigBits, leastSigBits);
+        return new UUID(mostSigBits, LEAST_SIG_BITS);
     }
 
 }

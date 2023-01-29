@@ -26,11 +26,10 @@ public abstract class AbstractCache implements ICache {
      * @author 王伟<br>
      * @taskId <br>
      * @param key
-     * @param type
      * @return <br>
      */
     @Override
-    public <T> T get(String key) {
+    public <T> T get(final String key) {
         byte[] datas = get(key.getBytes());
         return getValue(datas);
     }
@@ -72,10 +71,9 @@ public abstract class AbstractCache implements ICache {
      * @author 王伟<br>
      * @taskId <br>
      * @param key
-     * @param value <br>
      */
     @Override
-    public <T> void put(String key, int seconds, T t) {
+    public <T> void put(final String key, final int seconds, final T t) {
         byte[] keys = key.getBytes();
         put(keys, seconds, getData(t));
     }

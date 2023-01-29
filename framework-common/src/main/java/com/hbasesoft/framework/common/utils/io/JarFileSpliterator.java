@@ -32,21 +32,37 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
 public class JarFileSpliterator implements Spliterator<String> {
+
+    /** */
     private final String prefix;
 
+    /** */
     private Enumeration<URL> dirs;
 
+    /** */
     private byte subState = -1;
 
+    /** */
     private URL current;
 
+    /** */
     private Enumeration<JarEntry> entries;
 
+    /** */
     private Stack<File> files;
 
+    /** */
     private int filePrefixLength;
 
-    public JarFileSpliterator(String prefix) throws IOException {
+    /**
+     * @Method JarFileSpliterator
+     * @param prefix
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:43
+    */
+    public JarFileSpliterator(final String prefix) throws IOException {
         this.prefix = prefix;
         dirs = this.getClass().getClassLoader().getResources(prefix);
     }
@@ -163,7 +179,7 @@ public class JarFileSpliterator implements Spliterator<String> {
      * @return <br>
      */
     @Override
-    public boolean tryAdvance(Consumer<? super String> action) {
+    public boolean tryAdvance(final Consumer<? super String> action) {
         if (action == null) {
             throw new NullPointerException();
         }

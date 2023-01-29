@@ -34,10 +34,10 @@ public class Exit implements CommandHandler<Option> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param options <br>
+     * @param cmd <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
         shell.exit();
     }
 

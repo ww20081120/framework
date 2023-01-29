@@ -51,22 +51,36 @@ import com.hbasesoft.framework.log.flume.core.EventSerializer;
  */
 public class SpringJdbcTemplateClient implements JdbcClient {
 
+    /** */
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
+    /** */
     private final EventSerializer serializer;
 
+    /** */
     private List<Map<String, Object>> datas;
 
+    /** */
     private final String insertSql;
 
+    /** */
     private String idKey;
 
+    /** */
     private String createTimeKey;
 
-    /** 
-     *  
+    /**
+     * @Method SpringJdbcTemplateClient
+     * @param datasourceCode
+     * @param tableName
+     * @param serializer
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:22
      */
-    public SpringJdbcTemplateClient(String datasourceCode, String tableName, EventSerializer serializer) {
+    public SpringJdbcTemplateClient(final String datasourceCode, final String tableName,
+        final EventSerializer serializer) {
         DataSource dataSource = DataSourceUtil.getDataSource(datasourceCode);
         Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, datasourceCode);
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
@@ -80,10 +94,11 @@ public class SpringJdbcTemplateClient implements JdbcClient {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param dataSource
      * @param tableName
      * @return <br>
      */
-    private String getInsertSql(DataSource dataSource, String tableName) {
+    private String getInsertSql(final DataSource dataSource, final String tableName) {
         StringBuilder builder = new StringBuilder();
         builder.append("insert into ").append(tableName).append(" (");
 
@@ -126,7 +141,7 @@ public class SpringJdbcTemplateClient implements JdbcClient {
      * @throws Exception <br>
      */
     @Override
-    public void addEvent(Event event) throws Exception {
+    public void addEvent(final Event event) throws Exception {
         String content = serializer.getContentBuilder(event);
         JSONObject obj = JSONObject.parseObject(content);
         if (StringUtils.isNotEmpty(idKey) && !obj.containsKey(idKey)) {
@@ -176,7 +191,7 @@ public class SpringJdbcTemplateClient implements JdbcClient {
         try {
             jdbcTemplate.getJdbcOperations().batchUpdate(pscf.getSql(), new BatchPreparedStatementSetter() {
                 @Override
-                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                public void setValues(final PreparedStatement ps, final int i) throws SQLException {
                     Object[] values = NamedParameterUtils.buildValueArray(parsedSql, sources[i], null);
                     pscf.newPreparedStatementSetter(values).setValues(ps);
                 }
@@ -202,7 +217,7 @@ public class SpringJdbcTemplateClient implements JdbcClient {
      * @param context <br>
      */
     @Override
-    public void configure(Context context) {
+    public void configure(final Context context) {
     }
 
     /**

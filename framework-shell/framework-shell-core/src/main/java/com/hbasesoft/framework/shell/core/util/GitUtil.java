@@ -47,23 +47,36 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  */
 public class GitUtil {
 
+    /** */
     private static final String REMOTE_NAME = "origin";
 
+    /** */
     private static final String LOG_FILE_NAME = "logfile";
 
+    /** */
     private Git git;
 
+    /** */
     private CredentialsProvider credentialsProvider;
 
+    /** */
     private String repo;
 
+    /** */
     private LinkedBlockingDeque<String> logQueue = new LinkedBlockingDeque<>();
 
+    /** */
+    private static final int NUM5 = 5;
+
+    /** */
+    private static final int NUM1000 = 1000;
+
+    /** */
     private Thread sendLogThread = new Thread() {
         public void run() {
             while (!Thread.interrupted()) {
                 try {
-                    String msg = logQueue.poll(5, TimeUnit.MILLISECONDS);
+                    String msg = logQueue.poll(NUM5, TimeUnit.MILLISECONDS);
                     if (StringUtils.isNotEmpty(msg)) {
                         git.pull().setCredentialsProvider(credentialsProvider).call();
                         try (PrintWriter out = new PrintWriter(new FileWriter(new File(repo, LOG_FILE_NAME)))) {
@@ -77,7 +90,7 @@ public class GitUtil {
                 catch (Exception e) {
                     e.printStackTrace();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(NUM1000);
                     }
                     catch (InterruptedException e1) {
                         e1.printStackTrace();
@@ -89,7 +102,15 @@ public class GitUtil {
         }
     };
 
-    public GitUtil(String repo) throws IOException, IllegalStateException, GitAPIException {
+    /**
+     * @Method GitUtil
+     * @param repo
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:20
+    */
+    public GitUtil(final String repo) throws IOException, IllegalStateException, GitAPIException {
         this.repo = repo;
         File gitDir = new File(repo);
         if (!gitDir.exists()) {
@@ -105,7 +126,16 @@ public class GitUtil {
 
     }
 
-    public void login(String username, String password, String remote)
+    /**
+     * @Method login
+     * @param username
+     * @param password
+     * @param remote
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:20
+    */
+    public void login(final String username, final String password, final String remote)
         throws InvalidRemoteException, TransportException, GitAPIException, URISyntaxException {
 
         // 设置证书
@@ -147,11 +177,25 @@ public class GitUtil {
         sendLogThread.start();
     }
 
-    public void addLog(String log) {
+    /**
+     * @Method addLog
+     * @param log
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:21
+    */
+    public void addLog(final String log) {
         logQueue.offer(log);
     }
 
-    public void addSyncLog(String log) throws WrongRepositoryStateException, InvalidConfigurationException,
+    /**
+     * @Method addSyncLog
+     * @param log
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:21
+    */
+    public void addSyncLog(final String log) throws WrongRepositoryStateException, InvalidConfigurationException,
         InvalidRemoteException, CanceledException, RefNotFoundException, RefNotAdvertisedException, NoHeadException,
         TransportException, GitAPIException, IOException {
 

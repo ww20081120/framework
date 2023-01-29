@@ -17,6 +17,14 @@ package com.hbasesoft.framework.log.demo;
  */
 public interface DemoService {
 
+    /**
+     * @Method say
+     * @param name
+     * @return java.lang.String
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:55
+    */
     String say(String name);
 
 }

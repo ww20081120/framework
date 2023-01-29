@@ -33,11 +33,12 @@ public class TxCheckinfoEntity extends BaseEntity {
      */
     private static final long serialVersionUID = 1L;
 
+    /** */
     @PrimaryKeyColumn(name = "id", ordinal = 1, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
     private String id;
 
-    @PrimaryKeyColumn(name = "mark", ordinal = 2, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
     /** mark */
+    @PrimaryKeyColumn(name = "mark", ordinal = 2, type = PrimaryKeyType.PARTITIONED, ordering = Ordering.DESCENDING)
     private String mark;
 
     /** result */

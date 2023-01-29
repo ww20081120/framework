@@ -28,12 +28,16 @@ import com.hbasesoft.framework.log.flume.core.TimestampedEvent;
  */
 public class TimeBasedIndexNameBuilder implements IndexNameBuilder {
 
+    /** */
     public static final String DATE_FORMAT = "dateFormat";
 
+    /** */
     public static final String DEFAULT_DATE_FORMAT = "yyyy.MM.dd";
 
+    /** */
     private String indexPrefix;
 
+    /** */
     private String dateFormatString;
 
     /**
@@ -44,7 +48,7 @@ public class TimeBasedIndexNameBuilder implements IndexNameBuilder {
      * @param context <br>
      */
     @Override
-    public void configure(Context context) {
+    public void configure(final Context context) {
         dateFormatString = context.getString(DATE_FORMAT);
         if (StringUtils.isBlank(dateFormatString)) {
             dateFormatString = DEFAULT_DATE_FORMAT;
@@ -60,7 +64,7 @@ public class TimeBasedIndexNameBuilder implements IndexNameBuilder {
      * @param conf <br>
      */
     @Override
-    public void configure(ComponentConfiguration conf) {
+    public void configure(final ComponentConfiguration conf) {
     }
 
     /**
@@ -72,7 +76,7 @@ public class TimeBasedIndexNameBuilder implements IndexNameBuilder {
      * @return <br>
      */
     @Override
-    public String getIndexName(Event event) {
+    public String getIndexName(final Event event) {
         TimestampedEvent timestampedEvent = new TimestampedEvent(event);
         long timestamp = timestampedEvent.getTimestamp();
         String realIndexPrefix = getIndexPrefix(event);
@@ -89,7 +93,7 @@ public class TimeBasedIndexNameBuilder implements IndexNameBuilder {
      * @return <br>
      */
     @Override
-    public String getIndexPrefix(Event event) {
+    public String getIndexPrefix(final Event event) {
         return BucketPath.escapeString(indexPrefix, event.getHeaders());
     }
 

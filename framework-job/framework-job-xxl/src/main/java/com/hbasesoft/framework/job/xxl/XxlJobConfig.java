@@ -25,6 +25,20 @@ import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 @Configuration
 public class XxlJobConfig {
 
+    /** */
+    private static final int NUM30 = 30;
+
+    /** */
+    private static final int NUM9999 = 9999;
+
+    /**
+     * @Method xxlJobExecutor
+     * @param
+     * @return com.xxl.job.core.executor.impl.XxlJobSpringExecutor
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 16:13
+    */
     @Bean
     public XxlJobSpringExecutor xxlJobExecutor() {
 
@@ -52,7 +66,7 @@ public class XxlJobConfig {
             xxlJobSpringExecutor.setIp(ip);
         }
         // 执行器端口号 [选填]：小于等于0则自动获取；默认端口为9999，单机部署多个执行器时，注意要配置不同执行器端口；
-        xxlJobSpringExecutor.setPort(PropertyHolder.getIntProperty("job.xxl.executor.port", 9999));
+        xxlJobSpringExecutor.setPort(PropertyHolder.getIntProperty("job.xxl.executor.port", NUM9999));
 
         // 执行器运行日志文件存储磁盘路径 [选填] ：需要对该路径拥有读写权限；为空则使用默认路径；
         xxlJobSpringExecutor.setLogPath(PropertyHolder.getProperty("job.xxl.executor.logpath",
@@ -61,7 +75,7 @@ public class XxlJobConfig {
 
         // 执行器日志文件保存天数 [选填] ： 过期日志自动清理, 限制值大于等于3时生效; 否则, 如-1, 关闭自动清理功能；
         xxlJobSpringExecutor
-            .setLogRetentionDays(PropertyHolder.getIntProperty("job.xxl.executor.logretentiondays", 30));
+            .setLogRetentionDays(PropertyHolder.getIntProperty("job.xxl.executor.logretentiondays", NUM30));
         return xxlJobSpringExecutor;
 
     }

@@ -24,6 +24,7 @@ import lombok.Setter;
 @Setter
 public abstract class AbstractOption {
 
+    /** */
     @Parameter(names = {
         "--help", "-h"
     }, help = true, order = 0, description = "帮助")

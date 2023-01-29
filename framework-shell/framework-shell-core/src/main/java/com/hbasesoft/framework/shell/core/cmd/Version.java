@@ -28,6 +28,8 @@ import com.hbasesoft.framework.shell.core.vo.AbstractOption;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.PrintStream;
+
 /**
  * <Description> <br>
  * 
@@ -49,7 +51,7 @@ public class Version implements CommandHandler<Option> {
      * @param option <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
         String nexus = PropertyHolder.getProperty("project.server.nexus");
         Assert.notEmpty(nexus, "升级服务器地址未配置，请检查project.server.nexus配置项");
 
@@ -62,9 +64,9 @@ public class Version implements CommandHandler<Option> {
         String groupId = PropertyHolder.getProperty("project.groupId");
         Assert.notEmpty(groupId, "请增加 project.groupId=@project.groupId@ 配置");
 
-        String _gid = StringUtils.replace(groupId, ".", "/");
+        String gids = StringUtils.replace(groupId, ".", "/");
 
-        String basePath = new StringBuilder().append(nexus).append("/repository/maven-releases/").append(_gid)
+        String basePath = new StringBuilder().append(nexus).append("/repository/maven-releases/").append(gids)
             .append('/').append(artifactId).append('/').toString();
 
         String lastVersion = getLastVersion(basePath + "maven-metadata.xml", shell);
@@ -72,17 +74,19 @@ public class Version implements CommandHandler<Option> {
 
         String filePath = new StringBuilder().append(basePath).append(lastVersion).append('/').append(artifactId)
             .append('-').append(lastVersion).append(".jar").toString();
+
+        PrintStream shellOut = shell.getOut();
         if (version.compareTo(lastVersion) >= 0) {
-            shell.out.println("当前已经是最新版本!");
-            shell.out.println("下载地址: " + filePath);
+            shellOut.println("当前已经是最新版本!");
+            shellOut.println("下载地址: " + filePath);
         }
         else {
-            shell.out.println("最新版本为：" + lastVersion);
-            shell.out.println("请使用下面的命令进行下载升级: curl -O " + filePath);
+            shellOut.println("最新版本为：" + lastVersion);
+            shellOut.println("请使用下面的命令进行下载升级: curl -O " + filePath);
         }
     }
 
-    private String getLastVersion(String url, Shell shell) {
+    private String getLastVersion(final String url, final Shell shell) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setValidating(false);
         try {
@@ -112,7 +116,7 @@ public class Version implements CommandHandler<Option> {
 
         }
         catch (Exception e) {
-            shell.out.println("获取最新版本失败" + e.getMessage());
+            shell.getOut().println("获取最新版本失败" + e.getMessage());
         }
         return null;
     }

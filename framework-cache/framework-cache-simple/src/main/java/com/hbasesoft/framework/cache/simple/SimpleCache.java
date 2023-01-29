@@ -30,6 +30,7 @@ public class SimpleCache extends AbstractCache {
      */
     private static final String DEFAULT_CACHE_DIR = "/";
 
+    /** */
     private static final int MAX_SIZE = PropertyHolder.getIntProperty("cache.max_size", 10000);
 
     /**
@@ -103,7 +104,7 @@ public class SimpleCache extends AbstractCache {
      * @param value <br>
      */
     @Override
-    public void put(final byte[] key, int seconds, final byte[] value) {
+    public void put(final byte[] key, final int seconds, final byte[] value) {
         putNodeValue(DEFAULT_CACHE_DIR.getBytes(), 0, key, value);
     }
 
@@ -130,7 +131,7 @@ public class SimpleCache extends AbstractCache {
      * @param dataMap <br>
      */
     @Override
-    public void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
+    public void putNode(final byte[] key, final int seconds, final Map<byte[], byte[]> dataMap) {
         Cache<String, byte[]> cache = buildCache(seconds);
         cache.putAll(byte2StringMap(dataMap));
         this.cachesMap.put(new String(key), cache);
@@ -199,7 +200,7 @@ public class SimpleCache extends AbstractCache {
         }
     }
 
-    private Cache<String, byte[]> buildCache(int seconds) {
+    private Cache<String, byte[]> buildCache(final int seconds) {
         Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
         if (seconds > 0) {
             builder.expireAfterWrite(seconds, TimeUnit.SECONDS);
@@ -207,7 +208,7 @@ public class SimpleCache extends AbstractCache {
         return builder.build();
     }
 
-    private Map<String, byte[]> byte2StringMap(Map<byte[], byte[]> map) {
+    private Map<String, byte[]> byte2StringMap(final Map<byte[], byte[]> map) {
         Map<String, byte[]> m = new HashMap<>();
         if (map != null) {
             for (Entry<byte[], byte[]> entry : map.entrySet()) {
@@ -217,7 +218,7 @@ public class SimpleCache extends AbstractCache {
         return m;
     }
 
-    private Map<byte[], byte[]> string2ByteMap(Map<String, byte[]> map) {
+    private Map<byte[], byte[]> string2ByteMap(final Map<String, byte[]> map) {
         Map<byte[], byte[]> m = new HashMap<>();
         if (map != null) {
             for (Entry<String, byte[]> entry : map.entrySet()) {

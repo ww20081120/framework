@@ -66,6 +66,7 @@ public interface TxCheckinfoDao {
      * @author 王伟<br>
      * @taskId <br>
      * @param checkInfo <br>
+     * @return int
      */
     @Sql("UPDATE FROM T_TX_CHECKINFO SET RESULT = :bean.result WHERE ID = :bean.id AND MARK = :bean.mark")
     int updateCheckInfo(@Param("bean") CheckInfo checkInfo);
@@ -77,6 +78,7 @@ public interface TxCheckinfoDao {
      * @taskId <br>
      * @param id
      * @param mark <br>
+     * @return int
      */
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
     int delCheckInfo(@Param("id") String id, @Param("mark") String mark);

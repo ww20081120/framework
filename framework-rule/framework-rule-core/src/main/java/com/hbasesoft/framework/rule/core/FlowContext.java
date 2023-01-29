@@ -37,17 +37,38 @@ public class FlowContext implements Serializable {
     /** paramMap */
     private Map<String, Object> paramMap;
 
+    /** */
     private Exception exception;
 
+    /** */
     private int code = 0;
 
-    public FlowContext(FlowConfig flowConfig, Map<String, Object> extendUtils, Map<String, Object> paramMap) {
+    /**
+     * @Method FlowContext
+     * @param flowConfig
+     * @param extendUtils
+     * @param paramMap
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:15
+     */
+    public FlowContext(final FlowConfig flowConfig, final Map<String, Object> extendUtils,
+        final Map<String, Object> paramMap) {
         this.flowConfig = flowConfig;
         this.extendUtils = extendUtils;
         this.paramMap = paramMap;
     }
 
-    public FlowContext(FlowConfig flowConfig) {
+    /**
+     * @Method FlowContext
+     * @param flowConfig
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:16
+     */
+    public FlowContext(final FlowConfig flowConfig) {
         this.flowConfig = flowConfig;
         this.paramMap = new HashMap<String, Object>();
         this.extendUtils = new HashMap<String, Object>();
@@ -139,7 +160,7 @@ public class FlowContext implements Serializable {
         return exception;
     }
 
-    public void setException(Exception exception) {
+    public void setException(final Exception exception) {
         this.exception = exception;
     }
 
@@ -147,9 +168,8 @@ public class FlowContext implements Serializable {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(final int code) {
         this.code = code;
     }
-    
-    
+
 }

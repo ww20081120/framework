@@ -109,7 +109,7 @@ public final class ArgsSerializationUtil {
      * @param obj
      * @return <br>
      */
-    public static byte[] updateArg(final byte[] data, final int index, Object obj) {
+    public static byte[] updateArg(final byte[] data, final int index, final Object obj) {
         if (data != null) {
             Object[] args = unserialArgs(data);
             if (index >= 0 && args.length >= index + 1) {

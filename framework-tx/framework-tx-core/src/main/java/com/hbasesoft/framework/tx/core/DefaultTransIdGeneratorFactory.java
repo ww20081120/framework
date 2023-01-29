@@ -8,7 +8,6 @@ package com.hbasesoft.framework.tx.core;
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.tx.core.TransIdGeneratorFactory;
 
 /**
  * <Description> <br>

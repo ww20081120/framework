@@ -32,10 +32,19 @@ import com.hbasesoft.framework.db.core.annotation.DataSource;
 @Component
 public class DynamicDataSourceChangeAdvice implements Ordered {
 
+    /** */
     @Pointcut("execution(public * com.hbasesoft..*(..))")
     public void change() {
     }
 
+    /**
+     * @Method around
+     * @param joinPoint
+     * @return java.lang.Object
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:56
+     */
     @Around("change()")
     public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
 
@@ -65,12 +74,12 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
         }
     }
 
-    private void changeDatasource(DataSource dataSource) {
+    private void changeDatasource(final DataSource dataSource) {
         // 判断增强的字段是否被覆盖，覆盖则走增强的切换数据源
         String enhanceDynamicDataSource = dataSource.enhanceDynamicDataSource();
         if (StringUtils.isNotBlank(enhanceDynamicDataSource)) {
-            EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler = (EnhanceDynamicDataSourceHandler) ContextHolder
-                .getContext().getBean(enhanceDynamicDataSource);
+            EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler =
+                (EnhanceDynamicDataSourceHandler) ContextHolder.getContext().getBean(enhanceDynamicDataSource);
             enhanceDynamicDataSourceHandler.enhanceChangeDbByCode(dataSource.value());
         }
         else {

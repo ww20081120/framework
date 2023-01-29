@@ -27,14 +27,34 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
  */
 public class RemoteShell {
 
-    private static ThreadPoolExecutor executor = new ThreadPoolExecutor(
-        PropertyHolder.getIntProperty("server.executor.coreSize", 5), // 设置核心线程数量
-        PropertyHolder.getIntProperty("server.executor.maxPoolSize", 20), // 线程池维护线程的最大数量
-        PropertyHolder.getIntProperty("server.executor.keepAliveSeconds", 600), TimeUnit.SECONDS, // 允许的空闲时间
-        new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("server.executor.queueCapacity", 10))); // 缓存队列
+    /** */
+    private static final int NUM5 = 5;
 
+    /** */
+    private static final int NUM10 = 10;
+
+    /** */
+    private static final int NUM20 = 20;
+
+    /** */
+    private static final int NUM600 = 600;
+
+    /** */
+    private static final int NUM1000 = 1000;
+
+    /** */
+    private static final int NUM60000 = 60000;
+
+    /** */
+    private static ThreadPoolExecutor executor = new ThreadPoolExecutor(
+        PropertyHolder.getIntProperty("server.executor.coreSize", NUM5), // 设置核心线程数量
+        PropertyHolder.getIntProperty("server.executor.maxPoolSize", NUM20), // 线程池维护线程的最大数量
+        PropertyHolder.getIntProperty("server.executor.keepAliveSeconds", NUM600), TimeUnit.SECONDS, // 允许的空闲时间
+        new ArrayBlockingQueue<>(PropertyHolder.getIntProperty("server.executor.queueCapacity", NUM10))); // 缓存队列
+
+    /** */
     public static void run() throws IOException {
-        int port = PropertyHolder.getIntProperty("server.port", 60000);
+        int port = PropertyHolder.getIntProperty("server.port", NUM60000);
         
         try (ServerSocket severSocket = new ServerSocket(port)) {
             System.out.println("==========>服务端启动成功，端口为" + port + "<===============");
@@ -57,7 +77,7 @@ public class RemoteShell {
                 catch (Exception e) {
                     e.printStackTrace();
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(NUM1000);
                     }
                     catch (InterruptedException e1) {
                         e1.printStackTrace();

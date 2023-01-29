@@ -36,7 +36,7 @@ public final class EventIntercetorHolder {
      * @param interceptor interceptor
      * @param events <br>
      */
-    public static synchronized void registInterceptor(EventInterceptor interceptor, String... events) {
+    public static synchronized void registInterceptor(final EventInterceptor interceptor, final String... events) {
         for (String event : events) {
             List<EventInterceptor> interceptors = intercetorHolder.get(event);
             if (interceptors == null) {
@@ -60,7 +60,7 @@ public final class EventIntercetorHolder {
      * @param event
      * @return <br>
      */
-    public static synchronized List<EventInterceptor> getInterceptors(String event) {
+    public static synchronized List<EventInterceptor> getInterceptors(final String event) {
         return intercetorHolder.get(event);
     }
 }
