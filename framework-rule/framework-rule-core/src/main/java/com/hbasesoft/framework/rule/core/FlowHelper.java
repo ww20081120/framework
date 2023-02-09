@@ -81,8 +81,7 @@ public final class FlowHelper {
         }
         catch (Exception e) {
             LoggerUtil.error("flow process error.", e);
-            FrameworkException fe = e instanceof FrameworkException ? (FrameworkException) e
-                : new FrameworkException(e);
+            FrameworkException fe = e instanceof FrameworkException f ? f : new FrameworkException(e);
             if (throwable) {
                 throw fe;
             }
@@ -104,7 +103,8 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> ErrorCode flowStart(final T bean, final String flowName, final boolean throwable) {
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final String flowName,
+        final boolean throwable) {
         Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");
 
         ErrorCode result = ErrorCodeDef.SUCCESS;
@@ -118,8 +118,7 @@ public final class FlowHelper {
         }
         catch (Exception e) {
             LoggerUtil.error("flow process error.", e);
-            FrameworkException fe = e instanceof FrameworkException ? (FrameworkException) e
-                : new FrameworkException(e);
+            FrameworkException fe = e instanceof FrameworkException f ? f : new FrameworkException(e);
             if (throwable) {
                 throw fe;
             }

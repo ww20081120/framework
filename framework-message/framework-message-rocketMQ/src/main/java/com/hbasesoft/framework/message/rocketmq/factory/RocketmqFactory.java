@@ -228,11 +228,11 @@ public final class RocketmqFactory {
             throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
         }
 
-        if (messageListener instanceof MessageListenerConcurrently) {
-            consumer.registerMessageListener((MessageListenerConcurrently) messageListener);
+        if (messageListener instanceof MessageListenerConcurrently mc) {
+            consumer.registerMessageListener(mc);
         }
-        else if (messageListener instanceof MessageListenerOrderly) {
-            consumer.registerMessageListener((MessageListenerOrderly) messageListener);
+        else if (messageListener instanceof MessageListenerOrderly mo) {
+            consumer.registerMessageListener(mo);
         }
 
         // 延迟5秒再启动，主要是等待spring事件监听相关程序初始化完成，否则，回出现对RocketMQ的消息进行消费后立即发布消息到达的事件，
