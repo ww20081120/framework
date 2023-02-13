@@ -50,8 +50,8 @@ public final class KeyUtil {
             Map<String, Object> paramMap = new TreeMap<String, Object>();
             for (int i = 0; i < parameterAnnotations.length; i++) {
                 for (Annotation annotation : parameterAnnotations[i]) {
-                    if (annotation instanceof Key) {
-                        paramMap.put(((Key) annotation).value(), args[i]);
+                    if (annotation instanceof Key key) {
+                        paramMap.put(key.value(), args[i]);
                         break;
                     }
                 }

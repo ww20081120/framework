@@ -44,8 +44,7 @@ public class TxEventStartupListener implements StartupListener {
             TxEventInterceptor interceptor = new TxEventInterceptor();
 
             for (Entry<String, Object> entry : beans.entrySet()) {
-                if (entry.getValue() instanceof EventListener) {
-                    EventListener eventLinsener = (EventListener) entry.getValue();
+                if (entry.getValue() instanceof EventListener eventLinsener) {
                     Tx tx = AnnotationUtils.findAnnotation(eventLinsener.getClass(), Tx.class);
 
                     if (tx != null) {

@@ -126,8 +126,8 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
             if (entityClazz == null) {
                 Type[] interfacesTypes = clazz.getGenericInterfaces();
                 for (Type t : interfacesTypes) {
-                    if (t instanceof ParameterizedType) {
-                        Type[] genericType2 = ((ParameterizedType) t).getActualTypeArguments();
+                    if (t instanceof ParameterizedType pt) {
+                        Type[] genericType2 = pt.getActualTypeArguments();
                         for (Type t2 : genericType2) {
                             Class<?> t3 = (Class<?>) t2;
                             if (BaseEntity.class.isAssignableFrom(t3)) {

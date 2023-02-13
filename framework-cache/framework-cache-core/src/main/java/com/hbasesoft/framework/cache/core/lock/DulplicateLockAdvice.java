@@ -62,8 +62,7 @@ public class DulplicateLockAdvice {
     @Around("dulplicateLock()")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
-        if (sig instanceof MethodSignature) {
-            MethodSignature msig = (MethodSignature) sig;
+        if (sig instanceof MethodSignature msig) {
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 

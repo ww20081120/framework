@@ -60,8 +60,7 @@ public class TxAdvice {
     @Around("tx()")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
-        if (sig instanceof MethodSignature) {
-            MethodSignature msig = (MethodSignature) sig;
+        if (sig instanceof MethodSignature msig) {
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
@@ -79,7 +78,7 @@ public class TxAdvice {
                         return thisJoinPoint.proceed();
                     }
                     catch (Throwable e) {
-                        throw e instanceof FrameworkException ? (FrameworkException) e : new FrameworkException(e);
+                        throw e instanceof FrameworkException fe ? fe : new FrameworkException(e);
                     }
                 });
             }

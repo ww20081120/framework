@@ -38,7 +38,8 @@ public interface MessageSubscriber {
      * @param channel
      * @param subscribeChannels <br>
      */
-    void onSubscribe(String channel, int subscribeChannels);
+    default void onSubscribe(String channel, int subscribeChannels) {
+    };
 
     /**
      * Description:取消订阅 <br>
@@ -48,7 +49,8 @@ public interface MessageSubscriber {
      * @param channel
      * @param subscribedChannels <br>
      */
-    void onUnsubscribe(String channel, int subscribedChannels);
+    default void onUnsubscribe(String channel, int subscribedChannels) {
+    };
 
     /**
      * Description: subscriberSetting<br>

@@ -20,23 +20,6 @@ import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
  * @see com.hbasesoft.framework.cache.core <br>
  */
 public abstract class AbstractCache implements ICache {
-
-    protected abstract byte[] get(byte[] key);
-
-    protected abstract void put(byte[] key, int seconds, byte[] value);
-
-    protected abstract void remove(byte[] key);
-
-    protected abstract Map<byte[], byte[]> getNode(byte[] node);
-
-    protected abstract void putNode(byte[] key, int seconds, Map<byte[], byte[]> dataMap);
-
-    protected abstract byte[] getNodeValue(byte[] nodeName, byte[] key);
-
-    protected abstract void putNodeValue(byte[] nodeName, int seconds, byte[] key, byte[] t);
-
-    protected abstract void removeNodeValue(byte[] nodeName, byte[] key);
-
     /**
      * Description: <br>
      * 
