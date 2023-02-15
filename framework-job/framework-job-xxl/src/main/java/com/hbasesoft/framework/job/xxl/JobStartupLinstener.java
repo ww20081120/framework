@@ -47,7 +47,7 @@ public class JobStartupLinstener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
 
         // 未开启Job则不进行扫描
         if (!PropertyHolder.getBooleanProperty("job.enable", true)) {

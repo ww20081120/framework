@@ -94,19 +94,28 @@ public interface ElasticSearchSinkConstants {
 
     int DEFAULT_PORT = 9300;
 
+    /** */
     int DEFAULT_TTL = -1;
 
+    /** */
     String DEFAULT_INDEX_NAME = "flume";
 
+    /** */
     String DEFAULT_INDEX_TYPE = "log";
 
+    /** */
     String DEFAULT_CLUSTER_NAME = "elasticsearch";
 
+    /** */
     String DEFAULT_CLIENT_TYPE = "rest";
 
+    /** */
     String TTL_REGEX = "^(\\d+)(\\D*)";
 
+    /** */
     String DEFAULT_SERIALIZER_CLASS = "com.hbasesoft.framework.log.flume.core.LogStashEventSerializer";
 
-    String DEFAULT_INDEX_NAME_BUILDER_CLASS = "com.hbasesoft.framework.log.flume.elasticsearch.TimeBasedIndexNameBuilder";
+    /** */
+    String DEFAULT_INDEX_NAME_BUILDER_CLASS = "com.hbasesoft.framework.log.flume.elasticsearch"
+        + ".TimeBasedIndexNameBuilder";
 }

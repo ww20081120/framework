@@ -34,11 +34,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param obj <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void notNull(Object obj, Object... params) {
+    public static void notNull(final Object obj, final Object... params) {
         if (obj == null) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -50,11 +49,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param obj <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void isNull(Object obj, Object... params) throws RuntimeException {
+    public static void isNull(final Object obj, final Object... params) throws RuntimeException {
         if (obj != null) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -66,11 +64,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void notEmpty(String str, Object... params) throws RuntimeException {
+    public static void notEmpty(final String str, final Object... params) throws RuntimeException {
         if (StringUtils.isEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -82,11 +79,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void isEmpty(String str, Object... params) throws RuntimeException {
+    public static void isEmpty(final String str, final Object... params) throws RuntimeException {
         if (StringUtils.isNotEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -99,11 +95,10 @@ public final class Assert {
      * @taskId <br>
      * @param <T> <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static <T> void notEmpty(T[] str, Object... params) throws RuntimeException {
+    public static <T> void notEmpty(final T[] str, final Object... params) throws RuntimeException {
         if (ArrayUtils.isEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -116,11 +111,10 @@ public final class Assert {
      * @taskId <br>
      * @param <T> <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static <T> void isEmpty(T[] str, Object... params) throws RuntimeException {
+    public static <T> void isEmpty(final T[] str, final Object... params) throws RuntimeException {
         if (!ArrayUtils.isEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -132,11 +126,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void notEmpty(Collection<?> str, Object... params) throws RuntimeException {
+    public static void notEmpty(final Collection<?> str, final Object... params) throws RuntimeException {
         if (CollectionUtils.isEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -148,11 +141,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void isEmpty(Collection<?> str, Object... params) throws RuntimeException {
+    public static void isEmpty(final Collection<?> str, final Object... params) throws RuntimeException {
         if (CollectionUtils.isNotEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -164,11 +156,10 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void notEmpty(Map<?, ?> str, Object... params) throws RuntimeException {
+    public static void notEmpty(final Map<?, ?> str, final Object... params) throws RuntimeException {
         if (MapUtils.isEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
@@ -180,35 +171,68 @@ public final class Assert {
      * @author yang.zhipeng <br>
      * @taskId <br>
      * @param str <br>
-     * @param message <br>
      * @param params <br>
      * @throws RuntimeException <br>
      */
-    public static void isEmpty(Map<?, ?> str, Object... params) throws RuntimeException {
+    public static void isEmpty(final Map<?, ?> str, final Object... params) throws RuntimeException {
         if (MapUtils.isNotEmpty(str)) {
             throw new RuntimeException(Arrays.toString(params));
         }
     }
 
-    public static void equals(Object obj1, Object obj2, Object... params) {
+    /**
+     * @Method equals
+     * @param obj1
+     * @param obj2
+     * @param params
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:43
+    */
+    public static void equals(final Object obj1, final Object obj2, final Object... params) {
         if (!(obj1 != null && obj1.equals(obj2))) {
             throw new RuntimeException(Arrays.toString(params));
         }
     }
 
-    public static void notEquals(Object obj1, Object obj2, Object... params) {
+    /**
+     * @Method notEquals
+     * @param obj1
+     * @param obj2
+     * @param params
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:44
+    */
+    public static void notEquals(final Object obj1, final Object obj2, final Object... params) {
         if ((obj1 != null && obj1.equals(obj2)) || (obj2 != null && obj2.equals(obj1))) {
             throw new RuntimeException(Arrays.toString(params));
         }
     }
 
-    public static void isTrue(boolean result, Object... params) {
+    /**
+     * @Method isTrue
+     * @param result
+     * @param params
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:44
+    */
+    public static void isTrue(final boolean result, final Object... params) {
         if (!result) {
             throw new RuntimeException(Arrays.toString(params));
         }
     }
 
-    public static void isFalse(boolean result, Object... params) {
+    /**
+     * @Method isFalse
+     * @param result
+     * @param params
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:44
+    */
+    public static void isFalse(final boolean result, final Object... params) {
         if (result) {
             throw new RuntimeException(Arrays.toString(params));
         }

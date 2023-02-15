@@ -70,38 +70,74 @@ import com.google.gson.Gson;
 public class TaildirSource extends AbstractSource implements
     PollableSource, Configurable, BatchSizeSupported {
 
-  private static final Logger logger = LoggerFactory.getLogger(TaildirSource.class);
+  /** */
+  private static final Logger LOGGER = LoggerFactory.getLogger(TaildirSource.class);
 
+  /** */
   private Map<String, String> filePaths;
+  /** */
   private Table<String, String, String> headerTable;
+  /** */
   private int batchSize;
+  /** */
   private String positionFilePath;
+  /** */
   private boolean skipToEnd;
+  /** */
   private boolean byteOffsetHeader;
 
+  /** */
   private SourceCounter sourceCounter;
+  /** */
   private ReliableTaildirEventReader reader;
+  /** */
   private ScheduledExecutorService idleFileChecker;
+  /** */
   private ScheduledExecutorService positionWriter;
-  private int retryInterval = 1000;
-  private int maxRetryInterval = 5000;
+  /** */
+  private static final int NUM_1000 = 1000;
+
+  /** */
+  private int retryInterval = NUM_1000;
+
+  /** */
+  private static final int NUM = 1000;
+
+  /** */
+  private final int maxRetryInterval = 5000;
+
+  /** */
   private int idleTimeout;
-  private int checkIdleInterval = 5000;
-  private int writePosInitDelay = 5000;
+
+  /** */
+  private final int checkIdleInterval = 5000;
+
+  /** */
+  private final int writePosInitDelay = 5000;
+
+  /** */
   private int writePosInterval;
+  /** */
   private boolean cachePatternMatching;
 
+  /** */
   private List<Long> existingInodes = new CopyOnWriteArrayList<Long>();
+  /** */
   private List<Long> idleInodes = new CopyOnWriteArrayList<Long>();
+    /** */
   private Long backoffSleepIncrement;
+  /** */
   private Long maxBackOffSleepInterval;
+  /** */
   private boolean fileHeader;
+  /** */
   private String fileHeaderKey;
+  /** */
   private Long maxBatchCount;
 
   @Override
   public synchronized void start() {
-    logger.info("{} TaildirSource source starting with directory: {}", getName(), filePaths);
+    LOGGER.info("{} TaildirSource source starting with directory: {}", getName(), filePaths);
     try {
       reader = new ReliableTaildirEventReader.Builder()
           .filePaths(filePaths)
@@ -113,12 +149,13 @@ public class TaildirSource extends AbstractSource implements
           .annotateFileName(fileHeader)
           .fileNameHeader(fileHeaderKey)
           .build();
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new FlumeException("Error instantiating ReliableTaildirEventReader", e);
     }
     idleFileChecker = Executors.newSingleThreadScheduledExecutor(
         new ThreadFactoryBuilder().setNameFormat("idleFileChecker").build());
-    idleFileChecker.scheduleWithFixedDelay(new idleFileCheckerRunnable(),
+    idleFileChecker.scheduleWithFixedDelay(new IDLEFILECHECKERRUNNABLE(),
         idleTimeout, checkIdleInterval, TimeUnit.MILLISECONDS);
 
     positionWriter = Executors.newSingleThreadScheduledExecutor(
@@ -127,7 +164,7 @@ public class TaildirSource extends AbstractSource implements
         writePosInitDelay, writePosInterval, TimeUnit.MILLISECONDS);
 
     super.start();
-    logger.debug("TaildirSource started");
+    LOGGER.debug("TaildirSource started");
     sourceCounter.start();
   }
 
@@ -145,13 +182,15 @@ public class TaildirSource extends AbstractSource implements
       // write the last position
       writePosition();
       reader.close();
-    } catch (InterruptedException e) {
-      logger.info("Interrupted while awaiting termination", e);
-    } catch (IOException e) {
-      logger.info("Failed: " + e.getMessage(), e);
+    }
+    catch (InterruptedException e) {
+      LOGGER.info("Interrupted while awaiting termination", e);
+    }
+    catch (IOException e) {
+      LOGGER.info("Failed: " + e.getMessage(), e);
     }
     sourceCounter.stop();
-    logger.info("Taildir source {} stopped. Metrics: {}", getName(), sourceCounter);
+    LOGGER.info("Taildir source {} stopped. Metrics: {}", getName(), sourceCounter);
   }
 
   @Override
@@ -162,7 +201,7 @@ public class TaildirSource extends AbstractSource implements
   }
 
   @Override
-  public synchronized void configure(Context context) {
+  public synchronized void configure(final Context context) {
     String fileGroups = context.getString(FILE_GROUPS);
     Preconditions.checkState(fileGroups != null, "Missing param: " + FILE_GROUPS);
 
@@ -176,7 +215,8 @@ public class TaildirSource extends AbstractSource implements
     Path positionFile = Paths.get(positionFilePath);
     try {
       Files.createDirectories(positionFile.getParent());
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new FlumeException("Error creating positionFile parent directories", e);
     }
     headerTable = getTable(context, HEADERS_PREFIX);
@@ -199,7 +239,7 @@ public class TaildirSource extends AbstractSource implements
     maxBatchCount = context.getLong(MAX_BATCH_COUNT, DEFAULT_MAX_BATCH_COUNT);
     if (maxBatchCount <= 0) {
       maxBatchCount = DEFAULT_MAX_BATCH_COUNT;
-      logger.warn("Invalid maxBatchCount specified, initializing source "
+      LOGGER.warn("Invalid maxBatchCount specified, initializing source "
           + "default maxBatchCount of {}", maxBatchCount);
     }
 
@@ -213,7 +253,7 @@ public class TaildirSource extends AbstractSource implements
     return batchSize;
   }
 
-  private Map<String, String> selectByKeys(Map<String, String> map, String[] keys) {
+  private Map<String, String> selectByKeys(final Map<String, String> map, final String[] keys) {
     Map<String, String> result = Maps.newHashMap();
     for (String key : keys) {
       if (map.containsKey(key)) {
@@ -223,7 +263,7 @@ public class TaildirSource extends AbstractSource implements
     return result;
   }
 
-  private Table<String, String, String> getTable(Context context, String prefix) {
+  private Table<String, String, String> getTable(final Context context, final String prefix) {
     Table<String, String, String> table = HashBasedTable.create();
     for (Entry<String, String> e : context.getSubProperties(prefix).entrySet()) {
       String[] parts = e.getKey().split("\\.", 2);
@@ -253,8 +293,9 @@ public class TaildirSource extends AbstractSource implements
         }
       }
       closeTailFiles();
-    } catch (Throwable t) {
-      logger.error("Unable to tail files", t);
+    }
+    catch (Throwable t) {
+      LOGGER.error("Unable to tail files", t);
       sourceCounter.incrementEventReadFail();
       status = Status.BACKOFF;
     }
@@ -271,7 +312,7 @@ public class TaildirSource extends AbstractSource implements
     return maxBackOffSleepInterval;
   }
 
-  private boolean tailFileProcess(TailFile tf, boolean backoffWithoutNL)
+  private boolean tailFileProcess(final TailFile tf, final boolean backoffWithoutNL)
       throws IOException, InterruptedException {
     long batchCount = 0;
     while (true) {
@@ -285,24 +326,25 @@ public class TaildirSource extends AbstractSource implements
       try {
         getChannelProcessor().processEventBatch(events);
         reader.commit();
-      } catch (ChannelException ex) {
-        logger.warn("The channel is full or unexpected failure. " +
-            "The source will try again after " + retryInterval + " ms");
+      }
+      catch (ChannelException ex) {
+        LOGGER.warn("The channel is full or unexpected failure. " + "The source will try again after "
+            + retryInterval + " ms");
         sourceCounter.incrementChannelWriteFail();
         TimeUnit.MILLISECONDS.sleep(retryInterval);
         retryInterval = retryInterval << 1;
         retryInterval = Math.min(retryInterval, maxRetryInterval);
         continue;
       }
-      retryInterval = 1000;
+      retryInterval = NUM;
       sourceCounter.addToEventAcceptedCount(events.size());
       sourceCounter.incrementAppendBatchAcceptedCount();
       if (events.size() < batchSize) {
-        logger.debug("The events taken from " + tf.getPath() + " is less than " + batchSize);
+        LOGGER.debug("The events taken from " + tf.getPath() + " is less than " + batchSize);
         return false;
       }
       if (++batchCount >= maxBatchCount) {
-        logger.debug("The batches read from the same file is larger than " + maxBatchCount );
+        LOGGER.debug("The batches read from the same file is larger than " + maxBatchCount);
         return true;
       }
     }
@@ -314,7 +356,7 @@ public class TaildirSource extends AbstractSource implements
       if (tf.getRaf() != null) { // when file has not closed yet
         tailFileProcess(tf, false);
         tf.close();
-        logger.info("Closed file: " + tf.getPath() + ", inode: " + inode + ", pos: " + tf.getPos());
+        LOGGER.info("Closed file: " + tf.getPath() + ", inode: " + inode + ", pos: " + tf.getPos());
       }
     }
     idleInodes.clear();
@@ -323,7 +365,7 @@ public class TaildirSource extends AbstractSource implements
   /**
    * Runnable class that checks whether there are files which should be closed.
    */
-  private class idleFileCheckerRunnable implements Runnable {
+  private class IDLEFILECHECKERRUNNABLE implements Runnable {
     @Override
     public void run() {
       try {
@@ -333,8 +375,9 @@ public class TaildirSource extends AbstractSource implements
             idleInodes.add(tf.getInode());
           }
         }
-      } catch (Throwable t) {
-        logger.error("Uncaught exception in IdleFileChecker thread", t);
+      }
+      catch (Throwable t) {
+        LOGGER.error("Uncaught exception in IdleFileChecker thread", t);
         sourceCounter.incrementGenericProcessingFail();
       }
     }
@@ -360,14 +403,19 @@ public class TaildirSource extends AbstractSource implements
         String json = toPosInfoJson();
         writer.write(json);
       }
-    } catch (Throwable t) {
-      logger.error("Failed writing positionFile", t);
+    }
+    catch (Throwable t) {
+      LOGGER.error("Failed writing positionFile", t);
       sourceCounter.incrementGenericProcessingFail();
-    } finally {
+    }
+    finally {
       try {
-        if (writer != null) writer.close();
-      } catch (IOException e) {
-        logger.error("Error: " + e.getMessage(), e);
+        if (writer != null) {
+          writer.close();
+        }
+      }
+      catch (IOException e) {
+        LOGGER.error("Error: " + e.getMessage(), e);
         sourceCounter.incrementGenericProcessingFail();
       }
     }

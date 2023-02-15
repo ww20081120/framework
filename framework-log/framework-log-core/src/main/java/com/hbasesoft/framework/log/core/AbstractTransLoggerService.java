@@ -35,6 +35,7 @@ public abstract class AbstractTransLoggerService implements TransLoggerService {
      */
     private Logger logger = new Logger(AbstractTransLoggerService.class);
 
+    /** */
     private static Map<String, TransBean> transBeanHolder = new HashMap<>();
 
     /**

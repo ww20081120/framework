@@ -15,7 +15,6 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-import redis.clients.jedis.ShardedJedis;
 
 /**
  * <Description> <br>
@@ -41,19 +40,26 @@ public abstract class AbstractRedisCache extends AbstractCache {
     /** 是否校验完成 */
     private static final boolean VALIDATE = false;
 
+    /**  */
+    private static final int NUM_60000 = 60000;
+
+    /**  */
+    private static final int NUM_30000 = 30000;
+
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
+     * @param config
+     * @param <T>
      */
-    protected <T> void setConfig(GenericObjectPoolConfig<T> config) {
+    protected <T> void setConfig(final GenericObjectPoolConfig<T> config) {
         config.setTestWhileIdle(PropertyHolder.getBooleanProperty("cache.redis.testWhileIdle", true));
         config.setMinEvictableIdleTimeMillis(
-            PropertyHolder.getIntProperty("cache.redis.minEvictableIdleTimeMillis", 60000));
+            PropertyHolder.getIntProperty("cache.redis.minEvictableIdleTimeMillis", NUM_60000));
         config.setTimeBetweenEvictionRunsMillis(
-            PropertyHolder.getIntProperty("cache.redis.timeBetweenEvictionRunsMillis", 30000));
+            PropertyHolder.getIntProperty("cache.redis.timeBetweenEvictionRunsMillis", NUM_30000));
         config.setNumTestsPerEvictionRun(PropertyHolder.getIntProperty("cache.redis.numTestsPerEvictionRun", -1));
 
         // 控制一个pool最多有多少个状态为idle(空闲的)的jedis实例。

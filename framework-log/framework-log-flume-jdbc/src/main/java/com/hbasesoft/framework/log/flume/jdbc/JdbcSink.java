@@ -37,24 +37,34 @@ import com.hbasesoft.framework.log.flume.jdbc.client.JdbcClientFactory;
  */
 public class JdbcSink extends AbstractSink implements Configurable, BatchSizeSupported {
 
-    private static final int defaultBatchSize = 100;
+    /** */
+    private static final int DEFAULT_BATCH_SIZE = 100;
 
-    private int batchSize = defaultBatchSize;
+    /** */
+    private int batchSize = DEFAULT_BATCH_SIZE;
 
+    /** */
     private boolean rollback = true;
 
+    /** */
     private String datasourceCode = JdbcSinkConstants.DEFAULT_DATASOURCE_CODE;
 
+    /** */
     private String tableName = JdbcSinkConstants.DEFAULT_TABLE_NAME;
 
+    /** */
     private Context clientContext = null;
 
+    /** */
     private EventSerializer eventSerializer;
 
+    /** */
     private SinkCounter sinkCounter;
 
+    /** */
     private JdbcClient client = null;
 
+    /** */
     private final CounterGroup counterGroup = new CounterGroup();
 
     /**
@@ -151,7 +161,7 @@ public class JdbcSink extends AbstractSink implements Configurable, BatchSizeSup
      * @param context <br>
      */
     @Override
-    public void configure(Context context) {
+    public void configure(final Context context) {
 
         if (StringUtils.isNotBlank(context.getString(JdbcSinkConstants.TABLE_NAME))) {
             this.tableName = context.getString(JdbcSinkConstants.TABLE_NAME);

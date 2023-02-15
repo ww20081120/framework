@@ -16,5 +16,13 @@ package com.hbasesoft.framework.cache.core.lock;
  * @see com.hbasesoft.framework.cache.core <br>
  */
 public interface LockLoader {
+    /**
+     * @Method getInstance
+     * @param lockName
+     * @return com.hbasesoft.framework.cache.core.lock.Lock
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:52
+    */
     Lock getInstance(String lockName);
 }

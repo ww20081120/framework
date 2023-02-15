@@ -24,6 +24,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 public class DefaultLock implements Lock {
 
+    /** */
     private static final int DEFAULT_IDEL_TIME = 100;
 
     /** DEFAULT_MIN_IDEL_TIME */
@@ -35,11 +36,21 @@ public class DefaultLock implements Lock {
     /** RANDOM */
     private static final Random RANDOM = new Random();
 
+    /** */
     private ReentrantLock reentrantLock = new ReentrantLock();
 
+    /** */
     private String lockName;
 
-    public DefaultLock(String lockName) {
+    /**
+     * @Method DefaultLock
+     * @param lockName
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:53
+    */
+    public DefaultLock(final String lockName) {
         this.lockName = lockName;
     }
 
@@ -51,7 +62,7 @@ public class DefaultLock implements Lock {
      * @param timeout <br>
      */
     @Override
-    public void lock(int timeout) {
+    public void lock(final int timeout) {
 
         LoggerUtil.debug("开始锁住{0},timeout={1},expireTime={2}", lockName, timeout);
         long lockTime = System.currentTimeMillis();
@@ -89,7 +100,7 @@ public class DefaultLock implements Lock {
      * @return <br>
      */
     @Override
-    public boolean tryLock(int timeout) {
+    public boolean tryLock(final int timeout) {
         try {
             return reentrantLock.tryLock(timeout, TimeUnit.SECONDS);
         }

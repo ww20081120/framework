@@ -43,70 +43,99 @@ import com.google.gson.stream.JsonReader;
  */
 @InterfaceAudience.Private
 @InterfaceStability.Evolving
-public class ReliableTaildirEventReader implements ReliableEventReader {
-    private static final Logger logger = LoggerFactory.getLogger(ReliableTaildirEventReader.class);
+public final class ReliableTaildirEventReader implements ReliableEventReader {
 
+    /** */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReliableTaildirEventReader.class);
+
+    /** */
     private final List<TaildirMatcher> taildirCache;
 
+    /** */
     private final Table<String, String, String> headerTable;
 
+    /** */
     private TailFile currentFile = null;
 
+    /** */
     private Map<Long, TailFile> tailFiles = Maps.newHashMap();
 
+    /** */
     private long updateTime;
 
+    /** */
     private boolean addByteOffset;
 
+    /** */
     private boolean cachePatternMatching;
 
+    /** */
     private boolean committed = true;
 
+    /** */
     private final boolean annotateFileName;
 
+    /** */
     private final String fileNameHeader;
 
+    /** */
+    private final int params3 = 3;
+
+    /** */
+    private final int params4 = 4;
+
+    /** */
+    private final int params5 = 5;
+
     /**
-     * Create a ReliableTaildirEventReader to watch the given directory.
-     */
-    private ReliableTaildirEventReader(Map<String, String> filePaths, Table<String, String, String> headerTable,
-        String positionFilePath, boolean skipToEnd, boolean addByteOffset, boolean cachePatternMatching,
-        boolean annotateFileName, String fileNameHeader) throws IOException {
+     * @Method ReliableTaildirEventReader
+     * @param filePaths
+     * @param headerTable
+     * @param params
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/10 11:50
+    */
+    private ReliableTaildirEventReader(final Map<String, String> filePaths,
+        final Table<String, String, String> headerTable, final Object... params) throws IOException {
         // Sanity checks
         Preconditions.checkNotNull(filePaths);
-        Preconditions.checkNotNull(positionFilePath);
+        Preconditions.checkNotNull(params[0]);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Initializing {} with directory={}", new Object[] {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Initializing {} with directory={}", new Object[] {
                 ReliableTaildirEventReader.class.getSimpleName(), filePaths
             });
         }
 
-        List<TaildirMatcher> taildirCache = Lists.newArrayList();
+        List<TaildirMatcher> taildirMatchers = Lists.newArrayList();
         for (Entry<String, String> e : filePaths.entrySet()) {
-            taildirCache.add(new TaildirMatcher(e.getKey(), e.getValue(), cachePatternMatching));
+            taildirMatchers.add(new TaildirMatcher(e.getKey(), e.getValue(), (boolean) params[params3]));
         }
-        logger.info("taildirCache: " + taildirCache.toString());
-        logger.info("headerTable: " + headerTable.toString());
+        LOGGER.info("taildirCache: " + taildirMatchers.toString());
+        LOGGER.info("headerTable: " + headerTable.toString());
 
-        this.taildirCache = taildirCache;
+        this.taildirCache = taildirMatchers;
         this.headerTable = headerTable;
-        this.addByteOffset = addByteOffset;
-        this.cachePatternMatching = cachePatternMatching;
-        this.annotateFileName = annotateFileName;
-        this.fileNameHeader = fileNameHeader;
-        updateTailFiles(skipToEnd);
+        this.addByteOffset = (boolean) params[2];
+        this.cachePatternMatching = (boolean) params[params3];
+        this.annotateFileName = (boolean) params[params4];
+        this.fileNameHeader = (String) params[params5];
+        updateTailFiles((boolean) params[1]);
 
-        logger.info("Updating position from position file: " + positionFilePath);
-        loadPositionFile(positionFilePath);
+        LOGGER.info("Updating position from position file: " + params[0]);
+        loadPositionFile((String) params[0]);
     }
 
     /**
      * Load a position file which has the last read position of each file. If the position file exists, update tailFiles
      * mapping.
+     * @param filePath
      */
-    public void loadPositionFile(String filePath) {
-        Long inode, pos;
+    public void loadPositionFile(final String filePath) {
+        Long inode;
+        Long pos;
         String path;
         FileReader fr = null;
         JsonReader jr = null;
@@ -130,6 +159,8 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
                         case "file":
                             path = jr.nextString();
                             break;
+                        default:
+                            break;
                     }
                 }
                 jr.endObject();
@@ -143,26 +174,29 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
                     tailFiles.put(inode, tf);
                 }
                 else {
-                    logger.info("Missing file: " + path + ", inode: " + inode + ", pos: " + pos);
+                    LOGGER.info("Missing file: " + path + ", inode: " + inode + ", pos: " + pos);
                 }
             }
             jr.endArray();
         }
         catch (FileNotFoundException e) {
-            logger.info("File not found: " + filePath + ", not updating position");
+            LOGGER.info("File not found: " + filePath + ", not updating position");
         }
         catch (IOException e) {
-            logger.error("Failed loading positionFile: " + filePath, e);
+            LOGGER.error("Failed loading positionFile: " + filePath, e);
         }
         finally {
             try {
-                if (fr != null)
+                if (fr != null) {
                     fr.close();
-                if (jr != null)
+                }
+                if (jr != null) {
                     jr.close();
+                }
+
             }
             catch (IOException e) {
-                logger.error("Error: " + e.getMessage(), e);
+                LOGGER.error("Error: " + e.getMessage(), e);
             }
         }
     }
@@ -171,7 +205,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
         return tailFiles;
     }
 
-    public void setCurrentFile(TailFile currentFile) {
+    public void setCurrentFile(final TailFile currentFile) {
         this.currentFile = currentFile;
     }
 
@@ -185,22 +219,40 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     }
 
     @Override
-    public List<Event> readEvents(int numEvents) throws IOException {
+    public List<Event> readEvents(final int numEvents) throws IOException {
         return readEvents(numEvents, false);
     }
 
+    /**
+     * @Method readEvents
+     * @param tf
+     * @param numEvents
+     * @return java.util.List<org.apache.flume.Event>
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 13:44
+    */
     @VisibleForTesting
-    public List<Event> readEvents(TailFile tf, int numEvents) throws IOException {
+    public List<Event> readEvents(final TailFile tf, final int numEvents) throws IOException {
         setCurrentFile(tf);
         return readEvents(numEvents, true);
     }
 
-    public List<Event> readEvents(int numEvents, boolean backoffWithoutNL) throws IOException {
+    /**
+     * @Method readEvents
+     * @param numEvents
+     * @param backoffWithoutNL
+     * @return java.util.List<org.apache.flume.Event>
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 13:44
+    */
+    public List<Event> readEvents(final int numEvents, final boolean backoffWithoutNL) throws IOException {
         if (!committed) {
             if (currentFile == null) {
                 throw new IllegalStateException("current file does not exist. " + currentFile.getPath());
             }
-            logger.info("Last read was never committed - resetting position");
+            LOGGER.info("Last read was never committed - resetting position");
             long lastPos = currentFile.getPos();
             currentFile.updateFilePos(lastPos);
         }
@@ -227,8 +279,9 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
     @Override
     public void close() throws IOException {
         for (TailFile tf : tailFiles.values()) {
-            if (tf.getRaf() != null)
+            if (tf.getRaf() != null) {
                 tf.getRaf().close();
+            }
         }
     }
 
@@ -245,8 +298,10 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
 
     /**
      * Update tailFiles mapping if a new file is created or appends are detected to the existing file.
+     * @param skipToEnd
+     * @return java.util.List<java.lang.Long>
      */
-    public List<Long> updateTailFiles(boolean skipToEnd) throws IOException {
+    public List<Long> updateTailFiles(final boolean skipToEnd) throws IOException {
         updateTime = System.currentTimeMillis();
         List<Long> updatedInodes = Lists.newArrayList();
 
@@ -259,7 +314,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
                     inode = getInode(f);
                 }
                 catch (NoSuchFileException e) {
-                    logger.info("File has been deleted in the meantime: " + e.getMessage());
+                    LOGGER.info("File has been deleted in the meantime: " + e.getMessage());
                     continue;
                 }
                 TailFile tf = tailFiles.get(inode);
@@ -274,7 +329,7 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
                             tf = openFile(f, headers, inode, tf.getPos());
                         }
                         if (f.length() < tf.getPos()) {
-                            logger.info("Pos " + tf.getPos() + " is larger than file size! "
+                            LOGGER.info("Pos " + tf.getPos() + " is larger than file size! "
                                 + "Restarting from pos 0, file: " + tf.getPath() + ", inode: " + inode);
                             tf.updatePos(tf.getPath(), inode, 0);
                         }
@@ -288,18 +343,26 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
         return updatedInodes;
     }
 
+    /**
+     * @Method updateTailFiles
+     * @param
+     * @return java.util.List<java.lang.Long>
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 13:46
+    */
     public List<Long> updateTailFiles() throws IOException {
         return updateTailFiles(false);
     }
 
-    private long getInode(File file) throws IOException {
+    private long getInode(final File file) throws IOException {
         long inode = (long) Files.getAttribute(file.toPath(), "unix:ino");
         return inode;
     }
 
-    private TailFile openFile(File file, Map<String, String> headers, long inode, long pos) {
+    private TailFile openFile(final File file, final Map<String, String> headers, final long inode, final long pos) {
         try {
-            logger.info("Opening file: " + file + ", inode: " + inode + ", pos: " + pos);
+            LOGGER.info("Opening file: " + file + ", inode: " + inode + ", pos: " + pos);
             return new TailFile(file, headers, inode, pos);
         }
         catch (IOException e) {
@@ -311,62 +374,142 @@ public class ReliableTaildirEventReader implements ReliableEventReader {
      * Special builder class for ReliableTaildirEventReader
      */
     public static class Builder {
+        /** */
         private Map<String, String> filePaths;
 
+        /** */
         private Table<String, String, String> headerTable;
 
+        /** */
         private String positionFilePath;
 
+        /** */
         private boolean skipToEnd;
 
+        /** */
         private boolean addByteOffset;
 
+        /** */
         private boolean cachePatternMatching;
 
+        /** */
         private Boolean annotateFileName = TaildirSourceConfigurationConstants.DEFAULT_FILE_HEADER;
 
+        /** */
         private String fileNameHeader = TaildirSourceConfigurationConstants.DEFAULT_FILENAME_HEADER_KEY;
 
-        public Builder filePaths(Map<String, String> filePaths) {
-            this.filePaths = filePaths;
+        /**
+         * @Method filePaths
+         * @param filepaths
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:48
+        */
+        public Builder filePaths(final Map<String, String> filepaths) {
+            this.filePaths = filepaths;
             return this;
         }
 
-        public Builder headerTable(Table<String, String, String> headerTable) {
-            this.headerTable = headerTable;
+        /**
+         * @Method headerTable
+         * @param headertable
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:52
+        */
+        public Builder headerTable(final Table<String, String, String> headertable) {
+            this.headerTable = headertable;
             return this;
         }
 
-        public Builder positionFilePath(String positionFilePath) {
-            this.positionFilePath = positionFilePath;
+        /**
+         * @Method positionFilePath
+         * @param positionfilepath
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:52
+        */
+        public Builder positionFilePath(final String positionfilepath) {
+            this.positionFilePath = positionfilepath;
             return this;
         }
 
-        public Builder skipToEnd(boolean skipToEnd) {
-            this.skipToEnd = skipToEnd;
+        /**
+         * @Method skipToEnd
+         * @param skiptoend
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:53
+        */
+        public Builder skipToEnd(final boolean skiptoend) {
+            this.skipToEnd = skiptoend;
             return this;
         }
 
-        public Builder addByteOffset(boolean addByteOffset) {
-            this.addByteOffset = addByteOffset;
+        /**
+         * @Method addByteOffset
+         * @param addbyteoffset
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:53
+        */
+        public Builder addByteOffset(final boolean addbyteoffset) {
+            this.addByteOffset = addbyteoffset;
             return this;
         }
 
-        public Builder cachePatternMatching(boolean cachePatternMatching) {
-            this.cachePatternMatching = cachePatternMatching;
+        /**
+         * @Method cachePatternMatching
+         * @param cachepatternmatching
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:54
+        */
+        public Builder cachePatternMatching(final boolean cachepatternmatching) {
+            this.cachePatternMatching = cachepatternmatching;
             return this;
         }
 
-        public Builder annotateFileName(boolean annotateFileName) {
-            this.annotateFileName = annotateFileName;
+        /**
+         * @Method annotateFileName
+         * @param annotatefilename
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:54
+        */
+        public Builder annotateFileName(final boolean annotatefilename) {
+            this.annotateFileName = annotatefilename;
             return this;
         }
 
-        public Builder fileNameHeader(String fileNameHeader) {
-            this.fileNameHeader = fileNameHeader;
+        /**
+         * @Method fileNameHeader
+         * @param filenameheader
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader.Builder
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:55
+        */
+        public Builder fileNameHeader(final String filenameheader) {
+            this.fileNameHeader = filenameheader;
             return this;
         }
 
+        /**
+         * @Method build
+         * @param
+         * @return com.hbasesoft.framework.log.flume.core.taildir.ReliableTaildirEventReader
+         * @Author 李煜龙
+         * @Description TODD
+         * @Date 2023/1/29 13:55
+        */
         public ReliableTaildirEventReader build() throws IOException {
             return new ReliableTaildirEventReader(filePaths, headerTable, positionFilePath, skipToEnd, addByteOffset,
                 cachePatternMatching, annotateFileName, fileNameHeader);

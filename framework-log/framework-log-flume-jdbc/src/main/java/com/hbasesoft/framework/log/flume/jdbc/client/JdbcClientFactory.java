@@ -29,7 +29,8 @@ public class JdbcClientFactory {
      * @param eventSerializer
      * @return <br>
      */
-    public JdbcClient getClient(String tableName, String datasourceCode, EventSerializer eventSerializer) {
+    public JdbcClient getClient(final String tableName, final String datasourceCode,
+        final EventSerializer eventSerializer) {
         return new SpringJdbcTemplateClient(datasourceCode, tableName, eventSerializer);
     }
 

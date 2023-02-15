@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.shell.tx;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +42,12 @@ import lombok.Setter;
 @Component
 public class TxDelete implements CommandHandler<Option> {
 
+    /** */
     @Autowired
     private CassandraOperations cassandraOperations;
+
+    /** */
+    private static final int NAMES = 3;
 
     /**
      * Description: <br>
@@ -54,19 +59,20 @@ public class TxDelete implements CommandHandler<Option> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
 
         List<CriteriaDefinition> cds = new ArrayList<>();
         Assert.notEmpty(option.id, "ID必填");
         cds.add(Criteria.where("id").is(option.id));
+        PrintStream shellOut = shell.getOut();
 
         if (option.all) {
             Query q = Query.query(cds.toArray(new CriteriaDefinition[0])).withAllowFiltering();
             cassandraOperations.delete(q, TxCheckinfoEntity.class);
-            shell.out.println("删除TxCheckInfo成功！");
+            shellOut.println("删除TxCheckInfo成功！");
 
             cassandraOperations.delete(q, TxClientinfoEntity.class);
-            shell.out.println("删除TxClientinfo成功！");
+            shellOut.println("删除TxClientinfo成功！");
         }
         else {
             Assert.notEmpty(option.mark, "Mark必填");
@@ -75,7 +81,7 @@ public class TxDelete implements CommandHandler<Option> {
             Query q = Query.query(cds.toArray(new CriteriaDefinition[0])).withAllowFiltering();
 
             cassandraOperations.delete(q, TxCheckinfoEntity.class);
-            shell.out.println("删除TxCheckInfo成功！");
+            shellOut.println("删除TxCheckInfo成功！");
         }
 
     }
@@ -96,19 +102,22 @@ public class TxDelete implements CommandHandler<Option> {
     @Setter
     public static class Option extends AbstractOption {
 
+        /** */
         @Parameter(names = {
             "-id"
         }, help = true, order = 1, description = "根据ID删除")
         private String id;
 
+        /** */
         @Parameter(names = {
             "--mark", "-m"
         }, help = true, order = 2, description = "根据标记删除")
         private String mark;
 
+        /** */
         @Parameter(names = {
             "--all", "-a"
-        }, help = true, order = 3, description = "根据ID删除所有的信息，包含Client信息")
+        }, help = true, order = NAMES, description = "根据ID删除所有的信息，包含Client信息")
         private boolean all = false;
 
     }

@@ -41,33 +41,69 @@ import com.hbasesoft.framework.shell.core.vo.AbstractOption;
  */
 public class Shell {
 
+    /** */
     private static boolean login = PropertyHolder.getBooleanProperty("security.login", true);
 
+    /** */
     private GitUtil gitUtil;
 
-    public final boolean remote;
+    /** */
+    private final boolean remote;
 
-    public final PrintStream out;
+    /** */
+    private final PrintStream out;
 
-    public final InputStream in;
+    /** */
+    private final InputStream in;
 
+    /** */
     private Scanner scanner;
 
+    /** */
     private boolean exit;
 
-    public Shell(InputStream in, PrintStream out, boolean remote) {
+    /** */
+    private static final int NUM3 = 3;
+
+    /**
+     * @Method Shell
+     * @param in
+     * @param out
+     * @param remote
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:12
+    */
+    public Shell(final InputStream in, final PrintStream out, final boolean remote) {
         this.out = out;
         this.in = in;
         this.exit = false;
         this.remote = remote;
     }
 
-    public Shell(InputStream in, PrintStream out) {
+    /**
+     * @Method Shell
+     * @param in
+     * @param out
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:14
+    */
+    public Shell(final InputStream in, final PrintStream out) {
         this(in, out, false);
     }
 
+    /**
+     * @Method run
+     * @param args
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:14
+    */
     @SuppressWarnings("rawtypes")
-    public void run(String[] args) throws Exception {
+    public void run(final String[] args) throws Exception {
 
         // 加载所有命令
         Map<String, CommandHandler> commandHolder = ContextHolder.getContext().getBeansOfType(CommandHandler.class);
@@ -117,7 +153,7 @@ public class Shell {
             if (login) {
                 String c = args[0];
                 int index = c.indexOf("@");
-                Assert.isTrue(index > 3, "用户名密码不存在, 格式 jar -jar vcc-tools.jar 用户名:密码@命令 -命令参数 ");
+                Assert.isTrue(index > NUM3, "用户名密码不存在, 格式 jar -jar vcc-tools.jar 用户名:密码@命令 -命令参数 ");
                 String up = c.substring(0, index);
                 String[] ups = StringUtils.split(up, ":");
                 Assert.isTrue(ups.length == 2, "用户名密码不存在, 格式 jar -jar vcc-tools.jar 用户名:密码@命令 -命令参数 ");
@@ -132,6 +168,13 @@ public class Shell {
         }
     }
 
+    /**
+     * @Method exit
+     * @param
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:15
+    */
     public void exit() {
         this.exit = true;
         IOUtils.closeQuietly(scanner);
@@ -142,7 +185,7 @@ public class Shell {
         }
     }
 
-    private void login(Scanner scanner) {
+    private void login(final Scanner scanners) {
 
         String remoteLocation = PropertyHolder.getProperty("project.server.logserver");
         Assert.notEmpty(remoteLocation, "远程服务器地址未配置，请检查project.server.logserver配置项");
@@ -154,11 +197,11 @@ public class Shell {
         }
 
         boolean flag = true;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < NUM3; i++) {
             out.println("请输入用户名");
-            String username = scanner.next();
+            String username = scanners.next();
             out.println("请输入密码");
-            String password = scanner.next();
+            String password = scanners.next();
 
             try {
                 GitUtil util = new GitUtil(file.getAbsolutePath());
@@ -180,7 +223,7 @@ public class Shell {
         }
     }
 
-    private void login(String u, String p) {
+    private void login(final String u, final String p) {
 
         String remoteLocation = PropertyHolder.getProperty("project.server.logserver");
         Assert.notEmpty(remoteLocation, "远程服务器地址未配置，请检查project.server.logserver配置项");
@@ -210,8 +253,8 @@ public class Shell {
     @SuppressWarnings({
         "rawtypes", "unchecked"
     })
-    private void execute(Map<String, CommandHandler> commandHolder,
-        Map<String, Class<? extends AbstractOption>> paramsHolder, String[] cmds) throws Exception {
+    private void execute(final Map<String, CommandHandler> commandHolder,
+        final Map<String, Class<? extends AbstractOption>> paramsHolder, final String[] cmds) throws Exception {
         CommandHandler cmd = commandHolder.get(cmds[0]);
         if (cmd != null) {
             AbstractOption option = null;
@@ -251,7 +294,7 @@ public class Shell {
         }
     }
 
-    private void deleteDir(File dir) {
+    private void deleteDir(final File dir) {
         try {
             Runtime.getRuntime().exec("rm -rf " + dir.getAbsolutePath());
         }
@@ -261,7 +304,7 @@ public class Shell {
     }
 
     @SuppressWarnings("unchecked")
-    private Class<? extends AbstractOption> getCommandOptions(Class<?> clazz) {
+    private Class<? extends AbstractOption> getCommandOptions(final Class<?> clazz) {
         Type[] interfacesTypes = clazz.getGenericInterfaces();
         for (Type t : interfacesTypes) {
             Type[] genericType2 = ((ParameterizedType) t).getActualTypeArguments();
@@ -278,6 +321,10 @@ public class Shell {
 
     public boolean isExit() {
         return exit;
+    }
+
+    public PrintStream getOut() {
+        return out;
     }
 
 }

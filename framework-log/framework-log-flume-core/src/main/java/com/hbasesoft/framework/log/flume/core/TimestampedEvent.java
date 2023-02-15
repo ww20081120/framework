@@ -26,9 +26,18 @@ import com.google.common.collect.Maps;
  */
 public class TimestampedEvent extends SimpleEvent {
 
+    /** */
     private final long timestamp;
 
-    public TimestampedEvent(Event base) {
+    /**
+     * @Method TimestampedEvent
+     * @param base
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 15:01
+    */
+    public TimestampedEvent(final Event base) {
         setBody(base.getBody());
         Map<String, String> headers = Maps.newHashMap(base.getHeaders());
         String timestampString = headers.get("timestamp");

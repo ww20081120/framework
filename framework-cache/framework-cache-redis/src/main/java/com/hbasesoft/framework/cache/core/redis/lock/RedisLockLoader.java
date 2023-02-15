@@ -29,7 +29,7 @@ public class RedisLockLoader implements LockLoader {
      * @return <br>
      */
     @Override
-    public Lock getInstance(String lockName) {
+    public Lock getInstance(final String lockName) {
         return new RedisLock(lockName);
     }
 

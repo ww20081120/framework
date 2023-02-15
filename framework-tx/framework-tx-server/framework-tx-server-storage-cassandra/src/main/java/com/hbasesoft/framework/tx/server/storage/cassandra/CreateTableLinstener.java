@@ -38,7 +38,7 @@ public class CreateTableLinstener implements StartupListener {
         createTableIfNotExist(cassandraOperations);
     }
 
-    private void createTableIfNotExist(CassandraOperations cassandraOperations) {
+    private void createTableIfNotExist(final CassandraOperations cassandraOperations) {
         try {
             cassandraOperations.getCqlOperations().execute("select id from t_tx_check_info limit 1");
             return;

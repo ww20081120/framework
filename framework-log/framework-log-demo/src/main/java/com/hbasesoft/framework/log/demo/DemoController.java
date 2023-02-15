@@ -26,11 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
 
+    /** */
     @Resource
     private DemoService demoService;
 
+    /**
+     * @Method say
+     * @param name
+     * @return java.lang.String
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:54
+    */
     @GetMapping("/say")
-    public String say(@RequestParam("name") String name) {
+    public String say(final @RequestParam("name") String name) {
         return demoService.say(name);
     }
 }

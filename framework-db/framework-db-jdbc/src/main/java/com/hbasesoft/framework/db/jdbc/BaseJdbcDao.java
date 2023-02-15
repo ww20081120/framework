@@ -52,6 +52,7 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
  */
 public class BaseJdbcDao implements ISqlExcutor {
 
+    /** */
     private static final int INT = 10;
 
     /** */
@@ -68,6 +69,7 @@ public class BaseJdbcDao implements ISqlExcutor {
     /** entity class */
     private Class<?> entityClazz;
 
+    /** */
     private static Map<String, NamedParameterJdbcTemplate> jdbcTemplate = new HashMap<>();
 
     /**
@@ -84,7 +86,7 @@ public class BaseJdbcDao implements ISqlExcutor {
         "unchecked", "rawtypes"
     })
     @Override
-    public Object query(String sql, DataParam param) throws DaoException {
+    public Object query(final String sql, final DataParam param) throws DaoException {
         try {
             SQlCheckUtil.checkSql(sql);
 
@@ -168,7 +170,7 @@ public class BaseJdbcDao implements ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public int excuteSql(String sql, DataParam param) throws DaoException {
+    public int excuteSql(final String sql, final DataParam param) throws DaoException {
         try {
             SQlCheckUtil.checkSql(sql);
             return getJdbcTemplate().update(sql, param.getParamMap());
@@ -184,13 +186,13 @@ public class BaseJdbcDao implements ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param sql
+     * @param sqls
      * @param param
      * @return
      * @throws DaoException <br>
      */
     @Override
-    public int[] batchExcuteSql(String[] sqls, DataParam param) throws DaoException {
+    public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
         try {
 
             int[] result = new int[sqls.length];
@@ -216,7 +218,7 @@ public class BaseJdbcDao implements ISqlExcutor {
      * @param sql
      * @param objcts
      * @param commitNumber
-     * @throws DaoException <br>
+     * @return int[]
      */
     public int[] batchExecute(final String sql, final Collection<?> objcts, final int commitNumber) {
         if (CollectionUtils.isEmpty(objcts)) {
@@ -233,7 +235,7 @@ public class BaseJdbcDao implements ISqlExcutor {
 
         return getJdbcTemplate().getJdbcOperations().batchUpdate(pscf.getSql(), new BatchPreparedStatementSetter() {
             @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
+            public void setValues(final PreparedStatement ps, final int i) throws SQLException {
                 Object[] values = NamedParameterUtils.buildValueArray(parsedSql, datas[i], null);
                 pscf.newPreparedStatementSetter(values).setValues(ps);
             }

@@ -23,7 +23,6 @@ import org.apache.flume.annotations.InterfaceAudience;
 import org.apache.flume.annotations.InterfaceStability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.AntPathMatcher;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -55,37 +54,44 @@ import com.google.common.collect.Lists;
 @InterfaceAudience.Private
 @InterfaceStability.Evolving
 public class TaildirMatcher {
-    private static final Logger logger = LoggerFactory.getLogger(TaildirMatcher.class);
 
+    /** */
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaildirMatcher.class);
+
+    /** */
     private static final FileSystem FS = FileSystems.getDefault();
 
+    /** */
     // flag from configuration to switch off caching completely
     private final boolean cachePatternMatching;
 
-    // id from configuration
+    /**  id from configuration */
     private final String fileGroup;
 
-    // plain string of the desired files from configuration
+    /** plain string of the desired files from configuration */
     private final String filePattern;
 
-    // directory monitored for changes
+    /** directory monitored for changes */
     private final File parentDir;
 
-    // cached instance for filtering files based on filePattern
+    /** cached instance for filtering files based on filePattern */
     private final DirectoryStream.Filter<Path> fileFilter;
 
     // system time in milliseconds, stores the last modification time of the
     // parent directory seen by the last check, rounded to seconds
     // initial value is used in first check only when it will be replaced instantly
     // (system time is positive)
+    /** */
     private long lastSeenParentDirMTime = -1;
 
     // system time in milliseconds, time of the last check, rounded to seconds
     // initial value is used in first check only when it will be replaced instantly
     // (system time is positive)
+    /** */
     private long lastCheckedTime = -1;
 
     // cached content, files which matched the pattern within the parent directory
+    /** */
     private List<File> lastMatchedFiles = Lists.newArrayList();
 
     /**
@@ -105,7 +111,7 @@ public class TaildirMatcher {
      *            Don't set when local system clock is not used for stamping mtime (eg: remote filesystems)
      * @see TaildirSourceConfigurationConstants
      */
-    TaildirMatcher(String fileGroup, String filePattern, boolean cachePatternMatching) {
+    TaildirMatcher(final String fileGroup, final String filePattern, final boolean cachePatternMatching) {
         // store whatever came from configuration
         this.fileGroup = fileGroup;
         this.filePattern = filePattern;
@@ -118,7 +124,7 @@ public class TaildirMatcher {
         final PathMatcher matcher = FS.getPathMatcher("glob:" + regex);
         this.fileFilter = new DirectoryStream.Filter<Path>() {
             @Override
-            public boolean accept(Path entry) throws IOException {
+            public boolean accept(final Path entry) throws IOException {
                 return matcher.matches(entry.getFileName()) && !Files.isDirectory(entry);
             }
         };
@@ -202,7 +208,7 @@ public class TaildirMatcher {
             }
         }
         catch (IOException e) {
-            logger.error("I/O exception occurred while listing parent directory. "
+            LOGGER.error("I/O exception occurred while listing parent directory. "
                 + "Files already matched will be returned. " + parentDir.toPath(), e);
         }
         return result;
@@ -216,14 +222,14 @@ public class TaildirMatcher {
      * @param files list of files in any order
      * @return sorted list
      */
-    private static List<File> sortByLastModifiedTime(List<File> files) {
+    private static List<File> sortByLastModifiedTime(final List<File> files) {
         final HashMap<File, Long> lastModificationTimes = new HashMap<File, Long>(files.size());
         for (File f : files) {
             lastModificationTimes.put(f, f.lastModified());
         }
         Collections.sort(files, new Comparator<File>() {
             @Override
-            public int compare(File o1, File o2) {
+            public int compare(final File o1, final File o2) {
                 return lastModificationTimes.get(o1).compareTo(lastModificationTimes.get(o2));
             }
         });
@@ -238,11 +244,13 @@ public class TaildirMatcher {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
 
         TaildirMatcher that = (TaildirMatcher) o;
 

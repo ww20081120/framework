@@ -41,7 +41,8 @@ public class TxEventInterceptor implements EventInterceptor {
      * @return <br>
      */
     @Override
-    public boolean sendBefore(String channel, EventData eventData, Integer seconds, String produceModel) {
+    public boolean sendBefore(final String channel, final EventData eventData, final Integer seconds,
+        final String produceModel) {
         if (seconds != null) {
             TxInvokerProxy.registInvoke(getClientInfo(channel, eventData.getMsgId(), new Object[] {
                 channel, eventData, seconds
@@ -70,7 +71,7 @@ public class TxEventInterceptor implements EventInterceptor {
      * @return <br>
      */
     @Override
-    public boolean receiveBefore(String channel, EventData eventData) {
+    public boolean receiveBefore(final String channel, final EventData eventData) {
         String id = eventData.getMsgId();
         TxProducer sender = TxInvokerProxy.getSender();
         if (sender.containClient(id)) {
@@ -89,7 +90,7 @@ public class TxEventInterceptor implements EventInterceptor {
      * @param eventData <br>
      */
     @Override
-    public void receiveAfter(String channel, EventData eventData) {
+    public void receiveAfter(final String channel, final EventData eventData) {
         String id = TxManager.getTraceId();
         if (id != null) {
             TxManager.setTraceId(null);
@@ -108,7 +109,7 @@ public class TxEventInterceptor implements EventInterceptor {
      * @param e <br>
      */
     @Override
-    public void receiveError(String channel, EventData eventData, Exception e) {
+    public void receiveError(final String channel, final EventData eventData, final Exception e) {
         TxManager.setTraceId(null);
     }
 
@@ -123,7 +124,8 @@ public class TxEventInterceptor implements EventInterceptor {
      * @param method
      * @return <br>
      */
-    private static ClientInfo getClientInfo(String channel, final String id, final Object[] args, final String method) {
+    private static ClientInfo getClientInfo(final String channel, final String id, final Object[] args,
+        final String method) {
         ClientInfo clientInfo = new ClientInfo(id, TxEventRetryHandler.TX_EVENT_RETRY_HANDLER + method);
         clientInfo.setArgs(ArgsSerializationUtil.serializeArgs(args));
         clientInfo.setClientInfo(TxInvokerProxy.getClientInfoFactory().getClientInfo());

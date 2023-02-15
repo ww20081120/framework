@@ -38,7 +38,7 @@ public class TxEventStartupListener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         Map<String, Object> beans = context.getBeansWithAnnotation(Tx.class);
         if (MapUtils.isNotEmpty(beans)) {
             TxEventInterceptor interceptor = new TxEventInterceptor();

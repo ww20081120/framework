@@ -10,7 +10,7 @@ import com.hbasesoft.framework.shell.core.vo.AbstractOption;
 
 /**
  * <Description> <br>
- * 
+ * @param <T>
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -20,6 +20,15 @@ import com.hbasesoft.framework.shell.core.vo.AbstractOption;
  */
 public interface CommandHandler<T extends AbstractOption> {
 
+    /**
+     * @Method execute
+     * @param cmd
+     * @param option
+     * @param shell
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 10:49
+    */
     void execute(JCommander cmd, T option, Shell shell);
 
 }

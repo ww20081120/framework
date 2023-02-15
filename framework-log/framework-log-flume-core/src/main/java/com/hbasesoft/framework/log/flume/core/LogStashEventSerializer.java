@@ -66,6 +66,7 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  */
 public class LogStashEventSerializer implements EventSerializer {
 
+    /** */
     private String timestamp = "@timestamp";
 
     /**
@@ -78,14 +79,14 @@ public class LogStashEventSerializer implements EventSerializer {
      * @throws IOException <br>
      */
     @Override
-    public String getContentBuilder(Event event) throws IOException {
+    public String getContentBuilder(final Event event) throws IOException {
         JSONObject builder = new JSONObject();
         appendBody(builder, event);
         appendHeaders(builder, event);
         return builder.toJSONString();
     }
 
-    private void appendHeaders(JSONObject builder, Event event) throws IOException {
+    private void appendHeaders(final JSONObject builder, final Event event) throws IOException {
         Map<String, String> headers = Maps.newHashMap(event.getHeaders());
         builder.putAll(headers);
 
@@ -102,7 +103,8 @@ public class LogStashEventSerializer implements EventSerializer {
         }
     }
 
-    private void appendBody(JSONObject builder, Event event) throws IOException, UnsupportedEncodingException {
+    private void appendBody(final JSONObject builder, final Event event)
+        throws IOException, UnsupportedEncodingException {
         byte[] body = event.getBody();
         Object data = getJson(new String(body));
         if (data instanceof JSONObject jd) {
@@ -113,17 +115,17 @@ public class LogStashEventSerializer implements EventSerializer {
         }
     }
 
-    private Object getJson(String body) {
+    private Object getJson(final String body) {
         if (StringUtils.isNotEmpty(body)) {
-            body = StringUtils.trim(body);
-            if (body.startsWith("{") && body.endsWith("}")) {
+            String bodys = StringUtils.trim(body);
+            if (bodys.startsWith("{") && bodys.endsWith("}")) {
                 try {
-                    return JSONObject.parseObject(body);
+                    return JSONObject.parseObject(bodys);
                 }
                 catch (Exception e) {
                 }
             }
-            return body;
+            return bodys;
         }
         return GlobalConstants.BLANK;
     }
@@ -136,7 +138,7 @@ public class LogStashEventSerializer implements EventSerializer {
      * @param context <br>
      */
     @Override
-    public void configure(Context context) {
+    public void configure(final Context context) {
         if (StringUtils.isNotEmpty(context.getString("timestamp"))) {
             this.timestamp = context.getString("timestamp");
         }
@@ -150,6 +152,6 @@ public class LogStashEventSerializer implements EventSerializer {
      * @param conf <br>
      */
     @Override
-    public void configure(ComponentConfiguration conf) {
+    public void configure(final ComponentConfiguration conf) {
     }
 }

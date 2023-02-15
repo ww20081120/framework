@@ -30,7 +30,7 @@ public class SimpleLockLoader implements LockLoader {
      * @return <br>
      */
     @Override
-    public Lock getInstance(String lockName) {
+    public Lock getInstance(final String lockName) {
         return new DefaultLock(lockName);
     }
 

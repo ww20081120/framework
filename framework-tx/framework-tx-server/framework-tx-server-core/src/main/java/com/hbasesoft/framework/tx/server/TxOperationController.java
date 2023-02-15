@@ -91,9 +91,10 @@ public class TxOperationController {
      * @author 王伟<br>
      * @taskId <br>
      * @param id <br>
+     * @param mark
      */
     @PutMapping("/checkInfo/{id}/{mark}")
-    public void delCheckInfo(@PathVariable("id") final String id, @PathVariable("mark") String mark) {
+    public void delCheckInfo(@PathVariable("id") final String id, @PathVariable("mark") final String mark) {
         txStorage.deleteCheckInfo(id, mark);
     }
 
@@ -128,8 +129,8 @@ public class TxOperationController {
      * @return <br>
      */
     @PatchMapping("/clientInfo/{id}/{index}/{type}")
-    public ClientInfo updateClientArgs(@PathVariable("id") final String id, @PathVariable("index") Integer index,
-        @PathVariable("type") String type, @RequestBody String data) {
+    public ClientInfo updateClientArgs(@PathVariable("id") final String id, @PathVariable("index") final Integer index,
+        @PathVariable("type") final String type, @RequestBody final String data) {
 
         ClientInfo clientInfo = txStorage.getClientInfo(id);
         if (clientInfo != null) {
@@ -152,8 +153,8 @@ public class TxOperationController {
      * @return <br>
      */
     @PatchMapping("/checkInfo/{id}/{mark}/{type}")
-    public CheckInfo updateCheckInfo(@PathVariable("id") final String id, @PathVariable("mark") String mark,
-        @PathVariable("type") String type, @RequestBody String data) {
+    public CheckInfo updateCheckInfo(@PathVariable("id") final String id, @PathVariable("mark") final String mark,
+        @PathVariable("type") final String type, @RequestBody final String data) {
         CheckInfo checkInfo = txStorage.getCheckInfo(id, mark);
         if (checkInfo != null) {
             checkInfo.setResult(SerializationUtil.jdkSerial(ArgsSerializationUtil.parseObj(type, data)));

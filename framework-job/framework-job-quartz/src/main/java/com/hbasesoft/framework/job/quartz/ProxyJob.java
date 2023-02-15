@@ -37,7 +37,7 @@ public class ProxyJob implements Job {
      * @throws JobExecutionException <br>
      */
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(final JobExecutionContext context) throws JobExecutionException {
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
         if (dataMap != null) {
             String className = dataMap.getString(JobConstants.JOB_INSTANCE_CLASS);

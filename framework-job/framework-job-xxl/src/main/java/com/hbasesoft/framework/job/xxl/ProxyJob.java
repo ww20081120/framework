@@ -22,11 +22,22 @@ import com.xxl.job.core.handler.IJobHandler;
  */
 public class ProxyJob extends IJobHandler {
 
+    /** */
     private final SimpleJob job;
 
+    /** */
     private final String jobName;
 
-    public ProxyJob(String jobName, SimpleJob job) {
+    /**
+     * @Method ProxyJob
+     * @param jobName
+ * @param job
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 12:00
+    */
+    public ProxyJob(final String jobName, final SimpleJob job) {
         this.job = job;
         this.jobName = jobName;
     }

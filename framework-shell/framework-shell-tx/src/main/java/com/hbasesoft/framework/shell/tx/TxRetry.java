@@ -35,6 +35,7 @@ import lombok.Setter;
 @Component
 public class TxRetry implements CommandHandler<Option> {
 
+    /** */
     @Autowired
     private CassandraOperations cassandraOperations;
 
@@ -48,7 +49,7 @@ public class TxRetry implements CommandHandler<Option> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
 
         Assert.notEmpty(option.id, "ID必填");
 
@@ -61,7 +62,7 @@ public class TxRetry implements CommandHandler<Option> {
 
         entity.setNextRetryTime(DateUtil.getCurrentDate());
         cassandraOperations.update(entity);
-        shell.out.println("更新Clientinfo成功, 请等待执行");
+        shell.getOut().println("更新Clientinfo成功, 请等待执行");
 
     }
 
@@ -81,6 +82,7 @@ public class TxRetry implements CommandHandler<Option> {
     @Setter
     public static class Option extends AbstractOption {
 
+        /** */
         @Parameter(names = {
             "-id"
         }, help = true, order = 1, description = "根据ID修改")

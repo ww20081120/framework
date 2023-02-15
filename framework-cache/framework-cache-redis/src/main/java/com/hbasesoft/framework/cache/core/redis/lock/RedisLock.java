@@ -104,7 +104,6 @@ public class RedisLock implements Lock {
      * @author 王伟<br>
      * @taskId <br>
      * @param timeout
-     * @param expireTime
      * @return <br>
      */
     public boolean tryLock(final int timeout) {

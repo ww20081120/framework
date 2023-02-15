@@ -145,7 +145,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    public void put(final byte[] key, int seconds, final byte[] value) {
+    public void put(final byte[] key, final int seconds, final byte[] value) {
         if (value != null && value.length > 0) {
             Jedis jedis = null;
             try {
@@ -217,7 +217,7 @@ public class RedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    public void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
+    public void putNode(final byte[] key, final int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             Jedis jedis = null;
             try {

@@ -36,6 +36,7 @@ public class BusinessTransactionAdivce {
     private static final boolean DEBUG_OPEN_FLAG = PropertyHolder.getBooleanProperty("logservice.framework.show",
         false);
 
+    /** */
     private static final String[] EXCLOUDS = StringUtils.split(PropertyHolder.getProperty("logservice.nologs.package"),
         GlobalConstants.SPLITOR);
 

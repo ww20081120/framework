@@ -146,13 +146,13 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
         return true;
     }
 
-    private String getState(String errorState, int code) {
+    private String getState(final String errorState, final int code) {
         String[] errCodes = StringUtils.split(errorState, GlobalConstants.SPLITOR);
         String es = null;
-        String _code = GlobalConstants.BLANK + code;
+        String codes = GlobalConstants.BLANK + code;
         for (String errCode : errCodes) {
             String[] codeAndState = StringUtils.split(errCode, GlobalConstants.EQUAL_SPLITER);
-            if (codeAndState.length == 2 && CommonUtil.match(codeAndState[0], _code)) {
+            if (codeAndState.length == 2 && CommonUtil.match(codeAndState[0], codes)) {
                 es = codeAndState[1];
                 break;
             }

@@ -65,6 +65,7 @@ public interface TxClientinfoDao extends IBaseDao<TxClientinfoEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param clientInfo
      * @param retryTimes
      * @param pageIndex
      * @param pageSize
