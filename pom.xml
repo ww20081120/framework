@@ -223,7 +223,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>validate</goal>
+							<goal>install</goal>
 						</goals>
 						<configuration>
 							<hooks>
