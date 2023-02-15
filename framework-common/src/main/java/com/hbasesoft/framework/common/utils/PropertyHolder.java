@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -61,7 +62,10 @@ public final class PropertyHolder {
     public static Map<String, String> getProperties() {
         Map<String, String> properties = new HashMap<>();
         for (Property p : PROPERTYS) {
-            properties.putAll(p.getProperties());
+            Map<String, String> map = p.getProperties();
+            if (MapUtils.isNotEmpty(map)) {
+                properties.putAll(map);
+            }
         }
         return properties;
     }
