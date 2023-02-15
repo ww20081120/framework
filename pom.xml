@@ -223,7 +223,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>install</goal>
+							<goal>validate</goal>
 						</goals>
 						<configuration>
 							<hooks>
@@ -231,9 +231,7 @@
 								<pre-commit>
 									echo "begin to execute hook"gst
 									mvn checkstyle:check
-
 									RESULT=$?
-
 									exit $RESULT
 								</pre-commit>
 							</hooks>
