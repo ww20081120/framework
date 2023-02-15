@@ -22,13 +22,30 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
  */
 public final class TxEventHolder {
 
-    private static final Map<String, Tx> txHolder = new HashMap<String, Tx>();
+    /** */
+    private static final Map<String, Tx> TX_HOLDER = new HashMap<String, Tx>();
 
-    public static synchronized void put(String event, Tx tx) {
-        txHolder.put(event, tx);
+    /**
+     * @Method put
+     * @param event
+     * @param tx
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 15:16
+    */
+    public static synchronized void put(final String event, final Tx tx) {
+        TX_HOLDER.put(event, tx);
     }
 
-    public static Tx get(String event) {
-        return txHolder.get(event);
+    /**
+     * @Method get
+     * @param event
+     * @return com.hbasesoft.framework.tx.core.annotation.Tx
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 15:17
+    */
+    public static Tx get(final String event) {
+        return TX_HOLDER.get(event);
     }
 }

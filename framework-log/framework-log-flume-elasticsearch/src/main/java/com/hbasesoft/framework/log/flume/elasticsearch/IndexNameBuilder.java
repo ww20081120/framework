@@ -26,7 +26,7 @@ public interface IndexNameBuilder extends Configurable, ConfigurableComponent {
      * @param event Event which determines index name
      * @return index name of the form 'indexPrefix-indexDynamicName'
      */
-    public String getIndexName(Event event);
+    String getIndexName(Event event);
 
     /**
      * Gets the prefix of index to use for an index request.
@@ -34,5 +34,5 @@ public interface IndexNameBuilder extends Configurable, ConfigurableComponent {
      * @param event Event which determines index name
      * @return Index prefix name
      */
-    public String getIndexPrefix(Event event);
+    String getIndexPrefix(Event event);
 }

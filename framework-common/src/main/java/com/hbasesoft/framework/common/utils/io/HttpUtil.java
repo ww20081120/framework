@@ -209,6 +209,18 @@ public final class HttpUtil {
         return getStringRequest(request, charset);
     }
 
+    /** 
+     * @Method doPost
+     * @param url
+     * @param body
+     * @param contentType
+     * @param paramMap
+     * @param charset 
+     * @return java.lang.String
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:24
+    */
     public static String doPost(final String url, final String body, final String contentType,
         final Map<String, String> paramMap, final String charset) {
         Request.Builder builder = new Request.Builder();
@@ -262,7 +274,7 @@ public final class HttpUtil {
      * @author 王伟<br>
      * @taskId <br>
      * @param url
-     * @param absolutePath <br>
+     * @return InputStream <br>
      */
     public static InputStream downloadFile(final String url) {
         Request request = new Request.Builder().url(url).build();
@@ -394,6 +406,14 @@ public final class HttpUtil {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
     }
 
+    /** 
+     * @Method getOkHttpClient
+     * @param  
+     * @return okhttp3.OkHttpClient
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:25
+    */
     public static OkHttpClient getOkHttpClient() {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
@@ -409,6 +429,14 @@ public final class HttpUtil {
         return okHttpClient;
     }
 
+    /**
+     * @Method getSSLSocketFactory
+     * @param
+     * @return javax.net.ssl.SSLSocketFactory
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:27
+    */
     public static SSLSocketFactory getSSLSocketFactory() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -420,6 +448,14 @@ public final class HttpUtil {
         }
     }
 
+    /** 
+     * @Method getTrustManager
+     * @param  
+     * @return javax.net.ssl.TrustManager[]
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 11:25
+    */
     public static TrustManager[] getTrustManager() {
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {

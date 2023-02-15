@@ -44,15 +44,15 @@ public class Help implements CommandHandler<Option> {
      */
     @Override
     @SuppressWarnings("rawtypes")
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
         // 加载所有命令
         Map<String, CommandHandler> commandHolder = ContextHolder.getContext().getBeansOfType(CommandHandler.class);
         String cmdStr = getCommands(commandHolder);
-        shell.out.println(cmdStr);
+        shell.getOut().println(cmdStr);
     }
 
     @SuppressWarnings("rawtypes")
-    private static String getCommands(Map<String, CommandHandler> commandHolder) {
+    private static String getCommands(final Map<String, CommandHandler> commandHolder) {
         StringBuilder sb = new StringBuilder();
         sb.append("\n您可以输入以下命令:");
         List<String> cmds = new ArrayList<>(commandHolder.keySet());

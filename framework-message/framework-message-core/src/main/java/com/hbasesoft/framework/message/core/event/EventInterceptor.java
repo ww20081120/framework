@@ -68,7 +68,7 @@ public interface EventInterceptor {
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
-     * @param data
+     * @param eventData
      * @return <br>
      */
     default boolean receiveBefore(String channel, EventData eventData) {
@@ -81,7 +81,7 @@ public interface EventInterceptor {
      * @author 王伟<br>
      * @taskId <br>
      * @param channel
-     * @param data <br>
+     * @param eventData <br>
      */
     default void receiveAfter(String channel, EventData eventData) {
     }

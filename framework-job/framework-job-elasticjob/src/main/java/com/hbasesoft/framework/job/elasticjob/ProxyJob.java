@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProxyJob implements SimpleJob {
 
+    /** */
     private final com.hbasesoft.framework.job.core.SimpleJob simpleJob;
 
     /**
@@ -35,7 +36,7 @@ public class ProxyJob implements SimpleJob {
      * @param shardingContext <br>
      */
     @Override
-    public void execute(ShardingContext shardingContext) {
+    public void execute(final ShardingContext shardingContext) {
         simpleJob.execute(new JobContext(shardingContext.getJobName(), shardingContext.getTaskId(),
             shardingContext.getShardingTotalCount(), shardingContext.getJobParameter(),
             shardingContext.getShardingItem(), shardingContext.getShardingParameter()));

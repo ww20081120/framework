@@ -39,6 +39,15 @@ import com.hbasesoft.framework.job.core.annotation.Job;
  */
 public class JobStartupLinstener implements StartupListener {
 
+    /** */
+    private static final int NUM3 = 3;
+
+    /** */
+    private static final int NUM10 = 10;
+
+    /** */
+    private static final int NUM1000 = 1000;
+
     /**
      * packages to scan
      */
@@ -132,9 +141,10 @@ public class JobStartupLinstener implements StartupListener {
         ZookeeperConfiguration zkConfig = new ZookeeperConfiguration(url, jobNamespace);
         zkConfig.setDigest(PropertyHolder.getProperty("job.register.digest"));
         zkConfig.setConnectionTimeoutMilliseconds(
-            PropertyHolder.getIntProperty("job.register.connectionTimeout", 10) * 1000);
-        zkConfig.setMaxSleepTimeMilliseconds(PropertyHolder.getIntProperty("job.register.maxSleepTime", 10) * 1000);
-        zkConfig.setMaxRetries(PropertyHolder.getIntProperty("job.register.maxRetries", 3));
+            PropertyHolder.getIntProperty("job.register.connectionTimeout", NUM10) * NUM1000);
+        zkConfig
+            .setMaxSleepTimeMilliseconds(PropertyHolder.getIntProperty("job.register.maxSleepTime", NUM10) * NUM1000);
+        zkConfig.setMaxRetries(PropertyHolder.getIntProperty("job.register.maxRetries", NUM3));
 
         CoordinatorRegistryCenter result = new ZookeeperRegistryCenter(zkConfig);
         result.init();

@@ -37,10 +37,10 @@ public class Clear implements CommandHandler<Option> {
      * @param option <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
 
-        shell.out.print("\033[H\033[2J");
-        shell.out.flush();
+        shell.getOut().print("\033[H\033[2J");
+        shell.getOut().flush();
 
     }
 

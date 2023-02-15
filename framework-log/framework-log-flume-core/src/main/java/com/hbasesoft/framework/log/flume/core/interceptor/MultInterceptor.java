@@ -30,19 +30,22 @@ import com.google.common.collect.Lists;
  */
 public class MultInterceptor implements Interceptor {
 
-    // 过滤正则
+    /** */
+    private static final int NUM1024 = 1024;
+
+    /** 过滤正则 */
     private Pattern regex = null;
 
-    // 截取标志
+    /** 截取标志 */
     private Boolean cutFlag = true;
 
-    // 总截取最大长度
+    /** 总截取最大长度 */
     private Integer cutMax = null;
 
-    // 单个截取最大长度
+    /** 单个截取最大长度 */
     private Integer singleCut = null;
 
-    // 最后一个事件流
+    /** 最后一个事件流 */
     private List<Event> lastList = Lists.newArrayList();
 
     /**
@@ -65,7 +68,7 @@ public class MultInterceptor implements Interceptor {
      * @return <br>
      */
     @Override
-    public Event intercept(Event event) {
+    public Event intercept(final Event event) {
         return event;
     }
 
@@ -78,10 +81,10 @@ public class MultInterceptor implements Interceptor {
      * @return <br>
      */
     @Override
-    public List<Event> intercept(List<Event> events) {
+    public List<Event> intercept(final List<Event> events) {
         // 处理结果 event list
         List<Event> intercepted = null;
-        int addnum = 0;// 记录上一个正确匹配的event在队列中的位置,以便下一event有和它连接的需要
+        int addnum = 0; // 记录上一个正确匹配的event在队列中的位置,以便下一event有和它连接的需要
 
         if (CollectionUtils.isNotEmpty(lastList)) {
             // 初始化
@@ -166,16 +169,16 @@ public class MultInterceptor implements Interceptor {
     }
 
     public static class Builder implements Interceptor.Builder {
-        // 过滤正则
+        /** 过滤正则 */
         private Pattern regex = null;
 
-        // 截取标志
+        /** 截取标志 */
         private Boolean cutFlag = true;
 
-        // 总截取最大长度
+        /** 总截取最大长度 */
         private Integer cutMax = null;
 
-        // 单个截取最大长度
+        /**单个截取最大长度 */
         private Integer singleCut = null;
 
         @Override
@@ -189,10 +192,10 @@ public class MultInterceptor implements Interceptor {
         }
 
         @Override
-        public void configure(Context context) {
+        public void configure(final Context context) {
             this.cutFlag = context.getBoolean("cutFlag", true);
-            this.cutMax = context.getInteger("cutMax", 0) * 1024;
-            this.singleCut = context.getInteger("singleCut", 0) * 1024;
+            this.cutMax = context.getInteger("cutMax", 0) * NUM1024;
+            this.singleCut = context.getInteger("singleCut", 0) * NUM1024;
 
             String regexStr = context.getString("regex", null);
             if (StringUtils.isEmpty(regexStr)) {

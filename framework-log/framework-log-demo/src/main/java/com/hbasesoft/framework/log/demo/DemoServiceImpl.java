@@ -28,7 +28,7 @@ public class DemoServiceImpl implements DemoService {
      * @return <br>
      */
     @Override
-    public String say(String name) {
+    public String say(final String name) {
         return name + ": hello!";
     }
 

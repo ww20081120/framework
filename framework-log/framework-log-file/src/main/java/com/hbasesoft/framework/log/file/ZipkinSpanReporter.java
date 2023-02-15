@@ -40,7 +40,7 @@ public class ZipkinSpanReporter implements Reporter<Span> {
      * @param span <br>
      */
     @Override
-    public void report(Span span) {
+    public void report(final Span span) {
         if (span != null) {
             logger.info(span.toString());
         }

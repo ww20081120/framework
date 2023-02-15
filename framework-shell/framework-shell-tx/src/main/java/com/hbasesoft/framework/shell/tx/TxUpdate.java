@@ -38,8 +38,18 @@ import lombok.Setter;
 @Component
 public class TxUpdate implements CommandHandler<Option> {
 
+    /** */
     @Autowired
     private CassandraOperations cassandraOperations;
+
+    /** */
+    private static final int NUM3 = 3;
+
+    /** */
+    private static final int NUM4 = 4;
+
+    /** */
+    private static final int NUM5 = 5;
 
     /**
      * Description: <br>
@@ -51,7 +61,7 @@ public class TxUpdate implements CommandHandler<Option> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
 
         Assert.notEmpty(option.id, "ID必填");
 
@@ -63,7 +73,7 @@ public class TxUpdate implements CommandHandler<Option> {
 
             entity.setResult(option.result);
             cassandraOperations.update(entity);
-            shell.out.println("更新Checkinfo成功！");
+            shell.getOut().println("更新Checkinfo成功！");
 
         }
 
@@ -79,7 +89,7 @@ public class TxUpdate implements CommandHandler<Option> {
                 entity.setContext(option.context);
             }
             cassandraOperations.update(entity);
-            shell.out.println("更新Clientinfo成功！");
+            shell.getOut().println("更新Clientinfo成功！");
         }
 
     }
@@ -100,29 +110,34 @@ public class TxUpdate implements CommandHandler<Option> {
     @Setter
     public static class Option extends AbstractOption {
 
+        /** */
         @Parameter(names = {
             "-id"
         }, help = true, order = 1, description = "根据ID修改")
         private String id;
 
+        /** */
         @Parameter(names = {
             "--mark", "-m"
         }, help = true, order = 2, description = "根据标记修改")
         private String mark;
 
+        /** */
         @Parameter(names = {
             "--args", "-a"
-        }, help = true, order = 3, description = "修改输入参数")
+        }, help = true, order = NUM3, description = "修改输入参数")
         private String args;
 
+        /** */
         @Parameter(names = {
             "--context", "-c"
-        }, help = true, order = 4, description = "修改上下文")
+        }, help = true, order = NUM4, description = "修改上下文")
         private String context;
 
+        /** */
         @Parameter(names = {
             "--result", "-r"
-        }, help = true, order = 5, description = "修改结果")
+        }, help = true, order = NUM5, description = "修改结果")
         private String result;
 
     }

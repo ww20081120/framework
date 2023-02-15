@@ -44,36 +44,55 @@ import com.hbasesoft.framework.log.flume.elasticsearch.client.ElasticSearchClien
  */
 public class ElasticSearchSink extends AbstractSink implements Configurable, BatchSizeSupported {
 
-    private static final int defaultBatchSize = 100;
+    /** */
+    private static final int NUM7 = 7;
 
-    private int batchSize = defaultBatchSize;
+    /** */
+    private static final int DEFAULT_BATCH_SIZE = 100;
 
+    /** */
+    private int batchSize = DEFAULT_BATCH_SIZE;
+
+    /** */
     private Address[] serverAddresses = null;
 
+    /** */
     private String indexName = ElasticSearchSinkConstants.DEFAULT_INDEX_NAME;
 
+    /** */
     private String indexType = ElasticSearchSinkConstants.DEFAULT_INDEX_TYPE;
 
+    /** */
     private String clientType = ElasticSearchSinkConstants.DEFAULT_CLIENT_TYPE;
 
+    /** */
     private String clusterName = ElasticSearchSinkConstants.DEFAULT_CLUSTER_NAME;
 
+    /** */
     private long ttlMs = ElasticSearchSinkConstants.DEFAULT_TTL;
 
+    /** */
     private final Pattern pattern = Pattern.compile(ElasticSearchSinkConstants.TTL_REGEX, Pattern.CASE_INSENSITIVE);
 
+    /** */
     private Matcher matcher = pattern.matcher("");
 
+    /** */
     private Context elasticSearchClientContext = null;
 
+    /** */
     private EventSerializer eventSerializer;
 
+    /** */
     private SinkCounter sinkCounter;
 
+    /** */
     private IndexNameBuilder indexNameBuilder;
 
+    /** */
     private ElasticSearchClient client = null;
 
+    /** */
     private final CounterGroup counterGroup = new CounterGroup();
 
     /**
@@ -168,7 +187,7 @@ public class ElasticSearchSink extends AbstractSink implements Configurable, Bat
      * @param context <br>
      */
     @Override
-    public void configure(Context context) {
+    public void configure(final Context context) {
         if (StringUtils.isNotBlank(context.getString(ElasticSearchSinkConstants.HOSTNAMES))) {
             serverAddresses = ProtocolUtil.parseAddress(context.getString(ElasticSearchSinkConstants.HOSTNAMES));
             Preconditions.checkState(serverAddresses != null && serverAddresses.length > 0,
@@ -313,7 +332,7 @@ public class ElasticSearchSink extends AbstractSink implements Configurable, Bat
         super.stop();
     }
 
-    private long parseTTL(String ttl) {
+    private long parseTTL(final String ttl) {
         matcher = matcher.reset(ttl);
         while (matcher.find()) {
             if (matcher.group(2).equals("ms")) {
@@ -332,7 +351,7 @@ public class ElasticSearchSink extends AbstractSink implements Configurable, Bat
                 return TimeUnit.DAYS.toMillis(Integer.parseInt(matcher.group(1)));
             }
             else if (matcher.group(2).equals("w")) {
-                return TimeUnit.DAYS.toMillis(7 * Integer.parseInt(matcher.group(1)));
+                return TimeUnit.DAYS.toMillis(NUM7 * Integer.parseInt(matcher.group(1)));
             }
             else if (matcher.group(2).equals("")) {
                 LoggerUtil.info("TTL qualifier is empty. Defaulting to day qualifier.");

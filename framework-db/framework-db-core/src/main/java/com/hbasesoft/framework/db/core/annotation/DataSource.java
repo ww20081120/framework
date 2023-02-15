@@ -28,7 +28,13 @@ import java.lang.annotation.Target;
 })
 public @interface DataSource {
 
+    /**
+     * @return String
+     */
     String value();
 
+    /**
+     * @return String
+     */
     String enhanceDynamicDataSource() default "";
 }

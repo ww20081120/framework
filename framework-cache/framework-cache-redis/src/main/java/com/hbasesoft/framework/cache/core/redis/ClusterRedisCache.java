@@ -173,7 +173,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    public void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
+    public void putNode(final byte[] key, final int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             cluster.hmset(key, dataMap);
             if (seconds > 0) {

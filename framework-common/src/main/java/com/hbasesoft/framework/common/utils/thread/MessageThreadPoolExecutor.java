@@ -76,7 +76,7 @@ public final class MessageThreadPoolExecutor {
         }
     }
 
-    private static ThreadPoolExecutor createThreadPoolExecutor(String channel) {
+    private static ThreadPoolExecutor createThreadPoolExecutor(final String channel) {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
             PropertyHolder.getIntProperty("message.executor." + channel + ".coreSize", 1), // 设置核心线程数量
             PropertyHolder.getIntProperty("message.executor." + channel + ".maxPoolSize", NUM_10), // 线程池维护线程的最大数量
@@ -86,7 +86,7 @@ public final class MessageThreadPoolExecutor {
                 PropertyHolder.getIntProperty("message.executor." + channel + ".queueCapacity", NUM_10)),
             new ThreadFactory() {
                 @Override
-                public Thread newThread(Runnable r) {
+                public Thread newThread(final Runnable r) {
                     Thread thread = new Thread(r);
                     thread.setDaemon(true);
                     thread.setName(channel + thread.getId());

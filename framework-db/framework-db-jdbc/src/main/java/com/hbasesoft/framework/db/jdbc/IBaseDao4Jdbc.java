@@ -8,7 +8,6 @@ package com.hbasesoft.framework.db.jdbc;
 import java.util.Collection;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
-import com.hbasesoft.framework.db.core.DaoException;
 
 /**
  * <Description> <br>
@@ -31,8 +30,8 @@ public interface IBaseDao4Jdbc<T extends BaseEntity> {
      * @param sql
      * @param objcts
      * @param commitNumber
-     * @param <T> T
      * @throws DaoException <br>
+     * @return int[]
      */
-    int[] batchExecute(final String sql, final Collection<T> objcts, final int commitNumber);
+    int[] batchExecute(String sql, Collection<T> objcts, int commitNumber);
 }

@@ -25,10 +25,10 @@ public class ElasticSearchClientFactory {
      * @param hostNames Array of strings that represents hostnames with ports (hostname:port)
      * @param clusterName Elasticsearch cluster name used only by Transport Client
      * @param serializer Serializer of flume events to elasticsearch documents
-     * @return
+     * @return ElasticSearchClient
      */
-    public ElasticSearchClient getClient(String clientType, Address[] hostNames, String clusterName,
-        EventSerializer serializer) {
+    public ElasticSearchClient getClient(final String clientType, final Address[] hostNames, final String clusterName,
+        final EventSerializer serializer) {
         return new ElasticSearchRestClient(hostNames, serializer);
     }
 }

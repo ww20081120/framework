@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.shell.log;
 
 import java.io.File;
+import java.io.PrintStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.spark.sql.AnalysisException;
@@ -49,20 +50,21 @@ public class LQuery implements CommandHandler<Option> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
         Assert.notEmpty(option.filePath, "-f 文件路径为参数必填参数");
 
         File file = new File(option.filePath);
         Assert.isTrue(file.exists(), "日志文件不存在");
 
         String fileName = file.getName();
+        PrintStream shellOut = shell.getOut();
         int index = fileName.indexOf(".");
         if (index != -1) {
             fileName = fileName.substring(0, index);
         }
-        shell.out.print("...正在加载");
-        shell.out.print(option.filePath);
-        shell.out.println("文件...");
+        shellOut.print("...正在加载");
+        shellOut.print(option.filePath);
+        shellOut.println("文件...");
 
         SparkSession spark = SparkSession.builder().appName(PropertyHolder.getProjectName()).master("local")
             .getOrCreate();
@@ -70,9 +72,9 @@ public class LQuery implements CommandHandler<Option> {
         try {
             Dataset<Row> df = spark.read().json(option.filePath);
             df.createTempView(fileName);
-            shell.out.print("加载文件成功，表名：");
-            shell.out.println(fileName);
-            shell.out.print(">> ");
+            shellOut.print("加载文件成功，表名：");
+            shellOut.println(fileName);
+            shellOut.print(">> ");
             while (!shell.isExit() && shell.getScanner().hasNextLine()) {
                 String sql = StringUtils.trim(shell.getScanner().nextLine());
                 if (StringUtils.isNotEmpty(sql)) {
@@ -92,7 +94,7 @@ public class LQuery implements CommandHandler<Option> {
                         }
                     }
                 }
-                shell.out.print("\n>> ");
+                shellOut.print("\n>> ");
             }
 
         }
@@ -119,11 +121,13 @@ public class LQuery implements CommandHandler<Option> {
     @Getter
     @Setter
     public static class Option extends AbstractOption {
+        /** */
         @Parameter(names = {
             "--file", "-f"
         }, help = true, order = 1, description = "日志文件的位置")
         private String filePath;
 
+        /** */
         @Parameter(names = {
             "--truncate", "-t"
         }, help = true, order = 2, description = "加上该参数，则只显示一部分数据")

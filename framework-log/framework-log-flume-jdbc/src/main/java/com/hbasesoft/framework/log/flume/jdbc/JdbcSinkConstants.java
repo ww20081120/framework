@@ -17,8 +17,10 @@ package com.hbasesoft.framework.log.flume.jdbc;
  */
 public interface JdbcSinkConstants {
 
+    /** */
     String TABLE_NAME = "tableName";
 
+    /** */
     String BATCH_SIZE = "batchSize";
 
     /**
@@ -36,16 +38,22 @@ public interface JdbcSinkConstants {
      */
     String SERIALIZER_PREFIX = SERIALIZER + ".";
 
+    /** */
     String DATASOURCE_CODE = "datasourceCode";
 
+    /** */
     String CLIENT_TYPE = "client";
 
+    /** */
     String CLIENT_PREFIX = CLIENT_TYPE + ".";
 
+    /** */
     String DEFAULT_DATASOURCE_CODE = "master";
 
+    /** */
     String DEFAULT_TABLE_NAME = "t_ability_api_log";
 
+    /** */
     String DEFAULT_SERIALIZER_CLASS = "com.hbasesoft.framework.log.flume.core.LogStashEventSerializer";
 
 }

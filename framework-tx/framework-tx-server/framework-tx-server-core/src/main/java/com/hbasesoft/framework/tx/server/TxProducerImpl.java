@@ -34,9 +34,9 @@ public class TxProducerImpl implements TxProducer {
      */
     @Override
     public boolean registClient(final ClientInfo clientInfo) {
-        TxStorage txStorage = getTxStorage();
-        if (!txStorage.containsClientInfo(clientInfo.getId())) {
-            txStorage.saveClientInfo(clientInfo);
+        TxStorage txstorage = getTxStorage();
+        if (!txstorage.containsClientInfo(clientInfo.getId())) {
+            txstorage.saveClientInfo(clientInfo);
             return true;
         }
         return false;

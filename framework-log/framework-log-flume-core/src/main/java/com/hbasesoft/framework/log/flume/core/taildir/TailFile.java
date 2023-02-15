@@ -31,39 +31,68 @@ import com.google.common.collect.Lists;
  * @see com.hbasesoft.framework.log.flume.core.taildir <br>
  */
 public class TailFile {
-    private static final Logger logger = LoggerFactory.getLogger(TailFile.class);
 
+    /** */
+    private static final Logger LOGGER = LoggerFactory.getLogger(TailFile.class);
+
+    /** */
     private static final byte BYTE_NL = (byte) 10;
 
+    /** */
     private static final byte BYTE_CR = (byte) 13;
 
+    /** */
     private static final int BUFFER_SIZE = 8192;
 
+    /** */
     private static final int NEED_READING = -1;
 
+    /** */
     private RandomAccessFile raf;
 
+    /** */
     private final String path;
 
+    /** */
     private final long inode;
 
+    /** */
     private long pos;
 
+    /** */
     private long lastUpdated;
 
+    /** */
     private boolean needTail;
 
+    /** */
     private final Map<String, String> headers;
 
+    /** */
     private byte[] buffer;
 
+    /** */
     private byte[] oldBuffer;
 
+    /** */
     private int bufferPos;
 
+    /** */
     private long lineReadPos;
 
-    public TailFile(File file, Map<String, String> headers, long inode, long pos) throws IOException {
+    /**
+     * @Method TailFile
+     * @param file
+     * @param headers
+     * @param inode
+     * @param pos
+     * @return
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:31
+     */
+    public TailFile(final File file, final Map<String, String> headers, final long inode, final long pos)
+        throws IOException {
         this.raf = new RandomAccessFile(file, "r");
         if (pos > 0) {
             raf.seek(pos);
@@ -99,6 +128,14 @@ public class TailFile {
         return lastUpdated;
     }
 
+    /**
+     * @Method needTail
+     * @param
+     * @return boolean
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:39
+    */
     public boolean needTail() {
         return needTail;
     }
@@ -111,40 +148,68 @@ public class TailFile {
         return lineReadPos;
     }
 
-    public void setPos(long pos) {
+    public void setPos(final long pos) {
         this.pos = pos;
     }
 
-    public void setLastUpdated(long lastUpdated) {
+    public void setLastUpdated(final long lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
-    public void setNeedTail(boolean needTail) {
+    public void setNeedTail(final boolean needTail) {
         this.needTail = needTail;
     }
 
-    public void setLineReadPos(long lineReadPos) {
+    public void setLineReadPos(final long lineReadPos) {
         this.lineReadPos = lineReadPos;
     }
 
-    public boolean updatePos(String path, long inode, long pos) throws IOException {
-        if (this.inode == inode && this.path.equals(path)) {
-            setPos(pos);
-            updateFilePos(pos);
-            logger.info("Updated position, file: " + path + ", inode: " + inode + ", pos: " + pos);
+    /**
+     * @Method updatePos
+     * @param paths
+     * @param inodes
+     * @param poss
+     * @return boolean
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:32
+     */
+    public boolean updatePos(final String paths, final long inodes, final long poss) throws IOException {
+        if (this.inode == inodes && this.path.equals(paths)) {
+            setPos(poss);
+            updateFilePos(poss);
+            LOGGER.info("Updated position, file: " + paths + ", inode: " + inodes + ", pos: " + poss);
             return true;
         }
         return false;
     }
 
-    public void updateFilePos(long pos) throws IOException {
-        raf.seek(pos);
-        lineReadPos = pos;
+    /**
+     * @Method updateFilePos
+     * @param poss
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:33
+     */
+    public void updateFilePos(final long poss) throws IOException {
+        raf.seek(poss);
+        lineReadPos = poss;
         bufferPos = NEED_READING;
         oldBuffer = new byte[0];
     }
 
-    public List<Event> readEvents(int numEvents, boolean backoffWithoutNL, boolean addByteOffset) throws IOException {
+    /**
+     * @Method readEvents
+     * @param numEvents
+     * @param backoffWithoutNL
+     * @param addByteOffset
+     * @return java.util.List<org.apache.flume.Event>
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:33
+     */
+    public List<Event> readEvents(final int numEvents, final boolean backoffWithoutNL, final boolean addByteOffset)
+        throws IOException {
         List<Event> events = Lists.newLinkedList();
         for (int i = 0; i < numEvents; i++) {
             Event event = readEvent(backoffWithoutNL, addByteOffset);
@@ -156,20 +221,20 @@ public class TailFile {
         return events;
     }
 
-    private Event readEvent(boolean backoffWithoutNL, boolean addByteOffset) throws IOException {
+    private Event readEvent(final boolean backoffWithoutNL, final boolean addByteOffset) throws IOException {
         Long posTmp = getLineReadPos();
         LineResult line = readLine();
         if (line == null) {
             return null;
         }
         if (backoffWithoutNL && !line.lineSepInclude) {
-            logger.info("Backing off in file without newline: " + path + ", inode: " + inode + ", pos: "
+            LOGGER.info("Backing off in file without newline: " + path + ", inode: " + inode + ", pos: "
                 + raf.getFilePointer());
             updateFilePos(posTmp);
             return null;
         }
         Event event = EventBuilder.withBody(line.line);
-        if (addByteOffset == true) {
+        if (addByteOffset) {
             event.getHeaders().put(BYTE_OFFSET_HEADER_KEY, posTmp.toString());
         }
         return event;
@@ -186,13 +251,22 @@ public class TailFile {
         bufferPos = 0;
     }
 
-    private byte[] concatByteArrays(byte[] a, int startIdxA, int lenA, byte[] b, int startIdxB, int lenB) {
+    private byte[] concatByteArrays(final byte[] a, final int startIdxA, final int lenA, final byte[] b,
+        final int startIdxB, final int lenB) {
         byte[] c = new byte[lenA + lenB];
         System.arraycopy(a, startIdxA, c, 0, lenA);
         System.arraycopy(b, startIdxB, c, lenA, lenB);
         return c;
     }
 
+    /**
+     * @Method readLine
+     * @param
+     * @return com.hbasesoft.framework.log.flume.core.taildir.TailFile.LineResult
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:35
+     */
     public LineResult readLine() throws IOException {
         LineResult lineResult = null;
         while (true) {
@@ -244,6 +318,13 @@ public class TailFile {
         return lineResult;
     }
 
+    /**
+     * @Method close
+     * @param
+     * @Author 李煜龙
+     * @Description TODD
+     * @Date 2023/1/29 14:35
+     */
     public void close() {
         try {
             raf.close();
@@ -252,16 +333,18 @@ public class TailFile {
             setLastUpdated(now);
         }
         catch (IOException e) {
-            logger.error("Failed closing file: " + path + ", inode: " + inode, e);
+            LOGGER.error("Failed closing file: " + path + ", inode: " + inode, e);
         }
     }
 
     private class LineResult {
-        final boolean lineSepInclude;
+        /** */
+        private final boolean lineSepInclude;
 
-        final byte[] line;
+        /** */
+        private final byte[] line;
 
-        public LineResult(boolean lineSepInclude, byte[] line) {
+        LineResult(final boolean lineSepInclude, final byte[] line) {
             super();
             this.lineSepInclude = lineSepInclude;
             this.line = line;

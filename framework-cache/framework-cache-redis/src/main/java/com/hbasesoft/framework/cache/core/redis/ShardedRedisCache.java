@@ -128,7 +128,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param value <br>
      */
     @Override
-    public void put(final byte[] key, int seconds, final byte[] value) {
+    public void put(final byte[] key, final int seconds, final byte[] value) {
         ShardedJedis shardedJedis = null;
         try {
             shardedJedis = shardedPool.getResource();
@@ -199,7 +199,7 @@ public class ShardedRedisCache extends AbstractRedisCache {
      * @param dataMap <br>
      */
     @Override
-    public void putNode(final byte[] key, int seconds, final Map<byte[], byte[]> dataMap) {
+    public void putNode(final byte[] key, final int seconds, final Map<byte[], byte[]> dataMap) {
         if (MapUtils.isNotEmpty(dataMap)) {
             ShardedJedis shardedJedis = null;
             try {

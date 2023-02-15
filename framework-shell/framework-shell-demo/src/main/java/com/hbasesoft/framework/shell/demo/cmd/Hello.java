@@ -52,14 +52,15 @@ public class Hello implements CommandHandler<HelloWordOption> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, HelloWordOption option, Shell shell) {
-        shell.out.println("hello world! " + option.testParam);
+    public void execute(final JCommander cmd, final HelloWordOption option, final Shell shell) {
+        shell.getOut().println("hello world! " + option.testParam);
     }
 
     @Getter
     @Setter
     public static class HelloWordOption extends AbstractOption {
 
+        /** */
         @Parameter(names = {
             "--test", "-t"
         }, help = true, order = 1, description = "测试参数")

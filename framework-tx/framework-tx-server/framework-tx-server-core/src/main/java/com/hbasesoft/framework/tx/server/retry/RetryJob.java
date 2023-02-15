@@ -60,22 +60,22 @@ public class RetryJob implements SimpleJob {
     public void execute(final JobContext jobContext) {
         // 按每小时内
 
-        TxConsumer txConsumer = getConsumer();
-        TxStorage storage = getTxStorage();
+        TxConsumer txconsumer = getConsumer();
+        TxStorage txStorage = getTxStorage();
 
-        if (txConsumer != null && storage != null) {
+        if (txconsumer != null && txStorage != null) {
 
             int pageIndex = 1;
             int pageSize = GlobalConstants.DEFAULT_LINES;
 
             PagerList<ClientInfo> timeoutClientInfos;
             do {
-                timeoutClientInfos = storage.queryTimeoutClientInfo(getClientInfoFactory().getClientInfo(),
+                timeoutClientInfos = txStorage.queryTimeoutClientInfo(getClientInfoFactory().getClientInfo(),
                     jobContext.getShardingItem(), pageIndex++, pageSize);
                 if (CollectionUtils.isNotEmpty(timeoutClientInfos)) {
                     for (ClientInfo clientInfo : timeoutClientInfos) {
-                        if (!txConsumer.retry(clientInfo)) {
-                            storage.updateClientRetryTimes(clientInfo.getId());
+                        if (!txconsumer.retry(clientInfo)) {
+                            txStorage.updateClientRetryTimes(clientInfo.getId());
                         }
                     }
                 }

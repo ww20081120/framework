@@ -25,15 +25,15 @@ public final class AopTargetUtils {
 
     /**
      * 获取 目标对象
-     * 
+     * @Method getTarget
      * @param proxy 代理对象
-     * @return
-     * @throws Exception
+     * @return java.lang.Object
      */
-    public static Object getTarget(Object proxy) throws Exception {
+    public static Object getTarget(final Object proxy) throws Exception {
 
         if (!AopUtils.isAopProxy(proxy)) {
-            return proxy;// 不是代理对象
+            // 不是代理对象
+            return proxy;
         }
 
         if (AopUtils.isJdkDynamicProxy(proxy)) {
@@ -45,7 +45,7 @@ public final class AopTargetUtils {
 
     }
 
-    private static Object getCglibProxyTargetObject(Object proxy) throws Exception {
+    private static Object getCglibProxyTargetObject(final Object proxy) throws Exception {
         Field h = proxy.getClass().getDeclaredField("CGLIB$CALLBACK_0");
         h.setAccessible(true);
         Object dynamicAdvisedInterceptor = h.get(proxy);
@@ -58,7 +58,7 @@ public final class AopTargetUtils {
         return target;
     }
 
-    private static Object getJdkDynamicProxyTargetObject(Object proxy) throws Exception {
+    private static Object getJdkDynamicProxyTargetObject(final Object proxy) throws Exception {
         Field h = proxy.getClass().getSuperclass().getDeclaredField("h");
         h.setAccessible(true);
         AopProxy aopProxy = (AopProxy) h.get(proxy);

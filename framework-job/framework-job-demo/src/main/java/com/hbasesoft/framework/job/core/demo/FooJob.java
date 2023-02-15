@@ -29,7 +29,7 @@ public class FooJob implements SimpleJob {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param JobContext <br>
+     * @param jobContext <br>
      */
     @Override
     public void execute(final JobContext jobContext) {

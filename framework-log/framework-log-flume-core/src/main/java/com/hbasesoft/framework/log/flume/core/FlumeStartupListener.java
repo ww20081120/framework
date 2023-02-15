@@ -50,7 +50,7 @@ public class FlumeStartupListener implements StartupListener {
      * @param context <br>
      */
     @Override
-    public void complete(ApplicationContext context) {
+    public void complete(final ApplicationContext context) {
         String filePath = PropertyHolder.getProperty("logservice.flume.config", "flume-nc-log.conf");
         String name = PropertyHolder.getProperty("logservice.flume.name");
         if (StringUtils.isEmpty(name)) {

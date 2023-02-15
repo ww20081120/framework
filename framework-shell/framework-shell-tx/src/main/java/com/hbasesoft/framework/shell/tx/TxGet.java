@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.shell.tx;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,12 @@ import lombok.Setter;
 @Component
 public class TxGet implements CommandHandler<Option> {
 
+    /** */
     @Autowired
     private CassandraOperations cassandraOperations;
+
+    /** */
+    private static final int NUM5 = 5;
 
     /**
      * Description: <br>
@@ -57,13 +62,15 @@ public class TxGet implements CommandHandler<Option> {
      * @param shell <br>
      */
     @Override
-    public void execute(JCommander cmd, Option option, Shell shell) {
+    public void execute(final JCommander cmd, final Option option, final Shell shell) {
 
         List<CriteriaDefinition> cds = new ArrayList<>();
 
         Assert.notEmpty(option.id, "ID必填");
 
         cds.add(Criteria.where("id").is(option.id));
+
+        PrintStream shellOut = shell.getOut();
 
         if (StringUtils.isNotEmpty(option.mark)) {
             cds.add(Criteria.where("mark").is(option.mark));
@@ -73,23 +80,23 @@ public class TxGet implements CommandHandler<Option> {
             Query q = Query.query(cds.toArray(new CriteriaDefinition[0]));
 
             long s = cassandraOperations.count(q, TxClientinfoEntity.class);
-            shell.out.println("统计到：" + s + "条数据。");
+            shellOut.println("统计到：" + s + "条数据。");
         }
         else {
             Query q = Query.query(cds.toArray(new CriteriaDefinition[0]));
             List<TxCheckinfoEntity> entities = cassandraOperations.select(q, TxCheckinfoEntity.class);
 
-            shell.out.println("ID\t\t标记(mark)\t\t结果(args)\t\t创建时间(createTime)");
+            shellOut.println("ID\t\t标记(mark)\t\t结果(args)\t\t创建时间(createTime)");
 
             if (CollectionUtils.isNotEmpty(entities)) {
                 for (TxCheckinfoEntity entity : entities) {
-                    shell.out.print(entity.getId());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getMark());
-                    shell.out.print("\t\t");
-                    shell.out.print(entity.getResult());
-                    shell.out.print("\t\t");
-                    shell.out.println(DateUtil.date2String(entity.getCreateTime()));
+                    shellOut.print(entity.getId());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getMark());
+                    shellOut.print("\t\t");
+                    shellOut.print(entity.getResult());
+                    shellOut.print("\t\t");
+                    shellOut.println(DateUtil.date2String(entity.getCreateTime()));
                 }
             }
         }
@@ -111,19 +118,22 @@ public class TxGet implements CommandHandler<Option> {
     @Setter
     public static class Option extends AbstractOption {
 
+        /** */
         @Parameter(names = {
             "-id"
         }, help = true, order = 1, description = "根据ID查询，必填")
         private String id;
 
+        /** */
         @Parameter(names = {
             "--mark", "-m"
         }, help = true, order = 2, description = "根据标记查询")
         private String mark;
 
+        /** */
         @Parameter(names = {
             "--count", "-c"
-        }, help = true, order = 5, description = "统计数量")
+        }, help = true, order = NUM5, description = "统计数量")
         private boolean count = false;
 
     }
