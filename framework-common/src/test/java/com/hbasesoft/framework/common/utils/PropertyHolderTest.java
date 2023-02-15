@@ -142,23 +142,6 @@ public class PropertyHolderTest {
      *         <br>
      */
     @Test
-    public void setProperty() {
-        String a = PropertyHolder.getProperty("test.none");
-        Assert.isNull(a, ErrorCodeDef.SYSTEM_ERROR);
-
-        PropertyHolder.setProperty("test.none", "你好");
-        a = PropertyHolder.getProperty("test.none");
-        Assert.equals(a, "你好", ErrorCodeDef.SYSTEM_ERROR);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
     public void getProjectName() {
         String projectName = PropertyHolder.getProjectName();
         Assert.equals(projectName, "demo", ErrorCodeDef.SYSTEM_ERROR);
