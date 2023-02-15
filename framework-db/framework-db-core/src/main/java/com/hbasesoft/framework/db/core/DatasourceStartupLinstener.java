@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core;
 
+import org.springframework.context.ApplicationContext;
+
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 
@@ -37,11 +39,9 @@ public class DatasourceStartupLinstener implements StartupListener {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     *         <br>
+     * @param context <br>
      */
-    @Override
-    public void init() {
+    public void complete(final ApplicationContext context) {
         DataSourceUtil.init();
     }
-
 }
