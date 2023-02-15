@@ -16,5 +16,11 @@
 			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
 	</dependencies>
 </project>

@@ -15,20 +15,6 @@
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-common</artifactId>
 			<version>${project.parent.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-web</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javassist</groupId>
-					<artifactId>javassist</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<dependency>
