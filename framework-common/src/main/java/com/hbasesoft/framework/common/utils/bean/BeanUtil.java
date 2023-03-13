@@ -292,7 +292,7 @@ public final class BeanUtil {
                         classes.add(Thread.currentThread().getContextClassLoader().loadClass(classUrl));
                     }
                 }
-                catch (ClassNotFoundException e) {
+                catch (Exception e) {
                     logger.error("添加用户自定义视图类错误 找不到此类的.class文件", e);
                 }
             }
