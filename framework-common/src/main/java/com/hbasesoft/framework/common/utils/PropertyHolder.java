@@ -40,16 +40,20 @@ public final class PropertyHolder {
      */
     private static final List<Property> PROPERTYS;
 
+    /**
+     * LOCAL_PROPERTY
+     */
+    private static final LocalProperty LOCAL_PROPERTY = new LocalProperty();
+
     static {
         PROPERTYS = new ArrayList<Property>();
-        PROPERTYS.add(new LocalProperty());
-
         ServiceLoader<Property> loader = ServiceLoader.load(Property.class);
         if (loader != null) {
             for (Property p : loader) {
                 PROPERTYS.add(p);
             }
         }
+        PROPERTYS.add(LOCAL_PROPERTY);
     }
 
     /**
@@ -158,16 +162,8 @@ public final class PropertyHolder {
      */
     public static String getProperty(final String name) {
         for (Property property : PROPERTYS) {
-            String value = property.getProperty(name);
+            String value = getProperty(property, name);
             if (StringUtils.isNotEmpty(value)) {
-                int startIndex = value.indexOf("${");
-                if (startIndex != -1) {
-                    String key = value.substring(startIndex + 2, value.indexOf("}", startIndex + 2));
-                    if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
-                        String kv = getProperty(key);
-                        value = StringUtils.replace(value, "${" + key + "}", kv);
-                    }
-                }
                 return value;
             }
         }
@@ -208,6 +204,46 @@ public final class PropertyHolder {
             name = realPath.substring(realPath.lastIndexOf(GlobalConstants.PATH_SPLITOR));
         }
         return name;
+    }
+
+    /**
+     * Description: 获取本地的配置项 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Property getLocalProperty() {
+        return LOCAL_PROPERTY;
+    }
+
+    /**
+     * 
+     * Description: <br> 
+     *  
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param property
+     * @param name
+     * @return <br>
+     */
+    public static String getProperty(final Property property, final String name) {
+        String value = property.getProperty(name);
+        if (StringUtils.isNotEmpty(value)) {
+            int startIndex = value.indexOf("${");
+            int end = value.indexOf("}", startIndex + 2);
+            while (startIndex != -1 && end != -1) {
+                String key = value.substring(startIndex + 2, end);
+                if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
+                    String kv = getProperty(key);
+                    value = StringUtils.replace(value, "${" + key + "}", kv);
+                }
+                startIndex = value.indexOf("${");
+                end = value.indexOf("}", startIndex + 2);
+            }
+            return value;
+        }
+        return value;
     }
 
     /**
