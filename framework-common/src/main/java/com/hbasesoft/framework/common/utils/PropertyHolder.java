@@ -218,9 +218,8 @@ public final class PropertyHolder {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @param property
@@ -235,7 +234,7 @@ public final class PropertyHolder {
             while (startIndex != -1 && end != -1) {
                 String key = value.substring(startIndex + 2, end);
                 if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
-                    String kv = getProperty(key);
+                    String kv = getProperty(property, key);
                     value = StringUtils.replace(value, "${" + key + "}", kv);
                 }
                 startIndex = value.indexOf("${");
