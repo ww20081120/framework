@@ -15,6 +15,7 @@ import java.util.ServiceLoader;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.config.LocalProperty;
 import com.hbasesoft.framework.common.utils.config.Property;
@@ -235,6 +236,12 @@ public final class PropertyHolder {
                 String key = value.substring(startIndex + 2, end);
                 if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
                     String kv = getProperty(property, key);
+                    if (property != LOCAL_PROPERTY) {
+                        kv = LOCAL_PROPERTY.getProperty(key);
+                    }
+                    if (kv == null) {
+                        throw new UtilException(ErrorCodeDef.CONFIG_NOT_SET, key);
+                    }
                     value = StringUtils.replace(value, "${" + key + "}", kv);
                 }
                 startIndex = value.indexOf("${");
