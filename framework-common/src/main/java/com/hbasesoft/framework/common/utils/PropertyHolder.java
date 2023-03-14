@@ -236,7 +236,7 @@ public final class PropertyHolder {
                 String key = value.substring(startIndex + 2, end);
                 if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
                     String kv = getProperty(property, key);
-                    if (property != LOCAL_PROPERTY) {
+                    if (kv == null && property != LOCAL_PROPERTY) {
                         kv = LOCAL_PROPERTY.getProperty(key);
                     }
                     if (kv == null) {
