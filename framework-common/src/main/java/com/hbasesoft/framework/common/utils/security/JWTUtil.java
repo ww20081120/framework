@@ -84,11 +84,7 @@ public final class JWTUtil {
         if (token != null) {
             String[] data = StringUtils.split(token, ".");
             if (data.length == FIX_LENGTH && StringUtils.isNotEmpty(data[1])) {
-                JSONObject payload = JSONObject.parseObject(new String(DataUtil.base64Decode(data[1])));
-                Long exp = payload.getLong("exp");
-                if (exp != null && System.currentTimeMillis() < exp) {
-                    return payload;
-                }
+                return JSONObject.parseObject(new String(DataUtil.base64Decode(data[1])));
             }
         }
         return null;
