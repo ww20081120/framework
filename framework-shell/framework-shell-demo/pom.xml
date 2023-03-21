@@ -11,16 +11,22 @@
 	<name>demo</name>
 	<description>demo程序</description>
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.hbasesoft.framework</groupId> -->
-<!-- 			<artifactId>framework-shell-tx</artifactId> -->
-<!-- 			<version>${project.parent.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.hbasesoft.framework</groupId> -->
+		<!-- <artifactId>framework-shell-tx</artifactId> -->
+		<!-- <version>${project.parent.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-shell-log</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<resources>
