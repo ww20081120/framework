@@ -1,4 +1,4 @@
-package com.hbasesoft.framework.common.utils;
+package com.hbasesoft.framework.common.utils.security;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

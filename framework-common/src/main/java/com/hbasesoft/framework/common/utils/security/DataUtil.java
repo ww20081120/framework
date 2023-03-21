@@ -172,6 +172,24 @@ public final class DataUtil {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param content <br>
+     * @return <br>
+     * @throws UtilException <br>
+     */
+    public static String base64UrlEncode(final byte[] content) {
+        try {
+            return Base64.encodeBase64URLSafeString(content);
+        }
+        catch (Exception e) {
+            throw new UtilException(ErrorCodeDef.BASE64_ERROR, e);
+        }
+    }
+
+    /**
      * Description: 不可以解密的加密算法 <br>
      * 
      * @author 王伟<br>

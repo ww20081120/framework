@@ -293,7 +293,11 @@ public final class BeanUtil {
                     }
                 }
                 catch (ClassNotFoundException e) {
-                    logger.error("添加用户自定义视图类错误 找不到此类的.class文件", e);
+                    logger.warn(
+                        CommonUtil.messageFormat("添加用户自定义视图类错误 找不到{0}此类的.class文件 {1}", className, e.getMessage()));
+                }
+                catch (NoClassDefFoundError e) {
+                    logger.warn(CommonUtil.messageFormat("添加用户自定义视图类错误 找不到{0}此类关联的类{1}", className, e.getMessage()));
                 }
             }
         }

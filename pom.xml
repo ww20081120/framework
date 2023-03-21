@@ -231,9 +231,7 @@
 								<pre-commit>
 									echo "begin to execute hook"gst
 									mvn checkstyle:check
-
 									RESULT=$?
-
 									exit $RESULT
 								</pre-commit>
 							</hooks>
@@ -279,7 +277,7 @@
 				<executions>
 					<execution>
 						<id>checkstyle</id>
-						<phase>validate</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>

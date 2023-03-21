@@ -11,15 +11,20 @@
 	<name>framework job demo</name>
 	<description>job demo</description>
 	<dependencies>
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.hbasesoft.framework</groupId> -->
-<!-- 			<artifactId>framework-job-elasticjob</artifactId> -->
-<!-- 			<version>${project.parent.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.hbasesoft.framework</groupId> -->
+		<!-- <artifactId>framework-job-elasticjob</artifactId> -->
+		<!-- <version>${project.parent.version}</version> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-job-quartz</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
 

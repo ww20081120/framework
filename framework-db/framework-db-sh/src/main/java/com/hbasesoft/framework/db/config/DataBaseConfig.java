@@ -7,10 +7,10 @@ package com.hbasesoft.framework.db.config;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
@@ -48,17 +48,16 @@ public class DataBaseConfig {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param dbType
      * @return <br>
      */
     @Bean
-    public AutoProxyBeanFactory registAutoProxyBeanFactory(final @Value("${master.db.type}") String dbType) {
+    public AutoProxyBeanFactory registAutoProxyBeanFactory() {
 
         AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory();
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();
-        dataConfig.setDbType(dbType);
+        dataConfig.setDbType(PropertyHolder.getProperty("master.db.type"));
         dataConfig.setBaseDaoType(BaseHibernateDao.class);
         dataConfig.setCallBackType(ResultTransformer.class);
         beanFactory.setConfig(dataConfig);

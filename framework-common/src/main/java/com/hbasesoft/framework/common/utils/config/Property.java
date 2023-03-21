@@ -3,45 +3,38 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.core;
+package com.hbasesoft.framework.common.utils.config;
 
-import org.springframework.context.ApplicationContext;
-
-import com.hbasesoft.framework.common.StartupListener;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
+import java.util.Map;
 
 /**
- * <Description> <br>
+ * <Description> 配置项<br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2019年4月12日 <br>
+ * @CreateDate 2023年2月15日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.core <br>
+ * @see com.hbasesoft.framework.common.utils.bean <br>
  */
-public class DatasourceStartupLinstener implements StartupListener {
+public interface Property {
 
     /**
-     * Description: <br>
+     * Description: 获取配置项<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param property property
+     * @return <br>
+     */
+    String getProperty(String property);
+
+    /**
+     * Description: 获取所有配置项<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
      */
-    @Override
-    public LoadOrder getOrder() {
-        return LoadOrder.MIDDLE;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param context <br>
-     */
-    public void complete(final ApplicationContext context) {
-        DataSourceUtil.init();
-    }
+    Map<String, String> getProperties();
 }

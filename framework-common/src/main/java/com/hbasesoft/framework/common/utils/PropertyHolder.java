@@ -6,22 +6,19 @@
 
 package com.hbasesoft.framework.common.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
+import java.util.ServiceLoader;
 
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.yaml.snakeyaml.Yaml;
+import org.apache.commons.lang3.StringUtils;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.config.LocalProperty;
+import com.hbasesoft.framework.common.utils.config.Property;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -39,11 +36,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PropertyHolder {
 
-    /** properties */
-    private static final Map<String, String> PROPERTIES = new HashMap<>();
+    /**
+     * propertys
+     */
+    private static final List<Property> PROPERTYS;
+
+    /**
+     * LOCAL_PROPERTY
+     */
+    private static final LocalProperty LOCAL_PROPERTY = new LocalProperty();
 
     static {
-        init();
+        PROPERTYS = new ArrayList<Property>();
+        ServiceLoader<Property> loader = ServiceLoader.load(Property.class);
+        if (loader != null) {
+            for (Property p : loader) {
+                PROPERTYS.add(p);
+            }
+        }
+        PROPERTYS.add(LOCAL_PROPERTY);
     }
 
     /**
@@ -54,154 +65,14 @@ public final class PropertyHolder {
      * @return <br>
      */
     public static Map<String, String> getProperties() {
-        return PROPERTIES;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param inputStream
-     * @param map
-     * @throws IOException <br>
-     */
-    @SuppressWarnings("unchecked")
-    private static void loadYml(final InputStream inputStream, final Map<String, String> map) throws IOException {
-        try {
-
-            Yaml yaml = new Yaml();
-            HashMap<String, Object> value = yaml.loadAs(inputStream, HashMap.class);
-            if (MapUtils.isNotEmpty(value)) {
-                for (Entry<String, Object> entry : value.entrySet()) {
-                    transfer(entry.getKey(), entry.getValue(), map);
-                }
+        Map<String, String> properties = new HashMap<>();
+        for (Property p : PROPERTYS) {
+            Map<String, String> map = p.getProperties();
+            if (MapUtils.isNotEmpty(map)) {
+                properties.putAll(map);
             }
         }
-        finally {
-            IOUtils.closeQuietly(inputStream);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void transfer(final String key, final Object value, final Map<String, String> map) {
-        if (value != null) {
-            if (value instanceof Map) {
-                Map<String, Object> m = (Map<String, Object>) value;
-                if (MapUtils.isNotEmpty(m)) {
-                    for (Entry<String, Object> entry : m.entrySet()) {
-                        transfer(key + GlobalConstants.PERIOD + entry.getKey(), entry.getValue(), map);
-                    }
-                }
-            }
-            else {
-                map.put(key, value.toString());
-            }
-        }
-    }
-
-    private static void loadProperties(final InputStream inputStream, final Map<String, String> map)
-        throws IOException {
-        try {
-            Properties properties = new Properties();
-            properties.load(new InputStreamReader(inputStream, "utf-8"));
-            for (Entry<Object, Object> entry : properties.entrySet()) {
-                map.put(entry.getKey() + GlobalConstants.BLANK, entry.getValue() + GlobalConstants.BLANK);
-            }
-        }
-        finally {
-            IOUtils.closeQuietly(inputStream);
-        }
-    }
-
-    /**
-     * Description: 本方法中的日志只能输出中文，因为APDPlatLoggerImpl中默认指定输出中文 只有配置项加载完毕，调用了指定日志输出语言方法LOG.setLocale(getLogLanguage())
-     * 之后，配置的日志输出语言才会生效<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    private static void init() {
-        String systemConfig = "/application.yml";
-        ClassPathResource cr = null;
-        try {
-            cr = new ClassPathResource(systemConfig);
-            if (cr.exists()) {
-                loadYml(cr.getInputStream(), PROPERTIES);
-            }
-            else {
-                systemConfig = "/application.properties";
-                cr = new ClassPathResource(systemConfig);
-                loadProperties(cr.getInputStream(), PROPERTIES);
-            }
-            System.out.println("装入主配置文件:" + systemConfig);
-        }
-        catch (Exception e) {
-            System.out.println("装入主配置文件" + systemConfig + "失败!");
-            e.printStackTrace();
-            // throw new InitializationException(e);
-            return;
-        }
-
-        // 加载扩展文件
-        loadExtendFiles();
-
-        System.out.println("系统配置属性装载完毕");
-        System.out.println("******************属性列表***************************");
-        PROPERTIES.keySet().forEach(propertyName -> {
-            System.out.println("  " + propertyName + " = " + PROPERTIES.get(propertyName));
-        });
-        System.out.println("***********************************************************");
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    private static void loadExtendFiles() {
-        String extendPropertyFiles = PROPERTIES.get("extend.property.files");
-        String springIncloud = PROPERTIES.get("spring.profiles.include");
-        if (StringUtils.isNotEmpty(springIncloud)) {
-            StringBuilder sb = new StringBuilder();
-            if (sb != null) {
-                sb.append(extendPropertyFiles);
-            }
-
-            String[] fs = StringUtils.split(springIncloud, GlobalConstants.SPLITOR);
-            for (String f : fs) {
-                sb.append(GlobalConstants.SPLITOR).append("application-").append(f).append(".yml");
-            }
-            extendPropertyFiles = sb.toString();
-        }
-
-        if (StringUtils.isNotEmpty(extendPropertyFiles)) {
-            String[] files = StringUtils.split(extendPropertyFiles, GlobalConstants.SPLITOR);
-            ClassPathResource cr = null;
-            for (String file : files) {
-                try {
-                    file = StringUtils.trim(file);
-                    cr = new ClassPathResource(file);
-                    if (cr.exists()) {
-                        if (StringUtils.endsWith(file, "yml")) {
-                            loadYml(cr.getInputStream(), PROPERTIES);
-                        }
-                        else {
-                            loadProperties(cr.getInputStream(), PROPERTIES);
-                        }
-                        System.out.println("装入扩展配置文件：" + file);
-                    }
-                }
-                catch (Exception e) {
-                    System.out.println("装入扩展配置文件" + file + "失败！");
-                    e.printStackTrace();
-                    throw new InitializationException(e);
-                }
-            }
-        }
+        return properties;
     }
 
     /**
@@ -226,7 +97,7 @@ public final class PropertyHolder {
      * @return <br>
      */
     public static Boolean getBooleanProperty(final String name, final Boolean defaultValue) {
-        String value = PROPERTIES.get(name);
+        String value = getProperty(name);
         return StringUtils.isNotEmpty(value) ? "true".equals(value) : defaultValue;
     }
 
@@ -252,7 +123,7 @@ public final class PropertyHolder {
      * @return <br>
      */
     public static Integer getIntProperty(final String name, final Integer defaultValue) {
-        String value = PROPERTIES.get(name);
+        String value = getProperty(name);
         return StringUtils.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
     }
 
@@ -278,7 +149,7 @@ public final class PropertyHolder {
      * @return <br>
      */
     public static Long getLongProperty(final String name, final Long defaultValue) {
-        String value = PROPERTIES.get(name);
+        String value = getProperty(name);
         return StringUtils.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
     }
 
@@ -291,20 +162,13 @@ public final class PropertyHolder {
      * @return <br>
      */
     public static String getProperty(final String name) {
-        String value = PROPERTIES.get(name);
-        if (org.apache.commons.lang3.StringUtils.isNotEmpty(value)) {
-            int startIndex = value.indexOf("${");
-            if (startIndex != -1) {
-                String key = value.substring(startIndex + 2, value.indexOf("}", startIndex + 2));
-                if (!org.apache.commons.lang3.StringUtils.equals(name, key)
-                    && org.apache.commons.lang3.StringUtils.isNotEmpty(key)) {
-                    String kv = getProperty(key);
-                    value = StringUtils.replace(value, "${" + key + "}", kv);
-                }
+        for (Property property : PROPERTYS) {
+            String value = getProperty(property, name);
+            if (StringUtils.isNotEmpty(value)) {
+                return value;
             }
-
         }
-        return value;
+        return null;
     }
 
     /**
@@ -319,18 +183,6 @@ public final class PropertyHolder {
     public static String getProperty(final String name, final String defaultValue) {
         String value = getProperty(name);
         return StringUtils.isNotEmpty(value) ? value : defaultValue;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param name
-     * @param value <br>
-     */
-    public static void setProperty(final String name, final String value) {
-        PROPERTIES.put(name, value);
     }
 
     /**
@@ -353,6 +205,51 @@ public final class PropertyHolder {
             name = realPath.substring(realPath.lastIndexOf(GlobalConstants.PATH_SPLITOR));
         }
         return name;
+    }
+
+    /**
+     * Description: 获取本地的配置项 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Property getLocalProperty() {
+        return LOCAL_PROPERTY;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param property
+     * @param name
+     * @return <br>
+     */
+    public static String getProperty(final Property property, final String name) {
+        String value = property.getProperty(name);
+        if (StringUtils.isNotEmpty(value)) {
+            int startIndex = value.indexOf("${");
+            int end = value.indexOf("}", startIndex + 2);
+            while (startIndex != -1 && end != -1) {
+                String key = value.substring(startIndex + 2, end);
+                if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
+                    String kv = getProperty(property, key);
+                    if (kv == null && property != LOCAL_PROPERTY) {
+                        kv = LOCAL_PROPERTY.getProperty(key);
+                    }
+                    if (kv == null) {
+                        throw new UtilException(ErrorCodeDef.CONFIG_NOT_SET, key);
+                    }
+                    value = StringUtils.replace(value, "${" + key + "}", kv);
+                }
+                startIndex = value.indexOf("${");
+                end = value.indexOf("}", startIndex + 2);
+            }
+            return value;
+        }
+        return value;
     }
 
     /**

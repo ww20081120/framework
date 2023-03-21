@@ -222,7 +222,13 @@ public enum ErrorCodeDef implements ErrorCode {
     JDK_UNSERIALIZE_ERROR(SYSTEM_PREFIX + 65, "JDK 反序列化失败[{0}]"),
 
     /** 参数的内容大小超过65535个字节 */
-    ARGUMENTS_SIZE_TOO_LARGE(SYSTEM_PREFIX + 66, "参数的内容大小超过65535个字节");
+    ARGUMENTS_SIZE_TOO_LARGE(SYSTEM_PREFIX + 66, "参数的内容大小超过65535个字节"),
+
+    /** {0}未配置，请检查配置文件 */
+    CONFIG_NOT_SET(SYSTEM_PREFIX + 67, "{0}未配置，请检查配置文件"),
+
+    /** {0}参数错误 */
+    PARAM_ERROR(SYSTEM_PREFIX + 68, "{0}参数错误");
 
     /** code */
     private final int code;
