@@ -103,9 +103,6 @@ public class DBTable2JavaBean extends JFrame {
     private static final int NUM_150 = 150;
 
     /** NUM */
-    private static final int NUM_153 = 153;
-
-    /** NUM */
     private static final int NUM_450 = 450;
 
     /** NUM */

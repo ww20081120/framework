@@ -5,9 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.jdbc.config;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,9 +15,12 @@ import org.springframework.jdbc.core.RowMapper;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
-import com.hbasesoft.framework.db.jdbc.AutoProxyBeanFactory;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
+import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
+import com.hbasesoft.framework.db.core.spring.SpringDaoHandler;
 import com.hbasesoft.framework.db.jdbc.BaseJdbcDao;
-import com.hbasesoft.framework.db.jdbc.SpringDaoHandler4Jdbc;
+import com.hbasesoft.framework.db.jdbc.Dao4Jdbc;
 
 /**
  * <Description> <br>
@@ -39,10 +42,11 @@ public class DataBase4JdbcConfig {
      * @taskId <br>
      * @return <br>
      */
-    @Bean(name = "springDaoHandler4Jdbc")
-    public MethodInterceptor registDaoHandler() {
+    @ConditionalOnMissingBean(SpringDaoHandler.class)
+    @Bean
+    public SpringDaoHandler registDaoHandler() {
         // dao处理类
-        return new SpringDaoHandler4Jdbc();
+        return new SpringDaoHandler();
     }
 
     /**
@@ -56,7 +60,13 @@ public class DataBase4JdbcConfig {
     @Bean(name = "autoProxyBeanFactory4Jdbc")
     public AutoProxyBeanFactory registAutoProxyBeanFactory(final @Value("${master.db.type}") String dbType) {
 
-        AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory();
+        AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory(new ISqlExcutorFactory() {
+
+            @Override
+            public ISqlExcutor create() {
+                return new BaseJdbcDao();
+            }
+        }, Dao4Jdbc.class);
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();

@@ -12,5 +12,7 @@
   	<module>framework-db-sh</module>
   	<module>framework-db-demo</module>
   	<module>framework-db-jdbc</module>
+  	<module>framework-db-orm</module>
+  	<module>framework-db-ogm</module>
   </modules>
 </project>

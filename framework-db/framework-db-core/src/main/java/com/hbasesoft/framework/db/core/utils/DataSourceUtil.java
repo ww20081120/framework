@@ -55,13 +55,6 @@ public final class DataSourceUtil {
      */
     public static void init() {
         synchronized (dataSourceMap) {
-            if (StringUtils.isNotEmpty(PropertyHolder.getProperty("master.db.url"))) {
-                String name = "master";
-                LoggerUtil.info("开始注册{0}数据源", name);
-                regist(name, new DbParam(name));
-                LoggerUtil.info("注册{0}数据源成功", name);
-            }
-
             for (String key : PropertyHolder.getProperties().keySet()) {
                 if (key.endsWith(".db.url")) {
                     String name = key.substring(0, key.indexOf("."));

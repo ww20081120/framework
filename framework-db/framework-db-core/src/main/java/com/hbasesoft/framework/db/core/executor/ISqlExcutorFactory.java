@@ -3,20 +3,26 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.spring.datasource;
+package com.hbasesoft.framework.db.core.executor;
 
 /**
  * <Description> <br>
  * 
- * @author 王伟 <br>
- * @version 1.0 <br>
- * @CreateDate 2014年10月23日 <br>
- * @see com.hbasesoft.framework.dao.datasource <br>
+ * @author 王伟<br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2023年3月21日 <br>
+ * @since V1.0<br>
+ * @see com.hbasesoft.framework.db.core.executor <br>
  */
-public enum DataSourceType {
-    
+public interface ISqlExcutorFactory {
+
     /**
-     * system
+     * Description 生成SqlExcutor <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
      */
-    system, biz
+    ISqlExcutor create();
 }
