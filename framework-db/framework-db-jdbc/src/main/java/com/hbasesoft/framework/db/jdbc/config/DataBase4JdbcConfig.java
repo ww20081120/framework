@@ -43,7 +43,7 @@ public class DataBase4JdbcConfig {
      * @return <br>
      */
     @ConditionalOnMissingBean(SpringDaoHandler.class)
-    @Bean
+    @Bean("springDaoHandler")
     public SpringDaoHandler registDaoHandler() {
         // dao处理类
         return new SpringDaoHandler();
@@ -74,7 +74,7 @@ public class DataBase4JdbcConfig {
         dataConfig.setBaseDaoType(BaseJdbcDao.class);
         dataConfig.setCallBackType(RowMapper.class);
         beanFactory.setConfig(dataConfig);
-        beanFactory.setInterceptors("springDaoHandler4Jdbc");
+        beanFactory.setInterceptors("springDaoHandler");
         beanFactory.setPackagesToScan(getBasePackage());
 
         return beanFactory;

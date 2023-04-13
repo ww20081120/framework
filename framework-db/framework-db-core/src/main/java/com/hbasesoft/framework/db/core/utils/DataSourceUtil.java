@@ -58,11 +58,9 @@ public final class DataSourceUtil {
             for (String key : PropertyHolder.getProperties().keySet()) {
                 if (key.endsWith(".db.url")) {
                     String name = key.substring(0, key.indexOf("."));
-                    if (!"master".equals(name)) {
-                        LoggerUtil.info("开始注册{0}数据源", name);
-                        regist(name, new DbParam(name));
-                        LoggerUtil.info("注册{0}数据源成功", name);
-                    }
+                    LoggerUtil.info("开始注册{0}数据源", name);
+                    regist(name, new DbParam(name));
+                    LoggerUtil.info("注册{0}数据源成功", name);
                 }
             }
         }
