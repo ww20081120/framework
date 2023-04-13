@@ -41,7 +41,7 @@ public class DataBaseConfig {
      * @return <br>
      */
     @ConditionalOnMissingBean(SpringDaoHandler.class)
-    @Bean
+    @Bean(name = "springDaoHandler")
     public SpringDaoHandler registDaoHandler() {
         // dao处理类
         return new SpringDaoHandler();
