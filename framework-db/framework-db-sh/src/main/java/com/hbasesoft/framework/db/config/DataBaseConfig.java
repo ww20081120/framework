@@ -5,17 +5,20 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.config;
 
-import org.aopalliance.intercept.MethodInterceptor;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
+import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
+import com.hbasesoft.framework.db.core.spring.SpringDaoHandler;
 import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
-import com.hbasesoft.framework.db.spring.AutoProxyBeanFactory;
-import com.hbasesoft.framework.db.spring.SpringDaoHandler;
 
 /**
  * <Description> <br>
@@ -37,8 +40,9 @@ public class DataBaseConfig {
      * @taskId <br>
      * @return <br>
      */
-    @Bean(name = "springDaoHandler")
-    public MethodInterceptor registDaoHandler() {
+    @ConditionalOnMissingBean(SpringDaoHandler.class)
+    @Bean
+    public SpringDaoHandler registDaoHandler() {
         // dao处理类
         return new SpringDaoHandler();
     }
@@ -50,10 +54,15 @@ public class DataBaseConfig {
      * @taskId <br>
      * @return <br>
      */
-    @Bean
+    @Bean("SHAutoProxyBeanFactory")
     public AutoProxyBeanFactory registAutoProxyBeanFactory() {
+        AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory(new ISqlExcutorFactory() {
 
-        AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory();
+            @Override
+            public ISqlExcutor create() {
+                return new BaseHibernateDao();
+            }
+        }, Dao.class);
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();

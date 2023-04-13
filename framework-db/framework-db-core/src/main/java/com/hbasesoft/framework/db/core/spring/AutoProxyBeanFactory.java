@@ -3,8 +3,9 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.jdbc;
+package com.hbasesoft.framework.db.core.spring;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -21,9 +22,14 @@ import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.IBaseDao;
 import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * <Description> <br>
@@ -33,12 +39,23 @@ import com.hbasesoft.framework.db.core.config.DaoConfig;
  * @CreateDate 2014年10月23日 <br>
  * @see com.hbasesoft.framework.dao.beanfactory <br>
  */
+@RequiredArgsConstructor
 public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
 
     /**
      * logger
      */
     private static Logger logger = new Logger(AutoProxyBeanFactory.class);
+
+    /**
+     * executor的工厂
+     */
+    private final ISqlExcutorFactory sqlExcutorFactory;
+
+    /**
+     * 注解名称
+     */
+    private final Class<? extends Annotation> annotationClazz;
 
     /** 扫描路径 */
     private String[] packagesToScan;
@@ -69,7 +86,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                     Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
                     String className = null;
                     for (Class<?> clazz : clazzSet) {
-                        if (clazz.isAnnotationPresent(Dao4Jdbc.class)) {
+                        if (clazz.isAnnotationPresent(annotationClazz)) {
                             className = clazz.getName();
                             String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
                             if (beanFactory.containsBean(beanName)) {
@@ -104,11 +121,11 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     private DaoHandler getDaoHandler(final Class<?> clazz) {
         DaoHandler handler = new DaoHandler();
         handler.setDaoConfig(config);
-        BaseJdbcDao baseDao = new BaseJdbcDao();
+        ISqlExcutor baseDao = sqlExcutorFactory.create();
         handler.setSqlExcutor(baseDao);
 
         // 继承泛型的类需要获取到范性类
-        if (IBaseDao4Jdbc.class.isAssignableFrom(clazz)) {
+        if (IBaseDao.class.isAssignableFrom(clazz)) {
             Class<?> entityClazz = null;
             ParameterizedType type = (ParameterizedType) clazz.getGenericSuperclass();
             if (type != null) {

@@ -45,4 +45,13 @@ public interface ISqlExcutor {
      * @throws DaoException <br>
      */
     int[] batchExcuteSql(String[] sql, DataParam param) throws DaoException;
+
+    /**
+     * Description: 设置bean类型<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClazz <br>
+     */
+    void setEntityClazz(Class<?> entityClazz);
 }

@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
@@ -47,6 +49,7 @@
 		<elasticjob.version>3.0.1</elasticjob.version>
 		<jaxb.version>4.0.0</jaxb.version>
 		<xxl-job.version>2.3.1</xxl-job.version>
+		<javax-persistence.version>2.2</javax-persistence.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -204,11 +207,20 @@
 				<artifactId>xxl-job-core</artifactId>
 				<version>${xxl-job.version}</version>
 			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>javax.persistence-api</artifactId>
+				<version>${javax-persistence.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
 		<plugins>
+			<!-- 可以用来批量修改版本的插件 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
@@ -216,6 +228,30 @@
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
 			</plugin>
+
+			<!-- 做checkstyle的插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<configLocation>config/checkstyle/hbasesoft-check-1.0.xml</configLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<failOnViolation>true</failOnViolation>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 在提交代码的时候自动做checkstyle的插件 -->
 			<plugin>
 				<groupId>io.github.phillipuniverse</groupId>
 				<artifactId>githook-maven-plugin</artifactId>
@@ -239,6 +275,8 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- 编译设置jdk版本的插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -246,6 +284,8 @@
 					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
 			</plugin>
+
+			<!-- 编译时把源码打入jar包 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -255,35 +295,6 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<tagNameFormat>@{project.version}</tagNameFormat>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<configLocation>config/checkstyle/hbasesoft-check-1.0.xml</configLocation>
-				</configuration>
-				<executions>
-					<execution>
-						<id>checkstyle</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-						<configuration>
-							<failOnViolation>true</failOnViolation>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -304,6 +315,7 @@
 			</resource>
 		</resources>
 	</build>
+
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
