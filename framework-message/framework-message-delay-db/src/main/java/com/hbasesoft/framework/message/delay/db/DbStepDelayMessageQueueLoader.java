@@ -191,7 +191,8 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
     public void changeData(final String messageId, final long expireTime, final int oldLevel, final int newLevel) {
         if (oldLevel != newLevel) {
             StepDelayMessageQueue oldQueue = getDelayMessageQueue(oldLevel);
-            if (oldQueue instanceof MemeryStepDelayMessageQueue mm) {
+            if (oldQueue instanceof MemeryStepDelayMessageQueue) {
+                MemeryStepDelayMessageQueue mm = (MemeryStepDelayMessageQueue) oldQueue;
                 mm.removeIndex(messageId);
             }
             else if (oldQueue instanceof DbStepDelayMessageQueue) {
@@ -199,7 +200,8 @@ public class DbStepDelayMessageQueueLoader implements StepDelayMessageQueueLoade
             }
 
             StepDelayMessageQueue newQueue = getDelayMessageQueue(newLevel);
-            if (newQueue instanceof MemeryStepDelayMessageQueue mm) {
+            if (newQueue instanceof MemeryStepDelayMessageQueue) {
+                MemeryStepDelayMessageQueue mm = (MemeryStepDelayMessageQueue) newQueue;
                 mm.addIndex(messageId, expireTime);
             }
 

@@ -107,7 +107,9 @@ public class LogStashEventSerializer implements EventSerializer {
         throws IOException, UnsupportedEncodingException {
         byte[] body = event.getBody();
         Object data = getJson(new String(body));
-        if (data instanceof JSONObject jd) {
+        if (data instanceof JSONObject) {
+            JSONObject jd = (JSONObject) data;
+
             builder.putAll(jd);
         }
         else {

@@ -85,7 +85,8 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
             EventData data = new EventData();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);
-            data.put("errorCode", e instanceof FrameworkException fe ? fe.getCode() : ErrorCodeDef.SYSTEM_ERROR);
+            data.put("errorCode",
+                e instanceof FrameworkException ? ((FrameworkException) e).getCode() : ErrorCodeDef.SYSTEM_ERROR);
             EventEmmiter.emmit(event, data);
         }
     }

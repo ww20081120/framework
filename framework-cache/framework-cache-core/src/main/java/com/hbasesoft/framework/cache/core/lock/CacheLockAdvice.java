@@ -57,7 +57,8 @@ public class CacheLockAdvice {
     @Around("cacheLock()")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
-        if (sig instanceof MethodSignature msig) {
+        if (sig instanceof MethodSignature) {
+            MethodSignature msig = (MethodSignature) sig;
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 

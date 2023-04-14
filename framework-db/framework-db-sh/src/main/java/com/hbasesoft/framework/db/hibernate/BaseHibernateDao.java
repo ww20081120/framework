@@ -94,7 +94,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
             // step2:设置返回值类型
             final Object callBack = param.getCallback();
-            if (callBack != null && callBack instanceof ResultTransformer rt) {
+            if (callBack != null && callBack instanceof ResultTransformer) {
+                ResultTransformer rt = (ResultTransformer) callBack;
+
                 query.setResultTransformer(rt);
             }
             else if (param.getBeanType().equals(Map.class)) {
@@ -171,7 +173,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 if (obj instanceof Collection<?>) {
                     query.setParameterList(entry.getKey(), (Collection<?>) obj);
                 }
-                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[] os) {
+                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[]) {
+                    Object[] os = (Object[]) obj;
+
                     query.setParameterList(entry.getKey(), os);
                 }
                 else {
