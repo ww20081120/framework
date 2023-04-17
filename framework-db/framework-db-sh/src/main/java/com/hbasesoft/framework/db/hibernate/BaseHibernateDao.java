@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
+
 import org.apache.commons.collections.MapUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -62,6 +66,17 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     /** entity class */
     private Class<?> entityClazz;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public CriteriaBuilder getCriteriaBuilder() {
+        return getSession().getCriteriaBuilder();
+    }
 
     /**
      * Description: <br>
@@ -844,6 +859,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <T>
+     * @param criteria <br>
+     */
+    public <T> void updateByCriteria(final CriteriaUpdate<T> criteria) {
+        org.hibernate.query.Query query = getSession().createQuery(criteria);
+        query.executeUpdate();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param id <br>
      */
     public void deleteById(final Serializable id) {
@@ -871,6 +899,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     public void deleteByIds(final Collection<? extends Serializable> ids) {
         this.deleteAllEntitiesByIds(getEntityClazz(), ids);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param criteria <br>
+     */
+    public <T> void deleteByCriteria(final CriteriaDelete<T> criteria) {
+        org.hibernate.query.Query query = getSession().createQuery(criteria);
+        query.executeUpdate();
     }
 
     /**

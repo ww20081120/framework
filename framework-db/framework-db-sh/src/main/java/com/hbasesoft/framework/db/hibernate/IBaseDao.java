@@ -9,6 +9,10 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
+
 import org.hibernate.criterion.DetachedCriteria;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
@@ -27,6 +31,15 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
 public interface IBaseDao<T extends BaseEntity> {
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    CriteriaBuilder getCriteriaBuilder();
 
     /**
      * Description: <br>
@@ -77,6 +90,15 @@ public interface IBaseDao<T extends BaseEntity> {
     void updateBatch(List<T> entitys);
 
     /**
+     * Description: 根据条件来做更新<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria <br>
+     */
+    void updateByCriteria(CriteriaUpdate<T> criteria);
+
+    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -111,6 +133,15 @@ public interface IBaseDao<T extends BaseEntity> {
      * @param ids <br>
      */
     void deleteByIds(Collection<? extends Serializable> ids);
+
+    /**
+     * Description: 根据条件删除<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria <br>
+     */
+    void deleteByCriteria(CriteriaDelete<T> criteria);
 
     /**
      * Description: <br>
