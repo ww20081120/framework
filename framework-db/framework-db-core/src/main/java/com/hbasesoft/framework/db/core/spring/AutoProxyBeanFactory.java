@@ -16,8 +16,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.BaseEntity;
@@ -148,9 +146,6 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                             entityClazz = t3;
                         }
                     }
-                }
-                else {
-                    throw new UtilException(ErrorCodeDef.GENERIC_TYPE_ERROR, clazz.getName());
                 }
             }
         }
