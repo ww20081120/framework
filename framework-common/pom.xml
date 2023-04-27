@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>4.0</version>
+		<version>3.7</version>
 	</parent>
 	<artifactId>framework-common</artifactId>
-	<version>4.0</version>
+	<version>3.7</version>
 	<name>${project.artifactId}</name>
 	<description>公共模块</description>
 	<dependencies>

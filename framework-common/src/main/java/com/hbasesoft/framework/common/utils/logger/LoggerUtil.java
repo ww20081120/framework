@@ -223,7 +223,8 @@ public final class LoggerUtil {
      * @return <br>
      */
     public static String getErrorMessage(final Throwable t) {
-        if (t instanceof FrameworkException fe) {
+        if (t instanceof FrameworkException) {
+            FrameworkException fe = (FrameworkException) t;
             return fe.getCode() + GlobalConstants.VERTICAL_LINE + t.getMessage();
         }
         return t.getMessage();
@@ -239,7 +240,8 @@ public final class LoggerUtil {
      * @return <br>
      */
     public static String getErrorMessage(final String message, final Throwable t) {
-        if (t instanceof FrameworkException fe) {
+        if (t instanceof FrameworkException) {
+            FrameworkException fe = (FrameworkException) t;
             return fe.getCode() + GlobalConstants.VERTICAL_LINE + message;
         }
         return message;

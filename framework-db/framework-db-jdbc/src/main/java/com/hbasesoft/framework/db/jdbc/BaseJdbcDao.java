@@ -102,7 +102,8 @@ public class BaseJdbcDao implements ISqlExcutor {
             RowMapper<?> rowMap = null;
             // step2:设置返回值类型
             final Object callBack = param.getCallback();
-            if (callBack != null && callBack instanceof RowMapper rm) {
+            if (callBack != null && callBack instanceof RowMapper) {
+                RowMapper rm = (RowMapper) callBack;
                 rowMap = rm;
             }
             else if (param.getBeanType().equals(Map.class)) {

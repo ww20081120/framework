@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-log</artifactId>
-		<version>4.0</version>
+		<version>3.7</version>
 	</parent>
 	<artifactId>framework-log-flume-core</artifactId>
 	<name>flume</name>

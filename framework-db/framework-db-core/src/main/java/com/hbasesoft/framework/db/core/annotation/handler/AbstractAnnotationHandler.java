@@ -235,7 +235,9 @@ public class AbstractAnnotationHandler {
                         // 判断是否含有Param注解
                         String name = GlobalConstants.NULL;
                         for (Annotation annotation : pmAnnotaions) {
-                            if (annotation instanceof Param p) {
+                            if (annotation instanceof Param) {
+                                Param p = (Param) annotation;
+
                                 name = p.value();
                                 if (Param.PAGE_INDEX.equals(name)) {
                                     metadata.setIndexPosition(i);

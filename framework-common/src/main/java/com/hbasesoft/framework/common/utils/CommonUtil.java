@@ -139,7 +139,7 @@ public final class CommonUtil {
     public static String getString(final Object obj) {
         String result = null;
         if (obj != null) {
-            result = obj instanceof String str ? str : obj.toString();
+            result = obj instanceof String ? (String) obj : obj.toString();
         }
         return result;
     }

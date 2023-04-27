@@ -157,7 +157,7 @@ public final class RocketmqFactory {
         // 队列数
         // producer.setCheckRequestHoldMax(2000);
 
-        // TODO 由于社区版本的服务器阉割调了消息回查的功能，所以这个地方没有意义
+        // 由于社区版本的服务器阉割调了消息回查的功能，所以这个地方没有意义
         // TransactionCheckListener transactionCheckListener = new
         // TransactionCheckListenerImpl();
         // producer.setTransactionCheckListener(transactionCheckListener);
@@ -228,10 +228,12 @@ public final class RocketmqFactory {
             throw new UtilException(ErrorCodeDef.MESSAGE_MODEL_C_CREATE_ERROR, e);
         }
 
-        if (messageListener instanceof MessageListenerConcurrently mc) {
+        if (messageListener instanceof MessageListenerConcurrently) {
+            MessageListenerConcurrently mc = (MessageListenerConcurrently) messageListener;
             consumer.registerMessageListener(mc);
         }
-        else if (messageListener instanceof MessageListenerOrderly mo) {
+        else if (messageListener instanceof MessageListenerOrderly) {
+            MessageListenerConcurrently mo = (MessageListenerConcurrently) messageListener;
             consumer.registerMessageListener(mo);
         }
 

@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>4.0</version>
+		<version>3.7</version>
 	</parent>
 	<artifactId>framework-job</artifactId>
 	<name>framework job</name>

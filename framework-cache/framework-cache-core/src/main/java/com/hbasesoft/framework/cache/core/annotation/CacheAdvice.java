@@ -73,7 +73,8 @@ public class CacheAdvice {
         Object result = null;
 
         Signature sig = thisJoinPoint.getSignature();
-        if (sig instanceof MethodSignature msig) {
+        if (sig instanceof MethodSignature) {
+            MethodSignature msig = (MethodSignature) sig;
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
@@ -182,8 +183,8 @@ public class CacheAdvice {
             Map<String, Object> paramMap = new HashMap<String, Object>();
             for (int i = 0; i < parameterAnnotations.length; i++) {
                 for (Annotation annotation : parameterAnnotations[i]) {
-                    if (annotation instanceof Key a) {
-                        paramMap.put(a.value(), args[i]);
+                    if (annotation instanceof Key) {
+                        paramMap.put(((Key) annotation).value(), args[i]);
                         break;
                     }
                 }

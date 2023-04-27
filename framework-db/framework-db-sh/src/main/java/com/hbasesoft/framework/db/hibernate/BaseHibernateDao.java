@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaUpdate;
+
 import org.apache.commons.collections.MapUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -68,6 +72,17 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @return <br>
+     */
+    public CriteriaBuilder getCriteriaBuilder() {
+        return getSession().getCriteriaBuilder();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param sql
      * @param param
      * @return
@@ -94,7 +109,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
             // step2:设置返回值类型
             final Object callBack = param.getCallback();
-            if (callBack != null && callBack instanceof ResultTransformer rt) {
+            if (callBack != null && callBack instanceof ResultTransformer) {
+                ResultTransformer rt = (ResultTransformer) callBack;
+
                 query.setResultTransformer(rt);
             }
             else if (param.getBeanType().equals(Map.class)) {
@@ -171,7 +188,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 if (obj instanceof Collection<?>) {
                     query.setParameterList(entry.getKey(), (Collection<?>) obj);
                 }
-                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[] os) {
+                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[]) {
+                    Object[] os = (Object[]) obj;
+
                     query.setParameterList(entry.getKey(), os);
                 }
                 else {
@@ -840,6 +859,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <T>
+     * @param criteria <br>
+     */
+    public <T> void updateByCriteria(final CriteriaUpdate<T> criteria) {
+        org.hibernate.query.Query query = getSession().createQuery(criteria);
+        query.executeUpdate();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param id <br>
      */
     public void deleteById(final Serializable id) {
@@ -867,6 +899,19 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     public void deleteByIds(final Collection<? extends Serializable> ids) {
         this.deleteAllEntitiesByIds(getEntityClazz(), ids);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param criteria <br>
+     */
+    public <T> void deleteByCriteria(final CriteriaDelete<T> criteria) {
+        org.hibernate.query.Query query = getSession().createQuery(criteria);
+        query.executeUpdate();
     }
 
     /**
