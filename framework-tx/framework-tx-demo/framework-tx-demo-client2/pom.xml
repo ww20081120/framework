@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-tx-demo</artifactId>
-		<version>3.7</version>
+		<version>4.0</version>
 	</parent>
 	<artifactId>framework-tx-demo-client2</artifactId>
 	<dependencies>
