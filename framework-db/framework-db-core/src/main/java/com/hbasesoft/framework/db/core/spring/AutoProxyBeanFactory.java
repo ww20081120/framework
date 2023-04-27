@@ -16,13 +16,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.BaseEntity;
-import com.hbasesoft.framework.db.core.IBaseDao;
 import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
@@ -125,36 +121,35 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         handler.setSqlExcutor(baseDao);
 
         // 继承泛型的类需要获取到范性类
-        if (IBaseDao.class.isAssignableFrom(clazz)) {
-            Class<?> entityClazz = null;
-            ParameterizedType type = (ParameterizedType) clazz.getGenericSuperclass();
-            if (type != null) {
-                for (Type t2 : type.getActualTypeArguments()) {
-                    Class<?> t3 = (Class<?>) t2;
-                    if (BaseEntity.class.isAssignableFrom(t3)) {
-                        entityClazz = t3;
-                    }
+
+        Class<?> entityClazz = null;
+        ParameterizedType type = (ParameterizedType) clazz.getGenericSuperclass();
+        if (type != null) {
+            for (Type t2 : type.getActualTypeArguments()) {
+                Class<?> t3 = (Class<?>) t2;
+                if (BaseEntity.class.isAssignableFrom(t3)) {
+                    entityClazz = t3;
                 }
             }
+        }
 
-            if (entityClazz == null) {
-                Type[] interfacesTypes = clazz.getGenericInterfaces();
-                for (Type t : interfacesTypes) {
-                    if (t instanceof ParameterizedType pt) {
-                        Type[] genericType2 = pt.getActualTypeArguments();
-                        for (Type t2 : genericType2) {
-                            Class<?> t3 = (Class<?>) t2;
-                            if (BaseEntity.class.isAssignableFrom(t3)) {
-                                entityClazz = t3;
-                            }
+        if (entityClazz == null) {
+            Type[] interfacesTypes = clazz.getGenericInterfaces();
+            for (Type t : interfacesTypes) {
+                if (t instanceof ParameterizedType) {
+                    ParameterizedType pt = (ParameterizedType) t;
+
+                    Type[] genericType2 = pt.getActualTypeArguments();
+                    for (Type t2 : genericType2) {
+                        Class<?> t3 = (Class<?>) t2;
+                        if (BaseEntity.class.isAssignableFrom(t3)) {
+                            entityClazz = t3;
                         }
                     }
-                    else {
-                        throw new UtilException(ErrorCodeDef.GENERIC_TYPE_ERROR, clazz.getName());
-                    }
                 }
             }
-            Assert.notNull(entityClazz, ErrorCodeDef.GENERIC_TYPE_ERROR, clazz.getName());
+        }
+        if (entityClazz != null) {
             baseDao.setEntityClazz(entityClazz);
         }
         return handler;

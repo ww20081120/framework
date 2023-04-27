@@ -47,9 +47,10 @@ public class StateFlowInterceptor extends AbstractFlowCompnentInterceptor {
             skipFlagHolder.set(true);
         }
 
-        if (flowBean instanceof StateFlowBean stateFlowBean
+        if (flowBean instanceof StateFlowBean
             && flowContext.getFlowConfig().getConfigAttrMap().containsKey("stateFlow")) {
 
+            StateFlowBean stateFlowBean = (StateFlowBean) flowBean;
             // 如果未设置lastComponent则一直执行
             if (StringUtils.isEmpty(stateFlowBean.getLastComponent())) {
                 skipFlagHolder.set(false);

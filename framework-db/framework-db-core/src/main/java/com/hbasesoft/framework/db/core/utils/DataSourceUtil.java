@@ -113,8 +113,8 @@ public final class DataSourceUtil {
 
             if (uid != null && !dataSourceMap.containsValue(uid)) {
                 DataSource dataSource = dsMap.remove(uid);
-                if (dataSource != null && dataSource instanceof DruidDataSource d) {
-                    d.close();
+                if (dataSource != null && dataSource instanceof DruidDataSource) {
+                    ((DruidDataSource) dataSource).close();
                 }
             }
         }

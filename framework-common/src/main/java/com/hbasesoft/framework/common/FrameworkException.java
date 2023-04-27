@@ -55,7 +55,8 @@ public class FrameworkException extends RuntimeException {
      */
     public FrameworkException(final Throwable t) {
         super(t);
-        if (t instanceof FrameworkException fe) {
+        if (t instanceof FrameworkException) {
+            FrameworkException fe = (FrameworkException) t;
             this.code = fe.getCode();
         }
         else {

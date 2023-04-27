@@ -262,7 +262,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     @Override
     protected void statementExecuteBefore(final StatementProxy statement, final String sql) {
         statement.setLastExecuteStartNano();
-        if (statement instanceof PreparedStatementProxy p) {
+        if (statement instanceof PreparedStatementProxy) {
+            PreparedStatementProxy p = (PreparedStatementProxy) statement;
             logParameter(p);
         }
     }
@@ -314,7 +315,8 @@ public class SqlLogFilter extends FilterEventAdapter {
         double millis = nanos / (GlobalConstants.SECONDS * GlobalConstants.SECONDS);
 
         String sql;
-        if (statement instanceof PreparedStatementProxy p) {
+        if (statement instanceof PreparedStatementProxy) {
+            PreparedStatementProxy p = (PreparedStatementProxy) statement;
             sql = p.getSql();
         }
         else {
@@ -337,7 +339,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     @Override
     protected void statementExecuteQueryBefore(final StatementProxy statement, final String sql) {
         statement.setLastExecuteStartNano();
-        if (statement instanceof PreparedStatementProxy p) {
+        if (statement instanceof PreparedStatementProxy) {
+            PreparedStatementProxy p = (PreparedStatementProxy) statement;
             logParameter(p);
         }
     }
@@ -374,7 +377,8 @@ public class SqlLogFilter extends FilterEventAdapter {
     @Override
     protected void statementExecuteUpdateBefore(final StatementProxy statement, final String sql) {
         statement.setLastExecuteStartNano();
-        if (statement instanceof PreparedStatementProxy p) {
+        if (statement instanceof PreparedStatementProxy) {
+            PreparedStatementProxy p = (PreparedStatementProxy) statement;
             logParameter(p);
         }
     }
@@ -445,7 +449,8 @@ public class SqlLogFilter extends FilterEventAdapter {
         final int parameterIndex) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterIndex);
 
-        if (obj instanceof ResultSetProxy rp) {
+        if (obj instanceof ResultSetProxy) {
+            ResultSetProxy rp = (ResultSetProxy) obj;
             resultSetOpenAfter(rp);
         }
 
@@ -469,7 +474,8 @@ public class SqlLogFilter extends FilterEventAdapter {
         final int parameterIndex, final java.util.Map<String, Class<?>> map) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterIndex, map);
 
-        if (obj instanceof ResultSetProxy rp) {
+        if (obj instanceof ResultSetProxy) {
+            ResultSetProxy rp = (ResultSetProxy) obj;
             resultSetOpenAfter(rp);
         }
 
@@ -492,7 +498,8 @@ public class SqlLogFilter extends FilterEventAdapter {
         final String parameterName) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterName);
 
-        if (obj instanceof ResultSetProxy rp) {
+        if (obj instanceof ResultSetProxy) {
+            ResultSetProxy rp = (ResultSetProxy) obj;
             resultSetOpenAfter(rp);
         }
 
@@ -516,7 +523,8 @@ public class SqlLogFilter extends FilterEventAdapter {
         final String parameterName, final java.util.Map<String, Class<?>> map) throws SQLException {
         Object obj = chain.callableStatement_getObject(statement, parameterName, map);
 
-        if (obj instanceof ResultSetProxy rp) {
+        if (obj instanceof ResultSetProxy) {
+            ResultSetProxy rp = (ResultSetProxy) obj;
             resultSetOpenAfter(rp);
         }
 

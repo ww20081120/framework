@@ -81,7 +81,8 @@ public final class FlowHelper {
         }
         catch (Exception e) {
             LoggerUtil.error("flow process error.", e);
-            FrameworkException fe = e instanceof FrameworkException f ? f : new FrameworkException(e);
+            FrameworkException fe = e instanceof FrameworkException ? (FrameworkException) e
+                : new FrameworkException(e);
             if (throwable) {
                 throw fe;
             }
@@ -118,7 +119,8 @@ public final class FlowHelper {
         }
         catch (Exception e) {
             LoggerUtil.error("flow process error.", e);
-            FrameworkException fe = e instanceof FrameworkException f ? f : new FrameworkException(e);
+            FrameworkException fe = e instanceof FrameworkException ? (FrameworkException) e
+                : new FrameworkException(e);
             if (throwable) {
                 throw fe;
             }

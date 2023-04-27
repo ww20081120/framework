@@ -86,7 +86,8 @@ public class TransLoggerService4File extends AbstractTransLoggerService {
             }
 
             RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
-            if (attributes != null && attributes instanceof ServletRequestAttributes sa) {
+            if (attributes != null && attributes instanceof ServletRequestAttributes) {
+                ServletRequestAttributes sa = (ServletRequestAttributes) attributes;
                 HttpServletRequest request = sa.getRequest();
                 if (request != null) {
                     Enumeration<String> names = request.getHeaderNames();
