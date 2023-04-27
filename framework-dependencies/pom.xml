@@ -38,6 +38,16 @@
 			<!--framework-db-->
 			<dependency>
 				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-db-cg</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-db-core</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
 				<artifactId>framework-db-sh</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
