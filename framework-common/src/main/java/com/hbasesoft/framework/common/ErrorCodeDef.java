@@ -90,7 +90,7 @@ public enum ErrorCodeDef implements ErrorCode {
     READ_PARAM_ERROR(SYSTEM_PREFIX + 21, "读取内容体失败"),
 
     /** 读取jar文件内容失败 */
-    READ_FILE_ERROR(SYSTEM_PREFIX + 22, "读取jar文件内容失败"),
+    READ_FILE_ERROR(SYSTEM_PREFIX + 22, "读取{0}文件内容失败"),
 
     /** 写文件失败 */
     WRITE_FILE_ERROR(SYSTEM_PREFIX + 23, "写文件失败"),
