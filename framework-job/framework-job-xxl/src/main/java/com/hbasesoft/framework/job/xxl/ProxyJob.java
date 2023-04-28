@@ -5,9 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.job.xxl;
 
+import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.job.core.JobContext;
 import com.hbasesoft.framework.job.core.SimpleJob;
-import com.xxl.job.core.context.XxlJobHelper;
+import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 
 /**
@@ -28,18 +29,22 @@ public class ProxyJob extends IJobHandler {
     /** */
     private final String jobName;
 
+    /** */
+    private final String id;
+
     /**
      * @Method ProxyJob
      * @param jobName
- * @param job
+     * @param job
      * @return
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 12:00
-    */
+     */
     public ProxyJob(final String jobName, final SimpleJob job) {
         this.job = job;
         this.jobName = jobName;
+        this.id = CommonUtil.getTransactionID();
     }
 
     /**
@@ -47,13 +52,15 @@ public class ProxyJob extends IJobHandler {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param arg0
+     * @return
      * @throws Exception <br>
      */
     @Override
-    public void execute() throws Exception {
-        JobContext jobContext = new JobContext(jobName, String.valueOf(XxlJobHelper.getJobId()),
-            XxlJobHelper.getShardTotal(), XxlJobHelper.getJobParam(), XxlJobHelper.getShardIndex(), null);
+    public ReturnT<String> execute(final String arg0) throws Exception {
+        JobContext jobContext = new JobContext(jobName, id, 1, arg0, 1, null);
         job.execute(jobContext);
+        return ReturnT.SUCCESS;
     }
 
 }
