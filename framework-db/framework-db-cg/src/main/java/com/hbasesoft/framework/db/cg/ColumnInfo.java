@@ -55,6 +55,9 @@ public class ColumnInfo {
     /** 默认值 */
     private String defaultValue;
 
+    /** 值列表 */
+    private String valueList;
+
     /**
      * toString
      * 

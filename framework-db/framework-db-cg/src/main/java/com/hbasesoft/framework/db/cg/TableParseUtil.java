@@ -98,6 +98,7 @@ public final class TableParseUtil {
                 info.setComment((String) map.get("Comment"));
                 if (StringUtils.isNotEmpty(info.getComment())) {
                     info.setName(StringUtils.split(info.getComment())[0]);
+                    info.setValueList(parseValueList(info.getComment(), info.getCode()));
                 }
                 else {
                     info.setName(info.getCode());
@@ -157,5 +158,19 @@ public final class TableParseUtil {
         comment = all.substring(index + CONSTANT_9);
         comment = comment.substring(0, comment.length() - 1);
         return comment;
+    }
+
+    private static String parseValueList(final String comment, final String code) {
+        if (StringUtils.isNotEmpty(comment)) {
+            String str = StringUtils.trim(StringUtils.replace(comment, "，", GlobalConstants.SPLITOR));
+            if (str.indexOf(" ") != -1 && str.indexOf("-") != -1 && str.indexOf(GlobalConstants.SPLITOR) != -1) {
+                return "map|" + StringUtils.replace(str.substring(str.indexOf(" ") + 1), "-", "=");
+            }
+
+            if (comment.endsWith(" (字典)") || comment.endsWith(" （字典）")) {
+                return "dict|" + code;
+            }
+        }
+        return GlobalConstants.BLANK;
     }
 }
