@@ -124,7 +124,10 @@ public final class PropertyHolder {
      */
     public static Integer getIntProperty(final String name, final Integer defaultValue) {
         String value = getProperty(name);
-        return StringUtils.isNotEmpty(value) ? Integer.parseInt(value) : defaultValue;
+        if (StringUtils.isNotEmpty(value)) {
+            return Integer.parseInt(value);
+        }
+        return defaultValue;
     }
 
     /**
@@ -150,7 +153,10 @@ public final class PropertyHolder {
      */
     public static Long getLongProperty(final String name, final Long defaultValue) {
         String value = getProperty(name);
-        return StringUtils.isNotEmpty(value) ? Long.parseLong(value) : defaultValue;
+        if (StringUtils.isNotEmpty(value)) {
+            return Long.parseLong(value);
+        }
+        return defaultValue;
     }
 
     /**

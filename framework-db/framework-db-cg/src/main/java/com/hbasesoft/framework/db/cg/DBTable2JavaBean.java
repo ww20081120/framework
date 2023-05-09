@@ -1,4 +1,4 @@
-package com.hbasesoft.framework.db.core.utils;
+package com.hbasesoft.framework.db.cg;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,19 +10,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,10 +26,9 @@ import javax.swing.UIManager;
 import org.apache.commons.lang.StringUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.bean.BeanUtil;
-import com.hbasesoft.framework.common.utils.date.DateConstants;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 
@@ -138,26 +129,12 @@ public class DBTable2JavaBean extends JFrame {
     /**
      * dataSource
      */
-    private DataSource dataSource;
-
-    /**
-     * template
-     */
-    private String daoTemplate;
-
-    /** entity template */
-    private String entityTemplate;
-
-    /**
-     * dateFormat
-     */
-    private DateFormat dateFormat;
+    private DruidDataSource dataSource;
 
     /**
      * DBTable2JavaBean
      */
     public DBTable2JavaBean() {
-        dateFormat = new SimpleDateFormat(DateConstants.DATE_FORMAT_11);
 
         textFields = new JTextField[filedNames.length];
         tips = new JLabel[filedNames.length];
@@ -324,15 +301,13 @@ public class DBTable2JavaBean extends JFrame {
         String packname = textFields[1].getText();
         String dirstr = textFields[2].getText(); // 空表示当前目录
 
-        if (dataSource == null) {
-            DruidDataSource dbs = new DruidDataSource();
-            dbs.setUrl(textFields[NUM_3].getText());
-            dbs.setUsername(textFields[NUM_4].getText());
-            dbs.setPassword(textFields[NUM_5].getText());
-            dbs.setValidationQuery("select 1");
-            dbs.init();
-            dataSource = dbs;
-        }
+        DruidDataSource dbs = new DruidDataSource();
+        dbs.setUrl(textFields[NUM_3].getText());
+        dbs.setUsername(textFields[NUM_4].getText());
+        dbs.setPassword(textFields[NUM_5].getText());
+        dbs.setValidationQuery("select 1");
+        dbs.init();
+        dataSource = dbs;
 
         if (StringUtils.isEmpty(dirstr)) {
             tips[2].setText("给你导到根目录去了");
@@ -350,44 +325,23 @@ public class DBTable2JavaBean extends JFrame {
             tips[1].setText(GlobalConstants.BLANK);
         }
 
-        export(dirstr, packname, tablename);
-
-    }
-
-    private void export(final String dirstr, final String packname, final String tablename) throws SQLException {
-
-        File dir = new File(dirstr + "/" + StringUtils.replace(packname, ".", "/"));
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        String outputdir = dir.getAbsolutePath(); // bean的生成目录
-
-        Connection conn = null;
-
         try {
-            entityTemplate = IOUtil.readString(this.getClass().getClassLoader()
-                .getResourceAsStream("com/hbasesoft/framework/db/core/utils/entityTemplate.vm"));
-            daoTemplate = IOUtil.readString(this.getClass().getClassLoader()
-                .getResourceAsStream("com/hbasesoft/framework/db/core/utils/daoTemplate.vm"));
-
-            conn = dataSource.getConnection();
             if (StringUtils.isEmpty(tablename)) {
-                parseAllTable(conn, packname, outputdir);
+                parseAllTable(packname, dirstr);
             }
             else {
-                parseTableByShowCreate(conn, tablename, packname, outputdir);
+                export(packname, dirstr, tablename);
             }
-
         }
         catch (Exception e) {
-            dataSource = null;
             e.printStackTrace();
         }
         finally {
-            if (conn != null) {
-                conn.close();
+            if (dataSource != null) {
+                dataSource.close();
             }
         }
+
     }
 
     /**
@@ -395,21 +349,20 @@ public class DBTable2JavaBean extends JFrame {
      * 
      * @author yang.zhipeng <br>
      * @taskId <br>
-     * @param conn <br>
      * @param packname <br>
      * @param outputdir <br>
      * @throws Exception <br>
      */
-    public void parseAllTable(final Connection conn, final String packname, final String outputdir) throws Exception {
+    public void parseAllTable(final String packname, final String outputdir) throws Exception {
         ResultSet rs = null;
         try {
+            DruidPooledConnection conn = dataSource.getConnection();
             DatabaseMetaData metaData = conn.getMetaData();
             rs = metaData.getTables(conn.getCatalog(), null, null, new String[] {
                 "TABLE"
             });
-
             while (rs.next()) {
-                parseTableByShowCreate(conn, rs.getString("TABLE_NAME"), packname, outputdir);
+                export(packname, outputdir, rs.getString("TABLE_NAME"));
             }
         }
         finally {
@@ -419,193 +372,18 @@ public class DBTable2JavaBean extends JFrame {
         }
     }
 
-    /**
-     * Description:通过 mysql的 show create table TABLE_NAME逆向生成Bean; <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param conn <br>
-     * @param tn <br>
-     * @param packname <br>
-     * @param outputdir <br>
-     * @throws Exception <br>
-     */
-    public void parseTableByShowCreate(final Connection conn, final String tn, final String packname,
-        final String outputdir) throws Exception {
-        String className = BeanUtil.toCapitalizeCamelCase(tn.toUpperCase().startsWith("T_") ? tn.substring(2) : tn);
-        String tablename = StringUtils.upperCase(tn);
+    private void export(final String packname, final String dirstr, final String tablename) {
 
-        File dir = new File(outputdir + "/entity/");
+        File dir = new File(dirstr + "/" + StringUtils.replace(packname, ".", "/"));
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File entityFile = new File(dir, className + "Entity.java");
-        if (entityFile.exists()) {
-            System.out.println("文件已经存在，请删除后在生成。" + entityFile.getAbsoluteFile());
-            return;
-        }
+        String outputdir = dir.getAbsolutePath(); // bean的生成目录
 
-        dir = new File(outputdir + "/dao/");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File daoFile = new File(dir, className + "Dao.java");
-        if (daoFile.exists()) {
-            System.out.println("文件已经存在，请删除后在生成。" + daoFile.getAbsoluteFile());
-            return;
-        }
-
-        PreparedStatement ps = null;
-        try {
-            ps = conn.prepareStatement("select * from " + tablename + " where 1 = 2");
-            ResultSetMetaData metaData = ps.executeQuery().getMetaData();
-
-            StringBuilder fields = new StringBuilder();
-            StringBuilder methods = new StringBuilder();
-
-            String pkColum = null;
-            ResultSet rs = conn.getMetaData().getPrimaryKeys(conn.getCatalog(), null, tablename);
-            int index = 0;
-            while (rs.next()) {
-                if (index++ > 0) {
-                    pkColum = null;
-                    break;
-                }
-                pkColum = rs.getString(NUM_4);
-            }
-
-            for (int i = 0, size = metaData.getColumnCount(); i < size; i++) {
-                String cmt = metaData.getColumnLabel(i + 1);
-                String field = BeanUtil.toCamelCase(cmt);
-                String type = typeTrans(metaData.getColumnTypeName(i + 1));
-                fields.append('\n').append(getFieldStr(field, type, cmt, pkColum));
-                methods.append('\n').append(getMethodStr(field, type));
-            }
-
-            IOUtil.writeFile(StringUtils.replaceEach(entityTemplate, new String[] {
-                "${PACKAGE}", "${CLASSNAME}", "${CODE}", "${TABLENAME}", "${DATE}", "${ENTITY}"
-            }, new String[] {
-                packname, className, fields.append(methods).toString(), tablename, dateFormat.format(new Date()),
-                StringUtils.isEmpty(pkColum) ? GlobalConstants.BLANK : "@Entity(name = \"" + tablename + "\")"
-            }), entityFile);
-            System.out.println("生成文件成功。" + entityFile.getAbsoluteFile());
-
-            IOUtil.writeFile(StringUtils.replaceEach(daoTemplate, new String[] {
-                "${PACKAGE}", "${CLASSNAME}", "${TABLENAME}", "${DATE}"
-            }, new String[] {
-                packname, className, tablename, dateFormat.format(new Date())
-            }), daoFile);
-            System.out.println("生成文件成功。" + daoFile.getAbsoluteFile());
-
-        }
-        finally {
-            if (ps != null) {
-                ps.close();
-            }
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param field <br>
-     * @param type <br>
-     * @return <br>
-     */
-    private String getMethodStr(final String field, final String type) {
-        StringBuilder get = new StringBuilder('\n');
-        get.append("    ").append("public ").append(type).append(" ");
-        if ("boolean".equals(type)) {
-            get.append(field);
-        }
-        else {
-            get.append("get");
-            get.append(upperFirestChar(field));
-        }
-        get.append("() {").append("\r\n        return this.").append(field).append(";\r\n    }\r\n");
-
-        StringBuilder set = new StringBuilder("\n");
-        set.append("    public void ");
-        if ("boolean".equals(type)) {
-            set.append(field);
-        }
-        else {
-            set.append("set");
-            set.append(upperFirestChar(field));
-        }
-        set.append("(").append(type).append(" ").append(field).append(") {\r\n        this.").append(field)
-            .append(" = ").append(field).append(";\r\n    }\r\n");
-        get.append(set);
-        return get.toString();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param src <br>
-     * @return <br>
-     */
-    private String upperFirestChar(final String src) {
-        return src.substring(0, 1).toUpperCase().concat(src.substring(1));
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param field <br>
-     * @param type <br>
-     * @param cmt <br>
-     * @param pkColum <br>
-     * @return <br>
-     */
-    private String getFieldStr(final String field, final String type, final String cmt, final String pkColum) {
-        StringBuilder sb = new StringBuilder('\n');
-        sb.append("    ").append("/** ").append(cmt).append(" */").append('\n');
-        if (cmt.equals(pkColum)) {
-            sb.append("    ").append("@Id").append('\n');
-            sb.append("    ").append("@GeneratedValue(generator = \"paymentableGenerator\")").append('\n');
-            sb.append("    ").append("@GenericGenerator(name = \"paymentableGenerator\", strategy = \"uuid\")")
-                .append('\n');
-        }
-        sb.append("    ").append("@Column(name = \"").append(cmt).append("\")").append('\n');
-        sb.append("    ").append("private ").append(type).append(" ").append(field).append(';').append('\n');
-        return sb.toString();
-    }
-
-    /**
-     * Description: mysql的类型转换到java 类型参考文章 http://hi.baidu.com/wwtvanessa/blog/item/9fe555945a07bd16d31b70cd.html<br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param type <br>
-     * @return <br>
-     */
-    private String typeTrans(final String type) {
-        if (type.contains("INT")) {
-            return "Integer";
-        }
-        else if ("LONG".equals(type) || "NUMBER".equals(type) || "BIGINT".equals(type)) {
-            return "Long";
-        }
-        else if ("FLOAT".equals(type) || "DOUBLE".equals(type)) {
-            return "Double";
-        }
-        else if ("DATE".equals(type) || "TIME".equals(type) || "DATETIME".equals(type) || "TIMESTAMP".equals(type)) {
-            return "java.util.Date";
-        }
-        else if (type.contains("BINARY") || type.contains("BLOB")) {
-            return "byte[]";
-        }
-        else {
-            return "String";
-        }
+        TableInfo info = TableParseUtil.parse(tablename, dataSource);
+        DbGeneratorUtil dbGeneratorUtil = new DbGeneratorUtil(packname, outputdir);
+        dbGeneratorUtil.generateDao(info);
+        dbGeneratorUtil.generateEntity(info);
     }
 
     /**

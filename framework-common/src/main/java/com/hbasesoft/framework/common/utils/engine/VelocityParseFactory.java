@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.ServiceLoader;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.velocity.Template;
@@ -70,6 +71,17 @@ public final class VelocityParseFactory {
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
             properties.setProperty("input.encoding", GlobalConstants.DEFAULT_CHARSET);
             properties.setProperty("output.encoding", GlobalConstants.DEFAULT_CHARSET);
+
+            ServiceLoader<UserDirective> loader = ServiceLoader.load(UserDirective.class);
+            if (loader != null) {
+                StringBuilder sb = new StringBuilder();
+                loader.forEach(directive -> {
+                    sb.append(directive.getClass().getName()).append(',');
+                });
+                if (sb.length() > 0) {
+                    properties.setProperty("userdirective", sb.substring(0, sb.length() - 1));
+                }
+            }
 
             for (Entry<String, String> entry : PropertyHolder.getProperties().entrySet()) {
                 String key = entry.getKey();

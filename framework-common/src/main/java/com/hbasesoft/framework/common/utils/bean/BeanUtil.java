@@ -222,7 +222,7 @@ public final class BeanUtil {
             }
         }
         catch (IOException e) {
-            throw new UtilException(ErrorCodeDef.READ_FILE_ERROR);
+            throw new UtilException(e, ErrorCodeDef.READ_FILE_ERROR, e.getMessage());
         }
 
         return classes;
