@@ -47,7 +47,7 @@
 		<flumn.version>1.10.0</flumn.version>
 		<jsch.version>0.1.55</jsch.version>
 		<elasticjob.version>3.0.1</elasticjob.version>
-		<jaxb.version>4.0.0</jaxb.version>
+		<jaxb.version>3.0.2</jaxb.version>
 		<xxl-job.version>2.2.0</xxl-job.version>
 		<javax-persistence.version>2.2</javax-persistence.version>
 		<mysql.version>8.0.33</mysql.version>
