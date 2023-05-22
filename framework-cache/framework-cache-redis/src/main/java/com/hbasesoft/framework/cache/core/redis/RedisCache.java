@@ -78,6 +78,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             jedis.flushAll();
         }
         catch (Exception e) {
@@ -127,6 +128,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             return jedis.get(key);
         }
         finally {
@@ -150,6 +152,7 @@ public class RedisCache extends AbstractRedisCache {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
+                jedis.select(super.getDbIndex());
                 if (seconds > 0) {
                     jedis.setex(key, seconds, value);
                 }
@@ -177,6 +180,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             jedis.del(key);
         }
         finally {
@@ -199,6 +203,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             return jedis.hgetAll(node);
         }
         finally {
@@ -222,6 +227,7 @@ public class RedisCache extends AbstractRedisCache {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
+                jedis.select(super.getDbIndex());
                 jedis.hmset(key, dataMap);
                 if (seconds > 0) {
                     jedis.expire(key, seconds);
@@ -250,6 +256,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             return jedis.hget(nodeName, key);
         }
         finally {
@@ -274,6 +281,7 @@ public class RedisCache extends AbstractRedisCache {
             Jedis jedis = null;
             try {
                 jedis = jedisPool.getResource();
+                jedis.select(super.getDbIndex());
                 jedis.hset(nodeName, key, t);
                 if (seconds > 0) {
                     jedis.expire(nodeName, seconds);
@@ -300,6 +308,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             jedis.hdel(nodeName, key);
         }
         finally {
@@ -324,6 +333,7 @@ public class RedisCache extends AbstractRedisCache {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
+            jedis.select(super.getDbIndex());
             if (jedis.setnx(key, value) - 1 == 0) {
                 jedis.expire(key, expireTime);
                 return true;

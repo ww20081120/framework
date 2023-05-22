@@ -15,7 +15,6 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
-
 /**
  * <Description> <br>
  * 
@@ -45,6 +44,9 @@ public abstract class AbstractRedisCache extends AbstractCache {
 
     /**  */
     private static final int NUM_30000 = 30000;
+
+    /** 数据库 */
+    private int dbIndex;
 
     /**
      * Description: <br>
@@ -81,7 +83,19 @@ public abstract class AbstractRedisCache extends AbstractCache {
     protected Address[] getAddresses() {
         String address = PropertyHolder.getProperty(REDIS_ADDRESS);
         Assert.notEmpty(address, ErrorCodeDef.REDIS_ADDRESS_NOT_SET, REDIS_ADDRESS);
+        dbIndex = PropertyHolder.getIntProperty("cache.redis.db", 0);
         return ProtocolUtil.parseAddress(address);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    protected int getDbIndex() {
+        return this.dbIndex;
     }
 
     /**
