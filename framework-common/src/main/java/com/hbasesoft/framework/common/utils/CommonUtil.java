@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -139,7 +140,15 @@ public final class CommonUtil {
     public static String getString(final Object obj) {
         String result = null;
         if (obj != null) {
-            result = obj instanceof String ? (String) obj : obj.toString();
+            if (obj instanceof String) {
+                result = (String) obj;
+            }
+            else if (obj instanceof BigDecimal) {
+                result = ((BigDecimal) obj).stripTrailingZeros().toPlainString();
+            }
+            else {
+                result = obj.toString();
+            }
         }
         return result;
     }
