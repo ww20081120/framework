@@ -59,7 +59,7 @@ public class TransLoggerService4File implements TransLoggerService {
         span.tag("method", method);
         if (params != null) {
             String objStr = Arrays.toString(params);
-            span.tag("params", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) : objStr);
+            span.tag("params", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) + "..." : objStr);
         }
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes != null && attributes instanceof ServletRequestAttributes) {
@@ -95,7 +95,7 @@ public class TransLoggerService4File implements TransLoggerService {
         final Object returnValue) {
         if (returnValue != null) {
             String objStr = CommonUtil.getString(returnValue);
-            span.tag("returnValue", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) : objStr);
+            span.tag("returnValue", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) + "..." : objStr);
         }
     }
 
@@ -117,7 +117,7 @@ public class TransLoggerService4File implements TransLoggerService {
         span.tag("exception", e.getClass().getName());
         String errorMsg = e.getMessage();
         if (StringUtils.isNotEmpty(errorMsg)) {
-            span.tag("errorMsg", errorMsg.length() > MAX_LENGTH ? errorMsg.substring(0, MAX_LENGTH) : errorMsg);
+            span.tag("errorMsg", errorMsg.length() > MAX_LENGTH ? errorMsg.substring(0, MAX_LENGTH) + "..." : errorMsg);
         }
     }
 
