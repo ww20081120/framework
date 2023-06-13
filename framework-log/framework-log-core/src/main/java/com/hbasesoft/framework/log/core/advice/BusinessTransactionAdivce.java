@@ -139,9 +139,6 @@ public class BusinessTransactionAdivce {
             span.finish(endTime);
             throw e;
         }
-        finally {
-            TransLogUtil.end(span);
-        }
     }
 
     private Tracer getTracer() {

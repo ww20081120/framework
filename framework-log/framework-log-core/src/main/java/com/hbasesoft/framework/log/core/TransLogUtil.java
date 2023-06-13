@@ -110,18 +110,4 @@ public final class TransLogUtil {
         return transLoggerServices;
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param span <br>
-     */
-    public static void end(final Span span) {
-        // 执行记录
-        for (TransLoggerService service : getTransLoggerServices()) {
-            service.end(span);
-        }
-    }
-
 }

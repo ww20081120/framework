@@ -53,13 +53,4 @@ public interface TransLoggerService {
      * @param e <br>
      */
     void afterThrow(Span span, long endTime, long consumeTime, String method, Throwable e);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param span <br>
-     */
-    void end(Span span);
 }

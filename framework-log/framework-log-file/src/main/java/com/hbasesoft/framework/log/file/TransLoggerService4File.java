@@ -17,7 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.log.core.TransLoggerService;
 
 import brave.Span;
@@ -31,11 +30,6 @@ import brave.Span;
  * @see com.hbasesoft.framework.log.file <br>
  */
 public class TransLoggerService4File implements TransLoggerService {
-
-    /**
-     * logger
-     */
-    private Logger logger = new Logger(TransLoggerService4File.class);
 
     /** 允许展示的头 */
     private static final List<String> ACCEPT_HEADERS = Arrays.asList(
@@ -95,7 +89,9 @@ public class TransLoggerService4File implements TransLoggerService {
     @Override
     public void afterReturn(final Span span, final long endTime, final long consumeTime, final String method,
         final Object returnValue) {
-        span.tag("returnValue", CommonUtil.getString(returnValue));
+        if (returnValue != null) {
+            span.tag("returnValue", CommonUtil.getString(returnValue));
+        }
     }
 
     /**
@@ -118,18 +114,6 @@ public class TransLoggerService4File implements TransLoggerService {
         if (StringUtils.isNotEmpty(errorMsg)) {
             span.tag("errorMsg", errorMsg);
         }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param span <br>
-     */
-    @Override
-    public void end(final Span span) {
-        logger.info(span.toString());
     }
 
 }
