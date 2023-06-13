@@ -31,6 +31,9 @@ import brave.Span;
  */
 public class TransLoggerService4File implements TransLoggerService {
 
+    /** 最大长度 */
+    private static final int MAX_LENGTH = 1000;
+
     /** 允许展示的头 */
     private static final List<String> ACCEPT_HEADERS = Arrays.asList(
         StringUtils.split(PropertyHolder.getProperty("logservice.httpHeaders", "Authorization,cookie").toUpperCase(),
@@ -55,7 +58,8 @@ public class TransLoggerService4File implements TransLoggerService {
         final Object[] params) {
         span.tag("method", method);
         if (params != null) {
-            span.tag("params", Arrays.toString(params));
+            String objStr = Arrays.toString(params);
+            span.tag("params", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) : objStr);
         }
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         if (attributes != null && attributes instanceof ServletRequestAttributes) {
@@ -90,7 +94,8 @@ public class TransLoggerService4File implements TransLoggerService {
     public void afterReturn(final Span span, final long endTime, final long consumeTime, final String method,
         final Object returnValue) {
         if (returnValue != null) {
-            span.tag("returnValue", CommonUtil.getString(returnValue));
+            String objStr = CommonUtil.getString(returnValue);
+            span.tag("returnValue", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) : objStr);
         }
     }
 
@@ -112,7 +117,7 @@ public class TransLoggerService4File implements TransLoggerService {
         span.tag("exception", e.getClass().getName());
         String errorMsg = e.getMessage();
         if (StringUtils.isNotEmpty(errorMsg)) {
-            span.tag("errorMsg", errorMsg);
+            span.tag("errorMsg", errorMsg.length() > MAX_LENGTH ? errorMsg.substring(0, MAX_LENGTH) : errorMsg);
         }
     }
 
