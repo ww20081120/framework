@@ -5,17 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.log.core;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.logger.TransManager;
+
+import brave.Span;
 
 /**
  * <Description> <br>
@@ -28,9 +23,6 @@ import com.hbasesoft.framework.common.utils.logger.TransManager;
  * @see com.hbasesoft.framework.log.core <br>
  */
 public final class TransLogUtil {
-
-    /** Number */
-    private static final long NUM_10L = 10L;
 
     private TransLogUtil() {
     }
@@ -45,26 +37,17 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param span
+     * @param parentSpan
+     * @param beginTime
      * @param methodName
      * @param args <br>
      */
-    public static void before(final String methodName, final Object[] args) {
-
-        // 开始执行时间
-        long beginTime = System.currentTimeMillis();
-
-        TransManager manager = TransManager.getInstance();
-
-        // 父id
-        String parentStackId = manager.peek();
-
-        // id
-        String stackId = CommonUtil.getTransactionID();
-        manager.push(stackId, beginTime);
-
+    public static void before(final Span span, final Span parentSpan, final long beginTime, final String methodName,
+        final Object[] args) {
         // 执行记录
         for (TransLoggerService service : getTransLoggerServices()) {
-            service.before(stackId, parentStackId, beginTime, methodName, args);
+            service.before(span, parentSpan, beginTime, methodName, args);
         }
 
     }
@@ -74,58 +57,18 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param target
-     * @param method
-     * @param args
-     * @throws FrameworkException <br>
-     */
-    public static void before(final Object target, final Method method, final Object[] args) throws FrameworkException {
-        before(getMethodSignature(method), args);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
+     * @param span
+     * @param endTime
+     * @param consumeTime
      * @param methodName
      * @param returnValue <br>
      */
-    public static void afterReturning(final String methodName, final Object returnValue) {
-        // 执行完成时间
-        long endTime = System.currentTimeMillis();
-
-        TransManager manager = TransManager.getInstance();
-        String stackId = manager.pop();
-        if (StringUtils.isEmpty(stackId)) {
-            return;
-        }
-
-        long beginTime = manager.getBeginTime(stackId);
-        long consumeTime = endTime - beginTime;
-
-        long maxExcuteTime = PropertyHolder.getLongProperty("logservice.max.execute.time", NUM_10L)
-            * GlobalConstants.SECONDS;
-
-        if (consumeTime > maxExcuteTime) {
-            manager.setTimeout(true);
-        }
+    public static void afterReturning(final Span span, final long endTime, final long consumeTime,
+        final String methodName, final Object returnValue) {
 
         // 执行记录
         for (TransLoggerService service : getTransLoggerServices()) {
-            service.afterReturn(stackId, endTime, consumeTime, methodName, returnValue);
-        }
-
-        if (manager.getStackSize() <= 0) {
-            for (TransLoggerService service : getTransLoggerServices()) {
-                service.end(stackId, beginTime, endTime, consumeTime, methodName, returnValue, null);
-            }
-
-            for (TransLoggerService service : getTransLoggerServices()) {
-                service.clean();
-            }
-
-            manager.clean();
+            service.afterReturn(span, endTime, consumeTime, methodName, returnValue);
         }
     }
 
@@ -134,90 +77,18 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param target
-     * @param method
-     * @param returnValue <br>
-     */
-    public static void afterReturning(final Object target, final Method method, final Object returnValue) {
-        afterReturning(getMethodSignature(method), returnValue);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
+     * @param span
+     * @param endTime
+     * @param consumeTime
      * @param methodName
      * @param e <br>
      */
-    public static void afterThrowing(final String methodName, final Throwable e) {
-        // 执行完成时间
-        long endTime = System.currentTimeMillis();
-
-        TransManager manager = TransManager.getInstance();
-        String stackId = manager.pop();
-        if (StringUtils.isEmpty(stackId)) {
-            return;
-        }
-
-        long beginTime = manager.getBeginTime(stackId);
-        long consumeTime = endTime - beginTime;
-
-        manager.setError(true);
-
+    public static void afterThrowing(final Span span, final long endTime, final long consumeTime,
+        final String methodName, final Throwable e) {
         // 执行记录
         for (TransLoggerService service : getTransLoggerServices()) {
-            service.afterThrow(stackId, endTime, consumeTime, methodName, e);
+            service.afterThrow(span, endTime, consumeTime, methodName, e);
         }
-
-        if (manager.getStackSize() <= 0) {
-            for (TransLoggerService service : getTransLoggerServices()) {
-                service.end(stackId, beginTime, endTime, consumeTime, methodName, null, e);
-            }
-
-            for (TransLoggerService service : getTransLoggerServices()) {
-                service.clean();
-            }
-
-            manager.clean();
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param target
-     * @param method
-     * @param e <br>
-     */
-    public static void afterThrowing(final Object target, final Method method, final Throwable e) {
-        afterThrowing(getMethodSignature(method), e);
-    }
-
-    /**
-     * 获取 方法描述
-     * 
-     * @param method <br>
-     * @return <br>
-     */
-    private static String getMethodSignature(final Method method) {
-        StringBuilder sbuf = new StringBuilder();
-        sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
-        sbuf.append('(');
-
-        Class<?>[] types = method.getParameterTypes();
-        if (CommonUtil.isNotEmpty(types)) {
-            for (int i = 0; i < types.length; i++) {
-                if (i > 0) {
-                    sbuf.append(',');
-                }
-                sbuf.append(types[i].getName());
-            }
-        }
-        sbuf.append(')');
-        return sbuf.toString();
     }
 
     /**
@@ -237,6 +108,20 @@ public final class TransLogUtil {
             }
         }
         return transLoggerServices;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param span <br>
+     */
+    public static void end(final Span span) {
+        // 执行记录
+        for (TransLoggerService service : getTransLoggerServices()) {
+            service.end(span);
+        }
     }
 
 }

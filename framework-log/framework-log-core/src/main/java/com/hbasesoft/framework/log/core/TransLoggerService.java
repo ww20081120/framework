@@ -3,6 +3,8 @@
  */
 package com.hbasesoft.framework.log.core;
 
+import brave.Span;
+
 /**
  * <Description> <br>
  * 
@@ -16,64 +18,48 @@ public interface TransLoggerService {
     /**
      * Description: <br>
      * 
-     * @author yang.zhipeng <br>
+     * @author 王伟<br>
      * @taskId <br>
-     * @param stackId <br>
-     * @param parentStackId <br>
-     * @param beginTime <br>
-     * @param method <br>
+     * @param span
+     * @param parentSpan
+     * @param beginTime
+     * @param method
      * @param params <br>
      */
-    void before(String stackId, String parentStackId, long beginTime, String method, Object[] params);
+    void before(Span span, Span parentSpan, long beginTime, String method, Object[] params);
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param stackId
+     * @param span
      * @param endTime
      * @param consumeTime
      * @param method
      * @param returnValue <br>
      */
-    void afterReturn(String stackId, long endTime, long consumeTime, String method, Object returnValue);
+    void afterReturn(Span span, long endTime, long consumeTime, String method, Object returnValue);
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param stackId
+     * @param span
      * @param endTime
      * @param consumeTime
      * @param method
      * @param e <br>
      */
-    void afterThrow(String stackId, long endTime, long consumeTime, String method, Throwable e);
+    void afterThrow(Span span, long endTime, long consumeTime, String method, Throwable e);
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param stackId
-     * @param beginTime
-     * @param endTime
-     * @param consumeTime
-     * @param method
-     * @param returnValue
-     * @param e <br>
+     * @param span <br>
      */
-    void end(String stackId, long beginTime, long endTime, long consumeTime, String method, Object returnValue,
-        Throwable e);
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     *         <br>
-     */
-    void clean();
+    void end(Span span);
 }
