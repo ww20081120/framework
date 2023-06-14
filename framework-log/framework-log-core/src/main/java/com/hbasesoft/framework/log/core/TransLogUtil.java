@@ -5,12 +5,18 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.log.core;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 
+import org.springframework.context.ApplicationContext;
+
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 import brave.Span;
+import brave.Tracer;
 
 /**
  * <Description> <br>
@@ -27,6 +33,9 @@ public final class TransLogUtil {
     private TransLogUtil() {
     }
 
+    /** tracer */
+    private static Tracer tracer;
+
     /**
      * transLoggerServices
      */
@@ -37,17 +46,45 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param span
-     * @param parentSpan
+     * @param beginTime
+     * @param method
+     * @param args <br>
+     */
+    public static void before(final long beginTime, final Method method, final Object[] args) {
+        before(beginTime, getMethodSignature(method), args);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param beginTime
      * @param methodName
      * @param args <br>
      */
-    public static void before(final Span span, final Span parentSpan, final long beginTime, final String methodName,
-        final Object[] args) {
-        // 执行记录
-        for (TransLoggerService service : getTransLoggerServices()) {
-            service.before(span, parentSpan, beginTime, methodName, args);
+    public static void before(final long beginTime, final String methodName, final Object[] args) {
+        Tracer tc = getTracer();
+        if (tc != null) {
+
+            // 父Span
+            Span parentSpan = tc.currentSpan();
+
+            // 当前的Span
+            Span span = null;
+            if (parentSpan != null) {
+                span = tracer.newChild(parentSpan.context());
+            }
+            else {
+                span = tracer.newTrace();
+            }
+
+            span.start(beginTime);
+
+            // 执行记录
+            for (TransLoggerService service : getTransLoggerServices()) {
+                service.before(span, parentSpan, beginTime, methodName, args);
+            }
         }
 
     }
@@ -57,18 +94,40 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param span
-     * @param endTime
-     * @param consumeTime
+     * @param beginTime
+     * @param method
+     * @param returnValue <br>
+     */
+    public static void afterReturning(final long beginTime, final Method method, final Object returnValue) {
+        afterReturning(beginTime, getMethodSignature(method), returnValue);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param beginTime
      * @param methodName
      * @param returnValue <br>
      */
-    public static void afterReturning(final Span span, final long endTime, final long consumeTime,
-        final String methodName, final Object returnValue) {
-
-        // 执行记录
-        for (TransLoggerService service : getTransLoggerServices()) {
-            service.afterReturn(span, endTime, consumeTime, methodName, returnValue);
+    public static void afterReturning(final long beginTime, final String methodName, final Object returnValue) {
+        Tracer tc = getTracer();
+        if (tc != null) {
+            // 当前的Span
+            Span span = tc.currentSpan();
+            if (span != null) {
+                long endTime = System.currentTimeMillis();
+                try {
+                    // 执行记录
+                    for (TransLoggerService service : getTransLoggerServices()) {
+                        service.afterReturn(span, endTime, endTime - beginTime, methodName, returnValue);
+                    }
+                }
+                finally {
+                    span.finish(endTime);
+                }
+            }
         }
     }
 
@@ -77,18 +136,65 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param span
-     * @param endTime
-     * @param consumeTime
+     * @param beginTime
+     * @param method
+     * @param e <br>
+     */
+    public static void afterThrowing(final long beginTime, final Method method, final Throwable e) {
+        afterThrowing(beginTime, getMethodSignature(method), e);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param beginTime
      * @param methodName
      * @param e <br>
      */
-    public static void afterThrowing(final Span span, final long endTime, final long consumeTime,
-        final String methodName, final Throwable e) {
-        // 执行记录
-        for (TransLoggerService service : getTransLoggerServices()) {
-            service.afterThrow(span, endTime, consumeTime, methodName, e);
+    public static void afterThrowing(final long beginTime, final String methodName, final Throwable e) {
+        Tracer tc = getTracer();
+        if (tc != null) {
+            // 当前的Span
+            Span span = tc.currentSpan();
+            if (span != null) {
+                long endTime = System.currentTimeMillis();
+                try {
+                    // 执行记录
+                    for (TransLoggerService service : getTransLoggerServices()) {
+                        service.afterThrow(span, endTime, endTime - beginTime, methodName, e);
+                    }
+                }
+                finally {
+                    span.finish(endTime);
+                }
+            }
         }
+    }
+
+    /**
+     * 获取 方法描述
+     * 
+     * @param method <br>
+     * @return <br>
+     */
+    private static String getMethodSignature(final Method method) {
+        StringBuilder sbuf = new StringBuilder();
+        sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
+        sbuf.append('(');
+
+        Class<?>[] types = method.getParameterTypes();
+        if (CommonUtil.isNotEmpty(types)) {
+            for (int i = 0; i < types.length; i++) {
+                if (i > 0) {
+                    sbuf.append(',');
+                }
+                sbuf.append(types[i].getName());
+            }
+        }
+        sbuf.append(')');
+        return sbuf.toString();
     }
 
     /**
@@ -110,4 +216,13 @@ public final class TransLogUtil {
         return transLoggerServices;
     }
 
+    private static Tracer getTracer() {
+        if (tracer == null) {
+            ApplicationContext context = ContextHolder.getContext();
+            if (context != null) {
+                tracer = context.getBean(Tracer.class);
+            }
+        }
+        return tracer;
+    }
 }

@@ -11,18 +11,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
-import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.log.core.TransLogUtil;
-
-import brave.Span;
-import brave.Tracer;
 
 /**
  * <Description> <br>
@@ -49,9 +43,6 @@ public class BusinessTransactionAdivce {
     /** 框架日志的方法 */
     private static final String FRAMEWORK_PACKAGE = "com.hbasesoft.framework.";
 
-    /** tracer */
-    private Tracer tracer;
-
     /**
      * Description: <br>
      * 
@@ -74,11 +65,6 @@ public class BusinessTransactionAdivce {
      */
     @Around("log()")
     public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
-
-        Tracer tc = getTracer();
-        if (tc == null) {
-            return joinPoint.proceed();
-        }
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Object target = joinPoint.getTarget();
@@ -105,73 +91,19 @@ public class BusinessTransactionAdivce {
             }
         }
 
-        // 父Span
-        Span parentSpan = tc.currentSpan();
-
-        // 当前的Span
-        Span span = null;
-        if (parentSpan != null) {
-            span = tracer.newChild(parentSpan.context());
-        }
-        else {
-            span = tracer.newTrace();
-        }
-
         // 开始执行时间
         long beginTime = System.currentTimeMillis();
-        span.start(beginTime);
 
         Object[] args = joinPoint.getArgs();
-        String methodStr = getMethodSignature(method);
-        TransLogUtil.before(span, parentSpan, beginTime, methodStr, args);
+        TransLogUtil.before(beginTime, method, args);
         try {
             Object returnValue = joinPoint.proceed();
-            // 执行完成时间
-            long endTime = System.currentTimeMillis();
-            TransLogUtil.afterReturning(span, endTime, beginTime - endTime, methodStr, returnValue);
-            span.finish(endTime);
+            TransLogUtil.afterReturning(beginTime, method, returnValue);
             return returnValue;
         }
         catch (Throwable e) {
-            // 执行完成时间
-            long endTime = System.currentTimeMillis();
-            TransLogUtil.afterThrowing(span, endTime, beginTime - endTime, methodStr, e);
-            span.finish(endTime);
+            TransLogUtil.afterThrowing(beginTime, method, e);
             throw e;
         }
-    }
-
-    private Tracer getTracer() {
-        if (tracer == null) {
-            ApplicationContext context = ContextHolder.getContext();
-            if (context != null) {
-                tracer = context.getBean(Tracer.class);
-            }
-        }
-        return tracer;
-    }
-
-    /**
-     * 获取 方法描述
-     * 
-     * @param method <br>
-     * @return <br>
-     */
-    private static String getMethodSignature(final Method method) {
-        StringBuilder sbuf = new StringBuilder();
-        sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
-        sbuf.append('(');
-
-        Class<?>[] types = method.getParameterTypes();
-        if (CommonUtil.isNotEmpty(types)) {
-            for (int i = 0; i < types.length; i++) {
-                if (i > 0) {
-                    sbuf.append(',');
-                }
-                sbuf.append(types[i].getName());
-            }
-        }
-        sbuf.append(')');
-        return sbuf.toString();
     }
 }
