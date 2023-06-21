@@ -16,14 +16,14 @@
 			<artifactId>framework-log-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 		</dependency>
 	</dependencies>
 </project>

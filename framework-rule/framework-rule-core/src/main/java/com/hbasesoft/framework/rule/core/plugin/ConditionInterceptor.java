@@ -48,7 +48,7 @@ public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
         if (StringUtils.isNotEmpty(condition)) {
 
             // 构造上下文：准备比如变量定义等等表达式运行需要的上下文数据
-            EvaluationContext context = new StandardEvaluationContext();
+            EvaluationContext context = new StandardEvaluationContext(flowBean);
 
             if (MapUtils.isNotEmpty(flowContext.getExtendUtils())) {
                 for (Entry<String, Object> util : flowContext.getExtendUtils().entrySet()) {
@@ -68,7 +68,7 @@ public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
             // 解析表达式：使用ExpressionParser来解析表达式为相应的Expression对象
             Expression expression = parser.parseExpression(condition);
 
-            Object value = expression.getValue(context, flowBean);
+            Object value = expression.getValue(context);
 
             return value != null && "true".equals(value.toString().toLowerCase());
         }

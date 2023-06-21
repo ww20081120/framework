@@ -39,6 +39,7 @@ public class RedisMessageQueue implements MessageQueue {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();
+            jedis.select(RedisClientFactory.getDbIndex());
             jedis.lpush(key.getBytes(), value);
         }
         catch (Exception e) {
@@ -65,6 +66,7 @@ public class RedisMessageQueue implements MessageQueue {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();
+            jedis.select(RedisClientFactory.getDbIndex());
             return jedis.lrange(key.getBytes(), 0, -1);
         }
         catch (Exception e) {
@@ -91,6 +93,8 @@ public class RedisMessageQueue implements MessageQueue {
         Jedis jedis = null;
         try {
             jedis = RedisClientFactory.getJedisPool().getResource();
+            jedis.select(RedisClientFactory.getDbIndex());
+
             List<byte[]> result = jedis.brpop(timeout, key.getBytes());
             if (CollectionUtils.isNotEmpty(result) && result.size() >= 2) {
                 result.remove(0);

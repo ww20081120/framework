@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.rule.core;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +23,6 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.log.core.TransLogUtil;
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
 import com.hbasesoft.framework.rule.core.config.FlowLoader;
 import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
@@ -49,9 +47,6 @@ public final class FlowHelper {
 
     /** reverseInterceptors */
     private static List<FlowComponentInterceptor> reverseInterceptors;
-
-    /** processMethod */
-    private static Method processMethod;
 
     /**
      * Description: 支持通过json方式启动流程<br>
@@ -175,8 +170,6 @@ public final class FlowHelper {
 
         FlowComponent<T> component = null;
 
-        String beanName = flowConfig.getName();
-
         // 执行拦截器前置拦截
         if (before(flowBean, flowContext)) {
             try {
@@ -185,11 +178,6 @@ public final class FlowHelper {
                 component = flowConfig.getComponent();
                 boolean flag = true;
                 if (component != null) {
-                    // 打印前置日志
-                    TransLogUtil.before(beanName, new Object[] {
-                        flowBean, flowContext
-                    });
-
                     // 执行流程组件
                     flag = component.process(flowBean, flowContext);
                 }
@@ -220,21 +208,11 @@ public final class FlowHelper {
                 }
                 flowContext.setFlowConfig(flowConfig);
 
-                if (component != null) {
-                    // 打印后置日志
-                    TransLogUtil.afterReturning(beanName, getMethod(), flag);
-                }
-
                 // 执行后置拦截
                 after(flowBean, flowContext);
             }
             catch (Exception e) {
                 flowContext.setFlowConfig(flowConfig);
-                if (component != null) {
-                    // 打印错误日志
-                    TransLogUtil.afterThrowing(beanName, getMethod(), e);
-                }
-
                 // 执行异常拦截
                 error(e, flowBean, flowContext);
                 throw e;
@@ -347,21 +325,4 @@ public final class FlowHelper {
         }
         return reverse ? reverseInterceptors : interceptors;
     }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return method
-     * @throws NoSuchMethodException
-     * @throws SecurityException <br>
-     */
-    private static Method getMethod() throws NoSuchMethodException, SecurityException {
-        if (processMethod == null) {
-            processMethod = FlowComponent.class.getDeclaredMethod("process", Object.class, FlowContext.class);
-        }
-        return processMethod;
-    }
-
 }
