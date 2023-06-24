@@ -19,7 +19,7 @@ import zipkin2.reporter.Reporter;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jul 13, 2020 <br>
+ * @CreateDate 2023年6月13日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.log.file <br>
  */

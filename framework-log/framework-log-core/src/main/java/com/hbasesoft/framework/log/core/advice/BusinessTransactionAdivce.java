@@ -91,15 +91,18 @@ public class BusinessTransactionAdivce {
             }
         }
 
+        // 开始执行时间
+        long beginTime = System.currentTimeMillis();
+
         Object[] args = joinPoint.getArgs();
-        TransLogUtil.before(target, method, args);
+        TransLogUtil.before(beginTime, method, args);
         try {
             Object returnValue = joinPoint.proceed();
-            TransLogUtil.afterReturning(target, method, returnValue);
+            TransLogUtil.afterReturning(beginTime, method, returnValue);
             return returnValue;
         }
         catch (Throwable e) {
-            TransLogUtil.afterThrowing(target, method, e);
+            TransLogUtil.afterThrowing(beginTime, method, e);
             throw e;
         }
     }

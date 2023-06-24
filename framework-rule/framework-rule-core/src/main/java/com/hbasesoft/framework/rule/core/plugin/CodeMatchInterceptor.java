@@ -5,19 +5,19 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.core.plugin;
 
-import java.beans.PropertyDescriptor;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
-
-import org.springframework.util.Assert;
 
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.annotation.NoTransLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.engine.DefaultMemberAccess;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
+
+import ognl.Ognl;
+import ognl.OgnlContext;
 
 /**
  * <Description> 条件组合<br>
@@ -77,15 +77,12 @@ public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
      */
     private String getAttr(final String code, final Serializable flowBean) {
         try {
-            PropertyDescriptor pd = new PropertyDescriptor(code, flowBean.getClass());
-            Method rM = pd.getReadMethod();
-            Assert.notNull(rM, code + "对应的get方法不存在");
-            return (String) rM.invoke(flowBean);
+            return CommonUtil
+                .getString(Ognl.getValue(code, new OgnlContext(null, null, new DefaultMemberAccess(true)), flowBean));
         }
         catch (Exception e) {
             throw new ServiceException(e);
         }
-
     }
 
     /**

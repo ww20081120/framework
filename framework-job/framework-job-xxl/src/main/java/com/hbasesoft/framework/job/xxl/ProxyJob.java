@@ -31,12 +31,12 @@ public class ProxyJob extends IJobHandler {
     /**
      * @Method ProxyJob
      * @param jobName
- * @param job
+     * @param job
      * @return
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 12:00
-    */
+     */
     public ProxyJob(final String jobName, final SimpleJob job) {
         this.job = job;
         this.jobName = jobName;

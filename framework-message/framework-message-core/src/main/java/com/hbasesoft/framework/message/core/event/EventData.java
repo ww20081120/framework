@@ -21,6 +21,11 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
  */
 public class EventData extends HashMap<String, Object> {
 
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 2323769185641461392L;
+
     /** msgId */
     private String msgId;
 
@@ -36,13 +41,6 @@ public class EventData extends HashMap<String, Object> {
     }
 
     /**
-     * @param msgId
-     */
-    public EventData(final String msgId) {
-        this.msgId = msgId;
-    }
-
-    /**
      * @param data
      */
     public EventData(final Object data) {
@@ -54,14 +52,9 @@ public class EventData extends HashMap<String, Object> {
      * @param data
      */
     public EventData(final String msgId, final Object data) {
-        this(msgId);
+        this.msgId = msgId;
         super.put(DEFAULT_KEY, data);
     }
-
-    /**
-     * serialVersionUID <br>
-     */
-    private static final long serialVersionUID = 2323769185641461392L;
 
     /**
      * Description: <br>

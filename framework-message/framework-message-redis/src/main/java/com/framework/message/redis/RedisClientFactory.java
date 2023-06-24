@@ -79,6 +79,9 @@ public final class RedisClientFactory {
     /** lock */
     private static Object lock = new Object();
 
+    /** 数据库 */
+    private static int dbIndex;
+
     /**
      * 
      */
@@ -111,6 +114,7 @@ public final class RedisClientFactory {
                             Protocol.DEFAULT_TIMEOUT, passwd, Protocol.DEFAULT_DATABASE, null);
                     }
                 }
+                dbIndex = PropertyHolder.getIntProperty("message.redis.db", 0);
             }
             return jedisPool;
         }
@@ -194,4 +198,14 @@ public final class RedisClientFactory {
         return config;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static int getDbIndex() {
+        return dbIndex;
+    }
 }
