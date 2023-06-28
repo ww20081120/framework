@@ -109,7 +109,7 @@ public final class TableParseUtil {
                 String type = (String) map.get("Type");
                 int index = type.indexOf("(");
                 if (index != -1) {
-                    String[] ls = StringUtils.split(type.substring(index + 1, type.length() - 1), ",");
+                    String[] ls = StringUtils.split(type.substring(index + 1, type.lastIndexOf(")")), ",");
                     info.setLength(Integer.parseInt(ls[0]));
                     if (ls.length > 1) {
                         info.setPrecision(Integer.parseInt(ls[1]));
