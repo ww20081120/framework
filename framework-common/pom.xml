@@ -74,13 +74,10 @@
 			<artifactId>jasypt</artifactId>
 		</dependency>
 
+		<!-- 序列化工具 -->
 		<dependency>
-			<groupId>io.protostuff</groupId>
-			<artifactId>protostuff-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.protostuff</groupId>
-			<artifactId>protostuff-runtime</artifactId>
+			<groupId>org.furyio</groupId>
+			<artifactId>fury-core</artifactId>
 		</dependency>
 
 		<dependency>
