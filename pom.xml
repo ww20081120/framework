@@ -51,6 +51,7 @@
 		<xxl-job.version>2.2.0</xxl-job.version>
 		<javax-persistence.version>2.2</javax-persistence.version>
 		<mysql.version>8.0.33</mysql.version>
+		<fury.version>0.1.0</fury.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -128,16 +129,13 @@
 				<version>${jasypt.version}</version>
 			</dependency>
 
+			<!-- 序列化工具 -->
 			<dependency>
-				<groupId>io.protostuff</groupId>
-				<artifactId>protostuff-core</artifactId>
-				<version>${protostuff.version}</version>
+				<groupId>org.furyio</groupId>
+				<artifactId>fury-core</artifactId>
+				<version>${fury.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>io.protostuff</groupId>
-				<artifactId>protostuff-runtime</artifactId>
-				<version>${protostuff.version}</version>
-			</dependency>
+
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
