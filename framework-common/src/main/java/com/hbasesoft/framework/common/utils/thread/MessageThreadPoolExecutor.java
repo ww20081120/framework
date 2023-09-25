@@ -5,17 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.thread;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-
 /**
  * <Description> 消息线程处理工具<br>
  * 
@@ -28,18 +17,6 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 public final class MessageThreadPoolExecutor {
 
-    /** Number */
-    private static final int NUM_10 = 10;
-
-    /** Number */
-    private static final int NUM_100 = 100;
-
-    /** Number */
-    private static final int NUM_600 = 600;
-
-    /** executor map */
-    private static Map<String, ThreadPoolExecutor> executorMap = new HashMap<>();
-
     /**
      * Description: 通过线程池来处理消息<br>
      * 
@@ -50,49 +27,7 @@ public final class MessageThreadPoolExecutor {
      * @throws InterruptedException <br>
      */
     public static void execute(final String channel, final Runnable message) {
-        synchronized (channel) {
-            ThreadPoolExecutor executor = executorMap.get(channel);
-            if (executor == null) {
-                executor = createThreadPoolExecutor(channel);
-                executorMap.put(channel, executor);
-            }
-            BlockingQueue<Runnable> bq = executor.getQueue();
-
-            // 当线程池中的队列出现阻塞后，暂停从redis中进行获取
-            try {
-                long count = 0;
-                while (bq.remainingCapacity() == 0 && executor.getMaximumPoolSize() == executor.getPoolSize()) {
-                    if (count++ % NUM_100 == 0) {
-                        LoggerUtil.debug("wait message[{0}] execute, current pool size is [{1}]", channel, bq.size());
-                    }
-                    Thread.sleep(NUM_100);
-                }
-                executor.execute(message);
-            }
-            catch (InterruptedException e) {
-                LoggerUtil.error(e);
-            }
-
-        }
+        Thread.ofVirtual().name(channel + Thread.currentThread().threadId()).start(message);
     }
 
-    private static ThreadPoolExecutor createThreadPoolExecutor(final String channel) {
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            PropertyHolder.getIntProperty("message.executor." + channel + ".coreSize", 1), // 设置核心线程数量
-            PropertyHolder.getIntProperty("message.executor." + channel + ".maxPoolSize", NUM_10), // 线程池维护线程的最大数量
-            PropertyHolder.getIntProperty("message.executor." + channel + ".keepAliveSeconds", NUM_600),
-            TimeUnit.SECONDS, // 允许的空闲时间
-            new ArrayBlockingQueue<>(
-                PropertyHolder.getIntProperty("message.executor." + channel + ".queueCapacity", NUM_10)),
-            new ThreadFactory() {
-                @Override
-                public Thread newThread(final Runnable r) {
-                    Thread thread = new Thread(r);
-                    thread.setDaemon(true);
-                    thread.setName(channel + thread.getId());
-                    return thread;
-                }
-            }); // 缓存队列
-        return executor;
-    }
 }

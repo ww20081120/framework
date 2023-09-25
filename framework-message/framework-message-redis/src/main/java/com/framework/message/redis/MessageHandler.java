@@ -78,8 +78,8 @@ public final class MessageHandler {
                         if (CollectionUtils.isNotEmpty(datas)) {
 
                             String transId = CommonUtil.getTransactionID();
-                            LOGGER.debug("receive message by thread[{0}], transId[{1}]", Thread.currentThread().getId(),
-                                transId);
+                            LOGGER.debug("receive message by thread[{0}], transId[{1}]",
+                                Thread.currentThread().threadId(), transId);
 
                             for (byte[] data : datas) {
                                 MessageThreadPoolExecutor.execute(channel,

@@ -13,7 +13,7 @@ master: #主数据库配置
   password: sgp
     
 cache: #缓存配置
-  model: REDIS
+  model: SIMPLE
   redis:
     address: 127.0.0.1:6379
 
@@ -43,5 +43,6 @@ message: #消息服务
 #   coreSize: 20 # 设置核心线程数量
 #   maxPoolSize: 64 # 线程池维护线程的最大数量
 
+logging.level.root: INFO
    
     

@@ -27,7 +27,7 @@
 		<module>framework-dependencies</module>
 	</modules>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 		<spring-cloud.version>2021.0.7</spring-cloud.version>
 		<fastjson.version>2.0.14</fastjson.version>
 		<ognl.version>3.3.4</ognl.version>
@@ -52,6 +52,7 @@
 		<javax-persistence.version>2.2</javax-persistence.version>
 		<mysql.version>8.0.33</mysql.version>
 		<fury.version>0.1.0</fury.version>
+		<lombok.version>1.18.30</lombok.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -219,6 +220,13 @@
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+			<dependency>
+			    <groupId>org.projectlombok</groupId>
+			    <artifactId>lombok</artifactId>
+			    <version>${lombok.version}</version>
 			</dependency>
 
 		</dependencies>
