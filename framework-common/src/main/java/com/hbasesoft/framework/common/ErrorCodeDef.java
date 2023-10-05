@@ -228,7 +228,10 @@ public enum ErrorCodeDef implements ErrorCode {
     CONFIG_NOT_SET(SYSTEM_PREFIX + 67, "{0}未配置，请检查配置文件"),
 
     /** {0}参数错误 */
-    PARAM_ERROR(SYSTEM_PREFIX + 68, "{0}参数错误");
+    PARAM_ERROR(SYSTEM_PREFIX + 68, "{0}参数错误"),
+
+    /** 创建临时目录{0}失败，请检查目前权限 */
+    CREATE_TEMP_FILE_ERROR(SYSTEM_PREFIX + 69, "创建临时目录{0}失败，请检查目前权限");
 
     /** code */
     private final int code;

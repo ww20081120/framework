@@ -26,6 +26,8 @@ import org.apache.commons.io.IOUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.CommonUtil;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
@@ -41,6 +43,12 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IOUtil {
+
+    /**
+     * template filePath
+     */
+    private static String tempFileDir = PropertyHolder.getProperty("server.fileupload.filePath",
+        System.getProperty("user.home")) + "/uploadFiles/temp";
 
     /**
      * Description: 复制文件<br>
@@ -185,7 +193,9 @@ public final class IOUtil {
      */
     public static String readFile(final File file) throws IOException {
         if (file.exists() && file.isFile()) {
-            return readString(new BufferedReader(new FileReader(file)));
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                return readString(reader);
+            }
         }
         return null;
     }
@@ -349,4 +359,33 @@ public final class IOUtil {
             }
         }
     }
+
+    /**
+     * Description: 创建临时文件 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static File createTempFile() {
+        File dir = new File(tempFileDir);
+        if (!dir.exists() || dir.isFile()) {
+            if (!dir.mkdirs()) {
+                throw new UtilException(ErrorCodeDef.CREATE_TEMP_FILE_ERROR, dir.getAbsolutePath());
+            }
+        }
+        return new File(dir, CommonUtil.getTransactionID());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param tempFileDir <br>
+     */
+    public static void setTempFileDir(final String tempFileDir) {
+        IOUtil.tempFileDir = tempFileDir;
+    }
+
 }
