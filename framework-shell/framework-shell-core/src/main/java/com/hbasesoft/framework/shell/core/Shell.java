@@ -74,7 +74,7 @@ public class Shell {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 14:12
-    */
+     */
     public Shell(final InputStream in, final PrintStream out, final boolean remote) {
         this.out = out;
         this.in = in;
@@ -90,7 +90,7 @@ public class Shell {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 14:14
-    */
+     */
     public Shell(final InputStream in, final PrintStream out) {
         this(in, out, false);
     }
@@ -101,7 +101,7 @@ public class Shell {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 14:14
-    */
+     */
     @SuppressWarnings("rawtypes")
     public void run(final String[] args) throws Exception {
 
@@ -159,7 +159,7 @@ public class Shell {
                 Assert.isTrue(ups.length == 2, "用户名密码不存在, 格式 jar -jar vcc-tools.jar 用户名:密码@命令 -命令参数 ");
                 login(ups[0], ups[1]);
                 args[0] = c.substring(index + 1);
-                
+
                 gitUtil.addSyncLog(StringUtils.join(args, " "));
             }
 
@@ -174,7 +174,7 @@ public class Shell {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 14:15
-    */
+     */
     public void exit() {
         this.exit = true;
         IOUtils.closeQuietly(scanner);
@@ -264,13 +264,18 @@ public class Shell {
                 option = optionClass.newInstance();
 
                 if (cmds.length > 1) {
-                    String[] newCmds = Arrays.copyOfRange(cmds, 1, cmds.length);
-                    for (int i = 0; i < newCmds.length; i++) {
-                        newCmds[i] = StringUtils.replace(newCmds[i], "\\s", " ");
-                    }
                     jCommander = new JCommander(option);
                     jCommander.setProgramName(cmd.toString());
-                    jCommander.parse(newCmds);
+                    if (cmds.length == 2) {
+                        option.setDefaultParams(cmds[1]);
+                    }
+                    else {
+                        String[] newCmds = Arrays.copyOfRange(cmds, 1, cmds.length);
+                        for (int i = 0; i < newCmds.length; i++) {
+                            newCmds[i] = StringUtils.replace(newCmds[i], "\\s", " ");
+                        }
+                        jCommander.parse(newCmds);
+                    }
                 }
             }
             if (option.isHelp()) {
