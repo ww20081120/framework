@@ -262,19 +262,18 @@ public class Shell {
             Class<? extends AbstractOption> optionClass = paramsHolder.get(cmds[0]);
             if (optionClass != null) {
                 option = optionClass.newInstance();
-
                 if (cmds.length > 1) {
                     jCommander = new JCommander(option);
                     jCommander.setProgramName(cmd.toString());
-                    if (cmds.length == 2) {
-                        option.setDefaultParams(cmds[1]);
-                    }
-                    else {
-                        String[] newCmds = Arrays.copyOfRange(cmds, 1, cmds.length);
+                    String[] newCmds = Arrays.copyOfRange(cmds, 1, cmds.length);
+                    if (cmd.hasParam()) {
                         for (int i = 0; i < newCmds.length; i++) {
                             newCmds[i] = StringUtils.replace(newCmds[i], "\\s", " ");
                         }
                         jCommander.parse(newCmds);
+                    }
+                    else {
+                        option.setDefaultParams(StringUtils.join(newCmds, " "));
                     }
                 }
             }

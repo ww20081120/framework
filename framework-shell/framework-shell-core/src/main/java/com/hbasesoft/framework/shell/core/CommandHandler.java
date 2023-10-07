@@ -10,6 +10,7 @@ import com.hbasesoft.framework.shell.core.vo.AbstractOption;
 
 /**
  * <Description> <br>
+ * 
  * @param <T>
  * @author 王伟<br>
  * @version 1.0<br>
@@ -28,7 +29,17 @@ public interface CommandHandler<T extends AbstractOption> {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 10:49
-    */
+     */
     void execute(JCommander cmd, T option, Shell shell);
 
+    /**
+     * Description: 是否有参数<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    default boolean hasParam() {
+        return true;
+    }
 }
