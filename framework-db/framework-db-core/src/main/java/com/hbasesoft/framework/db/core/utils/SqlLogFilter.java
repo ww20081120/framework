@@ -6,6 +6,7 @@ package com.hbasesoft.framework.db.core.utils;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Types;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -21,6 +22,8 @@ import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.date.DateConstants;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -702,10 +705,25 @@ public class SqlLogFilter extends FilterEventAdapter {
                     case Types.CLOB:
                     case Types.CHAR:
                     case Types.VARCHAR:
-                        tempValue = new StringBuilder().append('\'').append(value).append('\'').toString();
+                        if (value != null) {
+                            tempValue = new StringBuilder().append('\'').append(value).append('\'').toString();
+                        }
+                        else {
+                            tempValue = "NULL";
+                        }
                         break;
                     default:
-                        tempValue = String.valueOf(value);
+                        if (value != null) {
+                            if (value instanceof Date) {
+                                tempValue = DateUtil.date2String((Date) value, DateConstants.DATETIME_FORMAT_19);
+                            }
+                            else {
+                                tempValue = String.valueOf(value);
+                            }
+                        }
+                        else {
+                            tempValue = "NULL";
+                        }
                         break;
                 }
                 sqlStr = StringUtils.replaceOnce(sqlStr, "?", tempValue);
