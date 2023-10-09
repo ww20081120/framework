@@ -715,7 +715,9 @@ public class SqlLogFilter extends FilterEventAdapter {
                     default:
                         if (value != null) {
                             if (value instanceof Date) {
-                                tempValue = DateUtil.date2String((Date) value, DateConstants.DATETIME_FORMAT_19);
+                                tempValue = new StringBuilder().append('\'')
+                                    .append(DateUtil.date2String((Date) value, DateConstants.DATETIME_FORMAT_19))
+                                    .append('\'').toString();
                             }
                             else {
                                 tempValue = String.valueOf(value);
