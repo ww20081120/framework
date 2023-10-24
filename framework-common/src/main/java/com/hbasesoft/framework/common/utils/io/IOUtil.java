@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -131,6 +132,21 @@ public final class IOUtil {
         finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    /**
+     * Description: 读取包下面的数据<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fileName
+     * @param clz
+     * @return <br>
+     */
+    public static String readPackageString(final String fileName, final Class<?> clz) {
+        String path = StringUtils
+            .replace(clz.getName().substring(0, clz.getName().length() - clz.getSimpleName().length()), ".", "/");
+        return readString(clz.getResourceAsStream(path + fileName));
     }
 
     /**
