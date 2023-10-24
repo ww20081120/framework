@@ -146,7 +146,15 @@ public final class IOUtil {
     public static String readPackageString(final String fileName, final Class<?> clz) {
         String path = StringUtils
             .replace(clz.getName().substring(0, clz.getName().length() - clz.getSimpleName().length()), ".", "/");
-        return readString(clz.getResourceAsStream(path + fileName));
+        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(path + fileName)) {
+            if (in != null) {
+                return readString(in);
+            }
+        }
+        catch (Exception e) {
+            throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
+        }
+        return null;
     }
 
     /**
