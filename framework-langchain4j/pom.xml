@@ -13,5 +13,6 @@
 	<description>langchain4j 国内的一些实现</description>
 	<modules>
 		<module>framework-langchain4j-dashscope</module>
+		<module>framework-langchain4j-demo</module>
 	</modules>
 </project>

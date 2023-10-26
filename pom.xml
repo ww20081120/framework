@@ -235,13 +235,18 @@
 				<artifactId>langchain4j-core</artifactId>
 				<version>${langchain4j.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>dev.langchain4j</groupId>
 				<artifactId>langchain4j</artifactId>
 				<version>${langchain4j.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>dev.langchain4j</groupId>
+				<artifactId>langchain4j-embeddings</artifactId>
+				<version>${langchain4j.version}</version>
+			</dependency>
 			<!--
 			https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
 			<dependency>
@@ -249,7 +254,6 @@
 				<artifactId>dashscope-sdk-java</artifactId>
 				<version>${dashscope.version}</version>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 

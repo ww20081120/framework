@@ -1,0 +1,5 @@
+project: 
+ name: langchainn4j-demo
+ 
+qwen:
+  apikey: 你的APIkey
