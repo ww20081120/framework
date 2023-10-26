@@ -12,7 +12,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.12</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
 		<module>framework-common</module>
@@ -25,6 +25,7 @@
 		<module>framework-tx</module>
 		<module>framework-shell</module>
 		<module>framework-dependencies</module>
+		<module>framework-langchain4j</module>
 	</modules>
 	<properties>
 		<java.version>8</java.version>
@@ -52,6 +53,8 @@
 		<javax-persistence.version>2.2</javax-persistence.version>
 		<mysql.version>8.0.33</mysql.version>
 		<fury.version>0.1.0</fury.version>
+		<langchain4j.version>0.23.0</langchain4j.version>
+		<dashscope.version>2.7.0</dashscope.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -149,21 +152,24 @@
 				<version>${dom4j.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+			<!--
+			https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>${commons-beanutils.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+			<!--
+			https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
 			<dependency>
 				<groupId>com.github.ben-manes.caffeine</groupId>
 				<artifactId>caffeine</artifactId>
 				<version>${caffeine.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/org.apache.flume/flume-ng-core -->
+			<!--
+			https://mvnrepository.com/artifact/org.apache.flume/flume-ng-core -->
 			<dependency>
 				<groupId>org.apache.flume</groupId>
 				<artifactId>flume-ng-core</artifactId>
@@ -207,7 +213,8 @@
 				<version>${xxl-job.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+			<!--
+			https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
 			<dependency>
 				<groupId>javax.persistence</groupId>
 				<artifactId>javax.persistence-api</artifactId>
@@ -219,6 +226,22 @@
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
+			</dependency>
+
+			<!--
+			https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-core -->
+			<dependency>
+				<groupId>dev.langchain4j</groupId>
+				<artifactId>langchain4j-core</artifactId>
+				<version>${langchain4j.version}</version>
+			</dependency>
+
+			<!--
+			https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>dashscope-sdk-java</artifactId>
+				<version>${dashscope.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -269,7 +292,8 @@
 						</goals>
 						<configuration>
 							<hooks>
-								<!-- 注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
+								<!--
+								注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
 								<pre-commit>
 									echo "begin to execute hook"gst
 									mvn checkstyle:check
