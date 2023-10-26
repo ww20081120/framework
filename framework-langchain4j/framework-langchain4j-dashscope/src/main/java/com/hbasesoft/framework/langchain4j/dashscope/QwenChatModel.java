@@ -96,7 +96,7 @@ public class QwenChatModel implements ChatLanguageModel {
                 QwenHelper.finishReasonFrom(generationResult));
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.LLM_ERROR, e);
+            throw new UtilException(e, ErrorCodeDef.LLM_ERROR, e.getMessage());
         }
     }
 
@@ -127,6 +127,17 @@ public class QwenChatModel implements ChatLanguageModel {
     @Override
     public Response<AiMessage> generate(final List<ChatMessage> messages, final ToolSpecification toolSpecification) {
         throw new IllegalArgumentException("Tools are currently not supported for qwen models");
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

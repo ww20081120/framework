@@ -233,8 +233,8 @@ public enum ErrorCodeDef implements ErrorCode {
     /** 创建临时目录{0}失败，请检查目前权限 */
     CREATE_TEMP_FILE_ERROR(SYSTEM_PREFIX + 69, "创建临时目录{0}失败，请检查目前权限"),
 
-    /** 大语言模型错误 */
-    LLM_ERROR(SYSTEM_PREFIX + 70, "大语言模型错误");
+    /** 大语言模型错误：{0} */
+    LLM_ERROR(SYSTEM_PREFIX + 70, "大语言模型错误:{0}");
 
     /** code */
     private final int code;

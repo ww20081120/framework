@@ -83,7 +83,7 @@ public class QwenStreamingLanguageModel extends QwenLanguageModel implements Str
             });
         }
         catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.LLM_ERROR, e);
+            throw new UtilException(e, ErrorCodeDef.LLM_ERROR, e.getMessage());
         }
     }
 
