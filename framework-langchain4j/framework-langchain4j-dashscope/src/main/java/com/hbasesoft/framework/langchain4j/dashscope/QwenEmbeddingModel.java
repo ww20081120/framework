@@ -10,10 +10,12 @@ import static com.alibaba.dashscope.embeddings.TextEmbeddingParam.TextType.QUERY
 import static java.util.Collections.singletonList;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.alibaba.dashscope.embeddings.TextEmbedding;
 import com.alibaba.dashscope.embeddings.TextEmbeddingOutput;
@@ -43,6 +45,9 @@ import lombok.Getter;
  */
 @Getter
 public class QwenEmbeddingModel implements EmbeddingModel {
+
+    /** 千问最多支持25条记录 */
+    public static final int MAX_SIZE = 25;
 
     /** type */
     public static final String TYPE_KEY = "type";
@@ -133,22 +138,28 @@ public class QwenEmbeddingModel implements EmbeddingModel {
 
     private Response<List<Embedding>> embedTexts(final List<TextSegment> textSegments,
         final TextEmbeddingParam.TextType textType) {
-        TextEmbeddingParam param = TextEmbeddingParam.builder().apiKey(apiKey).model(modelName).textType(textType)
-            .texts(textSegments.stream().map(TextSegment::text).collect(Collectors.toList())).build();
-        try {
-            TextEmbeddingResult generationResult = embedding.call(param);
-            // total_tokens are the same as input_tokens in the embedding model
-            TokenUsage usage = new TokenUsage(generationResult.getUsage().getTotalTokens());
-            List<Embedding> embeddings = Optional.of(generationResult).map(TextEmbeddingResult::getOutput)
-                .map(TextEmbeddingOutput::getEmbeddings).orElse(Collections.emptyList()).stream()
-                .map(TextEmbeddingResultItem::getEmbedding)
-                .map(doubleList -> doubleList.stream().map(Double::floatValue).collect(Collectors.toList()))
-                .map(Embedding::from).collect(Collectors.toList());
-            return Response.from(embeddings, usage);
-        }
-        catch (Exception e) {
-            throw new UtilException(e, ErrorCodeDef.LLM_ERROR, e.getMessage());
-        }
+        List<Embedding> embeddingList = IntStream.iterate(0, i -> i + MAX_SIZE)
+            .limit((long) textSegments.size() / MAX_SIZE + 1).mapToObj(i -> {
+
+                List<TextSegment> subList = textSegments.subList(i, Math.min(i + MAX_SIZE, textSegments.size()));
+
+                TextEmbeddingParam param = TextEmbeddingParam.builder().apiKey(apiKey).model(modelName)
+                    .textType(textType).texts(subList.stream().map(TextSegment::text).collect(Collectors.toList()))
+                    .build();
+                try {
+                    TextEmbeddingResult generationResult = embedding.call(param);
+                    // total_tokens are the same as input_tokens in the embedding model
+                    return Optional.of(generationResult).map(TextEmbeddingResult::getOutput)
+                        .map(TextEmbeddingOutput::getEmbeddings).orElse(Collections.emptyList()).stream()
+                        .map(TextEmbeddingResultItem::getEmbedding)
+                        .map(doubleList -> doubleList.stream().map(Double::floatValue).collect(Collectors.toList()))
+                        .map(Embedding::from).collect(Collectors.toList());
+                }
+                catch (Exception e) {
+                    throw new UtilException(e, ErrorCodeDef.LLM_ERROR, e.getMessage());
+                }
+            }).flatMap(Collection::stream).collect(Collectors.toList());
+        return Response.from(embeddingList);
     }
 
     /**
