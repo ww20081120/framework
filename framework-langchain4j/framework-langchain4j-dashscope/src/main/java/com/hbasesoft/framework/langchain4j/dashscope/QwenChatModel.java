@@ -261,7 +261,7 @@ public class QwenChatModel implements ChatLanguageModel {
                 throw new IllegalArgumentException("DashScope api key must be defined. It can be generated here: "
                     + "https://dashscope.console.aliyun.com/apiKey");
             }
-            modelName = Utils.isNullOrBlank(modelName) ? QwenModelName.QWEN_PLUS : modelName;
+            modelName = Utils.isNullOrBlank(modelName) ? QwenModelName.QWEN_TURBO : modelName;
             enableSearch = enableSearch != null && enableSearch;
         }
 
