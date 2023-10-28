@@ -333,7 +333,7 @@ public class ElasticsearchEmbeddingStore implements EmbeddingStore<TextSegment> 
             // Use Script Score and cosineSimilarity to calculate
             // see
             // https://www.elastic.co/guide/en/elasticsearch/reference/current
-            //query-dsl-script-score-query.html#vector-functions-cosine
+            // query-dsl-script-score-query.html#vector-functions-cosine
             ScriptScoreQuery scriptScoreQuery = buildDefaultScriptScoreQuery(referenceEmbedding.vector(),
                 (float) minScore);
             SearchResponse<Document> response = client.search(
@@ -405,14 +405,20 @@ public class ElasticsearchEmbeddingStore implements EmbeddingStore<TextSegment> 
         }
 
         // 根据元数据做删除历史数据
-        if (delMeta && MapUtils.isEmpty(metaData)) {
+        if (delMeta && MapUtils.isNotEmpty(metaData)) {
             BoolQuery.Builder boolQuery = new BoolQuery.Builder();
+            boolean flag = false;
             for (Entry<String, String> entry : metaData.entrySet()) {
-                boolQuery.must(t -> t.term(t2 -> t2.field("metadata." + entry.getKey()).value(entry.getValue())));
+                if (!"index".equals(entry.getKey())) {
+                    flag = true;
+                    boolQuery.must(t -> t.term(t2 -> t2.field("metadata." + entry.getKey()).value(entry.getValue())));
+                }
             }
-            DeleteByQueryRequest.Builder builder = new DeleteByQueryRequest.Builder().index(indexName)
-                .query(boolQuery.build()._toQuery());
-            client.deleteByQuery(builder.build());
+            if (flag) {
+                DeleteByQueryRequest.Builder builder = new DeleteByQueryRequest.Builder().index(indexName)
+                    .query(boolQuery.build()._toQuery());
+                client.deleteByQuery(builder.build());
+            }
         }
 
         BulkResponse response = client.bulk(bulkBuilder.build());
