@@ -56,6 +56,7 @@
 		<langchain4j.version>0.23.0</langchain4j.version>
 		<dashscope.version>2.7.0</dashscope.version>
 		<elasticsearch.version>8.10.4</elasticsearch.version>
+		<json-api.version>2.0.1</json-api.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -263,7 +264,13 @@
 				<artifactId>elasticsearch-java</artifactId>
 				<version>${elasticsearch.version}</version>
 			</dependency>
-
+			
+			<dependency>
+				<groupId>jakarta.json</groupId>
+				<artifactId>jakarta.json-api</artifactId>
+				<version>${json-api.version}</version>
+			</dependency>
+			
 		</dependencies>
 	</dependencyManagement>
 
