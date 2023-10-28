@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework-langchain4j</artifactId>
+		<version>3.7</version>
+	</parent>
+	<artifactId>framework-langchain4j-elasticsearch</artifactId>
+	<name>langchain4j-elasticsearch</name>
+	<description>LangChain4j integration with Elasticsearch</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>co.elastic.clients</groupId>
+			<artifactId>elasticsearch-java</artifactId>
+		</dependency>
+	</dependencies>
+</project>

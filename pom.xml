@@ -55,6 +55,7 @@
 		<fury.version>0.1.0</fury.version>
 		<langchain4j.version>0.23.0</langchain4j.version>
 		<dashscope.version>2.7.0</dashscope.version>
+		<elasticsearch.version>8.10.4</elasticsearch.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -254,6 +255,15 @@
 				<artifactId>dashscope-sdk-java</artifactId>
 				<version>${dashscope.version}</version>
 			</dependency>
+
+			<!--
+			https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
+			<dependency>
+				<groupId>co.elastic.clients</groupId>
+				<artifactId>elasticsearch-java</artifactId>
+				<version>${elasticsearch.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

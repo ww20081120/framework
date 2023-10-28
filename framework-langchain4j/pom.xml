@@ -14,5 +14,6 @@
 	<modules>
 		<module>framework-langchain4j-dashscope</module>
 		<module>framework-langchain4j-demo</module>
+		<module>framework-langchain4j-elasticsearch</module>
 	</modules>
 </project>
