@@ -52,7 +52,6 @@
 		<xxl-job.version>2.2.0</xxl-job.version>
 		<javax-persistence.version>2.2</javax-persistence.version>
 		<mysql.version>8.0.33</mysql.version>
-		<fury.version>0.1.0</fury.version>
 		<langchain4j.version>0.23.0</langchain4j.version>
 		<dashscope.version>2.7.0</dashscope.version>
 		<elasticsearch.version>8.10.4</elasticsearch.version>
@@ -136,11 +135,16 @@
 
 			<!-- 序列化工具 -->
 			<dependency>
-				<groupId>org.furyio</groupId>
-				<artifactId>fury-core</artifactId>
-				<version>${fury.version}</version>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-core</artifactId>
+				<version>${protostuff.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-runtime</artifactId>
+				<version>${protostuff.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>com.alibaba</groupId>
 				<artifactId>druid</artifactId>
@@ -264,13 +268,13 @@
 				<artifactId>elasticsearch-java</artifactId>
 				<version>${elasticsearch.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>jakarta.json</groupId>
 				<artifactId>jakarta.json-api</artifactId>
 				<version>${json-api.version}</version>
 			</dependency>
-			
+
 		</dependencies>
 	</dependencyManagement>
 

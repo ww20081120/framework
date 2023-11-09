@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
@@ -17,9 +18,10 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 
-import io.fury.Fury;
-import io.fury.Language;
-import io.fury.serializer.JavaSerializer;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtostuffIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -36,8 +38,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SerializationUtil {
 
-    /** Note that fury instance should be reused instead of creation every time. */
-    private static Fury fury = Fury.builder().withLanguage(Language.JAVA).requireClassRegistration(false).build();
+    /**
+     * INIT_SIZE
+     */
+    private static final int INIT_SIZE = 1024;
 
     /**
      * Description: <br>
@@ -49,11 +53,18 @@ public final class SerializationUtil {
      * @return T
      * @throws UtilException <br>
      */
+    @SuppressWarnings("unchecked")
     public static <T> byte[] serial(final T obj) throws UtilException {
         if (obj != null && !(obj instanceof Void)) {
             try {
-                fury.register(obj.getClass());
-                return fury.serialize(obj);
+                if (obj instanceof Map) {
+                    return jdkSerial(obj);
+                }
+                else {
+                    Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
+                    LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
+                    return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+                }
             }
             catch (Exception e) {
                 throw new UtilException(e, ErrorCodeDef.SERIALIZE_ERROR, obj);
@@ -106,12 +117,13 @@ public final class SerializationUtil {
         T result = null;
         if (data != null && data.length > 0) {
             try {
-                if (JavaSerializer.serializedByJDK(data)) {
-                    return (T) jdkUnserial(data);
+                if (Map.class.isAssignableFrom(clazz)) {
+                    result = (T) jdkUnserial(data);
                 }
                 else {
-                    fury.register(clazz);
-                    result = (T) fury.deserialize(data);
+                    Schema<T> schema = RuntimeSchema.getSchema(clazz);
+                    result = clazz.newInstance();
+                    ProtostuffIOUtil.mergeFrom(data, result, schema);
                 }
             }
             catch (Exception e) {

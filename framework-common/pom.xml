@@ -12,7 +12,8 @@
 	<name>${project.artifactId}</name>
 	<description>公共模块</description>
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+		<!--
+		https://mvnrepository.com/artifact/org.springframework/spring-context -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -76,8 +77,12 @@
 
 		<!-- 序列化工具 -->
 		<dependency>
-			<groupId>org.furyio</groupId>
-			<artifactId>fury-core</artifactId>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
 		</dependency>
 
 		<dependency>
