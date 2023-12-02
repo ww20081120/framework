@@ -26,6 +26,10 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
 import com.hbasesoft.framework.rule.core.config.FlowLoader;
 import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
+import com.hbasesoft.framework.rule.core.config.TreeFlowConfig;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * <Description> <br>
@@ -37,16 +41,34 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FlowHelper {
 
     /** serviceLoader */
-    private static ServiceLoader<FlowLoader> serviceLoader;
+    private ServiceLoader<FlowLoader> serviceLoader;
 
     /** interceptors */
-    private static List<FlowComponentInterceptor> interceptors;
+    private List<FlowComponentInterceptor> interceptors;
 
     /** reverseInterceptors */
-    private static List<FlowComponentInterceptor> reverseInterceptors;
+    private List<FlowComponentInterceptor> reverseInterceptors;
+
+    /** FlowHelper */
+    private static FlowHelper flowHelper;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static FlowHelper getFlowHelper() {
+        if (flowHelper == null) {
+            flowHelper = new FlowHelper();
+        }
+        return flowHelper;
+    }
 
     /**
      * Description: 支持通过json方式启动流程<br>
@@ -106,7 +128,7 @@ public final class FlowHelper {
         ErrorCode result = ErrorCodeDef.SUCCESS;
 
         // match flow config
-        FlowConfig config = match(flowName);
+        FlowConfig config = getFlowHelper().match(flowName);
         Assert.notNull(config, ErrorCodeDef.FLOW_NOT_MATCH, bean);
 
         try {
@@ -165,13 +187,15 @@ public final class FlowHelper {
     @SuppressWarnings("unchecked")
     public static <T extends Serializable> void execute(final T flowBean, final FlowContext flowContext)
         throws Exception {
-        FlowConfig flowConfig = flowContext.getFlowConfig();
+        TreeFlowConfig flowConfig = (TreeFlowConfig) flowContext.getFlowConfig();
         Assert.notNull(flowConfig, ErrorCodeDef.FLOW_COMPONENT_NOT_FOUND);
 
         FlowComponent<T> component = null;
 
+        FlowHelper helper = getFlowHelper();
+
         // 执行拦截器前置拦截
-        if (before(flowBean, flowContext)) {
+        if (helper.before(flowBean, flowContext)) {
             try {
 
                 // 获取流程组件，存在则执行流程组件
@@ -209,12 +233,12 @@ public final class FlowHelper {
                 flowContext.setFlowConfig(flowConfig);
 
                 // 执行后置拦截
-                after(flowBean, flowContext);
+                helper.after(flowBean, flowContext);
             }
             catch (Exception e) {
                 flowContext.setFlowConfig(flowConfig);
                 // 执行异常拦截
-                error(e, flowBean, flowContext);
+                helper.error(e, flowBean, flowContext);
                 throw e;
             }
         }
@@ -228,7 +252,7 @@ public final class FlowHelper {
      * @param flowName
      * @return <br>
      */
-    private static FlowConfig match(final String flowName) {
+    protected FlowConfig match(final String flowName) {
         if (serviceLoader == null) {
             serviceLoader = ServiceLoader.load(FlowLoader.class);
         }
@@ -252,7 +276,7 @@ public final class FlowHelper {
      * @param fc
      * @return <br>
      */
-    private static boolean before(final Serializable fb, final FlowContext fc) {
+    public boolean before(final Serializable fb, final FlowContext fc) {
         List<FlowComponentInterceptor> its = loadInterceptor(false);
         if (CollectionUtils.isNotEmpty(its)) {
             for (FlowComponentInterceptor interceptor : its) {
@@ -272,7 +296,7 @@ public final class FlowHelper {
      * @param fb
      * @param fc <br>
      */
-    private static void after(final Serializable fb, final FlowContext fc) {
+    public void after(final Serializable fb, final FlowContext fc) {
         List<FlowComponentInterceptor> its = loadInterceptor(true);
         if (CollectionUtils.isNotEmpty(its)) {
             for (FlowComponentInterceptor interceptor : its) {
@@ -290,7 +314,7 @@ public final class FlowHelper {
      * @param fb
      * @param fc <br>
      */
-    private static void error(final Exception e, final Serializable fb, final FlowContext fc) {
+    public void error(final Exception e, final Serializable fb, final FlowContext fc) {
         List<FlowComponentInterceptor> its = loadInterceptor(true);
         if (CollectionUtils.isNotEmpty(its)) {
             for (FlowComponentInterceptor interceptor : its) {
@@ -307,7 +331,7 @@ public final class FlowHelper {
      * @param reverse
      * @return <br>
      */
-    private static List<FlowComponentInterceptor> loadInterceptor(final boolean reverse) {
+    protected List<FlowComponentInterceptor> loadInterceptor(final boolean reverse) {
         if (CollectionUtils.isEmpty(interceptors)) {
             Map<String, FlowComponentInterceptor> interceptorMap = ContextHolder.getContext()
                 .getBeansOfType(FlowComponentInterceptor.class);
