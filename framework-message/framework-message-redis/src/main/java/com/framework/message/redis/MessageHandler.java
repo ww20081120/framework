@@ -102,7 +102,7 @@ public final class MessageHandler {
                 LoggerUtil.error(e);
             }
         });
-        thread.setName("ls_" + channel);
+        thread.setName("Scanner_" + channel + thread.getId());
         thread.setDaemon(true);
         thread.start();
     }
