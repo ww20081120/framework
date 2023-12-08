@@ -102,6 +102,7 @@ public final class MessageHandler {
                 LoggerUtil.error(e);
             }
         });
+        thread.setName("ls_" + channel);
         thread.setDaemon(true);
         thread.start();
     }
