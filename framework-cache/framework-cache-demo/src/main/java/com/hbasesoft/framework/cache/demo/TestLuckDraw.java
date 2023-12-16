@@ -7,10 +7,8 @@ package com.hbasesoft.framework.cache.demo;
 
 import javax.annotation.Resource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
 
@@ -25,8 +23,7 @@ import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
  * @see com.hbasesoft.test <br>
  */
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class TestLuckDraw {
 
     /** MAX_SIZE */
@@ -43,9 +40,8 @@ public class TestLuckDraw {
     private LuckDrawService luckDrawService;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @throws InterruptedException <br>
