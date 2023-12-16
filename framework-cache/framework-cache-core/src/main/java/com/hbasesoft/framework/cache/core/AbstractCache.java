@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import org.apache.commons.collections.MapUtils;
 
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -42,7 +43,7 @@ public abstract class AbstractCache implements ICache {
             }
         }
         catch (Exception e) {
-            throw new RuntimeException("unserial failed!", e);
+            LoggerUtil.error("unserial failed!", e);
         }
         return null;
     }
@@ -52,8 +53,9 @@ public abstract class AbstractCache implements ICache {
             return SerializationUtil.serial(new CacheObject(value));
         }
         catch (Exception e) {
-            throw new RuntimeException("serial failed!", e);
+            LoggerUtil.error("serial failed!", e);
         }
+        return null;
     }
 
     private byte[] getData(final int seconds, final Object value) {
@@ -61,8 +63,9 @@ public abstract class AbstractCache implements ICache {
             return SerializationUtil.serial(new CacheObject(seconds, value));
         }
         catch (Exception e) {
-            throw new RuntimeException("serial failed!", e);
+            LoggerUtil.error("serial failed!", e);
         }
+        return null;
     }
 
     /**

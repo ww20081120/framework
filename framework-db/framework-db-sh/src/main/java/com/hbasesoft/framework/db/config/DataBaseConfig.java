@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.Dao;
-import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
@@ -71,7 +70,6 @@ public class DataBaseConfig {
         dataConfig.setCallBackType(ResultTransformer.class);
         beanFactory.setConfig(dataConfig);
         beanFactory.setInterceptors("springDaoHandler");
-        beanFactory.setPackagesToScan(TransactionManagerHolder.getBasePackage());
 
         return beanFactory;
     }

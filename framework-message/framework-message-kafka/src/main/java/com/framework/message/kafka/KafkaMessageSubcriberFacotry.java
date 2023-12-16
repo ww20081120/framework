@@ -72,7 +72,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
                 .getKafkaConsumer(broadcast ? channel + CommonUtil.getTransactionID() : channel, channel);
             registSubscriberBroadCast(kafkaConsumer, channel, subscriber);
         });
-        thread.setName("Scanner_" + channel + thread.getId());
+        thread.setName("Scanner_" + channel + thread.threadId());
         thread.setDaemon(true);
         thread.start();
     }

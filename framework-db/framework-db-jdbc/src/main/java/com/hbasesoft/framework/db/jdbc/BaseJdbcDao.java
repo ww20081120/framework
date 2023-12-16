@@ -107,7 +107,7 @@ public class BaseJdbcDao implements ISqlExcutor {
                 rowMap = rm;
             }
             else if (param.getBeanType().equals(Map.class)) {
-                new ColumnMapRowMapper();
+                rowMap = new ColumnMapRowMapper();
             }
             else {
                 Class<?> beanType = param.getBeanType();

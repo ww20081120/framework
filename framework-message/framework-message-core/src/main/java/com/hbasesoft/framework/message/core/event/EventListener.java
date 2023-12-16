@@ -65,7 +65,7 @@ public interface EventListener extends MessageSubscriber {
      */
     default void onMessage(final String channel, final byte[] data) {
         EventData eventData = SerializationUtil.unserial(EventData.class, data);
-        LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().getId(), channel, eventData);
+        LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().threadId(), channel, eventData);
 
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(channel);
         if (CollectionUtils.isNotEmpty(interceptors)) {

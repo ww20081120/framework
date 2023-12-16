@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `t_course`;
 CREATE TABLE `t_student` (
 	id       varchar(32)       primary key,
 	name     varchar(32)       not null,
-	age      int(3)            not null
+	age      int            not null
 );
 
 CREATE TABLE `t_course` (
@@ -20,7 +20,7 @@ CREATE TABLE `t_student_course` (
     id       varchar(32)       primary key,
     student_id varchar(32)     not null,
     course_id  varchar(32)     not null,
-    score      int(3)
+    score      int
 );
 
 insert into t_student(id, name, age) values ('1', '张三', 18);

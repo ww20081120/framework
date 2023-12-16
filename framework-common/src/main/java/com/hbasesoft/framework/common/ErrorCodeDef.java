@@ -228,7 +228,19 @@ public enum ErrorCodeDef implements ErrorCode {
     CONFIG_NOT_SET(SYSTEM_PREFIX + 67, "{0}未配置，请检查配置文件"),
 
     /** {0}参数错误 */
-    PARAM_ERROR(SYSTEM_PREFIX + 68, "{0}参数错误");
+    PARAM_ERROR(SYSTEM_PREFIX + 68, "{0}参数错误"),
+
+    /** 创建临时目录{0}失败，请检查目前权限 */
+    CREATE_TEMP_FILE_ERROR(SYSTEM_PREFIX + 69, "创建临时目录{0}失败，请检查目前权限"),
+
+    /** 大语言模型错误：{0} */
+    LLM_ERROR(SYSTEM_PREFIX + 70, "大语言模型错误:{0}"),
+
+    /** {0}重复了 */
+    PARAM_REPEAT(SYSTEM_PREFIX + 71, "{0}重复了"),
+
+    /** 流程执行超过最大深度{0} */
+    FLOW_STACK_OVERFLOW(SYSTEM_PREFIX + 72, "流程执行超过最大深度{0}");
 
     /** code */
     private final int code;

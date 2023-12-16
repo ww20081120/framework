@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.demo;
 
-import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessagePublisher;
 import com.hbasesoft.framework.message.core.event.EventData;
@@ -22,8 +21,8 @@ import com.hbasesoft.framework.message.core.event.EventData;
  */
 public class MessageProvider {
 
-    /** Number */
-    private static final int NUM_10 = 10;
+    /** max count */
+    private static final int MAX_COUNT = 100000;
 
     /**
      * Description: <br>
@@ -36,7 +35,7 @@ public class MessageProvider {
     public static void main(final String[] args) throws InterruptedException {
         MessagePublisher publisher = MessageHelper.createMessagePublisher();
         int i = 0;
-        while (true) {
+        while (i < MAX_COUNT) {
             ++i;
             // publisher.publish("log-p21", (i + "").getBytes());
             EventData data = new EventData();
@@ -48,10 +47,6 @@ public class MessageProvider {
             // publisher.publish("log-p2", (++i + "").getBytes());
             // }
             System.out.println("produce " + i);
-            Thread.sleep(GlobalConstants.SECONDS);
-            if (i == NUM_10) {
-                return;
-            }
         }
     }
 
