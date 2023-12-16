@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework</artifactId>
+		<version>4.0</version>
+	</parent>
+	<artifactId>framework-langchain4j</artifactId>
+	<packaging>pom</packaging>
+	<name>langchain4j</name>
+	<description>langchain4j 国内的一些实现</description>
+	<modules>
+		<module>framework-langchain4j-dashscope</module>
+		<module>framework-langchain4j-demo</module>
+		<module>framework-langchain4j-elasticsearch</module>
+	</modules>
+</project>

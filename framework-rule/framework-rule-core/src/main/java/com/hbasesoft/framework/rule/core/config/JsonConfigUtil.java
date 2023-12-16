@@ -44,7 +44,7 @@ public final class JsonConfigUtil {
     @SuppressWarnings("rawtypes")
     public static FlowConfig getFlowConfig(final JSONObject obj) {
 
-        FlowConfig config = new FlowConfig();
+        TreeFlowConfig config = new TreeFlowConfig();
 
         String component = obj.getString("component");
         if (StringUtils.isNotEmpty(component)) {

@@ -12,7 +12,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.12</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
 		<module>framework-common</module>
@@ -25,6 +25,7 @@
 		<module>framework-tx</module>
 		<module>framework-shell</module>
 		<module>framework-dependencies</module>
+		<module>framework-langchain4j</module>
 	</modules>
 	<properties>
 		<java.version>21</java.version>
@@ -51,8 +52,11 @@
 		<xxl-job.version>2.4.0</xxl-job.version>
 		<javax-persistence.version>2.2</javax-persistence.version>
 		<mysql.version>8.0.33</mysql.version>
-		<fury.version>0.1.0</fury.version>
 		<lombok.version>1.18.30</lombok.version>
+		<langchain4j.version>0.23.0</langchain4j.version>
+		<dashscope.version>2.7.0</dashscope.version>
+		<elasticsearch.version>8.10.4</elasticsearch.version>
+		<json-api.version>2.0.1</json-api.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -132,9 +136,14 @@
 
 			<!-- 序列化工具 -->
 			<dependency>
-				<groupId>org.furyio</groupId>
-				<artifactId>fury-core</artifactId>
-				<version>${fury.version}</version>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-core</artifactId>
+				<version>${protostuff.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.protostuff</groupId>
+				<artifactId>protostuff-runtime</artifactId>
+				<version>${protostuff.version}</version>
 			</dependency>
 
 			<dependency>
@@ -150,21 +159,24 @@
 				<version>${dom4j.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+			<!--
+			https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>${commons-beanutils.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
+			<!--
+			https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
 			<dependency>
 				<groupId>com.github.ben-manes.caffeine</groupId>
 				<artifactId>caffeine</artifactId>
 				<version>${caffeine.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/org.apache.flume/flume-ng-core -->
+			<!--
+			https://mvnrepository.com/artifact/org.apache.flume/flume-ng-core -->
 			<dependency>
 				<groupId>org.apache.flume</groupId>
 				<artifactId>flume-ng-core</artifactId>
@@ -208,7 +220,8 @@
 				<version>${xxl-job.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+			<!--
+			https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
 			<dependency>
 				<groupId>javax.persistence</groupId>
 				<artifactId>javax.persistence-api</artifactId>
@@ -224,9 +237,49 @@
 
 			<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 			<dependency>
-			    <groupId>org.projectlombok</groupId>
-			    <artifactId>lombok</artifactId>
-			    <version>${lombok.version}</version>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
+			<!--
+			https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-core -->
+			<dependency>
+				<groupId>dev.langchain4j</groupId>
+				<artifactId>langchain4j-core</artifactId>
+				<version>${langchain4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dev.langchain4j</groupId>
+				<artifactId>langchain4j</artifactId>
+				<version>${langchain4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>dev.langchain4j</groupId>
+				<artifactId>langchain4j-embeddings</artifactId>
+				<version>${langchain4j.version}</version>
+			</dependency>
+			<!--
+			https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>dashscope-sdk-java</artifactId>
+				<version>${dashscope.version}</version>
+			</dependency>
+
+			<!--
+			https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
+			<dependency>
+				<groupId>co.elastic.clients</groupId>
+				<artifactId>elasticsearch-java</artifactId>
+				<version>${elasticsearch.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>jakarta.json</groupId>
+				<artifactId>jakarta.json-api</artifactId>
+				<version>${json-api.version}</version>
 			</dependency>
 
 		</dependencies>
@@ -277,7 +330,8 @@
 						</goals>
 						<configuration>
 							<hooks>
-								<!-- 注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
+								<!--
+								注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
 								<pre-commit>
 									echo "begin to execute hook"gst
 									mvn checkstyle:check
@@ -334,12 +388,12 @@
 		<repository>
 			<id>releases</id>
 			<name>Nexus Release Repository</name>
-			<url>http://nexus.hbasesoft.com:8888/repository/maven-releases/</url>
+			<url>http://nexus.gssecp.com:8888/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
 			<name>Nexus Snapshot Repository</name>
-			<url>http://nexus.hbasesoft.com:8888/repository/maven-snapshots/</url>
+			<url>http://nexus.gssecp.com:8888/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project> 

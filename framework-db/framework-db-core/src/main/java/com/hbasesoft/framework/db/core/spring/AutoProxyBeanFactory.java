@@ -13,11 +13,15 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
@@ -38,6 +42,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
 
+    /** basePackage */
+    private static String[] basePackage;
+
     /**
      * logger
      */
@@ -52,9 +59,6 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      * 注解名称
      */
     private final Class<? extends Annotation> annotationClazz;
-
-    /** 扫描路径 */
-    private String[] packagesToScan;
 
     /** interceptors */
     private String[] interceptors;
@@ -72,46 +76,74 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      */
     @Override
     public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        logger.info("*************************Dao注入列表***************************");
-        SQLHandler sqlHandler = new SQLHandler();
-        sqlHandler.setDaoConfig(config);
 
-        try {
-            for (String pack : packagesToScan) {
-                if (StringUtils.isNotEmpty(pack)) {
-                    Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
-                    String className = null;
-                    for (Class<?> clazz : clazzSet) {
-                        if (clazz.isAnnotationPresent(annotationClazz)) {
-                            className = clazz.getName();
-                            String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
-                            if (beanFactory.containsBean(beanName)) {
-                                beanName = className;
+        ComponentScan componentScanAnnotation = findComponentScanAnnotation(beanFactory);
+
+        logger.info("*************************Dao注入列表 {0}***************************", componentScanAnnotation);
+
+        if (componentScanAnnotation != null) {
+            basePackage = componentScanAnnotation.basePackages();
+
+            SQLHandler sqlHandler = new SQLHandler();
+            sqlHandler.setDaoConfig(config);
+
+            try {
+                for (String pack : basePackage) {
+                    if (StringUtils.isNotEmpty(pack)) {
+                        String tempPack = pack.indexOf("*") == -1 ? pack + ".*" : pack;
+                        Set<Class<?>> clazzSet = BeanUtil.getClasses(tempPack);
+                        String className = null;
+                        for (Class<?> clazz : clazzSet) {
+                            if (clazz.isAnnotationPresent(annotationClazz)) {
+                                className = clazz.getName();
+                                String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
                                 if (beanFactory.containsBean(beanName)) {
-                                    continue;
+                                    beanName = className;
+                                    if (beanFactory.containsBean(beanName)) {
+                                        continue;
+                                    }
                                 }
+
+                                // 此处不缓存SQL
+                                sqlHandler.invoke(clazz);
+
+                                // 单独加载一个接口的代理类
+                                ProxyFactoryBean factoryBean = new ProxyFactoryBean();
+                                factoryBean.setBeanFactory(beanFactory);
+                                factoryBean.setInterfaces(clazz);
+                                factoryBean.setInterceptorNames(interceptors);
+                                factoryBean.setTarget(getDaoHandler(clazz));
+                                beanFactory.registerSingleton(beanName, factoryBean);
+                                logger.info("    success create interface [{0}] with name {1}", className, beanName);
                             }
-
-                            // 此处不缓存SQL
-                            sqlHandler.invoke(clazz);
-
-                            // 单独加载一个接口的代理类
-                            ProxyFactoryBean factoryBean = new ProxyFactoryBean();
-                            factoryBean.setBeanFactory(beanFactory);
-                            factoryBean.setInterfaces(clazz);
-                            factoryBean.setInterceptorNames(interceptors);
-                            factoryBean.setTarget(getDaoHandler(clazz));
-                            beanFactory.registerSingleton(beanName, factoryBean);
-                            logger.info("    success create interface [{0}] with name {1}", className, beanName);
                         }
                     }
                 }
             }
+            catch (Exception e) {
+                logger.error("------->自动扫描jar包失败", e);
+            }
         }
-        catch (Exception e) {
-            logger.error("------->自动扫描jar包失败", e);
-        }
+
         logger.info("***********************************************************");
+    }
+
+    private ComponentScan findComponentScanAnnotation(final ConfigurableListableBeanFactory beanFactory) {
+        for (String beanName : beanFactory.getBeanDefinitionNames()) {
+            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+            Class<?> beanClass;
+            try {
+                beanClass = Class.forName(beanDefinition.getBeanClassName());
+                ComponentScan componentScan = AnnotationUtils.findAnnotation(beanClass, ComponentScan.class);
+                if (componentScan != null) {
+                    return componentScan;
+                }
+            }
+            catch (ClassNotFoundException e) {
+                LoggerUtil.error(e);
+            }
+        }
+        return null;
     }
 
     private DaoHandler getDaoHandler(final Class<?> clazz) {
@@ -171,10 +203,10 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param packagesToScan <br>
+     * @param interceptors <br>
      */
-    public void setPackagesToScan(final String... packagesToScan) {
-        this.packagesToScan = packagesToScan;
+    public void setInterceptors(final String... interceptors) {
+        this.interceptors = interceptors;
     }
 
     /**
@@ -182,9 +214,9 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param interceptors <br>
+     * @return <br>
      */
-    public void setInterceptors(final String... interceptors) {
-        this.interceptors = interceptors;
+    public static String[] getBasePackage() {
+        return basePackage;
     }
 }

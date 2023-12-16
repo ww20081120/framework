@@ -31,4 +31,7 @@ public abstract class AbstractOption {
 
     private boolean help;
 
+    /** 默认参数 */
+    private String defaultParams;
+
 }

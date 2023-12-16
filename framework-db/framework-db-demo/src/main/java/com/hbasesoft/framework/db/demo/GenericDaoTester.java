@@ -16,11 +16,9 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -44,8 +42,7 @@ import com.hbasesoft.framework.db.demo.entity.StudentEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest()
 @Transactional
 @Deprecated
 public class GenericDaoTester {
@@ -86,7 +83,7 @@ public class GenericDaoTester {
      * @taskId <br>
      *         <br>
      */
-    @Before
+    @BeforeEach
     public void createTable() {
         studentDao.createTable();
     }
