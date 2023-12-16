@@ -12,7 +12,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -42,22 +41,11 @@ public class TxAdvice {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     *         <br>
-     */
-    @Pointcut("execution(public * com.hbasesoft..*(..))")
-    public void tx() {
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param thisJoinPoint
      * @return Object
      * @throws Throwable <br>
      */
-    @Around("tx()")
+    @Around("@annotation(com.hbasesoft.framework.tx.core.annotation.Tx)")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {

@@ -9,10 +9,8 @@ import java.util.Random;
 
 import javax.annotation.Resource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.hbasesoft.framework.cache.demo.dulplicateLock.ZhanWeiZiService;
 
@@ -26,8 +24,7 @@ import com.hbasesoft.framework.cache.demo.dulplicateLock.ZhanWeiZiService;
  * @since V1.0<br>
  * @see com.hbasesoft.test.dulplicateLock <br>
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class TestDulplicateLock {
 
     /** MAX_SIZE */

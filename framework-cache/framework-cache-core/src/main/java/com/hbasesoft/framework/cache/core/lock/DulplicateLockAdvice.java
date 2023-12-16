@@ -11,10 +11,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.annotation.DulplicateLock;
@@ -33,22 +32,11 @@ import com.hbasesoft.framework.common.utils.Assert;
  * @see com.hbasesoft.framework.cache.core.redis.lock <br>
  */
 @Aspect
-@Configuration
+@Component
 public class DulplicateLockAdvice {
 
     /** LOCKED */
     public static final String LOCKED = "DULPLICATE_LOCKED";
-
-    /**
-     * Description: dulplicateLock <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Pointcut("execution(public * com.hbasesoft..*Service.*(..))")
-    public void dulplicateLock() {
-    }
 
     /**
      * Description: invoke<br>
@@ -59,7 +47,7 @@ public class DulplicateLockAdvice {
      * @return Object
      * @throws Throwable <br>
      */
-    @Around("dulplicateLock()")
+    @Around("@annotation(com.hbasesoft.framework.cache.core.annotation.DulplicateLock)")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Signature sig = thisJoinPoint.getSignature();
         if (sig instanceof MethodSignature) {

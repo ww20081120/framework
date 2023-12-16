@@ -7,6 +7,7 @@ package com.hbasesoft.framework.cache.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.hbasesoft.framework.cache.core.annotation.Cache;
 import com.hbasesoft.framework.cache.demo.service.TestService;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 
@@ -31,6 +32,7 @@ public class TestServiceImpl implements TestService {
      * @param key
      * @return <br>
      */
+    @Cache(node = "test")
     public String getTestContent(final String key) {
         System.out.println("test");
         return DateUtil.getCurrentTimestamp() + ":" + key;
