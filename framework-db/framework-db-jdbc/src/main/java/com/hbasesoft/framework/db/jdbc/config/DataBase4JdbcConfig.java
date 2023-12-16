@@ -5,15 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.jdbc.config;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
@@ -75,14 +72,7 @@ public class DataBase4JdbcConfig {
         dataConfig.setCallBackType(RowMapper.class);
         beanFactory.setConfig(dataConfig);
         beanFactory.setInterceptors("springDaoHandler");
-        beanFactory.setPackagesToScan(getBasePackage());
 
         return beanFactory;
     }
-
-    public static String[] getBasePackage() {
-        return StringUtils.split(PropertyHolder.getProperty("db.basepackage", "com.hbasesoft.*"),
-            GlobalConstants.SPLITOR);
-    }
-
 }

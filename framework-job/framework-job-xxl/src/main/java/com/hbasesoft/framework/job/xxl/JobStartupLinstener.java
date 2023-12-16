@@ -5,17 +5,13 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.job.xxl;
 
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.job.core.SimpleJob;
 import com.hbasesoft.framework.job.core.annotation.Job;
@@ -34,12 +30,6 @@ import com.xxl.job.core.executor.impl.XxlJobSpringExecutor;
 public class JobStartupLinstener implements StartupListener {
 
     /**
-     * packages to scan
-     */
-    private final String[] packagesToScan = StringUtils
-        .split(PropertyHolder.getProperty("job.basepackage", "com.hbasesoft.*"), GlobalConstants.SPLITOR);
-
-    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -54,34 +44,32 @@ public class JobStartupLinstener implements StartupListener {
             return;
         }
 
+        String[] beans = context.getBeanNamesForAnnotation(Job.class);
+
         try {
-            for (String pack : packagesToScan) {
-                if (StringUtils.isNotEmpty(pack)) {
-                    Set<Class<?>> clazzSet = BeanUtil.getClasses(pack);
-                    for (Class<?> clazz : clazzSet) {
-                        if (clazz.isAnnotationPresent(Job.class)) {
-                            Job job = AnnotationUtils.findAnnotation(clazz, Job.class);
+            for (String bean : beans) {
+                SimpleJob targetBean = context.getBean(bean, SimpleJob.class);
+                Class<?> clazz = targetBean.getClass();
+                Job job = AnnotationUtils.findAnnotation(clazz, Job.class);
+                if (job != null) {
+                    String isJobEnable = job.enable();
+                    isJobEnable = getPropery(isJobEnable);
+                    if (!"true".equalsIgnoreCase(isJobEnable)) {
+                        continue;
+                    }
 
-                            String isJobEnable = job.enable();
-                            isJobEnable = getPropery(isJobEnable);
-                            if (!"true".equalsIgnoreCase(isJobEnable)) {
-                                continue;
-                            }
+                    // Job名称
+                    String name = getPropery(job.name());
+                    if (StringUtils.isEmpty(name)) {
+                        name = StringUtils.uncapitalize(clazz.getSimpleName());
+                    }
 
-                            // Job名称
-                            String name = getPropery(job.name());
-                            if (StringUtils.isEmpty(name)) {
-                                name = StringUtils.uncapitalize(clazz.getSimpleName());
-                            }
-
-                            if (SimpleJob.class.isAssignableFrom(clazz)) {
-                                XxlJobSpringExecutor.registJobHandler(name,
-                                    new ProxyJob(name, (SimpleJob) clazz.getConstructor().newInstance()));
-                                LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(), name);
-                            }
-                        }
+                    if (SimpleJob.class.isAssignableFrom(clazz)) {
+                        XxlJobSpringExecutor.registJobHandler(name, new ProxyJob(name, targetBean));
+                        LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(), name);
                     }
                 }
+
             }
 
         }

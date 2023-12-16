@@ -18,7 +18,7 @@ package com.hbasesoft.framework.job.quartz;
 public interface JobConstants {
 
     /** job实例类 */
-    String JOB_INSTANCE_CLASS = "__JOB_INSTANCE_CLASS";
+    String JOB_INSTANCE = "__JOB_INSTANCE";
 
     /** job分片参数 */
     String JOB_SHARDING_PARAM = "__JOB_SHARDING_PARAM";

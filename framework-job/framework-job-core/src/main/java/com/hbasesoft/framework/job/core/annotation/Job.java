@@ -7,10 +7,13 @@ package com.hbasesoft.framework.job.core.annotation;
 
 import static java.lang.annotation.ElementType.TYPE;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 
@@ -27,6 +30,8 @@ import com.hbasesoft.framework.common.GlobalConstants;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(TYPE)
+@Documented
+@Component
 public @interface Job {
 
     /**

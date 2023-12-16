@@ -12,6 +12,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.job.core.JobContext;
 import com.hbasesoft.framework.job.core.SimpleJob;
@@ -40,10 +41,10 @@ public class ProxyJob implements Job {
     public void execute(final JobExecutionContext context) throws JobExecutionException {
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
         if (dataMap != null) {
-            String className = dataMap.getString(JobConstants.JOB_INSTANCE_CLASS);
-            if (StringUtils.isNotEmpty(className)) {
+            String beanName = dataMap.getString(JobConstants.JOB_INSTANCE);
+            if (StringUtils.isNotEmpty(beanName)) {
                 try {
-                    SimpleJob instance = (SimpleJob) Class.forName(className).newInstance();
+                    SimpleJob instance = ContextHolder.getContext().getBean(beanName, SimpleJob.class);
                     String shardingItemParameters = dataMap.getString(JobConstants.JOB_SHARDING_PARAM);
                     String[] params = StringUtils.isNotEmpty(shardingItemParameters)
                         ? StringUtils.split(shardingItemParameters, GlobalConstants.SPLITOR)
