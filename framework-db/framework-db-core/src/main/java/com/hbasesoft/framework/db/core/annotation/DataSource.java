@@ -34,7 +34,11 @@ public @interface DataSource {
     String value();
 
     /**
+     * 用于在项目中自行控制数据源的切换 <br/>
+     * 1、提供一个实现了com.hbasesoft.framework.db.core.annotation.handler.EnhanceDynamicDataSourceHandler类
+     * 2、该类注册在spring容器中，注解中enhanceCode填写spring中的bean的名称
+     * 
      * @return String
      */
-    String enhanceDynamicDataSource() default "";
+    String enhanceCode() default "";
 }

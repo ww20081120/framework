@@ -70,12 +70,15 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
 
     private void changeDatasource(final DataSource dataSource) {
         // 判断增强的字段是否被覆盖，覆盖则走增强的切换数据源
-        String enhanceDynamicDataSource = dataSource.enhanceDynamicDataSource();
+        String enhanceDynamicDataSource = dataSource.enhanceCode();
         if (StringUtils.isNotBlank(enhanceDynamicDataSource)) {
             EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler = 
                 (EnhanceDynamicDataSourceHandler) ContextHolder
                 .getContext().getBean(enhanceDynamicDataSource);
-            enhanceDynamicDataSourceHandler.enhanceChangeDbByCode(dataSource.value());
+            String code = enhanceDynamicDataSourceHandler.enhance(dataSource.value());
+            if (StringUtils.isNotEmpty(code)) {
+                DynamicDataSourceManager.setDataSourceCode(code);
+            }
         }
         else {
             DynamicDataSourceManager.setDataSourceCode(dataSource.value());
