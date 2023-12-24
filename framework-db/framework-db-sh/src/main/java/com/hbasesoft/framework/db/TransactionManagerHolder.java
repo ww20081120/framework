@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 public final class TransactionManagerHolder {
-    
+
     /** transaction */
     private static Map<String, PlatformTransactionManager> transactionManagerHolder = new ConcurrentHashMap<>();
 
@@ -62,29 +62,25 @@ public final class TransactionManagerHolder {
 
             if (manager == null) {
                 HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
-                hibernateTransactionManager.setSessionFactory(getSessionFactory());
+                hibernateTransactionManager.setSessionFactory(getSessionFactory(dbCode));
                 manager = hibernateTransactionManager;
                 transactionManagerHolder.put(dbCode, manager);
             }
-
             return manager;
         }
     }
 
     /**
-     * Description: 获取session 工厂 <br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param dbCode
      * @return <br>
-     * @throws IOException
      */
-    public static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory(final String dbCode) {
         synchronized (sessionFactoryHolder) {
-            String dbCode = DynamicDataSourceManager.getDataSourceCode();
-
             SessionFactory sessionFactory = sessionFactoryHolder.get(dbCode);
-
             if (sessionFactory == null) {
                 DataSource dataSource = DataSourceUtil.getDataSource(dbCode);
                 Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, dbCode);
@@ -115,5 +111,19 @@ public final class TransactionManagerHolder {
 
             return sessionFactory;
         }
+
+    }
+
+    /**
+     * Description: 获取session 工厂 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     * @throws IOException
+     */
+    public static SessionFactory getSessionFactory() {
+        String dbCode = DynamicDataSourceManager.getDataSourceCode();
+        return getSessionFactory(dbCode);
     }
 }
