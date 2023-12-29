@@ -16,7 +16,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
@@ -31,7 +31,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.plugin.transaction <br>
  */
-@NoTransLog
+@NoTracerLog
 public class TransactionCommponentInterceptor extends AbstractFlowCompnentInterceptor {
 
     /** status holder */
