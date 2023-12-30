@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.tx.core.TxManager;
 
@@ -31,7 +31,7 @@ import com.hbasesoft.framework.tx.core.TxManager;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tx.client.producer.springcloud <br>
  */
-@NoTransLog
+@NoTracerLog
 @Component
 @WebFilter(urlPatterns = "/**", filterName = "traceIdFilter")
 public class TraceIdFilter implements javax.servlet.Filter {

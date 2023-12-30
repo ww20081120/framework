@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.engine.DefaultMemberAccess;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
@@ -29,7 +29,7 @@ import ognl.OgnlContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.plugin.condition <br>
  */
-@NoTransLog
+@NoTracerLog
 public class CodeMatchInterceptor extends AbstractFlowCompnentInterceptor {
 
     /** codes */

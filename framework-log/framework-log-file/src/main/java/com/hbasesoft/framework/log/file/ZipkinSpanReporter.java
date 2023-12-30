@@ -7,7 +7,7 @@ package com.hbasesoft.framework.log.file;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 
 import zipkin2.Span;
@@ -24,7 +24,7 @@ import zipkin2.reporter.Reporter;
  * @see com.hbasesoft.framework.log.file <br>
  */
 @Component("zipkinReporter")
-@NoTransLog
+@NoTracerLog
 public class ZipkinSpanReporter implements Reporter<Span> {
 
     /**

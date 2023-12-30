@@ -16,7 +16,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
 
@@ -30,7 +30,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.plugin.rule <br>
  */
-@NoTransLog
+@NoTracerLog
 public class ConditionInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**

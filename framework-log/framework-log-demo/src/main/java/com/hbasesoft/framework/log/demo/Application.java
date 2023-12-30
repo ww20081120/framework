@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import com.hbasesoft.framework.common.Bootstrap;
+import com.hbasesoft.framework.log.core.TracerLog;
 
 /**
  * <Description> <br>
@@ -27,10 +28,11 @@ import com.hbasesoft.framework.common.Bootstrap;
 @EnableAutoConfiguration(exclude = {
     DataSourceAutoConfiguration.class
 })
+@TracerLog(basePackages = "com.hbasesoft.framework.log.demo")
 @ComponentScan(basePackages = "com.hbasesoft")
 @Configuration
 public class Application {
-    
+
     /**
      * Description: <br>
      * 
