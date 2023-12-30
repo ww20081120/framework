@@ -16,7 +16,7 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -36,7 +36,7 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.rule.plugin.statemachine <br>
  */
-@NoTransLog
+@NoTracerLog
 public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
 
     /**

@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
@@ -26,7 +26,7 @@ import com.hbasesoft.framework.rule.core.FlowContext;
  * @CreateDate 2017年9月4日 <br>
  * @since V1.0<br>
  */
-@NoTransLog
+@NoTracerLog
 public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterceptor {
 
     /**

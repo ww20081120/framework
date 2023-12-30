@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
@@ -32,11 +31,6 @@ import com.hbasesoft.framework.db.core.annotation.DataSource;
 @Component
 public class DynamicDataSourceChangeAdvice implements Ordered {
 
-    /** */
-    @Pointcut("execution(public * com.hbasesoft..*(..))")
-    public void change() {
-    }
-
     /**
      * @Method around
      * @param joinPoint
@@ -45,7 +39,7 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
      * @Description TODD
      * @Date 2023/1/29 10:56
      */
-    @Around("change()")
+    @Around("@annotation(com.hbasesoft.framework.db.core.annotation.DataSource)")
     public Object around(final ProceedingJoinPoint joinPoint) throws Throwable {
 
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
@@ -76,11 +70,15 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
 
     private void changeDatasource(final DataSource dataSource) {
         // 判断增强的字段是否被覆盖，覆盖则走增强的切换数据源
-        String enhanceDynamicDataSource = dataSource.enhanceDynamicDataSource();
+        String enhanceDynamicDataSource = dataSource.enhanceCode();
         if (StringUtils.isNotBlank(enhanceDynamicDataSource)) {
-            EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler =
-                (EnhanceDynamicDataSourceHandler) ContextHolder.getContext().getBean(enhanceDynamicDataSource);
-            enhanceDynamicDataSourceHandler.enhanceChangeDbByCode(dataSource.value());
+            EnhanceDynamicDataSourceHandler enhanceDynamicDataSourceHandler = 
+                (EnhanceDynamicDataSourceHandler) ContextHolder
+                .getContext().getBean(enhanceDynamicDataSource);
+            String code = enhanceDynamicDataSourceHandler.enhance(dataSource.value());
+            if (StringUtils.isNotEmpty(code)) {
+                DynamicDataSourceManager.setDataSourceCode(code);
+            }
         }
         else {
             DynamicDataSourceManager.setDataSourceCode(dataSource.value());

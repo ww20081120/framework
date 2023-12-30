@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.rule.core;
 
-import com.hbasesoft.framework.common.annotation.NoTransLog;
+import com.hbasesoft.framework.common.annotation.NoTracerLog;
 
 /**
  * <Description> <br>
@@ -17,7 +17,7 @@ import com.hbasesoft.framework.common.annotation.NoTransLog;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.workflow.core <br>
  */
-@NoTransLog
+@NoTracerLog
 public abstract class AbstractFlowCompnentInterceptor implements FlowComponentInterceptor {
 
     /** order */
