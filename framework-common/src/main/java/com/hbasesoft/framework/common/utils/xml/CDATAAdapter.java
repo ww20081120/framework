@@ -5,9 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.xml;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.apache.commons.lang3.StringUtils;
+
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * <Description> <br>

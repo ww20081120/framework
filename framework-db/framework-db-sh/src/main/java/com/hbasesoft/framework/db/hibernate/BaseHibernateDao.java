@@ -12,22 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.apache.commons.collections.MapUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.jdbc.Work;
+import org.hibernate.persister.collection.mutation.RowMutationOperations.Restrictions;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
@@ -54,7 +47,7 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 @SuppressWarnings({
     "rawtypes", "deprecation", "unchecked"
 })
-public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
+public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
 
     /** Number */
     private static final int NUM_100 = 100;
