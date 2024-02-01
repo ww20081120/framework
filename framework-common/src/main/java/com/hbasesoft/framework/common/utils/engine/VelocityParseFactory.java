@@ -4,15 +4,14 @@
 package com.hbasesoft.framework.common.utils.engine;
 
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -115,31 +114,18 @@ public final class VelocityParseFactory {
                 context.put(entry.getKey(), entry.getValue());
             }
         }
-
         StringResourceRepository repository = StringResourceLoader.getRepository();
         repository.putStringResource(templateName, body);
 
-        ByteArrayOutputStream out = null;
-        try {
+        StringBuilder sb = new StringBuilder();
+        try (Writer writer = new BufferedWriter(new StringBuilderWriter(sb))) {
             Template template = Velocity.getTemplate(templateName, GlobalConstants.DEFAULT_CHARSET);
-            out = new ByteArrayOutputStream();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, GlobalConstants.DEFAULT_CHARSET));
             template.merge(context, writer);
             writer.flush();
-            return new String(out.toByteArray(), GlobalConstants.DEFAULT_CHARSET);
+            return sb.toString();
         }
         catch (Exception e) {
             throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
-        }
-        finally {
-            if (out != null) {
-                try {
-                    out.close();
-                }
-                catch (IOException e) {
-                    throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
-                }
-            }
         }
     }
 }
