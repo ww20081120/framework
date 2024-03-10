@@ -62,7 +62,7 @@ public final class KeyUtil {
                 StringBuilder sb = new StringBuilder();
                 if (StringUtils.isNotEmpty(template)) {
                     sb.append(GlobalConstants.UNDERLINE)
-                        .append(VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap));
+                        .append(VelocityParseFactory.parse(template, template, paramMap));
                 }
                 else {
                     for (Entry<String, Object> entry : paramMap.entrySet()) {

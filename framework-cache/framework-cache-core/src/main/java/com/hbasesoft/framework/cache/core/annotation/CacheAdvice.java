@@ -177,7 +177,7 @@ public class CacheAdvice {
                     }
                 }
             }
-            key = VelocityParseFactory.parse(CommonUtil.getTransactionID(), template, paramMap);
+            key = VelocityParseFactory.parse(template, template, paramMap);
             Assert.isFalse(key.contains(GlobalConstants.DOLLAR_BRACE), ErrorCodeDef.CACHE_ERROR);
         }
         else {
