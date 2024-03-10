@@ -14,7 +14,9 @@ import java.util.Map.Entry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Predicate;
 
 import org.apache.commons.collections.MapUtils;
 import org.hibernate.Criteria;
@@ -58,6 +60,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     /** Number */
     private static final int NUM_100 = 100;
+
+    /** 最大分页数 */
+    private static final int MAX_SIZE = 1000;
 
     /**
      * logger
@@ -158,6 +163,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 return resultList;
             }
             else if (List.class.isAssignableFrom(param.getReturnType())) {
+                query.setMaxResults(MAX_SIZE);
                 return query.list();
             }
             else {
@@ -272,6 +278,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         for (Criterion c : criterions) {
             criteria.add(c);
         }
+        criteria.setMaxResults(MAX_SIZE);
         return criteria;
     }
 
@@ -440,7 +447,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> List<T> findByProperty(final Class<T> entityClass, final String propertyName, final Object value)
         throws DaoException {
         Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
-        return (List<T>) createCriteria(entityClass, Restrictions.eq(propertyName, value)).list();
+        Criteria query = createCriteria(entityClass, Restrictions.eq(propertyName, value));
+        query.setMaxResults(MAX_SIZE);
+        return (List<T>) query.list();
     }
 
     /**
@@ -455,7 +464,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
     @Override
     public <T> List<T> loadAll(final Class<T> entityClass) throws DaoException {
-        return createCriteria(entityClass).list();
+        Criteria query = createCriteria(entityClass);
+        query.setMaxResults(MAX_SIZE);
+        return query.list();
     }
 
     /**
@@ -648,7 +659,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     @Override
     public <T> List<T> getListByCriteriaQuery(final DetachedCriteria detachedCriteria) throws DaoException {
-        return detachedCriteria.getExecutableCriteria(getSession()).list();
+        Criteria query = detachedCriteria.getExecutableCriteria(getSession());
+        query.setMaxResults(MAX_SIZE);
+        return query.list();
     }
 
     /**
@@ -959,6 +972,20 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <T> T
+     * @param criteria
+     * @return <br>
+     */
+    public <T> T getByCriteria(final CriteriaQuery<T> criteria) {
+        org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
+        return query.getSingleResult();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param hql
      * @param <T> T
      * @return <br>
@@ -1014,12 +1041,75 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <T>
+     * @param criteria
+     * @param pi
+     * @param pageSize
+     * @return <br>
+     */
+    public <T> PagerList<T> queryPagerByCriteria(final CriteriaQuery<T> criteria, final int pi, final int pageSize) {
+        // 查询总页数据
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+        countCriteria.select(builder.count(criteria.getRoots().iterator().next()));
+        // 复制原criteria中的所有where条件（如果有）
+        Predicate predicate = criteria.getRestriction();
+        if (predicate != null) {
+            countCriteria.where(predicate);
+        }
+        // 总页数
+        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
+        if (totalCount == null) {
+            totalCount = 0L;
+        }
+
+        // 设置分页数据
+        int pageIndex = pi;
+        if (pi <= 0) {
+            pageIndex = 1;
+        }
+
+        PagerList<T> resultList = new PagerList<T>();
+        resultList.setPageIndex(pageIndex);
+        resultList.setPageSize(pageSize);
+        resultList.setTotalCount(totalCount);
+
+        // 如果还有数据，则分页查询
+        if (totalCount >= pageIndex * pageSize) {
+            org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
+            query.setFirstResult((pageIndex - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            resultList.addAll(query.getResultList());
+        }
+        return resultList;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param detachedCriteria
      * @param <T> T
      * @return <br>
      */
     public <T> List<T> queryByCriteria(final DetachedCriteria detachedCriteria) {
         return this.getListByCriteriaQuery(detachedCriteria);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T> T
+     * @param criteria
+     * @return <br>
+     */
+    public <T> List<T> queryByCriteria(final CriteriaQuery<T> criteria) {
+        org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
+        query.setMaxResults(MAX_SIZE);
+        return query.getResultList();
     }
 
     /**
