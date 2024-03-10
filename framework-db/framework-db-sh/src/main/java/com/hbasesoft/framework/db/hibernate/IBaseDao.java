@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -172,7 +173,18 @@ public interface IBaseDao<T extends BaseEntity> {
      * @param detachedCriteria
      * @return <br>
      */
+    @Deprecated
     T getByCriteria(DetachedCriteria detachedCriteria);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @return <br>
+     */
+    T getByCriteria(CriteriaQuery<T> criteria);
 
     /**
      * Description: <br>
@@ -215,7 +227,20 @@ public interface IBaseDao<T extends BaseEntity> {
      * @param pageSize
      * @return <br>
      */
+    @Deprecated
     PagerList<T> queryPagerByCriteria(DetachedCriteria detachedCriteria, int pageIndex, int pageSize);
+
+    /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
 
     /**
      * Description: <br>
@@ -225,7 +250,18 @@ public interface IBaseDao<T extends BaseEntity> {
      * @param detachedCriteria
      * @return <br>
      */
+    @Deprecated
     List<T> queryByCriteria(DetachedCriteria detachedCriteria);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @return <br>
+     */
+    List<T> queryByCriteria(CriteriaQuery<T> criteria);
 
     /**
      * Description: <br>
