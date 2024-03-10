@@ -181,10 +181,11 @@ public interface IBaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M> M
      * @param criteria
      * @return <br>
      */
-    T getByCriteria(CriteriaQuery<T> criteria);
+    <M> M getByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: <br>
@@ -254,14 +255,15 @@ public interface IBaseDao<T extends BaseEntity> {
     List<T> queryByCriteria(DetachedCriteria detachedCriteria);
 
     /**
-     * Description: <br>
+     * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M>
      * @param criteria
      * @return <br>
      */
-    List<T> queryByCriteria(CriteriaQuery<T> criteria);
+    <M> List<M> queryByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: <br>
