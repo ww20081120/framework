@@ -5,17 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.hibernate;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-
 import org.hibernate.criterion.DetachedCriteria;
 
+import com.hbasesoft.framework.db.core.BaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.utils.PagerList;
@@ -31,44 +26,7 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface IBaseDao<T extends BaseEntity> {
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    CriteriaBuilder getCriteriaBuilder();
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entity
-     * @return <br>
-     */
-    Serializable save(T entity);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entitys <br>
-     */
-    void saveBatch(List<T> entitys);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param pojo <br>
-     */
-    void update(T pojo);
+public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
 
     /**
      * Description: <br>
@@ -86,106 +44,10 @@ public interface IBaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param entitys <br>
-     */
-    void updateBatch(List<T> entitys);
-
-    /**
-     * Description: 根据条件来做更新<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param criteria <br>
-     */
-    void updateByCriteria(CriteriaUpdate<T> criteria);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entity <br>
-     */
-    void delete(T entity);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id <br>
-     */
-    void deleteById(Serializable id);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entities <br>
-     */
-    void delete(Collection<T> entities);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param ids <br>
-     */
-    void deleteByIds(Collection<? extends Serializable> ids);
-
-    /**
-     * Description: 根据条件删除<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param criteria <br>
-     */
-    void deleteByCriteria(CriteriaDelete<T> criteria);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id
-     * @return <br>
-     */
-    T get(Serializable id);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param propertyName
-     * @param value
-     * @return <br>
-     */
-    T getByProperty(String propertyName, Object value);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param detachedCriteria
      * @return <br>
      */
-    @Deprecated
     T getByCriteria(DetachedCriteria detachedCriteria);
-
-    /**
-     * Description: 根据条件查询 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <M> M
-     * @param criteria
-     * @return <br>
-     */
-    <M> M getByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: <br>
@@ -203,47 +65,14 @@ public interface IBaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
-     */
-    List<T> queryAll();
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param propertyName
-     * @param value
-     * @return <br>
-     */
-    List<T> queryByProperty(String propertyName, Object value);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param detachedCriteria
      * @param pageIndex
      * @param pageSize
      * @return <br>
      */
-    @Deprecated
     PagerList<T> queryPagerByCriteria(DetachedCriteria detachedCriteria, int pageIndex, int pageSize);
 
     /**
-     * Description: 根据条件查询<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param criteria
-     * @param pageIndex
-     * @param pageSize
-     * @return <br>
-     */
-    PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
-
-    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -251,19 +80,7 @@ public interface IBaseDao<T extends BaseEntity> {
      * @param detachedCriteria
      * @return <br>
      */
-    @Deprecated
     List<T> queryByCriteria(DetachedCriteria detachedCriteria);
-
-    /**
-     * Description: 根据条件查询 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <M>
-     * @param criteria
-     * @return <br>
-     */
-    <M> List<M> queryByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: <br>
