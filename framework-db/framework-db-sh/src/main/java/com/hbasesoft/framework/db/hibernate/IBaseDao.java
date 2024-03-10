@@ -29,6 +29,16 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
 public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
 
     /**
+     * Description: 批量删除<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entities <br>
+     */
+    @Deprecated
+    void delete(Collection<T> entities);
+
+    /**
      * Description: <br>
      * 
      * @author 王伟<br>

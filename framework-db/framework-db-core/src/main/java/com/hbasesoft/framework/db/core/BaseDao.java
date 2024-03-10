@@ -109,7 +109,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param entities <br>
      */
-    void delete(Collection<T> entities);
+    void deleteBatch(Collection<T> entities);
 
     /**
      * Description: 根据id批量删除<br>

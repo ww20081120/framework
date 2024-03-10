@@ -902,6 +902,18 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void delete(final Collection<T> entities) {
         this.deleteAllEntitie(entities);
     }
+    
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entities <br>
+     * @param <T> T
+     */
+    public <T> void deleteBatch(final Collection<T> entities) {
+        this.deleteAllEntitie(entities);
+    }
 
     /**
      * Description: <br>
