@@ -19,6 +19,7 @@ Framework框架集成了log、cache、db、message、rule、tx，每块都以模
 + framework-rule 规则引擎，基于json的简单规则引擎， 支持多种插件及扩展， 例如：基于状态机的工作流引擎
 + framework-shell 命令行工具，用于做项目的维护和一些小工具
 + [framework-tx](#framework-tx) 分布式事务，支持各种远程接口、同步异步消息。
++ [framework-langchain4j] 对langchain4j的补充，支持国内的大模型，让大家更高效的开发AIGC应用。
 
 -------
 ## <p id="framework-db">framework-db</p>具有以下特征:
