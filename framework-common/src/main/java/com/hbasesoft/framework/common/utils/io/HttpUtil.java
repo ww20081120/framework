@@ -14,7 +14,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +22,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import okhttp3.Call;
@@ -209,18 +209,18 @@ public final class HttpUtil {
         return getStringRequest(request, charset);
     }
 
-    /** 
+    /**
      * @Method doPost
      * @param url
      * @param body
      * @param contentType
      * @param paramMap
-     * @param charset 
+     * @param charset
      * @return java.lang.String
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:24
-    */
+     */
     public static String doPost(final String url, final String body, final String contentType,
         final Map<String, String> paramMap, final String charset) {
         Request.Builder builder = new Request.Builder();
@@ -406,14 +406,14 @@ public final class HttpUtil {
         return "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
     }
 
-    /** 
+    /**
      * @Method getOkHttpClient
-     * @param  
+     * @param
      * @return okhttp3.OkHttpClient
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:25
-    */
+     */
     public static OkHttpClient getOkHttpClient() {
         OkHttpClient okHttpClient = httpClientHold.get();
         if (okHttpClient == null) {
@@ -436,7 +436,7 @@ public final class HttpUtil {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:27
-    */
+     */
     public static SSLSocketFactory getSSLSocketFactory() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
@@ -448,14 +448,14 @@ public final class HttpUtil {
         }
     }
 
-    /** 
+    /**
      * @Method getTrustManager
-     * @param  
+     * @param
      * @return javax.net.ssl.TrustManager[]
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:25
-    */
+     */
     public static TrustManager[] getTrustManager() {
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {

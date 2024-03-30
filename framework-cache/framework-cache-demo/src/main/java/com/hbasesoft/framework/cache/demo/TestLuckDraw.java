@@ -5,9 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.demo;
 
-import javax.annotation.Resource;
-
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
@@ -36,7 +35,7 @@ public class TestLuckDraw {
     private static final int MAX_SLEEP_TIME = 100000;
 
     /** luckDrawService */
-    @Resource
+    @Autowired
     private LuckDrawService luckDrawService;
 
     /**

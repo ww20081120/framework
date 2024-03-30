@@ -7,14 +7,14 @@ package com.hbasesoft.framework.message.delay.db.service.impl;
 
 import java.util.Date;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.message.delay.db.dao.MsgDelaymsgDao;
 import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
 import com.hbasesoft.framework.message.delay.db.service.DelaymsgService;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>

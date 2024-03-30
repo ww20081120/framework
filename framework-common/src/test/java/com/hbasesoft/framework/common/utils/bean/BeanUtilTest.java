@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.hbasesoft.framework.common.Bootstrap;
 import com.hbasesoft.framework.common.ErrorCodeDef;

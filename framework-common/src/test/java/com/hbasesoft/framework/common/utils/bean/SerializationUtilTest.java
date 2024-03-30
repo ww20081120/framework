@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -64,9 +64,9 @@ public class SerializationUtilTest {
         String hexStr = DataUtil.byte2HexStr(bs);
         System.out.println(hexStr);
         Assert.equals(hexStr,
-            "02FF01220001FF011600000474657374FF000090D63AE12774FDBF2900636F6D2E6862617365736F66742E6672616D6"
-                + "5776F726B2E636F6D6D6F6E2E7574696C732E6265616E002AD0CC76A6AA18500800546573744265616E7759BC931200000000000B"
-                + "68656C6C6F20776F726C64",
+            "02FF01220001FF011600000474657374FF000090D63AE12774FDBF2900636F6D2E6"
+                + "862617365736F66742E6672616D65776F726B2E636F6D6D6F6E2E7574696C732E6"
+                + "265616E002AD0CC76A6AA18500800546573744265616E7759BC931200000000000B" + "68656C6C6F20776F726C64",
             ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -138,8 +138,8 @@ public class SerializationUtilTest {
     public void unserial2() {
         byte[] bs = DataUtil.hexStr2Byte(
             "02FF01220001FF011600000474657374FF000090D63AE12774FDBF2900636F6D2E6862617365736F66742E6672616D6"
-                + "5776F726B2E636F6D6D6F6E2E7574696C732E6265616E002AD0CC76A6AA18500800546573744265616E7759BC931200000000000B"
-                + "68656C6C6F20776F726C64");
+                + "5776F726B2E636F6D6D6F6E2E7574696C732E6265616E002AD0CC76A6AA18500800546573744265616E7759BC9"
+                + "31200000000000B68656C6C6F20776F726C64");
         Map<String, TestBean> bean = SerializationUtil.unserial(Map.class, bs);
         System.out.println(bean);
         Assert.equals(bean.get("test").getName(), "hello world", ErrorCodeDef.SYSTEM_ERROR);

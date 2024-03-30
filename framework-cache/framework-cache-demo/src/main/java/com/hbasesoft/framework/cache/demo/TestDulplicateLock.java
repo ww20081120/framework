@@ -7,9 +7,8 @@ package com.hbasesoft.framework.cache.demo;
 
 import java.util.Random;
 
-import javax.annotation.Resource;
-
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.hbasesoft.framework.cache.demo.dulplicateLock.ZhanWeiZiService;
@@ -40,7 +39,7 @@ public class TestDulplicateLock {
     private static final int MAX_SLEEP_TIME = 100000;
 
     /** zhanWeiZiService */
-    @Resource
+    @Autowired
     private ZhanWeiZiService zhanWeiZiService;
 
     /**
