@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -19,7 +17,8 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.log.core.TransLoggerService;
 
-import brave.Span;
+import io.micrometer.tracing.Span;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <Description> <br>

@@ -4,6 +4,7 @@
 package com.hbasesoft.framework.db.hibernate;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,17 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.management.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Predicate;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
-import org.hibernate.persister.collection.mutation.RowMutationOperations.Restrictions;
+import org.hibernate.query.MutationQuery;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 
@@ -30,13 +26,24 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
+import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 /**
  * <Description> <br>
@@ -47,7 +54,7 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
  * @see com.hbasesoft.framework.dao.support.hibernate <br>
  */
 @SuppressWarnings({
-    "rawtypes", "deprecation", "unchecked"
+    "unchecked", "rawtypes"
 })
 public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
 
@@ -56,11 +63,6 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
 
     /** 最大分页数 */
     private static final int MAX_SIZE = 1000;
-
-    /**
-     * logger
-     */
-    private static Logger logger = new Logger(BaseHibernateDao.class);
 
     /** entity class */
     private Class<?> entityClazz;
@@ -72,8 +74,387 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @taskId <br>
      * @return <br>
      */
+    @Override
     public CriteriaBuilder getCriteriaBuilder() {
         return getSession().getCriteriaBuilder();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity <br>
+     */
+    @Override
+    public void save(final BaseEntity entity) {
+        getSession().persist(entity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entitys <br>
+     */
+    @Override
+    public void saveBatch(final List entitys) {
+        if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
+            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+        }
+        Session session = getSession();
+        for (int i = 0; i < entitys.size(); i++) {
+            session.persist(entitys.get(i));
+            if (i % NUM_100 == 0) {
+                // 1000个对象后才清理缓存，写入数据库
+                session.flush();
+                session.clear();
+            }
+        }
+        // 最后清理一下----防止大于1000小于2000的不保存
+        session.flush();
+        session.clear();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pojo <br>
+     */
+    @Override
+    public void update(final BaseEntity pojo) {
+        getSession().merge(pojo);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entitys <br>
+     */
+    @Override
+    public void updateBatch(final List entitys) {
+        if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
+            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+        }
+        Session session = getSession();
+        for (int i = 0; i < entitys.size(); i++) {
+            session.merge(entitys.get(i));
+            if (i % NUM_100 == 0) {
+                // 1000个对象后才清理缓存，写入数据库
+                session.flush();
+                session.clear();
+            }
+        }
+        // 最后清理一下----防止大于1000小于2000的不保存
+        session.flush();
+        session.clear();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria <br>
+     */
+    @Override
+    public void updateByCriteria(final CriteriaUpdate criteria) {
+        MutationQuery query = getSession().createMutationQuery(criteria);
+        query.executeUpdate();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity <br>
+     */
+    @Override
+    public void delete(final BaseEntity entity) {
+        getSession().remove(entity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id <br>
+     */
+    @Override
+    public void deleteById(final Serializable id) {
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
+        }
+
+        Field primaryKeyField = findPrimaryKeyField(entityType);
+        if (primaryKeyField == null) {
+            throw new IllegalStateException(
+                "Could not find a primary key field annotated with @Id in the given entity type.");
+        }
+
+        // 构建HQL或Criteria删除语句
+        String hql = new StringBuilder().append("DELETE FROM ").append(entityType.getName()).append(" WHERE ")
+            .append(primaryKeyField.getName()).append(" = :id").toString();
+        Query query = getSession().createQuery(hql, null);
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entities <br>
+     */
+    @Override
+    public void deleteBatch(final Collection entities) {
+        if (entities.size() > GlobalConstants.DEFAULT_LINES) {
+            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+        }
+        Session session = getSession();
+        int i = 0;
+        for (Object obj : entities) {
+            session.remove(obj);
+            if (i++ % NUM_100 == 0) {
+                // 1000个对象后才清理缓存，写入数据库
+                session.flush();
+                session.clear();
+            }
+        }
+        // 最后清理一下----防止大于1000小于2000的不保存
+        session.flush();
+        session.clear();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param ids <br>
+     */
+    @Override
+    public void deleteByIds(final Collection ids) {
+        if (CollectionUtils.isNotEmpty(ids)) {
+            if (ids.size() == 1) {
+                deleteById((Serializable) ids.iterator().next());
+            }
+            else {
+                // 确保实体类上有@Entity注解
+                Class<?> entityType = getEntityClazz();
+                if (!entityType.isAnnotationPresent(Entity.class)) {
+                    throw new IllegalArgumentException("The provided class is not an Entity.");
+                }
+
+                Field primaryKeyField = findPrimaryKeyField(entityType);
+                if (primaryKeyField == null) {
+                    throw new IllegalStateException(
+                        "Could not find a primary key field annotated with @Id in the given entity type.");
+                }
+
+                // 构建HQL或Criteria删除语句
+                String hql = new StringBuilder().append("DELETE FROM ").append(entityType.getName()).append(" WHERE ")
+                    .append(primaryKeyField.getName()).append(" IN (:ids)").toString();
+                Query query = getSession().createQuery(hql, null);
+                query.setParameter("ids", ids);
+                query.executeUpdate();
+            }
+        }
+
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria <br>
+     */
+    @Override
+    public void deleteByCriteria(final CriteriaDelete criteria) {
+        MutationQuery query = getSession().createMutationQuery(criteria);
+        query.executeUpdate();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param id
+     * @return <br>
+     */
+    @Override
+    public BaseEntity get(final Serializable id) {
+        return (BaseEntity) getSession().get(getEntityClazz(), id);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param propertyName
+     * @param value
+     * @return <br>
+     */
+    @Override
+    public BaseEntity getByProperty(final String propertyName, final Object value) {
+        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
+
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
+        }
+        // 构建HQL或Criteria删除语句
+        String hql = new StringBuilder().append("FROM ").append(entityType.getName()).append(" WHERE ")
+            .append(propertyName).append(" = :value").toString();
+
+        Query query = getSession().createQuery(hql, entityType);
+        query.setParameter("value", value);
+
+        // 获取唯一结果，如果不存在则返回null
+        return (BaseEntity) query.getSingleResult();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @return <br>
+     */
+    @Override
+    public Object getByCriteria(final CriteriaQuery criteria) {
+        org.hibernate.query.Query query = getSession().createQuery(criteria);
+        return query.getSingleResult();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public List queryAll() {
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
+        }
+        // 构建HQL或Criteria删除语句
+        String hql = new StringBuilder().append("FROM ").append(entityType.getName()).toString();
+
+        Query query = getSession().createQuery(hql, entityType);
+        query.setMaxResults(MAX_SIZE);
+        return query.getResultList();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param propertyName
+     * @param value
+     * @return <br>
+     */
+    @Override
+    public List queryByProperty(final String propertyName, final Object value) {
+        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
+
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
+        }
+
+        // 构建HQL或Criteria删除语句
+        String hql = new StringBuilder().append("FROM ").append(entityType.getName()).append(" WHERE ")
+            .append(propertyName).append(" = :value").toString();
+
+        Query query = getSession().createQuery(hql, entityType);
+        query.setParameter("value", value);
+        query.setMaxResults(MAX_SIZE);
+        return query.getResultList();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @param pi
+     * @param pageSize
+     * @return <br>
+     */
+    @Override
+    public PagerList queryPagerByCriteria(final CriteriaQuery criteria, final int pi, final int pageSize) {
+        // 查询总页数据
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+        countCriteria.select(builder.count((Root) criteria.getRoots().iterator().next()));
+
+        // 复制原criteria中的所有where条件（如果有）
+        Predicate predicate = criteria.getRestriction();
+        if (predicate != null) {
+            countCriteria.where(predicate);
+        }
+        // 总页数
+        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
+        if (totalCount == null) {
+            totalCount = 0L;
+        }
+
+        // 设置分页数据
+        int pageIndex = pi;
+        if (pi <= 0) {
+            pageIndex = 1;
+        }
+
+        PagerList resultList = new PagerList();
+        resultList.setPageIndex(pageIndex);
+        resultList.setPageSize(pageSize);
+        resultList.setTotalCount(totalCount);
+
+        // 如果还有数据，则分页查询
+        if (totalCount >= pageIndex * pageSize) {
+            org.hibernate.query.Query query = getSession().createQuery(criteria);
+            query.setFirstResult((pageIndex - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            resultList.addAll(query.getResultList());
+        }
+        return resultList;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @return <br>
+     */
+    @Override
+    public List queryByCriteria(final CriteriaQuery criteria) {
+        org.hibernate.query.Query query = getSession().createQuery(criteria);
+        query.setMaxResults(MAX_SIZE);
+        return query.getResultList();
     }
 
     /**
@@ -84,23 +465,22 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @param sql
      * @param param
      * @return
-     * @throws DaoException <br>
      */
+    @SuppressWarnings("deprecation")
     @Override
-    public Object query(final String sql, final DataParam param) throws DaoException {
+    public Object query(final String sql, final DataParam param) {
         try {
-
             SQlCheckUtil.checkSql(sql);
 
             Session session = getSession();
             session.flush();
 
-            SQLQuery query = session.createSQLQuery(sql);
-
             // Redis缓存序列化时不能有void返回类型，特殊处理一下
             if (param.getReturnType() == null) {
                 param.setReturnType(void.class);
             }
+
+            NativeQuery query = session.createNativeQuery(sql);
 
             // step1:设置参数
             setParamMap(param.getParamMap(), query);
@@ -139,7 +519,8 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
                 query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
                 query.setMaxResults(param.getPageSize());
 
-                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(1) FROM (" + sql + ") QUERY_DATA__");
+                NativeQuery countQuery = session.createNativeQuery("SELECT COUNT(1) FROM (" + sql + ") QUERY_DATA__",
+                    Long.class);
                 setParamMap(param.getParamMap(), countQuery);
                 resultList = new PagerList();
                 resultList.setPageIndex(param.getPageIndex());
@@ -164,40 +545,9 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
             }
         }
         catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LoggerUtil.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.QUERY_ERROR, e);
         }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @param paramMap <br>
-     * @param query <br>
-     * @throws DaoException <br>
-     */
-    private void setParamMap(final Map<String, Object> paramMap, final Query query) throws DaoException {
-        if (MapUtils.isNotEmpty(paramMap)) {
-            for (Entry<String, Object> entry : paramMap.entrySet()) {
-                Object obj = entry.getValue();
-
-                // 这里考虑传入的参数是什么类型，不同类型使用的方法不同
-                if (obj instanceof Collection<?>) {
-                    query.setParameterList(entry.getKey(), (Collection<?>) obj);
-                }
-                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[]) {
-                    Object[] os = (Object[]) obj;
-
-                    query.setParameterList(entry.getKey(), os);
-                }
-                else {
-                    query.setParameter(entry.getKey(), obj);
-                }
-            }
-        }
-
     }
 
     /**
@@ -210,6 +560,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
+    @SuppressWarnings("deprecation")
     @Override
     public int excuteSql(final String sql, final DataParam param) throws DaoException {
         try {
@@ -217,12 +568,12 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
             Session session = getSession();
             session.flush();
 
-            SQLQuery query = session.createSQLQuery(sql);
+            NativeQuery query = session.createNativeQuery(sql);
             setParamMap(param.getParamMap(), query);
             return query.executeUpdate();
         }
         catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LoggerUtil.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.EXECUTE_ERROR, e);
         }
     }
@@ -237,6 +588,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
+    @SuppressWarnings("deprecation")
     @Override
     public int[] batchExcuteSql(final String[] sqls, final DataParam param) throws DaoException {
         try {
@@ -244,303 +596,30 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
             session.flush();
 
             int[] result = new int[sqls.length];
-            SQLQuery query;
+            NativeQuery query;
             for (int i = 0; i < sqls.length; i++) {
-                query = session.createSQLQuery(sqls[i]);
+                query = session.createNativeQuery(sqls[i]);
                 setParamMap(param.getParamMap(), query);
                 result[i] = query.executeUpdate();
             }
             return result;
         }
         catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LoggerUtil.error(e.getMessage(), e);
             throw new DaoException(ErrorCodeDef.BATCH_EXECUTE_ERROR, e);
         }
     }
 
     /**
-     * 创建Criteria对象带属性比较
-     *
-     * @param <T>
-     * @param entityClass
-     * @param criterions
-     * @return Criteria
-     */
-    private <T> Criteria createCriteria(final Class<T> entityClass, final Criterion... criterions) {
-        Criteria criteria = getSession().createCriteria(entityClass);
-        for (Criterion c : criterions) {
-            criteria.add(c);
-        }
-        criteria.setMaxResults(MAX_SIZE);
-        return criteria;
-    }
-
-    /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
-     */
-    protected Session getSession() {
-        // 事务必须是开启的(Required)，否则获取不到
-        return TransactionManagerHolder.getSessionFactory().getCurrentSession();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entity
-     * @return
-     * @throws DaoException <br>
+     * @param entityClazz <br>
      */
     @Override
-    public <T> Serializable save(final T entity) throws DaoException {
-        try {
-            Serializable id = getSession().save(entity);
-            logger.debug("保存实体成功," + entity.getClass().getName());
-            return id;
-        }
-        catch (Exception e) {
-            logger.error("保存实体异常", e);
-            throw new DaoException(ErrorCodeDef.SAVE_ERROR, e);
-        }
-    }
-
-    /**
-     * 根据传入的实体添加或更新对象
-     *
-     * @param <T>
-     * @param entity
-     */
-    @Override
-    public <T> void saveOrUpdate(final T entity) throws DaoException {
-        try {
-            getSession().saveOrUpdate(entity);
-            logger.debug("添加或更新成功," + entity.getClass().getName());
-        }
-        catch (RuntimeException e) {
-            logger.error("添加或更新异常", e);
-            throw new DaoException(ErrorCodeDef.SAVE_ERROR, e);
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entity
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> void delete(final T entity) throws DaoException {
-        try {
-            getSession().delete(entity);
-            logger.debug("删除成功," + entity.getClass().getName());
-        }
-        catch (RuntimeException e) {
-            logger.error("删除异常", e);
-            throw e;
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entitys
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> void batchSave(final List<T> entitys) throws DaoException {
-        if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
-            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
-        }
-        for (int i = 0; i < entitys.size(); i++) {
-            getSession().save(entitys.get(i));
-            if (i % NUM_100 == 0) {
-                // 1000个对象后才清理缓存，写入数据库
-                getSession().flush();
-                getSession().clear();
-            }
-        }
-        // 最后清理一下----防止大于1000小于2000的不保存
-        getSession().flush();
-        getSession().clear();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClass
-     * @param id
-     * @param <T> T
-     * @return T
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> T get(final Class<T> entityClass, final Serializable id) throws DaoException {
-        Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
-        return (T) getSession().get(entityClass, id);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityName
-     * @param id
-     * @return
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> T getEntity(final Class<T> entityName, final Serializable id) throws DaoException {
-        return get(entityName, id);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClass
-     * @param propertyName
-     * @param value
-     * @return
-     * @throws DaoException <br>
-     */
-
-    @Override
-    public <T> T findUniqueByProperty(final Class<T> entityClass, final String propertyName, final Object value)
-        throws DaoException {
-        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
-        return (T) createCriteria(entityClass, Restrictions.eq(propertyName, value)).uniqueResult();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClass
-     * @param propertyName
-     * @param value
-     * @return
-     * @throws DaoException <br>
-     */
-
-    @Override
-    public <T> List<T> findByProperty(final Class<T> entityClass, final String propertyName, final Object value)
-        throws DaoException {
-        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
-        Criteria query = createCriteria(entityClass, Restrictions.eq(propertyName, value));
-        query.setMaxResults(MAX_SIZE);
-        return (List<T>) query.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClass
-     * @return
-     * @throws DaoException <br>
-     */
-
-    @Override
-    public <T> List<T> loadAll(final Class<T> entityClass) throws DaoException {
-        Criteria query = createCriteria(entityClass);
-        query.setMaxResults(MAX_SIZE);
-        return query.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityName
-     * @param id
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> void deleteEntityById(final Class<T> entityName, final Serializable id) throws DaoException {
-        Assert.notNull(id, ErrorCodeDef.ID_IS_NULL);
-        T entity = get(entityName, id);
-        if (entity != null) {
-            delete(entity);
-        }
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entities
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> void deleteAllEntitie(final Collection<T> entities) throws DaoException {
-        for (Object entity : entities) {
-            getSession().delete(entity);
-        }
-        getSession().flush();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param ids
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> void deleteAllEntitiesByIds(final Class<T> entityName, final Collection<? extends Serializable> ids)
-        throws DaoException {
-        Assert.notEmpty(ids, ErrorCodeDef.ID_IS_NULL);
-        for (Serializable id : ids) {
-            getSession().delete(get(entityName, id));
-        }
-        getSession().flush();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param pojo
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> void updateEntity(final T pojo) throws DaoException {
-        getSession().update(pojo);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @return
-     * @throws DaoException <br>
-     */
-
-    @Override
-    public <T> List<T> findByQueryString(final String hql) throws DaoException {
-        Query queryObject = getSession().createQuery(hql);
-        return queryObject.list();
+    public void setEntityClazz(final Class<?> entityClazz) {
+        this.entityClazz = entityClazz;
     }
 
     /**
@@ -552,12 +631,13 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @return
      * @throws DaoException <br>
      */
+    @SuppressWarnings("deprecation")
     @Override
-    public int updateBySqlString(final String sql) throws DaoException {
+    public int updateBySql(final String sql) throws DaoException {
         Session session = getSession();
         session.flush();
 
-        Query querys = session.createSQLQuery(sql);
+        NativeQuery querys = session.createNativeQuery(sql);
         return querys.executeUpdate();
     }
 
@@ -566,117 +646,20 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param sql
-     * @param <T> T
-     * @return T
-     * @throws DaoException <br>
-     */
-
-    @Override
-    public <T> List<T> findListbySql(final String sql) throws DaoException {
-        Session session = getSession();
-        session.flush();
-        Query querys = session.createSQLQuery(sql);
-        return querys.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param hql
      * @return
      * @throws DaoException <br>
      */
-
     @Override
-    public <T> T singleResult(final String hql) throws DaoException {
-        return (T) getSession().createQuery(hql).uniqueResult();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @param pi
-     * @param pageSize
-     * @param <T> T
-     * @return T
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> PagerList<T> getPageList(final DetachedCriteria detachedCriteria, final int pi, final int pageSize)
-        throws DaoException {
-        int pageIndex = pi;
-        if (pi == 0) {
-            pageIndex = 1;
+    public BaseEntity getByHql(final String hql) throws DaoException {
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
 
-        Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
-
-        // 查询分页总数
-        CriteriaImpl impl = (CriteriaImpl) criteria;
-        Projection projection = impl.getProjection();
-        Long allCounts = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
-
-        criteria.setProjection(projection);
-        criteria.setFirstResult((pageIndex - 1) * pageSize);
-        criteria.setMaxResults(pageSize);
-
-        PagerList<T> resultList = new PagerList<T>();
-        resultList.setPageIndex(pageIndex);
-        resultList.setPageSize(pageSize);
-        if (allCounts == null) {
-            allCounts = 0L;
-        }
-        resultList.setTotalCount(allCounts);
-
-        if (allCounts > 0) {
-            resultList.addAll(criteria.list());
-        }
-        return resultList;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @param <T> T
-     * @return T
-     * @throws DaoException <br>
-     */
-    @Override
-    public <T> List<T> getListByCriteriaQuery(final DetachedCriteria detachedCriteria) throws DaoException {
-        Criteria query = detachedCriteria.getExecutableCriteria(getSession());
-        query.setMaxResults(MAX_SIZE);
-        return query.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @param param
-     * @return
-     * @throws DaoException <br>
-     */
-
-    @Override
-    public <T> List<T> findHql(final String hql, final Object... param) throws DaoException {
-        Query q = getSession().createQuery(hql);
-        if (param != null && param.length > 0) {
-            for (int i = 0; i < param.length; i++) {
-                q.setParameter(i, param[i]);
-            }
-        }
-        return q.list();
+        Query query = getSession().createQuery(hql, entityType);
+        return (BaseEntity) query.getSingleResult();
     }
 
     /**
@@ -686,15 +669,15 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param procedureSql
      * @param params
-     * @return
-     * @throws DaoException <br>
+     * @return <br>
      */
-
     @Override
-    public <T> List<T> executeProcedure(final String procedureSql, final Object... params) throws DaoException {
+    public List executeProcedure(final String procedureSql, final Object... params) {
+        Class<?> entityType = getEntityClazz();
+
         Session session = getSession();
         session.flush();
-        SQLQuery sqlQuery = session.createSQLQuery(procedureSql);
+        NativeQuery sqlQuery = session.createNativeQuery(procedureSql, entityType);
 
         for (int i = 0; i < params.length; i++) {
             sqlQuery.setParameter(i, params[i]);
@@ -707,14 +690,69 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param detachedCriteria
-     * @return
-     * @throws DaoException <br>
+     * @param sql
+     * @return <br>
      */
-
+    @SuppressWarnings("deprecation")
     @Override
-    public <T> T getCriteriaQuery(final DetachedCriteria detachedCriteria) throws DaoException {
-        return (T) detachedCriteria.getExecutableCriteria(getSession()).uniqueResult();
+    public List queryBySql(final String sql) {
+        Session session = getSession();
+        session.flush();
+        NativeQuery query = session.createNativeQuery(sql);
+
+        if (getEntityClazz().equals(Map.class)) {
+            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        }
+        else {
+            query.setResultTransformer(new AutoResultTransformer(getEntityClazz()));
+        }
+        return query.list();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param param
+     * @return <br>
+     */
+    @Override
+    public List queryByHqlParam(final String hql, final Object... param) {
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
+        }
+
+        Query q = getSession().createQuery(hql, entityType);
+        if (param != null && param.length > 0) {
+            for (int i = 0; i < param.length; i++) {
+                q.setParameter(i, param[i]);
+            }
+        }
+        return q.getResultList();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @return <br>
+     */
+    @Override
+    public List queryByHql(final String hql) {
+        // 确保实体类上有@Entity注解
+        Class<?> entityType = getEntityClazz();
+        if (!entityType.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
+        }
+
+        Query query = getSession().createQuery(hql, entityType);
+        return query.getResultList();
     }
 
     /**
@@ -724,12 +762,10 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param sql
      * @param objcts
-     * @param commitNumber
-     * @throws DaoException <br>
+     * @param commitNumber <br>
      */
     @Override
-    public <T> void batchExecute(final String sql, final Collection<Object[]> objcts, final int commitNumber)
-        throws DaoException {
+    public void executeBatch(final String sql, final Collection objcts, final int commitNumber) {
         Session session = getSession();
         session.flush();
 
@@ -742,7 +778,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
                     stmt = connection.prepareStatement(sql);
                     connection.setAutoCommit(false);
                     int i = 0;
-                    for (Object[] object : objcts) {
+                    for (Object[] object : (Collection<Object[]>) objcts) {
                         i++;
                         for (int j = 0; j < object.length; j++) {
                             stmt.setObject(j + 1, object[j]);
@@ -804,369 +840,11 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param entitys <br>
-     * @param <T> T
-     */
-    public <T> void saveBatch(final List<T> entitys) {
-        this.batchSave(entitys);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entitys <br>
-     * @param <T> T
-     */
-    public <T> void updateBatch(final List<T> entitys) {
-        if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
-            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
-        }
-        for (int i = 0; i < entitys.size(); i++) {
-            getSession().update(entitys.get(i));
-            if (i % NUM_100 == 0) {
-                // 1000个对象后才清理缓存，写入数据库
-                getSession().flush();
-                getSession().clear();
-            }
-        }
-        // 最后清理一下----防止大于1000小于2000的不保存
-        getSession().flush();
-        getSession().clear();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param pojo <br>
-     * @param <T> T
-     */
-    public <T> void update(final T pojo) {
-        this.updateEntity(pojo);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param sql
      * @return <br>
      */
-    public int updateBySql(final String sql) {
-        return this.updateBySqlString(sql);
-    };
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <T>
-     * @param criteria <br>
-     */
-    public <T> void updateByCriteria(final CriteriaUpdate<T> criteria) {
-        org.hibernate.query.Query query = getSession().createQuery(criteria);
-        query.executeUpdate();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id <br>
-     */
-    public void deleteById(final Serializable id) {
-        this.deleteEntityById(getEntityClazz(), id);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entities <br>
-     * @param <T> T
-     */
-    public <T> void delete(final Collection<T> entities) {
-        this.deleteAllEntitie(entities);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param ids <br>
-     */
-    public void deleteByIds(final Collection<? extends Serializable> ids) {
-        this.deleteAllEntitiesByIds(getEntityClazz(), ids);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <T>
-     * @param criteria <br>
-     */
-    public <T> void deleteByCriteria(final CriteriaDelete<T> criteria) {
-        org.hibernate.query.Query query = getSession().createQuery(criteria);
-        query.executeUpdate();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> T get(final Serializable id) {
-        return (T) this.get(getEntityClazz(), id);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param propertyName
-     * @param value
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> T getByProperty(final String propertyName, final Object value) {
-        return (T) this.findUniqueByProperty(getEntityClazz(), propertyName, value);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> T getByCriteria(final DetachedCriteria detachedCriteria) {
-        return this.getCriteriaQuery(detachedCriteria);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <T> T
-     * @param criteria
-     * @return <br>
-     */
-    public <T> T getByCriteria(final CriteriaQuery<T> criteria) {
-        org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
-        return query.getSingleResult();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> T getByHql(final String hql) {
-        return this.singleResult(hql);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> List<T> queryAll() {
-        return (List<T>) this.loadAll(getEntityClazz());
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param propertyName
-     * @param value
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> List<T> queryByProperty(final String propertyName, final Object value) {
-        return (List<T>) this.findByProperty(getEntityClazz(), propertyName, value);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @param pageIndex
-     * @param pageSize
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> PagerList<T> queryPagerByCriteria(final DetachedCriteria detachedCriteria, final int pageIndex,
-        final int pageSize) {
-        return this.getPageList(detachedCriteria, pageIndex, pageSize);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <T>
-     * @param criteria
-     * @param pi
-     * @param pageSize
-     * @return <br>
-     */
-    public <T> PagerList<T> queryPagerByCriteria(final CriteriaQuery<T> criteria, final int pi, final int pageSize) {
-        // 查询总页数据
-        CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        countCriteria.select(builder.count(criteria.getRoots().iterator().next()));
-        // 复制原criteria中的所有where条件（如果有）
-        Predicate predicate = criteria.getRestriction();
-        if (predicate != null) {
-            countCriteria.where(predicate);
-        }
-        // 总页数
-        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
-        if (totalCount == null) {
-            totalCount = 0L;
-        }
-
-        // 设置分页数据
-        int pageIndex = pi;
-        if (pi <= 0) {
-            pageIndex = 1;
-        }
-
-        PagerList<T> resultList = new PagerList<T>();
-        resultList.setPageIndex(pageIndex);
-        resultList.setPageSize(pageSize);
-        resultList.setTotalCount(totalCount);
-
-        // 如果还有数据，则分页查询
-        if (totalCount >= pageIndex * pageSize) {
-            org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
-            query.setFirstResult((pageIndex - 1) * pageSize);
-            query.setMaxResults(pageSize);
-            resultList.addAll(query.getResultList());
-        }
-        return resultList;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> List<T> queryByCriteria(final DetachedCriteria detachedCriteria) {
-        return this.getListByCriteriaQuery(detachedCriteria);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <T> T
-     * @param criteria
-     * @return <br>
-     */
-    public <T> List<T> queryByCriteria(final CriteriaQuery<T> criteria) {
-        org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
-        query.setMaxResults(MAX_SIZE);
-        return query.getResultList();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param sql
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> List<T> queryBySql(final String sql) {
-
-        Session session = getSession();
-        session.flush();
-        Query query = session.createSQLQuery(sql);
-
-        if (getEntityClazz().equals(Map.class)) {
-            query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-        }
-        else {
-            query.setResultTransformer(new AutoResultTransformer(getEntityClazz()));
-        }
-        return query.list();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @param param
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> List<T> queryByHqlParam(final String hql, final Object... param) {
-        return findHql(hql, param);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @param <T> T
-     * @return <br>
-     */
-    public <T> List<T> queryByHql(final String hql) {
-        return this.findByQueryString(hql);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param sql
-     * @param objcts
-     * @param commitNumber <br>
-     */
-    public void executeBatch(final String sql, final Collection<Object[]> objcts, final int commitNumber) {
-        this.batchExecute(sql, objcts, commitNumber);
+    protected Session getSession() {
+        // 事务必须是开启的(Required)，否则获取不到
+        return TransactionManagerHolder.getSessionFactory().getCurrentSession();
     }
 
     /**
@@ -1176,20 +854,45 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @taskId <br>
      * @return <br>
      */
-    private Class<?> getEntityClazz() {
+    protected Class<?> getEntityClazz() {
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
         return entityClazz;
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param entityClazz <br>
-     */
-    public void setEntityClazz(final Class<?> entityClazz) {
-        this.entityClazz = entityClazz;
+    private Field findPrimaryKeyField(final Class<?> clazz) {
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Id.class)) {
+                field.setAccessible(true); // 解除私有访问限制
+                return field;
+            }
+        }
+        Class<?> superClass = clazz.getSuperclass();
+        if (superClass != null && !superClass.equals(Object.class)) {
+            return findPrimaryKeyField(superClass);
+        }
+        return null;
+    }
+
+    private void setParamMap(final Map<String, Object> paramMap, final NativeQuery query) throws DaoException {
+        if (MapUtils.isNotEmpty(paramMap)) {
+            for (Entry<String, Object> entry : paramMap.entrySet()) {
+                Object obj = entry.getValue();
+
+                // 这里考虑传入的参数是什么类型，不同类型使用的方法不同
+                if (obj instanceof Collection<?>) {
+                    query.setParameterList(entry.getKey(), (Collection<?>) obj);
+                }
+                else if (obj != null && obj.getClass().isArray() && obj instanceof Object[]) {
+                    Object[] os = (Object[]) obj;
+                    query.setParameterList(entry.getKey(), os);
+                }
+                else {
+                    query.setParameter(entry.getKey(), obj);
+                }
+            }
+        }
+
     }
 
 }

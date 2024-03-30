@@ -41,7 +41,7 @@ public class DynamicTransactionManagementConfigurer implements TransactionManage
         return new ProxyPlatformTransactionManager();
     }
 
-    private static class ProxyPlatformTransactionManager implements PlatformTransactionManager {
+    private static final class ProxyPlatformTransactionManager implements PlatformTransactionManager {
 
         /**
          * Description: <br>

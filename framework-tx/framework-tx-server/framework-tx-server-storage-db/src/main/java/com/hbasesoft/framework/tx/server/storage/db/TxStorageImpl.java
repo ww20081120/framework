@@ -8,8 +8,6 @@ package com.hbasesoft.framework.tx.server.storage.db;
 import java.util.Calendar;
 import java.util.stream.Collectors;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,6 +24,8 @@ import com.hbasesoft.framework.tx.server.storage.db.dao.TxCheckinfoDao;
 import com.hbasesoft.framework.tx.server.storage.db.dao.TxClientinfoDao;
 import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
 import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>

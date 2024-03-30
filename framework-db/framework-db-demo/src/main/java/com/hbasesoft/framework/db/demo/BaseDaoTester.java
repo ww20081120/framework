@@ -11,11 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,11 +23,12 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
-import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>
@@ -319,6 +316,8 @@ public class BaseDaoTester {
 
         iStudentDao.deleteById(id);
 
+        iStudentDao.clear();
+        
         entity = iStudentDao.get(id);
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
@@ -334,7 +333,7 @@ public class BaseDaoTester {
     @Transactional
     public void deleteAll() {
         List<StudentEntity> entities = iStudentDao.queryAll();
-        iStudentDao.delete(entities);
+        iStudentDao.deleteBatch(entities);
         int size = iStudentDao.countStudentSize();
         Assert.isTrue(size == 0, ErrorCodeDef.SYSTEM_ERROR);
     }
@@ -351,6 +350,7 @@ public class BaseDaoTester {
     public void deleteAllEntitiesByIds() {
         int s1 = iStudentDao.countStudentSize();
         iStudentDao.deleteByIds(Arrays.asList("1", "2", "3"));
+        iStudentDao.clear();
         int s2 = iStudentDao.countStudentSize();
         Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
     }
@@ -425,57 +425,5 @@ public class BaseDaoTester {
             .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
         Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR);
 
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void queryPagerByCriteria() {
-        DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
-        PagerList<StudentEntity> entities = iStudentDao.queryPagerByCriteria(criteria, 1, 1);
-        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void queryByCriteria() {
-        DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
-        criteria.add(Restrictions.eq(StudentEntity.AGE, NUM_18));
-        List<StudentEntity> es1 = iStudentDao.queryByCriteria(criteria);
-
-        List<StudentEntity> es2 = iStudentDao.queryByProperty(StudentEntity.AGE, NUM_18);
-        Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void getByCriteria() {
-        DetachedCriteria criteria = DetachedCriteria.forClass(CourseEntity.class);
-        criteria.add(Restrictions.eq(CourseEntity.COURSE_NAME, "语文"));
-        CourseEntity e1 = iCourseDao.getByCriteria(criteria);
-
-        CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
-
-        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR);
     }
 }

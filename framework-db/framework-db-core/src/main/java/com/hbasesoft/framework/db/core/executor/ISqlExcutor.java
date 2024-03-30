@@ -3,7 +3,6 @@
  */
 package com.hbasesoft.framework.db.core.executor;
 
-import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 
 /**
@@ -22,9 +21,8 @@ public interface ISqlExcutor {
      * @param sql <br>
      * @param param <br>
      * @return <br>
-     * @throws DaoException <br>
      */
-    Object query(String sql, DataParam param) throws DaoException;
+    Object query(String sql, DataParam param);
 
     /**
      * 执行sql语句
@@ -32,9 +30,8 @@ public interface ISqlExcutor {
      * @param sql sql <br>
      * @param param params <br>
      * @return Object <br>
-     * @throws DaoException DaoException <br>
      */
-    int excuteSql(String sql, DataParam param) throws DaoException;
+    int excuteSql(String sql, DataParam param);
 
     /**
      * 批处理sql
@@ -42,9 +39,8 @@ public interface ISqlExcutor {
      * @param sql <br>
      * @param param <br>
      * @return <br>
-     * @throws DaoException <br>
      */
-    int[] batchExcuteSql(String[] sql, DataParam param) throws DaoException;
+    int[] batchExcuteSql(String[] sql, DataParam param);
 
     /**
      * Description: 设置bean类型<br>

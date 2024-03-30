@@ -9,12 +9,12 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-
 import com.hbasesoft.framework.db.core.utils.PagerList;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
 
 /**
  * <Description> <br>
@@ -44,9 +44,8 @@ public interface BaseDao<T extends BaseEntity> {
      * @author 王伟<br>
      * @taskId <br>
      * @param entity
-     * @return <br>
      */
-    Serializable save(T entity);
+    void save(T entity);
 
     /**
      * Description: <br>
@@ -109,7 +108,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param entities <br>
      */
-    void delete(Collection<T> entities);
+    void deleteBatch(Collection<T> entities);
 
     /**
      * Description: <br>

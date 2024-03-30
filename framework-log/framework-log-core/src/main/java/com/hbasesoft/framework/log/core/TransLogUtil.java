@@ -8,6 +8,7 @@ package com.hbasesoft.framework.log.core;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.ApplicationContext;
 
@@ -15,8 +16,8 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
-import brave.Span;
-import brave.Tracer;
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.Tracer;
 
 /**
  * <Description> <br>
@@ -73,13 +74,12 @@ public final class TransLogUtil {
             // 当前的Span
             Span span = null;
             if (parentSpan != null) {
-                span = tracer.newChild(parentSpan.context());
+                span = tracer.spanBuilder().setParent(parentSpan.context())
+                    .startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
             }
             else {
-                span = tracer.newTrace();
+                span = tracer.spanBuilder().startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
             }
-
-            span.start(beginTime);
 
             // 执行记录
             for (TransLoggerService service : getTransLoggerServices()) {
@@ -125,7 +125,7 @@ public final class TransLogUtil {
                     }
                 }
                 finally {
-                    span.finish(endTime);
+                    span.end(endTime, TimeUnit.MILLISECONDS);
                 }
             }
         }
@@ -167,7 +167,7 @@ public final class TransLogUtil {
                     }
                 }
                 finally {
-                    span.finish(endTime);
+                    span.end(endTime, TimeUnit.MILLISECONDS);
                 }
             }
         }

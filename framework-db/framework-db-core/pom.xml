@@ -20,10 +20,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
 		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
+		    <groupId>jakarta.persistence</groupId>
+		    <artifactId>jakarta.persistence-api</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>

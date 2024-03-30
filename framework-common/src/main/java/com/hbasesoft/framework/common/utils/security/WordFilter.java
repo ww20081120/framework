@@ -1,4 +1,4 @@
-package com.hbasesoft.framework.common.utils;
+package com.hbasesoft.framework.common.utils.security;
 
 import java.util.Collection;
 import java.util.HashMap;

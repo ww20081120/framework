@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.common.utils;
+package com.hbasesoft.framework.common.utils.security;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.Assert;
 
 /**
  * <Description> 分词的测试类 <br>

@@ -50,7 +50,6 @@ public class RedisCache extends AbstractRedisCache {
             JedisPoolConfig config = new JedisPoolConfig();
             super.setConfig(config);
             if (StringUtils.isEmpty(passwd)) {
-
                 jedisPool = new JedisPool(config, addresses[0].getHost(), addresses[0].getPort());
             }
             else {
