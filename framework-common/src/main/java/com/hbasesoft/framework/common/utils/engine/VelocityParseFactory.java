@@ -12,6 +12,7 @@ import java.util.ServiceLoader;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -24,6 +25,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -41,6 +43,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VelocityParseFactory {
 
+    /** 最大名称长度 */
+    private static final int MAX_NAME_LENGTH = 16;
+
     /** v length */
     private static final int V_LENGTH = "velocity.".length();
 
@@ -56,7 +61,6 @@ public final class VelocityParseFactory {
 
     static {
 
-        // dateTool = new DateTool();
         try {
             properties = new Properties();
             properties.setProperty("runtime.log.error.stacktrace", "false");
@@ -105,10 +109,27 @@ public final class VelocityParseFactory {
      * @return String
      * @throws UtilException UtilException
      */
-    public static String parse(final String templateName, final String body, final Map<String, ?> params)
-        throws UtilException {
+    @Deprecated
+    public static String parse(final String templateName, final String body, final Map<String, ?> params) {
+        return parse(null, body, params);
+    }
+
+    /**
+     * templateName
+     * 
+     * @param body body
+     * @param params params
+     * @return String
+     * @throws UtilException UtilException
+     */
+    public static String parse(final String body, final Map<String, ?> params) {
+        if (StringUtils.isEmpty(body)) {
+            return GlobalConstants.BLANK;
+        }
+
+        String templateName = body.length() > MAX_NAME_LENGTH ? DataUtil.md5(body) : body;
+
         VelocityContext context = new VelocityContext();
-        // context.put("dateTool", dateTool);
         if (MapUtils.isNotEmpty(params)) {
             for (Entry<String, ?> entry : params.entrySet()) {
                 context.put(entry.getKey(), entry.getValue());
