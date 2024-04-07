@@ -30,7 +30,7 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 public interface BaseDao<T extends BaseEntity> {
 
     /**
-     * Description: <br>
+     * Description: JPA工厂<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -39,7 +39,7 @@ public interface BaseDao<T extends BaseEntity> {
     CriteriaBuilder getCriteriaBuilder();
 
     /**
-     * Description: <br>
+     * Description: 保存数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -48,7 +48,7 @@ public interface BaseDao<T extends BaseEntity> {
     void save(T entity);
 
     /**
-     * Description: <br>
+     * Description: 批量保存<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -57,7 +57,7 @@ public interface BaseDao<T extends BaseEntity> {
     void saveBatch(List<T> entitys);
 
     /**
-     * Description: <br>
+     * Description: 更新数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -66,7 +66,7 @@ public interface BaseDao<T extends BaseEntity> {
     void update(T pojo);
 
     /**
-     * Description: <br>
+     * Description: 批量更新<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -84,7 +84,7 @@ public interface BaseDao<T extends BaseEntity> {
     void updateByCriteria(CriteriaUpdate<T> criteria);
 
     /**
-     * Description: <br>
+     * Description: 删除数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -93,7 +93,7 @@ public interface BaseDao<T extends BaseEntity> {
     void delete(T entity);
 
     /**
-     * Description: <br>
+     * Description: 根据id来删除<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -102,7 +102,7 @@ public interface BaseDao<T extends BaseEntity> {
     void deleteById(Serializable id);
 
     /**
-     * Description: <br>
+     * Description: 批量删除<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -111,7 +111,7 @@ public interface BaseDao<T extends BaseEntity> {
     void deleteBatch(Collection<T> entities);
 
     /**
-     * Description: <br>
+     * Description: 根据id批量删除<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -129,7 +129,7 @@ public interface BaseDao<T extends BaseEntity> {
     void deleteByCriteria(CriteriaDelete<T> criteria);
 
     /**
-     * Description: <br>
+     * Description: 根据id来获取数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -139,7 +139,7 @@ public interface BaseDao<T extends BaseEntity> {
     T get(Serializable id);
 
     /**
-     * Description: <br>
+     * Description: 根据唯一数据来查询数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -161,7 +161,7 @@ public interface BaseDao<T extends BaseEntity> {
     <M> M getByCriteria(CriteriaQuery<M> criteria);
 
     /**
-     * Description: <br>
+     * Description: 查询所有数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
@@ -170,7 +170,7 @@ public interface BaseDao<T extends BaseEntity> {
     List<T> queryAll();
 
     /**
-     * Description: <br>
+     * Description: 根据属性查询数据<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
