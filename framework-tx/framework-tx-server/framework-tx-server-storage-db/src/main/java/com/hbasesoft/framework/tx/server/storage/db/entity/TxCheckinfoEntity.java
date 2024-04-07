@@ -6,9 +6,9 @@
 
 package com.hbasesoft.framework.tx.server.storage.db.entity;
 
-import javax.persistence.Column;
-
 import com.hbasesoft.framework.db.core.BaseEntity;
+
+import jakarta.persistence.Column;
 
 /**
  * <Description> T_TX_CHECKINFO的Entity<br>

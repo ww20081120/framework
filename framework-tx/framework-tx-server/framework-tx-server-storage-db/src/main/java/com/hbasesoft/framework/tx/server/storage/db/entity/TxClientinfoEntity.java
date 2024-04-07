@@ -6,11 +6,11 @@
 
 package com.hbasesoft.framework.tx.server.storage.db.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import com.hbasesoft.framework.db.core.BaseEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 /**
  * <Description> T_TX_CLIENTINFO的Entity<br>

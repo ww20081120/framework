@@ -8,12 +8,9 @@ package com.hbasesoft.framework.db.hibernate;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-
 import com.hbasesoft.framework.db.core.BaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
-import com.hbasesoft.framework.db.core.utils.PagerList;
 
 /**
  * <Description> <br>
@@ -44,43 +41,11 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param detachedCriteria
-     * @return <br>
-     */
-    T getByCriteria(DetachedCriteria detachedCriteria);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param hql
      * @return T
      * @throws DaoException <br>
      */
     T getByHql(String hql) throws DaoException;
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @param pageIndex
-     * @param pageSize
-     * @return <br>
-     */
-    PagerList<T> queryPagerByCriteria(DetachedCriteria detachedCriteria, int pageIndex, int pageSize);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param detachedCriteria
-     * @return <br>
-     */
-    List<T> queryByCriteria(DetachedCriteria detachedCriteria);
 
     /**
      * Description: <br>

@@ -8,8 +8,6 @@ package com.hbasesoft.framework.tx.server;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import javax.annotation.Resource;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +20,8 @@ import com.hbasesoft.framework.tx.core.TxConsumer;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
 import com.hbasesoft.framework.tx.core.util.ArgsSerializationUtil;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> 维护的工具<br>

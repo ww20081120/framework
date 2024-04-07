@@ -5,13 +5,13 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tx.server.storage.db;
 
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.tx.server.storage.db.dao.TxClientinfoDao;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>

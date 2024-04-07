@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.cache.core.redis;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.MapUtils;
@@ -19,7 +17,6 @@ import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.Protocol;
 
 /**
@@ -50,14 +47,9 @@ public class RedisCache extends AbstractRedisCache {
         if (CACHE_MODEL.equals(cacheModel)) {
             Address[] addresses = getAddresses();
             String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
-            List<JedisShardInfo> shards = new ArrayList<JedisShardInfo>(addresses.length);
-            for (Address addr : addresses) {
-                shards.add(new JedisShardInfo(addr.getHost(), addr.getPort()));
-            }
             JedisPoolConfig config = new JedisPoolConfig();
             super.setConfig(config);
             if (StringUtils.isEmpty(passwd)) {
-
                 jedisPool = new JedisPool(config, addresses[0].getHost(), addresses[0].getPort());
             }
             else {

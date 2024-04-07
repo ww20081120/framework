@@ -7,19 +7,20 @@ package com.hbasesoft.framework.tx.integration;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.tx.core.TxManager;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <Description> <br>
@@ -34,7 +35,7 @@ import com.hbasesoft.framework.tx.core.TxManager;
 @NoTracerLog
 @Component
 @WebFilter(urlPatterns = "/**", filterName = "traceIdFilter")
-public class TraceIdFilter implements javax.servlet.Filter {
+public class TraceIdFilter implements Filter {
 
     /** trace id */
     public static final String TRACE_ID = "X-B3-TraceId";

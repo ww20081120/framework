@@ -9,10 +9,6 @@ package com.hbasesoft.framework.message.delay.db.entity;
 import java.net.InetAddress;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -21,6 +17,10 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.message.core.delay.DelayMessage;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 /**
  * <Description> T_MSG_DELAYMSG的Entity<br>

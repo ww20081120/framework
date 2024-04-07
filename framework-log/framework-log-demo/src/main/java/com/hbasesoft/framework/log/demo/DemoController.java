@@ -5,12 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.log.demo;
 
-import javax.annotation.Resource;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>
@@ -37,7 +37,7 @@ public class DemoController {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 10:54
-    */
+     */
     @GetMapping("/say")
     public String say(final @RequestParam("name") String name) {
         return demoService.say(name);

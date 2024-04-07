@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.log.core;
 
-import brave.Span;
+import io.micrometer.tracing.Span;
 
 /**
  * <Description> <br>

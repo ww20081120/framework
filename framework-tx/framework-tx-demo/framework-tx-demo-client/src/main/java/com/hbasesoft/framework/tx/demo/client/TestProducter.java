@@ -7,8 +7,6 @@ package com.hbasesoft.framework.tx.demo.client;
 
 import java.util.Random;
 
-import javax.annotation.Resource;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.tx.core.TxInvokerProxy;
 import com.hbasesoft.framework.tx.core.annotation.Tx;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>
