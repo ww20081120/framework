@@ -11,6 +11,12 @@ import java.util.List;
 import com.hbasesoft.framework.db.core.BaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.utils.PagerList;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
 
 /**
  * <Description> <br>
@@ -24,6 +30,93 @@ import com.hbasesoft.framework.db.core.DaoException;
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
 public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
+
+    /**
+     * Description: JPA工厂<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    CriteriaBuilder getCriteriaBuilder();
+
+    /**
+     * Description: 根据条件来做更新<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria <br>
+     */
+    void updateByCriteria(CriteriaUpdate<T> criteria);
+
+    /**
+     * Description: 根据条件删除<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria <br>
+     */
+    void deleteByCriteria(CriteriaDelete<T> criteria);
+    
+
+    /**
+     * Description: 根据唯一数据来查询数据<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param propertyName
+     * @param value
+     * @return <br>
+     */
+    T getByProperty(String propertyName, Object value);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M> M
+     * @param criteria
+     * @return <br>
+     */
+    <M> M getByCriteria(CriteriaQuery<M> criteria);
+
+
+    /**
+     * Description: 根据属性查询数据<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param propertyName
+     * @param value
+     * @return <br>
+     */
+    List<T> queryByProperty(String propertyName, Object value);
+
+    /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param criteria
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
+    
+
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param criteria
+     * @return <br>
+     */
+    <M> List<M> queryByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: <br>
