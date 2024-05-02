@@ -99,10 +99,13 @@ public final class Bootstrap {
 
         LoggerUtil.info("**********************************************************");
 
+        String port = PropertyHolder.getProperty("server.port");
+
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
             .append(PropertyHolder.getProjectName()).append('-').append(PropertyHolder.getVersion()).append(" 模块启动成功！")
-            .append('\n').append("***************************************"));
+            .append(StringUtils.isNotEmpty(port) ? "端口:" + port : "").append('\n')
+            .append("***************************************"));
         LoggerUtil.info("====================>系统正常启动<====================");
 
     }
