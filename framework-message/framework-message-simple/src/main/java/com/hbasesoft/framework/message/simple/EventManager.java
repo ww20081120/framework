@@ -18,7 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.common.utils.thread.MessageThreadPoolExecutor;
+import com.hbasesoft.framework.common.utils.thread.ThreadUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
 /**
@@ -197,13 +197,13 @@ public final class EventManager {
                             if (CollectionUtils.isNotEmpty(subscribers)) {
                                 if (broadcast) {
                                     for (MessageSubscriber subscriber : subscribers) {
-                                        MessageThreadPoolExecutor.execute(channel, () -> {
+                                        ThreadUtil.execute(channel, () -> {
                                             subscriber.onMessage(channel, data);
                                         });
                                     }
                                 }
                                 else {
-                                    MessageThreadPoolExecutor.execute(channel, () -> {
+                                    ThreadUtil.execute(channel, () -> {
                                         subscribers.get(random.nextInt(subscribers.size())).onMessage(channel, data);
                                     });
                                 }

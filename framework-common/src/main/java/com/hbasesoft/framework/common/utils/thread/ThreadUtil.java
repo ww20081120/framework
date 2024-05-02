@@ -15,19 +15,19 @@ package com.hbasesoft.framework.common.utils.thread;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.util <br>
  */
-public final class MessageThreadPoolExecutor {
+public final class ThreadUtil {
 
     /**
      * Description: 通过线程池来处理消息<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param channel
+     * @param name
      * @param message
      * @throws InterruptedException <br>
      */
-    public static void execute(final String channel, final Runnable message) {
-        Thread.ofVirtual().name(channel + Thread.currentThread().threadId()).start(message);
+    public static void execute(final String name, final Runnable message) {
+        Thread.ofVirtual().name(name + Thread.currentThread().threadId()).start(message);
     }
 
 }
