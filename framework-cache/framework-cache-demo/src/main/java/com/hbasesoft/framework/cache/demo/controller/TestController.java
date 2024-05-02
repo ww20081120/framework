@@ -24,9 +24,6 @@ import com.hbasesoft.framework.cache.demo.service.TestService;
 @Controller
 public class TestController {
 
-    /** 默认超时时间 */
-    private static final int DEFAULT_EXPIRETIME = 10;
-
     /** testService */
     private TestService testService;
 

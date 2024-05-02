@@ -67,7 +67,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
                 cluster = new JedisCluster(readSet,
                     PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT),
                     PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT),
-                    DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+                    DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig<>());
             }
         }
     }
