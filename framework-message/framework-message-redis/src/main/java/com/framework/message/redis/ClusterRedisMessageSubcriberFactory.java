@@ -50,7 +50,7 @@ public class ClusterRedisMessageSubcriberFactory implements MessageSubcriberFact
                 RedisClientFactory.getBinaryJedisCluster().subscribe(new BinaryListener(subscriber),
                     channel.getBytes());
             });
-            thread.setName("Scanner_" + channel + thread.getId());
+            thread.setName("Scanner_" + channel + thread.threadId());
             thread.setDaemon(true);
             thread.start();
         }

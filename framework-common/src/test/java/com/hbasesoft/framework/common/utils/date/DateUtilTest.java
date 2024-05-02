@@ -110,37 +110,37 @@ public class DateUtilTest {
     @Test
     public void date2string() {
         Date date = new Date(NUM_C);
-        String d8 = DateUtil.format(date, DateConstants.DATE_FORMAT_8);
+        String d8 = DateUtil.format(date, DateUtil.DATE_FORMAT_8);
         Assert.equals(d8, "20180912", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d11 = DateUtil.format(date, DateConstants.DATE_FORMAT_11);
+        String d11 = DateUtil.format(date, DateUtil.DATE_FORMAT_11);
         Assert.equals(d11, "2018年09月12日", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d10 = DateUtil.format(date, DateConstants.DATE_FORMAT_10);
+        String d10 = DateUtil.format(date, DateUtil.DATE_FORMAT_10);
         Assert.equals(d10, "2018-09-12", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d102 = DateUtil.format(date, DateConstants.DATE_FORMAT_10_2);
+        String d102 = DateUtil.format(date, DateUtil.DATE_FORMAT_10_2);
         Assert.equals(d102, "2018/09/12", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d14 = DateUtil.format(date, DateConstants.DATETIME_FORMAT_14);
+        String d14 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_14);
         Assert.equals(d14, "20180912105355", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d17 = DateUtil.format(date, DateConstants.DATETIME_FORMAT_17);
+        String d17 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_17);
         Assert.equals(d17, "20180912105355123", ErrorCodeDef.SYSTEM_ERROR);
 
         String d19 = DateUtil.format(date);
         Assert.equals(d19, "2018-09-12 10:53:55", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d192 = DateUtil.format(date, DateConstants.DATETIME_FORMAT_19_2);
+        String d192 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_19_2);
         Assert.equals(d192, "2018/09/12 10:53:55", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d21 = DateUtil.format(date, DateConstants.DATETIME_FORMAT_21);
+        String d21 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_21);
         Assert.equals(d21, "2018年09月12日 10时53分55秒", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d23 = DateUtil.format(date, DateConstants.DATETIME_FORMAT_23);
+        String d23 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_23);
         Assert.equals(d23, "2018-09-12 10:53:55.123", ErrorCodeDef.SYSTEM_ERROR);
 
-        String d232 = DateUtil.format(date, DateConstants.DATETIME_FORMAT_23_2);
+        String d232 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_23_2);
         Assert.equals(d232, "2018/09/12 10:53:55.123", ErrorCodeDef.SYSTEM_ERROR);
 
         String str = DateUtil.format(date, "yy年M月dd号hh点mm分ss秒");
@@ -215,7 +215,7 @@ public class DateUtilTest {
     public void getYrMonthLastDay() {
         Date t1 = DateUtil.format("2018-02-20");
         Date t2 = DateUtil.getYrMonthLastDay(t1);
-        String str = DateUtil.format(t2, DateConstants.DATE_FORMAT_10);
+        String str = DateUtil.format(t2, DateUtil.DATE_FORMAT_10);
         Assert.equals(str, "2018-02-28", ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -230,7 +230,7 @@ public class DateUtilTest {
     public void getYrMonthFirstDay() {
         Date t1 = DateUtil.format("2018-02-20");
         Date t2 = DateUtil.getYrMonthFirstDay(t1);
-        String str = DateUtil.format(t2, DateConstants.DATE_FORMAT_10);
+        String str = DateUtil.format(t2, DateUtil.DATE_FORMAT_10);
         Assert.equals(str, "2018-02-01", ErrorCodeDef.SYSTEM_ERROR);
     }
 }

@@ -170,7 +170,7 @@ public final class HttpUtil {
      */
     public static String doPost(final String url, final String body, final String contentType, final String charset) {
         MediaType mediaType = MediaType.parse(contentType);
-        RequestBody requestBody = RequestBody.create(mediaType, body);
+        RequestBody requestBody = RequestBody.create(body == null ? null : body.getBytes(), mediaType);
         Request request = new Request.Builder().url(url).post(requestBody).build();
         return getStringRequest(request, charset);
     }
@@ -203,7 +203,7 @@ public final class HttpUtil {
     public static String doPost(final String url, final String body, final String contentType,
         final String authorization, final String charset) {
         MediaType mediaType = MediaType.parse(contentType);
-        RequestBody requestBody = RequestBody.create(mediaType, body);
+        RequestBody requestBody = RequestBody.create(body == null ? null : body.getBytes(), mediaType);
         Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).post(requestBody)
             .build();
         return getStringRequest(request, charset);
@@ -231,7 +231,7 @@ public final class HttpUtil {
             }
         }
         MediaType mediaType = MediaType.parse(contentType);
-        RequestBody requestBody = RequestBody.create(mediaType, body);
+        RequestBody requestBody = RequestBody.create(body == null ? null : body.getBytes(), mediaType);
         Request request = builder.post(requestBody).build();
         return getStringRequest(request, charset);
     }

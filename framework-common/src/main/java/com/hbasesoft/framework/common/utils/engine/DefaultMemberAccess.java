@@ -139,7 +139,7 @@ public class DefaultMemberAccess implements MemberAccess {
         if (isAccessible(context, target, member, propertyName)) {
             AccessibleObject accessible = (AccessibleObject) member;
 
-            if (!accessible.isAccessible()) {
+            if (!accessible.canAccess(target)) {
                 result = Boolean.TRUE;
                 accessible.setAccessible(true);
             }

@@ -261,7 +261,7 @@ public class Shell {
             JCommander jCommander = null;
             Class<? extends AbstractOption> optionClass = paramsHolder.get(cmds[0]);
             if (optionClass != null) {
-                option = optionClass.newInstance();
+                option = optionClass.getConstructor().newInstance();
                 if (cmds.length > 1) {
                     jCommander = new JCommander(option);
                     jCommander.setProgramName(cmd.toString());
@@ -286,7 +286,7 @@ public class Shell {
         }
         else {
             try {
-                Process process = Runtime.getRuntime().exec(StringUtils.join(cmds, " "));
+                Process process = new ProcessBuilder(StringUtils.join(cmds, " ")).start();
                 IOUtils.copy(process.getInputStream(), out);
             }
             catch (IOException e) {
@@ -300,7 +300,7 @@ public class Shell {
 
     private void deleteDir(final File dir) {
         try {
-            Runtime.getRuntime().exec("rm -rf " + dir.getAbsolutePath());
+            new ProcessBuilder("rm -rf " + dir.getAbsolutePath()).start();
         }
         catch (Exception e) {
             out.println("删除目录失败" + e.getMessage());

@@ -122,7 +122,7 @@ public final class SerializationUtil {
                 }
                 else {
                     Schema<T> schema = RuntimeSchema.getSchema(clazz);
-                    result = clazz.newInstance();
+                    result = clazz.getConstructor().newInstance();
                     ProtostuffIOUtil.mergeFrom(data, result, schema);
                 }
             }

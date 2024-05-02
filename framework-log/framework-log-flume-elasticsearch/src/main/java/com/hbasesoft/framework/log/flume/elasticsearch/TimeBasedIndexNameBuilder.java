@@ -81,7 +81,7 @@ public class TimeBasedIndexNameBuilder implements IndexNameBuilder {
         long timestamp = timestampedEvent.getTimestamp();
         String realIndexPrefix = getIndexPrefix(event);
         return new StringBuilder().append(realIndexPrefix).append('-')
-            .append(DateUtil.date2String(new Date(timestamp), dateFormatString)).toString();
+            .append(DateUtil.format(new Date(timestamp), dateFormatString)).toString();
     }
 
     /**

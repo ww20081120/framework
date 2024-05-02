@@ -98,7 +98,7 @@ public class LogStashEventSerializer implements EventSerializer {
 
             if (StringUtils.isNotEmpty(ts)) {
                 long timestampMs = Long.parseLong(ts);
-                builder.put(timestamp, DateUtil.date2String(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+                builder.put(timestamp, DateUtil.format(new Date(timestampMs), "yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
             }
         }
     }

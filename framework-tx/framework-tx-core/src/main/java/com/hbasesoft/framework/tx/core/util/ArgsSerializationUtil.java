@@ -177,7 +177,7 @@ public final class ArgsSerializationUtil {
                     obj = param;
                     break;
                 case "java.lang.Integer":
-                    obj = new Integer(param);
+                    obj = Integer.valueOf(param);
                     break;
                 default:
                     try {

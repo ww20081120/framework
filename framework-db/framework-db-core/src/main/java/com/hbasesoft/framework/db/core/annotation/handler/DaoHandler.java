@@ -213,9 +213,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      */
     private String parseSqlTemplate(final Method method, final String templateSql,
         final Map<String, Object> sqlParamsMap) throws UtilException {
-        String key = SqlCacheManager.buildKey(method.getDeclaringClass().getName(),
-            BeanUtil.getMethodSignature(method));
-        String executeSql = VelocityParseFactory.parse(key, templateSql, sqlParamsMap);
+        String executeSql = VelocityParseFactory.parse(templateSql, sqlParamsMap);
 
         // 除去无效字段，不然批量处理可能报错
         return executeSql.replaceAll("\\n", " ").replaceAll("\\t", " ").replaceAll("\\s{1,}", " ").trim();

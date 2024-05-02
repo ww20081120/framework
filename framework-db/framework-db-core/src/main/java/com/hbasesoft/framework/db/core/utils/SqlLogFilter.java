@@ -22,7 +22,6 @@ import com.alibaba.druid.proxy.jdbc.PreparedStatementProxy;
 import com.alibaba.druid.proxy.jdbc.ResultSetProxy;
 import com.alibaba.druid.proxy.jdbc.StatementProxy;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.date.DateConstants;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
@@ -716,8 +715,8 @@ public class SqlLogFilter extends FilterEventAdapter {
                         if (value != null) {
                             if (value instanceof Date) {
                                 tempValue = new StringBuilder().append('\'')
-                                    .append(DateUtil.format((Date) value, DateConstants.DATETIME_FORMAT_19))
-                                    .append('\'').toString();
+                                    .append(DateUtil.format((Date) value, DateUtil.DATETIME_FORMAT_19)).append('\'')
+                                    .toString();
                             }
                             else {
                                 tempValue = String.valueOf(value);

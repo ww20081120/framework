@@ -91,7 +91,8 @@ public class DelayMessageQueue {
 
         int newLevel = -1;
         int[] levels = stepDelayMessageQueueLoader.getLevels();
-        int currentSeconds = new Long((expireTime - System.currentTimeMillis()) / GlobalConstants.SECONDS).intValue();
+        int currentSeconds = Long.valueOf((expireTime - System.currentTimeMillis()) 
+            / GlobalConstants.SECONDS).intValue();
         for (int i = 0, l = levels.length; i < l; i++) {
             int level = levels[i];
             if (currentSeconds > level) {

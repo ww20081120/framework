@@ -34,22 +34,10 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
 public final class EventManager {
 
     /** number */
-    private static final int NUM_5 = 5;
-
-    /** number */
-    private static final int NUM_10 = 10;
-
-    /** number */
     private static final long NUM_10L = 10L;
 
     /** number */
-    private static final int NUM_20 = 20;
-
-    /** number */
     private static final int NUM_500 = 500;
-
-    /** number */
-    private static final int NUM_600 = 600;
 
     /** number */
     private static final long NUM_1000L = 1000L;
@@ -107,7 +95,7 @@ public final class EventManager {
                 subscribers = new ArrayList<>();
                 subscriberHolder.put(channel, subscribers);
                 Thread thread = new Thread(new EventScanner(channel, broadcast, getBlockingQueue(channel)));
-                thread.setName("Scanner_" + channel + thread.getId());
+                thread.setName("Scanner_" + channel + thread.threadId());
                 thread.setDaemon(true);
                 thread.start();
             }

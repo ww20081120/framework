@@ -150,7 +150,7 @@ public class SpringJdbcTemplateClient implements JdbcClient {
 
         if (StringUtils.isNotEmpty(createTimeKey)) {
             if (obj.containsKey(createTimeKey)) {
-                obj.put(createTimeKey, DateUtil.string2Date(obj.getString(createTimeKey)));
+                obj.put(createTimeKey, DateUtil.format(obj.getString(createTimeKey)));
             }
             else {
                 obj.put(createTimeKey, new Date());
