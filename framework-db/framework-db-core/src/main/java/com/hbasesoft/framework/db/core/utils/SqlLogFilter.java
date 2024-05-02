@@ -716,7 +716,7 @@ public class SqlLogFilter extends FilterEventAdapter {
                         if (value != null) {
                             if (value instanceof Date) {
                                 tempValue = new StringBuilder().append('\'')
-                                    .append(DateUtil.date2String((Date) value, DateConstants.DATETIME_FORMAT_19))
+                                    .append(DateUtil.format((Date) value, DateConstants.DATETIME_FORMAT_19))
                                     .append('\'').toString();
                             }
                             else {
