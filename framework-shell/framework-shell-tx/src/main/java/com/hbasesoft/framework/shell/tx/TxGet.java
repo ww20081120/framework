@@ -96,7 +96,7 @@ public class TxGet implements CommandHandler<Option> {
                     shellOut.print("\t\t");
                     shellOut.print(entity.getResult());
                     shellOut.print("\t\t");
-                    shellOut.println(DateUtil.date2String(entity.getCreateTime()));
+                    shellOut.println(DateUtil.format(entity.getCreateTime()));
                 }
             }
         }

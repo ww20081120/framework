@@ -134,11 +134,11 @@ public class TxQuery implements CommandHandler<Option> {
                     shellOut.print(entity.getRetryConfigs());
                     shellOut.print("\t\t");
                     shellOut.print(
-                        entity.getNextRetryTime() == null ? null : DateUtil.date2String(entity.getNextRetryTime()));
+                        entity.getNextRetryTime() == null ? null : DateUtil.format(entity.getNextRetryTime()));
                     shellOut.print("\t\t");
                     shellOut.print(entity.getClientInfo());
                     shellOut.print("\t\t");
-                    shellOut.println(DateUtil.date2String(entity.getCreateTime()));
+                    shellOut.println(DateUtil.format(entity.getCreateTime()));
                 }
             }
         }
