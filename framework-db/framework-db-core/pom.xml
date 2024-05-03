@@ -26,13 +26,6 @@
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-core</artifactId>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
-		<dependency>
-			<groupId>com.querydsl</groupId>
-			<artifactId>querydsl-apt</artifactId>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
