@@ -18,7 +18,7 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.bean <br>
  */
-public abstract class BaseDto implements Serializable {
+public abstract class BaseEntity implements Serializable {
     /**
      * serialVersionUID
      */

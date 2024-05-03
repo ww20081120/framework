@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.db.core.config;
 
-import com.hbasesoft.framework.db.core.BaseDto;
+import com.hbasesoft.framework.db.core.BaseEntity;
 
 /**
  * <Description> <br>
@@ -15,7 +15,7 @@ import com.hbasesoft.framework.db.core.BaseDto;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.dao.metadata <br>
  */
-public class ParamMetadata extends BaseDto {
+public class ParamMetadata extends BaseEntity {
 
     /**
      * serialVersionUID

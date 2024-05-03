@@ -7,7 +7,7 @@ package com.hbasesoft.framework.db.jdbc;
 
 import java.util.Collection;
 
-import com.hbasesoft.framework.db.core.BaseDto;
+import com.hbasesoft.framework.db.core.BaseEntity;
 
 /**
  * <Description> <br>
@@ -20,7 +20,7 @@ import com.hbasesoft.framework.db.core.BaseDto;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface IBaseDao4Jdbc<T extends BaseDto> {
+public interface IBaseDao4Jdbc<T extends BaseEntity> {
 
     /**
      * Description: <br>

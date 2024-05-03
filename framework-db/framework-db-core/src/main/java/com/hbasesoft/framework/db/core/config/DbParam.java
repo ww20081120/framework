@@ -11,7 +11,7 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
-import com.hbasesoft.framework.db.core.BaseDto;
+import com.hbasesoft.framework.db.core.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +28,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DbParam extends BaseDto {
+public class DbParam extends BaseEntity {
 
     /**
      * serialVersionUID <br>

@@ -2,7 +2,7 @@ package com.hbasesoft.framework.db.demo.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.hbasesoft.framework.db.core.BaseDto;
+import com.hbasesoft.framework.db.core.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,14 +20,14 @@ import lombok.Setter;
  * @version 1.0<br>
  * @CreateDate 2018年05月01日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.BaseDto.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseEntity.bean.BaseEntity <br>
  */
 @Entity(name = "T_COURSE")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseEntity extends BaseDto {
+public class CourseEntity extends BaseEntity {
 
     /**
      * serialVersionUID <br>

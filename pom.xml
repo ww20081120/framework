@@ -56,6 +56,7 @@
 		<dashscope.version>2.9.2</dashscope.version>
 		<elasticsearch.version>8.10.4</elasticsearch.version>
 		<json-api.version>2.1.3</json-api.version>
+		<querydsl.version>5.1.0</querydsl.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -274,6 +275,27 @@
 				<groupId>jakarta.json</groupId>
 				<artifactId>jakarta.json-api</artifactId>
 				<version>${json-api.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-core -->
+			<dependency>
+				<groupId>com.querydsl</groupId>
+				<artifactId>querydsl-core</artifactId>
+				<version>${querydsl.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-apt -->
+			<dependency>
+				<groupId>com.querydsl</groupId>
+				<artifactId>querydsl-apt</artifactId>
+				<version>${querydsl.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa -->
+			<dependency>
+				<groupId>com.querydsl</groupId>
+				<artifactId>querydsl-jpa</artifactId>
+				<version>${querydsl.version}</version>
 			</dependency>
 
 		</dependencies>
