@@ -20,7 +20,7 @@ import java.util.List;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface BaseDao<T extends BaseEntity> {
+public interface BaseDao<T extends BaseDto> {
 
     /**
      * Description: 保存数据<br>

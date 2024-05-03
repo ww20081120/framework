@@ -28,7 +28,7 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
@@ -87,7 +87,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @param entity <br>
      */
     @Override
-    public void save(final BaseEntity entity) {
+    public void save(final BaseDto entity) {
         getSession().persist(entity);
     }
 
@@ -125,7 +125,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @param pojo <br>
      */
     @Override
-    public void update(final BaseEntity pojo) {
+    public void update(final BaseDto pojo) {
         getSession().merge(pojo);
     }
 
@@ -176,7 +176,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @param entity <br>
      */
     @Override
-    public void delete(final BaseEntity entity) {
+    public void delete(final BaseDto entity) {
         getSession().remove(entity);
     }
 
@@ -295,8 +295,8 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @return <br>
      */
     @Override
-    public BaseEntity get(final Serializable id) {
-        return (BaseEntity) getSession().get(getEntityClazz(), id);
+    public BaseDto get(final Serializable id) {
+        return (BaseDto) getSession().get(getEntityClazz(), id);
     }
 
     /**
@@ -309,7 +309,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @return <br>
      */
     @Override
-    public BaseEntity getByProperty(final String propertyName, final Object value) {
+    public BaseDto getByProperty(final String propertyName, final Object value) {
         Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
 
         // 确保实体类上有@Entity注解
@@ -325,7 +325,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         query.setParameter("value", value);
 
         // 获取唯一结果，如果不存在则返回null
-        return (BaseEntity) query.getSingleResult();
+        return (BaseDto) query.getSingleResult();
     }
 
     /**
@@ -651,7 +651,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @throws DaoException <br>
      */
     @Override
-    public BaseEntity getByHql(final String hql) throws DaoException {
+    public BaseDto getByHql(final String hql) throws DaoException {
         // 确保实体类上有@Entity注解
         Class<?> entityType = getEntityClazz();
         if (!entityType.isAnnotationPresent(Entity.class)) {
@@ -659,7 +659,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         }
 
         Query query = getSession().createQuery(hql, entityType);
-        return (BaseEntity) query.getSingleResult();
+        return (BaseDto) query.getSingleResult();
     }
 
     /**

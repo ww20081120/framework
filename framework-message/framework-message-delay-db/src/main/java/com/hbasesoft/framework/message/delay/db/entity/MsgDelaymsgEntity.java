@@ -15,7 +15,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 import com.hbasesoft.framework.message.core.delay.DelayMessage;
 
 import jakarta.persistence.Column;
@@ -29,10 +29,10 @@ import jakarta.persistence.Id;
  * @version 1.0<br>
  * @CreateDate 2019年04月10日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseDto.bean.BaseEntity <br>
  */
 @Entity(name = "T_MSG_DELAYMSG")
-public class MsgDelaymsgEntity extends BaseEntity {
+public class MsgDelaymsgEntity extends BaseDto {
 
     /**
      * serialVersionUID

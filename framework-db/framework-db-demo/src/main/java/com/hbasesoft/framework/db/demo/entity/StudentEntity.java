@@ -2,7 +2,7 @@ package com.hbasesoft.framework.db.demo.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,10 +17,10 @@ import jakarta.persistence.Transient;
  * @version 1.0<br>
  * @CreateDate 2018年05月01日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseDto.bean.BaseEntity <br>
  */
 @Entity(name = "T_STUDENT")
-public class StudentEntity extends BaseEntity {
+public class StudentEntity extends BaseDto {
 
     /** name */
     public static final String NAME = "name";

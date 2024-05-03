@@ -26,7 +26,7 @@ import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
@@ -105,7 +105,7 @@ public class AbstractAnnotationHandler {
         Class<?>[] paramTypes = method.getParameterTypes();
         if (ArrayUtils.isNotEmpty(paramTypes)) {
             for (Class<?> clazz : paramTypes) {
-                sbuf.append(BaseEntity.class.isAssignableFrom(clazz) ? Object.class.getName() : clazz.getName())
+                sbuf.append(BaseDto.class.isAssignableFrom(clazz) ? Object.class.getName() : clazz.getName())
                     .append(',');
             }
         }

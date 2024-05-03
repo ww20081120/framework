@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.hbasesoft.framework.db.core.BaseDao;
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
@@ -29,7 +29,7 @@ import jakarta.persistence.criteria.CriteriaUpdate;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
+public interface IBaseDao<T extends BaseDto> extends BaseDao<T> {
 
     /**
      * Description: JPA工厂<br>

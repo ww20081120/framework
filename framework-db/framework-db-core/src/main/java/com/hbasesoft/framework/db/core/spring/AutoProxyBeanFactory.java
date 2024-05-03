@@ -22,7 +22,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
 import com.hbasesoft.framework.db.core.annotation.handler.SQLHandler;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
@@ -159,7 +159,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         if (type != null) {
             for (Type t2 : type.getActualTypeArguments()) {
                 Class<?> t3 = (Class<?>) t2;
-                if (BaseEntity.class.isAssignableFrom(t3)) {
+                if (BaseDto.class.isAssignableFrom(t3)) {
                     entityClazz = t3;
                 }
             }
@@ -174,7 +174,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
                     Type[] genericType2 = pt.getActualTypeArguments();
                     for (Type t2 : genericType2) {
                         Class<?> t3 = (Class<?>) t2;
-                        if (BaseEntity.class.isAssignableFrom(t3)) {
+                        if (BaseDto.class.isAssignableFrom(t3)) {
                             entityClazz = t3;
                         }
                     }

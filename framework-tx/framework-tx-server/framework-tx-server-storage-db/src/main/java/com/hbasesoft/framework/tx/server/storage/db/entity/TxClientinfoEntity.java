@@ -6,7 +6,7 @@
 
 package com.hbasesoft.framework.tx.server.storage.db.entity;
 
-import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.BaseDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,10 +19,10 @@ import jakarta.persistence.Id;
  * @version 1.0<br>
  * @CreateDate 2020年02月01日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseDto.bean.BaseEntity <br>
  */
 @Entity(name = "T_TX_CLIENTINFO")
-public class TxClientinfoEntity extends BaseEntity {
+public class TxClientinfoEntity extends BaseDto {
 
     /**
      * serialVersionUID
