@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.MutationQuery;
@@ -34,6 +35,14 @@ import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.dml.DeleteClause;
+import com.querydsl.core.dml.UpdateClause;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.Expression;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.JPQLQueryFactory;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -66,6 +75,12 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
 
     /** entity class */
     private Class<?> entityClazz;
+
+    /** jpaQueryFactory */
+    private JPAQueryFactory jpaQueryFactory;
+
+    /** jpaEntity */
+    private EntityPath<?> jpaEntity;
 
     /**
      * Description: <br>
@@ -859,6 +874,36 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         return entityClazz;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    protected JPQLQueryFactory getJpaQueryFactory() {
+        if (jpaQueryFactory == null) {
+            jpaQueryFactory = new JPAQueryFactory(getSession());
+            Class<?> clazz = getEntityClazz();
+            if (BaseEntity.class.isAssignableFrom(clazz)) {
+                String clazzName = StringUtils.uncapitalize(clazz.getSimpleName());
+                String qName = new StringBuilder(clazz.getName())
+                    .insert(clazz.getName().length() - clazzName.length(), 'Q').toString();
+                try {
+                    Class<EntityPath<?>> qClazz = (Class<EntityPath<?>>) Class.forName(qName);
+                    Field field = qClazz.getField(clazzName);
+                    if (field != null) {
+                        jpaEntity = (EntityPath<?>) field.get(null);
+                    }
+                }
+                catch (Exception e) {
+                    LoggerUtil.error(e);
+                }
+            }
+        }
+        return jpaQueryFactory;
+    }
+
     private Field findPrimaryKeyField(final Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -895,4 +940,115 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
 
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param exprs
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery<Tuple> select(final Expression... exprs) {
+        return getJpaQueryFactory().select(exprs).from(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public DeleteClause delete() {
+        return getJpaQueryFactory().delete(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param expr
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery select(final Expression expr) {
+        return getJpaQueryFactory().select(expr).from(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param expr
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery selectDistinct(final Expression expr) {
+        return getJpaQueryFactory().selectDistinct(expr).from(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param exprs
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery selectDistinct(final Expression... exprs) {
+        return getJpaQueryFactory().selectDistinct(exprs).from(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery selectOne() {
+        return getJpaQueryFactory().selectOne().from(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery selectZero() {
+        return getJpaQueryFactory().selectZero().from(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public JPQLQuery select() {
+        return getJpaQueryFactory().selectFrom(jpaEntity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public UpdateClause update() {
+        return getJpaQueryFactory().update(jpaEntity);
+    }
 }

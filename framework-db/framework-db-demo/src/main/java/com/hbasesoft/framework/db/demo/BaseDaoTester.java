@@ -26,7 +26,10 @@ import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
+import com.hbasesoft.framework.db.demo.entity.QCourseEntity;
+import com.hbasesoft.framework.db.demo.entity.QStudentEntity;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
+import com.querydsl.core.Tuple;
 
 import jakarta.annotation.Resource;
 
@@ -90,6 +93,21 @@ public class BaseDaoTester {
     @Transactional
     public void createTable() {
         iStudentDao.createTable();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void countCourse() {
+        QCourseEntity qm = QCourseEntity.courseEntity;
+        Tuple count = iCourseDao.select(qm.id.count()).fetchOne();
+        Assert.isTrue(count.get(0, Long.class).intValue() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -176,6 +194,30 @@ public class BaseDaoTester {
         iStudentDao.delete(entity);
 
         entity = iStudentDao.get(id);
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void delete2() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        QStudentEntity qm = QStudentEntity.studentEntity;
+        iStudentDao.delete().where(qm.id.eq(id)).execute();
+
+        entity = iStudentDao.select().where(qm.id.eq(id)).fetchFirst();
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -317,7 +359,7 @@ public class BaseDaoTester {
         iStudentDao.deleteById(id);
 
         iStudentDao.clear();
-        
+
         entity = iStudentDao.get(id);
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
@@ -371,6 +413,27 @@ public class BaseDaoTester {
         iStudentDao.update(entity);
 
         StudentEntity e2 = iStudentDao.get("1");
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void update2() {
+        QStudentEntity qm = QStudentEntity.studentEntity;
+        StudentEntity entity = iStudentDao.select().where(qm.id.eq("1")).fetchFirst();
+        System.out.println(entity);
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        entity.setName("李四");
+        iStudentDao.update().set(qm.name, "李四").where(qm.id.eq("1")).execute();
+
+        StudentEntity e2 = iStudentDao.select().where(qm.id.eq("1")).fetchFirst();
         Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
     }
 

@@ -12,6 +12,11 @@ import com.hbasesoft.framework.db.core.BaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.utils.PagerList;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.dml.DeleteClause;
+import com.querydsl.core.dml.UpdateClause;
+import com.querydsl.core.types.Expression;
+import com.querydsl.jpa.JPQLQuery;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
@@ -30,6 +35,73 @@ import jakarta.persistence.criteria.CriteriaUpdate;
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
 public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
+
+    /**
+     * Create a new DELETE clause
+     *
+     * @return delete clause
+     */
+    DeleteClause<?> delete();
+
+    /**
+     * Create a new JPQLQuery instance with the given projection
+     *
+     * @param expr projection
+     * @return select(expr)
+     */
+    JPQLQuery<T> select(Expression<T> expr);
+
+    /**
+     * Create a new JPQLQuery instance with the given projection
+     *
+     * @param exprs projection
+     * @return select(exprs)
+     */
+    JPQLQuery<Tuple> select(Expression<?>... exprs);
+
+    /**
+     * Create a new JPQLQuery instance with the given projection
+     *
+     * @param expr projection
+     * @return select(distinct expr)
+     */
+    JPQLQuery<T> selectDistinct(Expression<T> expr);
+
+    /**
+     * Create a new JPQLQuery instance with the given projection
+     *
+     * @param exprs projection
+     * @return select(distinct exprs)
+     */
+    JPQLQuery<Tuple> selectDistinct(Expression<?>... exprs);
+
+    /**
+     * Create a new JPQLQuery instance with the projection one
+     *
+     * @return select(1)
+     */
+    JPQLQuery<Integer> selectOne();
+
+    /**
+     * Create a new JPQLQuery instance with the projection zero
+     *
+     * @return select(0)
+     */
+    JPQLQuery<Integer> selectZero();
+
+    /**
+     * Create a new JPQLQuery instance with the given source and projection
+     *
+     * @return select(from).from(from)
+     */
+    JPQLQuery<T> select();
+
+    /**
+     * Create a new UPDATE clause
+     *
+     * @return update clause
+     */
+    UpdateClause<?> update();
 
     /**
      * Description: JPA工厂<br>
@@ -57,7 +129,6 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * @param criteria <br>
      */
     void deleteByCriteria(CriteriaDelete<T> criteria);
-    
 
     /**
      * Description: 根据唯一数据来查询数据<br>
@@ -81,7 +152,6 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      */
     <M> M getByCriteria(CriteriaQuery<M> criteria);
 
-
     /**
      * Description: 根据属性查询数据<br>
      * 
@@ -104,8 +174,6 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * @return <br>
      */
     PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
-    
-
 
     /**
      * Description: 根据条件查询 <br>
