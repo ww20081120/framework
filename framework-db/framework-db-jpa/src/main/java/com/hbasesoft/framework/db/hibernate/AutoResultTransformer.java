@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.engine.jdbc.SerializableBlobProxy;
 import org.hibernate.engine.jdbc.SerializableClobProxy;
 import org.hibernate.transform.ResultTransformer;
@@ -22,7 +23,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 
@@ -75,7 +75,7 @@ public class AutoResultTransformer implements ResultTransformer {
      */
     @SuppressWarnings("deprecation")
     public Object transformTuple(final Object[] tuple, final String[] aliases) {
-        if (CommonUtil.isEmpty(tuple)) {
+        if (ArrayUtils.isEmpty(tuple)) {
             return null;
         }
 

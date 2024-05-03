@@ -18,10 +18,10 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.beust.jcommander.JCommander;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
@@ -114,7 +114,7 @@ public class Shell {
             paramsHolder.put(entry.getKey(), getCommandOptions(AopTargetUtils.getTarget(entry.getValue()).getClass()));
         }
 
-        if (CommonUtil.isEmpty(args)) {
+        if (ArrayUtils.isEmpty(args)) {
             try {
                 scanner = new Scanner(in);
 
@@ -312,7 +312,7 @@ public class Shell {
         Type[] interfacesTypes = clazz.getGenericInterfaces();
         for (Type t : interfacesTypes) {
             Type[] genericType2 = ((ParameterizedType) t).getActualTypeArguments();
-            if (CommonUtil.isNotEmpty(genericType2)) {
+            if (ArrayUtils.isNotEmpty(genericType2)) {
                 return (Class<? extends AbstractOption>) genericType2[0];
             }
         }

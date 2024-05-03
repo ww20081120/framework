@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.yaml.snakeyaml.Yaml;
 
@@ -78,7 +78,6 @@ public class LocalProperty implements Property {
      * @param map
      * @throws IOException <br>
      */
-    @SuppressWarnings("unchecked")
     private void loadYml(final InputStream inputStream, final Map<String, String> map) throws IOException {
         try {
 

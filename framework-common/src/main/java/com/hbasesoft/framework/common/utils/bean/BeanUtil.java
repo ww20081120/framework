@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -153,7 +154,7 @@ public final class BeanUtil {
         sbuf.append(method.getName());
         sbuf.append('(');
         Class<?>[] paramTypes = method.getParameterTypes();
-        if (CommonUtil.isNotEmpty(paramTypes)) {
+        if (ArrayUtils.isNotEmpty(paramTypes)) {
             for (Class<?> clazz : paramTypes) {
                 sbuf.append(clazz.getName()).append(',');
             }

@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.engine.OgnlUtil;
@@ -159,7 +159,7 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
 
         String[] paramNames = metadata.getParamNames();
         paramMap = new HashMap<String, Object>();
-        if (CommonUtil.isNotEmpty(args)) {
+        if (ArrayUtils.isNotEmpty(args)) {
             for (int i = 0; i < args.length; i++) {
                 if (i == metadata.getIndexPosition()) {
                     dataParam.setPageIndex(Integer.valueOf(args[i].toString()));

@@ -7,8 +7,9 @@ package com.hbasesoft.framework.db.core.annotation.handler;
 
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.hbasesoft.framework.common.InitializationException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 
 /**
  * <Description> <br>
@@ -31,7 +32,7 @@ public class SQLHandler extends AbstractAnnotationHandler {
      */
     public void invoke(final Class<?> clazz) throws InitializationException {
         Method[] methods = clazz.getDeclaredMethods();
-        if (CommonUtil.isNotEmpty(methods)) {
+        if (ArrayUtils.isNotEmpty(methods)) {
             for (Method method : methods) {
                 // Step1:判断是否是BaseDaoExcutor方法
                 if (getBaseDaoExcutor(method) != null) {

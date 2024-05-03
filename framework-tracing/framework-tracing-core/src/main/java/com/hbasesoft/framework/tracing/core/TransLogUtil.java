@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.ServiceLoader;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.context.ApplicationContext;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
@@ -41,11 +41,10 @@ public final class TransLogUtil {
      * transLoggerServices
      */
     private static Iterable<TransLoggerService> transLoggerServices;
-    
+
     /**
+     * Description: 获取traceId <br>
      * 
-     * Description: 获取traceId <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -202,7 +201,7 @@ public final class TransLogUtil {
         sbuf.append('(');
 
         Class<?>[] types = method.getParameterTypes();
-        if (CommonUtil.isNotEmpty(types)) {
+        if (ArrayUtils.isNotEmpty(types)) {
             for (int i = 0; i < types.length; i++) {
                 if (i > 0) {
                     sbuf.append(',');

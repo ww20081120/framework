@@ -11,13 +11,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 
 /**
@@ -45,7 +45,7 @@ public final class KeyUtil {
      */
     public static String getLockKey(final String template, final Method method, final Object[] args)
         throws FrameworkException {
-        if (CommonUtil.isNotEmpty(args)) {
+        if (ArrayUtils.isNotEmpty(args)) {
             Annotation[][] parameterAnnotations = method.getParameterAnnotations();
             Map<String, Object> paramMap = new TreeMap<String, Object>();
             for (int i = 0; i < parameterAnnotations.length; i++) {

@@ -8,7 +8,7 @@ package com.hbasesoft.framework.message.tx;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 

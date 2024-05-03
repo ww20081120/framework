@@ -8,11 +8,11 @@ package com.hbasesoft.framework.rule.core.plugin;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
@@ -44,7 +44,7 @@ public class ToolsInterceptor extends AbstractFlowCompnentInterceptor {
         String tools = (String) flowContext.getFlowConfig().getConfigAttrMap().get("tools");
         if (StringUtils.isNotEmpty(tools)) {
             String[] ts = StringUtils.split(tools, GlobalConstants.SPLITOR);
-            if (CommonUtil.isNotEmpty(ts)) {
+            if (ArrayUtils.isNotEmpty(ts)) {
                 Map<String, Object> toolMap = flowContext.getExtendUtils();
                 for (String t : ts) {
                     if (!toolMap.containsKey(t)) {

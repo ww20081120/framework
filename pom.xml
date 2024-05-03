@@ -12,7 +12,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
 		<module>framework-common</module>
@@ -34,10 +34,10 @@
 		<ognl.version>3.3.4</ognl.version>
 		<velocity.version>2.3</velocity.version>
 		<thumbnailator.version>0.4.20</thumbnailator.version>
-		<commons-io.version>2.15.1</commons-io.version>
-		<commons-lang.version>2.6</commons-lang.version>
+		<commons-lang3.versionversion>3.14.0</commons-lang3.versionversion>
+		<commons-collections4.version>4.4</commons-collections4.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
-		<commons-collections.version>3.2.2</commons-collections.version>
+		<commons-io.version>2.16.1</commons-io.version>
 		<jasypt.version>1.9.3</jasypt.version>
 		<protostuff.version>1.8.0</protostuff.version>
 		<druid.version>1.2.20</druid.version>
@@ -83,17 +83,20 @@
 				<version>${jcommander.version}</version>
 			</dependency>
 
-			<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+			<!--
+			https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>${commons-lang.version}</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 
+			<!--
+			https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
 			<dependency>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-				<version>${commons-collections.version}</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>${commons-collections4.version}</version>
 			</dependency>
 
 			<dependency>
@@ -225,7 +228,7 @@
 				<artifactId>mysql-connector-j</artifactId>
 				<version>${mysql.version}</version>
 			</dependency>
-			
+
 			<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 			<dependency>
 				<groupId>org.projectlombok</groupId>

@@ -14,8 +14,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 
@@ -360,29 +359,4 @@ public final class CommonUtil {
         return StringUtils.trim(dest);
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param paramTypes 数组值
-     * @param <T> 数据类型
-     * @return <br>
-     */
-    public static <T> boolean isNotEmpty(final T[] paramTypes) {
-        return !ArrayUtils.isEmpty(paramTypes);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param paramTypes 数组值
-     * @param <T> 数据类型
-     * @return <br>
-     */
-    public static <T> boolean isEmpty(final T[] paramTypes) {
-        return ArrayUtils.isEmpty(paramTypes);
-    }
 }

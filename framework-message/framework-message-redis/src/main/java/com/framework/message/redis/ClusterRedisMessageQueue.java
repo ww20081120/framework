@@ -7,7 +7,7 @@ package com.framework.message.redis;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * <Description> <br>

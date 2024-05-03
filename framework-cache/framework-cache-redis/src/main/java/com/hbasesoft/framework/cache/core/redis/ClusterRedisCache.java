@@ -9,11 +9,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
@@ -53,7 +53,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
         String cacheModel = PropertyHolder.getProperty("cache.model");
         if (CACHE_MODEL.equals(cacheModel)) {
             Address[] addresses = getAddresses();
-            String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
+            String passwd = ArrayUtils.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
             Set<HostAndPort> readSet = new HashSet<HostAndPort>();
             for (Address addr : addresses) {
                 HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());

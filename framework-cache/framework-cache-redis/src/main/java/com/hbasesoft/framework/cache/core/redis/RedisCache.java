@@ -7,10 +7,10 @@ package com.hbasesoft.framework.cache.core.redis;
 
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
 
@@ -46,7 +46,7 @@ public class RedisCache extends AbstractRedisCache {
         String cacheModel = PropertyHolder.getProperty("cache.model");
         if (CACHE_MODEL.equals(cacheModel)) {
             Address[] addresses = getAddresses();
-            String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
+            String passwd = ArrayUtils.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
             JedisPoolConfig config = new JedisPoolConfig();
             super.setConfig(config);
             if (StringUtils.isEmpty(passwd)) {

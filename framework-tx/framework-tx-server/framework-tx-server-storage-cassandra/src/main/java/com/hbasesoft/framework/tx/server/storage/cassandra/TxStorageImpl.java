@@ -9,7 +9,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
@@ -18,7 +19,6 @@ import org.springframework.data.cassandra.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
@@ -110,7 +110,7 @@ public class TxStorageImpl implements TxStorage {
         bean.setCreateTime(DateUtil.getCurrentDate());
 
         String[] retryConfigs = StringUtils.split(clientInfo.getRetryConfigs(), GlobalConstants.SPLITOR);
-        int min = CommonUtil.isEmpty(retryConfigs) ? NUM_5 : Integer.parseInt(retryConfigs[0]);
+        int min = ArrayUtils.isEmpty(retryConfigs) ? NUM_5 : Integer.parseInt(retryConfigs[0]);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, min);
         bean.setNextRetryTime(calendar.getTime());
