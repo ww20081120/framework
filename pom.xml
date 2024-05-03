@@ -16,16 +16,16 @@
 	</parent>
 	<modules>
 		<module>framework-common</module>
+		<module>framework-tracing</module>
 		<module>framework-db</module>
 		<module>framework-cache</module>
 		<module>framework-message</module>
-		<module>framework-log</module>
 		<module>framework-rule</module>
 		<module>framework-job</module>
 		<module>framework-tx</module>
 		<module>framework-shell</module>
-		<module>framework-dependencies</module>
 		<module>framework-langchain4j</module>
+		<module>framework-dependencies</module>
 	</modules>
 	<properties>
 		<java.version>21</java.version>
