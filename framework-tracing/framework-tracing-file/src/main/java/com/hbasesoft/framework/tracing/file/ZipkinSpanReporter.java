@@ -30,7 +30,7 @@ public class ZipkinSpanReporter implements Reporter<Span> {
     /**
      * logger
      */
-    private Logger logger = new Logger(TransLoggerService4File.class);
+    private Logger logger = new Logger(TraceLoggerService4File.class);
 
     /**
      * Description: <br>

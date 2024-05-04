@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.tracing.core.TracerLog;
+import com.hbasesoft.framework.tracing.core.TraceLog;
 
 /** 
  * <Description> <br>
@@ -37,7 +37,7 @@ import com.hbasesoft.framework.tracing.core.TracerLog;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tracing.core.advice <br>
  */
-@ConditionalOnBean(annotation = TracerLog.class)
+@ConditionalOnBean(annotation = TraceLog.class)
 @Configuration
 public class TracerLogConfig {
 
@@ -67,7 +67,7 @@ public class TracerLogConfig {
                         Class<?> beanClass;
                         try {
                             beanClass = Class.forName(beanDefinition.getBeanClassName());
-                            TracerLog tracerLog = AnnotationUtils.findAnnotation(beanClass, TracerLog.class);
+                            TraceLog tracerLog = AnnotationUtils.findAnnotation(beanClass, TraceLog.class);
                             if (tracerLog != null) {
                                 basePackagesSet.addAll(Arrays.asList(tracerLog.basePackages()));
                             }

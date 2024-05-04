@@ -103,20 +103,6 @@ public final class VelocityParseFactory {
     /**
      * templateName
      * 
-     * @param templateName templateName
-     * @param body body
-     * @param params params
-     * @return String
-     * @throws UtilException UtilException
-     */
-    @Deprecated
-    public static String parse(final String templateName, final String body, final Map<String, ?> params) {
-        return parse(null, body, params);
-    }
-
-    /**
-     * templateName
-     * 
      * @param body body
      * @param params params
      * @return String

@@ -29,9 +29,9 @@ import io.micrometer.tracing.Tracer;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tracing.core <br>
  */
-public final class TransLogUtil {
+public final class TraceLogUtil {
 
-    private TransLogUtil() {
+    private TraceLogUtil() {
     }
 
     /** tracer */
@@ -40,7 +40,7 @@ public final class TransLogUtil {
     /**
      * transLoggerServices
      */
-    private static Iterable<TransLoggerService> transLoggerServices;
+    private static Iterable<TraceLoggerService> transLoggerServices;
 
     /**
      * Description: 获取traceId <br>
@@ -98,7 +98,7 @@ public final class TransLogUtil {
             }
 
             // 执行记录
-            for (TransLoggerService service : getTransLoggerServices()) {
+            for (TraceLoggerService service : getTransLoggerServices()) {
                 service.before(span, parentSpan, beginTime, methodName, args);
             }
         }
@@ -136,7 +136,7 @@ public final class TransLogUtil {
                 long endTime = System.currentTimeMillis();
                 try {
                     // 执行记录
-                    for (TransLoggerService service : getTransLoggerServices()) {
+                    for (TraceLoggerService service : getTransLoggerServices()) {
                         service.afterReturn(span, endTime, endTime - beginTime, methodName, returnValue);
                     }
                 }
@@ -178,7 +178,7 @@ public final class TransLogUtil {
                 long endTime = System.currentTimeMillis();
                 try {
                     // 执行记录
-                    for (TransLoggerService service : getTransLoggerServices()) {
+                    for (TraceLoggerService service : getTransLoggerServices()) {
                         service.afterThrow(span, endTime, endTime - beginTime, methodName, e);
                     }
                 }
@@ -220,10 +220,10 @@ public final class TransLogUtil {
      * @taskId <br>
      * @return <br>
      */
-    private static Iterable<TransLoggerService> getTransLoggerServices() {
+    private static Iterable<TraceLoggerService> getTransLoggerServices() {
         if (transLoggerServices == null) {
             if (PropertyHolder.getBooleanProperty("logservice.aways.log", true)) {
-                transLoggerServices = ServiceLoader.load(TransLoggerService.class);
+                transLoggerServices = ServiceLoader.load(TraceLoggerService.class);
             }
             else {
                 transLoggerServices = new ArrayList<>();

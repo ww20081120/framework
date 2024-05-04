@@ -9,7 +9,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
-import com.hbasesoft.framework.tracing.core.TransLogUtil;
+import com.hbasesoft.framework.tracing.core.TraceLogUtil;
 
 /**
  * <Description> <br>
@@ -49,14 +49,14 @@ public class TracerLogMethodInterceptor implements MethodInterceptor {
         long beginTime = System.currentTimeMillis();
 
         Object[] args = joinPoint.getArguments();
-        TransLogUtil.before(beginTime, method, args);
+        TraceLogUtil.before(beginTime, method, args);
         try {
             Object returnValue = joinPoint.proceed();
-            TransLogUtil.afterReturning(beginTime, method, returnValue);
+            TraceLogUtil.afterReturning(beginTime, method, returnValue);
             return returnValue;
         }
         catch (Throwable e) {
-            TransLogUtil.afterThrowing(beginTime, method, e);
+            TraceLogUtil.afterThrowing(beginTime, method, e);
             throw e;
         }
     }

@@ -13,7 +13,7 @@ import io.micrometer.tracing.Span;
  * @CreateDate 2015年6月27日 <br>
  * @see com.hbasesoft.framework.tracing.core <br>
  */
-public interface TransLoggerService {
+public interface TraceLoggerService {
 
     /**
      * Description: <br>

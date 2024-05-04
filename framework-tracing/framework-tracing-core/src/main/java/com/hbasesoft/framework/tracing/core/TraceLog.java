@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TracerLog {
+public @interface TraceLog {
 
     /**
      * Description:扫描的包 <br>
