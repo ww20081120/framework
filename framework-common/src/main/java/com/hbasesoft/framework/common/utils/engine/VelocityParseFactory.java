@@ -111,7 +111,7 @@ public final class VelocityParseFactory {
      */
     @Deprecated
     public static String parse(final String templateName, final String body, final Map<String, ?> params) {
-        return parse(null, body, params);
+        return parse(body, params);
     }
 
     /**
