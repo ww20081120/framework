@@ -1051,4 +1051,90 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
     public UpdateClause update() {
         return getJpaQueryFactory().update(jpaEntity);
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    @Override
+    public void updateBySpecification(final CriterialUpdateSpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaUpdate query = cb.createCriteriaUpdate(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        updateByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    @Override
+    public void deleteBySpecification(final CriterialDeleteSpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaDelete query = cb.createCriteriaDelete(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        deleteByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    @Override
+    public BaseEntity getBySpecification(final CriterialQuerySpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        return (BaseEntity) getByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    @Override
+    public PagerList queryPagerBySpecification(final CriterialQuerySpecification specification, final int pageIndex,
+        final int pageSize) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        return queryPagerByCriteria(query, pageIndex, pageSize);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    @Override
+    public List queryBySpecification(final CriterialQuerySpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        return queryByCriteria(query);
+    }
 }

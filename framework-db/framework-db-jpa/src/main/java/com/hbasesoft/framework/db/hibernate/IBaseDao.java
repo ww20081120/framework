@@ -122,6 +122,15 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
     void updateByCriteria(CriteriaUpdate<T> criteria);
 
     /**
+     * Description: 根据条件来做更新<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    void updateBySpecification(CriterialUpdateSpecification<T> specification);
+
+    /**
      * Description: 根据条件删除<br>
      * 
      * @author 王伟<br>
@@ -129,6 +138,15 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * @param criteria <br>
      */
     void deleteByCriteria(CriteriaDelete<T> criteria);
+
+    /**
+     * Description: 根据条件删除<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    void deleteBySpecification(CriterialDeleteSpecification<T> specification);
 
     /**
      * Description: 根据唯一数据来查询数据<br>
@@ -151,6 +169,16 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * @return <br>
      */
     <M> M getByCriteria(CriteriaQuery<M> criteria);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    T getBySpecification(CriterialQuerySpecification<T> specification);
 
     /**
      * Description: 根据属性查询数据<br>
@@ -176,6 +204,18 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
     PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    PagerList<T> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex, int pageSize);
+
+    /**
      * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
@@ -185,6 +225,16 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * @return <br>
      */
     <M> List<M> queryByCriteria(CriteriaQuery<M> criteria);
+
+    /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    List<T> queryBySpecification(CriterialQuerySpecification<T> specification);
 
     /**
      * Description: <br>
