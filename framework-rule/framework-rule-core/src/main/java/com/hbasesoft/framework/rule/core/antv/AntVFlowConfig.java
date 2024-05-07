@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -222,7 +222,7 @@ public class AntVFlowConfig implements FlowConfig {
     @Getter
     @Setter
     @AllArgsConstructor
-    private static class Component {
+    private static final class Component {
         /** flowComponent */
         @SuppressWarnings("rawtypes")
         private FlowComponent flowComponent;

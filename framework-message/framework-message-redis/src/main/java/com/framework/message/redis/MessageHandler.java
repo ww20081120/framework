@@ -7,13 +7,13 @@ package com.framework.message.redis;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.common.utils.thread.MessageThreadPoolExecutor;
+import com.hbasesoft.framework.common.utils.thread.ThreadUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
 /**
@@ -82,7 +82,7 @@ public final class MessageHandler {
                                 Thread.currentThread().threadId(), transId);
 
                             for (byte[] data : datas) {
-                                MessageThreadPoolExecutor.execute(channel,
+                                ThreadUtil.execute(channel,
                                     new Consumer(transId, channel, subscriber, data));
                             }
                         }
@@ -102,7 +102,7 @@ public final class MessageHandler {
                 LoggerUtil.error(e);
             }
         });
-        thread.setName("Scanner_" + channel + thread.getId());
+        thread.setName("Scanner_" + channel + thread.threadId());
         thread.setDaemon(true);
         thread.start();
     }

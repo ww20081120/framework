@@ -17,7 +17,7 @@ import jakarta.persistence.Column;
  * @version 1.0<br>
  * @CreateDate 2020年02月01日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseEntity.bean.BaseEntity <br>
  */
 
 public class TxCheckinfoEntity extends BaseEntity {

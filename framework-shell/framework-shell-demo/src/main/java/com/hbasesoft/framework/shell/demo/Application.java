@@ -5,13 +5,13 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.shell.demo;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.hbasesoft.framework.common.Bootstrap;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.shell.core.RemoteShell;
 import com.hbasesoft.framework.shell.core.Shell;
@@ -43,7 +43,7 @@ public class Application {
         ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         Bootstrap.after(context);
 
-        if (CommonUtil.isEmpty(args) && PropertyHolder.getBooleanProperty("server.remote", false)) {
+        if (ArrayUtils.isEmpty(args) && PropertyHolder.getBooleanProperty("server.remote", false)) {
             RemoteShell.run();
         }
         else {

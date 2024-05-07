@@ -240,7 +240,10 @@ public enum ErrorCodeDef implements ErrorCode {
     PARAM_REPEAT(SYSTEM_PREFIX + 71, "{0}重复了"),
 
     /** 流程执行超过最大深度{0} */
-    FLOW_STACK_OVERFLOW(SYSTEM_PREFIX + 72, "流程执行超过最大深度{0}");
+    FLOW_STACK_OVERFLOW(SYSTEM_PREFIX + 72, "流程执行超过最大深度{0}"),
+
+    /** 压缩文件的路径不能再源文件的路径中 */
+    ZIP_PATH_IS_IN_SRC_PATH(SYSTEM_PREFIX + 73, "压缩文件的路径不能再源文件的路径中"),;
 
     /** code */
     private final int code;

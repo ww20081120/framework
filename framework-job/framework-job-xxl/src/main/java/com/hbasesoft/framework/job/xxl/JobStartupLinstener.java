@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.job.xxl;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 

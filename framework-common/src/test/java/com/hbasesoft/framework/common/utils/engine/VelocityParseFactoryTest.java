@@ -43,7 +43,7 @@ public class VelocityParseFactoryTest {
         params.put("b", bean);
 
         String template = "你好，我的名字叫${b.name}";
-        String str = VelocityParseFactory.parse("template01", template, params);
+        String str = VelocityParseFactory.parse(template, params);
         Assert.equals(str, "你好，我的名字叫张三", ErrorCodeDef.SYSTEM_ERROR);
     }
 }

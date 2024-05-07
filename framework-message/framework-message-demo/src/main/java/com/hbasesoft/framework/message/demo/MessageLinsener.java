@@ -57,7 +57,7 @@ public class MessageLinsener implements MessageSubscriber {
      */
     @Override
     public void onSubscribe(final String channel, final int subscribeChannels) {
-        System.out.println(Thread.currentThread().getId());
+        System.out.println(Thread.currentThread().threadId());
         System.out.println(name + " onSubscribe: " + channel + "---" + subscribeChannels);
     }
 

@@ -8,8 +8,8 @@ package com.hbasesoft.framework.rule.core.plugin;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;

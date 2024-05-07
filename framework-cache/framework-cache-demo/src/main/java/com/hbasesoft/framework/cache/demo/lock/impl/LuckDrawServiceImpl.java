@@ -33,9 +33,6 @@ public class LuckDrawServiceImpl implements LuckDrawService {
     /** DEFAULT_LEVEL */
     private static final int DEFAULT_LEVEL = 2000;
 
-    /** expire_time */
-    private static final int EXPIRE_TIME = 70;
-
     /** gifs */
     private static final int GIFS_10 = 10;
 

@@ -30,15 +30,6 @@ public class PropertyHolderTest {
     private static final long NUM_3L = 3L;
 
     /** number */
-    private static final int NUM_8888 = 8888;
-
-    /** number */
-    private static final int NUM_9998 = 9998;
-
-    /** number */
-    private static final int NUM_9999 = 9999;
-
-    /** number */
     private static final long NUM_1000L = 1000L;
 
     /**

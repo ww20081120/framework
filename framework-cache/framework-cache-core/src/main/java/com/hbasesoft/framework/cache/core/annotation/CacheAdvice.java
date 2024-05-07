@@ -10,7 +10,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -25,7 +26,6 @@ import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -162,7 +162,7 @@ public class CacheAdvice {
 
     private String getCacheKey(final String template, final Method method, final Object[] args)
         throws FrameworkException {
-        if (StringUtils.isEmpty(template) && CommonUtil.isEmpty(args)) {
+        if (StringUtils.isEmpty(template) && ArrayUtils.isEmpty(args)) {
             throw new ServiceException(ErrorCodeDef.CACHE_ERROR);
         }
         String key;
@@ -177,7 +177,7 @@ public class CacheAdvice {
                     }
                 }
             }
-            key = VelocityParseFactory.parse(template, template, paramMap);
+            key = VelocityParseFactory.parse(template, paramMap);
             Assert.isFalse(key.contains(GlobalConstants.DOLLAR_BRACE), ErrorCodeDef.CACHE_ERROR);
         }
         else {

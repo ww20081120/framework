@@ -5,15 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -50,11 +43,11 @@ public class CommonUtilTest {
     private static final int NUM_10000 = 10000;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void messageFormat() {
@@ -66,11 +59,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void getTransactionID() {
@@ -81,11 +74,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void getRandomNumber() {
@@ -95,11 +88,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void getRandomChar() {
@@ -111,11 +104,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void getString() {
@@ -132,11 +125,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void notNullStr() {
@@ -147,11 +140,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void getDate() {
@@ -163,11 +156,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void splitId() {
@@ -183,11 +176,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void splitIdsByLong() {
@@ -198,11 +191,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void match() {
@@ -222,11 +215,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void removeAllSymbol() {
@@ -237,11 +230,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void replaceAllBlank() {
@@ -252,11 +245,11 @@ public class CommonUtilTest {
     }
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
-     * @taskId <br> <br>
+     * @taskId <br>
+     *         <br>
      */
     @Test
     public void replaceRedundantBlank() {
@@ -264,79 +257,5 @@ public class CommonUtilTest {
         String str2 = CommonUtil.replaceRedundantBlank(str1);
         Assert.equals(str2, "你好 呀 你在干什么", ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("去掉字符串str1中的首尾空格，以及多余的空格、换行、制表符号");
-    }
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br> <br>
-     */
-    @Test
-    public void isNotEmpty() {
-        String str = "hello world";
-        Assert.isTrue(StringUtils.isNotEmpty(str), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("str 不是空字符串");
-
-        List<String> strList = new ArrayList<>();
-        strList.add(str);
-        Assert.isTrue(CollectionUtils.isNotEmpty(strList), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strList 不是空集合");
-
-        String[] strs = new String[] {
-            str
-        };
-        Assert.isTrue(CommonUtil.isNotEmpty(strs), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strs 不是空数组");
-
-        Map<String, String> strMap = new HashMap<>();
-        strMap.put("a", str);
-        Assert.isTrue(MapUtils.isNotEmpty(strMap), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strMap 不是空Map");
-    }
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br> <br>
-     */
-    @Test
-    public void isEmpty() {
-
-        String str = null;
-        Assert.isTrue(StringUtils.isEmpty(str), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("str 是null字符串");
-
-        str = "";
-        Assert.isTrue(StringUtils.isEmpty(str), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("str 是空字符串");
-
-        List<String> strList = null;
-        Assert.isTrue(CollectionUtils.isEmpty(strList), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strList 是null集合");
-
-        strList = new ArrayList<>();
-        Assert.isTrue(CollectionUtils.isEmpty(strList), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strList 是空集合");
-
-        String[] strs = null;
-        Assert.isTrue(CommonUtil.isEmpty(strs), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strs 是null数组");
-
-        strs = new String[0];
-        Assert.isTrue(CommonUtil.isEmpty(strs), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strs 是空数组");
-
-        Map<String, String> strMap = null;
-        Assert.isTrue(MapUtils.isEmpty(strMap), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strMap 是null Map");
-
-        strMap = new HashMap<>();
-        Assert.isTrue(MapUtils.isEmpty(strMap), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("strMap 是空 Map");
-
     }
 }

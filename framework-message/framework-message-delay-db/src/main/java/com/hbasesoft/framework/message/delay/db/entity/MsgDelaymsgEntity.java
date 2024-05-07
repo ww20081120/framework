@@ -29,7 +29,7 @@ import jakarta.persistence.Id;
  * @version 1.0<br>
  * @CreateDate 2019年04月10日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseEntity.bean.BaseEntity <br>
  */
 @Entity(name = "T_MSG_DELAYMSG")
 public class MsgDelaymsgEntity extends BaseEntity {

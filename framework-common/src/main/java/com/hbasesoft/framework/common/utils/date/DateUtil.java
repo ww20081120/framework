@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -26,6 +26,39 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
+
+    /** yyyyMMdd */
+    public static final String DATE_FORMAT_8 = "yyyyMMdd";
+
+    /** yyyy年MM月dd日 */
+    public static final String DATE_FORMAT_11 = "yyyy年MM月dd日";
+
+    /** yyyy-MM-dd */
+    public static final String DATE_FORMAT_10 = "yyyy-MM-dd";
+
+    /** yyyy/MM/dd */
+    public static final String DATE_FORMAT_10_2 = "yyyy/MM/dd";
+
+    /** yyyyMMddHHmmss */
+    public static final String DATETIME_FORMAT_14 = "yyyyMMddHHmmss";
+
+    /** yyyyMMddHHmmssSSS */
+    public static final String DATETIME_FORMAT_17 = "yyyyMMddHHmmssSSS";
+
+    /** yyyy-MM-dd HH:mm:ss */
+    public static final String DATETIME_FORMAT_19 = "yyyy-MM-dd HH:mm:ss";
+
+    /** yyyy-MM-dd HH:mm:ss */
+    public static final String DATETIME_FORMAT_19_2 = "yyyy/MM/dd HH:mm:ss";
+
+    /** yyyy年MM月dd日 HH时mm分ss秒 */
+    public static final String DATETIME_FORMAT_21 = "yyyy年MM月dd日 HH时mm分ss秒";
+
+    /** yyyy-MM-dd HH:mm:ss.SSS */
+    public static final String DATETIME_FORMAT_23 = "yyyy-MM-dd HH:mm:ss.SSS";
+
+    /** yyyy/MM/dd HH:mm:ss.SSS */
+    public static final String DATETIME_FORMAT_23_2 = "yyyy/MM/dd HH:mm:ss.SSS";
 
     /** ONE_DAY_MILISECOND */
     private static final int ONE_DAY_MILISECOND = 1000 * 3600 * 24;
@@ -62,7 +95,7 @@ public final class DateUtil {
      * @param ds <br>
      * @return <br>
      */
-    public static Date string2Date(final String ds) {
+    public static Date format(final String ds) {
         if (StringUtils.isEmpty(ds)) {
             return null;
         }
@@ -70,31 +103,31 @@ public final class DateUtil {
         Date date = null;
         switch (dateStr.length()) {
             case DATE_LENGTH_8:
-                date = string2Date(dateStr, DateConstants.DATE_FORMAT_8);
+                date = format(dateStr, DateUtil.DATE_FORMAT_8);
                 break;
             case DATE_LENGTH_10:
-                date = string2Date(dateStr,
-                    dateStr.indexOf("/") == -1 ? DateConstants.DATE_FORMAT_10 : DateConstants.DATE_FORMAT_10_2);
+                date = format(dateStr,
+                    dateStr.indexOf("/") == -1 ? DateUtil.DATE_FORMAT_10 : DateUtil.DATE_FORMAT_10_2);
                 break;
             case DATE_LENGTH_11:
-                date = string2Date(dateStr, DateConstants.DATE_FORMAT_11);
+                date = format(dateStr, DateUtil.DATE_FORMAT_11);
                 break;
             case DATE_LENGTH_14:
-                date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_14);
+                date = format(dateStr, DateUtil.DATETIME_FORMAT_14);
                 break;
             case DATE_LENGTH_17:
-                date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_17);
+                date = format(dateStr, DateUtil.DATETIME_FORMAT_17);
                 break;
             case DATE_LENGTH_19:
-                date = string2Date(dateStr,
-                    dateStr.indexOf("/") == -1 ? DateConstants.DATETIME_FORMAT_19 : DateConstants.DATETIME_FORMAT_19_2);
+                date = format(dateStr,
+                    dateStr.indexOf("/") == -1 ? DateUtil.DATETIME_FORMAT_19 : DateUtil.DATETIME_FORMAT_19_2);
                 break;
             case DATE_LENGTH_21:
-                date = string2Date(dateStr, DateConstants.DATETIME_FORMAT_21);
+                date = format(dateStr, DateUtil.DATETIME_FORMAT_21);
                 break;
             case DATE_LENGTH_23:
-                date = string2Date(dateStr,
-                    dateStr.indexOf("/") == -1 ? DateConstants.DATETIME_FORMAT_23 : DateConstants.DATETIME_FORMAT_23_2);
+                date = format(dateStr,
+                    dateStr.indexOf("/") == -1 ? DateUtil.DATETIME_FORMAT_23 : DateUtil.DATETIME_FORMAT_23_2);
                 break;
             default:
                 throw new IllegalArgumentException(dateStr + "不支持的时间格式");
@@ -111,7 +144,7 @@ public final class DateUtil {
      * @param format <br>
      * @return <br>
      */
-    public static Date string2Date(final String date, final String format) {
+    public static Date format(final String date, final String format) {
         if (StringUtils.isEmpty(format)) {
             throw new IllegalArgumentException("the date format string is null!");
         }
@@ -132,8 +165,8 @@ public final class DateUtil {
      * @param date <br>
      * @return <br>
      */
-    public static String date2String(final Date date) {
-        return date2String(date, DateConstants.DATETIME_FORMAT_19);
+    public static String format(final Date date) {
+        return format(date, DateUtil.DATETIME_FORMAT_19);
     }
 
     /**
@@ -145,7 +178,7 @@ public final class DateUtil {
      * @param format <br>
      * @return <br>
      */
-    public static String date2String(final Date date, final String format) {
+    public static String format(final Date date, final String format) {
         String result = null;
         if (date != null) {
             DateFormat sdf = new SimpleDateFormat(format);
@@ -162,7 +195,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static String getCurrentTimestamp() {
-        return date2String(getCurrentDate(), DateConstants.DATETIME_FORMAT_14);
+        return format(getCurrentDate(), DateUtil.DATETIME_FORMAT_14);
     }
 
     /**
@@ -224,9 +257,9 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date getYrMonthFirstDay(final Date d) {
-        String yrMonth = DateUtil.date2String(d, "yyyyMM");
+        String yrMonth = DateUtil.format(d, "yyyyMM");
         String date = yrMonth + "01";
-        return DateUtil.string2Date(date);
+        return DateUtil.format(date);
     }
 
     /**
@@ -248,6 +281,6 @@ public final class DateUtil {
             int d2 = calendar.get(Calendar.DAY_OF_YEAR);
             return d1 == d2 ? 0 : 1;
         }
-        return Math.abs(new Double(Math.floor((s2 - s1) / ONE_DAY_MILISECOND)).intValue());
+        return Math.abs(Double.valueOf(Math.floor((s2 - s1) / ONE_DAY_MILISECOND)).intValue());
     }
 }

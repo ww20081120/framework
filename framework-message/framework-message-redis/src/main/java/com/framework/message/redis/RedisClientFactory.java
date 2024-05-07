@@ -5,16 +5,17 @@
  ****************************************************************************************/
 package com.framework.message.redis;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
@@ -97,7 +98,7 @@ public final class RedisClientFactory {
                 String cacheModel = PropertyHolder.getProperty("message.model");
                 if (MESSAGE_MODEL.equals(cacheModel)) {
                     Address[] addresses = getAddresses();
-                    String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
+                    String passwd = ArrayUtils.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
                     if (StringUtils.isEmpty(passwd)) {
                         jedisPool = new JedisPool(getConfig(), addresses[0].getHost(), addresses[0].getPort());
                     }
@@ -126,7 +127,7 @@ public final class RedisClientFactory {
                 if (CLUSTER_MESSAGE_MODEL.equals(cacheModel)) {
                     Address[] addresses = getAddresses();
                     Set<HostAndPort> readSet = new HashSet<HostAndPort>();
-                    String passwd = CommonUtil.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
+                    String passwd = ArrayUtils.isNotEmpty(addresses) ? addresses[0].getPassword() : null;
                     for (Address addr : addresses) {
                         HostAndPort hostAndPort = new HostAndPort(addr.getHost(), addr.getPort());
                         readSet.add(hostAndPort);
@@ -136,7 +137,7 @@ public final class RedisClientFactory {
                     cluster = new JedisCluster(readSet,
                         PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT),
                         PropertyHolder.getIntProperty("cache.redis.cluster.max.timeout", MAX_TIMEOUT),
-                        DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig());
+                        DEFAULT_MAX_REDIRECTIONS, passwd, new GenericObjectPoolConfig<>());
                 }
             }
             return cluster;
@@ -173,8 +174,8 @@ public final class RedisClientFactory {
         config.setMaxIdle(PropertyHolder.getIntProperty("message.redis.max.idle", MAX_IDLE));
 
         // 表示当borrow(引入)一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException；
-        config.setMaxWaitMillis(
-            GlobalConstants.SECONDS * PropertyHolder.getIntProperty("message.redis.max.wait", MAX_WAIT));
+        config.setMaxWait(Duration
+            .ofMillis(GlobalConstants.SECONDS * PropertyHolder.getIntProperty("message.redis.max.wait", MAX_WAIT)));
 
         // 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的；
         config.setTestOnBorrow(PropertyHolder.getBooleanProperty("message.redis.testonborrow", VALIDATE));

@@ -79,8 +79,8 @@ public class DbGeneratorUtil {
             Map<String, Object> map = new HashMap<>();
             map.put("table", tableInfo);
             map.put("package", basePackage);
-            map.put("DATE", DateUtil.date2String(DateUtil.getCurrentDate()));
-            String daoData = VelocityParseFactory.parse("daoTemplate", daoTemplate, map);
+            map.put("DATE", DateUtil.format(DateUtil.getCurrentDate()));
+            String daoData = VelocityParseFactory.parse(daoTemplate, map);
             IOUtil.writeFile(daoData, file);
             LoggerUtil.info("{0}文件生成成功！", file.getAbsolutePath());
         }
@@ -107,10 +107,10 @@ public class DbGeneratorUtil {
             Map<String, Object> map = new HashMap<>();
             map.put("table", tableInfo);
             map.put("package", basePackage);
-            map.put("DATE", DateUtil.date2String(DateUtil.getCurrentDate()));
+            map.put("DATE", DateUtil.format(DateUtil.getCurrentDate()));
             generateEntityCode(tableInfo, map);
 
-            String daoData = VelocityParseFactory.parse("entityTemplate", entityTemplate, map);
+            String daoData = VelocityParseFactory.parse(entityTemplate, map);
             IOUtil.writeFile(daoData, file);
             LoggerUtil.info("{0}文件生成成功！", file.getAbsolutePath());
         }

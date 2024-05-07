@@ -18,10 +18,10 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.beust.jcommander.JCommander;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
@@ -114,7 +114,7 @@ public class Shell {
             paramsHolder.put(entry.getKey(), getCommandOptions(AopTargetUtils.getTarget(entry.getValue()).getClass()));
         }
 
-        if (CommonUtil.isEmpty(args)) {
+        if (ArrayUtils.isEmpty(args)) {
             try {
                 scanner = new Scanner(in);
 
@@ -261,7 +261,7 @@ public class Shell {
             JCommander jCommander = null;
             Class<? extends AbstractOption> optionClass = paramsHolder.get(cmds[0]);
             if (optionClass != null) {
-                option = optionClass.newInstance();
+                option = optionClass.getConstructor().newInstance();
                 if (cmds.length > 1) {
                     jCommander = new JCommander(option);
                     jCommander.setProgramName(cmd.toString());
@@ -286,7 +286,7 @@ public class Shell {
         }
         else {
             try {
-                Process process = Runtime.getRuntime().exec(StringUtils.join(cmds, " "));
+                Process process = new ProcessBuilder(StringUtils.join(cmds, " ")).start();
                 IOUtils.copy(process.getInputStream(), out);
             }
             catch (IOException e) {
@@ -300,7 +300,7 @@ public class Shell {
 
     private void deleteDir(final File dir) {
         try {
-            Runtime.getRuntime().exec("rm -rf " + dir.getAbsolutePath());
+            new ProcessBuilder("rm -rf " + dir.getAbsolutePath()).start();
         }
         catch (Exception e) {
             out.println("删除目录失败" + e.getMessage());
@@ -312,7 +312,7 @@ public class Shell {
         Type[] interfacesTypes = clazz.getGenericInterfaces();
         for (Type t : interfacesTypes) {
             Type[] genericType2 = ((ParameterizedType) t).getActualTypeArguments();
-            if (CommonUtil.isNotEmpty(genericType2)) {
+            if (ArrayUtils.isNotEmpty(genericType2)) {
                 return (Class<? extends AbstractOption>) genericType2[0];
             }
         }

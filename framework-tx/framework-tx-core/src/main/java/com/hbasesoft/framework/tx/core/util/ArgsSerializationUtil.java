@@ -7,10 +7,11 @@ package com.hbasesoft.framework.tx.core.util;
 
 import java.nio.ByteBuffer;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 
 /**
@@ -43,7 +44,7 @@ public final class ArgsSerializationUtil {
      * @return <br>
      */
     public static byte[] serializeArgs(final Object[] args) {
-        if (CommonUtil.isNotEmpty(args)) {
+        if (ArrayUtils.isNotEmpty(args)) {
             byte[][] argsData = new byte[args.length][];
             int bufferSize = args.length * 2 + 1;
             for (int i = 0, len = args.length; i < len; i++) {
@@ -177,7 +178,7 @@ public final class ArgsSerializationUtil {
                     obj = param;
                     break;
                 case "java.lang.Integer":
-                    obj = new Integer(param);
+                    obj = Integer.valueOf(param);
                     break;
                 default:
                     try {

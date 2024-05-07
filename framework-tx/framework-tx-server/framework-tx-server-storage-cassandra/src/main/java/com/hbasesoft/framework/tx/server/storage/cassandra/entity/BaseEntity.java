@@ -6,7 +6,7 @@ package com.hbasesoft.framework.tx.server.storage.cassandra.entity;
 import java.io.Serializable;
 
 import com.alibaba.fastjson.JSONObject;
-import com.hbasesoft.framework.common.utils.date.DateConstants;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
  * <Description> <br>
@@ -32,6 +32,6 @@ public abstract class BaseEntity implements Serializable {
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, DateConstants.DATETIME_FORMAT_19);
+        return JSONObject.toJSONStringWithDateFormat(this, DateUtil.DATETIME_FORMAT_19);
     }
 }

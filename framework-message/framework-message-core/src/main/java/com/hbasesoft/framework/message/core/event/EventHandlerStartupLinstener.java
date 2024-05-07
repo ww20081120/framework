@@ -9,12 +9,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.StartupListener;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
@@ -49,7 +49,7 @@ public class EventHandlerStartupLinstener implements StartupListener {
             for (Entry<String, EventListener> entry : eventLinseners.entrySet()) {
                 EventListener linsener = entry.getValue();
                 String[] events = linsener.events();
-                if (CommonUtil.isNotEmpty(events)) {
+                if (ArrayUtils.isNotEmpty(events)) {
                     // 注册事件
                     for (String channel : linsener.events()) {
                         factory.registSubscriber(channel, linsener.subscriber(), linsener);

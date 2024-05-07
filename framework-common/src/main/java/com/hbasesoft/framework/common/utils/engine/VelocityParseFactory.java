@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ServiceLoader;
 
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
@@ -98,20 +98,6 @@ public final class VelocityParseFactory {
         catch (Exception e) {
             logger.error("初始化Velocity模板失败", e);
         }
-    }
-
-    /**
-     * templateName
-     * 
-     * @param templateName templateName
-     * @param body body
-     * @param params params
-     * @return String
-     * @throws UtilException UtilException
-     */
-    @Deprecated
-    public static String parse(final String templateName, final String body, final Map<String, ?> params) {
-        return parse(null, body, params);
     }
 
     /**

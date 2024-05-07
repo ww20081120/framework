@@ -20,7 +20,7 @@ import lombok.Setter;
  * @version 1.0<br>
  * @CreateDate 2018年05月01日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
+ * @see com.hbasesoft.framework.BaseEntity.bean.BaseEntity <br>
  */
 @Entity(name = "T_COURSE")
 @Getter

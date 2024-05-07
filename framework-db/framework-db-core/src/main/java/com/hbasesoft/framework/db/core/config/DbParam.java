@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.config;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;

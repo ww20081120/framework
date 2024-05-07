@@ -16,12 +16,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -103,7 +103,7 @@ public class AbstractAnnotationHandler {
         sbuf.append(method.getName());
         sbuf.append('(');
         Class<?>[] paramTypes = method.getParameterTypes();
-        if (CommonUtil.isNotEmpty(paramTypes)) {
+        if (ArrayUtils.isNotEmpty(paramTypes)) {
             for (Class<?> clazz : paramTypes) {
                 sbuf.append(BaseEntity.class.isAssignableFrom(clazz) ? Object.class.getName() : clazz.getName())
                     .append(',');

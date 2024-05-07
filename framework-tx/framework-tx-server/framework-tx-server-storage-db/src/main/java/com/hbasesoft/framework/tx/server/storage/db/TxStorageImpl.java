@@ -8,13 +8,13 @@ package com.hbasesoft.framework.tx.server.storage.db;
 import java.util.Calendar;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.core.bean.ClientInfo;
@@ -105,7 +105,7 @@ public class TxStorageImpl implements TxStorage {
         bean.setCreateTime(DateUtil.getCurrentDate());
 
         String[] retryConfigs = StringUtils.split(clientInfo.getRetryConfigs(), GlobalConstants.SPLITOR);
-        int min = CommonUtil.isEmpty(retryConfigs) ? NUM_5 : Integer.parseInt(retryConfigs[0]);
+        int min = ArrayUtils.isEmpty(retryConfigs) ? NUM_5 : Integer.parseInt(retryConfigs[0]);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, min);
         bean.setNextRetryTime(calendar.getTime());

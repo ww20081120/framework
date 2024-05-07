@@ -12,11 +12,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil;
 import com.hbasesoft.framework.common.utils.io.ProtocolUtil.Address;
@@ -99,10 +99,13 @@ public final class Bootstrap {
 
         LoggerUtil.info("**********************************************************");
 
+        String port = PropertyHolder.getProperty("server.port");
+
         System.out.println(new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
             .append(PropertyHolder.getProjectName()).append('-').append(PropertyHolder.getVersion()).append(" 模块启动成功！")
-            .append('\n').append("***************************************"));
+            .append(StringUtils.isNotEmpty(port) ? "端口:" + port : "").append('\n')
+            .append("***************************************"));
         LoggerUtil.info("====================>系统正常启动<====================");
 
     }
@@ -117,7 +120,7 @@ public final class Bootstrap {
 
         if (StringUtils.isNotEmpty(httpProxy)) {
             Address[] protocols = ProtocolUtil.parseAddress(httpProxy);
-            if (CommonUtil.isNotEmpty(protocols)) {
+            if (ArrayUtils.isNotEmpty(protocols)) {
                 Address addr = protocols[0];
                 System.setProperty("http.proxyHost", addr.getHost());
                 System.setProperty("http.proxyPort", addr.getPort() + GlobalConstants.BLANK);
@@ -141,7 +144,7 @@ public final class Bootstrap {
 
         if (StringUtils.isNotEmpty(httpsProxy)) {
             Address[] protocols = ProtocolUtil.parseAddress(httpsProxy);
-            if (CommonUtil.isNotEmpty(protocols)) {
+            if (ArrayUtils.isNotEmpty(protocols)) {
                 Address addr = protocols[0];
                 System.setProperty("https.proxyHost", addr.getHost());
                 System.setProperty("https.proxyPort", addr.getPort() + GlobalConstants.BLANK);
@@ -165,7 +168,7 @@ public final class Bootstrap {
 
         if (StringUtils.isNotEmpty(ftpProxy)) {
             Address[] protocols = ProtocolUtil.parseAddress(ftpProxy);
-            if (CommonUtil.isNotEmpty(protocols)) {
+            if (ArrayUtils.isNotEmpty(protocols)) {
                 Address addr = protocols[0];
                 System.setProperty("ftp.proxyHost", addr.getHost());
                 System.setProperty("ftp.proxyPort", addr.getPort() + GlobalConstants.BLANK);
@@ -189,7 +192,7 @@ public final class Bootstrap {
 
         if (StringUtils.isNotEmpty(socksProxy)) {
             Address[] protocols = ProtocolUtil.parseAddress(socksProxy);
-            if (CommonUtil.isNotEmpty(protocols)) {
+            if (ArrayUtils.isNotEmpty(protocols)) {
                 Address addr = protocols[0];
                 System.setProperty("socksProxyHost", addr.getHost());
                 System.setProperty("socksProxyPort", addr.getPort() + GlobalConstants.BLANK);

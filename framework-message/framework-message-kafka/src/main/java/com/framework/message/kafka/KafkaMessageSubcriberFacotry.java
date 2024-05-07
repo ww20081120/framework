@@ -14,7 +14,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.common.utils.thread.MessageThreadPoolExecutor;
+import com.hbasesoft.framework.common.utils.thread.ThreadUtil;
 import com.hbasesoft.framework.message.core.MessageSubcriberFactory;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 
@@ -91,7 +91,7 @@ public class KafkaMessageSubcriberFacotry implements MessageSubcriberFactory {
                     if (records != null) {
 
                         for (ConsumerRecord<String, byte[]> record : records) {
-                            MessageThreadPoolExecutor.execute(channel, () -> {
+                            ThreadUtil.execute(channel, () -> {
                                 subscriber.onMessage(channel, record.value());
                             });
                         }
