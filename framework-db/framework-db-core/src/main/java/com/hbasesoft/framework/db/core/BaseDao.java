@@ -14,6 +14,9 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 
+import com.hbasesoft.framework.db.core.criterial.CriterialDeleteSpecification;
+import com.hbasesoft.framework.db.core.criterial.CriterialQuerySpecification;
+import com.hbasesoft.framework.db.core.criterial.CriterialUpdateSpecification;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
 /**
@@ -85,6 +88,15 @@ public interface BaseDao<T extends BaseEntity> {
     void updateByCriteria(CriteriaUpdate<T> criteria);
 
     /**
+     * Description: 根据条件来做更新<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    void updateBySpecification(CriterialUpdateSpecification<T> specification);
+
+    /**
      * Description: 删除数据<br>
      * 
      * @author 王伟<br>
@@ -130,6 +142,15 @@ public interface BaseDao<T extends BaseEntity> {
     void deleteByCriteria(CriteriaDelete<T> criteria);
 
     /**
+     * Description: 根据条件删除<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    void deleteBySpecification(CriterialDeleteSpecification<T> specification);
+
+    /**
      * Description: 根据id来获取数据<br>
      * 
      * @author 王伟<br>
@@ -162,6 +183,16 @@ public interface BaseDao<T extends BaseEntity> {
     <M> M getByCriteria(CriteriaQuery<M> criteria);
 
     /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    T getBySpecification(CriterialQuerySpecification<T> specification);
+
+    /**
      * Description: 查询所有数据<br>
      * 
      * @author 王伟<br>
@@ -192,6 +223,18 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    PagerList<T> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex, int pageSize);
 
     /**
      * Description: 根据条件查询 <br>

@@ -17,6 +17,7 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.collections.MapUtils;
 import org.hibernate.Criteria;
@@ -39,8 +40,12 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
+import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
+import com.hbasesoft.framework.db.core.criterial.CriterialDeleteSpecification;
+import com.hbasesoft.framework.db.core.criterial.CriterialQuerySpecification;
+import com.hbasesoft.framework.db.core.criterial.CriterialUpdateSpecification;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
@@ -902,7 +907,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
     public <T> void delete(final Collection<T> entities) {
         this.deleteAllEntitie(entities);
     }
-    
+
     /**
      * Description: <br>
      * 
@@ -1209,6 +1214,87 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     public void setEntityClazz(final Class<?> entityClazz) {
         this.entityClazz = entityClazz;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    public void updateBySpecification(final CriterialUpdateSpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaUpdate query = cb.createCriteriaUpdate(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        updateByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    public void deleteBySpecification(final CriterialDeleteSpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaDelete query = cb.createCriteriaDelete(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        deleteByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    public BaseEntity getBySpecification(final CriterialQuerySpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        return (BaseEntity) getByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    public PagerList queryPagerBySpecification(final CriterialQuerySpecification specification, final int pageIndex,
+        final int pageSize) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        return queryPagerByCriteria(query, pageIndex, pageSize);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    public List queryBySpecification(final CriterialQuerySpecification specification) {
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery query = cb.createQuery(getEntityClazz());
+        Root<?> root = query.from(getEntityClazz());
+        specification.build(root, query, cb);
+        return queryByCriteria(query);
     }
 
 }
