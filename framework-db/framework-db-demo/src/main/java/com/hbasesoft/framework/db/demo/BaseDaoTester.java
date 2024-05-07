@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
@@ -179,6 +182,64 @@ public class BaseDaoTester {
         iStudentDao.delete(entity);
 
         entity = iStudentDao.get(id);
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteByCriteria() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        CriteriaBuilder cb = iStudentDao.getCriteriaBuilder();
+        CriteriaDelete<StudentEntity> query = cb.createCriteriaDelete(StudentEntity.class);
+        Root<StudentEntity> root = query.from(StudentEntity.class);
+        query.where(cb.equal(root.get("id"), id));
+        iStudentDao.deleteByCriteria(query);
+
+        entity = iStudentDao.getBySpecification((r1, q1, cb1) -> {
+            return q1.where(cb1.equal(r1.get("id"), id)).getRestriction();
+        });
+
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteBySpecification() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        iStudentDao.deleteBySpecification((r1, q1, cb1) -> {
+            return q1.where(cb1.equal(r1.get("id"), id)).getRestriction();
+        });
+
+        entity = iStudentDao.getBySpecification((r1, q1, cb1) -> {
+            return q1.where(cb1.equal(r1.get("id"), id)).getRestriction();
+        });
+
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -383,10 +444,13 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
-    public void queryByHql() {
-        List<StudentEntity> entities = iStudentDao
-            .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR);
+    public void updateBySpecification() {
+        iStudentDao.updateBySpecification((root, query, cb) -> {
+            return query.set(root.get("name"), "李四").where(cb.equal(root.get("id"), "1")).getRestriction();
+        });
+
+        StudentEntity e2 = iStudentDao.get("1");
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -409,6 +473,21 @@ public class BaseDaoTester {
 
         StudentEntity e2 = iStudentDao.get("1");
         Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void queryByHql() {
+        List<StudentEntity> entities = iStudentDao
+            .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+        Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**

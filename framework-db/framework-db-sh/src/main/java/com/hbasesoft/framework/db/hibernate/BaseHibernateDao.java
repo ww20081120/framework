@@ -39,6 +39,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
@@ -999,7 +1000,13 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     public <T> T getByCriteria(final CriteriaQuery<T> criteria) {
         org.hibernate.query.Query<T> query = getSession().createQuery(criteria);
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        }
+        catch (javax.persistence.NoResultException e) {
+            LoggerUtil.warn(e.getMessage());
+        }
+        return null;
     }
 
     /**
