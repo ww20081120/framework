@@ -7,6 +7,7 @@ package com.hbasesoft.framework.db.core.criterial;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -30,7 +31,8 @@ public interface CriterialDeleteSpecification<T> {
      * @taskId <br>
      * @param root
      * @param delete
-     * @param criteriaBuilder <br>
+     * @param criteriaBuilder
+     * @return <br>
      */
-    void build(Root<T> root, CriteriaDelete<T> delete, CriteriaBuilder criteriaBuilder);
+    Predicate toPredicate(Root<T> root, CriteriaDelete<T> delete, CriteriaBuilder criteriaBuilder);
 }

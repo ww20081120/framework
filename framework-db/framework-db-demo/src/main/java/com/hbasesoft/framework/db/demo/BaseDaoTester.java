@@ -451,6 +451,20 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void queryPagerBySpecification() {
+        PagerList<StudentEntity> entities = iStudentDao.queryPagerBySpecification(null, 1, 1);
+        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void queryByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
         criteria.add(Restrictions.eq(StudentEntity.AGE, NUM_18));
@@ -469,10 +483,47 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void queryBySpecification() {
+        List<StudentEntity> es1 = iStudentDao.queryBySpecification((root, query, cb) -> {
+            return query.where(cb.equal(root.get(StudentEntity.AGE), NUM_18)).getRestriction();
+        });
+
+        List<StudentEntity> es2 = iStudentDao.queryByProperty(StudentEntity.AGE, NUM_18);
+        Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void getByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(CourseEntity.class);
         criteria.add(Restrictions.eq(CourseEntity.COURSE_NAME, "语文"));
         CourseEntity e1 = iCourseDao.getByCriteria(criteria);
+
+        CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
+
+        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void getBySpecification() {
+        CourseEntity e1 = iCourseDao.getBySpecification((root, query, cb) -> {
+            return query.where(cb.equal(root.get(CourseEntity.COURSE_NAME), "语文")).getRestriction();
+        });
 
         CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
 

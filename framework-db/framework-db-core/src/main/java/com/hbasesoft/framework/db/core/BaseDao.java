@@ -246,4 +246,14 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     <M> List<M> queryByCriteria(CriteriaQuery<M> criteria);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    List<T> queryBySpecification(CriterialQuerySpecification<T> specification);
 }

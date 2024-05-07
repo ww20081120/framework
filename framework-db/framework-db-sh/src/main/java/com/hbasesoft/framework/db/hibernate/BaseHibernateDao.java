@@ -63,6 +63,9 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 })
 public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
+    /** 匿名 */
+    private static final String ALIAS = "QUERY_DATA__";
+
     /** Number */
     private static final int NUM_100 = 100;
 
@@ -151,7 +154,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
                 query.setMaxResults(param.getPageSize());
 
-                SQLQuery countQuery = session.createSQLQuery("SELECT COUNT(1) FROM (" + sql + ") QUERY_DATA__");
+                SQLQuery countQuery = session.createSQLQuery(new StringBuilder().append("SELECT COUNT(1) FROM (")
+                    .append(sql).append(") ").append(ALIAS).toString());
                 setParamMap(param.getParamMap(), countQuery);
                 resultList = new PagerList();
                 resultList.setPageIndex(param.getPageIndex());
@@ -160,7 +164,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
                 isPager = true;
             }
 
-            if (isPager) {
+            if (isPager && resultList != null) {
                 if (resultList.getTotalCount() > 0
                     && (resultList.getPageIndex() - 1) * resultList.getPageSize() < resultList.getTotalCount()) {
                     resultList.addAll(query.list());
@@ -1065,10 +1069,17 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @return <br>
      */
     public <T> PagerList<T> queryPagerByCriteria(final CriteriaQuery<T> criteria, final int pi, final int pageSize) {
+        criteria.getRoots().forEach(r -> {
+            r.alias(ALIAS);
+        });
+
         // 查询总页数据
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        countCriteria.select(builder.count(criteria.getRoots().iterator().next()));
+
+        Root<?> root = countCriteria.from(criteria.getRoots().iterator().next().getJavaType());
+        root.alias(ALIAS);
+        countCriteria.select(builder.count(root));
         // 复制原criteria中的所有where条件（如果有）
         Predicate predicate = criteria.getRestriction();
         if (predicate != null) {
@@ -1227,7 +1238,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         CriteriaBuilder cb = getCriteriaBuilder();
         CriteriaUpdate query = cb.createCriteriaUpdate(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         updateByCriteria(query);
     }
 
@@ -1242,7 +1255,9 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         CriteriaBuilder cb = getCriteriaBuilder();
         CriteriaDelete query = cb.createCriteriaDelete(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         deleteByCriteria(query);
     }
 
@@ -1258,7 +1273,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         CriteriaBuilder cb = getCriteriaBuilder();
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        query.select(root);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         return (BaseEntity) getByCriteria(query);
     }
 
@@ -1277,7 +1295,10 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         CriteriaBuilder cb = getCriteriaBuilder();
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        query.select(root);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         return queryPagerByCriteria(query, pageIndex, pageSize);
     }
 
@@ -1293,7 +1314,8 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         CriteriaBuilder cb = getCriteriaBuilder();
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        query.select(root);
+        specification.toPredicate(root, query, cb);
         return queryByCriteria(query);
     }
 
