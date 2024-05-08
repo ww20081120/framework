@@ -10,6 +10,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * <Description> T_MEM_ACCOUNT的Entity<br>
  * 
@@ -19,6 +22,8 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.api.bean.BaseEntity <br>
  */
+@Getter
+@Setter
 @Entity(name = "T_STUDENT")
 public class StudentEntity extends BaseEntity {
 
@@ -46,7 +51,7 @@ public class StudentEntity extends BaseEntity {
 
     /** age */
     @Column(name = "AGE")
-    private int age;
+    private Integer age;
 
     /** score */
     @Transient
@@ -55,115 +60,5 @@ public class StudentEntity extends BaseEntity {
     /** course name */
     @Transient
     private String courseName;
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id <br>
-     */
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param name <br>
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public int getAge() {
-        return age;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param age <br>
-     */
-    public void setAge(final int age) {
-        this.age = age;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public Integer getScore() {
-        return score;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param score <br>
-     */
-    public void setScore(final Integer score) {
-        this.score = score;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public String getCourseName() {
-        return courseName;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param courseName <br>
-     */
-    public void setCourseName(final String courseName) {
-        this.courseName = courseName;
-    }
 
 }

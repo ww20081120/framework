@@ -1345,7 +1345,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param specification <br>
      */
-    public void updateByQuery(final UpdateSpecification specification) {
+    public void update(final UpdateSpecification specification) {
         updateBySpecification(specification.toSpecification(new UpdateWrapper<>()));
     }
 
@@ -1356,7 +1356,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param specification <br>
      */
-    public void updateByLambdaQuery(final LambdaUpdateSpecification specification) {
+    public void updateByLambda(final LambdaUpdateSpecification specification) {
         updateBySpecification(specification.toSpecification(new LambdaUpdateWrapper<>()));
     }
 
@@ -1367,7 +1367,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param specification <br>
      */
-    public void deleteByQuery(final DeleteSpecification specification) {
+    public void delete(final DeleteSpecification specification) {
         deleteBySpecification(specification.toSpecification(new DeleteWrapper<>()));
     }
 
@@ -1378,7 +1378,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @taskId <br>
      * @param specification <br>
      */
-    public void deleteByLambdaQuery(final LambdaDeleteSpecification specification) {
+    public void deleteByLambda(final LambdaDeleteSpecification specification) {
         deleteBySpecification(specification.toSpecification(new LambdaDeleteWrapper<>()));
     }
 
@@ -1390,7 +1390,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param specification
      * @return <br>
      */
-    public BaseEntity getByQuery(final QuerySpecification specification) {
+    public BaseEntity get(final QuerySpecification specification) {
         return getBySpecification(specification.toSpecification(new QueryWrapper<>()));
     }
 
@@ -1402,7 +1402,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param specification
      * @return <br>
      */
-    public BaseEntity getByLambdaQuery(final LambdaQuerySpecification specification) {
+    public BaseEntity getByLambda(final LambdaQuerySpecification specification) {
         return getBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
     }
 
@@ -1416,8 +1416,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param pageSize
      * @return <br>
      */
-    public PagerList queryPagerByQuery(final QuerySpecification specification, final int pageIndex,
-        final int pageSize) {
+    public PagerList queryPager(final QuerySpecification specification, final int pageIndex, final int pageSize) {
         return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize);
     }
 
@@ -1431,7 +1430,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param pageSize
      * @return <br>
      */
-    public PagerList queryPagerByLambdaQuery(final LambdaQuerySpecification specification, final int pageIndex,
+    public PagerList queryPagerByLambda(final LambdaQuerySpecification specification, final int pageIndex,
         final int pageSize) {
         return queryPagerBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), pageIndex,
             pageSize);
@@ -1445,7 +1444,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param specification
      * @return <br>
      */
-    public List queryByQuery(final QuerySpecification specification) {
+    public List query(final QuerySpecification specification) {
         return queryBySpecification(specification.toSpecification(new QueryWrapper<>()));
     }
 
@@ -1457,7 +1456,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      * @param specification
      * @return <br>
      */
-    public List queryByLambdaQuery(final LambdaQuerySpecification specification) {
+    public List queryByLambda(final LambdaQuerySpecification specification) {
         return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
     }
 }

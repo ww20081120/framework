@@ -64,7 +64,7 @@ public class SerializedLambda implements Serializable {
             throw new RuntimeException("该方法仅能传入 lambda 表达式产生的合成类");
         }
         try (ObjectInputStream objIn = new ObjectInputStream(
-            new ByteArrayInputStream(SerializationUtil.serial(lambda))) {
+            new ByteArrayInputStream(SerializationUtil.jdkSerial(lambda))) {
             @Override
             protected Class<?> resolveClass(final ObjectStreamClass objectStreamClass)
                 throws IOException, ClassNotFoundException {

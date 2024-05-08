@@ -68,7 +68,7 @@ public class LambdaSett {
             fieldType = DATE;
         }
         else {
-            throw new RuntimeException("Wrapper<T> 只能用于 number str date ");
+            throw new RuntimeException("Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
         }
     }
 

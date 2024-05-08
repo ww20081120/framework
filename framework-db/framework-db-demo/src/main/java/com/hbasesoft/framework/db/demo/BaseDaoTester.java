@@ -260,9 +260,33 @@ public class BaseDaoTester {
         iStudentDao.save(entity);
         String id = entity.getId();
 
-        iStudentDao.deleteByQuery(q -> q.eq("id", id).build());
+        iStudentDao.delete(q -> q.eq("id", id).build());
 
-        entity = iStudentDao.getByQuery(q -> q.eq("id", id).build());
+        entity = iStudentDao.get(q -> q.eq("id", id).build());
+
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteByLambdaQuery() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        iStudentDao.deleteByLambda(q -> q.eq(StudentEntity::getId, id).build());
+
+        entity = iStudentDao.getByLambda(q -> q.eq(StudentEntity::getId, id).build());
 
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
@@ -486,6 +510,38 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void updateByQuery() {
+        iStudentDao.update(q -> q.set("name", "李四").eq("id", 1).build());
+
+        StudentEntity e2 = iStudentDao.get("1");
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void updateByLambdaQuery() {
+        iStudentDao.updateByLambda(q -> q.set(StudentEntity::getName, "李四").eq(StudentEntity::getId, 1).build());
+
+        StudentEntity e2 = iStudentDao.get("1");
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void updateBySql() {
         StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
@@ -569,8 +625,23 @@ public class BaseDaoTester {
     @Test
     @Transactional
     public void queryPagerByQuery() {
-        PagerList<StudentEntity> entities = iStudentDao.queryPagerByQuery(q -> q.eq("name", "张三").build(), 1, 1);
-        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
+        PagerList<StudentEntity> entities = iStudentDao.queryPager(q -> q.eq("name", "张三").build(), 1, 1);
+        Assert.isTrue(entities.size() == entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void queryPagerByLambdaQuery() {
+        PagerList<StudentEntity> entities = iStudentDao
+            .queryPagerByLambda(q -> q.eq(StudentEntity::getName, "张三").build(), 1, 1);
+        Assert.isTrue(entities.size() == entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -618,6 +689,34 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void queryByQuery() {
+        List<StudentEntity> es1 = iStudentDao.query(q -> q.eq("age", NUM_18).build());
+        Assert.isTrue(es1.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void queryByLambdaQuery() {
+        List<StudentEntity> es1 = iStudentDao.queryByLambda(q -> q.eq(StudentEntity::getAge, NUM_18).build());
+        Assert.isTrue(es1.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void getByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(CourseEntity.class);
         criteria.add(Restrictions.eq(CourseEntity.COURSE_NAME, "语文"));
@@ -641,6 +740,40 @@ public class BaseDaoTester {
         CourseEntity e1 = iCourseDao.getBySpecification((root, query, cb) -> {
             return query.where(cb.equal(root.get(CourseEntity.COURSE_NAME), "语文")).getRestriction();
         });
+
+        CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
+
+        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void getByQuery() {
+        CourseEntity e1 = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
+
+        CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
+
+        Assert.equals(e1.getId(), e2.getId(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void getByLambdaQuery() {
+        CourseEntity e1 = iCourseDao.getByLambda(q -> q.eq(CourseEntity::getCourseName, "语文").build());
 
         CourseEntity e2 = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
 

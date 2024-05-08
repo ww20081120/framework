@@ -108,7 +108,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void updateByQuery(UpdateSpecification<T> specification);
+    void update(UpdateSpecification<T> specification);
 
     /**
      * Description: 根据条件来做更新<br>
@@ -117,7 +117,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void updateByLambdaQuery(LambdaUpdateSpecification<T> specification);
+    void updateByLambda(LambdaUpdateSpecification<T> specification);
 
     /**
      * Description: 删除数据<br>
@@ -180,7 +180,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void deleteByQuery(DeleteSpecification<T> specification);
+    void delete(DeleteSpecification<T> specification);
 
     /**
      * Description: 根据条件删除<br>
@@ -189,7 +189,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void deleteByLambdaQuery(LambdaDeleteSpecification<T> specification);
+    void deleteByLambda(LambdaDeleteSpecification<T> specification);
 
     /**
      * Description: 根据id来获取数据<br>
@@ -241,7 +241,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    T getByQuery(QuerySpecification<T> specification);
+    T get(QuerySpecification<T> specification);
 
     /**
      * Description: 根据条件查询 <br>
@@ -251,7 +251,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    T getByLambdaQuery(LambdaQuerySpecification<T> specification);
+    T getByLambda(LambdaQuerySpecification<T> specification);
 
     /**
      * Description: 查询所有数据<br>
@@ -307,7 +307,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPagerByQuery(QuerySpecification<T> specification, int pageIndex, int pageSize);
+    PagerList<T> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize);
 
     /**
      * Description: <br>
@@ -319,7 +319,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPagerByLambdaQuery(LambdaQuerySpecification<T> specification, int pageIndex, int pageSize);
+    PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T> specification, int pageIndex, int pageSize);
 
     /**
      * Description: 根据条件查询 <br>
@@ -350,7 +350,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    List<T> queryByQuery(QuerySpecification<T> specification);
+    List<T> query(QuerySpecification<T> specification);
 
     /**
      * Description: 根据条件查询 <br>
@@ -360,7 +360,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    List<T> queryByLambdaQuery(LambdaQuerySpecification<T> specification);
+    List<T> queryByLambda(LambdaQuerySpecification<T> specification);
 
     /**
      * <Description> <br>
