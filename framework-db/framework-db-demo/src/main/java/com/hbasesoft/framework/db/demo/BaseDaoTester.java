@@ -544,6 +544,20 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void queryPagerByQuery() {
+        PagerList<StudentEntity> entities = iStudentDao.queryPagerByQuery(q -> q.eq("name", "张三").build(), 1, 1);
+        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void queryByCriteria() {
         DetachedCriteria criteria = DetachedCriteria.forClass(StudentEntity.class);
         criteria.add(Restrictions.eq(StudentEntity.AGE, NUM_18));

@@ -41,15 +41,27 @@ import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
+import com.hbasesoft.framework.db.core.BaseDao.CriterialDeleteSpecification;
+import com.hbasesoft.framework.db.core.BaseDao.CriterialQuerySpecification;
+import com.hbasesoft.framework.db.core.BaseDao.CriterialUpdateSpecification;
+import com.hbasesoft.framework.db.core.BaseDao.DeleteSpecification;
+import com.hbasesoft.framework.db.core.BaseDao.LambdaDeleteSpecification;
+import com.hbasesoft.framework.db.core.BaseDao.LambdaQuerySpecification;
+import com.hbasesoft.framework.db.core.BaseDao.LambdaUpdateSpecification;
+import com.hbasesoft.framework.db.core.BaseDao.QuerySpecification;
+import com.hbasesoft.framework.db.core.BaseDao.UpdateSpecification;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
-import com.hbasesoft.framework.db.core.criterial.CriterialDeleteSpecification;
-import com.hbasesoft.framework.db.core.criterial.CriterialQuerySpecification;
-import com.hbasesoft.framework.db.core.criterial.CriterialUpdateSpecification;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
+import com.hbasesoft.framework.db.core.wrapper.DeleteWrapper;
+import com.hbasesoft.framework.db.core.wrapper.LambdaDeleteWrapper;
+import com.hbasesoft.framework.db.core.wrapper.LambdaQueryWrapper;
+import com.hbasesoft.framework.db.core.wrapper.LambdaUpdateWrapper;
+import com.hbasesoft.framework.db.core.wrapper.QueryWrapper;
+import com.hbasesoft.framework.db.core.wrapper.UpdateWrapper;
 
 /**
  * <Description> <br>
@@ -1326,4 +1338,126 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         return queryByCriteria(query);
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    public void updateByQuery(final UpdateSpecification specification) {
+        updateBySpecification(specification.toSpecification(new UpdateWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    public void updateByLambdaQuery(final LambdaUpdateSpecification specification) {
+        updateBySpecification(specification.toSpecification(new LambdaUpdateWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    public void deleteByQuery(final DeleteSpecification specification) {
+        deleteBySpecification(specification.toSpecification(new DeleteWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    public void deleteByLambdaQuery(final LambdaDeleteSpecification specification) {
+        deleteBySpecification(specification.toSpecification(new LambdaDeleteWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    public BaseEntity getByQuery(final QuerySpecification specification) {
+        return getBySpecification(specification.toSpecification(new QueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    public BaseEntity getByLambdaQuery(final LambdaQuerySpecification specification) {
+        return getBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    public PagerList queryPagerByQuery(final QuerySpecification specification, final int pageIndex,
+        final int pageSize) {
+        return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    public PagerList queryPagerByLambdaQuery(final LambdaQuerySpecification specification, final int pageIndex,
+        final int pageSize) {
+        return queryPagerBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), pageIndex,
+            pageSize);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    public List queryByQuery(final QuerySpecification specification) {
+        return queryBySpecification(specification.toSpecification(new QueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    public List queryByLambdaQuery(final LambdaQuerySpecification specification) {
+        return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
 }

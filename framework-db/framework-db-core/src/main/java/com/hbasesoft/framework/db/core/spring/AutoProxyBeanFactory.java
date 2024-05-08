@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.lang.NonNull;
 
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -75,7 +77,8 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
      * @throws BeansException <br>
      */
     @Override
-    public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    public void postProcessBeanFactory(final @NonNull ConfigurableListableBeanFactory beanFactory)
+        throws BeansException {
 
         ComponentScan componentScanAnnotation = findComponentScanAnnotation(beanFactory);
 
@@ -146,6 +149,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         return null;
     }
 
+    @NotNull
     private DaoHandler getDaoHandler(final Class<?> clazz) {
         DaoHandler handler = new DaoHandler();
         handler.setDaoConfig(config);
