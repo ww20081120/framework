@@ -41,7 +41,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
             }
 
             if (this.orderByList.isEmpty()) {
-                return cb.and(predicates);
+                return query.where(predicates).getRestriction();
             }
             else {
                 Order[] orders = new Order[this.orderByList.size()];

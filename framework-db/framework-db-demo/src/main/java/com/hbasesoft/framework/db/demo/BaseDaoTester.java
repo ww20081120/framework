@@ -248,6 +248,30 @@ public class BaseDaoTester {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteByQuery() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        iStudentDao.deleteByQuery(q -> q.eq("id", id).build());
+
+        entity = iStudentDao.getByQuery(q -> q.eq("id", id).build());
+
+        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @throws UnsupportedEncodingException
      * @throws FileNotFoundException <br>
      */
