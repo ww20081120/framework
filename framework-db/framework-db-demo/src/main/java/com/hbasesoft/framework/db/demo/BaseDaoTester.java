@@ -611,8 +611,10 @@ public class BaseDaoTester {
     @Test
     @Transactional
     public void queryPagerBySpecification() {
-        PagerList<StudentEntity> entities = iStudentDao.queryPagerBySpecification(null, 1, 1);
-        Assert.isTrue(entities.size() < entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
+        PagerList<StudentEntity> entities = iStudentDao.queryPagerBySpecification((root, query, cb) -> {
+            return query.where(cb.equal(root.get("name"), "张三")).getRestriction();
+        }, 1, 1);
+        Assert.isTrue(entities.size() == entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
