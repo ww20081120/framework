@@ -90,6 +90,7 @@ public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
      * @param detachedCriteria
      * @return <br>
      */
+    @Deprecated
     List<T> queryByCriteria(DetachedCriteria detachedCriteria);
 
     /**
