@@ -26,12 +26,12 @@ import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
-import com.hbasesoft.framework.db.demo.entity.QCourseEntity;
-import com.hbasesoft.framework.db.demo.entity.QStudentEntity;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
-import com.querydsl.core.Tuple;
 
 import jakarta.annotation.Resource;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 /**
  * <Description> <br>
@@ -105,9 +105,12 @@ public class BaseDaoTester {
     @Test
     @Transactional
     public void countCourse() {
-        QCourseEntity qm = QCourseEntity.courseEntity;
-        Tuple count = iCourseDao.select(qm.id.count()).fetchOne();
-        Assert.isTrue(count.get(0, Long.class).intValue() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+        CriteriaBuilder cb = iCourseDao.criteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<CourseEntity> root = query.from(CourseEntity.class);
+        query.select(cb.count(root));
+        Long count = iCourseDao.getByCriteria(query);
+        Assert.isTrue(count.intValue() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
     }
 
     /**
@@ -213,11 +216,9 @@ public class BaseDaoTester {
 
         iStudentDao.save(entity);
         String id = entity.getId();
+        iStudentDao.delete(q -> q.eq("id", id).build());
+        entity = iStudentDao.get(q -> q.eq("id", id).build());
 
-        QStudentEntity qm = QStudentEntity.studentEntity;
-        iStudentDao.delete().where(qm.id.eq(id)).execute();
-
-        entity = iStudentDao.select().where(qm.id.eq(id)).fetchFirst();
         Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -306,7 +307,7 @@ public class BaseDaoTester {
     @Test
     @Transactional
     public void getByProperty() {
-        CourseEntity entity = iCourseDao.getByProperty(CourseEntity.COURSE_NAME, "语文");
+        CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
         Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -320,7 +321,7 @@ public class BaseDaoTester {
     @Test
     @Transactional
     public void queryByProperty() {
-        List<StudentEntity> entities = iStudentDao.queryByProperty(StudentEntity.AGE, NUM_18);
+        List<StudentEntity> entities = iStudentDao.query(q -> q.eq(StudentEntity.AGE, NUM_18).build());
         Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -426,14 +427,10 @@ public class BaseDaoTester {
     @Test
     @Transactional
     public void update2() {
-        QStudentEntity qm = QStudentEntity.studentEntity;
-        StudentEntity entity = iStudentDao.select().where(qm.id.eq("1")).fetchFirst();
-        System.out.println(entity);
+        StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
-        entity.setName("李四");
-        iStudentDao.update().set(qm.name, "李四").where(qm.id.eq("1")).execute();
-
-        StudentEntity e2 = iStudentDao.select().where(qm.id.eq("1")).fetchFirst();
+        iStudentDao.update(q -> q.set("name", "李四").eq("id", "id").build());
+        StudentEntity e2 = iStudentDao.get("1");
         Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
     }
 

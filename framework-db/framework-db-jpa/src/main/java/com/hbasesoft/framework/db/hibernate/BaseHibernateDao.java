@@ -12,10 +12,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.hibernate.query.MutationQuery;
@@ -32,17 +32,15 @@ import com.hbasesoft.framework.db.TransactionManagerHolder;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
+import com.hbasesoft.framework.db.core.criteria.DeleteWrapper;
+import com.hbasesoft.framework.db.core.criteria.LambdaDeleteWrapper;
+import com.hbasesoft.framework.db.core.criteria.LambdaQueryWrapper;
+import com.hbasesoft.framework.db.core.criteria.LambdaUpdateWrapper;
+import com.hbasesoft.framework.db.core.criteria.QueryWrapper;
+import com.hbasesoft.framework.db.core.criteria.UpdateWrapper;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.dml.DeleteClause;
-import com.querydsl.core.dml.UpdateClause;
-import com.querydsl.core.types.EntityPath;
-import com.querydsl.core.types.Expression;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.JPQLQueryFactory;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -67,6 +65,9 @@ import jakarta.persistence.criteria.Root;
 })
 public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
 
+    /** 匿名 */
+    private static final String ALIAS = "QUERY_DATA__";
+
     /** Number */
     private static final int NUM_100 = 100;
 
@@ -76,12 +77,6 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
     /** entity class */
     private Class<?> entityClazz;
 
-    /** jpaQueryFactory */
-    private JPAQueryFactory jpaQueryFactory;
-
-    /** jpaEntity */
-    private EntityPath<?> jpaEntity;
-
     /**
      * Description: <br>
      * 
@@ -90,7 +85,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * @return <br>
      */
     @Override
-    public CriteriaBuilder getCriteriaBuilder() {
+    public CriteriaBuilder criteriaBuilder() {
         return getSession().getCriteriaBuilder();
     }
 
@@ -319,35 +314,6 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param propertyName
-     * @param value
-     * @return <br>
-     */
-    @Override
-    public BaseEntity getByProperty(final String propertyName, final Object value) {
-        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
-
-        // 确保实体类上有@Entity注解
-        Class<?> entityType = getEntityClazz();
-        if (!entityType.isAnnotationPresent(Entity.class)) {
-            throw new IllegalArgumentException("The provided class is not an Entity.");
-        }
-        // 构建HQL或Criteria删除语句
-        String hql = new StringBuilder().append("FROM ").append(entityType.getName()).append(" WHERE ")
-            .append(propertyName).append(" = :value").toString();
-
-        Query query = getSession().createQuery(hql, entityType);
-        query.setParameter("value", value);
-
-        // 获取唯一结果，如果不存在则返回null
-        return (BaseEntity) query.getSingleResult();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param criteria
      * @return <br>
      */
@@ -384,35 +350,6 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param propertyName
-     * @param value
-     * @return <br>
-     */
-    @Override
-    public List queryByProperty(final String propertyName, final Object value) {
-        Assert.notEmpty(propertyName, ErrorCodeDef.DAO_PROPERTY_IS_EMPTY);
-
-        // 确保实体类上有@Entity注解
-        Class<?> entityType = getEntityClazz();
-        if (!entityType.isAnnotationPresent(Entity.class)) {
-            throw new IllegalArgumentException("The provided class is not an Entity.");
-        }
-
-        // 构建HQL或Criteria删除语句
-        String hql = new StringBuilder().append("FROM ").append(entityType.getName()).append(" WHERE ")
-            .append(propertyName).append(" = :value").toString();
-
-        Query query = getSession().createQuery(hql, entityType);
-        query.setParameter("value", value);
-        query.setMaxResults(MAX_SIZE);
-        return query.getResultList();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @param criteria
      * @param pi
      * @param pageSize
@@ -420,11 +357,18 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      */
     @Override
     public PagerList queryPagerByCriteria(final CriteriaQuery criteria, final int pi, final int pageSize) {
-        // 查询总页数据
-        CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        countCriteria.select(builder.count((Root) criteria.getRoots().iterator().next()));
+        Set<Root<?>> roots = criteria.getRoots();
+        roots.forEach(r -> {
+            r.alias(ALIAS);
+        });
 
+        // 查询总页数据
+        CriteriaBuilder builder = criteriaBuilder();
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+
+        Root<?> root = countCriteria.from(roots.iterator().next().getJavaType());
+        root.alias(ALIAS);
+        countCriteria.select(builder.count(root));
         // 复制原criteria中的所有where条件（如果有）
         Predicate predicate = criteria.getRestriction();
         if (predicate != null) {
@@ -455,6 +399,7 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
             resultList.addAll(query.getResultList());
         }
         return resultList;
+
     }
 
     /**
@@ -534,8 +479,8 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
                 query.setFirstResult((param.getPageIndex() - 1) * param.getPageSize());
                 query.setMaxResults(param.getPageSize());
 
-                NativeQuery countQuery = session.createNativeQuery("SELECT COUNT(1) FROM (" + sql + ") QUERY_DATA__",
-                    Long.class);
+                NativeQuery countQuery = session.createNativeQuery(new StringBuilder().append("SELECT COUNT(1) FROM (")
+                    .append(sql).append(") ").append(ALIAS).toString(), Long.class);
                 setParamMap(param.getParamMap(), countQuery);
                 resultList = new PagerList();
                 resultList.setPageIndex(param.getPageIndex());
@@ -874,36 +819,6 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         return entityClazz;
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    protected JPQLQueryFactory getJpaQueryFactory() {
-        if (jpaQueryFactory == null) {
-            jpaQueryFactory = new JPAQueryFactory(getSession());
-            Class<?> clazz = getEntityClazz();
-            if (BaseEntity.class.isAssignableFrom(clazz)) {
-                String clazzName = StringUtils.uncapitalize(clazz.getSimpleName());
-                String qName = new StringBuilder(clazz.getName())
-                    .insert(clazz.getName().length() - clazzName.length(), 'Q').toString();
-                try {
-                    Class<EntityPath<?>> qClazz = (Class<EntityPath<?>>) Class.forName(qName);
-                    Field field = qClazz.getField(clazzName);
-                    if (field != null) {
-                        jpaEntity = (EntityPath<?>) field.get(null);
-                    }
-                }
-                catch (Exception e) {
-                    LoggerUtil.error(e);
-                }
-            }
-        }
-        return jpaQueryFactory;
-    }
-
     private Field findPrimaryKeyField(final Class<?> clazz) {
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -945,126 +860,16 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      * 
      * @author ww200<br>
      * @taskId <br>
-     * @param exprs
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery<Tuple> select(final Expression... exprs) {
-        return getJpaQueryFactory().select(exprs).from(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public DeleteClause delete() {
-        return getJpaQueryFactory().delete(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @param expr
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery select(final Expression expr) {
-        return getJpaQueryFactory().select(expr).from(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @param expr
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery selectDistinct(final Expression expr) {
-        return getJpaQueryFactory().selectDistinct(expr).from(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @param exprs
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery selectDistinct(final Expression... exprs) {
-        return getJpaQueryFactory().selectDistinct(exprs).from(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery selectOne() {
-        return getJpaQueryFactory().selectOne().from(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery selectZero() {
-        return getJpaQueryFactory().selectZero().from(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public JPQLQuery select() {
-        return getJpaQueryFactory().selectFrom(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public UpdateClause update() {
-        return getJpaQueryFactory().update(jpaEntity);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author ww200<br>
-     * @taskId <br>
      * @param specification <br>
      */
     @Override
     public void updateBySpecification(final CriterialUpdateSpecification specification) {
-        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaBuilder cb = criteriaBuilder();
         CriteriaUpdate query = cb.createCriteriaUpdate(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         updateByCriteria(query);
     }
 
@@ -1077,11 +882,14 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      */
     @Override
     public void deleteBySpecification(final CriterialDeleteSpecification specification) {
-        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaBuilder cb = criteriaBuilder();
         CriteriaDelete query = cb.createCriteriaDelete(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         deleteByCriteria(query);
+
     }
 
     /**
@@ -1094,11 +902,15 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      */
     @Override
     public BaseEntity getBySpecification(final CriterialQuerySpecification specification) {
-        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaBuilder cb = criteriaBuilder();
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        query.select(root);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         return (BaseEntity) getByCriteria(query);
+
     }
 
     /**
@@ -1114,11 +926,15 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
     @Override
     public PagerList queryPagerBySpecification(final CriterialQuerySpecification specification, final int pageIndex,
         final int pageSize) {
-        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaBuilder cb = criteriaBuilder();
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        query.select(root);
+        if (specification != null) {
+            specification.toPredicate(root, query, cb);
+        }
         return queryPagerByCriteria(query, pageIndex, pageSize);
+
     }
 
     /**
@@ -1131,10 +947,143 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
      */
     @Override
     public List queryBySpecification(final CriterialQuerySpecification specification) {
-        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaBuilder cb = criteriaBuilder();
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        specification.build(root, query, cb);
+        query.select(root);
+        specification.toPredicate(root, query, cb);
         return queryByCriteria(query);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    @Override
+    public BaseEntity get(final QuerySpecification specification) {
+        return getBySpecification(specification.toSpecification(new QueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    @Override
+    public BaseEntity getByLambda(final LambdaQuerySpecification specification) {
+        return getBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    @Override
+    public List query(final QuerySpecification specification) {
+        return queryBySpecification(specification.toSpecification(new QueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    @Override
+    public List queryByLambda(final LambdaQuerySpecification specification) {
+        return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    @Override
+    public PagerList queryPager(final QuerySpecification specification, final int pageIndex, final int pageSize) {
+        return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    @Override
+    public PagerList queryPagerByLambda(final LambdaQuerySpecification specification, final int pageIndex,
+        final int pageSize) {
+        return queryPagerBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), pageIndex,
+            pageSize);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    @Override
+    public void update(final UpdateSpecification specification) {
+        updateBySpecification(specification.toSpecification(new UpdateWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    @Override
+    public void updateByLambda(final LambdaUpdateSpecification specification) {
+        updateBySpecification(specification.toSpecification(new LambdaUpdateWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    @Override
+    public void delete(final DeleteSpecification specification) {
+        deleteBySpecification(specification.toSpecification(new DeleteWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification <br>
+     */
+    @Override
+    public void deleteByLambda(final LambdaDeleteSpecification specification) {
+        deleteBySpecification(specification.toSpecification(new LambdaDeleteWrapper<>()));
     }
 }

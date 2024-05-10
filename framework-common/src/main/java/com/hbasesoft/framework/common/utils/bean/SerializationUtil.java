@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -42,6 +43,27 @@ public final class SerializationUtil {
      * INIT_SIZE
      */
     private static final int INIT_SIZE = 1024;
+
+    /**
+     * Deep clone an {@code Object} using serialization.
+     * <p>
+     * This is many times slower than writing clone methods by hand on all objects in your object graph. However, for
+     * complex object graphs, or for those that don't support deep cloning this can be a simple alternative
+     * implementation. Of course all the objects must be {@code Serializable}.
+     * </p>
+     *
+     * @param <T> the type of the object involved
+     * @param object the {@code Serializable} object to clone
+     * @return the cloned object
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Serializable> T clone(final T object) {
+        if (object == null) {
+            return null;
+        }
+        final byte[] objectData = serial(object);
+        return (T) unserial(object.getClass(), objectData);
+    }
 
     /**
      * Description: <br>
