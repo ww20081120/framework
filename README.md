@@ -21,7 +21,7 @@ Framework框架集成了log、cache、db、message、rule、tx，每块都以模
 + [framework-shell] 控制台方式提供命令操作，支持自定义各种命令，做各种小工具使用。
 + [framework-langchain4j] 对langchain4j的补充，支持国内的大模型，让大家更高效的开发AIGC应用。
 
->> jdk1.8请使用framework3.X版本，framework4.X已升级至jdk21版本
+> jdk1.8请使用framework3.X版本，framework4.X已升级至jdk21版本
 
 ## <p id="framework-db">framework-db</p>具有以下特征:
 
