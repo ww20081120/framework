@@ -12,7 +12,7 @@ Framework 4.X 框架说明
 Framework框架集成了log、cache、db、message、rule、tx，每块都以模块形式组织，可以根据项目需要获取模块。
 
 + framework-common 定义公用的常量、工具类 采用了spring-boot方式启动， 启动类为Application， 也可以支持web方式启动。
-+ framework-log 分布式集成日志模块，详细的记录了每个方法执行的参数、返回结果、执行时间，可以很方便的排查问题或告警，通过远程接口上传服务器（支持直连服务端，也支持通过kafka发送）
++ framework-tracing 打印可观测日志，详细的记录了每个方法执行的参数、返回结果、执行时间，可以很方便的排查问题或告警，通过远程接口上传服务器（支持直连服务端，也支持通过kafka发送）
 + framework-cache 定义了缓存的获取。  支持注解方式访问缓存， 支持基于Redis的分布式锁
 + [framework-db](#framework-db) 是简单易用的轻量级DAO(Data Access Object)框架，它集成了Hibernate实体维护和Mybaits SQL分离的两大优势，提供了非入侵式API，可以与Hibernate、SpringJdbc等数据库框架很好的集成 
 + framework-job 基于[ElasticJob](http://elasticjob.io)简单封装的定时器，支持分布式、分片等功能
@@ -31,9 +31,10 @@ Framework框架集成了log、cache、db、message、rule、tx，每块都以模
 4. 可以自动生成SQL语句  
 5. 接口和实现分离，不用写持久层代码，用户只需写接口，以及某些接口方法对应的sql 它会通过动态代理自动生成实现类  
 6. 支持自动事务处理和手动事务处理  
-7. MiniDao整合了Hibernate+mybatis的两大优势，支持实体维护和SQL分离  
+7. Dao整合了Hibernate+mybatis的两大优势，支持实体维护和SQL分离  
 8. SQL支持脚本语言  
-9. 可以无缝集成Hibernate、Spring等第三方框架，也可以单独部署运行，适应性强。  
+9. 可以无缝集成Hibernate、Spring等第三方框架，也可以单独部署运行，适应性强。
+10. 支持JPA的CriteriaQuery API，并且提供了类似于Mybatis plus中 QueryWapper和LambdaQueryWapper的这种易用的写法。
 
  
 ## 接口和SQL文件对应目录 
@@ -42,57 +43,103 @@ Framework框架集成了log、cache、db、message、rule、tx，每块都以模
 
 ``` java
     @Dao
-	public interface EmpDao {
+    public interface IStudentDao extends IBaseDao<StudentEntity>  {
 
-	    @Sql("select * from emp")
-	    List<Map<String,Object>> selectAll();
-	    
-	    @Sql("select * from emp where empno = :empno")
-	    Map<String,Object> selectOne(@Param("empno") int empno);
-	    
-	    @Sql(value="select * from emp where deptno = :dept.deptno", bean=Emp.class)
-	    List<Emp> selectDeptEmp(@Param("deptno")Dept dept, @Param(Param.pageIndex)int pageIndex,@Param(Param.pageSize)int pageSize);
-	    
-	    @Sql(bean = Emp.class)
-	    List<Emp> queryEmp(@Param("dept") Dept dept);
-	    
-	    @Sql("select count(*) from emp")
-	    int listCount(ResultTransformer transformer);
+	    @Sql("select count(1) from t_student_course sc, t_course c "
+            + "where sc.course_id = c.id and sc.score >= 60 and c.course_name = :courseName")
+        int countCoursePass(@Param("courseName") String courseName);
+        
+        @Sql
+        List<StudentEntity> queryStudentCourse(@Param("entity") StudentEntity studentEntity,
+        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);
+
 	}
 	
 ```
 
-### SQL文件[EmpDao_queryEmp.sql] 
+### SQL文件[IStudentDao_queryStudentCourse.sql] 
 ``` sql 
-	select * from emp 
-	where 1=1 
-	#if($dept) 
-		and deptno=$dept.deptno 
+	select 
+	   s.id, s.name, s.age, sc.score, c.course_name
+	from 
+	   t_student s,
+	   t_course c,
+	   t_student_course sc
+	where
+	   s.id = sc.student_id
+	and
+	   c.id = sc.course_id
+	#if($entity.name)
+	  and s.name like :entity.name
 	#end
+	
+	#if($entity.age)
+	  and s.age = :entity.age
+	#end
+
 ```
 
 ### 测试代码[test.java]
 ``` java
-	@RunWith(SpringJUnit4ClassRunner.class)
-	@ContextConfiguration({
-	    "classpath:/META-INF/spring/*.xml"
-	})
+	@SpringBootTest()
 	@Transactional
-	public class EmpService {
+	public class BaseDaoTester {
+	
 	    @Resource
-	    private EmpDao empDao;
+	    private IStudentDao iStudentDao;
+	    
 	    @Test
-	    public void test() {
-	        try {
-	            Dept dept = new Dept();
-	            dept.setDeptno(30);
-	            System.out.println("------------------");
-	            System.out.println(empDao.queryEmp(dept).size());
-	            System.out.println("------------------");
-	        }
-	        catch (Exception e) {
-	            e.printStackTrace();
-	        }
+	    public void countCourse() { // 统计
+	        CriteriaBuilder cb = iCourseDao.criteriaBuilder();
+	        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+	        Root<CourseEntity> root = query.from(CourseEntity.class);
+	        query.select(cb.count(root));
+	        Long count = iCourseDao.getByCriteria(query);
+	        Assert.isTrue(count.intValue() == 3, ErrorCodeDef.SYSTEM_ERROR);
+	    }
+	    
+	    @Test
+	    public void queryStudentCourse() { // 复杂的SQL查询
+	        List<StudentEntity> entityes = iStudentDao.queryStudentCourse(null, 1, 5);
+	        Assert.isTrue(entityes.size() == 5, ErrorCodeDef.SYSTEM_ERROR);
+	
+	        entityes = iStudentDao.queryStudentCourse(null, 1, 3);
+	        Assert.isTrue(entityes.size() == 3, ErrorCodeDef.SYSTEM_ERROR);
+	
+	        StudentEntity entity = new StudentEntity();
+	        entity.setAge(19);
+	        entityes = iStudentDao.queryStudentCourse(entity, 1, 10);
+	        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+	
+	        entity = new StudentEntity();
+	        entity.setAge(18);
+	        entity.setName("张%");
+	        entityes = iStudentDao.queryStudentCourse(entity, 1, 10);
+	        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+	    }
+		
+		@Test
+	    public void queryBySpecification() { // JPA CriteriaQuery 用法
+	        List<StudentEntity> es1 = iStudentDao.queryBySpecification((root, query, cb) -> {
+	            return query.where(cb.equal(root.get(StudentEntity.AGE), 18)).getRestriction();
+	        });
+	
+	        List<StudentEntity> es2 = iStudentDao.queryByProperty(StudentEntity.AGE, 18);
+	        Assert.isTrue(es1.size() == es2.size(), ErrorCodeDef.SYSTEM_ERROR);
+	    }
+	    
+	    @Test
+	    @Transactional
+	    public void query() { // QueryWapper 写法
+	        List<StudentEntity> es1 = iStudentDao.query(q -> q.eq("age", 18).build());
+	        Assert.isTrue(es1.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
+	    }
+	    
+	    @Test
+	    @Transactional
+	    public void queryByLambdaQuery() { // LambdaQueryWapper 写法
+	        List<StudentEntity> es1 = iStudentDao.queryByLambda(q -> q.eq(StudentEntity::getAge, 18).build());
+	        Assert.isTrue(es1.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
 	    }
 	 }
 ```
