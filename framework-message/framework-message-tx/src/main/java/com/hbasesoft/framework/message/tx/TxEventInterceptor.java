@@ -41,7 +41,7 @@ public class TxEventInterceptor implements EventInterceptor {
      * @return <br>
      */
     @Override
-    public boolean sendBefore(final String channel, final EventData eventData, final Integer seconds,
+    public boolean sendBefore(final String channel, final EventData<?> eventData, final Integer seconds,
         final String produceModel) {
         if (seconds != null) {
             TxInvokerProxy.registInvoke(getClientInfo(channel, eventData.getMsgId(), new Object[] {
@@ -71,8 +71,8 @@ public class TxEventInterceptor implements EventInterceptor {
      * @return <br>
      */
     @Override
-    public boolean receiveBefore(final String channel, final EventData eventData) {
-        String id = eventData.getMsgId();
+    public boolean receiveBefore(final String channel, final EventData<?> eventData) {
+        String id = eventData.getTracerId();
         TxProducer sender = TxInvokerProxy.getSender();
         if (sender.containClient(id)) {
             TxManager.setTraceId(id);
@@ -90,7 +90,7 @@ public class TxEventInterceptor implements EventInterceptor {
      * @param eventData <br>
      */
     @Override
-    public void receiveAfter(final String channel, final EventData eventData) {
+    public void receiveAfter(final String channel, final EventData<?> eventData) {
         String id = TxManager.getTraceId();
         if (id != null) {
             TxManager.setTraceId(null);
@@ -109,7 +109,7 @@ public class TxEventInterceptor implements EventInterceptor {
      * @param e <br>
      */
     @Override
-    public void receiveError(final String channel, final EventData eventData, final Exception e) {
+    public void receiveError(final String channel, final EventData<?> eventData, final Exception e) {
         TxManager.setTraceId(null);
     }
 

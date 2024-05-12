@@ -45,7 +45,7 @@ public class TxEventStartupListener implements StartupListener {
 
             for (Entry<String, Object> entry : beans.entrySet()) {
                 if (entry.getValue() instanceof EventListener) {
-                    EventListener eventLinsener = (EventListener) entry.getValue();
+                    EventListener<?> eventLinsener = (EventListener<?>) entry.getValue();
                     Tx tx = AnnotationUtils.findAnnotation(eventLinsener.getClass(), Tx.class);
 
                     if (tx != null) {

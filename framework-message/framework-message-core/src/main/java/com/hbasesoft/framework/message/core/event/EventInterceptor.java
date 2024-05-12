@@ -31,7 +31,7 @@ public interface EventInterceptor {
      * @param produceModel
      * @return <br>
      */
-    default boolean sendBefore(String channel, EventData eventData, Integer seconds, String produceModel) {
+    default boolean sendBefore(String channel, EventData<?> eventData, Integer seconds, String produceModel) {
         return true;
     }
 
@@ -45,7 +45,7 @@ public interface EventInterceptor {
      * @param seconds
      * @param produceModel <br>
      */
-    default void sendAfter(String channel, EventData eventData, Integer seconds, String produceModel) {
+    default void sendAfter(String channel, EventData<?> eventData, Integer seconds, String produceModel) {
     }
 
     /**
@@ -59,7 +59,7 @@ public interface EventInterceptor {
      * @param produceModel
      * @param e <br>
      */
-    default void sendError(String channel, EventData eventData, Integer seconds, String produceModel, Exception e) {
+    default void sendError(String channel, EventData<?> eventData, Integer seconds, String produceModel, Exception e) {
     }
 
     /**
@@ -71,7 +71,7 @@ public interface EventInterceptor {
      * @param eventData
      * @return <br>
      */
-    default boolean receiveBefore(String channel, EventData eventData) {
+    default boolean receiveBefore(String channel, EventData<?> eventData) {
         return true;
     }
 
@@ -83,7 +83,7 @@ public interface EventInterceptor {
      * @param channel
      * @param eventData <br>
      */
-    default void receiveAfter(String channel, EventData eventData) {
+    default void receiveAfter(String channel, EventData<?> eventData) {
     }
 
     /**
@@ -95,7 +95,7 @@ public interface EventInterceptor {
      * @param eventData
      * @param e <br>
      */
-    default void receiveError(String channel, EventData eventData, Exception e) {
+    default void receiveError(String channel, EventData<?> eventData, Exception e) {
     }
 
     /**

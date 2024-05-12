@@ -39,6 +39,7 @@ public class EventHandlerStartupLinstener implements StartupListener {
      * @param context
      * @throws FrameworkException <br>
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public void complete(final ApplicationContext context) throws FrameworkException {
         Map<String, EventListener> eventLinseners = context.getBeansOfType(EventListener.class);
