@@ -60,8 +60,26 @@ public final class DateUtil {
     /** yyyy/MM/dd HH:mm:ss.SSS */
     public static final String DATETIME_FORMAT_23_2 = "yyyy/MM/dd HH:mm:ss.SSS";
 
-    /** ONE_DAY_MILISECOND */
-    private static final int ONE_DAY_MILISECOND = 1000 * 3600 * 24;
+    /** 秒 */
+    public static final int SECOND = Calendar.SECOND;
+
+    /** 分钟 */
+    public static final int MINUTE = Calendar.MINUTE;
+
+    /** 小时 */
+    public static final int HOUR = Calendar.HOUR;
+
+    /** 天 */
+    public static final int DAY = Calendar.DAY_OF_YEAR;
+
+    /** 月 */
+    public static final int MONTH = Calendar.MONTH;
+
+    /** 年 */
+    public static final int YEAR = Calendar.YEAR;
+
+    /** WEEK_LENGTH_7 */
+    private static final int WEEK_LENGTH = 7;
 
     /** DATE LENGTH */
     private static final int DATE_LENGTH_8 = 8;
@@ -87,6 +105,12 @@ public final class DateUtil {
     /** DATE LENGTH */
     private static final int DATE_LENGTH_23 = 23;
 
+    /** 时区 */
+    private static final long TIMEAREA = 28800000L;
+
+    /** 当天的秒数 */
+    private static final long DAYTIME = 86400000L;
+
     /**
      * Description: <br>
      * 
@@ -95,7 +119,7 @@ public final class DateUtil {
      * @param ds <br>
      * @return <br>
      */
-    public static Date format(final String ds) {
+    public static Date parse(final String ds) {
         if (StringUtils.isEmpty(ds)) {
             return null;
         }
@@ -103,30 +127,29 @@ public final class DateUtil {
         Date date = null;
         switch (dateStr.length()) {
             case DATE_LENGTH_8:
-                date = format(dateStr, DateUtil.DATE_FORMAT_8);
+                date = parse(dateStr, DateUtil.DATE_FORMAT_8);
                 break;
             case DATE_LENGTH_10:
-                date = format(dateStr,
-                    dateStr.indexOf("/") == -1 ? DateUtil.DATE_FORMAT_10 : DateUtil.DATE_FORMAT_10_2);
+                date = parse(dateStr, dateStr.indexOf("/") == -1 ? DateUtil.DATE_FORMAT_10 : DateUtil.DATE_FORMAT_10_2);
                 break;
             case DATE_LENGTH_11:
-                date = format(dateStr, DateUtil.DATE_FORMAT_11);
+                date = parse(dateStr, DateUtil.DATE_FORMAT_11);
                 break;
             case DATE_LENGTH_14:
-                date = format(dateStr, DateUtil.DATETIME_FORMAT_14);
+                date = parse(dateStr, DateUtil.DATETIME_FORMAT_14);
                 break;
             case DATE_LENGTH_17:
-                date = format(dateStr, DateUtil.DATETIME_FORMAT_17);
+                date = parse(dateStr, DateUtil.DATETIME_FORMAT_17);
                 break;
             case DATE_LENGTH_19:
-                date = format(dateStr,
+                date = parse(dateStr,
                     dateStr.indexOf("/") == -1 ? DateUtil.DATETIME_FORMAT_19 : DateUtil.DATETIME_FORMAT_19_2);
                 break;
             case DATE_LENGTH_21:
-                date = format(dateStr, DateUtil.DATETIME_FORMAT_21);
+                date = parse(dateStr, DateUtil.DATETIME_FORMAT_21);
                 break;
             case DATE_LENGTH_23:
-                date = format(dateStr,
+                date = parse(dateStr,
                     dateStr.indexOf("/") == -1 ? DateUtil.DATETIME_FORMAT_23 : DateUtil.DATETIME_FORMAT_23_2);
                 break;
             default:
@@ -144,7 +167,7 @@ public final class DateUtil {
      * @param format <br>
      * @return <br>
      */
-    public static Date format(final String date, final String format) {
+    public static Date parse(final String date, final String format) {
         if (StringUtils.isEmpty(format)) {
             throw new IllegalArgumentException("the date format string is null!");
         }
@@ -221,31 +244,250 @@ public final class DateUtil {
     }
 
     /**
-     * 获取开始日期到今天的间隔天数
-     * 
-     * @param startDate 开始时间
-     * @return 相差天数
-     */
-    public static int daysBetween(final Date startDate) {
-        return daysBetween(startDate, getCurrentDate());
-    }
-
-    /**
-     * Description: 获取月份最后一天<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param d
      * @return <br>
      */
-    public static Date getYrMonthLastDay(final Date d) {
+    public static Date yesterday() {
+        return yesterday(getCurrentDate());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date yesterday(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(d);
-        calendar.add(Calendar.MONTH, 1);
-        Date nextMonthFirstDay = DateUtil.getYrMonthFirstDay(calendar.getTime());
-        calendar.setTime(nextMonthFirstDay);
+        calendar.setTimeInMillis(time);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         return calendar.getTime();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date tomorrow() {
+        return tomorrow(getCurrentDate());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date tomorrow(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date lastWeek() {
+        return lastWeek(getCurrentDate());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date lastWeek(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.DAY_OF_MONTH, 0 - WEEK_LENGTH);
+        return calendar.getTime();
+    }
+
+    /**
+     * Description: 获取星期一<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date monday() {
+        return monday(getCurrentDate());
+    }
+
+    /**
+     * Description: 获取星期一<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date monday(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time); // 将给定的Date设置到Calendar中
+
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // 获取当前日期是一周中的哪一天
+        // 注意：Calendar.SUNDAY = 1, Calendar.MONDAY = 2, ..., 因此需要校正偏移量
+        if (dayOfWeek == Calendar.MONDAY) {
+            return calendar.getTime(); // 如果已经是星期一，直接返回原日期
+        }
+        calendar.add(Calendar.DAY_OF_MONTH, -(dayOfWeek - Calendar.MONDAY)); // 调整到星期一
+        return calendar.getTime(); // 返回调整后的星期一日期
+    }
+
+    /**
+     * Description: 获取星期天<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date sunday() {
+        return sunday(getCurrentDate());
+    }
+
+    /**
+     * Description: 获取星期天<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date sunday(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time); // 将给定的Date设置到Calendar中
+
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); // 获取当前日期是一周中的哪一天
+        // 注意：Calendar.SUNDAY = 1, Calendar.MONDAY = 2, ..., 因此需要校正偏移量
+        if (dayOfWeek == Calendar.SUNDAY) {
+            return calendar.getTime(); // 如果已经是星期天，直接返回原日期
+        }
+        calendar.add(Calendar.DAY_OF_MONTH, Calendar.SUNDAY - dayOfWeek); // 调整到星期一
+        return calendar.getTime(); // 返回调整后的星期一日期
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date nextWeek() {
+        return nextWeek(getCurrentDate());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date nextWeek(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.DAY_OF_MONTH, WEEK_LENGTH);
+        return calendar.getTime();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date lastMonth() {
+        return lastMonth(getCurrentDate());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date lastMonth(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.MONTH, -1);
+        return calendar.getTime();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date nextMonth() {
+        return nextMonth(getCurrentDate());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date nextMonth(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
+    }
+
+    /**
+     * Description:获取本月第一天 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date monthFirstDay() {
+        return monthFirstDay(getCurrentDate());
     }
 
     /**
@@ -253,34 +495,310 @@ public final class DateUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param d
+     * @param date
      * @return <br>
      */
-    public static Date getYrMonthFirstDay(final Date d) {
-        String yrMonth = DateUtil.format(d, "yyyyMM");
-        String date = yrMonth + "01";
-        return DateUtil.format(date);
+    public static Date monthFirstDay(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime(); // 返回该月份第一天的Date对象
     }
 
     /**
-     * 获取一年内，两个日期之间间隔的天数
+     * Description:获取本月最后一天 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public static Date monthLastDay() {
+        return monthLastDay(getCurrentDate());
+    }
+
+    /**
+     * Description: 获取月份最后一天<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @return <br>
+     */
+    public static Date monthLastDay(final Date date) {
+        long createTime = date.getTime();
+        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        // 将日期设置为下个月的第一天
+        calendar.add(Calendar.MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        // 再减去一天，得到本月的最后一天
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        return calendar.getTime(); // 返回该月份最后一天的Date对象
+    }
+
+    /**
+     * 两个日期之间间隔的年
+     * 
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 相差年
+     */
+    public static int betweenYear(final Date startDate, final Date endDate) {
+        return between(startDate, endDate, YEAR);
+    }
+
+    /**
+     * 两个日期之间间隔的月
+     * 
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 相差月
+     */
+    public static int betweenMonth(final Date startDate, final Date endDate) {
+        return between(startDate, endDate, DAY);
+    }
+
+    /**
+     * 两个日期之间间隔的天数
      * 
      * @param startDate 开始时间
      * @param endDate 结束时间
      * @return 相差天数
      */
-    public static int daysBetween(final Date startDate, final Date endDate) {
-        long s1 = startDate.getTime();
-        long s2 = endDate.getTime();
-        long c = s1 - s2;
-        if (c <= ONE_DAY_MILISECOND) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(startDate);
-            int d1 = calendar.get(Calendar.DAY_OF_YEAR);
-            calendar.setTime(endDate);
-            int d2 = calendar.get(Calendar.DAY_OF_YEAR);
-            return d1 == d2 ? 0 : 1;
-        }
-        return Math.abs(Double.valueOf(Math.floor((s2 - s1) / ONE_DAY_MILISECOND)).intValue());
+    public static int betweenDay(final Date startDate, final Date endDate) {
+        return between(startDate, endDate, DAY);
+    }
+
+    /**
+     * 两个日期之间间隔的小时数
+     * 
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 相差小时数
+     */
+    public static int betweenHour(final Date startDate, final Date endDate) {
+        return between(startDate, endDate, HOUR);
+    }
+
+    /**
+     * 两个日期之间间隔的分钟
+     * 
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 相差分钟
+     */
+    public static int betweenMinute(final Date startDate, final Date endDate) {
+        return between(startDate, endDate, MINUTE);
+    }
+
+    /**
+     * 两个日期之间间隔的秒
+     * 
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 相差秒
+     */
+    public static int betweenSecond(final Date startDate, final Date endDate) {
+        return between(startDate, endDate, SECOND);
+    }
+
+    /**
+     * 获取一年内，两个日期之间间隔
+     * 
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @param field 相差类型
+     * @return 相差天数
+     */
+    public static int between(final Date startDate, final Date endDate, final int field) {
+        Calendar clendar = Calendar.getInstance();
+        clendar.setTime(startDate);
+        int start = clendar.get(field);
+        clendar.setTime(endDate);
+        int end = clendar.get(field);
+        return end - start;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param amount
+     * @return <br>
+     */
+    public static Date offset(final int field, final int amount) {
+        return offset(DateUtil.getCurrentDate(), field, amount);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param field
+     * @param amount
+     * @return <br>
+     */
+    public static Date offset(final Date date, final int field, final int amount) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(field, amount);
+        return calendar.getTime();
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetYear(final Date date, final int amount) {
+        return offset(date, amount, YEAR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetYear(final int amount) {
+        return offset(DateUtil.getCurrentDate(), amount, YEAR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetMonth(final int amount) {
+        return offset(DateUtil.getCurrentDate(), amount, MONTH);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetMonth(final Date date, final int amount) {
+        return offset(date, amount, MONTH);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetDay(final int amount) {
+        return offset(DateUtil.getCurrentDate(), amount, DAY);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetDay(final Date date, final int amount) {
+        return offset(date, amount, DAY);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetHour(final int amount) {
+        return offset(DateUtil.getCurrentDate(), amount, HOUR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetHour(final Date date, final int amount) {
+        return offset(date, amount, HOUR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetMinute(final int amount) {
+        return offset(DateUtil.getCurrentDate(), amount, MINUTE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetMinute(final Date date, final int amount) {
+        return offset(date, amount, MINUTE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetSecond(final int amount) {
+        return offset(DateUtil.getCurrentDate(), amount, SECOND);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param date
+     * @param amount
+     * @return <br>
+     */
+    public static Date offsetSecond(final Date date, final int amount) {
+        return offset(date, amount, SECOND);
     }
 }
