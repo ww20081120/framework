@@ -52,51 +52,51 @@ public class DateUtilTest {
         long t2 = NUM_B;
         long t3 = NUM_C;
         String d8 = "20180912";
-        Date date = DateUtil.format(d8);
+        Date date = DateUtil.parse(d8);
         Assert.isTrue(date.getTime() == t1, ErrorCodeDef.SYSTEM_ERROR);
 
         String d11 = "2018年09月12日";
-        date = DateUtil.format(d11);
+        date = DateUtil.parse(d11);
         Assert.isTrue(date.getTime() == t1, ErrorCodeDef.SYSTEM_ERROR);
 
         String d10 = "2018-09-12";
-        date = DateUtil.format(d10);
+        date = DateUtil.parse(d10);
         Assert.isTrue(date.getTime() == t1, ErrorCodeDef.SYSTEM_ERROR);
 
         String d102 = "2018/09/12";
-        date = DateUtil.format(d102);
+        date = DateUtil.parse(d102);
         Assert.isTrue(date.getTime() == t1, ErrorCodeDef.SYSTEM_ERROR);
 
         String d14 = "20180912105355";
-        date = DateUtil.format(d14);
+        date = DateUtil.parse(d14);
         Assert.isTrue(date.getTime() == t2, ErrorCodeDef.SYSTEM_ERROR);
 
         String d17 = "20180912105355123";
-        date = DateUtil.format(d17);
+        date = DateUtil.parse(d17);
         Assert.isTrue(date.getTime() == t3, ErrorCodeDef.SYSTEM_ERROR);
 
         String d19 = "2018-09-12 10:53:55";
-        date = DateUtil.format(d19);
+        date = DateUtil.parse(d19);
         Assert.isTrue(date.getTime() == t2, ErrorCodeDef.SYSTEM_ERROR);
 
         String d192 = "2018/09/12 10:53:55";
-        date = DateUtil.format(d192);
+        date = DateUtil.parse(d192);
         Assert.isTrue(date.getTime() == t2, ErrorCodeDef.SYSTEM_ERROR);
 
         String d21 = "2018年09月12日 10时53分55秒";
-        date = DateUtil.format(d21);
+        date = DateUtil.parse(d21);
         Assert.isTrue(date.getTime() == t2, ErrorCodeDef.SYSTEM_ERROR);
 
         String d23 = "2018-09-12 10:53:55.123";
-        date = DateUtil.format(d23);
+        date = DateUtil.parse(d23);
         Assert.isTrue(date.getTime() == t3, ErrorCodeDef.SYSTEM_ERROR);
 
         String d232 = "2018/09/12 10:53:55.123";
-        date = DateUtil.format(d232);
+        date = DateUtil.parse(d232);
         Assert.isTrue(date.getTime() == t3, ErrorCodeDef.SYSTEM_ERROR);
 
         String str = "18年9月12号10点53分55秒";
-        date = DateUtil.format(str, "yy年M月dd号hh点mm分ss秒");
+        date = DateUtil.parse(str, "yy年M月dd号hh点mm分ss秒");
         Assert.isTrue(date.getTime() == t2, ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -198,9 +198,9 @@ public class DateUtilTest {
      */
     @Test
     public void daysBetween() {
-        Date t1 = DateUtil.format("2018-09-12 11:53:55");
-        Date t2 = DateUtil.format("2018-09-13 10:53:55");
-        int d = DateUtil.daysBetween(t2, t1);
+        Date t1 = DateUtil.parse("2018-09-12 11:53:55");
+        Date t2 = DateUtil.parse("2018-09-13 10:53:55");
+        int d = DateUtil.betweenDay(t1, t2);
         Assert.isTrue(d == 1, ErrorCodeDef.SYSTEM_ERROR);
     }
 
@@ -213,8 +213,8 @@ public class DateUtilTest {
      */
     @Test
     public void getYrMonthLastDay() {
-        Date t1 = DateUtil.format("2018-02-20");
-        Date t2 = DateUtil.getYrMonthLastDay(t1);
+        Date t1 = DateUtil.parse("2018-02-20");
+        Date t2 = DateUtil.monthLastDay(t1);
         String str = DateUtil.format(t2, DateUtil.DATE_FORMAT_10);
         Assert.equals(str, "2018-02-28", ErrorCodeDef.SYSTEM_ERROR);
     }
@@ -228,8 +228,8 @@ public class DateUtilTest {
      */
     @Test
     public void getYrMonthFirstDay() {
-        Date t1 = DateUtil.format("2018-02-20");
-        Date t2 = DateUtil.getYrMonthFirstDay(t1);
+        Date t1 = DateUtil.parse("2018-02-20");
+        Date t2 = DateUtil.monthFirstDay(t1);
         String str = DateUtil.format(t2, DateUtil.DATE_FORMAT_10);
         Assert.equals(str, "2018-02-01", ErrorCodeDef.SYSTEM_ERROR);
     }

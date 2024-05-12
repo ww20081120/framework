@@ -175,7 +175,7 @@ public class AutoResultTransformer implements ResultTransformer {
             return Boolean.valueOf(value.toString());
         }
         else if (Date.class.equals(clazz)) {
-            return DateUtil.format(value.toString());
+            return DateUtil.parse(value.toString());
         }
         throw new ClassCastException("不能将" + value.getClass().getName() + "类型转化为" + clazz.getName() + "类型");
     }
