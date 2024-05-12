@@ -9,7 +9,6 @@ import java.util.Random;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventListener;
 import com.hbasesoft.framework.tx.core.annotation.Tx;
 
@@ -25,7 +24,7 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
  */
 @Component
 @Tx
-public class TestEventListener implements EventListener {
+public class TestEventListener implements EventListener<String> {
 
     /** Number */
     private static final int NUM_5 = 5;
@@ -56,12 +55,12 @@ public class TestEventListener implements EventListener {
      * @param data <br>
      */
     @Override
-    public void onEmmit(final String event, final EventData data) {
+    public void onEmmit(final String event, final String data) {
 
         if (new Random().nextInt(NUM_5) == 1) {
             throw new RuntimeException();
         }
-        System.out.println(i++ + ":" + data.getMsgId());
+        System.out.println(i++ + ":" + data);
 
     }
 
