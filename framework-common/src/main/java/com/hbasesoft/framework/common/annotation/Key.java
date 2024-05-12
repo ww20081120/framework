@@ -1,15 +1,13 @@
 /**
  * 
  */
-package com.hbasesoft.framework.db.core.annotation;
+package com.hbasesoft.framework.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.hbasesoft.framework.db.core.DaoConstants;
 
 /**
  * <Description> <br>
@@ -24,17 +22,7 @@ import com.hbasesoft.framework.db.core.DaoConstants;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-public @interface Param {
-
-    /**
-     * pageSize
-     */
-    String PAGE_SIZE = DaoConstants.PAGE_SIZE;
-
-    /**
-     * pageIndex
-     */
-    String PAGE_INDEX = DaoConstants.PAGE_INDEX;
+public @interface Key {
 
     /**
      * 

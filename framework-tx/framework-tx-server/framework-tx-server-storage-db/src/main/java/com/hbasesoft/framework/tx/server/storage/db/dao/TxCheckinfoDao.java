@@ -6,8 +6,8 @@
 
 package com.hbasesoft.framework.tx.server.storage.db.dao;
 
+import com.hbasesoft.framework.common.annotation.Key;
 import com.hbasesoft.framework.db.Dao;
-import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.tx.core.bean.CheckInfo;
 import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
@@ -35,7 +35,7 @@ public interface TxCheckinfoDao {
      * @return <br>
      */
     @Sql("SELECT ID, MARK, RESULT FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
-    TxCheckinfoEntity getCheckInfoById(@Param("id") String id, @Param("mark") String mark);
+    TxCheckinfoEntity getCheckInfoById(@Key("id") String id, @Key("mark") String mark);
 
     /**
      * Description: <br>
@@ -47,7 +47,7 @@ public interface TxCheckinfoDao {
      */
     @Sql("INSERT INTO T_TX_CHECKINFO (ID, MARK, RESULT, CREATE_TIME) VALUES "
         + "(:entity.id, :entity.mark, :entity.result, now())")
-    int saveCheckInfo(@Param("entity") TxCheckinfoEntity entity);
+    int saveCheckInfo(@Key("entity") TxCheckinfoEntity entity);
 
     /**
      * Description: <br>
@@ -58,7 +58,7 @@ public interface TxCheckinfoDao {
      * @return <br>
      */
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id")
-    int deleteCheckInfo(@Param("id") String id);
+    int deleteCheckInfo(@Key("id") String id);
 
     /**
      * Description: <br>
@@ -69,7 +69,7 @@ public interface TxCheckinfoDao {
      * @return int
      */
     @Sql("UPDATE FROM T_TX_CHECKINFO SET RESULT = :bean.result WHERE ID = :bean.id AND MARK = :bean.mark")
-    int updateCheckInfo(@Param("bean") CheckInfo checkInfo);
+    int updateCheckInfo(@Key("bean") CheckInfo checkInfo);
 
     /**
      * Description: <br>
@@ -81,5 +81,5 @@ public interface TxCheckinfoDao {
      * @return int
      */
     @Sql("DELETE FROM T_TX_CHECKINFO WHERE ID = :id AND MARK = :mark")
-    int delCheckInfo(@Param("id") String id, @Param("mark") String mark);
+    int delCheckInfo(@Key("id") String id, @Key("mark") String mark);
 }

@@ -6,8 +6,9 @@
 
 package com.hbasesoft.framework.tx.server.storage.db.dao;
 
+import com.hbasesoft.framework.common.annotation.Key;
 import com.hbasesoft.framework.db.Dao;
-import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
@@ -35,7 +36,7 @@ public interface TxClientinfoDao extends BaseJpaDao<TxClientinfoEntity> {
      * @return <br>
      */
     @Sql("SELECT ID FROM T_TX_CLIENTINFO WHERE ID = :id")
-    String containsClientInfo(@Param("id") String id);
+    String containsClientInfo(@Key("id") String id);
 
     /**
      * Description: <br>
@@ -46,7 +47,7 @@ public interface TxClientinfoDao extends BaseJpaDao<TxClientinfoEntity> {
      * @return <br>
      */
     @Sql("SELECT ID, MAX_RETRY_TIMES, CURRENT_RETRY_TIMES, RETRY_CONFIGS FROM T_TX_CLIENTINFO WHERE ID = :id")
-    TxClientinfoEntity getRetryConfigs(@Param("id") String id);
+    TxClientinfoEntity getRetryConfigs(@Key("id") String id);
 
     /**
      * Description: <br>
@@ -58,7 +59,7 @@ public interface TxClientinfoDao extends BaseJpaDao<TxClientinfoEntity> {
      */
     @Sql("UPDATE T_TX_CLIENTINFO SET CURRENT_RETRY_TIMES = :entity.currentRetryTimes,"
         + " NEXT_RETRY_TIME = :entity.nextRetryTime WHERE ID = :entity.id")
-    int updateRetryTimes(@Param("entity") TxClientinfoEntity entity);
+    int updateRetryTimes(@Key("entity") TxClientinfoEntity entity);
 
     /**
      * Description: <br>
@@ -73,9 +74,9 @@ public interface TxClientinfoDao extends BaseJpaDao<TxClientinfoEntity> {
      */
     @Sql("SELECT ID, MARK, CONTEXT, ARGS, CLIENT_INFO FROM T_TX_CLIENTINFO WHERE CLIENT_INFO = :clientInfo AND "
         + "NEXT_RETRY_TIME <= NOW() AND MAX_RETRY_TIMES > CURRENT_RETRY_TIMES AND CURRENT_RETRY_TIMES = :retryTimes ")
-    PagerList<TxClientinfoEntity> queryTimeoutClientInfos(@Param("clientInfo") String clientInfo,
-        @Param("retryTimes") int retryTimes, @Param(Param.PAGE_INDEX) int pageIndex,
-        @Param(Param.PAGE_SIZE) int pageSize);
+    PagerList<TxClientinfoEntity> queryTimeoutClientInfos(@Key("clientInfo") String clientInfo,
+        @Key("retryTimes") int retryTimes, @Key(DaoConstants.PAGE_INDEX) int pageIndex,
+        @Key(DaoConstants.PAGE_SIZE) int pageSize);
 
     /**
      * Description: <br>
@@ -86,7 +87,7 @@ public interface TxClientinfoDao extends BaseJpaDao<TxClientinfoEntity> {
      * @return <br>
      */
     @Sql("DELETE FROM T_TX_CLIENTINFO WHERE ID = :id")
-    int deleteClientinfo(@Param("id") String id);
+    int deleteClientinfo(@Key("id") String id);
 
     /**
      * Description: <br>

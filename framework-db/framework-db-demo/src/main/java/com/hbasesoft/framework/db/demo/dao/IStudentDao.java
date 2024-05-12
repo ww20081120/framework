@@ -7,8 +7,9 @@ package com.hbasesoft.framework.db.demo.dao;
 
 import java.util.List;
 
+import com.hbasesoft.framework.common.annotation.Key;
 import com.hbasesoft.framework.db.Dao;
-import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
@@ -45,7 +46,7 @@ public interface IStudentDao extends BaseJpaDao<StudentEntity> {
      */
     @Sql("select count(1) from t_student_course sc, t_course c "
         + "where sc.course_id = c.id and sc.score >= 60 and c.course_name = :courseName")
-    int countCoursePass(@Param("courseName") String courseName);
+    int countCoursePass(@Key("courseName") String courseName);
 
     /**
      * Description: <br>
@@ -68,6 +69,6 @@ public interface IStudentDao extends BaseJpaDao<StudentEntity> {
      * @return <br>
      */
     @Sql
-    List<StudentEntity> queryStudentCourse(@Param("entity") StudentEntity studentEntity,
-        @Param(Param.PAGE_INDEX) int pageIndex, @Param(Param.PAGE_SIZE) int pageSize);
+    List<StudentEntity> queryStudentCourse(@Key("entity") StudentEntity studentEntity,
+        @Key(DaoConstants.PAGE_INDEX) int pageIndex, @Key(DaoConstants.PAGE_SIZE) int pageSize);
 }

@@ -9,7 +9,6 @@ import java.util.Date;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
 
@@ -92,5 +91,5 @@ public interface DelaymsgService {
      * @return <br>
      */
     @Transactional(rollbackFor = Exception.class)
-    int updateMemeryFlag(@Param("id") String id);
+    int updateMemeryFlag(String id);
 }

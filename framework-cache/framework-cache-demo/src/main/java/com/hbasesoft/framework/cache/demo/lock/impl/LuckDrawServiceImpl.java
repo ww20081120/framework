@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.hbasesoft.framework.cache.core.CacheHelper;
 import com.hbasesoft.framework.cache.core.ICache;
 import com.hbasesoft.framework.cache.core.annotation.CacheLock;
-import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.cache.demo.lock.LuckDrawService;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.annotation.Key;
 
 /**
  * <Description> <br>

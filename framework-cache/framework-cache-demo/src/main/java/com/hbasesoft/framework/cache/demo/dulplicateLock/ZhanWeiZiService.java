@@ -6,8 +6,8 @@
 package com.hbasesoft.framework.cache.demo.dulplicateLock;
 
 import com.hbasesoft.framework.cache.core.annotation.DulplicateLock;
-import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.annotation.Key;
 
 /**
  * <Description> 抢位子服务<br>
