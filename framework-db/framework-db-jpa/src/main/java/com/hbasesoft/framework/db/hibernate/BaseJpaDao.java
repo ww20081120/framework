@@ -23,7 +23,7 @@ import com.hbasesoft.framework.db.core.DaoException;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface IBaseDao<T extends BaseEntity> extends BaseDao<T> {
+public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
 
     /**
      * Description: <br>

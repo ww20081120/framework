@@ -12,7 +12,7 @@ import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.core.utils.PagerList;
-import com.hbasesoft.framework.db.hibernate.IBaseDao;
+import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
 import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
 
 /**
@@ -23,10 +23,10 @@ import com.hbasesoft.framework.message.delay.db.entity.MsgDelaymsgEntity;
  * @taskId <br>
  * @CreateDate 2019年4月3日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.hibernate.IBaseDao <br>
+ * @see com.hbasesoft.framework.db.hibernate.BaseJpaDao <br>
  */
 @Dao
-public interface MsgDelaymsgDao extends IBaseDao<MsgDelaymsgEntity> {
+public interface MsgDelaymsgDao extends BaseJpaDao<MsgDelaymsgEntity> {
 
     /**
      * Description: <br>

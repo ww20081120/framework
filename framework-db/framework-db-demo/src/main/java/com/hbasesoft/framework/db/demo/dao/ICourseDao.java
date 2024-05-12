@@ -7,7 +7,7 @@ package com.hbasesoft.framework.db.demo.dao;
 
 import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
-import com.hbasesoft.framework.db.hibernate.IBaseDao;
+import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
 
 /**
  * <Description> <br>
@@ -20,6 +20,6 @@ import com.hbasesoft.framework.db.hibernate.IBaseDao;
  * @see com.hbasesoft.framework.db.demo.dao <br>
  */
 @Dao
-public interface ICourseDao extends IBaseDao<CourseEntity> {
+public interface ICourseDao extends BaseJpaDao<CourseEntity> {
 
 }
