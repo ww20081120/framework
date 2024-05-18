@@ -8,7 +8,6 @@ package com.hbasesoft.framework.common.utils;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -162,20 +161,6 @@ public final class CommonUtil {
      */
     public static String notNullStr(final String str) {
         return StringUtils.isEmpty(str) ? GlobalConstants.BLANK : str;
-    }
-
-    /**
-     * Description:getDate <br>
-     * 
-     * @author 王伟 <br>
-     * @param time <br
-     * @return <br>
-     */
-    public static Date getDate(final Long time) {
-        if (time != null) {
-            return new Date(time);
-        }
-        return null;
     }
 
     /**

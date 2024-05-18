@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
-import java.util.Date;
-
 import org.junit.jupiter.api.Test;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -38,9 +36,6 @@ public class CommonUtilTest {
 
     /** number */
     private static final int NUM_100 = 100;
-
-    /** number */
-    private static final int NUM_10000 = 10000;
 
     /**
      * Description: <br>
@@ -137,22 +132,6 @@ public class CommonUtilTest {
         String str1 = CommonUtil.notNullStr(obj);
         Assert.equals(str1, "", ErrorCodeDef.SYSTEM_ERROR);
         System.out.println("null字符串的notNullStr得到的是空字符串");
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    public void getDate() {
-        long time = NUM_10000;
-        Date d = CommonUtil.getDate(time);
-        Assert.equals(time, d.getTime(), ErrorCodeDef.SYSTEM_ERROR);
-        System.out.println("将long类型转化为日期类型");
-
     }
 
     /**
