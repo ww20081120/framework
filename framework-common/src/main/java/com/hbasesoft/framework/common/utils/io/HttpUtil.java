@@ -3,6 +3,8 @@ package com.hbasesoft.framework.common.utils.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Map;
@@ -21,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -383,6 +386,21 @@ public final class HttpUtil {
     }
 
     /**
+     * 获取IP
+     *
+     * @return ip
+     */
+    public static String getLocalIp() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        }
+        catch (UnknownHostException e) {
+            LoggerUtil.warn(e);
+            return null;
+        }
+    }
+
+    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -479,4 +497,54 @@ public final class HttpUtil {
     public static HostnameVerifier getHostnameVerifier() {
         return (s, sslSession) -> true;
     }
+
+    /**
+     * 是否为http协议
+     *
+     * @param url 待验证的url
+     * @return true: http协议, false: 非http协议
+     */
+    public static boolean isHttpProtocol(final String url) {
+        if (StringUtils.isEmpty(url)) {
+            return false;
+        }
+        return url.startsWith("http://") || url.startsWith("http%3A%2F%2F");
+    }
+
+    /**
+     * 是否为https协议
+     *
+     * @param url 待验证的url
+     * @return true: https协议, false: 非https协议
+     */
+    public static boolean isHttpsProtocol(final String url) {
+        if (StringUtils.isEmpty(url)) {
+            return false;
+        }
+        return url.startsWith("https://") || url.startsWith("https%3A%2F%2F");
+    }
+
+    /**
+     * 是否为本地主机（域名）
+     *
+     * @param url 待验证的url
+     * @return true: 本地主机（域名）, false: 非本地主机（域名）
+     */
+    public static boolean isLocalHost(final String url) {
+        return StringUtils.isEmpty(url) || url.contains("127.0.0.1") || url.contains("localhost");
+    }
+
+    /**
+     * 是否为https协议或本地主机（域名）
+     *
+     * @param url 待验证的url
+     * @return true: https协议或本地主机 false: 非https协议或本机主机
+     */
+    public static boolean isHttpsProtocolOrLocalHost(final String url) {
+        if (StringUtils.isEmpty(url)) {
+            return false;
+        }
+        return isHttpsProtocol(url) || isLocalHost(url);
+    }
+
 }
