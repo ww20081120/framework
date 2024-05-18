@@ -272,7 +272,7 @@ public class AbstractAnnotationHandler {
             throw new InitializationException(e);
         }
         catch (Exception e) {
-            throw new InitializationException(ErrorCodeDef.SYSTEM_ERROR, e);
+            throw new InitializationException(ErrorCodeDef.FAILURE, e);
         }
         return metadata;
     }

@@ -60,7 +60,7 @@ public class FrameworkException extends RuntimeException {
             this.code = fe.getCode();
         }
         else {
-            this.code = ErrorCodeDef.SYSTEM_ERROR;
+            this.code = ErrorCodeDef.FAILURE;
         }
 
     }

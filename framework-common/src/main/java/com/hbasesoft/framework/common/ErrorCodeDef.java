@@ -27,7 +27,7 @@ public enum ErrorCodeDef implements ErrorCode {
     SUCCESS(0, "成功"),
 
     /** 系统错误 */
-    SYSTEM_ERROR(SYSTEM_PREFIX + 1, "系统错误"),
+    FAILURE(SYSTEM_PREFIX + 1, "系统错误"),
 
     /** 缓存失败 */
     CACHE_ERROR(SYSTEM_PREFIX + 2, "缓存失败"),

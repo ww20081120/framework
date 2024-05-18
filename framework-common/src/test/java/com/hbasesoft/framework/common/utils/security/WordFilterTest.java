@@ -41,12 +41,12 @@ public class WordFilterTest {
 
         String str1 = "我家住在南京的天安门上";
         boolean b1 = filter.hasFilterWord(str1);
-        Assert.isTrue(b1, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(b1, ErrorCodeDef.FAILURE);
         System.out.println("字符串str1中包含关键字");
 
         String str2 = "我家住在北京的天安门上";
         boolean b2 = filter.hasFilterWord(str2);
-        Assert.isFalse(b2, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isFalse(b2, ErrorCodeDef.FAILURE);
         System.out.println("字符串str2中不包含关键字");
     }
 
@@ -68,7 +68,7 @@ public class WordFilterTest {
         String str1 = "我家在南京，天安门在北京";
         String str2 = filter.getFilterString(str1, "*");
         System.out.println(str2);
-        Assert.equals(str2, "我家在**，天安门在**", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(str2, "我家在**，天安门在**", ErrorCodeDef.FAILURE);
         System.out.println("敏感字符已经被替换成*号了");
 
     }
@@ -94,7 +94,7 @@ public class WordFilterTest {
         filter.init(sss);
 
         String key = filter.getKeyword("我家住在南京的天安门上");
-        Assert.equals(key, "南京", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(key, "南京", ErrorCodeDef.FAILURE);
         System.out.println("找到了\"南京\"这个关键词");
     }
 

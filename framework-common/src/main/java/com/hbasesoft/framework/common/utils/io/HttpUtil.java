@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -103,6 +106,39 @@ public final class HttpUtil {
     public static String doGet(final String url, final String charset, final String authorization) {
         Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).build();
         return getStringRequest(request, charset);
+    }
+
+    /**
+     * Description: 拼接url请求参数 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param params
+     * @param encode
+     * @return <br>
+     */
+    public static String parseParams(final Map<String, String> params, final boolean encode) {
+        if (MapUtils.isNotEmpty(params)) {
+            List<String> paramList = new ArrayList<>();
+            try {
+                for (Entry<String, String> entry : params.entrySet()) {
+                    if (entry.getValue() == null) {
+                        paramList.add(entry.getValue() + "=");
+                    }
+                    else {
+                        paramList.add(entry.getValue() + "="
+                            + (encode ? URLEncoder.encode(entry.getValue(), GlobalConstants.DEFAULT_CHARSET)
+                                : entry.getValue()));
+                    }
+                }
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
+                throw new UtilException(e);
+            }
+            return String.join("&", paramList);
+        }
+        return GlobalConstants.BLANK;
     }
 
     /**
