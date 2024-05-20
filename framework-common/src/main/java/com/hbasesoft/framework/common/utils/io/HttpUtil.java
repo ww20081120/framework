@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,6 +27,7 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.common.utils.security.URLUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
@@ -64,6 +65,9 @@ public final class HttpUtil {
 
     /** READ_TIMEOUT */
     public static final Long READDING_TIMEOUT = 30000L;
+
+    /** 最大参数 */
+    private static final int MAX_PARAMS = 16;
 
     /** httpClientHold */
     private static ThreadLocal<OkHttpClient> httpClientHold = new ThreadLocal<>();
@@ -117,7 +121,7 @@ public final class HttpUtil {
      * @param encode
      * @return <br>
      */
-    public static String parseParams(final Map<String, String> params, final boolean encode) {
+    public static String paramsToString(final Map<String, String> params, final boolean encode) {
         if (MapUtils.isNotEmpty(params)) {
             List<String> paramList = new ArrayList<>();
             try {
@@ -127,7 +131,7 @@ public final class HttpUtil {
                     }
                     else {
                         paramList.add(entry.getValue() + "="
-                            + (encode ? URLEncoder.encode(entry.getValue(), GlobalConstants.DEFAULT_CHARSET)
+                            + (encode ? URLUtil.encode(entry.getValue(), GlobalConstants.DEFAULT_CHARSET)
                                 : entry.getValue()));
                     }
                 }
@@ -139,6 +143,74 @@ public final class HttpUtil {
             return String.join("&", paramList);
         }
         return GlobalConstants.BLANK;
+    }
+
+    /**
+     * 字符串转map，字符串格式为 {@code xxx=xxx&xxx=xxx}
+     *
+     * @param strTemp 待转换的字符串
+     * @param decode 是否解码
+     * @return map
+     */
+    public static Map<String, String> paramsParse(final String strTemp, final boolean decode) {
+        String str = preProcess(strTemp);
+
+        Map<String, String> params = new HashMap<>(MAX_PARAMS);
+        if (StringUtils.isEmpty(str)) {
+            return params;
+        }
+
+        if (!str.contains("&")) {
+            params.put(decode(str, decode), GlobalConstants.BLANK);
+            return params;
+        }
+
+        final int len = str.length();
+        String name = null;
+        // 未处理字符开始位置
+        int pos = 0;
+        // 未处理字符结束位置
+        int i;
+        // 当前字符
+        char c;
+        for (i = 0; i < len; i++) {
+            c = str.charAt(i);
+            // 键值对的分界点
+            if (c == '=') {
+                if (null == name) {
+                    // name可以是""
+                    name = str.substring(pos, i);
+                }
+                pos = i + 1;
+            }
+            // 参数对的分界点
+            else if (c == '&') {
+                if (null == name && pos != i) {
+                    // 对于像&a&这类无参数值的字符串，我们将name为a的值设为""
+                    addParam(params, str.substring(pos, i), GlobalConstants.BLANK, decode);
+                }
+                else if (name != null) {
+                    addParam(params, name, str.substring(pos, i), decode);
+                    name = null;
+                }
+                pos = i + 1;
+            }
+        }
+
+        // 处理结尾
+        if (pos != i) {
+            if (name == null) {
+                addParam(params, str.substring(pos, i), GlobalConstants.BLANK, decode);
+            }
+            else {
+                addParam(params, name, str.substring(pos, i), decode);
+            }
+        }
+        else if (name != null) {
+            addParam(params, name, GlobalConstants.BLANK, decode);
+        }
+
+        return params;
     }
 
     /**
@@ -581,6 +653,41 @@ public final class HttpUtil {
             return false;
         }
         return isHttpsProtocol(url) || isLocalHost(url);
+    }
+
+    private static void addParam(final Map<String, String> params, final String tempKey, final String tempValue,
+        final boolean decode) {
+        String key = decode(tempKey, decode);
+        String value = decode(tempValue, decode);
+        if (params.containsKey(key)) {
+            params.put(key, params.get(key) + "," + value);
+        }
+        else {
+            params.put(key, value);
+        }
+    }
+
+    private static String decode(final String str, final boolean decode) {
+        return decode ? URLUtil.decode(str, GlobalConstants.DEFAULT_CHARSET) : str;
+    }
+
+    private static String preProcess(final String tempStr) {
+        if (StringUtils.isEmpty(tempStr)) {
+            return tempStr;
+        }
+        String str = tempStr;
+        // 去除 URL 路径信息
+        int beginPos = str.indexOf("?");
+        if (beginPos > -1) {
+            str = str.substring(beginPos + 1);
+        }
+
+        // 去除 # 后面的内容
+        int endPos = str.indexOf("#");
+        if (endPos > -1) {
+            str = str.substring(0, endPos);
+        }
+        return str;
     }
 
 }

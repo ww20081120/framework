@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Spliterator;
 import java.util.Stack;
@@ -20,6 +19,7 @@ import java.util.jar.JarFile;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.security.URLUtil;
 
 /**
  * <Description> <br>
@@ -131,7 +131,7 @@ public class JarFileSpliterator implements Spliterator<String> {
     private String findInFiles() throws IOException {
         if (files == null) {
             files = new Stack<File>();
-            String filePath = URLDecoder.decode(current.getFile(), "UTF-8");
+            String filePath = URLUtil.decode(current.getFile(), "UTF-8");
             File f = new File(filePath);
             filePrefixLength = f.getAbsolutePath().length() - prefix.length();
             files.push(f);
