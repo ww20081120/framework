@@ -18,6 +18,7 @@ import java.util.jar.JarFile;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.security.URLUtil;
 
@@ -61,7 +62,7 @@ public class JarFileSpliterator implements Spliterator<String> {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:43
-    */
+     */
     public JarFileSpliterator(final String prefix) throws IOException {
         this.prefix = prefix;
         dirs = this.getClass().getClassLoader().getResources(prefix);
@@ -131,7 +132,7 @@ public class JarFileSpliterator implements Spliterator<String> {
     private String findInFiles() throws IOException {
         if (files == null) {
             files = new Stack<File>();
-            String filePath = URLUtil.decode(current.getFile(), "UTF-8");
+            String filePath = URLUtil.decode(current.getFile(), GlobalConstants.DEFAULT_CHARSET);
             File f = new File(filePath);
             filePrefixLength = f.getAbsolutePath().length() - prefix.length();
             files.push(f);

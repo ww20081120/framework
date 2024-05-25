@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import lombok.NoArgsConstructor;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.FormBody.Builder;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -93,22 +95,36 @@ public final class HttpUtil {
      * @param charset
      * @return <br>
      */
-    public static String doGet(final String url, final String charset) {
+    public static String doGet(final String url, final Charset charset) {
         Request request = new Request.Builder().url(url).build();
         return getStringRequest(request, charset);
     }
 
     /**
-     * Description: doGet<br>
-     *
+     * Description: <br>
+     * 
      * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param headers
+     * @return <br>
+     */
+    public static String doGet(final String url, final Headers headers) {
+        return doGet(url, GlobalConstants.DEFAULT_CHARSET, headers);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param url
      * @param charset
-     * @param authorization
-     * @return String
+     * @param headers
+     * @return <br>
      */
-    public static String doGet(final String url, final String charset, final String authorization) {
-        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).build();
+    public static String doGet(final String url, final Charset charset, final Headers headers) {
+        Request request = new Request.Builder().url(url).headers(headers).build();
         return getStringRequest(request, charset);
     }
 
@@ -214,6 +230,18 @@ public final class HttpUtil {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @return <br>
+     */
+    public static String doPost(final String url) {
+        return doPost(url, new HashMap<>());
+    }
+
+    /**
      * Description: 执行Post请求<br>
      * 
      * @author 王伟<br>
@@ -236,7 +264,7 @@ public final class HttpUtil {
      * @param charset
      * @return <br>
      */
-    public static String doPost(final String url, final Map<String, String> paramMap, final String charset) {
+    public static String doPost(final String url, final Map<String, String> paramMap, final Charset charset) {
         Builder builder = new FormBody.Builder();
         if (MapUtils.isNotEmpty(paramMap)) {
             for (Entry<String, String> param : paramMap.entrySet()) {
@@ -248,42 +276,89 @@ public final class HttpUtil {
     }
 
     /**
-     * Description: getStringRequest<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param request
-     * @param charset
+     * @param url
+     * @param paramMap
+     * @param headers
      * @return <br>
      */
-    public static String getStringRequest(final Request request, final String charset) {
-
-        Call call = getOkHttpClient().newCall(request);
-        try {
-            Response response = call.execute();
-            return IOUtil.readString(new InputStreamReader(response.body().byteStream(), charset));
-        }
-        catch (IOException e) {
-            throw new UtilException(e);
-        }
+    public static String doPost(final String url, final Map<String, String> paramMap, final Headers headers) {
+        return doPost(url, paramMap, GlobalConstants.DEFAULT_CHARSET, headers);
     }
 
     /**
-     * Description: 执行Post请求<br>
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param paramMap
+     * @param charset
+     * @param headers
+     * @return <br>
+     */
+    public static String doPost(final String url, final Map<String, String> paramMap, final Charset charset,
+        final Headers headers) {
+        Builder builder = new FormBody.Builder();
+        if (MapUtils.isNotEmpty(paramMap)) {
+            for (Entry<String, String> param : paramMap.entrySet()) {
+                builder.add(param.getKey(), param.getValue());
+            }
+        }
+        Request request = new Request.Builder().url(url).headers(headers).post(builder.build()).build();
+        return getStringRequest(request, charset);
+    }
+
+    /**
+     * Description:doPost <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
      * @param url
      * @param body
-     * @param contentType
-     * @param charset
      * @return <br>
      */
-    public static String doPost(final String url, final String body, final String contentType, final String charset) {
-        MediaType mediaType = MediaType.parse(contentType);
-        RequestBody requestBody = RequestBody.create(body == null ? null : body.getBytes(), mediaType);
-        Request request = new Request.Builder().url(url).post(requestBody).build();
-        return getStringRequest(request, charset);
+    public static String doPost(final String url, final String body) {
+        if (StringUtils.isEmpty(body)) {
+            return doPost(url);
+        }
+
+        String contentType = "text/plain";
+        if (body.startsWith("{") && body.endsWith("}")) {
+            contentType = "application/json";
+        }
+        else if (body.startsWith("<") && body.endsWith(">")) {
+            contentType = "text/xml";
+        }
+        return doPost(url, body, contentType);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param body
+     * @param headers
+     * @return <br>
+     */
+    public static String doPost(final String url, final String body, final Headers headers) {
+        if (StringUtils.isEmpty(body)) {
+            return doPost(url);
+        }
+
+        String contentType = "text/plain";
+        if (body.startsWith("{") && body.endsWith("}")) {
+            contentType = "application/json";
+        }
+        else if (body.startsWith("<") && body.endsWith(">")) {
+            contentType = "text/xml";
+        }
+        return doPost(url, body, contentType, GlobalConstants.DEFAULT_CHARSET, headers);
     }
 
     /**
@@ -301,41 +376,54 @@ public final class HttpUtil {
     }
 
     /**
-     * Description: doPost<br>
-     *
+     * Description: 执行Post请求<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param url
      * @param body
      * @param contentType
-     * @param authorization
      * @param charset
-     * @author 王伟<br>
-     * @return String
+     * @return <br>
      */
-    public static String doPost(final String url, final String body, final String contentType,
-        final String authorization, final String charset) {
-        MediaType mediaType = MediaType.parse(contentType);
-        RequestBody requestBody = RequestBody.create(body == null ? null : body.getBytes(), mediaType);
-        Request request = new Request.Builder().url(url).addHeader("Authorization", authorization).post(requestBody)
-            .build();
-        return getStringRequest(request, charset);
+    public static String doPost(final String url, final String body, final String contentType, final Charset charset) {
+        return doPost(url, body, contentType, charset, null);
     }
 
     /**
-     * @Method doPost
+     * Description: 执行Post请求 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param url
      * @param body
      * @param contentType
-     * @param paramMap
      * @param charset
-     * @return java.lang.String
-     * @Author 李煜龙
-     * @Description TODD
-     * @Date 2023/1/29 11:24
+     * @param headers
+     * @return <br>
      */
-    public static String doPost(final String url, final String body, final String contentType,
-        final Map<String, String> paramMap, final String charset) {
+    public static String doPost(final String url, final String body, final String contentType, final Charset charset,
+        final Headers headers) {
+        return doPost(url, body, null, contentType, charset, headers);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param body
+     * @param paramMap
+     * @param contentType
+     * @param charset
+     * @param headers
+     * @return <br>
+     */
+    public static String doPost(final String url, final String body, final Map<String, String> paramMap,
+        final String contentType, final Charset charset, final Headers headers) {
         Request.Builder builder = new Request.Builder();
-        builder.url(url);
+        builder.headers(headers).url(url);
         if (MapUtils.isNotEmpty(paramMap)) {
             for (Entry<String, String> param : paramMap.entrySet()) {
                 builder.addHeader(param.getKey(), param.getValue());
@@ -348,23 +436,24 @@ public final class HttpUtil {
     }
 
     /**
-     * Description:doPost <br>
+     * Description: getStringRequest<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param url
-     * @param body
+     * @param request
+     * @param charset
      * @return <br>
      */
-    public static String doPost(final String url, final String body) {
-        String contentType = "text/plain";
-        if (body.startsWith("{") && body.endsWith("}")) {
-            contentType = "application/json";
+    public static String getStringRequest(final Request request, final Charset charset) {
+
+        Call call = getOkHttpClient().newCall(request);
+        try {
+            Response response = call.execute();
+            return IOUtil.readString(new InputStreamReader(response.body().byteStream(), charset));
         }
-        else if (body.startsWith("<") && body.endsWith(">")) {
-            contentType = "text/xml";
+        catch (IOException e) {
+            throw new UtilException(e);
         }
-        return doPost(url, body, contentType);
     }
 
     /**

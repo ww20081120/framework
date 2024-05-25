@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common;
 
+import java.nio.charset.Charset;
+
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
@@ -48,7 +50,7 @@ public interface GlobalConstants {
     String ASTERISK = "*";
 
     /** 默认编码 */
-    String DEFAULT_CHARSET = "utf-8";
+    Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
     /** 默认语言 */
     String DEFAULT_LANGUAGE = "zh_CN";
