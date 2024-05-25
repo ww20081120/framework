@@ -134,7 +134,7 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
                             else {
                                 flowBean.setState(getState(errorState,
                                     (e instanceof FrameworkException ? ((FrameworkException) e).getCode().getCode()
-                                        : ErrorCodeDef.SYSTEM_ERROR.getCode())));
+                                        : ErrorCodeDef.FAILURE.getCode())));
                             }
                         }
                         return true;

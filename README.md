@@ -8,9 +8,9 @@ Framework 4.X 框架说明
 4.1 | 使用jdk21版本，spring boot 使用3.2版本，spring cloud使用2023.0.1版本| 2024年3月31 | 王伟
 
 # 框架介绍
-Framework框架集成了log、cache、db、message、rule、tx，每块都以模块形式组织，可以根据项目需要获取模块。
+Framework框架集成了tracing、cache、db、message、rule、tx，每块都以模块形式组织，可以根据项目需要获取模块。
 + [framework-common](https://github.com/ww20081120/framework/wiki/%E5%9F%BA%E7%A1%80%E5%B7%A5%E5%85%B7) 定义公用的常量、工具类 采用了spring-boot方式启动， 启动类为Application， 也可以支持web方式启动。
-+ [framework-log](https://github.com/ww20081120/framework/wiki/%E8%B7%9F%E8%B8%AA%E6%97%A5%E5%BF%97) 分布式集成日志模块，详细的记录了每个方法执行的参数、返回结果、执行时间，可以很方便的排查问题或告警，通过远程接口上传服务器（支持直连服务端，也支持通过kafka发送）
++ [framework-tracing](https://github.com/ww20081120/framework/wiki/%E8%B7%9F%E8%B8%AA%E6%97%A5%E5%BF%97) 分布式集成日志模块，详细的记录了每个方法执行的参数、返回结果、执行时间，可以很方便的排查问题或告警，通过远程接口上传服务器（支持直连服务端，也支持通过kafka发送）
 + [framework-cache](https://github.com/ww20081120/framework/wiki/%E7%BC%93%E5%AD%98) 定义了缓存的获取。  支持注解方式访问缓存， 支持基于Redis的分布式锁
 + [framework-db](https://github.com/ww20081120/framework/wiki/%E6%95%B0%E6%8D%AE%E5%BA%93) 是简单易用的轻量级DAO(Data Access Object)框架，它集成了Hibernate实体维护和Mybaits SQL分离的两大优势，提供了非入侵式API，可以与Hibernate、SpringJdbc等数据库框架很好的集成 
 + [framework-job](https://github.com/ww20081120/framework/wiki/%E4%BB%BB%E5%8A%A1) 定时任务，支持quartz、xxl-job、[ElasticJob](http://elasticjob.io)简单封装的定时器，支持分布式、分片等功能

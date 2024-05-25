@@ -110,7 +110,7 @@ public class BaseDaoTester {
         Root<CourseEntity> root = query.from(CourseEntity.class);
         query.select(cb.count(root));
         Long count = iCourseDao.getByCriteria(query);
-        Assert.isTrue(count.intValue() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(count.intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -124,7 +124,7 @@ public class BaseDaoTester {
     @Transactional
     public void countCoursePass() {
         int count = iStudentDao.countCoursePass("语文");
-        Assert.isTrue(count == 2, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(count == 2, ErrorCodeDef.FAILURE);
         System.out.println("语文考及格的有两人");
     }
 
@@ -139,21 +139,21 @@ public class BaseDaoTester {
     @Transactional
     public void queryStudentCourse() {
         List<StudentEntity> entityes = iStudentDao.queryStudentCourse(null, 1, NUM_5);
-        Assert.isTrue(entityes.size() == NUM_5, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entityes.size() == NUM_5, ErrorCodeDef.FAILURE);
 
         entityes = iStudentDao.queryStudentCourse(null, 1, NUM_3);
-        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.FAILURE);
 
         StudentEntity entity = new StudentEntity();
         entity.setAge(NUM_19);
         entityes = iStudentDao.queryStudentCourse(entity, 1, NUM_10);
-        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.FAILURE);
 
         entity = new StudentEntity();
         entity.setAge(NUM_18);
         entity.setName("张%");
         entityes = iStudentDao.queryStudentCourse(entity, 1, NUM_10);
-        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entityes.size() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -174,7 +174,7 @@ public class BaseDaoTester {
         String id = entity.getId();
 
         entity = iStudentDao.get(id);
-        Assert.equals(entity.getName(), "张三丰", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(entity.getName(), "张三丰", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -197,7 +197,7 @@ public class BaseDaoTester {
         iStudentDao.delete(entity);
 
         entity = iStudentDao.get(id);
-        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isNull(entity, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -219,7 +219,7 @@ public class BaseDaoTester {
         iStudentDao.delete(q -> q.eq("id", id).build());
         entity = iStudentDao.get(q -> q.eq("id", id).build());
 
-        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isNull(entity, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -250,7 +250,7 @@ public class BaseDaoTester {
             return true;
         }, GlobalConstants.DEFAULT_LINES);
         int s2 = iStudentDao.countStudentSize();
-        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -280,7 +280,7 @@ public class BaseDaoTester {
             return true;
         });
         int s2 = iStudentDao.countStudentSize();
-        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -294,7 +294,7 @@ public class BaseDaoTester {
     @Transactional
     public void get() {
         StudentEntity entity = iStudentDao.get("1");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -308,7 +308,7 @@ public class BaseDaoTester {
     @Transactional
     public void getByProperty() {
         CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
-        Assert.equals(entity.getId(), "1", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(entity.getId(), "1", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -322,7 +322,7 @@ public class BaseDaoTester {
     @Transactional
     public void queryByProperty() {
         List<StudentEntity> entities = iStudentDao.query(q -> q.eq(StudentEntity.AGE, NUM_18).build());
-        Assert.isTrue(entities.size() == 2, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entities.size() == 2, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -337,7 +337,7 @@ public class BaseDaoTester {
     public void queryAll() {
         List<StudentEntity> entities = iStudentDao.queryAll();
         int size = iStudentDao.countStudentSize();
-        Assert.isTrue(entities.size() == size, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entities.size() == size, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -362,7 +362,7 @@ public class BaseDaoTester {
         iStudentDao.clear();
 
         entity = iStudentDao.get(id);
-        Assert.isNull(entity, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isNull(entity, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -378,7 +378,7 @@ public class BaseDaoTester {
         List<StudentEntity> entities = iStudentDao.queryAll();
         iStudentDao.deleteBatch(entities);
         int size = iStudentDao.countStudentSize();
-        Assert.isTrue(size == 0, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(size == 0, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -395,7 +395,7 @@ public class BaseDaoTester {
         iStudentDao.deleteByIds(Arrays.asList("1", "2", "3"));
         iStudentDao.clear();
         int s2 = iStudentDao.countStudentSize();
-        Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -409,12 +409,12 @@ public class BaseDaoTester {
     @Transactional
     public void update() {
         StudentEntity entity = iStudentDao.get("1");
-        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.FAILURE);
         entity.setName("李四");
         iStudentDao.update(entity);
 
         StudentEntity e2 = iStudentDao.get("1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -428,10 +428,10 @@ public class BaseDaoTester {
     @Transactional
     public void update2() {
         StudentEntity entity = iStudentDao.get("1");
-        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.FAILURE);
         iStudentDao.update(q -> q.set("name", "李四").eq("id", "id").build());
         StudentEntity e2 = iStudentDao.get("1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -446,7 +446,7 @@ public class BaseDaoTester {
     public void queryByHql() {
         List<StudentEntity> entities = iStudentDao
             .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.isTrue(entities.size() == 1, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(entities.size() == 1, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -460,7 +460,7 @@ public class BaseDaoTester {
     @Transactional
     public void updateBySql() {
         StudentEntity entity = iStudentDao.get("1");
-        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.FAILURE);
 
         iStudentDao.updateBySql("update t_student set name = '李四' where id = '1'");
 
@@ -468,7 +468,7 @@ public class BaseDaoTester {
         iStudentDao.clear();
 
         StudentEntity e2 = iStudentDao.get("1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(e2.getName(), "李四", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -483,7 +483,7 @@ public class BaseDaoTester {
     public void getByHql() {
         StudentEntity entity = iStudentDao
             .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.SYSTEM_ERROR);
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
 
     }
 }

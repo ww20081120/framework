@@ -7,7 +7,6 @@ package com.hbasesoft.framework.message.demo.event;
 
 import org.springframework.stereotype.Service;
 
-import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.message.core.event.EventListener;
 
@@ -22,7 +21,7 @@ import com.hbasesoft.framework.message.core.event.EventListener;
  * @since V1.0<br>
  */
 @Service
-public class TestEventHandler implements EventListener {
+public class TestEventHandler implements EventListener<String> {
 
     /** Number */
     private static final int NUM_1500 = 1500;
@@ -53,7 +52,7 @@ public class TestEventHandler implements EventListener {
      * @taskId <br>
      */
     @Override
-    public void onEmmit(final String event, final EventData data) {
+    public void onEmmit(final String event, final String data) {
         System.out.println(event + ":" + data);
         try {
             Thread.sleep(NUM_1500);
@@ -72,10 +71,7 @@ public class TestEventHandler implements EventListener {
      */
     public static void main(final String[] args) {
         for (int i = 0; i < NUM_10000; i++) {
-
-            EventData data = new EventData();
-            data.put("key", "value" + i);
-            EventEmmiter.emmit("testEvent", data);
+            EventEmmiter.emmit("testEvent", "value" + i);
         }
     }
 

@@ -44,7 +44,7 @@ public class JavaScriptUtilTest {
     public void eval() {
         String script = "1+1";
         Double result = Double.valueOf(CommonUtil.getString(JavaScriptUtil.eval(script, null)));
-        Assert.isTrue(result - 2 == 0, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(result - 2 == 0, ErrorCodeDef.FAILURE);
 
         TestBean bean = new TestBean("张三", NUM_18);
         Map<String, Object> params = new HashMap<>();
@@ -52,7 +52,7 @@ public class JavaScriptUtilTest {
 
         script = "b.getAge() + 2";
         result = Double.valueOf(CommonUtil.getString(JavaScriptUtil.eval(script, params)));
-        Assert.isTrue(result - NUM_20 == 0, ErrorCodeDef.SYSTEM_ERROR);
+        Assert.isTrue(result - NUM_20 == 0, ErrorCodeDef.FAILURE);
     }
 
 }

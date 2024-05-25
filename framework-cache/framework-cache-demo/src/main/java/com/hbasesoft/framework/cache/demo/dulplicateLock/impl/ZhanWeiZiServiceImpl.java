@@ -10,9 +10,9 @@ import java.util.Arrays;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.cache.core.annotation.DulplicateLock;
-import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.cache.demo.dulplicateLock.ZhanWeiZiService;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.annotation.Key;
 
 /**
  * <Description> <br>

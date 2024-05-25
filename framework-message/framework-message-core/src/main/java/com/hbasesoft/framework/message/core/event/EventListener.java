@@ -11,11 +11,14 @@ import org.apache.commons.collections4.CollectionUtils;
 
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
+import com.hbasesoft.framework.tracing.core.TraceLogUtil;
 
 /**
  * <Description> <br>
  * 
+ * @param <T> 数据对象
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -23,7 +26,7 @@ import com.hbasesoft.framework.message.core.MessageSubscriber;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.message.core.event <br>
  */
-public interface EventListener extends MessageSubscriber {
+public interface EventListener<T> extends MessageSubscriber {
 
     /**
      * Description: <br>
@@ -42,7 +45,7 @@ public interface EventListener extends MessageSubscriber {
      * @param event
      * @param data <br>
      */
-    void onEmmit(String event, EventData data);
+    void onEmmit(String event, T data);
 
     /**
      * Description: 是否为订阅消息<br>
@@ -63,36 +66,48 @@ public interface EventListener extends MessageSubscriber {
      * @param channel
      * @param data <br>
      */
+    @SuppressWarnings("unchecked")
     default void onMessage(final String channel, final byte[] data) {
-        EventData eventData = SerializationUtil.unserial(EventData.class, data);
-        LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().threadId(), channel, eventData);
+        long current = System.currentTimeMillis();
+        TraceLogUtil.before(current, channel, new Object[] {
+            DataUtil.base64Encode(data)
+        });
+        try {
+            EventData<T> eventData = SerializationUtil.unserial(EventData.class, data);
+            LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().threadId(), channel, eventData);
 
-        List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(channel);
-        if (CollectionUtils.isNotEmpty(interceptors)) {
-            boolean flag = true;
-            for (EventInterceptor interceptor : interceptors) {
-                if (!interceptor.receiveBefore(channel, eventData)) {
-                    flag = false;
-                    break;
-                }
-            }
-
-            if (flag) {
-                try {
-                    onEmmit(channel, eventData);
-                    for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).receiveAfter(channel, eventData);
+            List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(channel);
+            if (CollectionUtils.isNotEmpty(interceptors)) {
+                boolean flag = true;
+                for (EventInterceptor interceptor : interceptors) {
+                    if (!interceptor.receiveBefore(channel, eventData)) {
+                        flag = false;
+                        break;
                     }
                 }
-                catch (Exception e) {
-                    for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).receiveError(channel, eventData, e);
+
+                if (flag) {
+                    try {
+                        onEmmit(channel, eventData.getData());
+                        for (int i = interceptors.size() - 1; i >= 0; i--) {
+                            interceptors.get(i).receiveAfter(channel, eventData);
+                        }
+                    }
+                    catch (Exception e) {
+                        for (int i = interceptors.size() - 1; i >= 0; i--) {
+                            interceptors.get(i).receiveError(channel, eventData, e);
+                        }
                     }
                 }
             }
+            else {
+                onEmmit(channel, eventData.getData());
+            }
+            TraceLogUtil.afterReturning(current, channel, null);
         }
-        else {
-            onEmmit(channel, eventData);
+        catch (Throwable e) {
+            LoggerUtil.error(e);
+            TraceLogUtil.afterThrowing(current, channel, e);
         }
     }
 

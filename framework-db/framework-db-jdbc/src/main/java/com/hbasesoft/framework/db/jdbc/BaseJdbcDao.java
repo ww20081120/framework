@@ -31,9 +31,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
-import com.hbasesoft.framework.db.core.annotation.Param;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
@@ -121,14 +121,14 @@ public class BaseJdbcDao implements ISqlExcutor {
             }
 
             // 处理分页
-            if (dataMap.containsKey(Param.PAGE_INDEX)) {
-                int pageIndex = Integer.parseInt(dataMap.get(Param.PAGE_INDEX).toString());
+            if (dataMap.containsKey(DaoConstants.PAGE_INDEX)) {
+                int pageIndex = Integer.parseInt(dataMap.get(DaoConstants.PAGE_INDEX).toString());
                 if (pageIndex <= 0) {
                     pageIndex = 1;
                 }
 
-                int pageSize = dataMap.containsKey(Param.PAGE_SIZE)
-                    ? Integer.parseInt(dataMap.get(Param.PAGE_SIZE).toString())
+                int pageSize = dataMap.containsKey(DaoConstants.PAGE_SIZE)
+                    ? Integer.parseInt(dataMap.get(DaoConstants.PAGE_SIZE).toString())
                     : INT;
                 if (pageSize <= 0 || pageSize > INT1) {
                     pageSize = PAGE_SIZE;

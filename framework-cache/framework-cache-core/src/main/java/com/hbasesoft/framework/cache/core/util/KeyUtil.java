@@ -15,9 +15,9 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.hbasesoft.framework.cache.core.annotation.Key;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.annotation.Key;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 
 /**

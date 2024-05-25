@@ -7,7 +7,6 @@ package com.hbasesoft.framework.message.demo;
 
 import com.hbasesoft.framework.message.core.MessageHelper;
 import com.hbasesoft.framework.message.core.MessagePublisher;
-import com.hbasesoft.framework.message.core.event.EventData;
 
 /**
  * <Description> <br>
@@ -38,8 +37,6 @@ public class MessageProvider {
         while (i < MAX_COUNT) {
             ++i;
             // publisher.publish("log-p21", (i + "").getBytes());
-            EventData data = new EventData();
-            data.put("param", (i + ""));
             // publisher.publish("testEvent", SerializationUtil.serial(data), MessagePublisher.PUBLISH_TYPE_ORDERLY);
             publisher.publish("log-p15", (i + "").getBytes());
 

@@ -25,6 +25,7 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.ServiceException;
+import com.hbasesoft.framework.common.annotation.Key;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
@@ -71,7 +72,6 @@ public class CacheAdvice {
             CacheNode cacheNode = null;
             // 携带Cache注解的方法，返回类型不能为空
             if (cache != null && !Void.class.equals(returnType)) {
-                thisJoinPoint.getArgs();
                 result = cache(cache, thisJoinPoint, currentMethod, returnType);
             }
             else if ((cacheNode = AnnotationUtils.findAnnotation(currentMethod, CacheNode.class)) != null) {

@@ -22,12 +22,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.annotation.Key;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.BaseEntity;
-import com.hbasesoft.framework.db.core.annotation.Param;
+import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.core.config.ParamMetadata;
@@ -235,14 +236,14 @@ public class AbstractAnnotationHandler {
                         // 判断是否含有Param注解
                         String name = GlobalConstants.NULL;
                         for (Annotation annotation : pmAnnotaions) {
-                            if (annotation instanceof Param) {
-                                Param p = (Param) annotation;
+                            if (annotation instanceof Key) {
+                                Key p = (Key) annotation;
 
                                 name = p.value();
-                                if (Param.PAGE_INDEX.equals(name)) {
+                                if (DaoConstants.PAGE_INDEX.equals(name)) {
                                     metadata.setIndexPosition(i);
                                 }
-                                else if (Param.PAGE_SIZE.equals(name)) {
+                                else if (DaoConstants.PAGE_SIZE.equals(name)) {
                                     metadata.setSizePosition(i);
                                 }
                                 metadata.setParamName(i, name);
@@ -271,7 +272,7 @@ public class AbstractAnnotationHandler {
             throw new InitializationException(e);
         }
         catch (Exception e) {
-            throw new InitializationException(ErrorCodeDef.SYSTEM_ERROR, e);
+            throw new InitializationException(ErrorCodeDef.FAILURE, e);
         }
         return metadata;
     }

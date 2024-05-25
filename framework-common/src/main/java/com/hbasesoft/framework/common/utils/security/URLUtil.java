@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -48,7 +50,8 @@ public final class URLUtil {
                 s = URLDecoder.decode(str, enc);
             }
             catch (UnsupportedEncodingException e) {
-                return null;
+                LoggerUtil.error(e);
+                throw new UtilException(e);
             }
         }
         return s;
@@ -80,7 +83,8 @@ public final class URLUtil {
                 s = URLEncoder.encode(str, enc);
             }
             catch (UnsupportedEncodingException e) {
-                return null;
+                LoggerUtil.error(e);
+                throw new UtilException(e);
             }
         }
         return s;

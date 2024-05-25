@@ -6,13 +6,14 @@
 package com.hbasesoft.rule.plugin.event;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
-import com.hbasesoft.framework.message.core.event.EventData;
 import com.hbasesoft.framework.message.core.event.EventEmmiter;
 import com.hbasesoft.framework.rule.core.AbstractFlowCompnentInterceptor;
 import com.hbasesoft.framework.rule.core.FlowContext;
@@ -42,7 +43,7 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
     public boolean before(final Serializable flowBean, final FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("beforeEvent");
         if (StringUtils.isNotEmpty(event)) {
-            EventData data = new EventData();
+            Map<String, Object> data = new HashMap<>();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);
             EventEmmiter.emmit(event, data);
@@ -62,7 +63,7 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
     public void after(final Serializable flowBean, final FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("orderedEvent");
         if (StringUtils.isNotEmpty(event)) {
-            EventData data = new EventData();
+            Map<String, Object> data = new HashMap<>();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);
             EventEmmiter.emmit(event, data, "ORDERLY");
@@ -82,11 +83,11 @@ public class EventOrderlyComponentIntercetor extends AbstractFlowCompnentInterce
     public void error(final Exception e, final Serializable flowBean, final FlowContext flowContext) {
         String event = (String) flowContext.getFlowConfig().getConfigAttrMap().get("errorEvent");
         if (StringUtils.isNotEmpty(event)) {
-            EventData data = new EventData();
+            Map<String, Object> data = new HashMap<>();
             data.putAll(flowContext.getParamMap());
             data.put("flowBean", flowBean);
             data.put("errorCode",
-                e instanceof FrameworkException ? ((FrameworkException) e).getCode() : ErrorCodeDef.SYSTEM_ERROR);
+                e instanceof FrameworkException ? ((FrameworkException) e).getCode() : ErrorCodeDef.FAILURE);
             EventEmmiter.emmit(event, data);
         }
     }

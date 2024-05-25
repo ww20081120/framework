@@ -37,7 +37,7 @@ public final class EventEmmiter {
      * @taskId <br>
      */
     public static void emmit(final String event) {
-        emmit(event, new EventData());
+        emmit(event, null);
     }
 
     /**
@@ -48,12 +48,13 @@ public final class EventEmmiter {
      * @author 王伟<br>
      * @taskId <br>
      */
-    public static void emmit(final String event, final EventData data) {
+    public static void emmit(final String event, final Object data) {
+        EventData<?> eventData = new EventData<>(data);
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                if (!interceptor.sendBefore(event, data, null, null)) {
+                if (!interceptor.sendBefore(event, eventData, null, null)) {
                     flag = false;
                     break;
                 }
@@ -61,23 +62,23 @@ public final class EventEmmiter {
 
             if (flag) {
                 try {
-                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(eventData));
 
                     for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).sendAfter(event, data, null, null);
+                        interceptors.get(i).sendAfter(event, eventData, null, null);
                     }
                 }
                 catch (Exception e) {
                     for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).sendError(event, data, null, null, e);
+                        interceptors.get(i).sendError(event, eventData, null, null, e);
                     }
                 }
             }
         }
         else {
-            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data));
+            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(eventData));
         }
-        LoggerUtil.debug("触发[event={0},data={1}]事件通知", event, data);
+        LoggerUtil.debug("触发[event={0},data={1}]事件通知", event, eventData);
     }
 
     /**
@@ -89,12 +90,14 @@ public final class EventEmmiter {
      * @param data
      * @param seconds <br>
      */
-    public static void emmit(final String event, final EventData data, final int seconds) {
+    public static void emmit(final String event, final Object data, final int seconds) {
+        EventData<?> eventData = new EventData<>(data);
+
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                if (!interceptor.sendBefore(event, data, seconds, null)) {
+                if (!interceptor.sendBefore(event, eventData, seconds, null)) {
                     flag = false;
                     break;
                 }
@@ -102,23 +105,23 @@ public final class EventEmmiter {
 
             if (flag) {
                 try {
-                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(eventData), seconds);
 
                     for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).sendAfter(event, data, seconds, null);
+                        interceptors.get(i).sendAfter(event, eventData, seconds, null);
                     }
                 }
                 catch (Exception e) {
                     for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).sendError(event, data, seconds, null, e);
+                        interceptors.get(i).sendError(event, eventData, seconds, null, e);
                     }
                 }
             }
         }
         else {
-            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), seconds);
+            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(eventData), seconds);
         }
-        LoggerUtil.debug("触发[event={0},data={1}, delayTime={2}]事件通知", event, data, seconds);
+        LoggerUtil.debug("触发[event={0},data={1}, delayTime={2}]事件通知", event, eventData, seconds);
     }
 
     /**
@@ -130,12 +133,14 @@ public final class EventEmmiter {
      * @param data
      * @param produceModel <br>
      */
-    public static void emmit(final String event, final EventData data, final String produceModel) {
+    public static void emmit(final String event, final Object data, final String produceModel) {
+        EventData<?> eventData = new EventData<>(data);
+
         List<EventInterceptor> interceptors = EventIntercetorHolder.getInterceptors(event);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             boolean flag = true;
             for (EventInterceptor interceptor : interceptors) {
-                if (!interceptor.sendBefore(event, data, null, produceModel)) {
+                if (!interceptor.sendBefore(event, eventData, null, produceModel)) {
                     flag = false;
                     break;
                 }
@@ -143,22 +148,23 @@ public final class EventEmmiter {
 
             if (flag) {
                 try {
-                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
+                    MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(eventData),
+                        produceModel);
 
                     for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).sendAfter(event, data, null, produceModel);
+                        interceptors.get(i).sendAfter(event, eventData, null, produceModel);
                     }
                 }
                 catch (Exception e) {
                     for (int i = interceptors.size() - 1; i >= 0; i--) {
-                        interceptors.get(i).sendError(event, data, null, produceModel, e);
+                        interceptors.get(i).sendError(event, eventData, null, produceModel, e);
                     }
                 }
             }
         }
         else {
-            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(data), produceModel);
+            MessageHelper.createMessagePublisher().publish(event, SerializationUtil.serial(eventData), produceModel);
         }
-        LoggerUtil.debug("触发[event={0},data={1}, produceModel={2}]事件通知", event, data, produceModel);
+        LoggerUtil.debug("触发[event={0},data={1}, produceModel={2}]事件通知", event, eventData, produceModel);
     }
 }

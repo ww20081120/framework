@@ -63,7 +63,7 @@ import jakarta.persistence.criteria.Root;
 @SuppressWarnings({
     "unchecked", "rawtypes"
 })
-public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
+public class BaseHibernateDao implements BaseJpaDao, ISqlExcutor {
 
     /** 匿名 */
     private static final String ALIAS = "QUERY_DATA__";
@@ -867,9 +867,8 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         CriteriaBuilder cb = criteriaBuilder();
         CriteriaUpdate query = cb.createCriteriaUpdate(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        if (specification != null) {
-            specification.toPredicate(root, query, cb);
-        }
+        Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "修改条件");
+        specification.toPredicate(root, query, cb);
         updateByCriteria(query);
     }
 
@@ -885,9 +884,8 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         CriteriaBuilder cb = criteriaBuilder();
         CriteriaDelete query = cb.createCriteriaDelete(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
-        if (specification != null) {
-            specification.toPredicate(root, query, cb);
-        }
+        Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "删除条件");
+        specification.toPredicate(root, query, cb);
         deleteByCriteria(query);
 
     }
@@ -930,11 +928,9 @@ public class BaseHibernateDao implements IBaseDao, ISqlExcutor {
         CriteriaQuery query = cb.createQuery(getEntityClazz());
         Root<?> root = query.from(getEntityClazz());
         query.select(root);
-        if (specification != null) {
-            specification.toPredicate(root, query, cb);
-        }
+        Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
+        specification.toPredicate(root, query, cb);
         return queryPagerByCriteria(query, pageIndex, pageSize);
-
     }
 
     /**

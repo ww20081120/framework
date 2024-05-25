@@ -23,7 +23,7 @@ import javax.net.ssl.X509TrustManager;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
-public final class TrustManagerUtils {
+public final class TrustManagerUtil {
     /** */
     private static final X509Certificate[] EMPTY_X509CERTIFICATE_ARRAY = new X509Certificate[] {};
 

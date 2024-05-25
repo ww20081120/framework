@@ -36,7 +36,7 @@ public class TxEventRetryHandler {
      * @taskId <br>
      */
     @Tx(name = TX_EVENT_RETRY_HANDLER + "emmit1")
-    public void emmit1(final String event, final EventData data) {
+    public void emmit1(final String event, final EventData<?> data) {
         EventEmmiter.emmit(event, data);
     }
 
@@ -50,7 +50,7 @@ public class TxEventRetryHandler {
      * @param seconds <br>
      */
     @Tx(name = TX_EVENT_RETRY_HANDLER + "emmit2")
-    public void emmit2(final String event, final EventData data, final int seconds) {
+    public void emmit2(final String event, final EventData<?> data, final int seconds) {
         EventEmmiter.emmit(event, data, seconds);
     }
 
@@ -64,7 +64,7 @@ public class TxEventRetryHandler {
      * @param produceModel <br>
      */
     @Tx(name = TX_EVENT_RETRY_HANDLER + "emmit3")
-    public void emmit3(final String event, final EventData data, final String produceModel) {
+    public void emmit3(final String event, final EventData<?> data, final String produceModel) {
         EventEmmiter.emmit(event, data, produceModel);
     }
 }
