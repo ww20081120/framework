@@ -242,6 +242,19 @@ public final class HttpUtil {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param headers
+     * @return <br>
+     */
+    public static String doPost(final String url, final Headers headers) {
+        return doPost(url, new HashMap<>(), headers);
+    }
+
+    /**
      * Description: 执行Post请求<br>
      * 
      * @author 王伟<br>
