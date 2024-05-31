@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.tracing.core.DefaultTraceLoggerService;
 
 import zipkin2.Span;
 import zipkin2.reporter.Reporter;
@@ -30,7 +31,7 @@ public class ZipkinSpanReporter implements Reporter<Span> {
     /**
      * logger
      */
-    private Logger logger = new Logger(TraceLoggerService4File.class);
+    private Logger logger = new Logger(DefaultTraceLoggerService.class);
 
     /**
      * Description: <br>

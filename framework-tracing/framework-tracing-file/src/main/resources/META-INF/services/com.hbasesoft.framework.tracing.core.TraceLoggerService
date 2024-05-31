@@ -1,1 +1,1 @@
-com.hbasesoft.framework.tracing.file.TraceLoggerService4File
+com.hbasesoft.framework.tracing.core.DefaultTraceLoggerService
