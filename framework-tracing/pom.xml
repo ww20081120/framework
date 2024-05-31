@@ -12,5 +12,8 @@
   	<module>framework-tracing-core</module>
   	<module>framework-tracing-file</module>
   	<module>framework-tracing-demo</module>
+  	<module>framework-tracing-otlp</module>
+  	<module>framework-tracing-zipkin</module>
+  	<module>framework-tracing-jaeger</module>
   </modules>
 </project>
