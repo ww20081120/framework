@@ -30,6 +30,7 @@ import io.opentelemetry.semconv.ResourceAttributes;
  */
 @Configuration
 public class OpenTelemetryConfig {
+
     /**
      * Description: <br>
      * 
