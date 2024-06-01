@@ -3,47 +3,40 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.tracing.file;
+package com.hbasesoft.framework.tracing.demo;
 
 import org.springframework.stereotype.Component;
 
-import com.hbasesoft.framework.common.annotation.NoTracerLog;
-import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
-import zipkin2.Span;
-import zipkin2.reporter.Reporter;
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>
  * 
- * @author 王伟<br>
+ * @author ww200<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2023年6月13日 <br>
+ * @CreateDate 2024年6月1日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.tracing.file <br>
+ * @see com.hbasesoft.framework.tracing.demo <br>
  */
-@Component("zipkinReporter")
-@NoTracerLog
-public class ZipkinSpanReporter implements Reporter<Span> {
+@Component
+public class TestComponent {
 
-    /**
-     * logger
-     */
-    private Logger logger = new Logger(TraceLoggerService4File.class);
+    /** */
+    @Resource
+    private TestComponent2 testComponent2;
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param span <br>
+     * @param value <br>
      */
-    @Override
-    public void report(final Span span) {
-        if (span != null) {
-            logger.info(span.toString());
-        }
+    public void test(final String value) {
+        LoggerUtil.info("test {0}", value);
+        testComponent2.test(value);
     }
-
 }

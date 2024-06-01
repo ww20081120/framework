@@ -11,6 +11,8 @@ import org.aopalliance.intercept.MethodInvocation;
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.tracing.core.TraceLogUtil;
 
+import io.micrometer.tracing.Tracer.SpanInScope;
+
 /**
  * <Description> <br>
  * 
@@ -49,8 +51,7 @@ public class TracerLogMethodInterceptor implements MethodInterceptor {
         long beginTime = System.currentTimeMillis();
 
         Object[] args = joinPoint.getArguments();
-        TraceLogUtil.before(beginTime, method, args);
-        try {
+        try (SpanInScope scope = TraceLogUtil.before(beginTime, method, args)) {
             Object returnValue = joinPoint.proceed();
             TraceLogUtil.afterReturning(beginTime, method, returnValue);
             return returnValue;

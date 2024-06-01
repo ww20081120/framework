@@ -18,6 +18,7 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
+import io.micrometer.tracing.Tracer.SpanInScope;
 
 /**
  * <Description> <br>
@@ -65,10 +66,11 @@ public final class TraceLogUtil {
      * @taskId <br>
      * @param beginTime
      * @param method
-     * @param args <br>
+     * @param args
+     * @return <br>
      */
-    public static void before(final long beginTime, final Method method, final Object[] args) {
-        before(beginTime, getMethodSignature(method), args);
+    public static SpanInScope before(final long beginTime, final Method method, final Object[] args) {
+        return before(beginTime, getMethodSignature(method), args);
     }
 
     /**
@@ -78,9 +80,10 @@ public final class TraceLogUtil {
      * @taskId <br>
      * @param beginTime
      * @param methodName
-     * @param args <br>
+     * @param args
+     * @return <br>
      */
-    public static void before(final long beginTime, final String methodName, final Object[] args) {
+    public static SpanInScope before(final long beginTime, final String methodName, final Object[] args) {
         Tracer tc = getTracer();
         if (tc != null) {
 
@@ -90,19 +93,23 @@ public final class TraceLogUtil {
             // 当前的Span
             Span span = null;
             if (parentSpan != null) {
-                span = tracer.spanBuilder().setParent(parentSpan.context())
+                span = tc.spanBuilder().setParent(parentSpan.context()).name(methodName)
                     .startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
             }
             else {
-                span = tracer.spanBuilder().startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
+                span = tc.spanBuilder().name(methodName).startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
             }
+
+            SpanInScope scope = tc.withSpan(span);
 
             // 执行记录
             for (TraceLoggerService service : getTransLoggerServices()) {
                 service.before(span, parentSpan, beginTime, methodName, args);
             }
+            return scope;
         }
 
+        return null;
     }
 
     /**

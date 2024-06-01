@@ -72,8 +72,8 @@ public final class VelocityParseFactory {
             properties.setProperty(VelocityEngine.RESOURCE_LOADER, "string");
             properties.setProperty("string.resource.loader.class",
                 "org.apache.velocity.runtime.resource.loader.StringResourceLoader");
-            properties.setProperty("input.encoding", GlobalConstants.DEFAULT_CHARSET);
-            properties.setProperty("output.encoding", GlobalConstants.DEFAULT_CHARSET);
+            properties.setProperty("input.encoding", GlobalConstants.DEFAULT_CHARSET.name());
+            properties.setProperty("output.encoding", GlobalConstants.DEFAULT_CHARSET.name());
 
             ServiceLoader<UserDirective> loader = ServiceLoader.load(UserDirective.class);
             if (loader != null) {
@@ -126,7 +126,7 @@ public final class VelocityParseFactory {
 
         StringBuilder sb = new StringBuilder();
         try (Writer writer = new BufferedWriter(new StringBuilderWriter(sb))) {
-            Template template = Velocity.getTemplate(templateName, GlobalConstants.DEFAULT_CHARSET);
+            Template template = Velocity.getTemplate(templateName, GlobalConstants.DEFAULT_CHARSET.name());
             template.merge(context, writer);
             writer.flush();
             return sb.toString();

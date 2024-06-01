@@ -1,14 +1,12 @@
 package com.hbasesoft.framework.common.utils.security;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -43,18 +41,11 @@ public final class URLUtil {
      * @return 解密的字符串
      * @see [类、类#方法、类#成员]
      */
-    public static String decode(final String str, final String enc) {
-        String s = null;
+    public static String decode(final String str, final Charset enc) {
         if (StringUtils.isNotEmpty(str)) {
-            try {
-                s = URLDecoder.decode(str, enc);
-            }
-            catch (UnsupportedEncodingException e) {
-                LoggerUtil.error(e);
-                throw new UtilException(e);
-            }
+            return URLDecoder.decode(str, enc);
         }
-        return s;
+        return GlobalConstants.BLANK;
     }
 
     /**
@@ -76,17 +67,10 @@ public final class URLUtil {
      * @return 加密的字符串
      * @see [类、类#方法、类#成员]
      */
-    public static String encode(final String str, final String enc) {
-        String s = null;
+    public static String encode(final String str, final Charset enc) {
         if (StringUtils.isNotEmpty(str)) {
-            try {
-                s = URLEncoder.encode(str, enc);
-            }
-            catch (UnsupportedEncodingException e) {
-                LoggerUtil.error(e);
-                throw new UtilException(e);
-            }
+            return URLEncoder.encode(str, enc);
         }
-        return s;
+        return GlobalConstants.BLANK;
     }
 }

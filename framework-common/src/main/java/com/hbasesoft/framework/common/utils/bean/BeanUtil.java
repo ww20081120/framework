@@ -212,7 +212,7 @@ public final class BeanUtil {
                 if ("file".equals(protocol)) {
                     logger.debug("-------------- scan type file ----------------");
                     // 获取包的物理路径
-                    String filePath = URLUtil.decode(url.getFile(), "UTF-8");
+                    String filePath = URLUtil.decode(url.getFile(), GlobalConstants.DEFAULT_CHARSET);
 
                     // 以文件的方式扫描整个包下的文件 并添加到集合中
                     findAndAddClassesInPackageByFile(packageName, packArr, filePath, recursive, classes);

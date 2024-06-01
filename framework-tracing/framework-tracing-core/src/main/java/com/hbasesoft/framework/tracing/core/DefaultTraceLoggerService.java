@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.tracing.file;
+package com.hbasesoft.framework.tracing.core;
 
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -15,7 +15,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.tracing.core.TraceLoggerService;
 
 import io.micrometer.tracing.Span;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +27,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @CreateDate 2015年6月27日 <br>
  * @see com.hbasesoft.framework.tracing.file <br>
  */
-public class TraceLoggerService4File implements TraceLoggerService {
+public class DefaultTraceLoggerService implements TraceLoggerService {
 
     /** 最大长度 */
     private static final int MAX_LENGTH = 1000;
@@ -55,7 +54,6 @@ public class TraceLoggerService4File implements TraceLoggerService {
     @Override
     public void before(final Span span, final Span parentSpan, final long beginTime, final String method,
         final Object[] params) {
-        span.tag("method", method);
         if (params != null) {
             String objStr = Arrays.toString(params);
             span.tag("params", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) + "..." : objStr);

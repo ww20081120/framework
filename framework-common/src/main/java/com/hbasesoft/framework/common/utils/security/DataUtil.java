@@ -3,7 +3,6 @@
  */
 package com.hbasesoft.framework.common.utils.security;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -145,12 +144,7 @@ public final class DataUtil {
      * @throws UtilException <br>
      */
     public static byte[] base64Decode(final String content) {
-        try {
-            return Base64.decodeBase64(content.getBytes(GlobalConstants.DEFAULT_CHARSET));
-        }
-        catch (UnsupportedEncodingException e) {
-            throw new UtilException(ErrorCodeDef.BASE64_ERROR, e);
-        }
+        return Base64.decodeBase64(content.getBytes(GlobalConstants.DEFAULT_CHARSET));
     }
 
     /**
@@ -163,12 +157,7 @@ public final class DataUtil {
      * @throws UtilException <br>
      */
     public static String base64Encode(final byte[] content) {
-        try {
-            return new String(Base64.encodeBase64(content), GlobalConstants.DEFAULT_CHARSET);
-        }
-        catch (UnsupportedEncodingException e) {
-            throw new UtilException(ErrorCodeDef.BASE64_ERROR, e);
-        }
+        return new String(Base64.encodeBase64(content), GlobalConstants.DEFAULT_CHARSET);
     }
 
     /**
