@@ -54,7 +54,6 @@ public class DefaultTraceLoggerService implements TraceLoggerService {
     @Override
     public void before(final Span span, final Span parentSpan, final long beginTime, final String method,
         final Object[] params) {
-        span.tag("method", method);
         if (params != null) {
             String objStr = Arrays.toString(params);
             span.tag("params", objStr.length() > MAX_LENGTH ? objStr.substring(0, MAX_LENGTH) + "..." : objStr);

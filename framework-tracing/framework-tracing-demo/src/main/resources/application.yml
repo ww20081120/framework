@@ -12,6 +12,6 @@ management:
   tracing:
     sampling:
       probability: 1.0
-  otlp:
+  zipkin:
     tracing:
-      endpoint: http://localhost:16686/v1/traces
+      endpoint: http://localhost:9411/api/v2/spans

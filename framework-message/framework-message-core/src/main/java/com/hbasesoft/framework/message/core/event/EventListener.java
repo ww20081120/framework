@@ -15,6 +15,8 @@ import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 import com.hbasesoft.framework.tracing.core.TraceLogUtil;
 
+import io.micrometer.tracing.Tracer.SpanInScope;
+
 /**
  * <Description> <br>
  * 
@@ -69,10 +71,9 @@ public interface EventListener<T> extends MessageSubscriber {
     @SuppressWarnings("unchecked")
     default void onMessage(final String channel, final byte[] data) {
         long current = System.currentTimeMillis();
-        TraceLogUtil.before(current, channel, new Object[] {
+        try (SpanInScope scope = TraceLogUtil.before(current, channel, new Object[] {
             DataUtil.base64Encode(data)
-        });
-        try {
+        })) {
             EventData<T> eventData = SerializationUtil.unserial(EventData.class, data);
             LoggerUtil.debug("[{0}]接收到[event={1},data={2}]事件", Thread.currentThread().threadId(), channel, eventData);
 
