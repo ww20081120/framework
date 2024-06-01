@@ -3,7 +3,11 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.log.demo;
+package com.hbasesoft.framework.tracing.demo;
+
+import org.springframework.stereotype.Service;
+
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -13,18 +17,23 @@ package com.hbasesoft.framework.log.demo;
  * @taskId <br>
  * @CreateDate Jul 13, 2020 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.log.demo <br>
+ * @see com.hbasesoft.framework.tracing.demo <br>
  */
-public interface DemoService {
+@Service
+public class DemoServiceImpl implements DemoService {
 
     /**
-     * @Method say
-     * @param name
-     * @return java.lang.String
-     * @Author 李煜龙
-     * @Description TODD
-     * @Date 2023/1/29 10:55
-    */
-    String say(String name);
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public String say(final String name) {
+        String value = name + ": hello!";
+        LoggerUtil.info(value);
+        return value;
+    }
 
 }

@@ -3,18 +3,15 @@ project: #项目信息
   
 spring: #应用配置
   application:
-    name: ${project.name}
-  sleuth:
-    traceId128: true
-    sampler:
-      probability: 1.0    
+    name: ${project.name}   
  
 server: #系统配置
   port: 10000
   
-logservice:
-  flume: # 日志采集任务配置
-    name: a1
-    config: flume-taildir-es.conf
-  framework: # 框架的日志是否打印
-    show: true
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: http://localhost:16686/v1/traces

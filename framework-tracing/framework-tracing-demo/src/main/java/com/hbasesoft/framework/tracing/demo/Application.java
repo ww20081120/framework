@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.log.demo;
+package com.hbasesoft.framework.tracing.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,7 +28,7 @@ import com.hbasesoft.framework.tracing.core.TraceLog;
 @EnableAutoConfiguration(exclude = {
     DataSourceAutoConfiguration.class
 })
-@TraceLog(basePackages = "com.hbasesoft.framework.log.demo")
+@TraceLog(basePackages = "com.hbasesoft.framework.tracing.demo")
 @ComponentScan(basePackages = "com.hbasesoft")
 @Configuration
 public class Application {
