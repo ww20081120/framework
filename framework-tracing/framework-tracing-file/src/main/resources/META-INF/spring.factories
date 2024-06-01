@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- com.hbasesoft.framework.tracing.file.ZipkinSpanReporter
+com.hbasesoft.framework.tracing.file.OpenTelemetryConfig

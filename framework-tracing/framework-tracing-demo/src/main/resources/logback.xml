@@ -102,15 +102,34 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.hbasesoft">
-		<level value="DEBUG" />
+	<!-- Appender to log to file in a JSON format -->
+	<appender name="transAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}/trans.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/trans.json.%d{yyyy-MM-dd}.gz
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([${springAppName:-}]){yellow} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<logger name="io.opentelemetry"
+		level="INFO" additivity="true">
+		<appender-ref ref="transAppender" />
+	</logger>
+
+	<logger name="com.hbasesoft" level="DEBUG">
 		<appender-ref ref="debugAppender" />
 		<appender-ref ref="infoAppender" />
 		<appender-ref ref="warnAppender" />
 		<appender-ref ref="errorAppender" />
 	</logger>
 
-	<root level="DEBUG">
+	<root level="INFO">
 		<appender-ref ref="consoleAppender" />
 	</root>
 </configuration>
