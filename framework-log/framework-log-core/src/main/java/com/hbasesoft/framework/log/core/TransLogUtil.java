@@ -47,6 +47,24 @@ public final class TransLogUtil {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @return <br>
+     */
+    public static String getTracerId() {
+        Tracer tc = getTracer();
+        if (tc != null) {
+            Span span = tracer.currentSpan();
+            if (span != null) {
+                return span.context().traceIdString();
+            }
+        }
+        return "No Tracer found!";
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param beginTime
      * @param method
      * @param args
