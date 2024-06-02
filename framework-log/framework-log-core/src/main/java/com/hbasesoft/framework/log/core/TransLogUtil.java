@@ -17,6 +17,7 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 import brave.Span;
 import brave.Tracer;
+import brave.Tracer.SpanInScope;
 
 /**
  * <Description> <br>
@@ -48,10 +49,11 @@ public final class TransLogUtil {
      * @taskId <br>
      * @param beginTime
      * @param method
-     * @param args <br>
+     * @param args
+     * @return <br>
      */
-    public static void before(final long beginTime, final Method method, final Object[] args) {
-        before(beginTime, getMethodSignature(method), args);
+    public static SpanInScope before(final long beginTime, final Method method, final Object[] args) {
+        return before(beginTime, getMethodSignature(method), args);
     }
 
     /**
@@ -61,9 +63,10 @@ public final class TransLogUtil {
      * @taskId <br>
      * @param beginTime
      * @param methodName
-     * @param args <br>
+     * @param args
+     * @return <br>
      */
-    public static void before(final long beginTime, final String methodName, final Object[] args) {
+    public static SpanInScope before(final long beginTime, final String methodName, final Object[] args) {
         Tracer tc = getTracer();
         if (tc != null) {
 
@@ -73,20 +76,24 @@ public final class TransLogUtil {
             // 当前的Span
             Span span = null;
             if (parentSpan != null) {
-                span = tracer.newChild(parentSpan.context());
+                span = tracer.newChild(parentSpan.context()).name(methodName);
             }
             else {
-                span = tracer.newTrace();
+                span = tracer.newTrace().name(methodName);
             }
 
             span.start(beginTime);
+
+            SpanInScope scope = tc.withSpanInScope(span);
 
             // 执行记录
             for (TransLoggerService service : getTransLoggerServices()) {
                 service.before(span, parentSpan, beginTime, methodName, args);
             }
-        }
 
+            return scope;
+        }
+        return null;
     }
 
     /**

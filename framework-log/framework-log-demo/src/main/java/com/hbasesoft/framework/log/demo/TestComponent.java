@@ -7,40 +7,36 @@ package com.hbasesoft.framework.log.demo;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
  * 
- * @author 王伟<br>
+ * @author ww200<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate Jul 13, 2020 <br>
+ * @CreateDate 2024年6月1日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.log.demo <br>
+ * @see com.hbasesoft.framework.tracing.demo <br>
  */
-@Service
-public class DemoServiceImpl implements DemoService {
-    
+@Component
+public class TestComponent {
+
     /** */
     @Resource
-    private TestComponent testComponent;
+    private TestComponent2 testComponent2;
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
+     * @param value <br>
      */
-    @Override
-    public String say(final String name) {
-        String value = name + ": hello!";
-        LoggerUtil.info(value);
-        testComponent.test(value);
-        return value;
+    public void test(final String value) {
+        LoggerUtil.info("test {0}", value);
+        testComponent2.test(value);
     }
-
 }

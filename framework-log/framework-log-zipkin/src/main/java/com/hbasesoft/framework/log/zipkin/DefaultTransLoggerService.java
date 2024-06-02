@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.log.file;
+package com.hbasesoft.framework.log.zipkin;
 
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -29,7 +29,7 @@ import brave.Span;
  * @CreateDate 2015年6月27日 <br>
  * @see com.hbasesoft.framework.log.file <br>
  */
-public class TransLoggerService4File implements TransLoggerService {
+public class DefaultTransLoggerService implements TransLoggerService {
 
     /** 最大长度 */
     private static final int MAX_LENGTH = 1000;

@@ -7,7 +7,10 @@ spring: #应用配置
   sleuth:
     traceId128: true
     sampler:
-      probability: 1.0    
+      probability: 1.0
+  zipkin:
+    base-url: http://127.0.0.1:9411
+    discovery-client-enabled: false    
  
 server: #系统配置
   port: 10000
