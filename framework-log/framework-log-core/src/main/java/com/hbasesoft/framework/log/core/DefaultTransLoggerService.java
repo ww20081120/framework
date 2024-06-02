@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.log.zipkin;
+package com.hbasesoft.framework.log.core;
 
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -17,7 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.log.core.TransLoggerService;
 
 import brave.Span;
 

@@ -1,1 +1,1 @@
-com.hbasesoft.framework.log.zipkin.DefaultTransLoggerService
+com.hbasesoft.framework.log.core.DefaultTransLoggerService
