@@ -222,7 +222,7 @@ public class AntVFlowConfig implements FlowConfig {
     @Getter
     @Setter
     @AllArgsConstructor
-    private static class Component {
+    private static final class Component {
         /** flowComponent */
         @SuppressWarnings("rawtypes")
         private FlowComponent flowComponent;
