@@ -206,7 +206,7 @@ public final class TransLogUtil {
      */
     private static String getMethodSignature(final Method method) {
         StringBuilder sbuf = new StringBuilder();
-        sbuf.append(method.getDeclaringClass().getName()).append('<').append(method.getName()).append('>');
+        sbuf.append(method.getDeclaringClass().getSimpleName()).append('<').append(method.getName()).append('>');
         sbuf.append('(');
 
         Class<?>[] types = method.getParameterTypes();
@@ -215,7 +215,7 @@ public final class TransLogUtil {
                 if (i > 0) {
                     sbuf.append(',');
                 }
-                sbuf.append(types[i].getName());
+                sbuf.append(types[i].getSimpleName());
             }
         }
         sbuf.append(')');
