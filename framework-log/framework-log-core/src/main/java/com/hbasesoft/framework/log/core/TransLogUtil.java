@@ -86,7 +86,7 @@ public final class TransLogUtil {
      */
     public static SpanInScope before(final long beginTime, final String methodName, final Object[] args) {
         Tracer tc = getTracer();
-        if (tc != null) {
+        if (tc != null && getTransLoggerServices().iterator().hasNext()) {
 
             // 父Span
             Span parentSpan = tc.currentSpan();
@@ -138,7 +138,7 @@ public final class TransLogUtil {
      */
     public static void afterReturning(final long beginTime, final String methodName, final Object returnValue) {
         Tracer tc = getTracer();
-        if (tc != null) {
+        if (tc != null && getTransLoggerServices().iterator().hasNext()) {
             // 当前的Span
             Span span = tc.currentSpan();
             if (span != null) {
@@ -180,7 +180,7 @@ public final class TransLogUtil {
      */
     public static void afterThrowing(final long beginTime, final String methodName, final Throwable e) {
         Tracer tc = getTracer();
-        if (tc != null) {
+        if (tc != null && getTransLoggerServices().iterator().hasNext()) {
             // 当前的Span
             Span span = tc.currentSpan();
             if (span != null) {
