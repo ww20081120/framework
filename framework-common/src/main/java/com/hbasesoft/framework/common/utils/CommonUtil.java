@@ -49,6 +49,12 @@ public final class CommonUtil {
     /** NEXT_CHAR */
     private static final int NEXT_CHAR = 26;
 
+    /** pattern */
+    private static final Pattern PATTERN = Pattern.compile("\\s*|\t|\r|\n");
+
+    /** pattern */
+    private static final Pattern PATTERN_1 = Pattern.compile("\\s{1,}|\t|\r|\n");
+
     /**
      * 消息格式化
      * 
@@ -319,8 +325,8 @@ public final class CommonUtil {
     public static String replaceAllBlank(final String str) {
         String dest = GlobalConstants.BLANK;
         if (StringUtils.isNotEmpty(str)) {
-            Pattern p = Pattern.compile("\\s*|\t|\r|\n");
-            Matcher m = p.matcher(str);
+
+            Matcher m = PATTERN.matcher(str);
             dest = m.replaceAll(GlobalConstants.BLANK);
         }
         return dest;
@@ -337,8 +343,8 @@ public final class CommonUtil {
     public static String replaceRedundantBlank(final String str) {
         String dest = GlobalConstants.BLANK;
         if (StringUtils.isNotEmpty(str)) {
-            Pattern p = Pattern.compile("\\s{1,}|\t|\r|\n");
-            Matcher m = p.matcher(str);
+
+            Matcher m = PATTERN_1.matcher(str);
             dest = m.replaceAll(" ");
         }
         return StringUtils.trim(dest);
