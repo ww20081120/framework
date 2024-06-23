@@ -5,8 +5,7 @@ package com.hbasesoft.framework.db.core;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson.JSONObject;
-import com.hbasesoft.framework.common.utils.date.DateUtil;
+import com.alibaba.fastjson2.JSON;
 
 /**
  * <Description> <br>
@@ -32,6 +31,6 @@ public abstract class BaseEntity implements Serializable {
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, DateUtil.DATETIME_FORMAT_19);
+        return JSON.toJSONString(this);
     }
 }

@@ -8,7 +8,7 @@ package com.hbasesoft.framework.tx.core;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;

@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.job.core.demo;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.job.core.JobContext;
 import com.hbasesoft.framework.job.core.SimpleJob;

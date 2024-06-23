@@ -7,8 +7,7 @@ package com.hbasesoft.framework.shell.core.vo;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
 
 /**
  * <Description> 基础传输基类<br>
@@ -35,7 +34,7 @@ public class AbstractVo implements Serializable {
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss", new SerializerFeature[0]);
+        return JSON.toJSONString(this);
     }
 
 }

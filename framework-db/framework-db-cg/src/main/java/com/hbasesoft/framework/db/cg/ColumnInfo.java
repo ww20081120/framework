@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.cg;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 
 import lombok.Data;
 

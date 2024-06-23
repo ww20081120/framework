@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
