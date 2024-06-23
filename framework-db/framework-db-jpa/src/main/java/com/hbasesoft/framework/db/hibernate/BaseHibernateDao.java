@@ -44,6 +44,7 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
@@ -320,7 +321,12 @@ public class BaseHibernateDao implements BaseJpaDao, ISqlExcutor {
     @Override
     public Object getByCriteria(final CriteriaQuery criteria) {
         org.hibernate.query.Query query = getSession().createQuery(criteria);
-        return query.getSingleResult();
+        try {
+            return query.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
     }
 
     /**
