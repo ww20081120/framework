@@ -7,6 +7,8 @@ package com.hbasesoft.framework.common;
 
 import org.springframework.context.ApplicationContext;
 
+import com.hbasesoft.framework.common.utils.PropertyHolder;
+
 /**
  * <Description> <br>
  * 
@@ -18,6 +20,17 @@ import org.springframework.context.ApplicationContext;
  * @see com.hbasesoft.framework.web.core.init <br>
  */
 public interface StartupListener {
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    default boolean enable() {
+        return PropertyHolder.getBooleanProperty(this.getClass().getName(), true);
+    }
 
     /**
      * Description: <br>

@@ -59,7 +59,9 @@ public final class Bootstrap {
         if (loader != null) {
             listenerList = new ArrayList<StartupListener>();
             for (StartupListener listener : loader) {
-                listenerList.add(listener);
+                if (listener.enable()) {
+                    listenerList.add(listener);
+                }
             }
 
             Collections.sort(listenerList, new Comparator<StartupListener>() {
