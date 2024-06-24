@@ -15,7 +15,7 @@ package com.hbasesoft.framework.common;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common <br>
  */
-public interface ErrorCode {
+public interface ErrorCode1 {
 
     /**
      * Description: 获取错误码<br>
