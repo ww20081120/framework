@@ -36,9 +36,75 @@ import jakarta.persistence.criteria.Predicate;
 public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
 
     /**
+     * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
+     * 
+     * @param <T> T
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月8日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.core.wrapper <br>
+     */
+    @FunctionalInterface
+    public interface TempLambdaDeleteWrapper<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper <br>
+         */
+        void exec(LambdaDeleteWrapper<T> wrapper);
+    }
+
+    /**
      * 缓存
      */
     private static Map<String, LambdaSett> lambdaSettMap = new HashMap<>();
+
+    private static String resolveFieldName(final String methodName) {
+        return StringUtils
+            .uncapitalize(methodName.startsWith("get") ? methodName.substring("get".length()) : methodName);
+    }
+
+    /**
+     * Description: between lower，upper <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param condition
+     * @param fieldLambda
+     * @param lower
+     * @param upper
+     * @return <br>
+     */
+    public LambdaDeleteWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Object lower, final Object upper) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.BETWEEN).value(new Object[] {
+                    lower, upper
+                }).build());
+        }
+        return this;
+    }
+
+    /**
+     * Description: between lower，upper <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @param lower
+     * @param upper
+     * @return <br>
+     */
+    public LambdaDeleteWrapper<T> between(final SFunction<T, ?> fieldLambda, final Object lower, final Object upper) {
+        between(true, fieldLambda, lower, upper);
+        return this;
+    }
 
     /**
      * Description: <br>
@@ -83,61 +149,8 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
         return this;
     }
 
-    /**
-     * !=
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> ne(final boolean condition, final SFunction<T, ?> fieldLambda, final Object value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NE).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * !=
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> ne(final SFunction<T, ?> fieldLambda, final Object value) {
-        ne(true, fieldLambda, value);
-        return this;
-    }
-
-    /**
-     * >
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.GT).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * >
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
-        gt(true, fieldLambda, value);
-        return this;
+    private String fieldLambda2FieldName(final SFunction<T, ?> fieldLambda) {
+        return getLambdaSett(fieldLambda).getFiledName();
     }
 
     /**
@@ -170,31 +183,168 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * <
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
+     */
+    protected LambdaSett getLambdaSett(final SFunction<T, ?> fieldLambda) {
+        SerializedLambda lambda = LambdaUtils.resolve(fieldLambda);
+        String filedName = resolveFieldName(lambda.getImplMethodName());
+        String key = lambda.getImplClass().getName() + filedName;
+        LambdaSett lambdaSett;
+        if (lambdaSettMap.containsKey(key)) {
+            lambdaSett = lambdaSettMap.get(key);
+        }
+        else {
+            lambdaSett = new LambdaSett(lambda, filedName);
+            lambdaSettMap.put(key, lambdaSett);
+        }
+        return lambdaSett;
+    }
+
+    /**
+     * >
      *
      * @param condition 是否需要使用本条件
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda,
+    public LambdaDeleteWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda,
         final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LT).value(value).build());
+                .operator(Operator.GT).value(value).build());
         }
         return this;
     }
 
     /**
-     * <
+     * >
      *
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
-        lt(true, fieldLambda, value);
+    public LambdaDeleteWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+        gt(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * in 集合
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Iterable<?> values) {
+        List<Object> valuesList = new ArrayList<>();
+        values.forEach(value -> {
+            valuesList.add(value);
+        });
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.IN).value(valuesList.toArray()).build());
+        }
+        return this;
+    }
+
+    /**
+     * in 数组/可变参
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Object... values) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.IN).value(values).build());
+        }
+        return this;
+    }
+
+    /**
+     * in 集合
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> in(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
+        in(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * in 数组/可变参
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> in(final SFunction<T, ?> fieldLambda, final Object... values) {
+        in(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * isNotNull
+     * 
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> isNotNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTNULL).build());
+        }
+        return this;
+    }
+
+    /**
+     * isNotNull
+     * 
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> isNotNull(final SFunction<T, ?> fieldLambda) {
+        isNotNull(true, fieldLambda);
+        return this;
+    }
+
+    /**
+     * isNull
+     * 
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> isNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.ISNULL).build());
+        }
+        return this;
+    }
+
+    /**
+     * isNull
+     * 
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> isNull(final SFunction<T, ?> fieldLambda) {
+        isNull(true, fieldLambda);
         return this;
     }
 
@@ -256,6 +406,35 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * like '%xx'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> likeLeft(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.LIKE).value("%" + value).build());
+        }
+        return this;
+    }
+
+    /**
+     * like '%xx'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> likeLeft(final SFunction<T, ?> fieldLambda, final String value) {
+        likeLeft(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
      * like 'xx%'
      *
      * @param condition 是否需要使用本条件
@@ -285,31 +464,121 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * like '%xx'
+     * <
      *
      * @param condition 是否需要使用本条件
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> likeLeft(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final String value) {
+    public LambdaDeleteWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LIKE).value("%" + value).build());
+                .operator(Operator.LT).value(value).build());
         }
         return this;
     }
 
     /**
-     * like '%xx'
+     * <
      *
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> likeLeft(final SFunction<T, ?> fieldLambda, final String value) {
-        likeLeft(true, fieldLambda, value);
+    public LambdaDeleteWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+        lt(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * !=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> ne(final boolean condition, final SFunction<T, ?> fieldLambda, final Object value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NE).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * !=
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> ne(final SFunction<T, ?> fieldLambda, final Object value) {
+        ne(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * notIn 集合
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Iterable<?> values) {
+        List<Object> valuesList = new ArrayList<>();
+        values.forEach(value -> {
+            valuesList.add(value);
+        });
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTIN).value(valuesList.toArray()).build());
+        }
+        return this;
+    }
+
+    /**
+     * notIn 数组/可变参
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Object... values) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTIN).value(values).build());
+        }
+        return this;
+    }
+
+    /**
+     * notIn 集合
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
+        notIn(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * notIn 数组/可变参
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Object... values) {
+        notIn(true, fieldLambda, values);
         return this;
     }
 
@@ -343,35 +612,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * like 'xx%'
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> notLikeRight(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final String value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTLIKE).value(value + "%").build());
-        }
-        return this;
-    }
-
-    /**
-     * like 'xx%'
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> notLikeRight(final SFunction<T, ?> fieldLambda, final String value) {
-        notLikeRight(true, fieldLambda, value);
-        return this;
-    }
-
-    /**
      * like '%xx'
      *
      * @param condition 是否需要使用本条件
@@ -401,6 +641,35 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * like 'xx%'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> notLikeRight(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTLIKE).value(value + "%").build());
+        }
+        return this;
+    }
+
+    /**
+     * like 'xx%'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> notLikeRight(final SFunction<T, ?> fieldLambda, final String value) {
+        notLikeRight(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
      * Description: or <br>
      * 
      * @author 王伟<br>
@@ -415,275 +684,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
             super.getOrTempPredicates().add(lambdaQueryWrapper.getTempPredicates());
         }
         return this;
-    }
-
-    /**
-     * Description: between lower，upper <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param condition
-     * @param fieldLambda
-     * @param lower
-     * @param upper
-     * @return <br>
-     */
-    public LambdaDeleteWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Object lower, final Object upper) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.BETWEEN).value(new Object[] {
-                    lower, upper
-                }).build());
-        }
-        return this;
-    }
-
-    /**
-     * Description: between lower，upper <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param fieldLambda
-     * @param lower
-     * @param upper
-     * @return <br>
-     */
-    public LambdaDeleteWrapper<T> between(final SFunction<T, ?> fieldLambda, final Object lower, final Object upper) {
-        between(true, fieldLambda, lower, upper);
-        return this;
-    }
-
-    /**
-     * in 集合
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.IN).value(valuesList.toArray()).build());
-        }
-        return this;
-    }
-
-    /**
-     * in 集合
-     *
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> in(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
-        in(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * in 数组/可变参
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Object... values) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.IN).value(values).build());
-        }
-        return this;
-    }
-
-    /**
-     * in 数组/可变参
-     *
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> in(final SFunction<T, ?> fieldLambda, final Object... values) {
-        in(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * notIn 数组/可变参
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Object... values) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTIN).value(values).build());
-        }
-        return this;
-    }
-
-    /**
-     * notIn 数组/可变参
-     *
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Object... values) {
-        notIn(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * isNull
-     * 
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> isNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.ISNULL).build());
-        }
-        return this;
-    }
-
-    /**
-     * isNull
-     * 
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> isNull(final SFunction<T, ?> fieldLambda) {
-        isNull(true, fieldLambda);
-        return this;
-    }
-
-    /**
-     * isNotNull
-     * 
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> isNotNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTNULL).build());
-        }
-        return this;
-    }
-
-    /**
-     * isNotNull
-     * 
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> isNotNull(final SFunction<T, ?> fieldLambda) {
-        isNotNull(true, fieldLambda);
-        return this;
-    }
-
-    /**
-     * notIn 集合
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTIN).value(valuesList.toArray()).build());
-        }
-        return this;
-    }
-
-    /**
-     * notIn 集合
-     *
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
-        notIn(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param fieldLambda
-     * @return <br>
-     */
-    protected LambdaSett getLambdaSett(final SFunction<T, ?> fieldLambda) {
-        SerializedLambda lambda = LambdaUtils.resolve(fieldLambda);
-        String filedName = resolveFieldName(lambda.getImplMethodName());
-        String key = lambda.getImplClass().getName() + filedName;
-        LambdaSett lambdaSett;
-        if (lambdaSettMap.containsKey(key)) {
-            lambdaSett = lambdaSettMap.get(key);
-        }
-        else {
-            lambdaSett = new LambdaSett(lambda, filedName);
-            lambdaSettMap.put(key, lambdaSett);
-        }
-        return lambdaSett;
-    }
-
-    private String fieldLambda2FieldName(final SFunction<T, ?> fieldLambda) {
-        return getLambdaSett(fieldLambda).getFiledName();
-    }
-
-    private static String resolveFieldName(final String methodName) {
-        return StringUtils
-            .uncapitalize(methodName.startsWith("get") ? methodName.substring("get".length()) : methodName);
-    }
-
-    /**
-     * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
-     * 
-     * @param <T> T
-     * @author 王伟<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月8日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.core.wrapper <br>
-     */
-    @FunctionalInterface
-    public interface TempLambdaDeleteWrapper<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper <br>
-         */
-        void exec(LambdaDeleteWrapper<T> wrapper);
     }
 
 }

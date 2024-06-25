@@ -31,14 +31,36 @@ import jakarta.persistence.criteria.Root;
 public abstract class AbstractWrapper<T> {
 
     /**
+     * 临时过滤条件-复杂的or的时候用的
+     */
+    private List<List<TempPredicate>> orTempPredicates = new ArrayList<>();
+
+    /**
      * 临时过滤条件
      */
     private List<TempPredicate> tempPredicates = new ArrayList<>();
 
     /**
-     * 临时过滤条件-复杂的or的时候用的
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
      */
-    private List<List<TempPredicate>> orTempPredicates = new ArrayList<>();
+    protected List<List<TempPredicate>> getOrTempPredicates() {
+        return this.orTempPredicates;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    protected List<TempPredicate> getTempPredicates() {
+        return this.tempPredicates;
+    }
 
     /**
      * Description: <br>
@@ -134,27 +156,5 @@ public abstract class AbstractWrapper<T> {
                 break;
         }
         return null;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    protected List<TempPredicate> getTempPredicates() {
-        return this.tempPredicates;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    protected List<List<TempPredicate>> getOrTempPredicates() {
-        return this.orTempPredicates;
     }
 }

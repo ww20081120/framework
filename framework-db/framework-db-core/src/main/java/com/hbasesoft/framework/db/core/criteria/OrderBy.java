@@ -27,12 +27,12 @@ import lombok.NoArgsConstructor;
 class OrderBy {
 
     /**
-     * 属性
-     */
-    private String property;
-
-    /**
      * 是否是desc
      */
     private boolean isDesc;
+
+    /**
+     * 属性
+     */
+    private String property;
 }
