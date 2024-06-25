@@ -183,35 +183,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * >=
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> ge(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.GREATER_THAN_OR_EQUAL_TO).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * >=
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> ge(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
-        ge(true, fieldLambda, value);
-        return this;
-    }
-
-    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -242,6 +213,64 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
+    public LambdaDeleteWrapper<T> greaterThan(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.GREATER_THAN).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> greaterThan(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+        greaterThan(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> greaterThanOrEqualTo(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.GREATER_THAN_OR_EQUAL_TO).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> greaterThanOrEqualTo(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+        greaterThanOrEqualTo(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * >
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
     public LambdaDeleteWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
@@ -258,35 +287,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public LambdaDeleteWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Number value) {
-        gt(true, fieldLambda, value);
-        return this;
-    }
-
-    /**
-     * >
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.GREATER_THAN).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * >
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
         gt(true, fieldLambda, value);
         return this;
     }
@@ -434,6 +434,35 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * <
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> lessThan(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.LESS_THAN).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaDeleteWrapper<T> lessThan(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+        lessThan(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
      * <=
      *
      * @param condition 是否需要使用本条件
@@ -441,7 +470,7 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> le(final boolean condition, final SFunction<T, ?> fieldLambda,
+    public LambdaDeleteWrapper<T> lessThanOrEqualTo(final boolean condition, final SFunction<T, ?> fieldLambda,
         final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
@@ -457,8 +486,8 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> le(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
-        le(true, fieldLambda, value);
+    public LambdaDeleteWrapper<T> lessThanOrEqualTo(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+        lessThanOrEqualTo(true, fieldLambda, value);
         return this;
     }
 
@@ -572,35 +601,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public LambdaDeleteWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Number value) {
-        lt(true, fieldLambda, value);
-        return this;
-    }
-
-    /**
-     * <
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LESS_THAN).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * <
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaDeleteWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
         lt(true, fieldLambda, value);
         return this;
     }
