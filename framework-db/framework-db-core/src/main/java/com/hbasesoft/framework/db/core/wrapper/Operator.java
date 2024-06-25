@@ -16,14 +16,11 @@ package com.hbasesoft.framework.db.core.wrapper;
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
 enum Operator {
+    /** between and */
+    BETWEEN,
+
     /** equal to */
     EQ,
-
-    /** like */
-    LIKE,
-
-    /** not like */
-    NE,
 
     /** greater than or equal to */
     GE,
@@ -31,26 +28,29 @@ enum Operator {
     /** greater than */
     GT,
 
+    /** in */
+    IN,
+
+    /** is null */
+    ISNULL,
+
     /** Less than or equal to */
     LE,
+
+    /** like */
+    LIKE,
 
     /** Less than */
     LT,
 
-    /** in */
-    IN,
-
-    /** not like */
-    NOTLIKE,
-
-    /** between and */
-    BETWEEN,
+    /** not equal to */
+    NE,
 
     /** not in */
     NOTIN,
 
-    /** is null */
-    ISNULL,
+    /** not like */
+    NOTLIKE,
 
     /** not null */
     NOTNULL;

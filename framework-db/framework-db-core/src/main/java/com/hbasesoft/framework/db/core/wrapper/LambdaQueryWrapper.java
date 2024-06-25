@@ -35,14 +35,81 @@ import com.hbasesoft.framework.db.core.wrapper.lambda.SerializedLambda;
 public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
 
     /**
+     * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
+     * 
+     * @param <T> T
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月8日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.core.wrapper <br>
+     */
+    @FunctionalInterface
+    public interface TempLambdaQueryWrapper<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper <br>
+         */
+        void exec(LambdaQueryWrapper<T> wrapper);
+    }
+
+    /**
      * 缓存
      */
     private static Map<String, LambdaSett> lambdaSettMap = new HashMap<>();
+
+    private static String resolveFieldName(final String methodName) {
+        return StringUtils
+            .uncapitalize(methodName.startsWith("get") ? methodName.substring("get".length()) : methodName);
+    }
 
     /**
      * 排序
      */
     private List<OrderBy> orderByList = new ArrayList<>();
+
+    /**
+     * Description: between lower，upper <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param condition
+     * @param fieldLambda
+     * @param lower
+     * @param upper
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Comparable<?> lower, final Comparable<?> upper) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.BETWEEN).value(new Comparable[] {
+                    lower, upper
+                }).build());
+        }
+        return this;
+    }
+
+    /**
+     * Description: between lower，upper <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @param lower
+     * @param upper
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
+        final Comparable<?> upper) {
+        between(true, fieldLambda, lower, upper);
+        return this;
+    }
 
     /**
      * Description: <br>
@@ -100,61 +167,8 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
         return this;
     }
 
-    /**
-     * !=
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> ne(final boolean condition, final SFunction<T, ?> fieldLambda, final Object value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NE).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * !=
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> ne(final SFunction<T, ?> fieldLambda, final Object value) {
-        ne(true, fieldLambda, value);
-        return this;
-    }
-
-    /**
-     * >
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.GT).value(value).build());
-        }
-        return this;
-    }
-
-    /**
-     * >
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
-        gt(true, fieldLambda, value);
-        return this;
+    private String fieldLambda2FieldName(final SFunction<T, ?> fieldLambda) {
+        return getLambdaSett(fieldLambda).getFiledName();
     }
 
     /**
@@ -165,8 +179,7 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> ge(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
+    public LambdaQueryWrapper<T> ge(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
                 .operator(Operator.GE).value(value).build());
@@ -181,37 +194,173 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> ge(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+    public LambdaQueryWrapper<T> ge(final SFunction<T, ?> fieldLambda, final Number value) {
         ge(true, fieldLambda, value);
         return this;
     }
 
     /**
-     * <
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
+     */
+    protected LambdaSett getLambdaSett(final SFunction<T, ?> fieldLambda) {
+        SerializedLambda lambda = LambdaUtils.resolve(fieldLambda);
+        String filedName = resolveFieldName(lambda.getImplMethodName());
+        String key = lambda.getImplClass().getName() + filedName;
+        LambdaSett lambdaSett;
+        if (lambdaSettMap.containsKey(key)) {
+            lambdaSett = lambdaSettMap.get(key);
+        }
+        else {
+            lambdaSett = new LambdaSett(lambda, filedName);
+            lambdaSettMap.put(key, lambdaSett);
+        }
+        return lambdaSett;
+    }
+
+    /**
+     * >
      *
      * @param condition 是否需要使用本条件
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
+    public LambdaQueryWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LT).value(value).build());
+                .operator(Operator.GT).value(value).build());
         }
         return this;
     }
 
     /**
-     * <
+     * >
      *
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
-        lt(true, fieldLambda, value);
+    public LambdaQueryWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Number value) {
+        gt(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * in 集合
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Iterable<?> values) {
+        List<Object> valuesList = new ArrayList<>();
+        values.forEach(value -> {
+            valuesList.add(value);
+        });
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.IN).value(valuesList.toArray()).build());
+        }
+        return this;
+    }
+
+    /**
+     * in 数组/可变参
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Object... values) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.IN).value(values).build());
+        }
+        return this;
+    }
+
+    /**
+     * in 集合
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> in(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
+        in(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * in 数组/可变参
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> in(final SFunction<T, ?> fieldLambda, final Object... values) {
+        in(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * isNotNull
+     * 
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaQueryWrapper<T> isNotNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTNULL).build());
+        }
+        return this;
+    }
+
+    /**
+     * isNotNull
+     * 
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaQueryWrapper<T> isNotNull(final SFunction<T, ?> fieldLambda) {
+        isNotNull(true, fieldLambda);
+        return this;
+    }
+
+    /**
+     * isNull
+     * 
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaQueryWrapper<T> isNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.ISNULL).build());
+        }
+        return this;
+    }
+
+    /**
+     * isNull
+     * 
+     * @param fieldLambda lambda
+     * @return this
+     */
+    public LambdaQueryWrapper<T> isNull(final SFunction<T, ?> fieldLambda) {
+        isNull(true, fieldLambda);
         return this;
     }
 
@@ -223,8 +372,7 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> le(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Comparable<?> value) {
+    public LambdaQueryWrapper<T> le(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
                 .operator(Operator.LE).value(value).build());
@@ -239,7 +387,7 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> le(final SFunction<T, ?> fieldLambda, final Comparable<?> value) {
+    public LambdaQueryWrapper<T> le(final SFunction<T, ?> fieldLambda, final Number value) {
         le(true, fieldLambda, value);
         return this;
     }
@@ -273,6 +421,35 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * like '%xx'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> likeLeft(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.LIKE).value("%" + value).build());
+        }
+        return this;
+    }
+
+    /**
+     * like '%xx'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> likeLeft(final SFunction<T, ?> fieldLambda, final String value) {
+        likeLeft(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
      * like 'xx%'
      *
      * @param condition 是否需要使用本条件
@@ -302,228 +479,58 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * like '%xx'
+     * <
      *
      * @param condition 是否需要使用本条件
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> likeLeft(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final String value) {
+    public LambdaQueryWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LIKE).value("%" + value).build());
+                .operator(Operator.LT).value(value).build());
         }
         return this;
     }
 
     /**
-     * Description: or <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param tempQueryWrapper
-     * @return <br>
-     */
-    public LambdaQueryWrapper<T> or(final TempLambdaQueryWrapper<T> tempQueryWrapper) {
-        LambdaQueryWrapper<T> lambdaQueryWrapper = new LambdaQueryWrapper<T>();
-        tempQueryWrapper.exec(lambdaQueryWrapper);
-        if (!lambdaQueryWrapper.getTempPredicates().isEmpty()) {
-            super.getOrTempPredicates().add(lambdaQueryWrapper.getTempPredicates());
-        }
-        return this;
-    }
-
-    /**
-     * like '%xx'
+     * <
      *
      * @param fieldLambda lambda
      * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> likeLeft(final SFunction<T, ?> fieldLambda, final String value) {
-        likeLeft(true, fieldLambda, value);
+    public LambdaQueryWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Number value) {
+        lt(true, fieldLambda, value);
         return this;
     }
 
     /**
-     * Description: between lower，upper <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param condition
-     * @param fieldLambda
-     * @param lower
-     * @param upper
-     * @return <br>
-     */
-    public LambdaQueryWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda, final Object lower,
-        final Object upper) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.BETWEEN).value(new Object[] {
-                    lower, upper
-                }).build());
-        }
-        return this;
-    }
-
-    /**
-     * Description: between lower，upper <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param fieldLambda
-     * @param lower
-     * @param upper
-     * @return <br>
-     */
-    public LambdaQueryWrapper<T> between(final SFunction<T, ?> fieldLambda, final Object lower, final Object upper) {
-        between(true, fieldLambda, lower, upper);
-        return this;
-    }
-
-    /**
-     * in 集合
+     * !=
      *
      * @param condition 是否需要使用本条件
      * @param fieldLambda lambda
-     * @param values 值
+     * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
+    public LambdaQueryWrapper<T> ne(final boolean condition, final SFunction<T, ?> fieldLambda, final Object value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.IN).value(valuesList.toArray()).build());
+                .operator(Operator.NE).value(value).build());
         }
         return this;
     }
 
     /**
-     * in 集合
+     * !=
      *
      * @param fieldLambda lambda
-     * @param values 值
+     * @param value 值
      * @return this
      */
-    public LambdaQueryWrapper<T> in(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
-        in(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * in 数组/可变参
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Object... values) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.IN).value(values).build());
-        }
-        return this;
-    }
-
-    /**
-     * in 数组/可变参
-     *
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> in(final SFunction<T, ?> fieldLambda, final Object... values) {
-        in(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * notIn 数组/可变参
-     *
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Object... values) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTIN).value(values).build());
-        }
-        return this;
-    }
-
-    /**
-     * notIn 数组/可变参
-     *
-     * @param fieldLambda lambda
-     * @param values 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Object... values) {
-        notIn(true, fieldLambda, values);
-        return this;
-    }
-
-    /**
-     * isNull
-     * 
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaQueryWrapper<T> isNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.ISNULL).build());
-        }
-        return this;
-    }
-
-    /**
-     * isNull
-     * 
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaQueryWrapper<T> isNull(final SFunction<T, ?> fieldLambda) {
-        isNull(true, fieldLambda);
-        return this;
-    }
-
-    /**
-     * isNotNull
-     * 
-     * @param condition 是否需要使用本条件
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaQueryWrapper<T> isNotNull(final boolean condition, final SFunction<T, ?> fieldLambda) {
-        if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTNULL).build());
-        }
-        return this;
-    }
-
-    /**
-     * isNotNull
-     * 
-     * @param fieldLambda lambda
-     * @return this
-     */
-    public LambdaQueryWrapper<T> isNotNull(final SFunction<T, ?> fieldLambda) {
-        isNotNull(true, fieldLambda);
+    public LambdaQueryWrapper<T> ne(final SFunction<T, ?> fieldLambda, final Object value) {
+        ne(true, fieldLambda, value);
         return this;
     }
 
@@ -549,6 +556,23 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * notIn 数组/可变参
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Object... values) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTIN).value(values).build());
+        }
+        return this;
+    }
+
+    /**
      * notIn 集合
      *
      * @param fieldLambda lambda
@@ -557,6 +581,122 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      */
     public LambdaQueryWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
         notIn(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * notIn 数组/可变参
+     *
+     * @param fieldLambda lambda
+     * @param values 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Object... values) {
+        notIn(true, fieldLambda, values);
+        return this;
+    }
+
+    /**
+     * like '%xx%'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLike(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTLIKE).value("%" + value + "%").build());
+        }
+        return this;
+    }
+
+    /**
+     * like '%xx%'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLike(final SFunction<T, ?> fieldLambda, final String value) {
+        notLike(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * like '%xx'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLikeLeft(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTLIKE).value("%" + value).build());
+        }
+        return this;
+    }
+
+    /**
+     * like '%xx'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLikeLeft(final SFunction<T, ?> fieldLambda, final String value) {
+        notLikeLeft(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * like 'xx%'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLikeRight(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTLIKE).value(value + "%").build());
+        }
+        return this;
+    }
+
+    /**
+     * like 'xx%'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLikeRight(final SFunction<T, ?> fieldLambda, final String value) {
+        notLikeRight(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * Description: or <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param tempQueryWrapper
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> or(final TempLambdaQueryWrapper<T> tempQueryWrapper) {
+        LambdaQueryWrapper<T> lambdaQueryWrapper = new LambdaQueryWrapper<T>();
+        tempQueryWrapper.exec(lambdaQueryWrapper);
+        if (!lambdaQueryWrapper.getTempPredicates().isEmpty()) {
+            super.getOrTempPredicates().add(lambdaQueryWrapper.getTempPredicates());
+        }
         return this;
     }
 
@@ -584,61 +724,5 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     public LambdaQueryWrapper<T> orderByDesc(final SFunction<T, ?> fieldLambda) {
         orderByList.add(OrderBy.builder().isDesc(true).property(fieldLambda2FieldName(fieldLambda)).build());
         return this;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param fieldLambda
-     * @return <br>
-     */
-    protected LambdaSett getLambdaSett(final SFunction<T, ?> fieldLambda) {
-        SerializedLambda lambda = LambdaUtils.resolve(fieldLambda);
-        String filedName = resolveFieldName(lambda.getImplMethodName());
-        String key = lambda.getImplClass().getName() + filedName;
-        LambdaSett lambdaSett;
-        if (lambdaSettMap.containsKey(key)) {
-            lambdaSett = lambdaSettMap.get(key);
-        }
-        else {
-            lambdaSett = new LambdaSett(lambda, filedName);
-            lambdaSettMap.put(key, lambdaSett);
-        }
-        return lambdaSett;
-    }
-
-    private String fieldLambda2FieldName(final SFunction<T, ?> fieldLambda) {
-        return getLambdaSett(fieldLambda).getFiledName();
-    }
-
-    private static String resolveFieldName(final String methodName) {
-        return StringUtils
-            .uncapitalize(methodName.startsWith("get") ? methodName.substring("get".length()) : methodName);
-    }
-
-    /**
-     * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
-     * 
-     * @param <T> T
-     * @author 王伟<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月8日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.core.wrapper <br>
-     */
-    @FunctionalInterface
-    public interface TempLambdaQueryWrapper<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper <br>
-         */
-        void exec(LambdaQueryWrapper<T> wrapper);
     }
 }

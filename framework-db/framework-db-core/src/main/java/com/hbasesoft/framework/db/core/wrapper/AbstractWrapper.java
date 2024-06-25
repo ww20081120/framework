@@ -31,14 +31,36 @@ import com.hbasesoft.framework.common.utils.Assert;
 public abstract class AbstractWrapper<T> {
 
     /**
+     * 临时过滤条件-复杂的or的时候用的
+     */
+    private List<List<TempPredicate>> orTempPredicates = new ArrayList<>();
+
+    /**
      * 临时过滤条件
      */
     private List<TempPredicate> tempPredicates = new ArrayList<>();
 
     /**
-     * 临时过滤条件-复杂的or的时候用的
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
      */
-    private List<List<TempPredicate>> orTempPredicates = new ArrayList<>();
+    protected List<List<TempPredicate>> getOrTempPredicates() {
+        return this.orTempPredicates;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    protected List<TempPredicate> getTempPredicates() {
+        return this.tempPredicates;
+    }
 
     /**
      * Description: <br>
@@ -118,35 +140,20 @@ public abstract class AbstractWrapper<T> {
                 String value = (String) predicate.getValue();
                 Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
                 return criteriaBuilder.like(root.get(predicate.getFieldName()), value);
+            case NOTLIKE:
+                value = (String) predicate.getValue();
+                Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
+                return criteriaBuilder.notLike(root.get(predicate.getFieldName()), value);
             case ISNULL:
                 return criteriaBuilder.isNull(root.get(predicate.getFieldName()));
             case NOTNULL:
                 return criteriaBuilder.isNotNull(root.get(predicate.getFieldName()));
+            case BETWEEN:
+                Comparable[] objs = (Comparable[]) predicate.getValue();
+                return criteriaBuilder.between(root.get(predicate.getFieldName()), objs[0], objs[1]);
             default:
                 break;
         }
         return null;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    protected List<TempPredicate> getTempPredicates() {
-        return this.tempPredicates;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    protected List<List<TempPredicate>> getOrTempPredicates() {
-        return this.orTempPredicates;
     }
 }
