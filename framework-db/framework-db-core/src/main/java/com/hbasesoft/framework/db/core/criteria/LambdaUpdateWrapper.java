@@ -85,10 +85,10 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
      * @return <br>
      */
     public LambdaUpdateWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Object lower, final Object upper) {
+        final Comparable<?> lower, final Comparable<?> upper) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.BETWEEN).value(new Object[] {
+                .operator(Operator.BETWEEN).value(new Comparable[] {
                     lower, upper
                 }).build());
         }
@@ -105,7 +105,8 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
      * @param upper
      * @return <br>
      */
-    public LambdaUpdateWrapper<T> between(final SFunction<T, ?> fieldLambda, final Object lower, final Object upper) {
+    public LambdaUpdateWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
+        final Comparable<?> upper) {
         between(true, fieldLambda, lower, upper);
         return this;
     }
@@ -170,11 +171,39 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
+    public LambdaUpdateWrapper<T> ge(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.GE).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaUpdateWrapper<T> ge(final SFunction<T, ?> fieldLambda, final Number value) {
+        ge(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
     public LambdaUpdateWrapper<T> ge(final boolean condition, final SFunction<T, ?> fieldLambda,
         final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.GE).value(value).build());
+                .operator(Operator.GREATER_THAN_OR_EQUAL_TO).value(value).build());
         }
         return this;
     }
@@ -222,11 +251,39 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
+    public LambdaUpdateWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.GT).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaUpdateWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Number value) {
+        gt(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * >
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
     public LambdaUpdateWrapper<T> gt(final boolean condition, final SFunction<T, ?> fieldLambda,
         final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.GT).value(value).build());
+                .operator(Operator.GREATER_THAN).value(value).build());
         }
         return this;
     }
@@ -365,11 +422,39 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
+    public LambdaUpdateWrapper<T> le(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.LE).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <=
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaUpdateWrapper<T> le(final SFunction<T, ?> fieldLambda, final Number value) {
+        le(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * <=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
     public LambdaUpdateWrapper<T> le(final boolean condition, final SFunction<T, ?> fieldLambda,
         final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LE).value(value).build());
+                .operator(Operator.LESS_THAN_OR_EQUAL_TO).value(value).build());
         }
         return this;
     }
@@ -480,11 +565,39 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
+    public LambdaUpdateWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda, final Number value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.LT).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaUpdateWrapper<T> lt(final SFunction<T, ?> fieldLambda, final Number value) {
+        lt(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
     public LambdaUpdateWrapper<T> lt(final boolean condition, final SFunction<T, ?> fieldLambda,
         final Comparable<?> value) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.LT).value(value).build());
+                .operator(Operator.LESS_THAN).value(value).build());
         }
         return this;
     }

@@ -121,12 +121,23 @@ public abstract class AbstractWrapper<T> {
                 return criteriaBuilder.notEqual(root.get(predicate.getFieldName()), predicate.getValue());
             case GE:
                 return criteriaBuilder.ge(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case GREATER_THAN_OR_EQUAL_TO:
+                return criteriaBuilder.greaterThanOrEqualTo(root.get(predicate.getFieldName()),
+                    (Comparable) predicate.getValue());
             case GT:
                 return criteriaBuilder.gt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case GREATER_THAN:
+                return criteriaBuilder.greaterThan(root.get(predicate.getFieldName()),
+                    (Comparable) predicate.getValue());
             case LE:
                 return criteriaBuilder.le(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case LESS_THAN_OR_EQUAL_TO:
+                return criteriaBuilder.lessThanOrEqualTo(root.get(predicate.getFieldName()),
+                    (Comparable) predicate.getValue());
             case LT:
                 return criteriaBuilder.lt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
+            case LESS_THAN:
+                return criteriaBuilder.lessThan(root.get(predicate.getFieldName()), (Comparable) predicate.getValue());
             case IN:
                 CriteriaBuilder.In in = criteriaBuilder.in(root.get(predicate.getFieldName()));
                 Object[] objects = (Object[]) predicate.getValue();
@@ -149,9 +160,8 @@ public abstract class AbstractWrapper<T> {
             case NOTNULL:
                 return criteriaBuilder.isNotNull(root.get(predicate.getFieldName()));
             case BETWEEN:
-                Object[] objs = (Object[]) predicate.getValue();
-                return criteriaBuilder.between(root.get(predicate.getFieldName()), (Comparable) objs[0],
-                    (Comparable) objs[1]);
+                Comparable[] objs = (Comparable[]) predicate.getValue();
+                return criteriaBuilder.between(root.get(predicate.getFieldName()), objs[0], objs[1]);
             default:
                 break;
         }

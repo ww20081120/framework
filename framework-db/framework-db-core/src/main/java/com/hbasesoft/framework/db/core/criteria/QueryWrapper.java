@@ -61,11 +61,11 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @param upper
      * @return <br>
      */
-    public QueryWrapper<T> between(final boolean condition, final String fieldName, final Object lower,
-        final Object upper) {
+    public QueryWrapper<T> between(final boolean condition, final String fieldName, final Comparable<?> lower,
+        final Comparable<?> upper) {
         if (condition) {
             getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.BETWEEN).value(new Object[] {
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.BETWEEN).value(new Comparable[] {
                     lower, upper
                 }).build());
         }
@@ -80,7 +80,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @param upper 最大值
      * @return this
      */
-    public QueryWrapper<T> between(final String fieldName, final Object lower, final Object upper) {
+    public QueryWrapper<T> between(final String fieldName, final Comparable<?> lower, final Comparable<?> upper) {
         between(true, fieldName, lower, upper);
         return this;
     }
@@ -149,10 +149,38 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public QueryWrapper<T> ge(final boolean condition, final String fieldName, final Comparable<?> value) {
+    public QueryWrapper<T> ge(final boolean condition, final String fieldName, final Number value) {
         if (condition) {
             getTempPredicates()
                 .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.GE).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> ge(final String fieldName, final Number value) {
+        ge(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> ge(final boolean condition, final String fieldName, final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName)
+                .operator(Operator.GREATER_THAN_OR_EQUAL_TO).value(value).build());
         }
         return this;
     }
@@ -177,10 +205,38 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public QueryWrapper<T> gt(final boolean condition, final String fieldName, final Comparable<?> value) {
+    public QueryWrapper<T> gt(final boolean condition, final String fieldName, final Number value) {
         if (condition) {
             getTempPredicates()
                 .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.GT).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >
+     * 
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> gt(final String fieldName, final Number value) {
+        gt(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * >
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> gt(final boolean condition, final String fieldName, final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates()
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.GREATER_THAN).value(value).build());
         }
         return this;
     }
@@ -315,10 +371,38 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public QueryWrapper<T> le(final boolean condition, final String fieldName, final Comparable<?> value) {
+    public QueryWrapper<T> le(final boolean condition, final String fieldName, final Number value) {
         if (condition) {
             getTempPredicates()
                 .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.LE).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <=
+     *
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> le(final String fieldName, final Number value) {
+        le(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * <=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> le(final boolean condition, final String fieldName, final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName)
+                .operator(Operator.LESS_THAN_OR_EQUAL_TO).value(value).build());
         }
         return this;
     }
@@ -427,10 +511,38 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
-    public QueryWrapper<T> lt(final boolean condition, final String fieldName, final Comparable<?> value) {
+    public QueryWrapper<T> lt(final boolean condition, final String fieldName, final Number value) {
         if (condition) {
             getTempPredicates()
                 .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.LT).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> lt(final String fieldName, final Number value) {
+        lt(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public QueryWrapper<T> lt(final boolean condition, final String fieldName, final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates()
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.LESS_THAN).value(value).build());
         }
         return this;
     }
