@@ -122,6 +122,10 @@ public abstract class AbstractWrapper<T> {
                 return criteriaBuilder.isNull(root.get(predicate.getFieldName()));
             case NOTNULL:
                 return criteriaBuilder.isNotNull(root.get(predicate.getFieldName()));
+            case BETWEEN:
+                Object[] objs = (Object[]) predicate.getValue();
+                return criteriaBuilder.between(root.get(predicate.getFieldName()), (Comparable) objs[0],
+                    (Comparable) objs[1]);
             default:
                 break;
         }
