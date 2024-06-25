@@ -171,6 +171,63 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
      * @param value 值
      * @return this
      */
+    public UpdateWrapper<T> greaterThan(final boolean condition, final String fieldName, final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates()
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.GREATER_THAN).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >
+     * 
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> greaterThan(final String fieldName, final Comparable<?> value) {
+        greaterThan(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> greaterThanOrEqualTo(final boolean condition, final String fieldName,
+        final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName)
+                .operator(Operator.GREATER_THAN_OR_EQUAL_TO).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * >=
+     *
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> greaterThanOrEqualTo(final String fieldName, final Comparable<?> value) {
+        greaterThanOrEqualTo(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * >
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
     public UpdateWrapper<T> gt(final boolean condition, final String fieldName, final Number value) {
         if (condition) {
             getTempPredicates()
@@ -326,6 +383,63 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
      */
     public UpdateWrapper<T> le(final String fieldName, final Number value) {
         le(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> lessThan(final boolean condition, final String fieldName, final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates()
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.LESS_THAN).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <
+     *
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> lessThan(final String fieldName, final Comparable<?> value) {
+        lessThan(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * <=
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> lessThanOrEqualTo(final boolean condition, final String fieldName,
+        final Comparable<?> value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName)
+                .operator(Operator.LESS_THAN_OR_EQUAL_TO).value(value).build());
+        }
+        return this;
+    }
+
+    /**
+     * <=
+     *
+     * @param fieldName 字段名
+     * @param value 值
+     * @return this
+     */
+    public UpdateWrapper<T> lessThanOrEqualTo(final String fieldName, final Comparable<?> value) {
+        lessThanOrEqualTo(true, fieldName, value);
         return this;
     }
 

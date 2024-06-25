@@ -26,6 +26,12 @@ enum Operator {
     GE,
 
     /** greater than */
+    GREATER_THAN,
+
+    /** greater than or equal to */
+    GREATER_THAN_OR_EQUAL_TO,
+
+    /** greater than */
     GT,
 
     /** in */
@@ -36,6 +42,12 @@ enum Operator {
 
     /** Less than or equal to */
     LE,
+
+    /** Less than */
+    LESS_THAN,
+
+    /** Less than or equal to */
+    LESS_THAN_OR_EQUAL_TO,
 
     /** like */
     LIKE,
