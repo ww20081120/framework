@@ -118,6 +118,10 @@ public abstract class AbstractWrapper<T> {
                 String value = (String) predicate.getValue();
                 Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
                 return criteriaBuilder.like(root.get(predicate.getFieldName()), value);
+            case NOTLIKE:
+                value = (String) predicate.getValue();
+                Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
+                return criteriaBuilder.notLike(root.get(predicate.getFieldName()), value);
             case ISNULL:
                 return criteriaBuilder.isNull(root.get(predicate.getFieldName()));
             case NOTNULL:

@@ -22,7 +22,7 @@ enum Operator {
     /** like */
     LIKE,
 
-    /** not like */
+    /** not equal to */
     NE,
 
     /** greater than or equal to */

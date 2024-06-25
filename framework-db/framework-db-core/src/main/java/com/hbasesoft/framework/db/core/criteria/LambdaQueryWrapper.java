@@ -319,6 +319,76 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * like '%xx'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> likeLeft(final SFunction<T, ?> fieldLambda, final String value) {
+        likeLeft(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * like '%xx%'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLike(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTLIKE).value("%" + value + "%").build());
+        }
+        return this;
+    }
+
+    /**
+     * like '%xx%'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLike(final SFunction<T, ?> fieldLambda, final String value) {
+        notLike(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * like 'xx%'
+     *
+     * @param condition 是否需要使用本条件
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLikeRight(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final String value) {
+        if (condition) {
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
+                .operator(Operator.NOTLIKE).value(value + "%").build());
+        }
+        return this;
+    }
+
+    /**
+     * like 'xx%'
+     *
+     * @param fieldLambda lambda
+     * @param value 值
+     * @return this
+     */
+    public LambdaQueryWrapper<T> notLikeRight(final SFunction<T, ?> fieldLambda, final String value) {
+        notLikeRight(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
      * Description: or <br>
      * 
      * @author 王伟<br>
@@ -332,18 +402,6 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
         if (!lambdaQueryWrapper.getTempPredicates().isEmpty()) {
             super.getOrTempPredicates().add(lambdaQueryWrapper.getTempPredicates());
         }
-        return this;
-    }
-
-    /**
-     * like '%xx'
-     *
-     * @param fieldLambda lambda
-     * @param value 值
-     * @return this
-     */
-    public LambdaQueryWrapper<T> likeLeft(final SFunction<T, ?> fieldLambda, final String value) {
-        likeLeft(true, fieldLambda, value);
         return this;
     }
 
