@@ -642,7 +642,7 @@ public class BaseDaoTester {
     @Transactional
     public void queryPagerByLambdaQuery() {
         PagerList<StudentEntity> entities = iStudentDao
-            .queryPagerByLambda(q -> q.eq(StudentEntity::getName, "张三").build(), 1, 1);
+            .queryPagerByLambda(q -> q.eq(StudentEntity::getName, "张三").build(), 1, 2);
         Assert.isTrue(entities.size() == entities.getTotalCount(), ErrorCodeDef.SYSTEM_ERROR);
     }
 
