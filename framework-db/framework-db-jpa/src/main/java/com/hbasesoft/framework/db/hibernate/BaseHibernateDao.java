@@ -392,7 +392,7 @@ public class BaseHibernateDao implements BaseJpaDao, ISqlExcutor {
         resultList.setTotalCount(totalCount);
 
         // 如果还有数据，则分页查询
-        if (totalCount >= pageIndex * pageSize) {
+        if (totalCount > (pageIndex - 1) * pageSize) {
             org.hibernate.query.Query query = getSession().createQuery(criteria);
             query.setFirstResult((pageIndex - 1) * pageSize);
             query.setMaxResults(pageSize);
