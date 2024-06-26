@@ -233,4 +233,30 @@ public class DateUtilTest {
         String str = DateUtil.date2String(t2, DateConstants.DATE_FORMAT_10);
         Assert.equals(str, "2018-02-01", ErrorCodeDef.SYSTEM_ERROR);
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    public void morning() {
+        Date t1 = DateUtil.parse("2018-01-02 13:05:65");
+        Assert.equals(DateUtil.format(DateUtil.morning(t1)), "2018-01-02 00:00:00", ErrorCodeDef.SYSTEM_ERROR);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    public void midnight() {
+        Date t1 = DateUtil.parse("2018-01-02 13:05:65");
+        Assert.equals(DateUtil.format(DateUtil.midnight(t1)), "2018-01-02 23:59:59", ErrorCodeDef.SYSTEM_ERROR);
+    }
 }

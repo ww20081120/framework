@@ -1,12 +1,14 @@
 package com.hbasesoft.framework.db.core.wrapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.db.core.BaseDao.CriterialDeleteSpecification;
 
 /**
@@ -78,6 +80,48 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      */
     public DeleteWrapper<T> between(final String fieldName, final Comparable<?> lower, final Comparable<?> upper) {
         between(true, fieldName, lower, upper);
+        return this;
+    }
+
+    /**
+     * Description: between lower，upper<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param condition
+     * @param fieldName
+     * @param dates
+     * @return <br>
+     */
+    public DeleteWrapper<T> between(final boolean condition, final String fieldName, final Date[] dates) {
+        if (condition) {
+            Date before = null;
+            Date after = null;
+            if (dates != null && dates.length > 0) {
+                before = dates[0];
+                if (dates.length > 1) {
+                    after = dates[1];
+                    if (after != null && "00:00:00".equals(DateUtil.format(after, "HH:mm:ss"))) {
+                        after = DateUtil.offsetSecond(DateUtil.midnight(after), -1);
+                    }
+                }
+            }
+            between(true, fieldName, before, after);
+        }
+        return this;
+    }
+
+    /**
+     * Description: between lower，upper<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldName
+     * @param dates
+     * @return <br>
+     */
+    public DeleteWrapper<T> between(final String fieldName, final Date[] dates) {
+        between(true, fieldName, dates);
         return this;
     }
 

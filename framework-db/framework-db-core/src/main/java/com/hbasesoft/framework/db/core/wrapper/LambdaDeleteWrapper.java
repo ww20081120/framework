@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.db.core.wrapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.db.core.BaseDao.CriterialDeleteSpecification;
 import com.hbasesoft.framework.db.core.utils.LambdaUtils;
 import com.hbasesoft.framework.db.core.wrapper.lambda.LambdaSett;
@@ -104,6 +106,51 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     public LambdaDeleteWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
         final Comparable<?> upper) {
         between(true, fieldLambda, lower, upper);
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param condition
+     * @param fieldLambda
+     * @param dates
+     * @return <br>
+     */
+    public LambdaDeleteWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Date[] dates) {
+        if (condition) {
+            Date before = null;
+            Date after = null;
+            if (dates != null && dates.length > 0) {
+                before = dates[0];
+                if (dates.length > 1) {
+                    after = dates[1];
+                    if (after != null && "00:00:00".equals(DateUtil.format(after, "HH:mm:ss"))) {
+                        after = DateUtil.offsetSecond(DateUtil.midnight(after), -1);
+                    }
+                }
+            }
+            between(true, fieldLambda, before, after);
+        }
+        return this;
+    }
+
+    /**
+     * Description: between lower，upper <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @param lower
+     * @param dates
+     * @return <br>
+     */
+    public LambdaDeleteWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
+        final Date[] dates) {
+        between(true, fieldLambda, dates);
         return this;
     }
 
