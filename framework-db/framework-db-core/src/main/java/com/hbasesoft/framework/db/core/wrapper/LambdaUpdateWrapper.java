@@ -133,7 +133,7 @@ public class LambdaUpdateWrapper<T> extends AbstractWrapper<T> {
                 if (dates.length > 1) {
                     after = dates[1];
                     if (after != null && "00:00:00".equals(DateUtil.format(after, "HH:mm:ss"))) {
-                        after = DateUtil.offsetSecond(DateUtil.midnight(after), -1);
+                        after = DateUtil.midnight(after);
                     }
                 }
             }
