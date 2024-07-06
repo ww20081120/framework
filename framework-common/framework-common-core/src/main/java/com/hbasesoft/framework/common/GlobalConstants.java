@@ -55,29 +55,11 @@ public interface GlobalConstants {
     /** 默认语言 */
     String DEFAULT_LANGUAGE = "zh_CN";
 
-    /** NULL */
-    String NULL = "NULL";
-
-    /** YES */
-    String YES = "Y";
-
-    /** NO */
-    String NO = "N";
-
-    /** POST */
-    String METHOD_POST = "POST";
-
-    /** GET */
-    String METHOD_GET = "GET";
-
     /** 百分号 */
     String PERCENT = "%";
 
     /** 句号 */
     String PERIOD = ".";
-
-    /** 开发模式 */
-    String DEV_MODEL = "dev";
 
     /** 符号校验 */
     String SYMBOL_REGULAR = "[\\pP\\p{Punct}]";

@@ -74,7 +74,7 @@ public class MemeryStepDelayMessageQueue implements StepDelayMessageQueue, Index
     @Override
     public void add(final DelayMessage delayMessage) {
         MsgDelaymsgEntity entity = new MsgDelaymsgEntity(delayMessage);
-        entity.setMemeryFlag(GlobalConstants.YES);
+        entity.setMemeryFlag("Y");
         delaymsgService.save(entity);
         addIndex(delayMessage.getMessageId(), delayMessage.getCurrentTime() + this.level * GlobalConstants.SECONDS);
     }

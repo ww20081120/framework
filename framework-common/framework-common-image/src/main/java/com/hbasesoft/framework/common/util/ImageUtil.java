@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.common.utils.io;
+package com.hbasesoft.framework.common.util;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

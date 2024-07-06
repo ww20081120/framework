@@ -234,7 +234,7 @@ public class AbstractAnnotationHandler {
                     }
                     else {
                         // 判断是否含有Param注解
-                        String name = GlobalConstants.NULL;
+                        String name = "NULL";
                         for (Annotation annotation : pmAnnotaions) {
                             if (annotation instanceof Key) {
                                 Key p = (Key) annotation;
