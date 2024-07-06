@@ -12,6 +12,7 @@ import java.util.Objects;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
 
+import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.CommonAbstractCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
@@ -72,7 +73,8 @@ public abstract class AbstractWrapper<T> {
      * @param cb
      * @return <br>
      */
-    public Predicate[] toPredicate(final Root<T> root, final CommonAbstractCriteria query, final CriteriaBuilder cb) {
+    public Predicate[] toPredicate(final Root<? extends Tuple> root, final CommonAbstractCriteria query,
+        final CriteriaBuilder cb) {
         Predicate[] predicates = new Predicate[tempPredicates.size() + orTempPredicates.size()];
 
         // 如果没有条件和order by 直接返回
@@ -112,7 +114,7 @@ public abstract class AbstractWrapper<T> {
     @SuppressWarnings({
         "rawtypes", "unchecked"
     })
-    public Predicate toPredicate(final Root<T> root, final CommonAbstractCriteria query,
+    public Predicate toPredicate(final Root<? extends Tuple> root, final CommonAbstractCriteria query,
         final CriteriaBuilder criteriaBuilder, final TempPredicate predicate) {
         switch (predicate.getOperator()) {
             case EQ:

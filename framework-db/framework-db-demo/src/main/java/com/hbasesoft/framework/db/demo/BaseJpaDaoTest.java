@@ -5,38 +5,42 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.demo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.hbasesoft.framework.common.Bootstrap;
+import com.hbasesoft.framework.db.demo.dao.IStudentDao;
+
+import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>
  * 
- * @author 王伟<br>
+ * @author ww200<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2018年9月13日 <br>
+ * @CreateDate 2024年7月6日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@ComponentScan(basePackages = "com.hbasesoft.framework.db.demo")
-@SpringBootApplication
-public class Application {
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class BaseJpaDaoTest {
+
+    /** dao */
+    @Resource
+    private IStudentDao iStudentDao;
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param args <br>
+     *         <br>
      */
-    public static void main(final String[] args) {
-        Bootstrap.before();
-        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-        Bootstrap.after(context);
+    @BeforeEach
+    @Transactional
+    public void createTable() {
+        iStudentDao.createTable();
     }
 
 }

@@ -1,12 +1,13 @@
 package com.hbasesoft.framework.db.core.criteria;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import com.hbasesoft.framework.db.core.BaseDao.CriterialQuerySpecification;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
-import jakarta.persistence.criteria.Order;
-import jakarta.persistence.criteria.Predicate;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
  * <Description>普通的queryWrapper 根据字段名 <br>
@@ -19,7 +20,31 @@ import jakarta.persistence.criteria.Predicate;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
-public class QueryWrapper<T> extends AbstractWrapper<T> {
+public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
+
+    /**
+     * <Description> 用于having下条件查询 <br>
+     * 
+     * @param <T> T
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月8日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.core.wrapper <br>
+     */
+    @FunctionalInterface
+    public interface TempHavingQueryWrapper<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper <br>
+         */
+        void exec(HavingQueryWrapper<T> wrapper);
+    }
 
     /**
      * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
@@ -46,9 +71,17 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * 排序
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
      */
-    private List<OrderBy> orderByList = new ArrayList<>();
+    public QueryWrapper<T> avg(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(field).build());
+        return this;
+    }
 
     /**
      * Description: between lower，upper <br>
@@ -73,6 +106,34 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: between lower，upper<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param condition
+     * @param fieldName
+     * @param dates
+     * @return <br>
+     */
+    public QueryWrapper<T> between(final boolean condition, final String fieldName, final Date[] dates) {
+        if (condition) {
+            Date before = null;
+            Date after = null;
+            if (dates != null && dates.length > 0) {
+                before = dates[0];
+                if (dates.length > 1) {
+                    after = dates[1];
+                    if (after != null && "00:00:00".equals(DateUtil.format(after, "HH:mm:ss"))) {
+                        after = DateUtil.midnight(after);
+                    }
+                }
+            }
+            between(true, fieldName, before, after);
+        }
+        return this;
+    }
+
+    /**
      * between lower，upper
      *
      * @param fieldName 字段名
@@ -86,31 +147,61 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: between lower，upper<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldName
+     * @param dates
+     * @return <br>
+     */
+    public QueryWrapper<T> between(final String fieldName, final Date[] dates) {
+        between(true, fieldName, dates);
+        return this;
+    }
+
+    /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param field
      * @return <br>
      */
-    public CriterialQuerySpecification<T> build() {
-        return (root, query, cb) -> {
-            Predicate[] predicates = toPredicate(root, query, cb);
-            if (predicates == null && orderByList.isEmpty()) {
-                return null;
-            }
+    public QueryWrapper<T> count(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(field).build());
+        return this;
+    }
 
-            if (this.orderByList.isEmpty()) {
-                return query.where(predicates).getRestriction();
-            }
-            else {
-                Order[] orders = new Order[this.orderByList.size()];
-                for (int i = 0; i < orderByList.size(); i++) {
-                    orders[i] = orderByList.get(i).isDesc() ? cb.desc(root.get(orderByList.get(i).getProperty()))
-                        : cb.asc(root.get(orderByList.get(i).getProperty()));
-                }
-                return query.orderBy(orders).where(predicates).getRestriction();
-            }
-        };
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @return <br>
+     */
+    public QueryWrapper<T> diff(final String field1, final String field2) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF).alias(field1).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> diff(final String field1, final String field2, final String alias) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF).alias(alias).build());
+        return this;
     }
 
     /**
@@ -227,6 +318,23 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fields
+     * @return <br>
+     */
+    public QueryWrapper<T> groupBy(final String... fields) {
+        if (ArrayUtils.isNotEmpty(fields)) {
+            for (String field : fields) {
+                getGroupList().add(field);
+            }
+        }
+        return this;
+    }
+
+    /**
      * >
      *
      * @param condition 是否需要使用本条件
@@ -251,6 +359,23 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      */
     public QueryWrapper<T> gt(final String fieldName, final Number value) {
         gt(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * Description: or <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param tempQueryWrapper
+     * @return <br>
+     */
+    public QueryWrapper<T> having(final TempHavingQueryWrapper<T> tempQueryWrapper) {
+        HavingQueryWrapper<T> lambdaQueryWrapper = new HavingQueryWrapper<T>();
+        tempQueryWrapper.exec(lambdaQueryWrapper);
+        if (!lambdaQueryWrapper.getTempPredicates().isEmpty()) {
+            super.setHavingWrapper(lambdaQueryWrapper);
+        }
         return this;
     }
 
@@ -562,14 +687,27 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> max(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(field).build());
+        return this;
+    }
+
+    /**
      * 合并另外一个wrapper
      * 
      * @param wrapper 另外的wrapper
      * @return this
      */
     public QueryWrapper<T> merge(final QueryWrapper<T> wrapper) {
-        if (!wrapper.orderByList.isEmpty()) {
-            orderByList.addAll(wrapper.orderByList);
+        if (!wrapper.getOrderByList().isEmpty()) {
+            getOrderByList().addAll(wrapper.getOrderByList());
         }
         if (!wrapper.getOrTempPredicates().isEmpty()) {
             super.getOrTempPredicates().addAll(wrapper.getOrTempPredicates());
@@ -577,6 +715,19 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
         if (!wrapper.getTempPredicates().isEmpty()) {
             this.getTempPredicates().addAll(wrapper.getTempPredicates());
         }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> min(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(field).build());
         return this;
     }
 
@@ -776,7 +927,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public QueryWrapper<T> orderByAsc(final String fieldName) {
-        orderByList.add(OrderBy.builder().isDesc(false).property(fieldName).build());
+        getOrderByList().add(OrderBy.builder().isDesc(false).property(fieldName).build());
         return this;
     }
 
@@ -787,7 +938,85 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public QueryWrapper<T> orderByDesc(final String fieldName) {
-        orderByList.add(OrderBy.builder().isDesc(true).property(fieldName).build());
+        getOrderByList().add(OrderBy.builder().isDesc(true).property(fieldName).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fields
+     * @return <br>
+     */
+    public QueryWrapper<T> select(final List<String> fields) {
+        if (CollectionUtils.isNotEmpty(fields)) {
+            for (String field : fields) {
+                getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).build());
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fields
+     * @return <br>
+     */
+    public QueryWrapper<T> select(final String... fields) {
+        if (ArrayUtils.isNotEmpty(fields)) {
+            for (String field : fields) {
+                getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).build());
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> sum(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @return <br>
+     */
+    public QueryWrapper<T> sum(final String field1, final String field2) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(field1).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> sum(final String field1, final String field2, final String alias) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(alias).build());
         return this;
     }
 }

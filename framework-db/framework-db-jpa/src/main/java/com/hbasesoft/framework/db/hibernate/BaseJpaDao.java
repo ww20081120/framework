@@ -30,64 +30,9 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param sql
-     * @return numbers
-     * @throws DaoException <br>
+     *         <br>
      */
-    int updateBySql(String sql) throws DaoException;
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @return T
-     * @throws DaoException <br>
-     */
-    T getByHql(String hql) throws DaoException;
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param procedureSql
-     * @param params
-     * @return <br>
-     */
-    List<T> executeProcedure(String procedureSql, Object... params);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param sql
-     * @return <br>
-     */
-    List<T> queryBySql(String sql);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @param param
-     * @return <br>
-     */
-    List<T> queryByHqlParam(String hql, Object... param);
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param hql
-     * @return <br>
-     */
-    List<T> queryByHql(String hql);
+    void clear();
 
     /**
      * Description: <br>
@@ -105,9 +50,11 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     *         <br>
+     * @param procedureSql
+     * @param params
+     * @return <br>
      */
-    void clear();
+    List<T> executeProcedure(String procedureSql, Object... params);
 
     /**
      * Description: <br>
@@ -117,5 +64,58 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      *         <br>
      */
     void flush();
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @return T
+     * @throws DaoException <br>
+     */
+    T getByHql(String hql) throws DaoException;
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @return <br>
+     */
+    List<T> queryByHql(String hql);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hql
+     * @param param
+     * @return <br>
+     */
+    List<T> queryByHqlParam(String hql, Object... param);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @return <br>
+     */
+    List<T> queryBySql(String sql);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @return numbers
+     * @throws DaoException <br>
+     */
+    int updateBySql(String sql) throws DaoException;
 
 }

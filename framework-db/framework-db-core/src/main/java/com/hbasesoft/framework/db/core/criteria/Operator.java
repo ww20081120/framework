@@ -16,11 +16,23 @@ package com.hbasesoft.framework.db.core.criteria;
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
 enum Operator {
+    /** 求平均值 */
+    AVG,
+
     /** between and */
     BETWEEN,
 
+    /** 计算 */
+    COUNT,
+
+    /** 相减 */
+    DIFF,
+
     /** equal to */
     EQ,
+
+    /** 字段 */
+    FIELD,
 
     /** greater than or equal to */
     GE,
@@ -55,6 +67,12 @@ enum Operator {
     /** Less than */
     LT,
 
+    /** 最大值 */
+    MAX,
+
+    /** 最小值 */
+    MIN,
+
     /** not equal to */
     NE,
 
@@ -65,5 +83,11 @@ enum Operator {
     NOTLIKE,
 
     /** not null */
-    NOTNULL;
+    NOTNULL,
+
+    /** 求和 */
+    SUM,
+
+    /** 求和 */
+    SUMMING;
 }

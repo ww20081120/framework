@@ -6,20 +6,20 @@
 package com.hbasesoft.framework.db.core.criteria;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.hbasesoft.framework.db.core.BaseDao.CriterialQuerySpecification;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.db.core.criteria.lambda.LambdaSett;
 import com.hbasesoft.framework.db.core.criteria.lambda.SFunction;
 import com.hbasesoft.framework.db.core.criteria.lambda.SerializedLambda;
 import com.hbasesoft.framework.db.core.utils.LambdaUtils;
-
-import jakarta.persistence.criteria.Order;
-import jakarta.persistence.criteria.Predicate;
 
 /**
  * <Description> <br>
@@ -32,7 +32,31 @@ import jakarta.persistence.criteria.Predicate;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
-public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
+public class LambdaQueryWrapper<T> extends AbstractQueryWrapper<T> {
+
+    /**
+     * <Description> 用于having下条件查询 <br>
+     * 
+     * @param <T> T
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月8日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.core.wrapper <br>
+     */
+    @FunctionalInterface
+    public interface TempLambdaHavingQueryWrapper<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper <br>
+         */
+        void exec(LambdaHavingQueryWrapper<T> wrapper);
+    }
 
     /**
      * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
@@ -69,9 +93,18 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * 排序
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
      */
-    private List<OrderBy> orderByList = new ArrayList<>();
+    public LambdaQueryWrapper<T> avg(final SFunction<T, ?> fieldLambda) {
+        String field = fieldLambda2FieldName(fieldLambda);
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(field).build());
+        return this;
+    }
 
     /**
      * Description: between lower，upper <br>
@@ -91,6 +124,35 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
                 .operator(Operator.BETWEEN).value(new Comparable[] {
                     lower, upper
                 }).build());
+        }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param condition
+     * @param fieldLambda
+     * @param dates
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> between(final boolean condition, final SFunction<T, ?> fieldLambda,
+        final Date[] dates) {
+        if (condition) {
+            Date before = null;
+            Date after = null;
+            if (dates != null && dates.length > 0) {
+                before = dates[0];
+                if (dates.length > 1) {
+                    after = dates[1];
+                    if (after != null && "00:00:00".equals(DateUtil.format(after, "HH:mm:ss"))) {
+                        after = DateUtil.midnight(after);
+                    }
+                }
+            }
+            between(true, fieldLambda, before, after);
         }
         return this;
     }
@@ -116,27 +178,63 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param fieldLambda
+     * @param lower
+     * @param dates
      * @return <br>
      */
-    public CriterialQuerySpecification<T> build() {
-        return (root, query, cb) -> {
-            Predicate[] predicates = toPredicate(root, query, cb);
-            if (predicates == null && orderByList.isEmpty()) {
-                return null;
-            }
+    public LambdaQueryWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
+        final Date[] dates) {
+        between(true, fieldLambda, dates);
+        return this;
+    }
 
-            if (this.orderByList.isEmpty()) {
-                return query.where(predicates).getRestriction();
-            }
-            else {
-                Order[] orders = new Order[this.orderByList.size()];
-                for (int i = 0; i < orderByList.size(); i++) {
-                    orders[i] = orderByList.get(i).isDesc() ? cb.desc(root.get(orderByList.get(i).getProperty()))
-                        : cb.asc(root.get(orderByList.get(i).getProperty()));
-                }
-                return query.orderBy(orders).where(predicates).getRestriction();
-            }
-        };
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> count(final SFunction<T, ?> fieldLambda) {
+        String field = fieldLambda2FieldName(fieldLambda);
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda1
+     * @param fieldLambda2
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> diff(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2) {
+        String field = fieldLambda2FieldName(fieldLambda1);
+        getSelectionList().add(TempSelection.builder().field(field).field2(fieldLambda2FieldName(fieldLambda2))
+            .operator(Operator.DIFF).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda1
+     * @param fieldLambda2
+     * @param alias
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> diff(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2,
+        final SFunction<T, ?> alias) {
+        getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda1))
+            .field2(fieldLambda2FieldName(fieldLambda2)).operator(Operator.DIFF).alias(fieldLambda2FieldName(alias))
+            .build());
+        return this;
     }
 
     /**
@@ -281,6 +379,24 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambdas
+     * @return <br>
+     */
+    @SuppressWarnings("unchecked")
+    public LambdaQueryWrapper<T> groupBy(final SFunction<T, ?>... fieldLambdas) {
+        if (ArrayUtils.isNotEmpty(fieldLambdas)) {
+            for (SFunction<T, ?> fieldLambda : fieldLambdas) {
+                getGroupList().add(fieldLambda2FieldName(fieldLambda));
+            }
+        }
+        return this;
+    }
+
+    /**
      * >
      *
      * @param condition 是否需要使用本条件
@@ -305,6 +421,23 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      */
     public LambdaQueryWrapper<T> gt(final SFunction<T, ?> fieldLambda, final Number value) {
         gt(true, fieldLambda, value);
+        return this;
+    }
+
+    /**
+     * Description: or <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param tempQueryWrapper
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> having(final TempLambdaHavingQueryWrapper<T> tempQueryWrapper) {
+        LambdaHavingQueryWrapper<T> lambdaQueryWrapper = new LambdaHavingQueryWrapper<T>();
+        tempQueryWrapper.exec(lambdaQueryWrapper);
+        if (!lambdaQueryWrapper.getTempPredicates().isEmpty()) {
+            super.setHavingWrapper(lambdaQueryWrapper);
+        }
         return this;
     }
 
@@ -623,6 +756,34 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> max(final SFunction<T, ?> fieldLambda) {
+        String field = fieldLambda2FieldName(fieldLambda);
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> min(final SFunction<T, ?> fieldLambda) {
+        String field = fieldLambda2FieldName(fieldLambda);
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(field).build());
+        return this;
+    }
+
+    /**
      * !=
      *
      * @param condition 是否需要使用本条件
@@ -825,7 +986,7 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * @return <br>
      */
     public LambdaQueryWrapper<T> orderByAsc(final SFunction<T, ?> fieldLambda) {
-        orderByList.add(OrderBy.builder().isDesc(false).property(fieldLambda2FieldName(fieldLambda)).build());
+        getOrderByList().add(OrderBy.builder().isDesc(false).property(fieldLambda2FieldName(fieldLambda)).build());
         return this;
     }
 
@@ -838,7 +999,92 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
      * @return <br>
      */
     public LambdaQueryWrapper<T> orderByDesc(final SFunction<T, ?> fieldLambda) {
-        orderByList.add(OrderBy.builder().isDesc(true).property(fieldLambda2FieldName(fieldLambda)).build());
+        getOrderByList().add(OrderBy.builder().isDesc(true).property(fieldLambda2FieldName(fieldLambda)).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambdas
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> select(final List<SFunction<T, ?>> fieldLambdas) {
+        if (CollectionUtils.isNotEmpty(fieldLambdas)) {
+            for (SFunction<T, ?> fieldLambda : fieldLambdas) {
+                getSelectionList().add(
+                    TempSelection.builder().field(fieldLambda2FieldName(fieldLambda)).operator(Operator.FIELD).build());
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambdas
+     * @return <br>
+     */
+    @SuppressWarnings("unchecked")
+    public LambdaQueryWrapper<T> select(final SFunction<T, ?>... fieldLambdas) {
+        if (ArrayUtils.isNotEmpty(fieldLambdas)) {
+            for (SFunction<T, ?> fieldLambda : fieldLambdas) {
+                getSelectionList().add(
+                    TempSelection.builder().field(fieldLambda2FieldName(fieldLambda)).operator(Operator.FIELD).build());
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> sum(final SFunction<T, ?> fieldLambda) {
+        String field = fieldLambda2FieldName(fieldLambda);
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda1
+     * @param fieldLambda2
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> sum(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2) {
+        String field = fieldLambda2FieldName(fieldLambda1);
+        getSelectionList().add(TempSelection.builder().field(field).field2(fieldLambda2FieldName(fieldLambda2))
+            .operator(Operator.SUMMING).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda1
+     * @param fieldLambda2
+     * @param alias
+     * @return <br>
+     */
+    public LambdaQueryWrapper<T> sum(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2,
+        final SFunction<T, ?> alias) {
+        getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda1))
+            .field2(fieldLambda2FieldName(fieldLambda2)).operator(Operator.SUMMING).alias(fieldLambda2FieldName(alias))
+            .build());
         return this;
     }
 }

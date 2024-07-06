@@ -22,7 +22,6 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
@@ -43,14 +42,8 @@ import jakarta.persistence.criteria.Root;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@SpringBootTest()
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BaseDaoTester {
-
-    /** Number */
-    private static final int NUM_3 = 3;
-
-    /** Number */
-    private static final int NUM_5 = 5;
 
     /** Number */
     private static final int NUM_10 = 10;
@@ -67,20 +60,19 @@ public class BaseDaoTester {
     /** Number */
     private static final int NUM_200000 = 200000;
 
-    /** dao */
-    @Resource
-    private IStudentDao iStudentDao;
+    /** Number */
+    private static final int NUM_3 = 3;
+
+    /** Number */
+    private static final int NUM_5 = 5;
 
     /** dao */
     @Resource
     private ICourseDao iCourseDao;
 
-    /** 
-     *  
-     */
-    public BaseDaoTester() {
-        DataSourceUtil.init();
-    }
+    /** dao */
+    @Resource
+    private IStudentDao iStudentDao;
 
     /**
      * Description: <br>
@@ -122,10 +114,246 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void countCourseByLamberda() {
+        CourseEntity course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId).build());
+        System.out.println(course);
+        // Assert.isTrue(course.getId() == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void countCoursePass() {
         int count = iStudentDao.countCoursePass("语文");
         Assert.isTrue(count == 2, ErrorCodeDef.FAILURE);
         System.out.println("语文考及格的有两人");
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void delete() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        iStudentDao.delete(entity);
+
+        entity = iStudentDao.get(id);
+        Assert.isNull(entity, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void delete2() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+        iStudentDao.delete(q -> q.eq("id", id).build());
+        entity = iStudentDao.get(q -> q.eq("id", id).build());
+
+        Assert.isNull(entity, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteAll() {
+        List<StudentEntity> entities = iStudentDao.queryAll();
+        iStudentDao.deleteBatch(entities);
+        int size = iStudentDao.countStudentSize();
+        Assert.isTrue(size == 0, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteAllEntitiesByIds() {
+        int s1 = iStudentDao.countStudentSize();
+        iStudentDao.deleteByIds(Arrays.asList("1", "2", "3"));
+        iStudentDao.clear();
+        int s2 = iStudentDao.countStudentSize();
+        Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void deleteById() {
+        StudentEntity entity = new StudentEntity();
+        entity.setAge(NUM_16);
+        entity.setName("张三丰");
+
+        iStudentDao.save(entity);
+        String id = entity.getId();
+
+        iStudentDao.deleteById(id);
+
+        iStudentDao.clear();
+
+        entity = iStudentDao.get(id);
+        Assert.isNull(entity, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void executeBatch() {
+        int s1 = iStudentDao.countStudentSize();
+        IOUtil.batchProcessFile(new File("Student.csv"), line -> {
+            if (StringUtils.isNotEmpty(line)) {
+                String[] strs = StringUtils.split(line, GlobalConstants.SPLITOR);
+                if (strs.length >= 2) {
+                    return new Object[] {
+                        CommonUtil.getTransactionID(), strs[0], strs[1]
+                    };
+                }
+            }
+            return null;
+        }, (students, pageIndex, pageSize) -> {
+            iStudentDao.executeBatch("insert into t_student (id, name, age) values (?, ?, ?)", students,
+                GlobalConstants.DEFAULT_LINES);
+            return true;
+        });
+        int s2 = iStudentDao.countStudentSize();
+        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void get() {
+        StudentEntity entity = iStudentDao.get("1");
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void getByHql() {
+        StudentEntity entity = iStudentDao
+            .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
+
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void getByProperty() {
+        CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
+        Assert.equals(entity.getId(), "1", ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void queryAll() {
+        List<StudentEntity> entities = iStudentDao.queryAll();
+        int size = iStudentDao.countStudentSize();
+        Assert.isTrue(entities.size() == size, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void queryByHql() {
+        List<StudentEntity> entities = iStudentDao
+            .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
+        Assert.isTrue(entities.size() == 1, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void queryByProperty() {
+        List<StudentEntity> entities = iStudentDao.query(q -> q.eq(StudentEntity.AGE, NUM_18).build());
+        Assert.isTrue(entities.size() == 2, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -182,51 +410,6 @@ public class BaseDaoTester {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void delete() {
-        StudentEntity entity = new StudentEntity();
-        entity.setAge(NUM_16);
-        entity.setName("张三丰");
-
-        iStudentDao.save(entity);
-        String id = entity.getId();
-
-        iStudentDao.delete(entity);
-
-        entity = iStudentDao.get(id);
-        Assert.isNull(entity, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void delete2() {
-        StudentEntity entity = new StudentEntity();
-        entity.setAge(NUM_16);
-        entity.setName("张三丰");
-
-        iStudentDao.save(entity);
-        String id = entity.getId();
-        iStudentDao.delete(q -> q.eq("id", id).build());
-        entity = iStudentDao.get(q -> q.eq("id", id).build());
-
-        Assert.isNull(entity, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
      * @throws UnsupportedEncodingException
      * @throws FileNotFoundException <br>
      */
@@ -251,151 +434,6 @@ public class BaseDaoTester {
         }, GlobalConstants.DEFAULT_LINES);
         int s2 = iStudentDao.countStudentSize();
         Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void executeBatch() {
-        int s1 = iStudentDao.countStudentSize();
-        IOUtil.batchProcessFile(new File("Student.csv"), line -> {
-            if (StringUtils.isNotEmpty(line)) {
-                String[] strs = StringUtils.split(line, GlobalConstants.SPLITOR);
-                if (strs.length >= 2) {
-                    return new Object[] {
-                        CommonUtil.getTransactionID(), strs[0], strs[1]
-                    };
-                }
-            }
-            return null;
-        }, (students, pageIndex, pageSize) -> {
-            iStudentDao.executeBatch("insert into t_student (id, name, age) values (?, ?, ?)", students,
-                GlobalConstants.DEFAULT_LINES);
-            return true;
-        });
-        int s2 = iStudentDao.countStudentSize();
-        Assert.isTrue(s2 - s1 == NUM_200000, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void get() {
-        StudentEntity entity = iStudentDao.get("1");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void getByProperty() {
-        CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
-        Assert.equals(entity.getId(), "1", ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void queryByProperty() {
-        List<StudentEntity> entities = iStudentDao.query(q -> q.eq(StudentEntity.AGE, NUM_18).build());
-        Assert.isTrue(entities.size() == 2, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void queryAll() {
-        List<StudentEntity> entities = iStudentDao.queryAll();
-        int size = iStudentDao.countStudentSize();
-        Assert.isTrue(entities.size() == size, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void deleteById() {
-        StudentEntity entity = new StudentEntity();
-        entity.setAge(NUM_16);
-        entity.setName("张三丰");
-
-        iStudentDao.save(entity);
-        String id = entity.getId();
-
-        iStudentDao.deleteById(id);
-
-        iStudentDao.clear();
-
-        entity = iStudentDao.get(id);
-        Assert.isNull(entity, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void deleteAll() {
-        List<StudentEntity> entities = iStudentDao.queryAll();
-        iStudentDao.deleteBatch(entities);
-        int size = iStudentDao.countStudentSize();
-        Assert.isTrue(size == 0, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void deleteAllEntitiesByIds() {
-        int s1 = iStudentDao.countStudentSize();
-        iStudentDao.deleteByIds(Arrays.asList("1", "2", "3"));
-        iStudentDao.clear();
-        int s2 = iStudentDao.countStudentSize();
-        Assert.isTrue(s1 - s2 == NUM_3, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -443,21 +481,6 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
-    public void queryByHql() {
-        List<StudentEntity> entities = iStudentDao
-            .queryByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.isTrue(entities.size() == 1, ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
     public void updateBySql() {
         StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.FAILURE);
@@ -469,21 +492,5 @@ public class BaseDaoTester {
 
         StudentEntity e2 = iStudentDao.get("1");
         Assert.equals(e2.getName(), "李四", ErrorCodeDef.FAILURE);
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    @Transactional
-    public void getByHql() {
-        StudentEntity entity = iStudentDao
-            .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
-
     }
 }
