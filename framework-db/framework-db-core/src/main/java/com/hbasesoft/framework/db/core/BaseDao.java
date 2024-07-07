@@ -173,6 +173,7 @@ public interface BaseDao<T extends BaseEntity> {
      * <Description> <br>
      * 
      * @param <T> 参数类型
+     * @param <M> 返参类型
      * @author ww200<br>
      * @version 1.0<br>
      * @taskId <br>
@@ -181,7 +182,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @see com.hbasesoft.framework.db.hibernate <br>
      */
     @FunctionalInterface
-    interface LambdaQuerySpecification<T> {
+    interface LambdaQuerySpecification<T, M> {
 
         /**
          * Description: <br>
@@ -191,7 +192,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialQuerySpecification<T> toSpecification(LambdaQueryWrapper<T> wrapper);
+        CriterialQuerySpecification<T> toSpecification(LambdaQueryWrapper<T, M> wrapper);
     }
 
     /**
@@ -361,6 +362,18 @@ public interface BaseDao<T extends BaseEntity> {
     T get(QuerySpecification<T> specification);
 
     /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> M get(QuerySpecification<T> specification, Class<M> clazz);
+
+    /**
      * Description: 根据id来获取数据<br>
      * 
      * @author 王伟<br>
@@ -387,9 +400,21 @@ public interface BaseDao<T extends BaseEntity> {
      * @author 王伟<br>
      * @taskId <br>
      * @param specification
+     * @param clazz
+     * @param <M>
      * @return <br>
      */
-    T getByLambda(LambdaQuerySpecification<T> specification);
+    <M> M getByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    T getByLambda(LambdaQuerySpecification<T, T> specification);
 
     /**
      * Description: 根据条件查询 <br>
@@ -402,6 +427,18 @@ public interface BaseDao<T extends BaseEntity> {
     T getBySpecification(CriterialQuerySpecification<T> specification);
 
     /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> M getBySpecification(CriterialQuerySpecification<T> specification, Class<M> clazz);
+
+    /**
      * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
@@ -410,6 +447,18 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     List<T> query(QuerySpecification<T> specification);
+
+    /**
+     * Description:根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> List<M> query(QuerySpecification<T> specification, Class<M> clazz);
 
     /**
      * Description: 查询所有数据<br>
@@ -437,9 +486,21 @@ public interface BaseDao<T extends BaseEntity> {
      * @author 王伟<br>
      * @taskId <br>
      * @param specification
+     * @param clazz
+     * @param <M>
      * @return <br>
      */
-    List<T> queryByLambda(LambdaQuerySpecification<T> specification);
+    <M> List<M> queryByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    List<T> queryByLambda(LambdaQuerySpecification<T, T> specification);
 
     /**
      * Description: 根据条件查询<br>
@@ -450,6 +511,18 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     List<T> queryBySpecification(CriterialQuerySpecification<T> specification);
+
+    /**
+     * Description:根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> List<M> queryBySpecification(CriterialQuerySpecification<T> specification, Class<M> clazz);
 
     /**
      * Description: <br>
@@ -484,9 +557,24 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @param pageIndex
      * @param pageSize
+     * @param <M> M
+     * @param clazz
      * @return <br>
      */
-    PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T> specification, int pageIndex, int pageSize);
+    <M> PagerList<M> queryPagerByLambda(LambdaQuerySpecification<T, M> specification, int pageIndex, int pageSize,
+        Class<M> clazz);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @return <br>
+     */
+    PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T, T> specification, int pageIndex, int pageSize);
 
     /**
      * Description: <br>
@@ -499,6 +587,21 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     PagerList<T> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex, int pageSize);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    <M> PagerList<M> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex,
+        int pageSize, Class<M> clazz);
 
     /**
      * Description: 保存数据<br>

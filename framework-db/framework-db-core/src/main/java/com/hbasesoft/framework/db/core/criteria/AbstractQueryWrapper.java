@@ -43,11 +43,6 @@ public abstract class AbstractQueryWrapper<T> extends AbstractWrapper<T> {
     private List<String> groupBy = new ArrayList<>();
 
     /**
-     * 临时过滤条件-复杂的or的时候用的
-     */
-    private AbstractWrapper<T> havingWrapper;
-
-    /**
      * 排序
      */
     private List<OrderBy> orderByList = new ArrayList<>();
@@ -76,9 +71,6 @@ public abstract class AbstractQueryWrapper<T> extends AbstractWrapper<T> {
 
             if (!this.groupBy.isEmpty()) {
                 query.groupBy(toGroupBy(root, query, cb));
-                if (havingWrapper != null) {
-                    query.having(havingWrapper.toPredicate(root, query, cb));
-                }
             }
 
             Predicate[] predicates = toPredicate(root, query, cb);
@@ -132,17 +124,6 @@ public abstract class AbstractQueryWrapper<T> extends AbstractWrapper<T> {
      */
     protected List<TempSelection> getSelectionList() {
         return this.selectionList;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param wrapper <br>
-     */
-    protected void setHavingWrapper(final AbstractWrapper<T> wrapper) {
-        this.havingWrapper = wrapper;
     }
 
     /**

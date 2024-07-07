@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
@@ -21,31 +18,6 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
 public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
-
-    /**
-     * <Description> 用于having下条件查询 <br>
-     * 
-     * @param <T> T
-     * @author 王伟<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月8日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.core.wrapper <br>
-     */
-    @FunctionalInterface
-    public interface TempHavingQueryWrapper<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper <br>
-         */
-        void exec(HavingQueryWrapper<T> wrapper);
-    }
-
     /**
      * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
      * 
@@ -80,6 +52,20 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      */
     public QueryWrapper<T> avg(final String field) {
         getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> avg(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(alias).build());
         return this;
     }
 
@@ -170,6 +156,20 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      */
     public QueryWrapper<T> count(final String field) {
         getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> count(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(alias).build());
         return this;
     }
 
@@ -322,15 +322,11 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param fields
+     * @param field
      * @return <br>
      */
-    public QueryWrapper<T> groupBy(final String... fields) {
-        if (ArrayUtils.isNotEmpty(fields)) {
-            for (String field : fields) {
-                getGroupList().add(field);
-            }
-        }
+    public QueryWrapper<T> groupBy(final String field) {
+        getGroupList().add(field);
         return this;
     }
 
@@ -359,23 +355,6 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      */
     public QueryWrapper<T> gt(final String fieldName, final Number value) {
         gt(true, fieldName, value);
-        return this;
-    }
-
-    /**
-     * Description: or <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param tempQueryWrapper
-     * @return <br>
-     */
-    public QueryWrapper<T> having(final TempHavingQueryWrapper<T> tempQueryWrapper) {
-        HavingQueryWrapper<T> lambdaQueryWrapper = new HavingQueryWrapper<T>();
-        tempQueryWrapper.exec(lambdaQueryWrapper);
-        if (!lambdaQueryWrapper.getTempPredicates().isEmpty()) {
-            super.setHavingWrapper(lambdaQueryWrapper);
-        }
         return this;
     }
 
@@ -700,6 +679,20 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> max(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(alias).build());
+        return this;
+    }
+
+    /**
      * 合并另外一个wrapper
      * 
      * @param wrapper 另外的wrapper
@@ -728,6 +721,20 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      */
     public QueryWrapper<T> min(final String field) {
         getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> min(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(alias).build());
         return this;
     }
 
@@ -947,15 +954,11 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param fields
+     * @param field
      * @return <br>
      */
-    public QueryWrapper<T> select(final List<String> fields) {
-        if (CollectionUtils.isNotEmpty(fields)) {
-            for (String field : fields) {
-                getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).build());
-            }
-        }
+    public QueryWrapper<T> select(final String field) {
+        select(field, field);
         return this;
     }
 
@@ -964,15 +967,12 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param fields
+     * @param field
+     * @param alias
      * @return <br>
      */
-    public QueryWrapper<T> select(final String... fields) {
-        if (ArrayUtils.isNotEmpty(fields)) {
-            for (String field : fields) {
-                getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).build());
-            }
-        }
+    public QueryWrapper<T> select(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).alias(alias).build());
         return this;
     }
 
@@ -994,11 +994,25 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> sum(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(alias).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param field1
      * @param field2
      * @return <br>
      */
-    public QueryWrapper<T> sum(final String field1, final String field2) {
+    public QueryWrapper<T> summing(final String field1, final String field2) {
         getSelectionList()
             .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(field1).build());
         return this;
@@ -1014,7 +1028,7 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @param alias
      * @return <br>
      */
-    public QueryWrapper<T> sum(final String field1, final String field2, final String alias) {
+    public QueryWrapper<T> summing(final String field1, final String field2, final String alias) {
         getSelectionList()
             .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(alias).build());
         return this;

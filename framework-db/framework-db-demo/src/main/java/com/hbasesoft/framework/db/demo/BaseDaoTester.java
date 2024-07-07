@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
+import com.hbasesoft.framework.db.demo.entity.Count;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 
@@ -96,7 +98,7 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
-    public void countCourse() {
+    public void countCourseByCriteria() {
         CriteriaBuilder cb = iCourseDao.criteriaBuilder();
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
         Root<CourseEntity> root = query.from(CourseEntity.class);
@@ -114,10 +116,80 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void countCourseBySpecification() {
+        Long course = iCourseDao.getBySpecification(
+            (root, query, cb) -> query.multiselect(cb.count(root.get("id"))).getRestriction(), Long.class);
+        Assert.isTrue(course.intValue() == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void countCourseByLamberda() {
-        CourseEntity course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId).build());
-        System.out.println(course);
-        // Assert.isTrue(course.getId() == NUM_3, ErrorCodeDef.FAILURE);
+        Long course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId).build(), Long.class);
+        Assert.isTrue(course.intValue() == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void countCourse() {
+        Long course = iCourseDao.get(q -> q.count("id").build(), Long.class);
+        Assert.isTrue(course.intValue() == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void countAliasByLamberda() {
+        Count course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId, Count::getTotal).build(), Count.class);
+        Assert.isTrue(course.getTotal().intValue() == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void countAlias() {
+        Count course = iCourseDao.get(q -> q.count("id", "total").build(), Count.class);
+        Assert.isTrue(course.getTotal().intValue() == NUM_3, ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void countAlias2Map() {
+        Map<String, Object> course = iCourseDao.get(q -> q.count("id", "count").build(), Map.class);
+        Assert.isTrue(((Long) course.get("count")).intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -310,6 +382,52 @@ public class BaseDaoTester {
     public void getByProperty() {
         CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
         Assert.equals(entity.getId(), "1", ErrorCodeDef.FAILURE);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void groupBy() {
+        List<StudentEntity> entity = iStudentDao.queryByLambda(
+            q -> q.select(StudentEntity::getAge).count(StudentEntity::getId).groupBy(StudentEntity::getAge).build());
+        System.out.println(entity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
+    public void groupByAlias() {
+        List<Count> entity = iStudentDao.queryByLambda(q -> q.select(StudentEntity::getAge, Count::getName)
+            .count(StudentEntity::getId, Count::getTotal).groupBy(StudentEntity::getAge).build(), Count.class);
+        System.out.println(entity);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @SuppressWarnings("rawtypes")
+    @Test
+    @Transactional
+    public void groupByAlias2Map() {
+        List<Map> entity = iStudentDao.query(q -> q.select("age").count("id", "count").max("id").min("id", "mid")
+            .avg("age", "avgAge").sum("age", "sumAge").groupBy("age").build(), Map.class);
+        System.out.println(entity);
     }
 
     /**

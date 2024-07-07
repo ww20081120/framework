@@ -46,7 +46,7 @@ public class StudentEntity extends BaseEntity {
 
     /** age */
     @Column(name = "AGE")
-    private int age;
+    private Integer age;
 
     /** score */
     @Transient

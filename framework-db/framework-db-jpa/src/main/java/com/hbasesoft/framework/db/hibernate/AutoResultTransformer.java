@@ -146,6 +146,11 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
             return (T) getValue(resultClass, tuple[0]);
         }
 
+        // 如果已经被hibernate转化过了，就不用转了
+        if (tuple.length == 1 && resultClass.isAssignableFrom(tuple[0].getClass())) {
+            return (T) tuple[0];
+        }
+
         T result = null;
         try {
             result = BeanUtils.instantiateClass(resultClass);
@@ -153,8 +158,9 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
             BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(result);
 
             for (int i = 0; i < aliases.length; i++) {
-                if (!"ROWNUM_".equals(aliases[i])) {
-                    String property = BeanUtil.toCamelCase(aliases[i]);
+                String alias = aliases[i];
+                if (!"ROWNUM_".equals(alias)) {
+                    String property = alias.indexOf('_') == -1 ? alias : BeanUtil.toCamelCase(alias);
                     if (tuple[i] instanceof Clob) {
                         // clob转成String
                         SerializableClobProxy proxy = (SerializableClobProxy) Proxy.getInvocationHandler(tuple[i]);

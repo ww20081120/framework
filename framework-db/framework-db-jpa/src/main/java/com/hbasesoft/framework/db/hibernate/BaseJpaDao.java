@@ -112,6 +112,18 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M>
+     * @param sql
+     * @param clazz
+     * @return <br>
+     */
+    <M> List<M> queryBySql(String sql, Class<M> clazz);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param sql
      * @return numbers
      * @throws DaoException <br>
