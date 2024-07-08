@@ -1,6 +1,7 @@
 package com.hbasesoft.framework.db.core.wrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -322,8 +323,8 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
      */
     public UpdateWrapper<T> in(final boolean condition, final String fieldName, final Object... values) {
         if (condition) {
-            getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN).value(values).build());
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN)
+                .value(Arrays.asList(values)).build());
         }
         return this;
     }
@@ -678,8 +679,8 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
      */
     public UpdateWrapper<T> notIn(final boolean condition, final String fieldName, final Object... values) {
         if (condition) {
-            getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN).value(values).build());
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN)
+                .value(Arrays.asList(values)).build());
         }
         return this;
     }

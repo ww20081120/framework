@@ -1,6 +1,7 @@
 package com.hbasesoft.framework.db.core.wrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -311,8 +312,8 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      */
     public DeleteWrapper<T> in(final boolean condition, final String fieldName, final Object... values) {
         if (condition) {
-            getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN).value(values).build());
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN)
+                .value(Arrays.asList(values)).build());
         }
         return this;
     }
@@ -662,8 +663,8 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      */
     public DeleteWrapper<T> notIn(final boolean condition, final String fieldName, final Object... values) {
         if (condition) {
-            getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN).value(values).build());
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN)
+                .value(Arrays.asList(values)).build());
         }
         return this;
     }

@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.db.core.wrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -388,7 +389,7 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
         final Object... values) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.IN).value(values).build());
+                .operator(Operator.IN).value(Arrays.asList(values)).build());
         }
         return this;
     }
@@ -730,7 +731,7 @@ public class LambdaQueryWrapper<T> extends AbstractWrapper<T> {
         final Object... values) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTIN).value(values).build());
+                .operator(Operator.NOTIN).value(Arrays.asList(values)).build());
         }
         return this;
     }
