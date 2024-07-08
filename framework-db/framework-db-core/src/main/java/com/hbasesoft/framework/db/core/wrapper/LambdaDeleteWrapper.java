@@ -5,11 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.wrapper;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.criteria.Predicate;
@@ -348,14 +347,10 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public LambdaDeleteWrapper<T> in(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
+        final Collection<?> values) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.IN).value(valuesList.toArray()).build());
+                .operator(Operator.IN).value(values).build());
         }
         return this;
     }
@@ -384,7 +379,7 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @param values 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> in(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
+    public LambdaDeleteWrapper<T> in(final SFunction<T, ?> fieldLambda, final Collection<?> values) {
         in(true, fieldLambda, values);
         return this;
     }
@@ -690,14 +685,10 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public LambdaDeleteWrapper<T> notIn(final boolean condition, final SFunction<T, ?> fieldLambda,
-        final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
+        final Collection<?> values) {
         if (condition) {
             getTempPredicates().add(TempPredicate.builder().fieldName(fieldLambda2FieldName(fieldLambda))
-                .operator(Operator.NOTIN).value(valuesList.toArray()).build());
+                .operator(Operator.NOTIN).value(values).build());
         }
         return this;
     }
@@ -726,7 +717,7 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
      * @param values 值
      * @return this
      */
-    public LambdaDeleteWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Iterable<?> values) {
+    public LambdaDeleteWrapper<T> notIn(final SFunction<T, ?> fieldLambda, final Collection<?> values) {
         notIn(true, fieldLambda, values);
         return this;
     }
