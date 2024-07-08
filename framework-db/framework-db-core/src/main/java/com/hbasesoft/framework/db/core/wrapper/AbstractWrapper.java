@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.db.core.wrapper;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -140,13 +141,18 @@ public abstract class AbstractWrapper<T> {
                 return criteriaBuilder.lessThan(root.get(predicate.getFieldName()), (Comparable) predicate.getValue());
             case IN:
                 CriteriaBuilder.In in = criteriaBuilder.in(root.get(predicate.getFieldName()));
-                Object[] objects = (Object[]) predicate.getValue();
+                Collection<?> objects = (Collection<?>) predicate.getValue();
                 for (Object obj : objects) {
                     in.value(obj);
                 }
                 return criteriaBuilder.and(in);
             case NOTIN:
-                return criteriaBuilder.not(root.get(predicate.getFieldName()).in(predicate.getValue()));
+                in = criteriaBuilder.in(root.get(predicate.getFieldName()));
+                objects = (Collection<?>) predicate.getValue();
+                for (Object obj : objects) {
+                    in.value(obj);
+                }
+                return criteriaBuilder.not(in);
             case LIKE:
                 String value = (String) predicate.getValue();
                 Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
