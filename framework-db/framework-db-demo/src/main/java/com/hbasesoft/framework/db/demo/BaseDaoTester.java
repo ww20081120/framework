@@ -502,6 +502,21 @@ public class BaseDaoTester {
      */
     @Test
     @Transactional
+    public void notInListLambda() {
+        List<String> ids = Arrays.asList("1", "2", "3");
+        List<StudentEntity> datas = iStudentDao.queryByLambda(q -> q.notIn(StudentEntity::getId, ids).build());
+        System.out.println(datas);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    @Test
+    @Transactional
     public void update() {
         StudentEntity entity = iStudentDao.get("1");
         Assert.notEquals(entity.getName(), "李四", ErrorCodeDef.SYSTEM_ERROR);
