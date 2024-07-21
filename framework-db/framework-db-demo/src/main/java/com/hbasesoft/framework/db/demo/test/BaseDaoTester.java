@@ -626,7 +626,6 @@ public class BaseDaoTester {
             1, 2, StaffEntity.class);
         assertEquals(entites.size(), 2);
         assertNull(entites.get(0).getDepartment());
-
     }
 
     /**
