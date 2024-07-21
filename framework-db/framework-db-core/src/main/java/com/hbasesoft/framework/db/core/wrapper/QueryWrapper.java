@@ -6,11 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-
 import com.hbasesoft.framework.common.utils.date.DateUtil;
-import com.hbasesoft.framework.db.core.BaseDao.CriterialQuerySpecification;
 
 /**
  * <Description>普通的queryWrapper 根据字段名 <br>
@@ -23,7 +19,7 @@ import com.hbasesoft.framework.db.core.BaseDao.CriterialQuerySpecification;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
-public class QueryWrapper<T> extends AbstractWrapper<T> {
+public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
 
     /**
      * <Description> 用于or的情况，比如 订单号或者名称包含某个 <br>
@@ -50,9 +46,31 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * 排序
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
      */
-    private List<OrderBy> orderByList = new ArrayList<>();
+    public QueryWrapper<T> avg(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> avg(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(alias).build());
+        return this;
+    }
 
     /**
      * Description: between lower，upper <br>
@@ -73,19 +91,6 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
                     lower, upper
                 }).build());
         }
-        return this;
-    }
-
-    /**
-     * between lower，upper
-     *
-     * @param fieldName 字段名
-     * @param lower 最小值
-     * @param upper 最大值
-     * @return this
-     */
-    public QueryWrapper<T> between(final String fieldName, final Comparable<?> lower, final Comparable<?> upper) {
-        between(true, fieldName, lower, upper);
         return this;
     }
 
@@ -118,6 +123,19 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * between lower，upper
+     *
+     * @param fieldName 字段名
+     * @param lower 最小值
+     * @param upper 最大值
+     * @return this
+     */
+    public QueryWrapper<T> between(final String fieldName, final Comparable<?> lower, final Comparable<?> upper) {
+        between(true, fieldName, lower, upper);
+        return this;
+    }
+
+    /**
      * Description: between lower，upper<br>
      * 
      * @author 王伟<br>
@@ -136,27 +154,57 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param field
      * @return <br>
      */
-    public CriterialQuerySpecification<T> build() {
-        return (root, query, cb) -> {
-            Predicate[] predicates = toPredicate(root, query, cb);
-            if (predicates == null && orderByList.isEmpty()) {
-                return null;
-            }
+    public QueryWrapper<T> count(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(field).build());
+        return this;
+    }
 
-            if (this.orderByList.isEmpty()) {
-                return query.where(predicates).getRestriction();
-            }
-            else {
-                Order[] orders = new Order[this.orderByList.size()];
-                for (int i = 0; i < orderByList.size(); i++) {
-                    orders[i] = orderByList.get(i).isDesc() ? cb.desc(root.get(orderByList.get(i).getProperty()))
-                        : cb.asc(root.get(orderByList.get(i).getProperty()));
-                }
-                return query.orderBy(orders).where(predicates).getRestriction();
-            }
-        };
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> count(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(alias).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @return <br>
+     */
+    public QueryWrapper<T> diff(final String field1, final String field2) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF).alias(field1).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> diff(final String field1, final String field2, final String alias) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF).alias(alias).build());
+        return this;
     }
 
     /**
@@ -269,6 +317,19 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      */
     public QueryWrapper<T> greaterThanOrEqualTo(final String fieldName, final Comparable<?> value) {
         greaterThanOrEqualTo(true, fieldName, value);
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> groupBy(final String field) {
+        getGroupList().add(field);
         return this;
     }
 
@@ -608,14 +669,41 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> max(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> max(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(alias).build());
+        return this;
+    }
+
+    /**
      * 合并另外一个wrapper
      * 
      * @param wrapper 另外的wrapper
      * @return this
      */
     public QueryWrapper<T> merge(final QueryWrapper<T> wrapper) {
-        if (!wrapper.orderByList.isEmpty()) {
-            orderByList.addAll(wrapper.orderByList);
+        if (!wrapper.getOrderByList().isEmpty()) {
+            getOrderByList().addAll(wrapper.getOrderByList());
         }
         if (!wrapper.getOrTempPredicates().isEmpty()) {
             super.getOrTempPredicates().addAll(wrapper.getOrTempPredicates());
@@ -623,6 +711,33 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
         if (!wrapper.getTempPredicates().isEmpty()) {
             this.getTempPredicates().addAll(wrapper.getTempPredicates());
         }
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> min(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> min(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(alias).build());
         return this;
     }
 
@@ -818,7 +933,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public QueryWrapper<T> orderByAsc(final String fieldName) {
-        orderByList.add(OrderBy.builder().isDesc(false).property(fieldName).build());
+        getOrderByList().add(OrderBy.builder().isDesc(false).property(fieldName).build());
         return this;
     }
 
@@ -829,7 +944,93 @@ public class QueryWrapper<T> extends AbstractWrapper<T> {
      * @return this
      */
     public QueryWrapper<T> orderByDesc(final String fieldName) {
-        orderByList.add(OrderBy.builder().isDesc(true).property(fieldName).build());
+        getOrderByList().add(OrderBy.builder().isDesc(true).property(fieldName).build());
         return this;
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> select(final String field) {
+        select(field, field);
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> select(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).alias(alias).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @return <br>
+     */
+    public QueryWrapper<T> sum(final String field) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(field).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> sum(final String field, final String alias) {
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(alias).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @return <br>
+     */
+    public QueryWrapper<T> summing(final String field1, final String field2) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(field1).build());
+        return this;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param field1
+     * @param field2
+     * @param alias
+     * @return <br>
+     */
+    public QueryWrapper<T> summing(final String field1, final String field2, final String alias) {
+        getSelectionList()
+            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(alias).build());
+        return this;
+    }
+
 }

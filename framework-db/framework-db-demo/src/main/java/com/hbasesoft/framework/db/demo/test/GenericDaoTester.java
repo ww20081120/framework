@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.demo;
+package com.hbasesoft.framework.db.demo.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +27,7 @@ import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
+import com.hbasesoft.framework.db.demo.Application;
 import com.hbasesoft.framework.db.demo.dao.CourseDao;
 import com.hbasesoft.framework.db.demo.dao.StudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
@@ -42,7 +43,7 @@ import com.hbasesoft.framework.db.demo.entity.StudentEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@SpringBootTest()
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @Deprecated
 public class GenericDaoTester {

@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.demo;
+package com.hbasesoft.framework.db.demo.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,8 +29,8 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
+import com.hbasesoft.framework.db.demo.Application;
 import com.hbasesoft.framework.db.demo.dao.ICourseDao;
 import com.hbasesoft.framework.db.demo.dao.IStudentDao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
@@ -46,8 +46,8 @@ import com.hbasesoft.framework.db.demo.entity.StudentEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@SpringBootTest()
-public class BaseDaoTester {
+@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class IBaseDaoTester {
 
     /** Number */
     private static final int NUM_3 = 3;
@@ -77,13 +77,6 @@ public class BaseDaoTester {
     /** dao */
     @Resource
     private ICourseDao iCourseDao;
-
-    /** 
-     *  
-     */
-    public BaseDaoTester() {
-        DataSourceUtil.init();
-    }
 
     /**
      * Description: <br>

@@ -1,0 +1,102 @@
+[
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phoneNumber": "123-456-7890",
+    "hireDate": "2021-01-01",
+    "jobTitle": "Software Engineer",
+    "salary": 75000.00,
+    "department": "项目一部"
+  },
+  {
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@example.com",
+    "phoneNumber": "098-765-4321",
+    "hireDate": "2021-02-01",
+    "jobTitle": "Project Manager",
+    "salary": 80000.00,
+    "department": "项目一部"
+  },
+  {
+    "firstName": "Michael",
+    "lastName": "Smith",
+    "email": "michael.smith@example.com",
+    "phoneNumber": "555-555-5555",
+    "hireDate": "2021-03-01",
+    "jobTitle": "Data Analyst",
+    "salary": 65000.00,
+    "department": "项目一部"
+  },
+  {
+    "firstName": "Emily",
+    "lastName": "Johnson",
+    "email": "emily.johnson@example.com",
+    "phoneNumber": "321-654-9870",
+    "hireDate": "2021-04-01",
+    "jobTitle": "HR Coordinator",
+    "salary": 55000.00,
+    "department": "项目二部"
+  },
+  {
+    "firstName": "David",
+    "lastName": "Brown",
+    "email": "david.brown@example.com",
+    "phoneNumber": "987-654-3210",
+    "hireDate": "2021-05-01",
+    "jobTitle": "Network Administrator",
+    "salary": 70000.00,
+    "department": "项目二部"
+  },
+  {
+    "firstName": "Jessica",
+    "lastName": "Jones",
+    "email": "jessica.jones@example.com",
+    "phoneNumber": "123-987-4560",
+    "hireDate": "2021-06-01",
+    "jobTitle": "Accountant",
+    "salary": 60000.00,
+    "department": "项目二部"
+  },
+  {
+    "firstName": "Matthew",
+    "lastName": "Williams",
+    "email": "matthew.williams@example.com",
+    "phoneNumber": "789-012-3456",
+    "hireDate": "2021-07-01",
+    "jobTitle": "Sales Manager",
+    "salary": 65000.00,
+    "department": "项目二部"
+  },
+  {
+    "firstName": "Olivia",
+    "lastName": "Taylor",
+    "email": "olivia.taylor@example.com",
+    "phoneNumber": "456-789-0123",
+    "hireDate": "2021-08-01",
+    "jobTitle": "Marketing Coordinator",
+    "salary": 55000.00,
+    "department": "项目二部"
+  },
+  {
+    "firstName": "Daniel",
+    "lastName": "Anderson",
+    "email": "daniel.anderson@example.com",
+    "phoneNumber": "012-345-6789",
+    "hireDate": "2021-09-01",
+    "jobTitle": "IT Support",
+    "salary": 50000.00,
+    "department": "项目三部"
+  },
+  {
+    "firstName": "Sophia",
+    "lastName": "Thomas",
+    "email": "sophia.thomas@example.com",
+    "phoneNumber": "345-678-9012",
+    "hireDate": "2021-10-01",
+    "jobTitle": "Customer Service",
+    "salary": 45000.00,
+    "department": "项目三部"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "phoneNumber": "123-456-7890",
+  "hireDate": "2021-01-01",
+  "jobTitle": "Software Engineer",
+  "salary": 75000.00,
+  "department": "项目三部"
+}

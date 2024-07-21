@@ -5,10 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.demo;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.lang.NonNull;
 
 import com.hbasesoft.framework.common.Bootstrap;
 
@@ -18,26 +18,29 @@ import com.hbasesoft.framework.common.Bootstrap;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2018年9月13日 <br>
+ * @CreateDate 2024年7月20日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@ComponentScan(basePackages = "com.hbasesoft.framework.db.demo")
-@SpringBootApplication
-public class Application {
+@TestConfiguration
+public class GlobalConfig implements ApplicationListener<ContextRefreshedEvent> {
+
+    static {
+        Bootstrap.before();
+    }
 
     /**
      * Description: <br>
      * 
-     * @author 王伟<br>
+     * @author ww200<br>
      * @taskId <br>
-     * @param args <br>
+     * @param event <br>
      */
-    public static void main(final String[] args) {
-
-        Bootstrap.before();
-        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-        Bootstrap.after(context);
+    @Override
+    public void onApplicationEvent(final @NonNull ContextRefreshedEvent event) {
+        if (event.getApplicationContext().getParent() == null) { // 确保是根上下文初始化完成
+            Bootstrap.after(event.getApplicationContext());
+        }
     }
 
 }

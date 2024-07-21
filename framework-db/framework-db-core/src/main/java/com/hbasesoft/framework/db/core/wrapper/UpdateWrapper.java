@@ -77,19 +77,6 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * between lower，upper
-     *
-     * @param fieldName 字段名
-     * @param lower 最小值
-     * @param upper 最大值
-     * @return this
-     */
-    public UpdateWrapper<T> between(final String fieldName, final Comparable<?> lower, final Comparable<?> upper) {
-        between(true, fieldName, lower, upper);
-        return this;
-    }
-
-    /**
      * Description: between lower，upper<br>
      * 
      * @author 王伟<br>
@@ -114,6 +101,19 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
             }
             between(true, fieldName, before, after);
         }
+        return this;
+    }
+
+    /**
+     * between lower，upper
+     *
+     * @param fieldName 字段名
+     * @param lower 最小值
+     * @param upper 最大值
+     * @return this
+     */
+    public UpdateWrapper<T> between(final String fieldName, final Comparable<?> lower, final Comparable<?> upper) {
+        between(true, fieldName, lower, upper);
         return this;
     }
 

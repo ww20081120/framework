@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.NoResultException;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -1458,5 +1460,66 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
      */
     public List queryByLambda(final LambdaQuerySpecification specification) {
         return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    public <M> M get(final QuerySpecification specification, final Class<M> clazz) {
+        return getBySpecification(specification.toSpecification(new QueryWrapper<>()), clazz);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M> M
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    public <M> M getByLambda(final LambdaQuerySpecification specification, final Class<M> clazz) {
+        return getBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), clazz);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    public <M> M getBySpecification(final CriterialQuerySpecification specification, final Class<M> clazz) {
+        Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery<Tuple> query = cb.createTupleQuery();
+        Root root = query.from(getEntityClazz());
+        specification.toPredicate(root, query, cb);
+        org.hibernate.query.Query q = getSession().createQuery(query);
+
+        if (Map.class.isAssignableFrom(clazz)) {
+            q.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        }
+        else {
+            q.setResultTransformer(new AutoResultTransformer(clazz));
+        }
+        try {
+            return (M) q.getSingleResult();
+        }
+        catch (NoResultException e) {
+            return null;
+        }
+
     }
 }

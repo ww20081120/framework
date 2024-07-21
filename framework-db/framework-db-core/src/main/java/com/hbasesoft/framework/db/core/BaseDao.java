@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -202,6 +203,28 @@ public interface BaseDao<T extends BaseEntity> {
     T get(Serializable id);
 
     /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @return <br>
+     */
+    T get(QuerySpecification<T> specification);
+
+    /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> M get(QuerySpecification<T> specification, Class<M> clazz);
+
+    /**
      * Description: 根据唯一数据来查询数据<br>
      * 
      * @author 王伟<br>
@@ -210,6 +233,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param value
      * @return <br>
      */
+    @Deprecated
     T getByProperty(String propertyName, Object value);
 
     /**
@@ -234,14 +258,16 @@ public interface BaseDao<T extends BaseEntity> {
     T getBySpecification(CriterialQuerySpecification<T> specification);
 
     /**
-     * Description: 根据条件查询 <br>
+     * Description: 根据条件查询<br>
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M>
      * @param specification
+     * @param clazz
      * @return <br>
      */
-    T get(QuerySpecification<T> specification);
+    <M> M getBySpecification(CriterialQuerySpecification<T> specification, Class<M> clazz);
 
     /**
      * Description: 根据条件查询 <br>
@@ -251,7 +277,19 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    T getByLambda(LambdaQuerySpecification<T> specification);
+    T getByLambda(LambdaQuerySpecification<T, T> specification);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param clazz
+     * @param <M>
+     * @return <br>
+     */
+    <M> M getByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz);
 
     /**
      * Description: 查询所有数据<br>
@@ -271,6 +309,7 @@ public interface BaseDao<T extends BaseEntity> {
      * @param value
      * @return <br>
      */
+    @Deprecated
     List<T> queryByProperty(String propertyName, Object value);
 
     /**
@@ -302,6 +341,21 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    <M> PagerList<M> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex,
+        int pageSize, Class<M> clazz);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param specification
      * @param pageIndex
      * @param pageSize
@@ -314,12 +368,41 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M> M
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    <M> PagerList<M> queryPager(QuerySpecification<M> specification, int pageIndex, int pageSize, Class<M> clazz);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
      * @param specification
      * @param pageIndex
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T> specification, int pageIndex, int pageSize);
+    PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T, T> specification, int pageIndex, int pageSize);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param <M> M
+     * @param clazz
+     * @return <br>
+     */
+    <M> PagerList<M> queryPagerByLambda(LambdaQuerySpecification<T, M> specification, int pageIndex, int pageSize,
+        Class<M> clazz);
 
     /**
      * Description: 根据条件查询 <br>
@@ -353,6 +436,18 @@ public interface BaseDao<T extends BaseEntity> {
     List<T> query(QuerySpecification<T> specification);
 
     /**
+     * Description:根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> List<M> query(QuerySpecification<T> specification, Class<M> clazz);
+
+    /**
      * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
@@ -360,7 +455,19 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    List<T> queryByLambda(LambdaQuerySpecification<T> specification);
+    List<T> queryByLambda(LambdaQuerySpecification<T, T> specification);
+
+    /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param clazz
+     * @param <M>
+     * @return <br>
+     */
+    <M> List<M> queryByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz);
 
     /**
      * <Description> <br>
@@ -386,7 +493,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param criteriaBuilder
          * @return <br>
          */
-        Predicate toPredicate(Root<T> root, CriteriaDelete<T> delete, CriteriaBuilder criteriaBuilder);
+        Predicate toPredicate(Root<? extends Tuple> root, CriteriaDelete<T> delete, CriteriaBuilder criteriaBuilder);
     }
 
     /**
@@ -413,7 +520,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param criteriaBuilder
          * @return <br>
          */
-        Predicate toPredicate(Root<T> root, CriteriaQuery<T> query, CriteriaBuilder criteriaBuilder);
+        Predicate toPredicate(Root<? extends Tuple> root, CriteriaQuery<Tuple> query, CriteriaBuilder criteriaBuilder);
     }
 
     /**
@@ -440,7 +547,108 @@ public interface BaseDao<T extends BaseEntity> {
          * @param criteriaBuilder
          * @return <br>
          */
-        Predicate toPredicate(Root<T> root, CriteriaUpdate<T> update, CriteriaBuilder criteriaBuilder);
+        Predicate toPredicate(Root<? extends Tuple> root, CriteriaUpdate<T> update, CriteriaBuilder criteriaBuilder);
+    }
+
+    /**
+     * <Description> <br>
+     * 
+     * @param <T> 参数类型
+     * @author ww200<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月6日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.hibernate <br>
+     */
+    @FunctionalInterface
+    interface DeleteSpecification<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper
+         * @return <br>
+         */
+        CriterialDeleteSpecification<T> toSpecification(DeleteWrapper<T> wrapper);
+    }
+
+    /**
+     * <Description> <br>
+     * 
+     * @param <T> 参数类型
+     * @author ww200<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月6日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.hibernate <br>
+     */
+    @FunctionalInterface
+    interface LambdaDeleteSpecification<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper
+         * @return <br>
+         */
+        CriterialDeleteSpecification<T> toSpecification(LambdaDeleteWrapper<T> wrapper);
+    }
+
+    /**
+     * <Description> <br>
+     * 
+     * @param <T> 参数类型
+     * @param <M> 返参类型
+     * @author ww200<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月6日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.hibernate <br>
+     */
+    @FunctionalInterface
+    interface LambdaQuerySpecification<T, M> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper
+         * @return <br>
+         */
+        CriterialQuerySpecification<T> toSpecification(LambdaQueryWrapper<T, M> wrapper);
+    }
+
+    /**
+     * <Description> <br>
+     * 
+     * @param <T> 参数类型
+     * @author ww200<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2024年5月6日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.db.hibernate <br>
+     */
+    @FunctionalInterface
+    interface LambdaUpdateSpecification<T> {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param wrapper
+         * @return <br>
+         */
+        CriterialUpdateSpecification<T> toSpecification(LambdaUpdateWrapper<T> wrapper);
     }
 
     /**
@@ -491,105 +699,5 @@ public interface BaseDao<T extends BaseEntity> {
          * @return <br>
          */
         CriterialUpdateSpecification<T> toSpecification(UpdateWrapper<T> wrapper);
-    }
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface DeleteSpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper
-         * @return <br>
-         */
-        CriterialDeleteSpecification<T> toSpecification(DeleteWrapper<T> wrapper);
-    }
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface LambdaQuerySpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper
-         * @return <br>
-         */
-        CriterialQuerySpecification<T> toSpecification(LambdaQueryWrapper<T> wrapper);
-    }
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface LambdaUpdateSpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper
-         * @return <br>
-         */
-        CriterialUpdateSpecification<T> toSpecification(LambdaUpdateWrapper<T> wrapper);
-    }
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface LambdaDeleteSpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param wrapper
-         * @return <br>
-         */
-        CriterialDeleteSpecification<T> toSpecification(LambdaDeleteWrapper<T> wrapper);
     }
 }

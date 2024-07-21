@@ -94,22 +94,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
     }
 
     /**
-     * Description: between lower，upper <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param fieldLambda
-     * @param lower
-     * @param upper
-     * @return <br>
-     */
-    public LambdaDeleteWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
-        final Comparable<?> upper) {
-        between(true, fieldLambda, lower, upper);
-        return this;
-    }
-
-    /**
      * Description: <br>
      * 
      * @author 王伟<br>
@@ -135,6 +119,22 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
             }
             between(true, fieldLambda, before, after);
         }
+        return this;
+    }
+
+    /**
+     * Description: between lower，upper <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param fieldLambda
+     * @param lower
+     * @param upper
+     * @return <br>
+     */
+    public LambdaDeleteWrapper<T> between(final SFunction<T, ?> fieldLambda, final Comparable<?> lower,
+        final Comparable<?> upper) {
+        between(true, fieldLambda, lower, upper);
         return this;
     }
 
