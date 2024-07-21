@@ -427,6 +427,18 @@ public interface BaseDao<T extends BaseEntity> {
     List<T> queryBySpecification(CriterialQuerySpecification<T> specification);
 
     /**
+     * Description:根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    <M> List<M> queryBySpecification(CriterialQuerySpecification<T> specification, Class<M> clazz);
+
+    /**
      * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>

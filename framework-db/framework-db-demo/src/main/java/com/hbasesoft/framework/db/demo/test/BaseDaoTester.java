@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,6 +31,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.db.demo.Application;
 import com.hbasesoft.framework.db.demo.dao.StaffDao;
+import com.hbasesoft.framework.db.demo.entity.CountEntity;
 import com.hbasesoft.framework.db.demo.entity.StaffEntity;
 import com.hbasesoft.framework.db.demo.util.DataUtil;
 
@@ -474,7 +476,6 @@ public class BaseDaoTester {
     @Transactional
     @Test
     public void getBySpecification2() {
-
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
         assertEquals(staffDao.getBySpecification((r, q, cb) -> q.multiselect(cb.count(r.get("id")))
@@ -559,6 +560,23 @@ public class BaseDaoTester {
      */
     @Transactional
     @Test
+    public void queryPagerBySpecification2() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+
+        List<StaffEntity> entites = staffDao.queryPagerBySpecification((r, q, cb) -> q
+            .multiselect(r.get("id").alias("id"), r.get("firstName").alias("first_name"),
+                r.get("lastName").alias("last_name"))
+            .where(cb.lessThanOrEqualTo(r.get("salary"), NUM_60000)).getRestriction(), 1, 2, StaffEntity.class);
+        assertEquals(entites.size(), 2);
+        assertNull(entites.get(0).getDepartment());
+    }
+
+    /**
+     * Description: <br>
+     */
+    @Transactional
+    @Test
     public void queryPager() {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
@@ -614,42 +632,115 @@ public class BaseDaoTester {
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void queryByCriteria() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        CriteriaBuilder cb = staffDao.getCriteriaBuilder();
+        CriteriaQuery<Tuple> q = cb.createTupleQuery();
+        Root<StaffEntity> r = q.from(StaffEntity.class);
+        q.multiselect(cb.count(r.get("id")), r.get("department")).groupBy(r.get("department"));
+
+        List<Tuple> tuples = staffDao.queryByCriteria(q);
+        assertEquals(tuples.size(), NUM_3);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void queryBySpecification() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        List<StaffEntity> entites = staffDao
+            .queryBySpecification((r, q, cb) -> q.where(cb.le(r.get("salary"), NUM_60000)).getRestriction());
+
+        assertEquals(entites.size(), NUM_5);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
-    public void query() {
+    @Transactional
+    @Test
+    public void queryBySpecification2() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        List<StaffEntity> entites = staffDao.queryBySpecification(
+            (r, q, cb) -> q.multiselect(cb.count(r.get("id")).alias("id"), r.get("department").alias("department"))
+                .groupBy(r.get("department")).getRestriction(),
+            StaffEntity.class);
+
+        assertEquals(entites.size(), NUM_3);
+    }
+
+    /**
+     * Description: 根据条件查询 <br>
+     */
+    @Transactional
+    @Test
+    public void query() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+
+        List<StaffEntity> entites = staffDao.query(q -> q.le("salary", NUM_60000).build());
+
+        assertEquals(entites.size(), NUM_5);
     }
 
     /**
      * Description:根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void query2() {
 
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+
+        List<CountEntity> entites = staffDao.query(
+            q -> q.count("id", "total").select("department", "name").groupBy("department").build(), CountEntity.class);
+
+        assertEquals(entites.size(), NUM_3);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void queryByLambda() {
 
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+
+        List<StaffEntity> entites = staffDao.queryByLambda(q -> q.le(StaffEntity::getSalary, NUM_60000).build());
+
+        assertEquals(entites.size(), NUM_5);
+
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void queryByLambda2() {
+
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+
+        List<CountEntity> entites = staffDao.queryByLambda(
+            q -> q.count(StaffEntity::getId, CountEntity::getTotal)
+                .select(StaffEntity::getDepartment, CountEntity::getName).groupBy(StaffEntity::getDepartment).build(),
+            CountEntity.class);
+
+        assertEquals(entites.size(), NUM_3);
 
     }
 

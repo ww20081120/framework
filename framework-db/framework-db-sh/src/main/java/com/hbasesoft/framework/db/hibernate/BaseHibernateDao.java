@@ -1508,21 +1508,25 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         CriteriaQuery<Tuple> query = cb.createTupleQuery();
         Root root = query.from(getEntityClazz());
         specification.toPredicate(root, query, cb);
-        org.hibernate.query.Query q = getSession().createQuery(query);
+        org.hibernate.query.Query<Tuple> q = getSession().createQuery(query);
 
+        final ResultTransformer rt;
         if (Map.class.isAssignableFrom(clazz)) {
-            q.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+            rt = Transformers.ALIAS_TO_ENTITY_MAP;
         }
         else {
-            q.setResultTransformer(new AutoResultTransformer(clazz));
+            rt = new AutoResultTransformer(clazz);
         }
+
         try {
-            return (M) q.getSingleResult();
+            Tuple t = q.getSingleResult();
+
+            return (M) rt.transformTuple(t.toArray(),
+                t.getElements().stream().map(e -> e.getAlias()).collect(Collectors.toList()).toArray(new String[0]));
         }
         catch (NoResultException e) {
             return null;
         }
-
     }
 
     /**
@@ -1635,4 +1639,63 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         return resultList;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    public <M> List<M> queryBySpecification(final CriterialQuerySpecification specification, final Class<M> clazz) {
+        Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery<Tuple> query = cb.createTupleQuery();
+        Root root = query.from(getEntityClazz());
+        specification.toPredicate(root, query, cb);
+        org.hibernate.query.Query<Tuple> q = getSession().createQuery(query);
+        q.setMaxResults(MAX_SIZE);
+
+        final ResultTransformer rt;
+        if (Map.class.isAssignableFrom(clazz)) {
+            rt = Transformers.ALIAS_TO_ENTITY_MAP;
+        }
+        else {
+            rt = new AutoResultTransformer(clazz);
+        }
+        return q.getResultList().stream().map(t -> {
+            return (M) rt.transformTuple(t.toArray(),
+                t.getElements().stream().map(e -> e.getAlias()).collect(Collectors.toList()).toArray(new String[0]));
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    public <M> List<M> query(final QuerySpecification specification, final Class<M> clazz) {
+        return queryBySpecification(specification.toSpecification(new QueryWrapper<>()), clazz);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param clazz
+     * @return <br>
+     */
+    public <M> List<M> queryByLambda(final LambdaQuerySpecification specification, final Class<M> clazz) {
+        return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), clazz);
+    }
 }
