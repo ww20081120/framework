@@ -970,13 +970,17 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
      */
     @Override
     public <M> PagerList<M> queryPagerByCriteria(final CriteriaQuery<M> criteria, final int pi, final int pageSize) {
-        CriteriaBuilder builder = criteriaBuilder();
         Set<Root<?>> roots = criteria.getRoots();
+        roots.forEach(r -> {
+            r.alias(ALIAS);
+        });
 
         // 查询总页数据
+        CriteriaBuilder builder = criteriaBuilder();
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
 
         Root<?> root = countCriteria.from(roots.iterator().next().getJavaType());
+        root.alias(ALIAS);
         countCriteria.select(builder.count(root));
         // 复制原criteria中的所有where条件（如果有）
         Predicate predicate = criteria.getRestriction();
@@ -984,7 +988,7 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
             countCriteria.where(predicate);
         }
         // 总页数
-        Long totalCount = getSession().createQuery(countCriteria).getSingleResultOrNull();
+        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
         if (totalCount == null) {
             totalCount = 0L;
         }
