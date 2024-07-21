@@ -22,7 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Count extends BaseEntity {
+public class CountEntity extends BaseEntity {
 
     /**
      * serialVersionUID <br>

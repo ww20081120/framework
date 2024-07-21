@@ -537,6 +537,20 @@ public interface BaseDao<T extends BaseEntity> {
     PagerList<T> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize);
 
     /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param <M> M
+     * @param clazz
+     * @return <br>
+     */
+    <M> PagerList<M> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize, Class<M> clazz);
+
+    /**
      * Description: 根据条件查询<br>
      * 
      * @author 王伟<br>

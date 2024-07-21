@@ -1,8 +1,8 @@
 package com.hbasesoft.framework.db.core.criteria;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -289,14 +289,10 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      * @param values 值
      * @return this
      */
-    public DeleteWrapper<T> in(final boolean condition, final String fieldName, final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
+    public DeleteWrapper<T> in(final boolean condition, final String fieldName, final Collection<?> values) {
         if (condition) {
-            getTempPredicates().add(
-                TempPredicate.builder().fieldName(fieldName).operator(Operator.IN).value(valuesList.toArray()).build());
+            getTempPredicates()
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN).value(values).build());
         }
         return this;
     }
@@ -311,8 +307,8 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      */
     public DeleteWrapper<T> in(final boolean condition, final String fieldName, final Object... values) {
         if (condition) {
-            getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN).value(values).build());
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.IN)
+                .value(Arrays.asList(values)).build());
         }
         return this;
     }
@@ -324,7 +320,7 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      * @param values 值
      * @return this
      */
-    public DeleteWrapper<T> in(final String fieldName, final Iterable<?> values) {
+    public DeleteWrapper<T> in(final String fieldName, final Collection<?> values) {
         in(true, fieldName, values);
         return this;
     }
@@ -640,14 +636,10 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      * @param values 值
      * @return this
      */
-    public DeleteWrapper<T> notIn(final boolean condition, final String fieldName, final Iterable<?> values) {
-        List<Object> valuesList = new ArrayList<>();
-        values.forEach(value -> {
-            valuesList.add(value);
-        });
+    public DeleteWrapper<T> notIn(final boolean condition, final String fieldName, final Collection<?> values) {
         if (condition) {
-            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN)
-                .value(valuesList.toArray()).build());
+            getTempPredicates()
+                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN).value(values).build());
         }
         return this;
     }
@@ -662,8 +654,8 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      */
     public DeleteWrapper<T> notIn(final boolean condition, final String fieldName, final Object... values) {
         if (condition) {
-            getTempPredicates()
-                .add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN).value(values).build());
+            getTempPredicates().add(TempPredicate.builder().fieldName(fieldName).operator(Operator.NOTIN)
+                .value(Arrays.asList(values)).build());
         }
         return this;
     }
@@ -675,7 +667,7 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
      * @param values 值
      * @return this
      */
-    public DeleteWrapper<T> notIn(final String fieldName, final Iterable<?> values) {
+    public DeleteWrapper<T> notIn(final String fieldName, final Collection<?> values) {
         notIn(true, fieldName, values);
         return this;
     }

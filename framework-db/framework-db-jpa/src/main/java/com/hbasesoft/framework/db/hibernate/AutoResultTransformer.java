@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.SerializableBlobProxy;
 import org.hibernate.engine.jdbc.SerializableClobProxy;
 import org.hibernate.query.ResultListTransformer;
@@ -158,7 +159,7 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
             BeanWrapper wrapper = PropertyAccessorFactory.forBeanPropertyAccess(result);
 
             for (int i = 0; i < aliases.length; i++) {
-                String alias = aliases[i];
+                String alias = StringUtils.lowerCase(aliases[i]);
                 if (!"ROWNUM_".equals(alias)) {
                     String property = alias.indexOf('_') == -1 ? alias : BeanUtil.toCamelCase(alias);
                     if (tuple[i] instanceof Clob) {

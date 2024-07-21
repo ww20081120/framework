@@ -37,11 +37,11 @@ public class StudentEntity extends BaseEntity {
     @Id
     @GeneratedValue(generator = "paymentableGenerator")
     @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-    @Column(name = "ID")
+    @Column(name = "id")
     private String id;
 
     /** name */
-    @Column(name = "NAME")
+    @Column(name = "name")
     private String name;
 
     /** age */

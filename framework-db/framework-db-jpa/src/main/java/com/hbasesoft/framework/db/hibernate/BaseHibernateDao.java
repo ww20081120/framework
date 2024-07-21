@@ -45,7 +45,6 @@ import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -481,12 +480,7 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
     @Override
     public <M> M getByCriteria(final CriteriaQuery<M> criteria) {
         org.hibernate.query.Query<M> query = getSession().createQuery(criteria);
-        try {
-            return query.getSingleResult();
-        }
-        catch (NoResultException e) {
-            return null;
-        }
+        return query.getSingleResultOrNull();
     }
 
     /**
@@ -507,7 +501,7 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
         }
 
         org.hibernate.query.Query<T> query = getSession().createQuery(hql, entityType);
-        return query.getSingleResult();
+        return query.getSingleResultOrNull();
     }
 
     /**
@@ -579,13 +573,7 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
         else {
             q.setTupleTransformer(new AutoResultTransformer(clazz));
         }
-        try {
-            return (M) q.getSingleResult();
-        }
-        catch (NoResultException e) {
-            return null;
-        }
-
+        return (M) q.getSingleResultOrNull();
     }
 
     /**
@@ -954,6 +942,25 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
     /**
      * Description: <br>
      * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    @Override
+    public <M> PagerList<M> queryPager(final QuerySpecification<T> specification, final int pageIndex,
+        final int pageSize, final Class<M> clazz) {
+        return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize,
+            clazz);
+    }
+
+    /**
+     * Description: <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
      * @param criteria
@@ -963,17 +970,13 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
      */
     @Override
     public <M> PagerList<M> queryPagerByCriteria(final CriteriaQuery<M> criteria, final int pi, final int pageSize) {
+        CriteriaBuilder builder = criteriaBuilder();
         Set<Root<?>> roots = criteria.getRoots();
-        roots.forEach(r -> {
-            r.alias(ALIAS);
-        });
 
         // 查询总页数据
-        CriteriaBuilder builder = criteriaBuilder();
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
 
         Root<?> root = countCriteria.from(roots.iterator().next().getJavaType());
-        root.alias(ALIAS);
         countCriteria.select(builder.count(root));
         // 复制原criteria中的所有where条件（如果有）
         Predicate predicate = criteria.getRestriction();
@@ -981,7 +984,7 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
             countCriteria.where(predicate);
         }
         // 总页数
-        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
+        Long totalCount = getSession().createQuery(countCriteria).getSingleResultOrNull();
         if (totalCount == null) {
             totalCount = 0L;
         }
@@ -1005,7 +1008,6 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
             resultList.addAll(query.getResultList());
         }
         return resultList;
-
     }
 
     /**
@@ -1102,7 +1104,7 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
             countCriteria.where(predicate);
         }
         // 总页数
-        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
+        Long totalCount = getSession().createQuery(countCriteria).getSingleResultOrNull();
         if (totalCount == null) {
             totalCount = 0L;
         }
