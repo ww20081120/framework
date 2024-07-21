@@ -7,12 +7,16 @@ package com.hbasesoft.framework.db.demo.test;
 
 import static com.hbasesoft.framework.db.demo.util.DataUtil.loadData;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
@@ -27,6 +31,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hbasesoft.framework.db.demo.Application;
 import com.hbasesoft.framework.db.demo.dao.StaffDao;
 import com.hbasesoft.framework.db.demo.entity.StaffEntity;
+import com.hbasesoft.framework.db.demo.util.DataUtil;
 
 /**
  * <Description> <br>
@@ -64,6 +69,9 @@ public class BaseDaoTester {
 
     /** */
     private static final int NUM_5 = 5;
+
+    /** */
+    private static final double NUM_65000 = 65000.00;
 
     /** staff dao */
     @Autowired
@@ -294,154 +302,312 @@ public class BaseDaoTester {
     /**
      * Description: 根据id批量删除<br>
      */
+    @Transactional
+    @Test
     public void deleteByIds() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+
+        List<StaffEntity> entites = staffDao
+            .queryByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson").build());
+        staffDao.deleteByIds(entites.stream().map(s -> s.getId()).collect(Collectors.toList()));
+
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
     }
 
     /**
      * Description: 根据条件删除<br>
      */
+    @Transactional
+    @Test
     public void deleteByCriteria() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+
+        CriteriaBuilder cb = staffDao.getCriteriaBuilder();
+        CriteriaDelete<StaffEntity> cd = cb.createCriteriaDelete(StaffEntity.class);
+        Root<StaffEntity> r = cd.from(StaffEntity.class);
+        cd.where(r.get("lastName").in("Doe", "Johnson"));
+        staffDao.deleteByCriteria(cd);
+
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
     }
 
     /**
      * Description: 根据条件删除<br>
      */
+    @Transactional
+    @Test
     public void deleteBySpecification() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+
+        staffDao.deleteBySpecification((r, q, cb) -> q.where(r.get("lastName").in("Doe", "Johnson")).getRestriction());
+
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
     }
 
     /**
      * Description: 根据条件删除<br>
      */
+    @Transactional
+    @Test
     public void delete2() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+
+        staffDao.delete(q -> q.in("lastName", "Doe", "Johnson").build());
+
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
     }
 
     /**
      * Description: 根据条件删除<br>
      */
+    @Transactional
+    @Test
     public void deleteByLambda() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+
+        staffDao.deleteByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson").build());
+
+        assertEquals(staffDao.getByLambda(
+            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
     }
 
     /**
      * Description: 根据id来获取数据<br>
      */
+    @Transactional
+    @Test
     public void get() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        StaffEntity entity = staffDao.get(q -> q.eq("firstName", "Michael").eq("lastName", "Smith").build());
+
+        assertEquals(entity.getSalary(), NUM_65000);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void get2() {
+        StaffEntity entity = JSONObject.parseObject(loadData("data/t_staff/staff_save.json"), StaffEntity.class);
+        staffDao.save(entity);
+        assertTrue(entity.getId() != null);
 
+        StaffEntity newEntity = staffDao.get(entity.getId());
+
+        assertTrue(DataUtil.equals(entity, newEntity));
     }
 
     /**
      * Description: 根据条件查询<br>
      */
+    @Transactional
+    @Test
     public void get3() {
-
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        assertEquals(staffDao.get(q -> q.count("id").eq("lastName", "Doe").build(), Integer.class), 2);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void getByCriteria() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        CriteriaBuilder cb = staffDao.getCriteriaBuilder();
+        CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        Root<StaffEntity> r = q.from(StaffEntity.class);
+
+        q.select(cb.count(r.get("id"))).where(cb.equal(r.get("lastName"), "Doe"));
+
+        assertEquals(staffDao.getByCriteria(q).intValue(), 2);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void getBySpecification() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        StaffEntity entity = staffDao.getBySpecification((r, q, cb) -> q
+            .where(cb.equal(r.get("firstName"), "Michael"), cb.equal(r.get("lastName"), "Smith")).getRestriction());
+
+        assertEquals(entity.getSalary(), NUM_65000);
     }
 
     /**
      * Description: 根据条件查询<br>
      */
+    @Transactional
+    @Test
     public void getBySpecification2() {
 
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        assertEquals(staffDao.getBySpecification((r, q, cb) -> q.multiselect(cb.count(r.get("id")))
+            .where(cb.equal(r.get("lastName"), "Doe")).getRestriction(), Long.class).intValue(), 2);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void getByLambda() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        StaffEntity entity = staffDao
+            .getByLambda(q -> q.eq(StaffEntity::getFirstName, "Michael").eq(StaffEntity::getLastName, "Smith").build());
+
+        assertEquals(entity.getSalary(), NUM_65000);
     }
 
     /**
      * Description: 根据条件查询 <br>
      */
+    @Transactional
+    @Test
     public void getByLambda2() {
-
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getLastName, "Doe").build(),
+            Integer.class), 2);
     }
 
     /**
      * Description: 查询所有数据<br>
      */
+    @Transactional
+    @Test
     public void queryAll() {
-
-    }
-
-    /**
-     * Description: 根据属性查询数据<br>
-     */
-    public void queryByProperty() {
-
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        assertEquals(staffDao.queryAll().size(), all.size());
     }
 
     /**
      * Description: 根据条件查询<br>
      */
+    @Transactional
+    @Test
     public void queryPagerByCriteria() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
 
+        CriteriaBuilder cb = staffDao.getCriteriaBuilder();
+        CriteriaQuery<StaffEntity> q = cb.createQuery(StaffEntity.class);
+        Root<StaffEntity> r = q.from(StaffEntity.class);
+        q.where(cb.lessThanOrEqualTo(r.get("salary"), NUM_60000));
+
+        assertEquals(staffDao.queryPagerByCriteria(q, 1, 2).size(), 2);
     }
 
     /**
      * Description: <br>
      */
+    @Transactional
+    @Test
     public void queryPagerBySpecification() {
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+
+        assertEquals(
+            staffDao
+                .queryPagerBySpecification(
+                    (r, q, cb) -> q.where(cb.lessThanOrEqualTo(r.get("salary"), NUM_60000)).getRestriction(), 1, 2)
+                .size(),
+            2);
 
     }
 
     /**
      * Description: <br>
      */
-    public void queryPagerBySpecification2() {
-
-    }
-
-    /**
-     * Description: <br>
-     */
+    @Transactional
+    @Test
     public void queryPager() {
-
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        assertEquals(staffDao.queryPager(q -> q.le("salary", NUM_60000).build(), 1, 2).size(), 2);
     }
 
     /**
      * Description: <br>
      */
+    @Transactional
+    @Test
     public void queryPager2() {
-
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        List<StaffEntity> entites = staffDao.queryPager(
+            q -> q.select("id").select("firstName").select("lastName").le("salary", NUM_60000).build(), 1, 2,
+            StaffEntity.class);
+        assertEquals(entites.size(), 2);
+        assertNull(entites.get(0).getDepartment());
     }
 
     /**
      * Description: <br>
      */
+    @Transactional
+    @Test
     public void queryPagerByLambda() {
 
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        assertEquals(staffDao.queryPagerByLambda(q -> q.le(StaffEntity::getSalary, NUM_60000).build(), 1, 2).size(), 2);
+
     }
 
     /**
      * Description: <br>
      */
+    @Transactional
+    @Test
     public void queryPagerByLambda2() {
+
+        List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
+        staffDao.saveBatch(all);
+        List<StaffEntity> entites = staffDao.queryPagerByLambda(
+            q -> q.select(StaffEntity::getId).select(StaffEntity::getFirstName).select(StaffEntity::getLastName)
+                .le(StaffEntity::getSalary, NUM_60000).build(),
+            1, 2, StaffEntity.class);
+        assertEquals(entites.size(), 2);
+        assertNull(entites.get(0).getDepartment());
 
     }
 

@@ -317,12 +317,13 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param <M> M
      * @param criteria
      * @param pageIndex
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPagerByCriteria(CriteriaQuery<T> criteria, int pageIndex, int pageSize);
+    <M> PagerList<M> queryPagerByCriteria(CriteriaQuery<M> criteria, int pageIndex, int pageSize);
 
     /**
      * Description: <br>

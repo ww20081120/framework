@@ -25,6 +25,7 @@ import org.springframework.beans.PropertyAccessorFactory;
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -87,6 +88,11 @@ public class AutoResultTransformer implements ResultTransformer {
             return getValue(resultClass, tuple[0]);
         }
 
+        // 如果已经被hibernate转化过了，就不用转了
+        if (tuple.length == 1 && resultClass.isAssignableFrom(tuple[0].getClass())) {
+            return tuple[0];
+        }
+
         Object result = null;
         try {
             result = BeanUtils.instantiate(resultClass);
@@ -130,6 +136,7 @@ public class AutoResultTransformer implements ResultTransformer {
             }
         }
         catch (Exception e) {
+            LoggerUtil.error(e);
             throw new RuntimeException("设置返回值失败", e);
         }
 

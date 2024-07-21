@@ -17,11 +17,6 @@ import lombok.Data;
 public class LambdaSett {
 
     /**
-     * 字符串
-     */
-    public static final int STR = 0;
-
-    /**
      * 日期
      */
     public static final int DATE = 1;
@@ -30,6 +25,11 @@ public class LambdaSett {
      * 数字
      */
     public static final int NUMBER = 2;
+
+    /**
+     * 字符串
+     */
+    public static final int STR = 0;
 
     /**
      * 字段

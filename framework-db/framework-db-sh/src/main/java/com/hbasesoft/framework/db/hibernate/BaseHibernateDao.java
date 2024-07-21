@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
@@ -142,7 +144,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
 
                 query.setResultTransformer(rt);
             }
-            else if (param.getBeanType().equals(Map.class)) {
+            else if (Map.class.isAssignableFrom(param.getBeanType())) {
                 query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
             }
             else {
@@ -1176,7 +1178,7 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         session.flush();
         Query query = session.createSQLQuery(sql);
 
-        if (getEntityClazz().equals(Map.class)) {
+        if (Map.class.isAssignableFrom(getEntityClazz())) {
             query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         }
         else {
@@ -1522,4 +1524,115 @@ public class BaseHibernateDao implements IGenericBaseDao, ISqlExcutor {
         }
 
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    public <M> PagerList<M> queryPagerByLambda(final LambdaQuerySpecification specification, final int pageIndex,
+        final int pageSize, final Class<M> clazz) {
+        return queryPagerBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), pageIndex, pageSize,
+            clazz);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param pageIndex
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    public <M> PagerList<M> queryPager(final QuerySpecification specification, final int pageIndex, final int pageSize,
+        final Class<M> clazz) {
+        return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize,
+            clazz);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author ww200<br>
+     * @taskId <br>
+     * @param <M>
+     * @param specification
+     * @param pi
+     * @param pageSize
+     * @param clazz
+     * @return <br>
+     */
+    public <M> PagerList<M> queryPagerBySpecification(final CriterialQuerySpecification specification, final int pi,
+        final int pageSize, final Class<M> clazz) {
+        Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
+        CriteriaBuilder cb = getCriteriaBuilder();
+        CriteriaQuery<Tuple> criteria = cb.createTupleQuery();
+        Root entityRoot = criteria.from(getEntityClazz());
+        specification.toPredicate(entityRoot, criteria, cb);
+
+        Set<Root<?>> roots = criteria.getRoots();
+        roots.forEach(r -> {
+            r.alias(ALIAS);
+        });
+
+        // 查询总页数据
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+
+        Root<?> root = countCriteria.from(roots.iterator().next().getJavaType());
+        root.alias(ALIAS);
+        countCriteria.select(builder.count(root));
+        // 复制原criteria中的所有where条件（如果有）
+        Predicate predicate = criteria.getRestriction();
+        if (predicate != null) {
+            countCriteria.where(predicate);
+        }
+        // 总页数
+        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
+        if (totalCount == null) {
+            totalCount = 0L;
+        }
+
+        // 设置分页数据
+        int pageIndex = pi;
+        if (pi <= 0) {
+            pageIndex = 1;
+        }
+
+        PagerList<M> resultList = new PagerList<>();
+        resultList.setPageIndex(pageIndex);
+        resultList.setPageSize(pageSize);
+        resultList.setTotalCount(totalCount);
+
+        // 如果还有数据，则分页查询
+        if (totalCount > (pageIndex - 1) * pageSize) {
+            org.hibernate.query.Query<Tuple> query = getSession().createQuery(criteria);
+            query.setFirstResult((pageIndex - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            final ResultTransformer rt;
+            if (Map.class.isAssignableFrom(clazz)) {
+                rt = Transformers.ALIAS_TO_ENTITY_MAP;
+            }
+            else {
+                rt = new AutoResultTransformer(clazz);
+            }
+            resultList.addAll(query.getResultList().stream().map(t -> {
+                return (M) rt.transformTuple(t.toArray(), t.getElements().stream().map(e -> e.getAlias())
+                    .collect(Collectors.toList()).toArray(new String[0]));
+            }).collect(Collectors.toList()));
+        }
+        return resultList;
+    }
+
 }

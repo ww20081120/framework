@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
@@ -54,7 +55,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> avg(final String field) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -68,7 +70,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> avg(final String field, final String alias) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -158,7 +161,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> count(final String field) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -172,7 +176,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> count(final String field, final String alias) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -186,8 +191,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> diff(final String field1, final String field2) {
-        getSelectionList()
-            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF).alias(field1).build());
+        getSelectionList().add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF)
+            .alias(BeanUtil.camelStr2underLine(field1)).build());
         return this;
     }
 
@@ -202,8 +207,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> diff(final String field1, final String field2, final String alias) {
-        getSelectionList()
-            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field1).field2(field2).operator(Operator.DIFF)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -677,7 +682,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> max(final String field) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -691,7 +697,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> max(final String field, final String alias) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -723,7 +730,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> min(final String field) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -737,7 +745,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> min(final String field, final String alias) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -971,7 +980,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> select(final String field, final String alias) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -984,7 +994,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> sum(final String field) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -998,7 +1009,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> sum(final String field, final String alias) {
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 
@@ -1012,8 +1024,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> summing(final String field1, final String field2) {
-        getSelectionList()
-            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(field1).build());
+        getSelectionList().add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING)
+            .alias(BeanUtil.camelStr2underLine(field1)).build());
         return this;
     }
 
@@ -1028,8 +1040,8 @@ public class QueryWrapper<T> extends AbstractQueryWrapper<T> {
      * @return <br>
      */
     public QueryWrapper<T> summing(final String field1, final String field2, final String alias) {
-        getSelectionList()
-            .add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING).alias(alias).build());
+        getSelectionList().add(TempSelection.builder().field(field1).field2(field2).operator(Operator.SUMMING)
+            .alias(BeanUtil.camelStr2underLine(alias)).build());
         return this;
     }
 

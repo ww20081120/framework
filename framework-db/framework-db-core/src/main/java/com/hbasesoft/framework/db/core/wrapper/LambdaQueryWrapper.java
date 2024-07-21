@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.db.core.utils.LambdaUtils;
 import com.hbasesoft.framework.db.core.wrapper.lambda.LambdaSett;
@@ -83,7 +84,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> avg(final SFunction<T, ?> fieldLambda) {
         String field = fieldLambda2FieldName(fieldLambda);
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.AVG)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -98,7 +100,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> avg(final SFunction<T, ?> fieldLambda, final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda)).operator(Operator.AVG)
-            .alias(fieldLambda2Result(alias)).build());
+            .alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -195,7 +197,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> count(final SFunction<T, ?> fieldLambda) {
         String field = fieldLambda2FieldName(fieldLambda);
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.COUNT)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -210,7 +213,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> count(final SFunction<T, ?> fieldLambda, final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda))
-            .operator(Operator.COUNT).alias(fieldLambda2Result(alias)).build());
+            .operator(Operator.COUNT).alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -226,7 +229,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
     public LambdaQueryWrapper<T, M> diff(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2) {
         String field = fieldLambda2FieldName(fieldLambda1);
         getSelectionList().add(TempSelection.builder().field(field).field2(fieldLambda2FieldName(fieldLambda2))
-            .operator(Operator.DIFF).alias(field).build());
+            .operator(Operator.DIFF).alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -243,8 +246,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
     public LambdaQueryWrapper<T, M> diff(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2,
         final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda1))
-            .field2(fieldLambda2FieldName(fieldLambda2)).operator(Operator.DIFF).alias(fieldLambda2Result(alias))
-            .build());
+            .field2(fieldLambda2FieldName(fieldLambda2)).operator(Operator.DIFF)
+            .alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -778,7 +781,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> max(final SFunction<T, ?> fieldLambda) {
         String field = fieldLambda2FieldName(fieldLambda);
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MAX)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -793,7 +797,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> max(final SFunction<T, ?> fieldLambda, final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda)).operator(Operator.MAX)
-            .alias(fieldLambda2Result(alias)).build());
+            .alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -807,7 +811,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> min(final SFunction<T, ?> fieldLambda) {
         String field = fieldLambda2FieldName(fieldLambda);
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.MIN)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -822,7 +827,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> min(final SFunction<T, ?> fieldLambda, final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda)).operator(Operator.MIN)
-            .alias(fieldLambda2Result(alias)).build());
+            .alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -1052,7 +1057,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> select(final SFunction<T, ?> fieldLambda) {
         String field = fieldLambda2FieldName(fieldLambda);
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.FIELD)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -1067,7 +1073,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> select(final SFunction<T, ?> fieldLambda, final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda))
-            .operator(Operator.FIELD).alias(fieldLambda2Result(alias)).build());
+            .operator(Operator.FIELD).alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -1081,7 +1087,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> sum(final SFunction<T, ?> fieldLambda) {
         String field = fieldLambda2FieldName(fieldLambda);
-        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM).alias(field).build());
+        getSelectionList().add(TempSelection.builder().field(field).operator(Operator.SUM)
+            .alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -1096,7 +1103,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
      */
     public LambdaQueryWrapper<T, M> sum(final SFunction<T, ?> fieldLambda, final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda)).operator(Operator.SUM)
-            .alias(fieldLambda2Result(alias)).build());
+            .alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 
@@ -1112,7 +1119,7 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
     public LambdaQueryWrapper<T, M> summing(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2) {
         String field = fieldLambda2FieldName(fieldLambda1);
         getSelectionList().add(TempSelection.builder().field(field).field2(fieldLambda2FieldName(fieldLambda2))
-            .operator(Operator.SUMMING).alias(field).build());
+            .operator(Operator.SUMMING).alias(BeanUtil.camelStr2underLine(field)).build());
         return this;
     }
 
@@ -1129,8 +1136,8 @@ public class LambdaQueryWrapper<T, M> extends AbstractQueryWrapper<T> {
     public LambdaQueryWrapper<T, M> summing(final SFunction<T, ?> fieldLambda1, final SFunction<T, ?> fieldLambda2,
         final SFunction<M, ?> alias) {
         getSelectionList().add(TempSelection.builder().field(fieldLambda2FieldName(fieldLambda1))
-            .field2(fieldLambda2FieldName(fieldLambda2)).operator(Operator.SUMMING).alias(fieldLambda2Result(alias))
-            .build());
+            .field2(fieldLambda2FieldName(fieldLambda2)).operator(Operator.SUMMING)
+            .alias(BeanUtil.camelStr2underLine(fieldLambda2Result(alias))).build());
         return this;
     }
 }

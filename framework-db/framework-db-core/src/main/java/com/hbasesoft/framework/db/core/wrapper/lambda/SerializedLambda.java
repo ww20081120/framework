@@ -23,36 +23,6 @@ public class SerializedLambda implements Serializable {
 
     private static final long serialVersionUID = 8025925345765570181L;
 
-    /** capturingClass */
-    private Class<?> capturingClass;
-
-    /** functionalInterfaceClass */
-    private String functionalInterfaceClass;
-
-    /** functionalInterfaceMethodName */
-    private String functionalInterfaceMethodName;
-
-    /** functionalInterfaceMethodSignature */
-    private String functionalInterfaceMethodSignature;
-
-    /** implClass */
-    private String implClass;
-
-    /** implMethodName */
-    private String implMethodName;
-
-    /** implMethodSignature */
-    private String implMethodSignature;
-
-    /** implMethodKind */
-    private int implMethodKind;
-
-    /** instantiatedMethodType */
-    private String instantiatedMethodType;
-
-    /** capturedArgs */
-    private Object[] capturedArgs;
-
     /**
      * 通过反序列化转换 lambda 表达式，该方法只能序列化 lambda 表达式，不能序列化接口实现或者正常非 lambda 写法的对象
      *
@@ -84,6 +54,36 @@ public class SerializedLambda implements Serializable {
             throw new RuntimeException("This is impossible to happen", e);
         }
     }
+
+    /** capturedArgs */
+    private Object[] capturedArgs;
+
+    /** capturingClass */
+    private Class<?> capturingClass;
+
+    /** functionalInterfaceClass */
+    private String functionalInterfaceClass;
+
+    /** functionalInterfaceMethodName */
+    private String functionalInterfaceMethodName;
+
+    /** functionalInterfaceMethodSignature */
+    private String functionalInterfaceMethodSignature;
+
+    /** implClass */
+    private String implClass;
+
+    /** implMethodKind */
+    private int implMethodKind;
+
+    /** implMethodName */
+    private String implMethodName;
+
+    /** implMethodSignature */
+    private String implMethodSignature;
+
+    /** instantiatedMethodType */
+    private String instantiatedMethodType;
 
     /**
      * 获取接口 class
@@ -122,6 +122,15 @@ public class SerializedLambda implements Serializable {
     }
 
     /**
+     * @return 获取实例化方法的类型
+     */
+    public Class<?> getInstantiatedType() {
+        String instantiatedTypeName = normalizedName(
+            instantiatedMethodType.substring(2, instantiatedMethodType.indexOf(';')));
+        return ClassUtil.toClassConfident(instantiatedTypeName);
+    }
+
+    /**
      * 正常化类名称，将类名称中的 / 替换为 .
      *
      * @param name 名称
@@ -129,15 +138,6 @@ public class SerializedLambda implements Serializable {
      */
     private String normalizedName(final String name) {
         return name.replace('/', '.');
-    }
-
-    /**
-     * @return 获取实例化方法的类型
-     */
-    public Class<?> getInstantiatedType() {
-        String instantiatedTypeName = normalizedName(
-            instantiatedMethodType.substring(2, instantiatedMethodType.indexOf(';')));
-        return ClassUtil.toClassConfident(instantiatedTypeName);
     }
 
     /**
