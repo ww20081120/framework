@@ -104,7 +104,7 @@ public class ElasticSearchRestClient implements ElasticSearchClient {
         Map<String, Map<String, String>> parameters = new HashMap<String, Map<String, String>>();
         Map<String, String> indexParameters = new HashMap<String, String>();
         indexParameters.put(INDEX_PARAM, indexNameBuilder.getIndexName(event));
-        indexParameters.put(TYPE_PARAM, indexType);
+        // indexParameters.put(TYPE_PARAM, indexType);
         if (ttlMs > 0) {
             indexParameters.put(TTL_PARAM, Long.toString(ttlMs));
         }
