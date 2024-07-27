@@ -5,10 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tracing.file;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.tracing.core.TraceLog;
 
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
@@ -28,6 +30,7 @@ import io.opentelemetry.semconv.ResourceAttributes;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tracing.file <br>
  */
+@ConditionalOnBean(annotation = TraceLog.class)
 @Configuration
 public class OpenTelemetryConfig {
 

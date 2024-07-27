@@ -6,9 +6,7 @@
 package com.hbasesoft.framework.db.demo;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -24,10 +22,7 @@ import com.hbasesoft.framework.common.Bootstrap;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo <br>
  */
-@EnableAutoConfiguration(exclude = {
-    DataSourceAutoConfiguration.class
-})
-@ComponentScan(basePackages = "com.hbasesoft")
+@ComponentScan(basePackages = "com.hbasesoft.framework.db.demo")
 @SpringBootApplication
 public class Application {
 
@@ -39,7 +34,6 @@ public class Application {
      * @param args <br>
      */
     public static void main(final String[] args) {
-
         Bootstrap.before();
         ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
         Bootstrap.after(context);

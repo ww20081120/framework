@@ -7,7 +7,7 @@ package com.hbasesoft.framework.rule.core.config;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 
 /**

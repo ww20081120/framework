@@ -7,8 +7,8 @@ package com.hbasesoft.framework.rule.core.config;
 
 import java.util.List;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 
 import lombok.Getter;
@@ -58,6 +58,6 @@ public class TreeFlowConfig implements FlowConfig {
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONStringWithDateFormat(this, "yyyy-MM-dd HH:mm:ss", new SerializerFeature[0]);
+        return JSON.toJSONString(this);
     }
 }

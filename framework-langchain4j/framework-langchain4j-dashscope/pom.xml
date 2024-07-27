@@ -12,7 +12,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-common</artifactId>
+			<artifactId>framework-common-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

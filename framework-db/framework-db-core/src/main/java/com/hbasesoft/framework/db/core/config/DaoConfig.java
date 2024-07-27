@@ -28,4 +28,8 @@ public class DaoConfig {
 
     /** 结果集类型转换回调函数 */
     private Class<?> callBackType;
+
+    public Class<?> getCallBackType() {
+        return callBackType;
+    };
 }

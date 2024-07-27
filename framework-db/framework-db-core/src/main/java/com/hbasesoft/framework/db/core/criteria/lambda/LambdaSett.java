@@ -3,7 +3,9 @@ package com.hbasesoft.framework.db.core.criteria.lambda;
 import java.lang.reflect.Field;
 import java.util.Date;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.bean.ClassUtil;
+import com.hbasesoft.framework.db.core.DaoException;
 
 import lombok.Data;
 
@@ -68,7 +70,8 @@ public class LambdaSett {
             fieldType = DATE;
         }
         else {
-            throw new RuntimeException("Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
+            throw new DaoException(ErrorCodeDef.PARAM_ERROR,
+                filedName + " 类型错误， Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
         }
     }
 

@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework-common</artifactId>
+		<version>4.1</version>
+	</parent>
+	<artifactId>framework-common-image</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-common-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- 处理图片 -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+		</dependency>
+	</dependencies>
+</project>

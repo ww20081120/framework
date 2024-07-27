@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;

@@ -1,138 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.hbasesoft.framework</groupId>
-		<artifactId>framework</artifactId>
-		<version>4.1</version>
-	</parent>
-	<artifactId>framework-common</artifactId>
-	<version>4.1</version>
-	<name>${project.artifactId}</name>
-	<description>公共模块</description>
-	<dependencies>
-		<!--
-		https://mvnrepository.com/artifact/org.springframework/spring-context -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-crypto</artifactId>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-collections4</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity-engine-core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ognl</groupId>
-			<artifactId>ognl</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-		</dependency>
-
-		<!-- 处理图片 -->
-		<dependency>
-			<groupId>net.coobird</groupId>
-			<artifactId>thumbnailator</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.jcraft</groupId>
-			<artifactId>jsch</artifactId>
-		</dependency>
-
-		<!-- 数据库密码加密工具 -->
-		<dependency>
-			<groupId>org.jasypt</groupId>
-			<artifactId>jasypt</artifactId>
-		</dependency>
-
-		<!-- 序列化工具 -->
-		<dependency>
-			<groupId>io.protostuff</groupId>
-			<artifactId>protostuff-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.protostuff</groupId>
-			<artifactId>protostuff-runtime</artifactId>
-		</dependency>
-
-		<!--
-		https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-		</dependency>
-
-		<!-- http 工具类 -->
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>okhttp</artifactId>
-		</dependency>
-
-		<!-- 编码神器 -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.xml.bind</groupId>
-			<artifactId>jaxb-impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.logging.log4j</groupId>
-					<artifactId>log4j-to-slf4j</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.hbasesoft.framework</groupId>
+    <artifactId>framework</artifactId>
+    <version>4.1</version>
+  </parent>
+  <artifactId>framework-common</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>framework-common-core</module>
+  	<module>framework-common-image</module>
+  	<module>framework-common-xml</module>
+  </modules>
 </project>

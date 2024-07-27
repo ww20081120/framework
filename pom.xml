@@ -11,8 +11,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.3.2</version>
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
 		<module>framework-common</module>
@@ -29,9 +29,13 @@
 	</modules>
 	<properties>
 		<java.version>21</java.version>
+		<!-- 解决文件拷贝时的编码 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring-cloud.version>2023.0.1</spring-cloud.version>
-		<fastjson.version>2.0.44</fastjson.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- 解决编译时中文乱码-->
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
+		<fastjson2.version>2.0.51</fastjson2.version>
 		<ognl.version>3.3.4</ognl.version>
 		<velocity.version>2.3</velocity.version>
 		<thumbnailator.version>0.4.20</thumbnailator.version>
@@ -106,11 +110,24 @@
 				<version>${velocity.version}</version>
 			</dependency>
 
+			<!--
+			https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
 			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>fastjson</artifactId>
-				<version>${fastjson.version}</version>
+				<groupId>com.alibaba.fastjson2</groupId>
+				<artifactId>fastjson2</artifactId>
+				<version>${fastjson2.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.alibaba.fastjson2</groupId>
+				<artifactId>fastjson2-extension</artifactId>
+				<version>${fastjson2.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.alibaba.fastjson2</groupId>
+				<artifactId>fastjson2-extension-spring6</artifactId>
+				<version>${fastjson2.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>ognl</groupId>
 				<artifactId>ognl</artifactId>
@@ -346,6 +363,7 @@
 			</plugin>
 
 			<!-- 编译时把源码打入jar包 -->
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -358,6 +376,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 		</plugins>
 		<resources>
 			<resource>

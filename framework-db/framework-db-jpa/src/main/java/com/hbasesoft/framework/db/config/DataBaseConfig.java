@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.config;
 
-import org.hibernate.transform.ResultTransformer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +16,7 @@ import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
 import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
 import com.hbasesoft.framework.db.core.spring.SpringDaoHandler;
+import com.hbasesoft.framework.db.hibernate.AutoResultTransformer;
 import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
 
 /**
@@ -67,7 +67,7 @@ public class DataBaseConfig {
         DaoConfig dataConfig = new DaoConfig();
         dataConfig.setDbType(PropertyHolder.getProperty("master.db.type"));
         dataConfig.setBaseDaoType(BaseHibernateDao.class);
-        dataConfig.setCallBackType(ResultTransformer.class);
+        dataConfig.setCallBackType(AutoResultTransformer.class);
         beanFactory.setConfig(dataConfig);
         beanFactory.setInterceptors("springDaoHandler");
 

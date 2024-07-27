@@ -41,7 +41,7 @@ public class CourseEntity extends BaseEntity {
     @Id
     @GeneratedValue(generator = "paymentableGenerator")
     @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-    @Column(name = "ID")
+    @Column(name = "id")
     private String id;
 
     /** course name */

@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- com.hbasesoft.framework.db.config.DataBaseConfig,\
- com.hbasesoft.framework.db.config.DynamicTransactionManagementConfigurer

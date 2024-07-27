@@ -11,6 +11,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.context.annotation.Import;
+
+import com.hbasesoft.framework.tracing.core.advice.TracerLogConfig;
+
 /**
  * <Description> <br>
  * 
@@ -24,6 +28,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
+@Import(TracerLogConfig.class)
 public @interface TraceLog {
 
     /**

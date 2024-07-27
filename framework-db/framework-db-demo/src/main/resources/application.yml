@@ -8,5 +8,5 @@ spring: #应用配置
 master: #主数据库配置
  db:
   type: h2
-  url: jdbc:h2:~/test
+  url: jdbc:h2:./target/test
   

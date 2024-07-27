@@ -27,11 +27,10 @@ public class DatasourceStartupLinstener implements StartupListener {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @return <br>
+     * @param context <br>
      */
-    @Override
-    public LoadOrder getOrder() {
-        return LoadOrder.MIDDLE;
+    public void complete(final ApplicationContext context) {
+        DataSourceUtil.init();
     }
 
     /**
@@ -39,9 +38,10 @@ public class DatasourceStartupLinstener implements StartupListener {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param context <br>
+     * @return <br>
      */
-    public void complete(final ApplicationContext context) {
-        DataSourceUtil.init();
+    @Override
+    public LoadOrder getOrder() {
+        return LoadOrder.MIDDLE;
     }
 }

@@ -1,0 +1,2 @@
+com.hbasesoft.framework.db.config.DataBaseConfig
+com.hbasesoft.framework.db.config.DynamicTransactionManagementConfigurer

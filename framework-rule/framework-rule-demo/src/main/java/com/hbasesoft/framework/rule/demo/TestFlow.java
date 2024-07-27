@@ -8,7 +8,7 @@ package com.hbasesoft.framework.rule.demo;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.rule.core.FlowHelper;
 import com.hbasesoft.framework.rule.core.antv.AntVFlowHelper;

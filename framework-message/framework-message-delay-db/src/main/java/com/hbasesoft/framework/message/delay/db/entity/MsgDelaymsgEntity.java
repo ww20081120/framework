@@ -89,7 +89,7 @@ public class MsgDelaymsgEntity extends BaseEntity {
         }
         this.setCreateTime(new Date(delayMessage.getCurrentTime()));
         this.setDelaySeconds(delayMessage.getSeconds());
-        this.setMemeryFlag(GlobalConstants.NO);
+        this.setMemeryFlag("N");
         this.setShardInfo(getShardMsg());
         this.expireTime = new Date(delayMessage.getCurrentTime() + this.getDelaySeconds() * GlobalConstants.SECONDS);
     }

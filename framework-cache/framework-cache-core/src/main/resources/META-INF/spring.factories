@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- com.hbasesoft.framework.cache.core.annotation.CacheAdvice,\
- com.hbasesoft.framework.cache.core.lock.CacheLockAdvice,\
- com.hbasesoft.framework.cache.core.lock.DulplicateLockAdvice

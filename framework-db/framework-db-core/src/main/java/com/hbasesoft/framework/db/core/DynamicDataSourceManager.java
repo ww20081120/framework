@@ -22,15 +22,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class DynamicDataSourceManager {
 
-    /** default datasource code */
-    public static final String DEFAULT_DATASOURCE_CODE = "master";
-
     /** data source code holder */
     private static ThreadLocal<String> dataSourceCodeHolder = new ThreadLocal<String>() {
         protected synchronized String initialValue() {
             return DEFAULT_DATASOURCE_CODE;
         }
     };
+
+    /** default datasource code */
+    public static final String DEFAULT_DATASOURCE_CODE = "master";
 
     /**
      * Description: <br>
