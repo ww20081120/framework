@@ -57,6 +57,6 @@ public class HttpUtilTest {
     @Test
     public void doGetDowloadFile() {
         HttpUtil.downloadFile("https://www.baidu.com/img/"
-            + "PCfb_5bf082d29588c07f842ccde3f97243ea.png", "a2.jpg");
+            + "PCfb_5bf082d29588c07f842ccde3f97243ea.png", "target/a2.jpg");
     }
 }
