@@ -189,6 +189,7 @@ public class IBaseDaoTester {
      * @taskId <br>
      *         <br>
      */
+    @SuppressWarnings("unchecked")
     @Test
     @Transactional
     public void countAlias2Map() {
