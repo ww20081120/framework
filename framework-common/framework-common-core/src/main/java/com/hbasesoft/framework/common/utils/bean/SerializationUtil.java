@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -79,7 +80,7 @@ public final class SerializationUtil {
     public static <T> byte[] serial(final T obj) throws UtilException {
         if (obj != null && !(obj instanceof Void)) {
             try {
-                if (obj instanceof Map) {
+                if (obj instanceof Map || obj instanceof Collection) {
                     return jdkSerial(obj);
                 }
                 else {
@@ -139,7 +140,7 @@ public final class SerializationUtil {
         T result = null;
         if (data != null && data.length > 0) {
             try {
-                if (Map.class.isAssignableFrom(clazz)) {
+                if (Map.class.isAssignableFrom(clazz) || Collection.class.isAssignableFrom(clazz)) {
                     result = (T) jdkUnserial(data);
                 }
                 else {

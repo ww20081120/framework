@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.bean;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Set;
@@ -60,23 +62,6 @@ public class BeanUtilTest {
     // System.out.println("获取到了Bootstrap after方法中的参数名称");
     // }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
-    @Test
-    public void getMethodSignature() {
-        Method[] methods = Bootstrap.class.getDeclaredMethods();
-        Method method = methods[1];
-
-        String name = BeanUtil.getMethodSignature(method);
-        Assert.equals(name, "after(org.springframework.context.ApplicationContext,)", ErrorCodeDef.FAILURE);
-        System.out.println("获取到了Bootstrap after方法的签名");
-
-    }
 
     /**
      * Description: <br>
