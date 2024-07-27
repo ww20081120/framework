@@ -243,7 +243,10 @@ public enum ErrorCodeDef implements ErrorCode {
     FLOW_STACK_OVERFLOW(SYSTEM_PREFIX + 72, "流程执行超过最大深度{0}"),
 
     /** 压缩文件的路径不能再源文件的路径中 */
-    ZIP_PATH_IS_IN_SRC_PATH(SYSTEM_PREFIX + 73, "压缩文件的路径不能再源文件的路径中"),;
+    ZIP_PATH_IS_IN_SRC_PATH(SYSTEM_PREFIX + 73, "压缩文件的路径不能再源文件的路径中"),
+
+    /** 不支持的DAO操作 */
+    UNSPORT_DAO_OPERATOR(SYSTEM_PREFIX + 74, "不支持的DAO操作"),;
 
     /** code */
     private final int code;

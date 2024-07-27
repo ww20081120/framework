@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -23,6 +22,7 @@ import org.hibernate.query.MutationQuery;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.ResultListTransformer;
 import org.hibernate.query.TupleTransformer;
+import org.hibernate.query.criteria.JpaCriteriaQuery;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -47,11 +47,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Query;
 import jakarta.persistence.Tuple;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 /**
@@ -968,27 +968,18 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
      * @param pageSize
      * @return <br>
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <M> PagerList<M> queryPagerByCriteria(final CriteriaQuery<M> criteria, final int pi, final int pageSize) {
-        Set<Root<?>> roots = criteria.getRoots();
-        roots.forEach(r -> {
-            r.alias(ALIAS);
-        });
-
-        // 查询总页数据
-        CriteriaBuilder builder = criteriaBuilder();
-        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-
-        Root<?> root = countCriteria.from(roots.iterator().next().getJavaType());
-        root.alias(ALIAS);
-        countCriteria.select(builder.count(root));
-        // 复制原criteria中的所有where条件（如果有）
-        Predicate predicate = criteria.getRestriction();
-        if (predicate != null) {
-            countCriteria.where(predicate);
-        }
         // 总页数
-        Long totalCount = getSession().createQuery(countCriteria).getSingleResult();
+        Long totalCount = null;
+        if (criteria instanceof JpaCriteriaQuery jcq) {
+            TypedQuery<Long> query = getSession().createQuery(jcq.createCountQuery());
+            totalCount = query.getSingleResult();
+        }
+        else {
+            throw new DaoException(ErrorCodeDef.UNSPORT_DAO_OPERATOR);
+        }
         if (totalCount == null) {
             totalCount = 0L;
         }
@@ -1085,30 +1076,16 @@ public class BaseHibernateDao<T extends BaseEntity> implements BaseJpaDao<T>, IS
     public <M> PagerList<M> queryPagerBySpecification(final CriterialQuerySpecification<T> specification, final int pi,
         final int pageSize, final Class<M> clazz) {
         Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
+
+        // 设置条件
         CriteriaBuilder cb = criteriaBuilder();
         CriteriaQuery<Tuple> criteria = cb.createTupleQuery();
         Root entityRoot = criteria.from(getEntityClazz());
         specification.toPredicate(entityRoot, criteria, cb);
 
-        Set<Root<?>> roots = criteria.getRoots();
-        roots.forEach(r -> {
-            r.alias(ALIAS);
-        });
-
-        // 查询总页数据
-        CriteriaBuilder builder = criteriaBuilder();
-        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-
-        Root<?> root = countCriteria.from(roots.iterator().next().getJavaType());
-        root.alias(ALIAS);
-        countCriteria.select(builder.count(root));
-        // 复制原criteria中的所有where条件（如果有）
-        Predicate predicate = criteria.getRestriction();
-        if (predicate != null) {
-            countCriteria.where(predicate);
-        }
-        // 总页数
-        Long totalCount = getSession().createQuery(countCriteria).getSingleResultOrNull();
+        Long totalCount = null;
+        TypedQuery<Long> countQuery = getSession().createQuery(((JpaCriteriaQuery) criteria).createCountQuery());
+        totalCount = countQuery.getSingleResult();
         if (totalCount == null) {
             totalCount = 0L;
         }
