@@ -5,8 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.core.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.db.core.DaoConstants;
 
 /**
  * <Description> <br>
@@ -31,6 +34,7 @@ public final class SQlCheckUtil {
      * @param sql <br>
      */
     public static void checkSql(final String sql) {
-        Assert.isTrue(sql.indexOf(ASTERISK) == -1, ErrorCodeDef.UNSUUPORT_ASTERISK);
+        Assert.isTrue(!StringUtils.trim(sql).toLowerCase().startsWith(DaoConstants.SQL_SELECT_PREFIX)
+            || sql.indexOf(ASTERISK) == -1, ErrorCodeDef.UNSUUPORT_ASTERISK);
     }
 }
