@@ -16,5 +16,6 @@
   	<module>framework-log-flume-elasticsearch</module>
   	<module>framework-log-flume-jdbc</module>
   	<module>framework-log-zipkin</module>
+  	<module>framework-log-otlp</module>
   </modules>
 </project>

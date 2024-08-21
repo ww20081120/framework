@@ -8,10 +8,25 @@ spring: #应用配置
     traceId128: true
     sampler:
       probability: 1.0
+    otel:
+      config:
+        trace-id-ratio-based: 1.0
+      exporter:
+        otlp:
+          protocol: grpc
+          endpoint: http://192.168.10.75:11800
+  
   zipkin:
-    base-url: http://127.0.0.1:9411
+    base-url: http://192.168.10.75:9412
     discovery-client-enabled: false    
- 
+
+skywalking:
+  agent:
+    service-name: ${project.name}
+    namespace: demo
+    direct-wire-target-host: 192.168.10.75
+    direct-wire-target-port: 11800
+
 server: #系统配置
   port: 10000
   

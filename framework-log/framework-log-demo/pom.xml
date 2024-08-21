@@ -11,15 +11,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-log-file</artifactId>
+			<artifactId>framework-log-otlp</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<!--		<dependency>-->
-		<!--			<groupId>com.hbasesoft.framework</groupId>-->
-		<!--			<artifactId>framework-log-flume-elasticsearch</artifactId>-->
-		<!--			<version>${project.parent.version}</version>-->
-		<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

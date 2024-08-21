@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.log.core;
 
-import brave.Span;
+import org.springframework.cloud.sleuth.Span;
 
 /**
  * <Description> <br>

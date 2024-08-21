@@ -7,11 +7,10 @@ import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.cloud.sleuth.Tracer.SpanInScope;
 
 import com.hbasesoft.framework.common.annotation.NoTracerLog;
 import com.hbasesoft.framework.log.core.TransLogUtil;
-
-import brave.Tracer.SpanInScope;
 
 /**
  * <Description> <br>

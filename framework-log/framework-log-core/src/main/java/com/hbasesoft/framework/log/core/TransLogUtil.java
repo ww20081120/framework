@@ -9,15 +9,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.cloud.sleuth.Tracer.SpanInScope;
 import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-
-import brave.Span;
-import brave.Tracer;
-import brave.Tracer.SpanInScope;
 
 /**
  * <Description> <br>
@@ -54,7 +53,7 @@ public final class TransLogUtil {
         if (tc != null) {
             Span span = tracer.currentSpan();
             if (span != null) {
-                return span.context().traceIdString();
+                return span.context().traceId();
             }
         }
         return "No Tracer found!";
@@ -94,15 +93,13 @@ public final class TransLogUtil {
             // 当前的Span
             Span span = null;
             if (parentSpan != null) {
-                span = tracer.newChild(parentSpan.context()).name(methodName);
+                span = tracer.spanBuilder().name(methodName).setParent(parentSpan.context()).start();
             }
             else {
-                span = tracer.newTrace().name(methodName);
+                span = tracer.spanBuilder().name(methodName).start();
             }
 
-            span.start(beginTime);
-
-            SpanInScope scope = tc.withSpanInScope(span);
+            SpanInScope scope = tc.withSpan(span);
 
             // 执行记录
             for (TransLoggerService service : getTransLoggerServices()) {
@@ -150,7 +147,7 @@ public final class TransLogUtil {
                     }
                 }
                 finally {
-                    span.finish(endTime);
+                    span.end();
                 }
             }
         }
@@ -192,7 +189,7 @@ public final class TransLogUtil {
                     }
                 }
                 finally {
-                    span.finish(endTime);
+                    span.end();
                 }
             }
         }
