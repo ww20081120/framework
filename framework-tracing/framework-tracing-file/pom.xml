@@ -27,11 +27,9 @@
 			<artifactId>opentelemetry-exporter-common</artifactId>
 		</dependency>
 
-		<!--
-		https://mvnrepository.com/artifact/io.opentelemetry/opentelemetry-exporter-logging -->
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-exporter-logging</artifactId>
+			<artifactId>opentelemetry-exporter-logging-otlp</artifactId>
 		</dependency>
 
 	</dependencies>
