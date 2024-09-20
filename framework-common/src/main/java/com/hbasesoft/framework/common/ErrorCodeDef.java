@@ -32,8 +32,8 @@ public enum ErrorCodeDef implements ErrorCode {
     /** 缓存失败 */
     CACHE_ERROR(SYSTEM_PREFIX + 2, "缓存失败"),
 
-    /** class:{0} 不包含局部变量表信息，请使用编译器选项 javac -g:'{'vars'}'来编译源文件。 */
-    CAN_NOT_FIND_VER_NAME(SYSTEM_PREFIX + 3, "class:{0} 不包含局部变量表信息，请使用编译器选项 javac -g:'{'vars'}'来编译源文件。"),
+    /** class:{0} 未找到变量的名称，检查是不是方法的参数未加@Param注解。 */
+    CAN_NOT_FIND_VER_NAME(SYSTEM_PREFIX + 3, "class:{0} 未找到变量的名称，检查是不是方法的参数未加@Param(\"XXX\")注解"),
 
     /** 解析模板失败 */
     PARSE_TEPLATE_ERROR(SYSTEM_PREFIX + 4, "解析模板失败"),
