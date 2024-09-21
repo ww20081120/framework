@@ -61,6 +61,7 @@
 		<dashscope.version>2.9.2</dashscope.version>
 		<elasticsearch.version>8.10.4</elasticsearch.version>
 		<json-api.version>2.1.3</json-api.version>
+		<skywalking.version>9.3.0</skywalking.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -294,6 +295,23 @@
 				<version>${json-api.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.skywalking</groupId>
+				<artifactId>apm-toolkit-trace</artifactId>
+				<version>${skywalking.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.skywalking</groupId>
+				<artifactId>apm-toolkit-webflux</artifactId>
+				<version>${skywalking.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.skywalking</groupId>
+				<artifactId>apm-toolkit-logback-1.x</artifactId>
+				<version>${skywalking.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
