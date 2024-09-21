@@ -1,15 +1,16 @@
 /**
- * 
+ *
  */
 package com.hbasesoft.framework.common.utils.engine;
 
-import java.io.BufferedWriter;
-import java.io.Writer;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.ServiceLoader;
-
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.logger.Logger;
+import com.hbasesoft.framework.common.utils.security.DataUtil;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang3.StringUtils;
@@ -20,25 +21,23 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
 import org.apache.velocity.runtime.resource.util.StringResourceRepository;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.logger.Logger;
-import com.hbasesoft.framework.common.utils.security.DataUtil;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import java.io.BufferedWriter;
+import java.io.Writer;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.ServiceLoader;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2014年10月28日 <br>
- * @since V1.0<br>
  * @see com.hbasesoft.framework.core.utils <br>
+ * @since V1.0<br>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VelocityParseFactory {
@@ -58,6 +57,11 @@ public final class VelocityParseFactory {
      * logger
      */
     private static Logger logger = new Logger(VelocityParseFactory.class);
+
+    /**
+     * templateCache
+     */
+    private static ConcurrentHashMap<String, Template> templateCache = new ConcurrentHashMap<>();
 
     static {
 
@@ -97,13 +101,14 @@ public final class VelocityParseFactory {
         }
         catch (Exception e) {
             logger.error("初始化Velocity模板失败", e);
+            throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
         }
     }
 
     /**
      * templateName
-     * 
-     * @param body body
+     *
+     * @param body   body
      * @param params params
      * @return String
      * @throws UtilException UtilException
@@ -121,12 +126,16 @@ public final class VelocityParseFactory {
                 context.put(entry.getKey(), entry.getValue());
             }
         }
-        StringResourceRepository repository = StringResourceLoader.getRepository();
-        repository.putStringResource(templateName, body);
+
+        // 缓存模板
+        Template template = templateCache.computeIfAbsent(templateName, k -> {
+            StringResourceRepository repository = StringResourceLoader.getRepository();
+            repository.putStringResource(templateName, body);
+            return Velocity.getTemplate(templateName, GlobalConstants.DEFAULT_CHARSET.name());
+        });
 
         StringBuilder sb = new StringBuilder();
         try (Writer writer = new BufferedWriter(new StringBuilderWriter(sb))) {
-            Template template = Velocity.getTemplate(templateName, GlobalConstants.DEFAULT_CHARSET.name());
             template.merge(context, writer);
             writer.flush();
             return sb.toString();
