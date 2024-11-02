@@ -6,9 +6,13 @@
 package com.hbasesoft.framework.common;
 
 import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -101,15 +105,42 @@ public final class Bootstrap {
 
         LoggerUtil.info("**********************************************************");
 
-        String port = PropertyHolder.getProperty("server.port");
-
-        System.out.println(new StringBuilder().append("\n***************************************").append('\n')
+        StringBuilder sb = new StringBuilder().append("\n***************************************").append('\n')
             .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
             .append(PropertyHolder.getProjectName()).append('-').append(PropertyHolder.getVersion()).append(" 模块启动成功！")
-            .append(StringUtils.isNotEmpty(port) ? "端口:" + port : "").append('\n')
-            .append("***************************************"));
+            .append('\n');
+
+        String protocol = PropertyHolder.getBooleanProperty("server.ssl.enabled", false) ? "https" : "http";
+
+        String port = context.getEnvironment().getProperty("server.port", "8080");
+        for (String ip : listAllIpAddresses()) {
+            sb.append(protocol).append("://").append(ip).append(":").append(port).append('\n');
+        }
+        sb.append("***************************************");
+
+        System.out.println(sb);
         LoggerUtil.info("====================>系统正常启动<====================");
 
+    }
+
+    private static List<String> listAllIpAddresses() {
+        List<String> ipList = new ArrayList<>();
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = networkInterfaces.nextElement();
+                Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
+                while (inetAddresses.hasMoreElements()) {
+                    InetAddress inetAddress = inetAddresses.nextElement();
+                    ipList.add(inetAddress.getHostAddress());
+                }
+            }
+        }
+        catch (SocketException e) {
+            LoggerUtil.error(e);
+            ipList.add("127.0.0.1");
+        }
+        return ipList;
     }
 
     private static void setHttpProxy() {
