@@ -74,8 +74,8 @@ public enum ErrorCodeDef implements ErrorCode {
     /** XML 转换失败 */
     XML_TRANS_ERROR(SYSTEM_PREFIX + 16, "XML 转换失败"),
 
-    /** 缓存模式没有设置 */
-    CACHE_MODEL_NOT_SET(SYSTEM_PREFIX + 17, "缓存模式没有设置"),
+    /** 缓存模式没有设置 cache.model*/
+    CACHE_MODEL_NOT_SET(SYSTEM_PREFIX + 17, "缓存模式没有设置 cache.model"),
 
     /** redis地址{0}未配置 */
     REDIS_ADDRESS_NOT_SET(SYSTEM_PREFIX + 18, "redis地址{0}未配置"),
