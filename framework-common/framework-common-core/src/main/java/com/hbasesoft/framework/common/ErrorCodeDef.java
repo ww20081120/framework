@@ -246,7 +246,10 @@ public enum ErrorCodeDef implements ErrorCode {
     ZIP_PATH_IS_IN_SRC_PATH(SYSTEM_PREFIX + 73, "压缩文件的路径不能再源文件的路径中"),
 
     /** 不支持的DAO操作 */
-    UNSPORT_DAO_OPERATOR(SYSTEM_PREFIX + 74, "不支持的DAO操作"),;
+    UNSPORT_DAO_OPERATOR(SYSTEM_PREFIX + 74, "不支持的DAO操作"),
+
+    /** 没有流程可以被编译 */
+    NO_PROCESS_TO_COMPILE(SYSTEM_PREFIX + 75, "没有流程可以被编译"),;
 
     /** code */
     private final int code;

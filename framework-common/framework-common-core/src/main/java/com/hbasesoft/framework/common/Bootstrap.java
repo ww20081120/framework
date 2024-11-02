@@ -106,7 +106,7 @@ public final class Bootstrap {
         LoggerUtil.info("**********************************************************");
 
         StringBuilder sb = new StringBuilder().append("\n***************************************").append('\n')
-            .append("         ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("         ")
+            .append("      ").append(ManagementFactory.getRuntimeMXBean().getName()).append('\n').append("      ")
             .append(PropertyHolder.getProjectName()).append('-').append(PropertyHolder.getVersion()).append(" 模块启动成功！")
             .append('\n');
 
@@ -114,7 +114,7 @@ public final class Bootstrap {
 
         String port = context.getEnvironment().getProperty("server.port", "8080");
         for (String ip : listAllIpAddresses()) {
-            sb.append(protocol).append("://").append(ip).append(":").append(port).append('\n');
+            sb.append("      ").append(protocol).append("://").append(ip).append(":").append(port).append('\n');
         }
         sb.append("***************************************");
 
@@ -129,10 +129,15 @@ public final class Bootstrap {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
             while (networkInterfaces.hasMoreElements()) {
                 NetworkInterface networkInterface = networkInterfaces.nextElement();
+                if (!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.isVirtual()) {
+                    continue;
+                }
                 Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
                 while (inetAddresses.hasMoreElements()) {
                     InetAddress inetAddress = inetAddresses.nextElement();
-                    ipList.add(inetAddress.getHostAddress());
+                    if (inetAddress instanceof java.net.Inet4Address && !inetAddress.isLoopbackAddress()) {
+                        ipList.add(inetAddress.getHostAddress());
+                    }
                 }
             }
         }
