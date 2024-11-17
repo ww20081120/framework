@@ -558,7 +558,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetDay(final Date date, final int amount) {
-        return offset(date, amount, DAY);
+        return offset(date, DAY, amount);
     }
 
     /**
@@ -570,7 +570,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetDay(final int amount) {
-        return offset(DateUtil.getCurrentDate(), amount, DAY);
+        return offset(DateUtil.getCurrentDate(), DAY, amount);
     }
 
     /**
@@ -583,7 +583,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetHour(final Date date, final int amount) {
-        return offset(date, amount, HOUR);
+        return offset(date, HOUR, amount);
     }
 
     /**
@@ -595,7 +595,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetHour(final int amount) {
-        return offset(DateUtil.getCurrentDate(), amount, HOUR);
+        return offset(DateUtil.getCurrentDate(), HOUR, amount);
     }
 
     /**
@@ -608,7 +608,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetMinute(final Date date, final int amount) {
-        return offset(date, amount, MINUTE);
+        return offset(date, MINUTE, amount);
     }
 
     /**
@@ -620,7 +620,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetMinute(final int amount) {
-        return offset(DateUtil.getCurrentDate(), amount, MINUTE);
+        return offset(DateUtil.getCurrentDate(), MINUTE, amount);
     }
 
     /**
@@ -633,7 +633,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetMonth(final Date date, final int amount) {
-        return offset(date, amount, MONTH);
+        return offset(date, MONTH, amount);
     }
 
     /**
@@ -645,7 +645,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetMonth(final int amount) {
-        return offset(DateUtil.getCurrentDate(), amount, MONTH);
+        return offset(DateUtil.getCurrentDate(), MONTH, amount);
     }
 
     /**
@@ -658,7 +658,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetSecond(final Date date, final int amount) {
-        return offset(date, amount, SECOND);
+        return offset(date, SECOND, amount);
     }
 
     /**
@@ -670,7 +670,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetSecond(final int amount) {
-        return offset(DateUtil.getCurrentDate(), amount, SECOND);
+        return offset(DateUtil.getCurrentDate(), SECOND, amount);
     }
 
     /**
@@ -683,7 +683,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetYear(final Date date, final int amount) {
-        return offset(date, amount, YEAR);
+        return offset(date, YEAR, amount);
     }
 
     /**
@@ -695,7 +695,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date offsetYear(final int amount) {
-        return offset(DateUtil.getCurrentDate(), amount, YEAR);
+        return offset(DateUtil.getCurrentDate(), YEAR, amount);
     }
 
     /**
