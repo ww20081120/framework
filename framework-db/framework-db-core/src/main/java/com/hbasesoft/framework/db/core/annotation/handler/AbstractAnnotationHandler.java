@@ -68,7 +68,7 @@ public class AbstractAnnotationHandler {
      */
     public AbstractAnnotationHandler(final DaoConfig daoConfig) {
         this.daoConfig = daoConfig;
-        if (MapUtils.isNotEmpty(genericBaseDaoMethodMap)) {
+        if (MapUtils.isEmpty(genericBaseDaoMethodMap)) {
             Class<?> daoClazz = daoConfig.getBaseDaoType();
             if (daoClazz != null) {
                 Method[] methods = daoClazz.getDeclaredMethods();
