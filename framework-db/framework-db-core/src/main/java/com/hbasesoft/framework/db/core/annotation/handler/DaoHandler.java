@@ -23,6 +23,7 @@ import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.config.ParamMetadata;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
@@ -38,6 +39,13 @@ import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
  * @see com.hbasesoft.framework.dao.annotation.handler <br>
  */
 public class DaoHandler extends AbstractAnnotationHandler implements InvocationHandler {
+
+    /**
+     * @param daoConfig
+     */
+    public DaoHandler(final DaoConfig daoConfig) {
+        super(daoConfig);
+    }
 
     /**
      * 表示以：开头的合法变量名

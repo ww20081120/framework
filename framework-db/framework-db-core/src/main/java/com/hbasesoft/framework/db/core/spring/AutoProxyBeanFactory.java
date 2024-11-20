@@ -84,8 +84,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         if (componentScanAnnotation != null) {
             basePackage = componentScanAnnotation.basePackages();
 
-            SQLHandler sqlHandler = new SQLHandler();
-            sqlHandler.setDaoConfig(config);
+            SQLHandler sqlHandler = new SQLHandler(config);
 
             try {
                 for (String pack : basePackage) {
@@ -147,8 +146,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     }
 
     private DaoHandler getDaoHandler(final Class<?> clazz) {
-        DaoHandler handler = new DaoHandler();
-        handler.setDaoConfig(config);
+        DaoHandler handler = new DaoHandler(config);
         ISqlExcutor baseDao = sqlExcutorFactory.create();
         handler.setSqlExcutor(baseDao);
 

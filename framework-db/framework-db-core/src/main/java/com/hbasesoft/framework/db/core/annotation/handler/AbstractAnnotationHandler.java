@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,17 +56,27 @@ public class AbstractAnnotationHandler {
     private static Logger logger = new Logger(AbstractAnnotationHandler.class);
 
     /** IGenericBaseDao 的方法签名 */
-    private static Map<String, Method> genericBaseDaoMethodMap;
+    private static Map<String, Method> genericBaseDaoMethodMap = new HashMap<String, Method>();
 
-    /**
-     * daoConfig
-     */
+    /** dao config */
     private DaoConfig daoConfig;
 
     /**
      * 默认构造函数
+     * 
+     * @param daoConfig
      */
-    public AbstractAnnotationHandler() {
+    public AbstractAnnotationHandler(final DaoConfig daoConfig) {
+        this.daoConfig = daoConfig;
+        if (MapUtils.isNotEmpty(genericBaseDaoMethodMap)) {
+            Class<?> daoClazz = daoConfig.getBaseDaoType();
+            if (daoClazz != null) {
+                Method[] methods = daoClazz.getDeclaredMethods();
+                for (Method m : methods) {
+                    genericBaseDaoMethodMap.put(getMethodSignature(m), m);
+                }
+            }
+        }
     }
 
     /**
@@ -76,19 +87,9 @@ public class AbstractAnnotationHandler {
      */
     protected Method getBaseDaoExcutor(final Method method) {
         Method result = null;
-        Class<?> daoClazz = daoConfig.getBaseDaoType();
-        if (daoClazz != null) {
-            if (genericBaseDaoMethodMap == null) {
-                genericBaseDaoMethodMap = new HashMap<String, Method>();
-                Method[] methods = daoClazz.getDeclaredMethods();
-                for (Method m : methods) {
-                    genericBaseDaoMethodMap.put(getMethodSignature(m), m);
-                }
-            }
-            String methodSignature = getMethodSignature(method);
-            if (genericBaseDaoMethodMap.containsKey(methodSignature)) {
-                result = genericBaseDaoMethodMap.get(methodSignature);
-            }
+        String methodSignature = getMethodSignature(method);
+        if (genericBaseDaoMethodMap.containsKey(methodSignature)) {
+            result = genericBaseDaoMethodMap.get(methodSignature);
         }
         return result;
     }
