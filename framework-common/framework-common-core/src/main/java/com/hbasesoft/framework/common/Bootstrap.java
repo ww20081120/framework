@@ -118,7 +118,7 @@ public final class Bootstrap {
         }
         sb.append("***************************************");
 
-        System.out.println(sb);
+        LoggerUtil.info(sb.toString());
         LoggerUtil.info("====================>系统正常启动<====================");
 
     }
