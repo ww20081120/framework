@@ -38,12 +38,20 @@ public class EventData<T> implements Serializable {
     private final String msgId;
 
     /** data */
-    private final T data;
+    private T data;
+
+    /** 
+     *  
+     */
+    public EventData() {
+        this.msgId = CommonUtil.getTransactionID();
+        this.tracerId = TraceLogUtil.getTraceId();
+    }
 
     /**
      * @param data
      */
-    EventData(final T data) {
+    public EventData(final T data) {
         this.msgId = CommonUtil.getTransactionID();
         this.tracerId = TraceLogUtil.getTraceId();
         this.data = data;
@@ -52,7 +60,7 @@ public class EventData<T> implements Serializable {
     /**
      * @param data
      */
-    EventData(final EventData<T> data) {
+    public EventData(final EventData<T> data) {
         this.msgId = data.getMsgId();
         this.tracerId = data.getTracerId();
         this.data = data.getData();
