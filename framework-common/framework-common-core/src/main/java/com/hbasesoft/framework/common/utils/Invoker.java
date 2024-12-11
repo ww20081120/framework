@@ -8,6 +8,7 @@ package com.hbasesoft.framework.common.utils;
 /**
  * <Description> <br>
  * 
+ * @param <T> T
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
