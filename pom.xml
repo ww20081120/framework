@@ -12,7 +12,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.6</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
 		<module>framework-common</module>
@@ -44,7 +44,7 @@
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 		<commons-io.version>2.16.1</commons-io.version>
 		<jasypt.version>1.9.3</jasypt.version>
-		<protostuff.version>1.8.0</protostuff.version>
+		<kryo.version>5.6.2</kryo.version>
 		<druid.version>1.2.20</druid.version>
 		<curator.version>5.5.0</curator.version>
 		<jcommander.version>1.82</jcommander.version>
@@ -156,15 +156,12 @@
 			</dependency>
 
 			<!-- 序列化工具 -->
+			<!--
+			https://mvnrepository.com/artifact/com.esotericsoftware.kryo/kryo5 -->
 			<dependency>
-				<groupId>io.protostuff</groupId>
-				<artifactId>protostuff-core</artifactId>
-				<version>${protostuff.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.protostuff</groupId>
-				<artifactId>protostuff-runtime</artifactId>
-				<version>${protostuff.version}</version>
+				<groupId>com.esotericsoftware.kryo</groupId>
+				<artifactId>kryo5</artifactId>
+				<version>${kryo.version}</version>
 			</dependency>
 
 			<dependency>

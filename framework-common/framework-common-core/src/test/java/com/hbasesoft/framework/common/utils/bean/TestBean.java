@@ -27,10 +27,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestBean implements Serializable {
+
     /**
      * serialVersionUID <br>
      */
-    private static final long serialVersionUID = 953343907289102121L;
+    private static final long serialVersionUID = -1112878944094057934L;
 
     /** name */
     private String name;

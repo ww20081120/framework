@@ -52,12 +52,8 @@
 			<artifactId>jasypt</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.protostuff</groupId>
-			<artifactId>protostuff-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.protostuff</groupId>
-			<artifactId>protostuff-runtime</artifactId>
+			<groupId>com.esotericsoftware.kryo</groupId>
+			<artifactId>kryo5</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
@@ -77,7 +73,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- 单元测试 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
