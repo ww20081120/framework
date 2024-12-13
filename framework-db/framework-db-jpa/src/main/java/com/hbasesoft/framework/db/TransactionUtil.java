@@ -10,6 +10,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.db.core.DaoException;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -46,10 +47,10 @@ public final class TransactionUtil {
             }
             return data;
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             tm.rollback(ts);
             LoggerUtil.error(e);
-            throw e;
+            throw new DaoException(e);
         }
     }
 
@@ -69,10 +70,10 @@ public final class TransactionUtil {
                 tm.commit(ts);
             }
         }
-        catch (Exception e) {
+        catch (Throwable e) {
             tm.rollback(ts);
             LoggerUtil.error(e);
-            throw e;
+            throw new DaoException(e);
         }
     }
 
@@ -97,7 +98,7 @@ public final class TransactionUtil {
          * @param tm
          * @param ts
          */
-        void invoke(PlatformTransactionManager tm, TransactionStatus ts);
+        void invoke(PlatformTransactionManager tm, TransactionStatus ts) throws Throwable;
     }
 
     /**
@@ -123,6 +124,6 @@ public final class TransactionUtil {
          * @param ts
          * @return <br>
          */
-        T invoke(PlatformTransactionManager tm, TransactionStatus ts);
+        T invoke(PlatformTransactionManager tm, TransactionStatus ts) throws Throwable;
     }
 }
