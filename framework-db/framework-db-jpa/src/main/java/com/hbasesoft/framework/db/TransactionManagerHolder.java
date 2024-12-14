@@ -23,8 +23,9 @@ import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
+import com.hbasesoft.framework.db.core.config.DaoTypeDef;
 import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
+import com.hbasesoft.framework.db.orm.util.DataSourceUtil;
 
 import lombok.NoArgsConstructor;
 
@@ -57,7 +58,7 @@ public final class TransactionManagerHolder {
     public static PlatformTransactionManager getTransactionManager() {
 
         synchronized (transactionManagerHolder) {
-            String dbCode = DynamicDataSourceManager.getDataSourceCode();
+            String dbCode = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
             PlatformTransactionManager manager = transactionManagerHolder.get(dbCode);
 
             if (manager == null) {
@@ -123,7 +124,7 @@ public final class TransactionManagerHolder {
      * @throws IOException
      */
     public static SessionFactory getSessionFactory() {
-        String dbCode = DynamicDataSourceManager.getDataSourceCode();
+        String dbCode = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
         return getSessionFactory(dbCode);
     }
 }

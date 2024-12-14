@@ -34,11 +34,12 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
+import com.hbasesoft.framework.db.core.config.DaoTypeDef;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
+import com.hbasesoft.framework.db.orm.util.DataSourceUtil;
 
 /**
  * <Description> <br>
@@ -262,7 +263,7 @@ public class BaseJdbcDao implements ISqlExcutor {
 
     private NamedParameterJdbcTemplate getJdbcTemplate() {
         synchronized (jdbcTemplate) {
-            String code = DynamicDataSourceManager.getDataSourceCode();
+            String code = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
             NamedParameterJdbcTemplate template = jdbcTemplate.get(code);
             if (template == null) {
                 DataSource dataSource = DataSourceUtil.getDataSource(code);

@@ -15,6 +15,7 @@ import com.hbasesoft.framework.db.core.criteria.LambdaQueryWrapper;
 import com.hbasesoft.framework.db.core.criteria.LambdaUpdateWrapper;
 import com.hbasesoft.framework.db.core.criteria.QueryWrapper;
 import com.hbasesoft.framework.db.core.criteria.UpdateWrapper;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
 import jakarta.persistence.Tuple;
@@ -36,7 +37,7 @@ import jakarta.persistence.criteria.Root;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface BaseDao<T extends BaseEntity> {
+public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
 
     /**
      * <Description> <br>
@@ -286,7 +287,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void delete(DeleteSpecification<T> specification);
+    default void delete(DeleteSpecification<T> specification) {
+        deleteBySpecification(specification.toSpecification(new DeleteWrapper<>()));
+    }
 
     /**
      * Description: 删除数据<br>
@@ -340,7 +343,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void deleteByLambda(LambdaDeleteSpecification<T> specification);
+    default void deleteByLambda(LambdaDeleteSpecification<T> specification) {
+        deleteBySpecification(specification.toSpecification(new LambdaDeleteWrapper<>()));
+    }
 
     /**
      * Description: 根据条件删除<br>
@@ -359,7 +364,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    T get(QuerySpecification<T> specification);
+    default T get(QuerySpecification<T> specification) {
+        return getBySpecification(specification.toSpecification(new QueryWrapper<>()));
+    }
 
     /**
      * Description: 根据条件查询<br>
@@ -371,7 +378,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param clazz
      * @return <br>
      */
-    <M> M get(QuerySpecification<T> specification, Class<M> clazz);
+    default <M> M get(QuerySpecification<T> specification, Class<M> clazz) {
+        return getBySpecification(specification.toSpecification(new QueryWrapper<>()), clazz);
+    }
 
     /**
      * Description: 根据id来获取数据<br>
@@ -404,7 +413,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param <M>
      * @return <br>
      */
-    <M> M getByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz);
+    default <M> M getByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz) {
+        return getBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), clazz);
+    }
 
     /**
      * Description: 根据条件查询 <br>
@@ -414,7 +425,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    T getByLambda(LambdaQuerySpecification<T, T> specification);
+    default T getByLambda(LambdaQuerySpecification<T, T> specification) {
+        return getBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
 
     /**
      * Description: 根据条件查询 <br>
@@ -446,7 +459,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    List<T> query(QuerySpecification<T> specification);
+    default List<T> query(QuerySpecification<T> specification) {
+        return queryBySpecification(specification.toSpecification(new QueryWrapper<>()));
+    }
 
     /**
      * Description:根据条件查询 <br>
@@ -458,7 +473,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param clazz
      * @return <br>
      */
-    <M> List<M> query(QuerySpecification<T> specification, Class<M> clazz);
+    default <M> List<M> query(QuerySpecification<T> specification, Class<M> clazz) {
+        return queryBySpecification(specification.toSpecification(new QueryWrapper<>()), clazz);
+    }
 
     /**
      * Description: 查询所有数据<br>
@@ -490,7 +507,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param <M>
      * @return <br>
      */
-    <M> List<M> queryByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz);
+    default <M> List<M> queryByLambda(LambdaQuerySpecification<T, M> specification, Class<M> clazz) {
+        return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), clazz);
+    }
 
     /**
      * Description: 根据条件查询 <br>
@@ -500,7 +519,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param specification
      * @return <br>
      */
-    List<T> queryByLambda(LambdaQuerySpecification<T, T> specification);
+    default List<T> queryByLambda(LambdaQuerySpecification<T, T> specification) {
+        return queryBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()));
+    }
 
     /**
      * Description: 根据条件查询<br>
@@ -534,7 +555,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize);
+    default PagerList<T> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize) {
+        return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize);
+    }
 
     /**
      * Description: <br>
@@ -548,7 +571,11 @@ public interface BaseDao<T extends BaseEntity> {
      * @param clazz
      * @return <br>
      */
-    <M> PagerList<M> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize, Class<M> clazz);
+    default <M> PagerList<M> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize,
+        Class<M> clazz) {
+        return queryPagerBySpecification(specification.toSpecification(new QueryWrapper<>()), pageIndex, pageSize,
+            clazz);
+    }
 
     /**
      * Description: 根据条件查询<br>
@@ -575,8 +602,11 @@ public interface BaseDao<T extends BaseEntity> {
      * @param clazz
      * @return <br>
      */
-    <M> PagerList<M> queryPagerByLambda(LambdaQuerySpecification<T, M> specification, int pageIndex, int pageSize,
-        Class<M> clazz);
+    default <M> PagerList<M> queryPagerByLambda(LambdaQuerySpecification<T, M> specification, int pageIndex,
+        int pageSize, Class<M> clazz) {
+        return queryPagerBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), pageIndex, pageSize,
+            clazz);
+    }
 
     /**
      * Description: <br>
@@ -588,7 +618,10 @@ public interface BaseDao<T extends BaseEntity> {
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T, T> specification, int pageIndex, int pageSize);
+    default PagerList<T> queryPagerByLambda(LambdaQuerySpecification<T, T> specification, int pageIndex, int pageSize) {
+        return queryPagerBySpecification(specification.toSpecification(new LambdaQueryWrapper<>()), pageIndex,
+            pageSize);
+    }
 
     /**
      * Description: <br>
@@ -651,7 +684,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void update(UpdateSpecification<T> specification);
+    default void update(UpdateSpecification<T> specification) {
+        updateBySpecification(specification.toSpecification(new UpdateWrapper<>()));
+    }
 
     /**
      * Description: 批量更新<br>
@@ -678,7 +713,9 @@ public interface BaseDao<T extends BaseEntity> {
      * @taskId <br>
      * @param specification <br>
      */
-    void updateByLambda(LambdaUpdateSpecification<T> specification);
+    default void updateByLambda(LambdaUpdateSpecification<T> specification) {
+        updateBySpecification(specification.toSpecification(new LambdaUpdateWrapper<>()));
+    }
 
     /**
      * Description: 根据条件来做更新<br>

@@ -56,14 +56,14 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
         String currentDS = DynamicDataSourceManager.DEFAULT_DATASOURCE_CODE;
         try {
             if (dataSource != null) {
-                currentDS = DynamicDataSourceManager.getDataSourceCode();
+                currentDS = DynamicDataSourceManager.getInstance(dataSource.type()).getDataSourceCode();
                 changeDatasource(dataSource);
             }
             return joinPoint.proceed();
         }
         finally {
             if (dataSource != null) {
-                DynamicDataSourceManager.setDataSourceCode(currentDS);
+                DynamicDataSourceManager.getInstance(dataSource.type()).setDataSourceCode(currentDS);
             }
         }
     }
@@ -77,11 +77,11 @@ public class DynamicDataSourceChangeAdvice implements Ordered {
                 .getContext().getBean(enhanceDynamicDataSource);
             String code = enhanceDynamicDataSourceHandler.enhance(dataSource.value());
             if (StringUtils.isNotEmpty(code)) {
-                DynamicDataSourceManager.setDataSourceCode(code);
+                DynamicDataSourceManager.getInstance(dataSource.type()).setDataSourceCode(code);
             }
         }
         else {
-            DynamicDataSourceManager.setDataSourceCode(dataSource.value());
+            DynamicDataSourceManager.getInstance(dataSource.type()).setDataSourceCode(dataSource.value());
         }
     }
 

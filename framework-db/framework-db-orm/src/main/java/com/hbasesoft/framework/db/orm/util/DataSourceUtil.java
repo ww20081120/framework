@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.core.utils;
+package com.hbasesoft.framework.db.orm.util;
 
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -23,6 +23,7 @@ import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
+import com.hbasesoft.framework.db.core.config.DaoTypeDef;
 import com.hbasesoft.framework.db.core.config.DbParam;
 
 /**
@@ -36,6 +37,9 @@ import com.hbasesoft.framework.db.core.config.DbParam;
  * @see com.hbasesoft.framework.db.core <br>
  */
 public final class DataSourceUtil {
+
+    /** 前缀长度 */
+    private static final int PREFIX_LENGTH = 3;
 
     /** datasource map */
     private static Map<String, String> dataSourceMap = new ConcurrentHashMap<>();
@@ -57,7 +61,7 @@ public final class DataSourceUtil {
         synchronized (dataSourceMap) {
             for (String key : PropertyHolder.getProperties().keySet()) {
                 if (key.endsWith(".db.url")) {
-                    String name = key.substring(0, key.indexOf("."));
+                    String name = key.substring(0, key.indexOf(".db.") + PREFIX_LENGTH);
                     LoggerUtil.info("开始注册{0}数据源", name);
                     regist(name, new DbParam(name));
                     LoggerUtil.info("注册{0}数据源成功", name);
@@ -67,7 +71,7 @@ public final class DataSourceUtil {
     }
 
     public static DataSource getDataSource() {
-        return getDataSource(DynamicDataSourceManager.getDataSourceCode());
+        return getDataSource(DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode());
     }
 
     /**

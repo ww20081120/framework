@@ -178,11 +178,11 @@ public class DbParam extends BaseEntity {
      * @param prefix
      */
     public DbParam(final String prefix) {
-        this.url = PropertyHolder.getProperty(prefix + ".db.url");
+        this.url = PropertyHolder.getProperty(prefix + ".url");
         Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET);
-        this.username = PropertyHolder.getProperty(prefix + ".db.username");
+        this.username = PropertyHolder.getProperty(prefix + ".username");
         // Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
-        String pw = PropertyHolder.getProperty(prefix + ".db.password");
+        String pw = PropertyHolder.getProperty(prefix + ".password");
         // Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
         setPassword(pw);
         init(prefix);
@@ -190,25 +190,25 @@ public class DbParam extends BaseEntity {
 
     private void init(final String prefix) {
         this.code = prefix;
-        this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
-        this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", INITIAL_SIZE);
-        this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", MAX_ACTIVE);
-        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", MIN_IDLE);
-        this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", MAX_WAIT);
-        this.validationQuery = PropertyHolder.getProperty(prefix + ".db.validationQuery", "SELECT 1");
-        this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", true);
-        this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".db.testOnReturn", false);
-        this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".db.testWhileIdle", true);
-        this.timeBetweenEvictionRunsMillis = PropertyHolder
-            .getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis", timeBetweenEvictionRunsMillis);
-        this.minEvictableIdleTimeMillis = PropertyHolder.getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis",
+        this.dbType = PropertyHolder.getProperty(prefix + ".type", "mysql");
+        this.initialSize = PropertyHolder.getIntProperty(prefix + ".initialSize", INITIAL_SIZE);
+        this.maxActive = PropertyHolder.getIntProperty(prefix + ".maxActive", MAX_ACTIVE);
+        this.minIdle = PropertyHolder.getIntProperty(prefix + ".minIdle", MIN_IDLE);
+        this.maxWait = PropertyHolder.getLongProperty(prefix + ".maxWait", MAX_WAIT);
+        this.validationQuery = PropertyHolder.getProperty(prefix + ".validationQuery", "SELECT 1");
+        this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".testOnBorrow", true);
+        this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".testOnReturn", false);
+        this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".testWhileIdle", true);
+        this.timeBetweenEvictionRunsMillis = PropertyHolder.getLongProperty(prefix + ".timeBetweenEvictionRunsMillis",
+            timeBetweenEvictionRunsMillis);
+        this.minEvictableIdleTimeMillis = PropertyHolder.getLongProperty(prefix + ".timeBetweenEvictionRunsMillis",
             TIME_BETWEEN_EVICTION_RUNS_MILLIS);
-        this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.removeAbandoned", true);
-        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout",
+        this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".removeAbandoned", true);
+        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".removeAbandonedTimeout",
             REMOVE_ABANDONED_TIMEOUT);
-        this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.logAbandoned", true);
-        this.driverClass = PropertyHolder.getProperty(prefix + ".db.driverClass");
-        this.filters = PropertyHolder.getProperty(prefix + ".db.filters", "stat");
+        this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".logAbandoned", true);
+        this.driverClass = PropertyHolder.getProperty(prefix + ".driverClass");
+        this.filters = PropertyHolder.getProperty(prefix + ".filters", "stat");
     }
 
     /**

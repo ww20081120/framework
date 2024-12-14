@@ -72,9 +72,8 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * @taskId <br>
      * @param hql
      * @return T
-     * @throws DaoException <br>
      */
-    T getByHql(String hql) throws DaoException;
+    T getByHql(String hql);
 
     /**
      * Description: <br>

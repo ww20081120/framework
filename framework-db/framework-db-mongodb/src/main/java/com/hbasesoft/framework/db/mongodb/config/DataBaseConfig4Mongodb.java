@@ -3,21 +3,20 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.config;
+package com.hbasesoft.framework.db.mongodb.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.hbasesoft.framework.common.utils.PropertyHolder;
-import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.config.DaoConfig;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.executor.ISqlExcutorFactory;
 import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
 import com.hbasesoft.framework.db.core.spring.SpringDaoHandler;
-import com.hbasesoft.framework.db.hibernate.AutoResultTransformer;
-import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
+import com.hbasesoft.framework.db.mongodb.BaseMongodbDao;
+import com.hbasesoft.framework.db.mongodb.Dao4Mongo;
 
 /**
  * <Description> <br>
@@ -30,7 +29,7 @@ import com.hbasesoft.framework.db.hibernate.BaseHibernateDao;
  * @see com.hbasesoft.framework.db.config <br>
  */
 @Configuration
-public class DataBaseConfig {
+public class DataBaseConfig4Mongodb {
 
     /**
      * Description: <br>
@@ -53,22 +52,22 @@ public class DataBaseConfig {
      * @taskId <br>
      * @return <br>
      */
-    @Bean("SHAutoProxyBeanFactory")
+    @Bean("AutoProxyBeanFactory4Mongodb")
     public AutoProxyBeanFactory registAutoProxyBeanFactory() {
         AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory(new ISqlExcutorFactory() {
 
             @SuppressWarnings("rawtypes")
             @Override
             public ISqlExcutor create() {
-                return new BaseHibernateDao();
+                return new BaseMongodbDao();
             }
-        }, Dao.class);
+        }, Dao4Mongo.class);
 
         // dao的配置
         DaoConfig dataConfig = new DaoConfig();
         dataConfig.setDbType(PropertyHolder.getProperty("master.db.type"));
-        dataConfig.setBaseDaoType(BaseHibernateDao.class);
-        dataConfig.setCallBackType(AutoResultTransformer.class);
+        dataConfig.setBaseDaoType(BaseMongodbDao.class);
+        // dataConfig.setCallBackType(AutoResultTransformer.class);
         beanFactory.setConfig(dataConfig);
         beanFactory.setInterceptors("springDaoHandler");
 

@@ -75,6 +75,18 @@ public class AbstractAnnotationHandler {
                 for (Method m : methods) {
                     genericBaseDaoMethodMap.put(getMethodSignature(m), m);
                 }
+
+                // 获取类实现的接口
+                Class<?>[] interfaces = daoClazz.getInterfaces();
+                if (ArrayUtils.isNotEmpty(interfaces)) {
+                    for (Class<?> iface : interfaces) {
+                        for (Method method : iface.getMethods()) {
+                            if (method.isDefault()) {
+                                genericBaseDaoMethodMap.put(getMethodSignature(method), method);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
