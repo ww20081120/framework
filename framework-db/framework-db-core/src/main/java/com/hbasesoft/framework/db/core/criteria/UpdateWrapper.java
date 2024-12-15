@@ -5,14 +5,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
-import com.hbasesoft.framework.db.core.BaseDao.CriterialUpdateSpecification;
-
-import jakarta.persistence.criteria.Predicate;
 
 /**
  * <Description>普通的queryWrapper 根据字段名 <br>
@@ -53,6 +47,17 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
 
     /** value map */
     private Map<String, Object> valueMap = new HashMap<>();
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    public Map<String, Object> getValueMap() {
+        return valueMap;
+    }
 
     /**
      * Description: between lower，upper <br>
@@ -129,26 +134,6 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
     public UpdateWrapper<T> between(final String fieldName, final Date[] dates) {
         between(true, fieldName, dates);
         return this;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public CriterialUpdateSpecification<T> build() {
-        return (root, query, cb) -> {
-            Assert.notEmpty(valueMap, ErrorCodeDef.PARAM_NOT_NULL, "修改的内容");
-            for (Entry<String, Object> entry : valueMap.entrySet()) {
-                query.set(root.get(entry.getKey()), entry.getValue());
-            }
-
-            Predicate[] predicates = toPredicate(root, query, cb);
-            Assert.notEmpty(predicates, ErrorCodeDef.PARAM_NOT_NULL, "修改的条件");
-            return query.where(predicates).getRestriction();
-        };
     }
 
     /**

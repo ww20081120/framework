@@ -135,7 +135,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void countCourseByLamberda() {
-        Long course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId).build(), Long.class);
+        Long course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId), Long.class);
         Assert.isTrue(course.intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
@@ -149,7 +149,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void countCourse() {
-        Long course = iCourseDao.get(q -> q.count("id").build(), Long.class);
+        Long course = iCourseDao.get(q -> q.count("id"), Long.class);
         Assert.isTrue(course.intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
@@ -163,7 +163,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void countAliasByLamberda() {
-        CountEntity course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId, CountEntity::getTotal).build(),
+        CountEntity course = iCourseDao.getByLambda(q -> q.count(CourseEntity::getId, CountEntity::getTotal),
             CountEntity.class);
         Assert.isTrue(course.getTotal().intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
@@ -178,7 +178,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void countAlias() {
-        CountEntity course = iCourseDao.get(q -> q.count("id", "total").build(), CountEntity.class);
+        CountEntity course = iCourseDao.get(q -> q.count("id", "total"), CountEntity.class);
         Assert.isTrue(course.getTotal().intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
@@ -193,7 +193,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void countAlias2Map() {
-        Map<String, Object> course = iCourseDao.get(q -> q.count("id", "count").build(), Map.class);
+        Map<String, Object> course = iCourseDao.get(q -> q.count("id", "count"), Map.class);
         Assert.isTrue(((Long) course.get("count")).intValue() == NUM_3, ErrorCodeDef.FAILURE);
     }
 
@@ -251,8 +251,8 @@ public class IBaseDaoTester {
 
         iStudentDao.save(entity);
         String id = entity.getId();
-        iStudentDao.delete(q -> q.eq("id", id).build());
-        entity = iStudentDao.get(q -> q.eq("id", id).build());
+        iStudentDao.delete(q -> q.eq("id", id));
+        entity = iStudentDao.get(q -> q.eq("id", id));
 
         Assert.isNull(entity, ErrorCodeDef.FAILURE);
     }
@@ -385,7 +385,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void getByProperty() {
-        CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文").build());
+        CourseEntity entity = iCourseDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文"));
         Assert.equals(entity.getId(), "1", ErrorCodeDef.FAILURE);
     }
 
@@ -400,7 +400,7 @@ public class IBaseDaoTester {
     @Transactional
     public void groupBy() {
         List<StudentEntity> entity = iStudentDao.queryByLambda(
-            q -> q.select(StudentEntity::getAge).count(StudentEntity::getId).groupBy(StudentEntity::getAge).build());
+            q -> q.select(StudentEntity::getAge).count(StudentEntity::getId).groupBy(StudentEntity::getAge));
         System.out.println(entity);
     }
 
@@ -416,7 +416,7 @@ public class IBaseDaoTester {
     public void groupByAlias() {
         List<CountEntity> entity = iStudentDao.queryByLambda(
             q -> q.select(StudentEntity::getAge, CountEntity::getName)
-                .count(StudentEntity::getId, CountEntity::getTotal).groupBy(StudentEntity::getAge).build(),
+                .count(StudentEntity::getId, CountEntity::getTotal).groupBy(StudentEntity::getAge),
             CountEntity.class);
         System.out.println(entity);
     }
@@ -433,7 +433,7 @@ public class IBaseDaoTester {
     @Transactional
     public void groupByAlias2Map() {
         List<Map> entity = iStudentDao.query(q -> q.select("age").count("id", "count").max("id").min("id", "mid")
-            .avg("age", "avgAge").sum("age", "sumAge").groupBy("age").build(), Map.class);
+            .avg("age", "avgAge").sum("age", "sumAge").groupBy("age"), Map.class);
         System.out.println(entity);
     }
 
@@ -477,7 +477,7 @@ public class IBaseDaoTester {
     @Test
     @Transactional
     public void queryByProperty() {
-        List<StudentEntity> entities = iStudentDao.query(q -> q.eq(StudentEntity.AGE, NUM_18).build());
+        List<StudentEntity> entities = iStudentDao.query(q -> q.eq(StudentEntity.AGE, NUM_18));
         Assert.isTrue(entities.size() == 2, ErrorCodeDef.FAILURE);
     }
 
@@ -592,7 +592,7 @@ public class IBaseDaoTester {
     public void update2() {
         StudentEntity entity = iStudentDao.get("1");
         assertNotEquals(entity.getName(), "李四");
-        iStudentDao.update(q -> q.set("name", "李四").eq("id", "1").build());
+        iStudentDao.update(q -> q.set("name", "李四").eq("id", "1"));
         iStudentDao.clear();
         StudentEntity e2 = iStudentDao.get("1");
         assertEquals(e2.getName(), "李四");

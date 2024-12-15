@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-class TempPredicate {
+public class TempPredicate {
 
     /**
      * 字段名

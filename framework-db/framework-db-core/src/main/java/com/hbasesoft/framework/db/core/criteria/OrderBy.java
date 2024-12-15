@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-class OrderBy {
+public class OrderBy {
 
     /**
      * 是否是desc

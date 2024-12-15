@@ -5,9 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.demo.dao;
 
+import com.hbasesoft.framework.db.BaseJpaDao;
 import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.demo.entity.CourseEntity;
-import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
 
 /**
  * <Description> <br>

@@ -8,11 +8,11 @@ package com.hbasesoft.framework.db.demo.dao;
 import java.util.List;
 
 import com.hbasesoft.framework.common.annotation.Key;
+import com.hbasesoft.framework.db.BaseJpaDao;
 import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.demo.entity.StudentEntity;
-import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
 
 /**
  * <Description> <br>

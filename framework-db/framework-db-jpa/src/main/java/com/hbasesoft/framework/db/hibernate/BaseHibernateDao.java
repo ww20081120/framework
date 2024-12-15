@@ -29,8 +29,9 @@ import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.db.AbstractJpaBaseDao;
+import com.hbasesoft.framework.db.BaseJpaDao;
 import com.hbasesoft.framework.db.TransactionManagerHolder;
-import com.hbasesoft.framework.db.core.AbstractBaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
@@ -58,7 +59,7 @@ import jakarta.persistence.criteria.Root;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public class BaseHibernateDao<T extends BaseEntity> extends AbstractBaseDao<T> implements BaseJpaDao<T> {
+public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T> implements BaseJpaDao<T> {
 
     /** 匿名 */
     private static final String ALIAS = "QUERY_DATA__";

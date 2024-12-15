@@ -6,18 +6,7 @@
 package com.hbasesoft.framework.db.core.criteria;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
-
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
-
-import jakarta.persistence.Tuple;
-import jakarta.persistence.criteria.CommonAbstractCriteria;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 /**
  * <Description> <br>
@@ -49,7 +38,7 @@ public abstract class AbstractWrapper<T> {
      * @taskId <br>
      * @return <br>
      */
-    protected List<List<TempPredicate>> getOrTempPredicates() {
+    public List<List<TempPredicate>> getOrTempPredicates() {
         return this.orTempPredicates;
     }
 
@@ -60,119 +49,8 @@ public abstract class AbstractWrapper<T> {
      * @taskId <br>
      * @return <br>
      */
-    protected List<TempPredicate> getTempPredicates() {
+    public List<TempPredicate> getTempPredicates() {
         return this.tempPredicates;
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param root
-     * @param query
-     * @param cb
-     * @return <br>
-     */
-    public Predicate[] toPredicate(final Root<? extends Tuple> root, final CommonAbstractCriteria query,
-        final CriteriaBuilder cb) {
-        Predicate[] predicates = new Predicate[tempPredicates.size() + orTempPredicates.size()];
-
-        // 如果没有条件和order by 直接返回
-        if (Objects.equals(predicates.length, 0)) {
-            return null;
-        }
-
-        // 组装where条件
-        int index = 0;
-        for (int i = 0; i < tempPredicates.size(); ++i) {
-            predicates[i] = toPredicate(root, query, cb, tempPredicates.get(i));
-            index++;
-        }
-        // 处理or的过滤条件
-        for (List<TempPredicate> orTempPredicate : orTempPredicates) {
-            Predicate[] oneOr = new Predicate[orTempPredicate.size()];
-            for (int i = 0; i < orTempPredicate.size(); ++i) {
-                oneOr[i] = toPredicate(root, query, cb, orTempPredicate.get(i));
-            }
-            predicates[index] = cb.or(oneOr);
-            index++;
-        }
-        return predicates;
-    }
-
-    /**
-     * Description: TempPredicate 转换为 Predicate <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param root
-     * @param query
-     * @param criteriaBuilder
-     * @param predicate
-     * @return <br>
-     */
-    @SuppressWarnings({
-        "rawtypes", "unchecked"
-    })
-    public Predicate toPredicate(final Root<? extends Tuple> root, final CommonAbstractCriteria query,
-        final CriteriaBuilder criteriaBuilder, final TempPredicate predicate) {
-        switch (predicate.getOperator()) {
-            case EQ:
-                return criteriaBuilder.equal(root.get(predicate.getFieldName()), predicate.getValue());
-            case NE:
-                return criteriaBuilder.notEqual(root.get(predicate.getFieldName()), predicate.getValue());
-            case GE:
-                return criteriaBuilder.ge(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case GREATER_THAN_OR_EQUAL_TO:
-                return criteriaBuilder.greaterThanOrEqualTo(root.get(predicate.getFieldName()),
-                    (Comparable) predicate.getValue());
-            case GT:
-                return criteriaBuilder.gt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case GREATER_THAN:
-                return criteriaBuilder.greaterThan(root.get(predicate.getFieldName()),
-                    (Comparable) predicate.getValue());
-            case LE:
-                return criteriaBuilder.le(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case LESS_THAN_OR_EQUAL_TO:
-                return criteriaBuilder.lessThanOrEqualTo(root.get(predicate.getFieldName()),
-                    (Comparable) predicate.getValue());
-            case LT:
-                return criteriaBuilder.lt(root.get(predicate.getFieldName()), (Number) predicate.getValue());
-            case LESS_THAN:
-                return criteriaBuilder.lessThan(root.get(predicate.getFieldName()), (Comparable) predicate.getValue());
-            case IN:
-                CriteriaBuilder.In in = criteriaBuilder.in(root.get(predicate.getFieldName()));
-                Collection<?> objects = (Collection<?>) predicate.getValue();
-                for (Object obj : objects) {
-                    in.value(obj);
-                }
-                return criteriaBuilder.and(in);
-            case NOTIN:
-                in = criteriaBuilder.in(root.get(predicate.getFieldName()));
-                objects = (Collection<?>) predicate.getValue();
-                for (Object obj : objects) {
-                    in.value(obj);
-                }
-                return criteriaBuilder.not(in);
-            case LIKE:
-                String value = (String) predicate.getValue();
-                Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
-                return criteriaBuilder.like(root.get(predicate.getFieldName()), value);
-            case NOTLIKE:
-                value = (String) predicate.getValue();
-                Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
-                return criteriaBuilder.notLike(root.get(predicate.getFieldName()), value);
-            case ISNULL:
-                return criteriaBuilder.isNull(root.get(predicate.getFieldName()));
-            case NOTNULL:
-                return criteriaBuilder.isNotNull(root.get(predicate.getFieldName()));
-            case BETWEEN:
-                Comparable[] objs = (Comparable[]) predicate.getValue();
-                return criteriaBuilder.between(root.get(predicate.getFieldName()), objs[0], objs[1]);
-            default:
-                break;
-        }
-        return null;
-    }
 }

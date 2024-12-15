@@ -7,11 +7,11 @@
 package com.hbasesoft.framework.tx.server.storage.db.dao;
 
 import com.hbasesoft.framework.common.annotation.Key;
+import com.hbasesoft.framework.db.BaseJpaDao;
 import com.hbasesoft.framework.db.Dao;
 import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.annotation.Sql;
 import com.hbasesoft.framework.db.core.utils.PagerList;
-import com.hbasesoft.framework.db.hibernate.BaseJpaDao;
 import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
 
 /**
@@ -22,7 +22,7 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxClientinfoEntity;
  * @taskId <br>
  * @CreateDate 2019年4月3日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.hibernate.BaseJpaDao <br>
+ * @see com.hbasesoft.framework.db.BaseJpaDao <br>
  */
 @Dao
 public interface TxClientinfoDao extends BaseJpaDao<TxClientinfoEntity> {

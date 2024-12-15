@@ -13,8 +13,12 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -71,11 +75,10 @@ public class AbstractAnnotationHandler {
         if (MapUtils.isEmpty(genericBaseDaoMethodMap)) {
             Class<?> daoClazz = daoConfig.getBaseDaoType();
             if (daoClazz != null) {
-                Method[] methods = daoClazz.getDeclaredMethods();
+                List<Method> methods = getAllPublicMethods(daoClazz);
                 for (Method m : methods) {
                     genericBaseDaoMethodMap.put(getMethodSignature(m), m);
                 }
-
                 // 获取类实现的接口
                 Class<?>[] interfaces = daoClazz.getInterfaces();
                 if (ArrayUtils.isNotEmpty(interfaces)) {
@@ -89,6 +92,20 @@ public class AbstractAnnotationHandler {
                 }
             }
         }
+    }
+
+    private static List<Method> getAllPublicMethods(final Class<?> clazz) {
+        if (clazz == null) {
+            return new ArrayList<>();
+        }
+        // 获取当前类的公共方法（包括来自接口的default方法）
+        Method[] declaredMethods = clazz.getMethods();
+
+        // 递归获取父类的公共方法
+        List<Method> parentMethods = getAllPublicMethods(clazz.getSuperclass());
+        // 合并当前类的方法与父类的方法，并去除重复项
+        return Stream.concat(Stream.of(declaredMethods), parentMethods.stream()).distinct() // 去重，确保不会包含重复的方法签名
+            .collect(Collectors.toList());
     }
 
     /**

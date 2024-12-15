@@ -13,16 +13,11 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
-import com.hbasesoft.framework.db.core.BaseDao.CriterialDeleteSpecification;
 import com.hbasesoft.framework.db.core.criteria.lambda.LambdaSett;
 import com.hbasesoft.framework.db.core.criteria.lambda.SFunction;
 import com.hbasesoft.framework.db.core.criteria.lambda.SerializedLambda;
 import com.hbasesoft.framework.db.core.utils.LambdaUtils;
-
-import jakarta.persistence.criteria.Predicate;
 
 /**
  * <Description> <br>
@@ -152,21 +147,6 @@ public class LambdaDeleteWrapper<T> extends AbstractWrapper<T> {
         final Date[] dates) {
         between(true, fieldLambda, dates);
         return this;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public CriterialDeleteSpecification<T> build() {
-        return (root, query, cb) -> {
-            Predicate[] predicates = toPredicate(root, query, cb);
-            Assert.notEmpty(predicates, ErrorCodeDef.PARAM_NOT_NULL, "删除的条件");
-            return query.where(predicates).getRestriction();
-        };
     }
 
     /**

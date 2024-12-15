@@ -100,7 +100,7 @@ public class BaseDaoTester {
         StaffEntity entity = JSONObject.parseObject(loadData("data/t_staff/staff_save.json"), StaffEntity.class);
         staffDao.save(entity);
         assertTrue(entity.getId() != null);
-        assertEquals(staffDao.get(q -> q.count("id").build(), Integer.class), 1);
+        assertEquals(staffDao.get(q -> q.count("id"), Integer.class), 1);
     }
 
     /**
@@ -116,7 +116,7 @@ public class BaseDaoTester {
         }
         assertEquals(all.size(), NUM_1000);
         staffDao.saveBatch(all);
-        assertEquals(staffDao.get(q -> q.count("id").build(), Integer.class), NUM_1000);
+        assertEquals(staffDao.get(q -> q.count("id"), Integer.class), NUM_1000);
     }
 
     /**
@@ -151,7 +151,7 @@ public class BaseDaoTester {
             }
         }
         staffDao.updateBatch(all);
-        assertEquals(staffDao.get(q -> q.count("id").eq("department", "行政部").build(), Integer.class), NUM_5);
+        assertEquals(staffDao.get(q -> q.count("id").eq("department", "行政部"), Integer.class), NUM_5);
     }
 
     /**
@@ -164,7 +164,7 @@ public class BaseDaoTester {
         staffDao.saveBatch(all);
 
         // 把薪资小于65000的人都调到62000
-        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_60000).build(), Integer.class), NUM_6);
+        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_60000), Integer.class), NUM_6);
 
         CriteriaBuilder cb = staffDao.criteriaBuilder();
         CriteriaUpdate<StaffEntity> cu = cb.createCriteriaUpdate(StaffEntity.class);
@@ -174,7 +174,7 @@ public class BaseDaoTester {
         staffDao.updateByCriteria(cu);
 
         // 所有人薪资都大于60000
-        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_62000).build(), Integer.class), NUM_10);
+        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_62000), Integer.class), NUM_10);
     }
 
     /**
@@ -187,13 +187,13 @@ public class BaseDaoTester {
         staffDao.saveBatch(all);
 
         // 把薪资小于65000的人都调到62000
-        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_60000).build(), Integer.class), NUM_6);
+        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_60000), Integer.class), NUM_6);
 
         staffDao.updateBySpecification((r, q, cb) -> q.set(r.get("salary"), NUM_62000)
             .where(cb.lessThanOrEqualTo(r.get("salary"), NUM_60000)).getRestriction());
 
         // 所有人薪资都大于60000
-        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_62000).build(), Integer.class), NUM_10);
+        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_62000), Integer.class), NUM_10);
     }
 
     /**
@@ -206,12 +206,12 @@ public class BaseDaoTester {
         staffDao.saveBatch(all);
 
         // 把薪资小于65000的人都调到62000
-        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_60000).build(), Integer.class), NUM_6);
+        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_60000), Integer.class), NUM_6);
 
-        staffDao.update(q -> q.set("salary", NUM_62000).le("salary", NUM_60000).build());
+        staffDao.update(q -> q.set("salary", NUM_62000).le("salary", NUM_60000));
 
         // 所有人薪资都大于60000
-        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_62000).build(), Integer.class), NUM_10);
+        assertEquals(staffDao.get(q -> q.count("id").ge("salary", NUM_62000), Integer.class), NUM_10);
     }
 
     /**
@@ -223,12 +223,11 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.get(q -> q.count("id").eq("department", "财务部").build(), Integer.class), 0);
+        assertEquals(staffDao.get(q -> q.count("id").eq("department", "财务部"), Integer.class), 0);
 
-        staffDao
-            .update(q -> q.set("salary", NUM_62000).set("department", "财务部").in("lastName", "Doe", "Smith").build());
+        staffDao.update(q -> q.set("salary", NUM_62000).set("department", "财务部").in("lastName", "Doe", "Smith"));
 
-        assertEquals(staffDao.get(q -> q.count("id").eq("department", "财务部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.get(q -> q.count("id").eq("department", "财务部"), Integer.class), NUM_3);
     }
 
     /**
@@ -240,14 +239,16 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "财务部").build(), Integer.class), 0);
+        assertEquals(
+            staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "财务部"), Integer.class),
+            0);
 
         staffDao.updateByLambda(q -> q.set(StaffEntity::getSalary, NUM_62000).set(StaffEntity::getDepartment, "财务部")
-            .in(StaffEntity::getLastName, "Doe", "Smith").build());
+            .in(StaffEntity::getLastName, "Doe", "Smith"));
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "财务部").build(), Integer.class), NUM_3);
+        assertEquals(
+            staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "财务部"), Integer.class),
+            NUM_3);
     }
 
     /**
@@ -259,10 +260,10 @@ public class BaseDaoTester {
         StaffEntity entity = JSONObject.parseObject(loadData("data/t_staff/staff_save.json"), StaffEntity.class);
         staffDao.save(entity);
         assertTrue(entity.getId() != null);
-        assertEquals(staffDao.get(q -> q.count("id").build(), Integer.class), 1);
+        assertEquals(staffDao.get(q -> q.count("id"), Integer.class), 1);
 
         staffDao.delete(entity);
-        assertEquals(staffDao.get(q -> q.count("id").build(), Integer.class), 0);
+        assertEquals(staffDao.get(q -> q.count("id"), Integer.class), 0);
     }
 
     /**
@@ -274,10 +275,10 @@ public class BaseDaoTester {
         StaffEntity entity = JSONObject.parseObject(loadData("data/t_staff/staff_save.json"), StaffEntity.class);
         staffDao.save(entity);
         assertTrue(entity.getId() != null);
-        assertEquals(staffDao.get(q -> q.count("id").build(), Integer.class), 1);
+        assertEquals(staffDao.get(q -> q.count("id"), Integer.class), 1);
 
         staffDao.deleteById(entity.getId());
-        assertEquals(staffDao.get(q -> q.count("id").build(), Integer.class), 0);
+        assertEquals(staffDao.get(q -> q.count("id"), Integer.class), 0);
     }
 
     /**
@@ -289,15 +290,14 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), NUM_3);
 
-        List<StaffEntity> entites = staffDao
-            .queryByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson").build());
+        List<StaffEntity> entites = staffDao.queryByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson"));
         staffDao.deleteBatch(entites);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), 1);
     }
 
     /**
@@ -309,15 +309,14 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), NUM_3);
 
-        List<StaffEntity> entites = staffDao
-            .queryByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson").build());
+        List<StaffEntity> entites = staffDao.queryByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson"));
         staffDao.deleteByIds(entites.stream().map(s -> s.getId()).collect(Collectors.toList()));
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), 1);
     }
 
     /**
@@ -329,8 +328,8 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), NUM_3);
 
         CriteriaBuilder cb = staffDao.criteriaBuilder();
         CriteriaDelete<StaffEntity> cd = cb.createCriteriaDelete(StaffEntity.class);
@@ -338,8 +337,8 @@ public class BaseDaoTester {
         cd.where(r.get("lastName").in("Doe", "Johnson"));
         staffDao.deleteByCriteria(cd);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), 1);
     }
 
     /**
@@ -351,13 +350,13 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), NUM_3);
 
         staffDao.deleteBySpecification((r, q, cb) -> q.where(r.get("lastName").in("Doe", "Johnson")).getRestriction());
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), 1);
     }
 
     /**
@@ -369,13 +368,13 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), NUM_3);
 
-        staffDao.delete(q -> q.in("lastName", "Doe", "Johnson").build());
+        staffDao.delete(q -> q.in("lastName", "Doe", "Johnson"));
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), 1);
     }
 
     /**
@@ -387,13 +386,13 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), NUM_3);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), NUM_3);
 
-        staffDao.deleteByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson").build());
+        staffDao.deleteByLambda(q -> q.in(StaffEntity::getLastName, "Doe", "Johnson"));
 
-        assertEquals(staffDao.getByLambda(
-            q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部").build(), Integer.class), 1);
+        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getDepartment, "项目一部"),
+            Integer.class), 1);
     }
 
     /**
@@ -405,7 +404,7 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        StaffEntity entity = staffDao.get(q -> q.eq("firstName", "Michael").eq("lastName", "Smith").build());
+        StaffEntity entity = staffDao.get(q -> q.eq("firstName", "Michael").eq("lastName", "Smith"));
 
         assertEquals(entity.getSalary(), NUM_65000);
     }
@@ -433,7 +432,7 @@ public class BaseDaoTester {
     public void get3() {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
-        assertEquals(staffDao.get(q -> q.count("id").eq("lastName", "Doe").build(), Integer.class), 2);
+        assertEquals(staffDao.get(q -> q.count("id").eq("lastName", "Doe"), Integer.class), 2);
     }
 
     /**
@@ -491,7 +490,7 @@ public class BaseDaoTester {
         staffDao.saveBatch(all);
 
         StaffEntity entity = staffDao
-            .getByLambda(q -> q.eq(StaffEntity::getFirstName, "Michael").eq(StaffEntity::getLastName, "Smith").build());
+            .getByLambda(q -> q.eq(StaffEntity::getFirstName, "Michael").eq(StaffEntity::getLastName, "Smith"));
 
         assertEquals(entity.getSalary(), NUM_65000);
     }
@@ -504,8 +503,9 @@ public class BaseDaoTester {
     public void getByLambda2() {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
-        assertEquals(staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getLastName, "Doe").build(),
-            Integer.class), 2);
+        assertEquals(
+            staffDao.getByLambda(q -> q.count(StaffEntity::getId).eq(StaffEntity::getLastName, "Doe"), Integer.class),
+            2);
     }
 
     /**
@@ -579,7 +579,7 @@ public class BaseDaoTester {
     public void queryPager() {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
-        assertEquals(staffDao.queryPager(q -> q.le("salary", NUM_60000).build(), 1, 2).size(), 2);
+        assertEquals(staffDao.queryPager(q -> q.le("salary", NUM_60000), 1, 2).size(), 2);
     }
 
     /**
@@ -591,7 +591,7 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
         List<StaffEntity> entites = staffDao.queryPager(
-            q -> q.select("id").select("firstName").select("lastName").le("salary", NUM_60000).build(), 1, 2,
+            q -> q.select("id").select("firstName").select("lastName").le("salary", NUM_60000), 1, 2,
             StaffEntity.class);
         assertEquals(entites.size(), 2);
         assertNull(entites.get(0).getDepartment());
@@ -606,7 +606,7 @@ public class BaseDaoTester {
 
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
-        assertEquals(staffDao.queryPagerByLambda(q -> q.le(StaffEntity::getSalary, NUM_60000).build(), 1, 2).size(), 2);
+        assertEquals(staffDao.queryPagerByLambda(q -> q.le(StaffEntity::getSalary, NUM_60000), 1, 2).size(), 2);
 
     }
 
@@ -619,9 +619,8 @@ public class BaseDaoTester {
 
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
-        List<StaffEntity> entites = staffDao.queryPagerByLambda(
-            q -> q.select(StaffEntity::getId).select(StaffEntity::getFirstName).select(StaffEntity::getLastName)
-                .le(StaffEntity::getSalary, NUM_60000).build(),
+        List<StaffEntity> entites = staffDao.queryPagerByLambda(q -> q.select(StaffEntity::getId)
+            .select(StaffEntity::getFirstName).select(StaffEntity::getLastName).le(StaffEntity::getSalary, NUM_60000),
             1, 2, StaffEntity.class);
         assertEquals(entites.size(), 2);
         assertNull(entites.get(0).getDepartment());
@@ -686,7 +685,7 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        List<StaffEntity> entites = staffDao.query(q -> q.le("salary", NUM_60000).build());
+        List<StaffEntity> entites = staffDao.query(q -> q.le("salary", NUM_60000));
 
         assertEquals(entites.size(), NUM_5);
     }
@@ -701,8 +700,8 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        List<CountEntity> entites = staffDao.query(
-            q -> q.count("id", "total").select("department", "name").groupBy("department").build(), CountEntity.class);
+        List<CountEntity> entites = staffDao
+            .query(q -> q.count("id", "total").select("department", "name").groupBy("department"), CountEntity.class);
 
         assertEquals(entites.size(), NUM_3);
     }
@@ -717,7 +716,7 @@ public class BaseDaoTester {
         List<StaffEntity> all = JSONArray.parseArray(loadData("data/t_staff/staff_saveBatch.json"), StaffEntity.class);
         staffDao.saveBatch(all);
 
-        List<StaffEntity> entites = staffDao.queryByLambda(q -> q.le(StaffEntity::getSalary, NUM_60000).build());
+        List<StaffEntity> entites = staffDao.queryByLambda(q -> q.le(StaffEntity::getSalary, NUM_60000));
 
         assertEquals(entites.size(), NUM_5);
 
@@ -735,7 +734,7 @@ public class BaseDaoTester {
 
         List<CountEntity> entites = staffDao.queryByLambda(
             q -> q.count(StaffEntity::getId, CountEntity::getTotal)
-                .select(StaffEntity::getDepartment, CountEntity::getName).groupBy(StaffEntity::getDepartment).build(),
+                .select(StaffEntity::getDepartment, CountEntity::getName).groupBy(StaffEntity::getDepartment),
             CountEntity.class);
 
         assertEquals(entites.size(), NUM_3);
