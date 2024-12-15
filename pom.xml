@@ -62,7 +62,6 @@
 		<elasticsearch.version>8.10.4</elasticsearch.version>
 		<json-api.version>2.1.3</json-api.version>
 		<skywalking.version>9.3.0</skywalking.version>
-		<kundera.version>3.13</kundera.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -305,46 +304,6 @@
 				<groupId>org.apache.skywalking</groupId>
 				<artifactId>apm-toolkit-logback-1.x</artifactId>
 				<version>${skywalking.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-mongo</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-elastic-search</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-spark</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-cassandra</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-neo4j</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-couchdb</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-hbase</artifactId>
-				<version>${kundera.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.impetus.kundera.client</groupId>
-				<artifactId>kundera-kudu</artifactId>
-				<version>${kundera.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

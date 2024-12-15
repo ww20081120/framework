@@ -137,7 +137,7 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractBaseDao<T> i
      * @param entity <br>
      */
     @Override
-    public void delete(final BaseEntity entity) {
+    public void delete(final T entity) {
         getSession().remove(entity);
     }
 
@@ -880,7 +880,7 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractBaseDao<T> i
      * @param pojo <br>
      */
     @Override
-    public void update(final BaseEntity pojo) {
+    public void update(final T pojo) {
         getSession().merge(pojo);
     }
 

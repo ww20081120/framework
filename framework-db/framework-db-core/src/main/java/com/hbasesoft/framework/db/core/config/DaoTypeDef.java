@@ -20,8 +20,8 @@ public enum DaoTypeDef {
     /** 支持jdbc的数据库类型 */
     db,
 
-    /** mongoDb */
-    mongoDb,
+    /** mongodb */
+    mongodb,
 
     /** elastic-search */
     es,

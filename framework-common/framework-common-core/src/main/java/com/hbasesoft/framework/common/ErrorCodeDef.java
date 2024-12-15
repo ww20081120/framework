@@ -149,8 +149,8 @@ public enum ErrorCodeDef implements ErrorCode {
     /** SHA256 ERROR */
     SHA256_ERROR(SYSTEM_PREFIX + 41, "SHA256 ERROR"),
 
-    /** {0}.db.url未配置 */
-    DB_URL_NOT_SET(SYSTEM_PREFIX + 42, "{0}.db.url未配置"),
+    /** {0}.url未配置 */
+    DB_URL_NOT_SET(SYSTEM_PREFIX + 42, "{0}.url未配置"),
 
     /** 查询的属性名是空的 */
     DAO_PROPERTY_IS_EMPTY(SYSTEM_PREFIX + 43, "查询的属性名是空的"),
