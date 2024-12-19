@@ -43,10 +43,10 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  */
 @Aspect
 @Component
-public class CacheAdvice {
+public class CacheNodeAdvice {
 
     /** logger */
-    private static Logger logger = new Logger(CacheAdvice.class);
+    private static Logger logger = new Logger(CacheNodeAdvice.class);
 
     /**
      * Description: <br>
@@ -57,7 +57,7 @@ public class CacheAdvice {
      * @return Object
      * @throws Throwable <br>
      */
-    @Around("@annotation(com.hbasesoft.framework.cache.core.annotation.Cache)")
+    @Around("@annotation(com.hbasesoft.framework.cache.core.annotation.CacheNode)")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Object result = null;
 
@@ -68,7 +68,7 @@ public class CacheAdvice {
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
 
             Class<?> returnType = currentMethod.getReturnType();
-            Cache cache = AnnotationUtils.findAnnotation(currentMethod, Cache.class);
+            CacheNode cache = AnnotationUtils.findAnnotation(currentMethod, CacheNode.class);
             // 携带Cache注解的方法，返回类型不能为空
             if (cache != null && !Void.class.equals(returnType)) {
                 result = cache(cache, thisJoinPoint, currentMethod, returnType);
@@ -84,22 +84,23 @@ public class CacheAdvice {
         }
     }
 
-    private Object cache(final Cache cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
+    private Object cache(final CacheNode cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
         final Class<?> returnType) throws Throwable {
         String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
-        Object result = CacheHelper.getCache().get(key);
+        Object result = CacheHelper.getCache().getNodeValue(cache.node(), key);
         if (result == null) {
             result = thisJoinPoint.proceed();
             if (result != null) {
                 int expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
-                    CacheHelper.getCache().put(key, expireTimes, result);
+                    CacheHelper.getCache().putNodeValue(cache.node(), expireTimes, key, result);
                 }
                 else {
-                    CacheHelper.getCache().put(key, result);
+                    CacheHelper.getCache().putNodeValue(cache.node(), key, result);
                 }
 
-                logger.debug("－－－－－－>{0}方法设置缓存key_value成功, key[{1}]", BeanUtil.getMethodSignature(method), key);
+                logger.debug("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
+                    cache.node(), key);
             }
         }
 

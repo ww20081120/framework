@@ -1,3 +1,6 @@
  com.hbasesoft.framework.cache.core.annotation.CacheAdvice
+ com.hbasesoft.framework.cache.core.annotation.CacheNodeAdvice
+ com.hbasesoft.framework.cache.core.annotation.RmCacheAdvice
+ com.hbasesoft.framework.cache.core.annotation.RmCacheNodeAdvice
  com.hbasesoft.framework.cache.core.lock.CacheLockAdvice
  com.hbasesoft.framework.cache.core.lock.DulplicateLockAdvice

@@ -43,10 +43,10 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
  */
 @Aspect
 @Component
-public class CacheAdvice {
+public class RmCacheAdvice {
 
     /** logger */
-    private static Logger logger = new Logger(CacheAdvice.class);
+    private static Logger logger = new Logger(RmCacheAdvice.class);
 
     /**
      * Description: <br>
@@ -57,7 +57,7 @@ public class CacheAdvice {
      * @return Object
      * @throws Throwable <br>
      */
-    @Around("@annotation(com.hbasesoft.framework.cache.core.annotation.Cache)")
+    @Around("@annotation(com.hbasesoft.framework.cache.core.annotation.RmCache)")
     public Object invoke(final ProceedingJoinPoint thisJoinPoint) throws Throwable {
         Object result = null;
 
@@ -66,15 +66,10 @@ public class CacheAdvice {
             MethodSignature msig = (MethodSignature) sig;
             Object target = thisJoinPoint.getTarget();
             Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
-
-            Class<?> returnType = currentMethod.getReturnType();
-            Cache cache = AnnotationUtils.findAnnotation(currentMethod, Cache.class);
-            // 携带Cache注解的方法，返回类型不能为空
-            if (cache != null && !Void.class.equals(returnType)) {
-                result = cache(cache, thisJoinPoint, currentMethod, returnType);
-            }
-            else {
-                result = thisJoinPoint.proceed();
+            result = thisJoinPoint.proceed();
+            RmCache rmCache = AnnotationUtils.findAnnotation(currentMethod, RmCache.class);
+            if (rmCache != null) {
+                rmCache(rmCache, currentMethod, thisJoinPoint.getArgs());
             }
             return result;
 
@@ -84,26 +79,12 @@ public class CacheAdvice {
         }
     }
 
-    private Object cache(final Cache cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
-        final Class<?> returnType) throws Throwable {
-        String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
-        Object result = CacheHelper.getCache().get(key);
-        if (result == null) {
-            result = thisJoinPoint.proceed();
-            if (result != null) {
-                int expireTimes = cache.expireTime();
-                if (expireTimes > 0) {
-                    CacheHelper.getCache().put(key, expireTimes, result);
-                }
-                else {
-                    CacheHelper.getCache().put(key, result);
-                }
-
-                logger.debug("－－－－－－>{0}方法设置缓存key_value成功, key[{1}]", BeanUtil.getMethodSignature(method), key);
-            }
+    private void rmCache(final RmCache rmCache, final Method method, final Object[] args) throws Exception {
+        for (String key : rmCache.keys()) {
+            CacheHelper.getCache().remove(getCacheKey(key, method, args));
+            logger.debug("－－－－－－>{0}方法删除缓存key_value成功,key[{1}]", BeanUtil.getMethodSignature(method), key);
         }
 
-        return result;
     }
 
     private String getCacheKey(final String template, final Method method, final Object[] args)
