@@ -138,7 +138,6 @@ public final class SerializationUtil {
         if (data != null && data.length > 0) {
             try (Input input = new Input(data)) {
                 Kryo kryo = KRYO_LOCAL.get();
-                kryo.register(clazz);
                 return (T) kryo.readClassAndObject(input);
             }
         }
