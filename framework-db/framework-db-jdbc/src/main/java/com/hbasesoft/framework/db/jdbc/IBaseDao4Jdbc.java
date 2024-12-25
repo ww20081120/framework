@@ -7,11 +7,13 @@ package com.hbasesoft.framework.db.jdbc;
 
 import java.util.Collection;
 
+import com.hbasesoft.framework.db.core.BaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
 /**
  * <Description> <br>
  * 
+ * @param <T> T
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -20,7 +22,7 @@ import com.hbasesoft.framework.db.core.BaseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface IBaseDao4Jdbc<T extends BaseEntity> {
+public interface IBaseDao4Jdbc<T extends BaseEntity> extends BaseDao<T> {
 
     /**
      * Description: <br>
@@ -30,7 +32,6 @@ public interface IBaseDao4Jdbc<T extends BaseEntity> {
      * @param sql
      * @param objcts
      * @param commitNumber
-     * @throws DaoException <br>
      * @return int[]
      */
     int[] batchExecute(String sql, Collection<T> objcts, int commitNumber);
