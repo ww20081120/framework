@@ -74,8 +74,8 @@ public enum ErrorCodeDef implements ErrorCode {
     /** XML 转换失败 */
     XML_TRANS_ERROR(SYSTEM_PREFIX + 16, "XML 转换失败"),
 
-    /** 缓存模式没有设置 */
-    CACHE_MODEL_NOT_SET(SYSTEM_PREFIX + 17, "缓存模式没有设置"),
+    /** 缓存模式没有设置 cache.model */
+    CACHE_MODEL_NOT_SET(SYSTEM_PREFIX + 17, "缓存模式没有设置 cache.model"),
 
     /** redis地址{0}未配置 */
     REDIS_ADDRESS_NOT_SET(SYSTEM_PREFIX + 18, "redis地址{0}未配置"),
@@ -149,8 +149,8 @@ public enum ErrorCodeDef implements ErrorCode {
     /** SHA256 ERROR */
     SHA256_ERROR(SYSTEM_PREFIX + 41, "SHA256 ERROR"),
 
-    /** {0}.db.url未配置 */
-    DB_URL_NOT_SET(SYSTEM_PREFIX + 42, "{0}.db.url未配置"),
+    /** {0}.url未配置 */
+    DB_URL_NOT_SET(SYSTEM_PREFIX + 42, "{0}.url未配置"),
 
     /** 查询的属性名是空的 */
     DAO_PROPERTY_IS_EMPTY(SYSTEM_PREFIX + 43, "查询的属性名是空的"),
@@ -246,7 +246,10 @@ public enum ErrorCodeDef implements ErrorCode {
     ZIP_PATH_IS_IN_SRC_PATH(SYSTEM_PREFIX + 73, "压缩文件的路径不能再源文件的路径中"),
 
     /** 不支持的DAO操作 */
-    UNSPORT_DAO_OPERATOR(SYSTEM_PREFIX + 74, "不支持的DAO操作"),;
+    UNSPORT_DAO_OPERATOR(SYSTEM_PREFIX + 74, "不支持的DAO操作"),
+
+    /** 没有流程可以被编译 */
+    NO_PROCESS_TO_COMPILE(SYSTEM_PREFIX + 75, "没有流程可以被编译"),;
 
     /** code */
     private final int code;

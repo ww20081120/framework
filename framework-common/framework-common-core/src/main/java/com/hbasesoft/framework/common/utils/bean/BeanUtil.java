@@ -171,6 +171,20 @@ public final class BeanUtil {
      * @throws UtilException <br>
      */
     public static Set<Class<?>> getClasses(final String pk) throws UtilException {
+        return getClasses(pk, null);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param pk
+     * @param filter
+     * @return 获取所有的类型
+     * @throws UtilException <br>
+     */
+    public static Set<Class<?>> getClasses(final String pk, final ClassFilter filter) throws UtilException {
         // 是否循环迭代
         boolean recursive = false;
         String[] packArr = {};
@@ -215,10 +229,11 @@ public final class BeanUtil {
                     String filePath = URLUtil.decode(url.getFile(), GlobalConstants.DEFAULT_CHARSET);
 
                     // 以文件的方式扫描整个包下的文件 并添加到集合中
-                    findAndAddClassesInPackageByFile(packageName, packArr, filePath, recursive, classes);
+                    findAndAddClassesInPackageByFile(packageName, packArr, filePath, recursive, classes, filter);
                 }
                 else if ("jar".equals(protocol)) {
-                    findAndAddClassesInPackageByJarFile(packageName, packArr, url, packageDirName, recursive, classes);
+                    findAndAddClassesInPackageByJarFile(packageName, packArr, url, packageDirName, recursive, classes,
+                        filter);
                 }
             }
         }
@@ -239,9 +254,10 @@ public final class BeanUtil {
      * @param packagePath <br>
      * @param recursive <br>
      * @param classes <br>
+     * @param filter
      */
     private static void findAndAddClassesInPackageByFile(final String packageName, final String[] packArr,
-        final String packagePath, final boolean recursive, final Set<Class<?>> classes) {
+        final String packagePath, final boolean recursive, final Set<Class<?>> classes, final ClassFilter filter) {
         // 获取此包的目录 建立一个File
         File dir = new File(packagePath);
         // 如果不存在或者 也不是目录就直接返回
@@ -261,7 +277,7 @@ public final class BeanUtil {
             // 如果是目录 则继续扫描
             if (file.isDirectory()) {
                 findAndAddClassesInPackageByFile(packageName + "." + file.getName(), packArr, file.getAbsolutePath(),
-                    recursive, classes);
+                    recursive, classes, filter);
             }
             else {
                 // 如果是java类文件 去掉后面的.class 只留下类名
@@ -290,7 +306,10 @@ public final class BeanUtil {
                     }
 
                     if (flag) {
-                        classes.add(Thread.currentThread().getContextClassLoader().loadClass(classUrl));
+                        Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(classUrl);
+                        if (filter == null || filter.accept(clazz)) {
+                            classes.add(clazz);
+                        }
                     }
                 }
                 catch (ClassNotFoundException e) {
@@ -315,9 +334,10 @@ public final class BeanUtil {
      * @param packageDirName <br>
      * @param recursive <br>
      * @param classes <br>
+     * @param filter
      */
     private static void findAndAddClassesInPackageByJarFile(final String pn, final String[] packArr, final URL url,
-        final String packageDirName, final boolean recursive, final Set<Class<?>> classes) {
+        final String packageDirName, final boolean recursive, final Set<Class<?>> classes, final ClassFilter filter) {
 
         String packageName = pn;
         // 如果是jar包文件
@@ -369,7 +389,10 @@ public final class BeanUtil {
                                 }
 
                                 if (flag) {
-                                    classes.add(Class.forName(packageName + '.' + className));
+                                    Class<?> clazz = Class.forName(packageName + '.' + className);
+                                    if (filter == null || filter.accept(clazz)) {
+                                        classes.add(clazz);
+                                    }
                                 }
                             }
                             catch (ClassNotFoundException e) {

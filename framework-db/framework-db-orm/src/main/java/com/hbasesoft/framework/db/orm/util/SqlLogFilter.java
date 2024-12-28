@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hbasesoft.framework.db.core.utils;
+package com.hbasesoft.framework.db.orm.util;
 
 import java.sql.SQLException;
 import java.sql.Savepoint;

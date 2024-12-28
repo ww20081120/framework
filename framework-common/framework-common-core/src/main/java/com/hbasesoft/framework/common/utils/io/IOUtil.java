@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.CommonUtil;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
@@ -48,8 +47,7 @@ public final class IOUtil {
     /**
      * template filePath
      */
-    private static String tempFileDir = PropertyHolder.getProperty("server.fileupload.filePath",
-        System.getProperty("user.home")) + "/uploadFiles/temp";
+    private static String tempFileDir = GlobalConstants.FILE_STORAGE_PATH + "/temp";
 
     /**
      * Description: 复制文件<br>

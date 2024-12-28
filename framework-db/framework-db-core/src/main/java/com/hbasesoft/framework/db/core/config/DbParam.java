@@ -48,27 +48,27 @@ public class DbParam extends BaseEntity {
     /**
      * 连接池最小空闲
      */
-    private static final int MIN_IDLE = 10;
+    private static final int MIN_IDLE = 5;
 
     /**
      * 获取连接最大等待时间
      */
-    private static final long MAX_WAIT = 6000000;
+    private static final long MAX_WAIT_TIME = 60000;
 
     /**
      * 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
      */
-    private static final long TIME_BETWEEN_EVICTION_RUNS_MILLIS = 600000;
+    private static final long TIME_BETWEEN_EVICTION_RUNS_MILLIS = 60000;
 
     /**
      * 配置一个连接在池中最小生存的时间，单位是毫秒
      */
-    private static final long MIN_EVICTABLE_IDLE_TIME_MILLIS = 25200000;
+    private static final long MIN_EVICTABLE_IDLE_TIME_MILLIS = 1800000;
 
     /**
      * 1800秒，也就是30分钟
      */
-    private static final int REMOVE_ABANDONED_TIMEOUT = 1800;
+    private static final int REMOVE_ABANDONED_TIMEOUT = 60;
 
     /** ENC_LENGTH */
     private static final int ENC_LENGTH = "ENC(".length();
@@ -114,7 +114,7 @@ public class DbParam extends BaseEntity {
     /**
      * 获取连接最大等待时间
      */
-    private long maxWait = MAX_WAIT;
+    private long maxWait = MAX_WAIT_TIME;
 
     /**
      * validationQuery
@@ -161,6 +161,12 @@ public class DbParam extends BaseEntity {
     /** driverClass */
     private String driverClass;
 
+    /** keyspace */
+    private String keyspace;
+
+    /** authDb */
+    private String authDb;
+
     /**
      * @param prefix
      * @param u
@@ -178,11 +184,11 @@ public class DbParam extends BaseEntity {
      * @param prefix
      */
     public DbParam(final String prefix) {
-        this.url = PropertyHolder.getProperty(prefix + ".db.url");
-        Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET);
-        this.username = PropertyHolder.getProperty(prefix + ".db.username");
+        this.url = PropertyHolder.getProperty(prefix + ".url");
+        Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET, prefix);
+        this.username = PropertyHolder.getProperty(prefix + ".username");
         // Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
-        String pw = PropertyHolder.getProperty(prefix + ".db.password");
+        String pw = PropertyHolder.getProperty(prefix + ".password");
         // Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
         setPassword(pw);
         init(prefix);
@@ -190,25 +196,27 @@ public class DbParam extends BaseEntity {
 
     private void init(final String prefix) {
         this.code = prefix;
-        this.dbType = PropertyHolder.getProperty(prefix + ".db.type", "mysql");
-        this.initialSize = PropertyHolder.getIntProperty(prefix + ".db.initialSize", INITIAL_SIZE);
-        this.maxActive = PropertyHolder.getIntProperty(prefix + ".db.maxActive", MAX_ACTIVE);
-        this.minIdle = PropertyHolder.getIntProperty(prefix + ".db.minIdle", MIN_IDLE);
-        this.maxWait = PropertyHolder.getLongProperty(prefix + ".db.maxWait", MAX_WAIT);
-        this.validationQuery = PropertyHolder.getProperty(prefix + ".db.validationQuery", "SELECT 1");
-        this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".db.testOnBorrow", true);
-        this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".db.testOnReturn", false);
-        this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".db.testWhileIdle", true);
-        this.timeBetweenEvictionRunsMillis = PropertyHolder
-            .getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis", timeBetweenEvictionRunsMillis);
-        this.minEvictableIdleTimeMillis = PropertyHolder.getLongProperty(prefix + ".db.timeBetweenEvictionRunsMillis",
+        this.dbType = PropertyHolder.getProperty(prefix + ".type", "mysql");
+        this.initialSize = PropertyHolder.getIntProperty(prefix + ".initialSize", INITIAL_SIZE);
+        this.maxActive = PropertyHolder.getIntProperty(prefix + ".maxActive", MAX_ACTIVE);
+        this.minIdle = PropertyHolder.getIntProperty(prefix + ".minIdle", MIN_IDLE);
+        this.maxWait = PropertyHolder.getLongProperty(prefix + ".maxWait", MAX_WAIT_TIME);
+        this.validationQuery = PropertyHolder.getProperty(prefix + ".validationQuery", "SELECT 1");
+        this.testOnBorrow = PropertyHolder.getBooleanProperty(prefix + ".testOnBorrow", true);
+        this.testOnReturn = PropertyHolder.getBooleanProperty(prefix + ".testOnReturn", false);
+        this.testWhileIdle = PropertyHolder.getBooleanProperty(prefix + ".testWhileIdle", true);
+        this.timeBetweenEvictionRunsMillis = PropertyHolder.getLongProperty(prefix + ".timeBetweenEvictionRunsMillis",
+            timeBetweenEvictionRunsMillis);
+        this.minEvictableIdleTimeMillis = PropertyHolder.getLongProperty(prefix + ".timeBetweenEvictionRunsMillis",
             TIME_BETWEEN_EVICTION_RUNS_MILLIS);
-        this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.removeAbandoned", true);
-        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".db.removeAbandonedTimeout",
+        this.removeAbandoned = PropertyHolder.getBooleanProperty(prefix + ".removeAbandoned", true);
+        this.removeAbandonedTimeout = PropertyHolder.getIntProperty(prefix + ".removeAbandonedTimeout",
             REMOVE_ABANDONED_TIMEOUT);
-        this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".db.logAbandoned", true);
-        this.driverClass = PropertyHolder.getProperty(prefix + ".db.driverClass");
-        this.filters = PropertyHolder.getProperty(prefix + ".db.filters", "stat");
+        this.logAbandoned = PropertyHolder.getBooleanProperty(prefix + ".logAbandoned", true);
+        this.driverClass = PropertyHolder.getProperty(prefix + ".driverClass");
+        this.filters = PropertyHolder.getProperty(prefix + ".filters", "stat");
+        this.keyspace = PropertyHolder.getProperty(prefix + ".keyspace");
+        this.authDb = PropertyHolder.getProperty(prefix + ".auth.db");
     }
 
     /**

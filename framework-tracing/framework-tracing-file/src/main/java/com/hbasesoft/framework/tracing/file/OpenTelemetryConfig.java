@@ -13,11 +13,12 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.tracing.core.TraceLog;
 
 import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
+import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.semconv.ResourceAttributes;
 
 /**
@@ -45,8 +46,7 @@ public class OpenTelemetryConfig {
     public OpenTelemetrySdk openTelemetrySdk() {
         Resource resource = Resource.getDefault()
             .merge(Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, PropertyHolder.getProjectName())));
-
-        LoggingSpanExporter exporter = LoggingSpanExporter.create();
+        SpanExporter exporter = OtlpJsonLoggingSpanExporter.create();
 
         SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
             .addSpanProcessor(SimpleSpanProcessor.create(exporter)).setResource(resource).build();

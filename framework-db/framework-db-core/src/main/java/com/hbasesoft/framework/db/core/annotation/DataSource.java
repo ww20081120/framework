@@ -11,6 +11,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.hbasesoft.framework.db.core.config.DaoTypeDef;
+
 /**
  * <Description> <br>
  * 
@@ -27,6 +29,15 @@ import java.lang.annotation.Target;
     ElementType.TYPE, ElementType.METHOD
 })
 public @interface DataSource {
+
+    /**
+     * Description: 数据库的类型，默认db-jdbc支持的数据库类型，其他还有mongdb、elasticsearch、cassandra等nosql数据库<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    DaoTypeDef type() default DaoTypeDef.db;
 
     /**
      * @return String

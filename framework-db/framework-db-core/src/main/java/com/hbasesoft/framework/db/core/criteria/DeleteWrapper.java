@@ -4,12 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
-import com.hbasesoft.framework.db.core.BaseDao.CriterialDeleteSpecification;
-
-import jakarta.persistence.criteria.Predicate;
 
 /**
  * <Description>普通的queryWrapper 根据字段名 <br>
@@ -123,21 +118,6 @@ public class DeleteWrapper<T> extends AbstractWrapper<T> {
     public DeleteWrapper<T> between(final String fieldName, final Date[] dates) {
         between(true, fieldName, dates);
         return this;
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public CriterialDeleteSpecification<T> build() {
-        return (root, query, cb) -> {
-            Predicate[] predicates = toPredicate(root, query, cb);
-            Assert.notEmpty(predicates, ErrorCodeDef.PARAM_NOT_NULL, "删除的条件");
-            return query.where(predicates).getRestriction();
-        };
     }
 
     /**

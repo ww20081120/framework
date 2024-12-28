@@ -32,7 +32,7 @@ public class TestServiceImpl implements TestService {
      * @param key
      * @return <br>
      */
-    @Cache(node = "test")
+    @Cache(key = "test")
     public String getTestContent(final String key) {
         System.out.println("test");
         return DateUtil.getCurrentTimestamp() + ":" + key;

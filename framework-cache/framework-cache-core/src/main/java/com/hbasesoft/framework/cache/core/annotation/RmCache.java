@@ -11,8 +11,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.hbasesoft.framework.common.GlobalConstants;
-
 /**
  * <Description> <br>
  * 
@@ -29,32 +27,11 @@ import com.hbasesoft.framework.common.GlobalConstants;
 public @interface RmCache {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
      */
-    String[] node();
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    String key() default GlobalConstants.BLANK;
-
-    /**
-     * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    boolean clean() default false;
+    String[] keys();
 }

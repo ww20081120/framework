@@ -3,12 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.core;
-
-import org.springframework.context.ApplicationContext;
-
-import com.hbasesoft.framework.common.StartupListener;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
+package com.hbasesoft.framework.common.utils.bean;
 
 /**
  * <Description> <br>
@@ -16,32 +11,20 @@ import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2019年4月12日 <br>
+ * @CreateDate 2024年12月11日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.core <br>
+ * @see com.hbasesoft.framework.common.utils.bean <br>
  */
-public class DatasourceStartupLinstener implements StartupListener {
+@FunctionalInterface
+public interface ClassFilter {
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param context <br>
-     */
-    public void complete(final ApplicationContext context) {
-        DataSourceUtil.init();
-    }
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
+     * @param clazz
      * @return <br>
      */
-    @Override
-    public LoadOrder getOrder() {
-        return LoadOrder.MIDDLE;
-    }
+    boolean accept(Class<?> clazz);
 }

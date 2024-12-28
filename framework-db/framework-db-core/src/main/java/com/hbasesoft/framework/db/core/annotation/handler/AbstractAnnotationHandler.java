@@ -13,9 +13,14 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,17 +60,52 @@ public class AbstractAnnotationHandler {
     private static Logger logger = new Logger(AbstractAnnotationHandler.class);
 
     /** IGenericBaseDao 的方法签名 */
-    private static Map<String, Method> genericBaseDaoMethodMap;
+    private static Map<String, Method> genericBaseDaoMethodMap = new HashMap<String, Method>();
 
-    /**
-     * daoConfig
-     */
+    /** dao config */
     private DaoConfig daoConfig;
 
     /**
      * 默认构造函数
+     * 
+     * @param daoConfig
      */
-    public AbstractAnnotationHandler() {
+    public AbstractAnnotationHandler(final DaoConfig daoConfig) {
+        this.daoConfig = daoConfig;
+        if (MapUtils.isEmpty(genericBaseDaoMethodMap)) {
+            Class<?> daoClazz = daoConfig.getBaseDaoType();
+            if (daoClazz != null) {
+                List<Method> methods = getAllPublicMethods(daoClazz);
+                for (Method m : methods) {
+                    genericBaseDaoMethodMap.put(getMethodSignature(m), m);
+                }
+                // 获取类实现的接口
+                Class<?>[] interfaces = daoClazz.getInterfaces();
+                if (ArrayUtils.isNotEmpty(interfaces)) {
+                    for (Class<?> iface : interfaces) {
+                        for (Method method : iface.getMethods()) {
+                            if (method.isDefault()) {
+                                genericBaseDaoMethodMap.put(getMethodSignature(method), method);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static List<Method> getAllPublicMethods(final Class<?> clazz) {
+        if (clazz == null) {
+            return new ArrayList<>();
+        }
+        // 获取当前类的公共方法（包括来自接口的default方法）
+        Method[] declaredMethods = clazz.getMethods();
+
+        // 递归获取父类的公共方法
+        List<Method> parentMethods = getAllPublicMethods(clazz.getSuperclass());
+        // 合并当前类的方法与父类的方法，并去除重复项
+        return Stream.concat(Stream.of(declaredMethods), parentMethods.stream()).distinct() // 去重，确保不会包含重复的方法签名
+            .collect(Collectors.toList());
     }
 
     /**
@@ -76,19 +116,9 @@ public class AbstractAnnotationHandler {
      */
     protected Method getBaseDaoExcutor(final Method method) {
         Method result = null;
-        Class<?> daoClazz = daoConfig.getBaseDaoType();
-        if (daoClazz != null) {
-            if (genericBaseDaoMethodMap == null) {
-                genericBaseDaoMethodMap = new HashMap<String, Method>();
-                Method[] methods = daoClazz.getDeclaredMethods();
-                for (Method m : methods) {
-                    genericBaseDaoMethodMap.put(getMethodSignature(m), m);
-                }
-            }
-            String methodSignature = getMethodSignature(method);
-            if (genericBaseDaoMethodMap.containsKey(methodSignature)) {
-                result = genericBaseDaoMethodMap.get(methodSignature);
-            }
+        String methodSignature = getMethodSignature(method);
+        if (genericBaseDaoMethodMap.containsKey(methodSignature)) {
+            result = genericBaseDaoMethodMap.get(methodSignature);
         }
         return result;
     }

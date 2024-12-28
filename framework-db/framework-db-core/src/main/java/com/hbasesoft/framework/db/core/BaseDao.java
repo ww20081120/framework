@@ -15,15 +15,8 @@ import com.hbasesoft.framework.db.core.criteria.LambdaQueryWrapper;
 import com.hbasesoft.framework.db.core.criteria.LambdaUpdateWrapper;
 import com.hbasesoft.framework.db.core.criteria.QueryWrapper;
 import com.hbasesoft.framework.db.core.criteria.UpdateWrapper;
+import com.hbasesoft.framework.db.core.executor.ISqlExcutor;
 import com.hbasesoft.framework.db.core.utils.PagerList;
-
-import jakarta.persistence.Tuple;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 /**
  * <Description> <br>
@@ -36,88 +29,7 @@ import jakarta.persistence.criteria.Root;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface BaseDao<T extends BaseEntity> {
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface CriterialDeleteSpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param root
-         * @param delete
-         * @param criteriaBuilder
-         * @return <br>
-         */
-        Predicate toPredicate(Root<? extends Tuple> root, CriteriaDelete<T> delete, CriteriaBuilder criteriaBuilder);
-    }
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface CriterialQuerySpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param root
-         * @param query
-         * @param criteriaBuilder
-         * @return <br>
-         */
-        Predicate toPredicate(Root<? extends Tuple> root, CriteriaQuery<Tuple> query, CriteriaBuilder criteriaBuilder);
-    }
-
-    /**
-     * <Description> <br>
-     * 
-     * @param <T> 参数类型
-     * @author ww200<br>
-     * @version 1.0<br>
-     * @taskId <br>
-     * @CreateDate 2024年5月6日 <br>
-     * @since V1.0<br>
-     * @see com.hbasesoft.framework.db.hibernate <br>
-     */
-    @FunctionalInterface
-    interface CriterialUpdateSpecification<T> {
-
-        /**
-         * Description: <br>
-         * 
-         * @author 王伟<br>
-         * @taskId <br>
-         * @param root
-         * @param update
-         * @param criteriaBuilder
-         * @return <br>
-         */
-        Predicate toPredicate(Root<? extends Tuple> root, CriteriaUpdate<T> update, CriteriaBuilder criteriaBuilder);
-    }
+public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
 
     /**
      * <Description> <br>
@@ -141,7 +53,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialDeleteSpecification<T> toSpecification(DeleteWrapper<T> wrapper);
+        DeleteWrapper<T> toSpecification(DeleteWrapper<T> wrapper);
     }
 
     /**
@@ -166,7 +78,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialDeleteSpecification<T> toSpecification(LambdaDeleteWrapper<T> wrapper);
+        LambdaDeleteWrapper<T> toSpecification(LambdaDeleteWrapper<T> wrapper);
     }
 
     /**
@@ -192,7 +104,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialQuerySpecification<T> toSpecification(LambdaQueryWrapper<T, M> wrapper);
+        LambdaQueryWrapper<T, M> toSpecification(LambdaQueryWrapper<T, M> wrapper);
     }
 
     /**
@@ -217,7 +129,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialUpdateSpecification<T> toSpecification(LambdaUpdateWrapper<T> wrapper);
+        LambdaUpdateWrapper<T> toSpecification(LambdaUpdateWrapper<T> wrapper);
     }
 
     /**
@@ -242,7 +154,7 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialQuerySpecification<T> toSpecification(QueryWrapper<T> wrapper);
+        QueryWrapper<T> toSpecification(QueryWrapper<T> wrapper);
     }
 
     /**
@@ -267,17 +179,8 @@ public interface BaseDao<T extends BaseEntity> {
          * @param wrapper
          * @return <br>
          */
-        CriterialUpdateSpecification<T> toSpecification(UpdateWrapper<T> wrapper);
+        UpdateWrapper<T> toSpecification(UpdateWrapper<T> wrapper);
     }
-
-    /**
-     * Description: JPA工厂<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    CriteriaBuilder criteriaBuilder();
 
     /**
      * Description: 根据条件删除<br>
@@ -305,15 +208,6 @@ public interface BaseDao<T extends BaseEntity> {
      * @param entities <br>
      */
     void deleteBatch(Collection<T> entities);
-
-    /**
-     * Description: 根据条件删除<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param criteria <br>
-     */
-    void deleteByCriteria(CriteriaDelete<T> criteria);
 
     /**
      * Description: 根据id来删除<br>
@@ -347,9 +241,9 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param specification <br>
+     * @param wrapper <br>
      */
-    void deleteBySpecification(CriterialDeleteSpecification<T> specification);
+    void deleteByLambda(LambdaDeleteWrapper<T> wrapper);
 
     /**
      * Description: 根据条件查询 <br>
@@ -374,6 +268,28 @@ public interface BaseDao<T extends BaseEntity> {
     <M> M get(QuerySpecification<T> specification, Class<M> clazz);
 
     /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param wrapper
+     * @return <br>
+     */
+    T get(QueryWrapper<T> wrapper);
+
+    /**
+     * Description: 根据条件查询<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param wrapper
+     * @param clazz
+     * @return <br>
+     */
+    <M> M get(QueryWrapper<T> wrapper, Class<M> clazz);
+
+    /**
      * Description: 根据id来获取数据<br>
      * 
      * @author 王伟<br>
@@ -382,17 +298,6 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     T get(Serializable id);
-
-    /**
-     * Description: 根据条件查询 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <M> M
-     * @param criteria
-     * @return <br>
-     */
-    <M> M getByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: 根据条件查询 <br>
@@ -421,22 +326,22 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param specification
+     * @param wrapper
+     * @param clazz
+     * @param <M>
      * @return <br>
      */
-    T getBySpecification(CriterialQuerySpecification<T> specification);
+    <M> M getByLambda(LambdaQueryWrapper<T, M> wrapper, Class<M> clazz);
 
     /**
-     * Description: 根据条件查询<br>
+     * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param <M>
-     * @param specification
-     * @param clazz
+     * @param wrapper
      * @return <br>
      */
-    <M> M getBySpecification(CriterialQuerySpecification<T> specification, Class<M> clazz);
+    T getByLambda(LambdaQueryWrapper<T, T> wrapper);
 
     /**
      * Description: 根据条件查询 <br>
@@ -461,6 +366,28 @@ public interface BaseDao<T extends BaseEntity> {
     <M> List<M> query(QuerySpecification<T> specification, Class<M> clazz);
 
     /**
+     * Description: 根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param wrapper
+     * @return <br>
+     */
+    List<T> query(QueryWrapper<T> wrapper);
+
+    /**
+     * Description:根据条件查询 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <M>
+     * @param wrapper
+     * @param clazz
+     * @return <br>
+     */
+    <M> List<M> query(QueryWrapper<T> wrapper, Class<M> clazz);
+
+    /**
      * Description: 查询所有数据<br>
      * 
      * @author 王伟<br>
@@ -468,17 +395,6 @@ public interface BaseDao<T extends BaseEntity> {
      * @return <br>
      */
     List<T> queryAll();
-
-    /**
-     * Description: 根据条件查询 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param <M>
-     * @param criteria
-     * @return <br>
-     */
-    <M> List<M> queryByCriteria(CriteriaQuery<M> criteria);
 
     /**
      * Description: 根据条件查询 <br>
@@ -503,26 +419,26 @@ public interface BaseDao<T extends BaseEntity> {
     List<T> queryByLambda(LambdaQuerySpecification<T, T> specification);
 
     /**
-     * Description: 根据条件查询<br>
+     * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param specification
+     * @param wrapper
+     * @param clazz
+     * @param <M>
      * @return <br>
      */
-    List<T> queryBySpecification(CriterialQuerySpecification<T> specification);
+    <M> List<M> queryByLambda(LambdaQueryWrapper<T, M> wrapper, Class<M> clazz);
 
     /**
-     * Description:根据条件查询 <br>
+     * Description: 根据条件查询 <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param <M>
-     * @param specification
-     * @param clazz
+     * @param wrapper
      * @return <br>
      */
-    <M> List<M> queryBySpecification(CriterialQuerySpecification<T> specification, Class<M> clazz);
+    List<T> queryByLambda(LambdaQueryWrapper<T, T> wrapper);
 
     /**
      * Description: <br>
@@ -551,17 +467,30 @@ public interface BaseDao<T extends BaseEntity> {
     <M> PagerList<M> queryPager(QuerySpecification<T> specification, int pageIndex, int pageSize, Class<M> clazz);
 
     /**
-     * Description: 根据条件查询<br>
+     * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param <M> M
-     * @param criteria
+     * @param wrapper
      * @param pageIndex
      * @param pageSize
      * @return <br>
      */
-    <M> PagerList<M> queryPagerByCriteria(CriteriaQuery<M> criteria, int pageIndex, int pageSize);
+    PagerList<T> queryPager(QueryWrapper<T> wrapper, int pageIndex, int pageSize);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param wrapper
+     * @param pageIndex
+     * @param pageSize
+     * @param <M> M
+     * @param clazz
+     * @return <br>
+     */
+    <M> PagerList<M> queryPager(QueryWrapper<T> wrapper, int pageIndex, int pageSize, Class<M> clazz);
 
     /**
      * Description: <br>
@@ -595,27 +524,26 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param specification
+     * @param wrapper
      * @param pageIndex
      * @param pageSize
+     * @param <M> M
+     * @param clazz
      * @return <br>
      */
-    PagerList<T> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex, int pageSize);
+    <M> PagerList<M> queryPagerByLambda(LambdaQueryWrapper<T, M> wrapper, int pageIndex, int pageSize, Class<M> clazz);
 
     /**
      * Description: <br>
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param <M>
-     * @param specification
+     * @param wrapper
      * @param pageIndex
      * @param pageSize
-     * @param clazz
      * @return <br>
      */
-    <M> PagerList<M> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex,
-        int pageSize, Class<M> clazz);
+    PagerList<T> queryPagerByLambda(LambdaQueryWrapper<T, T> wrapper, int pageIndex, int pageSize);
 
     /**
      * Description: 保存数据<br>
@@ -654,6 +582,15 @@ public interface BaseDao<T extends BaseEntity> {
     void update(UpdateSpecification<T> specification);
 
     /**
+     * Description: 根据条件来做更新<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param wrapper <br>
+     */
+    void update(UpdateWrapper<T> wrapper);
+
+    /**
      * Description: 批量更新<br>
      * 
      * @author 王伟<br>
@@ -661,15 +598,6 @@ public interface BaseDao<T extends BaseEntity> {
      * @param entitys <br>
      */
     void updateBatch(List<T> entitys);
-
-    /**
-     * Description: 根据条件来做更新<br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param criteria <br>
-     */
-    void updateByCriteria(CriteriaUpdate<T> criteria);
 
     /**
      * Description: 根据条件来做更新<br>
@@ -685,8 +613,8 @@ public interface BaseDao<T extends BaseEntity> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param specification <br>
+     * @param wrapper <br>
      */
-    void updateBySpecification(CriterialUpdateSpecification<T> specification);
+    void updateByLambda(LambdaUpdateWrapper<T> wrapper);
 
 }

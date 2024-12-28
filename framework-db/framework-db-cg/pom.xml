@@ -13,12 +13,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-db-core</artifactId>
+			<artifactId>framework-db-orm</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>

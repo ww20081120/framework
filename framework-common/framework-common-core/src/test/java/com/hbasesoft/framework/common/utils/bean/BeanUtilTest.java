@@ -5,15 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.bean;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import com.hbasesoft.framework.common.Bootstrap;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.Assert;

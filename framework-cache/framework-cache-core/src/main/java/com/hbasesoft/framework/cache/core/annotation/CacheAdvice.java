@@ -69,23 +69,13 @@ public class CacheAdvice {
 
             Class<?> returnType = currentMethod.getReturnType();
             Cache cache = AnnotationUtils.findAnnotation(currentMethod, Cache.class);
-            CacheNode cacheNode = null;
             // 携带Cache注解的方法，返回类型不能为空
             if (cache != null && !Void.class.equals(returnType)) {
                 result = cache(cache, thisJoinPoint, currentMethod, returnType);
             }
-            else if ((cacheNode = AnnotationUtils.findAnnotation(currentMethod, CacheNode.class)) != null) {
-                result = cacheNode(cacheNode, thisJoinPoint, currentMethod, returnType);
-            }
             else {
                 result = thisJoinPoint.proceed();
             }
-
-            RmCache rmCache = AnnotationUtils.findAnnotation(currentMethod, RmCache.class);
-            if (rmCache != null) {
-                rmCache(rmCache, currentMethod, thisJoinPoint.getArgs());
-            }
-
             return result;
 
         }
@@ -97,67 +87,23 @@ public class CacheAdvice {
     private Object cache(final Cache cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
         final Class<?> returnType) throws Throwable {
         String key = getCacheKey(cache.key(), method, thisJoinPoint.getArgs());
-        Object result = CacheHelper.getCache().getNodeValue(cache.node(), key);
+        Object result = CacheHelper.getCache().get(key);
         if (result == null) {
             result = thisJoinPoint.proceed();
             if (result != null) {
                 int expireTimes = cache.expireTime();
                 if (expireTimes > 0) {
-                    CacheHelper.getCache().putNodeValue(cache.node(), expireTimes, key, result);
+                    CacheHelper.getCache().put(key, expireTimes, result);
                 }
                 else {
-                    CacheHelper.getCache().putNodeValue(cache.node(), key, result);
+                    CacheHelper.getCache().put(key, result);
                 }
 
-                logger.debug("－－－－－－>{0}方法设置缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
-                    cache.node(), key);
+                logger.debug("－－－－－－>{0}方法设置缓存key_value成功, key[{1}]", BeanUtil.getMethodSignature(method), key);
             }
         }
 
         return result;
-    }
-
-    @SuppressWarnings("unchecked")
-    private Object cacheNode(final CacheNode cache, final ProceedingJoinPoint thisJoinPoint, final Method method,
-        final Class<?> returnType) throws Throwable {
-        if (!Map.class.isAssignableFrom(returnType)) {
-            throw new ServiceException(ErrorCodeDef.CACHE_KEY_ERROR);
-        }
-
-        Object result = CacheHelper.getCache().getNode(cache.node(), cache.bean());
-        if (result == null) {
-            result = thisJoinPoint.proceed();
-            if (result != null) {
-                int expireTimes = cache.expireTime();
-                if (expireTimes > 0) {
-                    CacheHelper.getCache().putNode(cache.node(), expireTimes, (Map<String, ?>) result);
-                }
-                else {
-                    CacheHelper.getCache().putNode(cache.node(), (Map<String, ?>) result);
-                }
-
-                logger.debug("－－－－－－>{0}方法设置缓存node成功,节点[{1}] ", BeanUtil.getMethodSignature(method), cache.node());
-            }
-        }
-
-        return null;
-    }
-
-    private void rmCache(final RmCache rmCache, final Method method, final Object[] args) throws Exception {
-        if (rmCache.clean()) {
-            for (String node : rmCache.node()) {
-                CacheHelper.getCache().remove(node);
-                logger.debug("－－－－－－>{0}方法删除缓存node成功,节点[{1}]", BeanUtil.getMethodSignature(method), node);
-            }
-        }
-        else {
-            String key = getCacheKey(rmCache.key(), method, args);
-            for (String node : rmCache.node()) {
-                CacheHelper.getCache().removeNodeValue(node, key);
-                logger.debug("－－－－－－>{0}方法删除缓存key_value成功,节点[{1}] key[{2}]", BeanUtil.getMethodSignature(method),
-                    rmCache.node(), key);
-            }
-        }
     }
 
     private String getCacheKey(final String template, final Method method, final Object[] args)

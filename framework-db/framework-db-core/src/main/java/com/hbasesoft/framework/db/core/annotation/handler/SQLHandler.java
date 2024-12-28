@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.db.core.config.DaoConfig;
 
 /**
  * <Description> <br>
@@ -20,6 +21,13 @@ import com.hbasesoft.framework.common.InitializationException;
  * @see com.hbasesoft.framework.dao.annotation.handler <br>
  */
 public class SQLHandler extends AbstractAnnotationHandler {
+
+    /** 
+     * @param daoConfig 
+     */ 
+    public SQLHandler(final DaoConfig daoConfig) {
+        super(daoConfig);
+    }
 
     /**
      * 

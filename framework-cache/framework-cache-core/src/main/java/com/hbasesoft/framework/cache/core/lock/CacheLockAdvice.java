@@ -52,19 +52,9 @@ public class CacheLockAdvice {
 
             CacheLock cacheLock = AnnotationUtils.findAnnotation(currentMethod, CacheLock.class);
             if (cacheLock != null) {
-                // 新建一个锁
-                Lock lock = CacheHelper.getLock(
-                    cacheLock.value() + KeyUtil.getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()));
-
-                try {
-                    lock.lock(cacheLock.timeOut());
-                    // 加锁成功，执行方法
-                    return thisJoinPoint.proceed();
-                }
-                finally {
-                    lock.unlock();
-                }
-
+                return CacheHelper.lock(
+                    cacheLock.value() + KeyUtil.getLockKey(cacheLock.key(), currentMethod, thisJoinPoint.getArgs()),
+                    cacheLock.timeOut(), () -> thisJoinPoint.proceed());
             }
         }
         return thisJoinPoint.proceed();

@@ -23,8 +23,9 @@ import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
+import com.hbasesoft.framework.db.core.config.DaoTypeDef;
 import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
-import com.hbasesoft.framework.db.core.utils.DataSourceUtil;
+import com.hbasesoft.framework.db.orm.util.DataSourceUtil;
 
 import lombok.NoArgsConstructor;
 
@@ -55,19 +56,12 @@ public final class TransactionManagerHolder {
      * @return <br>
      */
     public static PlatformTransactionManager getTransactionManager() {
-
-        synchronized (transactionManagerHolder) {
-            String dbCode = DynamicDataSourceManager.getDataSourceCode();
-            PlatformTransactionManager manager = transactionManagerHolder.get(dbCode);
-
-            if (manager == null) {
-                HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
-                hibernateTransactionManager.setSessionFactory(getSessionFactory(dbCode));
-                manager = hibernateTransactionManager;
-                transactionManagerHolder.put(dbCode, manager);
-            }
-            return manager;
-        }
+        String key = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
+        return transactionManagerHolder.computeIfAbsent(key, dbCode -> {
+            HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
+            hibernateTransactionManager.setSessionFactory(getSessionFactory(dbCode));
+            return hibernateTransactionManager;
+        });
     }
 
     /**
@@ -75,42 +69,36 @@ public final class TransactionManagerHolder {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param dbCode
+     * @param key
      * @return <br>
      */
-    public static SessionFactory getSessionFactory(final String dbCode) {
-        synchronized (sessionFactoryHolder) {
-            SessionFactory sessionFactory = sessionFactoryHolder.get(dbCode);
-            if (sessionFactory == null) {
-                DataSource dataSource = DataSourceUtil.getDataSource(dbCode);
-                Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, dbCode);
+    public static SessionFactory getSessionFactory(final String key) {
+        return sessionFactoryHolder.computeIfAbsent(key, dbCode -> {
+            DataSource dataSource = DataSourceUtil.getDataSource(dbCode);
+            Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, dbCode);
 
-                LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-                bean.setDataSource(dataSource);
-                Map<String, String> map = PropertyHolder.getProperties();
-                Properties properties = new Properties();
-                int prefixLength = dbCode.length() + 1;
-                String prefix = dbCode + ".hibernate";
-                for (Entry<String, String> entry : map.entrySet()) {
-                    if (entry.getKey().startsWith(prefix)) {
-                        properties.setProperty(entry.getKey().substring(prefixLength, entry.getKey().length()),
-                            entry.getValue());
-                    }
+            LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
+            bean.setDataSource(dataSource);
+            Map<String, String> map = PropertyHolder.getProperties();
+            Properties properties = new Properties();
+            int prefixLength = dbCode.length() + 1;
+            String prefix = dbCode + ".hibernate";
+            for (Entry<String, String> entry : map.entrySet()) {
+                if (entry.getKey().startsWith(prefix)) {
+                    properties.setProperty(entry.getKey().substring(prefixLength, entry.getKey().length()),
+                        entry.getValue());
                 }
-                bean.setHibernateProperties(properties);
-                bean.setPackagesToScan(AutoProxyBeanFactory.getBasePackage());
-                try {
-                    bean.afterPropertiesSet();
-                }
-                catch (IOException e) {
-                    throw new InitializationException(e);
-                }
-                sessionFactory = bean.getObject();
-                sessionFactoryHolder.put(dbCode, sessionFactory);
             }
-
-            return sessionFactory;
-        }
+            bean.setHibernateProperties(properties);
+            bean.setPackagesToScan(AutoProxyBeanFactory.getBasePackage());
+            try {
+                bean.afterPropertiesSet();
+            }
+            catch (IOException e) {
+                throw new InitializationException(e);
+            }
+            return bean.getObject();
+        });
 
     }
 
@@ -123,7 +111,7 @@ public final class TransactionManagerHolder {
      * @throws IOException
      */
     public static SessionFactory getSessionFactory() {
-        String dbCode = DynamicDataSourceManager.getDataSourceCode();
+        String dbCode = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
         return getSessionFactory(dbCode);
     }
 }

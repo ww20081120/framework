@@ -11,19 +11,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 
+import com.esotericsoftware.kryo.kryo5.Kryo;
+import com.esotericsoftware.kryo.kryo5.io.Input;
+import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 
-import io.protostuff.LinkedBuffer;
-import io.protostuff.ProtostuffIOUtil;
-import io.protostuff.Schema;
-import io.protostuff.runtime.RuntimeSchema;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -40,10 +38,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SerializationUtil {
 
-    /**
-     * INIT_SIZE
-     */
-    private static final int INIT_SIZE = 1024;
+    /** KRYO_LOCAL */
+    private static final ThreadLocal<Kryo> KRYO_LOCAL = ThreadLocal.withInitial(() -> {
+        Kryo kryo = new Kryo();
+        kryo.setRegistrationRequired(false);
+        kryo.setClassLoader(Thread.currentThread().getContextClassLoader());
+        return kryo;
+    });
 
     /**
      * Deep clone an {@code Object} using serialization.
@@ -74,25 +75,20 @@ public final class SerializationUtil {
      * @param obj
      * @param <T> T
      * @return T
-     * @throws UtilException <br>
      */
-    @SuppressWarnings("unchecked")
-    public static <T> byte[] serial(final T obj) throws UtilException {
+    public static <T> byte[] serial(final T obj) {
         if (obj != null && !(obj instanceof Void)) {
-            try {
-                if (obj instanceof Map || obj instanceof Collection) {
-                    return jdkSerial(obj);
-                }
-                else {
-                    Schema<T> schema = RuntimeSchema.getSchema((Class<T>) obj.getClass());
-                    LinkedBuffer buffer = LinkedBuffer.allocate(INIT_SIZE);
-                    return ProtostuffIOUtil.toByteArray(obj, schema, buffer);
-                }
+            try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                Output output = new Output(byteArrayOutputStream);) {
+                Kryo kryo = KRYO_LOCAL.get();
+                kryo.writeClassAndObject(output, obj);
+                output.flush();
+                return byteArrayOutputStream.toByteArray();
             }
-            catch (Exception e) {
-                throw new UtilException(e, ErrorCodeDef.SERIALIZE_ERROR, obj);
+            catch (IOException e) {
+                LoggerUtil.error(e);
+                throw new UtilException(e);
             }
-
         }
         return null;
     }
@@ -116,6 +112,7 @@ public final class SerializationUtil {
             bytes = byteArrayOutputStream.toByteArray();
         }
         catch (IOException e) {
+            LoggerUtil.error(e);
             throw new UtilException(e, ErrorCodeDef.JDK_SERIALIZE_ERROR, obj);
         }
         finally {
@@ -139,18 +136,9 @@ public final class SerializationUtil {
     public static <T> T unserial(final Class<T> clazz, final byte[] data) throws UtilException {
         T result = null;
         if (data != null && data.length > 0) {
-            try {
-                if (Map.class.isAssignableFrom(clazz) || Collection.class.isAssignableFrom(clazz)) {
-                    result = (T) jdkUnserial(data);
-                }
-                else {
-                    Schema<T> schema = RuntimeSchema.getSchema(clazz);
-                    result = clazz.getConstructor().newInstance();
-                    ProtostuffIOUtil.mergeFrom(data, result, schema);
-                }
-            }
-            catch (Exception e) {
-                throw new UtilException(e, ErrorCodeDef.UNSERIALIZE_ERROR, DataUtil.byte2HexStr(data));
+            try (Input input = new Input(data)) {
+                Kryo kryo = KRYO_LOCAL.get();
+                return (T) kryo.readClassAndObject(input);
             }
         }
         return result;

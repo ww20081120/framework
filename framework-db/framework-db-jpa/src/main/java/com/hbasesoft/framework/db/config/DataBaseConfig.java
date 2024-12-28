@@ -57,6 +57,7 @@ public class DataBaseConfig {
     public AutoProxyBeanFactory registAutoProxyBeanFactory() {
         AutoProxyBeanFactory beanFactory = new AutoProxyBeanFactory(new ISqlExcutorFactory() {
 
+            @SuppressWarnings("rawtypes")
             @Override
             public ISqlExcutor create() {
                 return new BaseHibernateDao();

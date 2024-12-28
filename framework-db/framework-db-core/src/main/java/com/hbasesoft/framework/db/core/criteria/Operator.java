@@ -15,7 +15,7 @@ package com.hbasesoft.framework.db.core.criteria;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core.wrapper <br>
  */
-enum Operator {
+public enum Operator {
     /** 求平均值 */
     AVG,
 

@@ -27,9 +27,8 @@ import com.hbasesoft.framework.common.GlobalConstants;
 public @interface CacheNode {
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -37,19 +36,8 @@ public @interface CacheNode {
     String node();
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    Class<?> bean();
-
-    /**
-     * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -57,9 +45,8 @@ public @interface CacheNode {
     int expireTime() default 0;
 
     /**
+     * Description: <br>
      * 
-     * Description: <br> 
-     *  
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>

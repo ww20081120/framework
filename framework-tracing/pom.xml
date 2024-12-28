@@ -6,7 +6,6 @@
     <version>4.1</version>
   </parent>
   <artifactId>framework-tracing</artifactId>
-  <version>4.1</version>
   <packaging>pom</packaging>
   <modules>
   	<module>framework-tracing-core</module>
@@ -14,5 +13,6 @@
   	<module>framework-tracing-demo</module>
   	<module>framework-tracing-otlp</module>
   	<module>framework-tracing-zipkin</module>
+  	<module>framework-tracing-skywalking</module>
   </modules>
 </project>

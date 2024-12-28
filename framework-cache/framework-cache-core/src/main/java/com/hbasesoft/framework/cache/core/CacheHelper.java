@@ -11,10 +11,13 @@ import java.util.ServiceLoader;
 import com.hbasesoft.framework.cache.core.lock.Lock;
 import com.hbasesoft.framework.cache.core.lock.LockLoader;
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.Invoker;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -80,6 +83,73 @@ public final class CacheHelper {
             }
         }
         return lockLoader.getInstance(lockName);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param key
+     * @param seconds
+     * @param invoker
+     * @return <br>
+     */
+    public static <T> T lock(final String key, final int seconds, final Invoker<T> invoker) {
+        Lock lock = getLock(key);
+        try {
+            lock.lock(seconds);
+            return invoker.invoke();
+        }
+        catch (Throwable e) {
+            throw new FrameworkException(e);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param key
+     * @param invoker
+     * @return <br>
+     */
+    public static <T> T getCacheData(final String key, final Invoker<T> invoker) {
+        return getCacheData(key, 0, invoker);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <T>
+     * @param key
+     * @param seconds
+     * @param invoker
+     * @return <br>
+     */
+    public static <T> T getCacheData(final String key, final int seconds, final Invoker<T> invoker) {
+        ICache c = getCache();
+        T data = c.get(key);
+        if (data == null) {
+            try {
+                data = invoker.invoke();
+            }
+            catch (Throwable e) {
+                LoggerUtil.error(e);
+            }
+            if (data != null) {
+                c.put(key, seconds, data);
+            }
+        }
+        return data;
     }
 
     /**

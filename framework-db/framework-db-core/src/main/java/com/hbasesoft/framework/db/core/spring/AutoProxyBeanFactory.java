@@ -84,38 +84,36 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         if (componentScanAnnotation != null) {
             basePackage = componentScanAnnotation.basePackages();
 
-            SQLHandler sqlHandler = new SQLHandler();
-            sqlHandler.setDaoConfig(config);
+            SQLHandler sqlHandler = new SQLHandler(config);
 
             try {
                 for (String pack : basePackage) {
                     if (StringUtils.isNotEmpty(pack)) {
                         String tempPack = pack.indexOf("*") == -1 ? pack + ".*" : pack;
-                        Set<Class<?>> clazzSet = BeanUtil.getClasses(tempPack);
+                        Set<Class<?>> clazzSet = BeanUtil.getClasses(tempPack,
+                            clazz -> clazz.isAnnotationPresent(annotationClazz));
                         String className = null;
                         for (Class<?> clazz : clazzSet) {
-                            if (clazz.isAnnotationPresent(annotationClazz)) {
-                                className = clazz.getName();
-                                String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
+                            className = clazz.getName();
+                            String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
+                            if (beanFactory.containsBean(beanName)) {
+                                beanName = className;
                                 if (beanFactory.containsBean(beanName)) {
-                                    beanName = className;
-                                    if (beanFactory.containsBean(beanName)) {
-                                        continue;
-                                    }
+                                    continue;
                                 }
-
-                                // 此处不缓存SQL
-                                sqlHandler.invoke(clazz);
-
-                                // 单独加载一个接口的代理类
-                                ProxyFactoryBean factoryBean = new ProxyFactoryBean();
-                                factoryBean.setBeanFactory(beanFactory);
-                                factoryBean.setInterfaces(clazz);
-                                factoryBean.setInterceptorNames(interceptors);
-                                factoryBean.setTarget(getDaoHandler(clazz));
-                                beanFactory.registerSingleton(beanName, factoryBean);
-                                logger.info("    success create interface [{0}] with name {1}", className, beanName);
                             }
+
+                            // 此处不缓存SQL
+                            sqlHandler.invoke(clazz);
+
+                            // 单独加载一个接口的代理类
+                            ProxyFactoryBean factoryBean = new ProxyFactoryBean();
+                            factoryBean.setBeanFactory(beanFactory);
+                            factoryBean.setInterfaces(clazz);
+                            factoryBean.setInterceptorNames(interceptors);
+                            factoryBean.setTarget(getDaoHandler(clazz));
+                            beanFactory.registerSingleton(beanName, factoryBean);
+                            logger.info("    success create interface [{0}] with name {1}", className, beanName);
                         }
                     }
                 }
@@ -147,8 +145,7 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
     }
 
     private DaoHandler getDaoHandler(final Class<?> clazz) {
-        DaoHandler handler = new DaoHandler();
-        handler.setDaoConfig(config);
+        DaoHandler handler = new DaoHandler(config);
         ISqlExcutor baseDao = sqlExcutorFactory.create();
         handler.setSqlExcutor(baseDao);
 

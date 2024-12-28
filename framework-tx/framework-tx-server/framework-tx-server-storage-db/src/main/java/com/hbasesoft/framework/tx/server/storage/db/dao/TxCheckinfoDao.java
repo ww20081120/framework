@@ -20,7 +20,7 @@ import com.hbasesoft.framework.tx.server.storage.db.entity.TxCheckinfoEntity;
  * @taskId <br>
  * @CreateDate 2019年4月3日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.hibernate.BaseJpaDao <br>
+ * @see com.hbasesoft.framework.db.BaseJpaDao <br>
  */
 @Dao
 public interface TxCheckinfoDao {

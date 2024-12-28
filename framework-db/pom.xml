@@ -15,5 +15,6 @@
 		<module>framework-db-demo</module>
 		<module>framework-db-jdbc</module>
 		<module>framework-db-cg</module>
+		<module>framework-db-orm</module>
 	</modules>
 </project>
