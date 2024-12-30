@@ -18,7 +18,6 @@ import java.util.Objects;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.Column;
@@ -149,7 +148,11 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
             }
             else {
                 Class<?> beanType = param.getBeanType();
-                if (Serializable.class.equals(beanType)) {
+                if (beanType.equals(Integer.class) || beanType.equals(int.class)) {
+                    // 处理标量查询
+                    return getJdbcTemplate().queryForObject(sql, dataMap, Integer.class);
+                }
+                else if (Serializable.class.equals(beanType)) {
                     beanType = param.getReturnType();
                     if (entityClazz != null && List.class.isAssignableFrom(param.getReturnType())) {
                         beanType = entityClazz;
@@ -344,7 +347,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
     @Override
     public void delete(final T entity) {
         // 解析实体类并获取表结构信息
-        Map<String, Object> columnValues = parseEntity(entity);
+        Map<String, Object> columnValues = parseEntity(entity, true);
         if (MapUtils.isEmpty(columnValues)) {
             throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR);
         }
@@ -383,23 +386,21 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
             throw new IllegalStateException(
                     "Could not find a primary key field annotated with @Id in the given entity type.");
         }
-        // 使用 Stream API 处理实体集合并提取主键值
-        Set ids = entities.stream()
-                .map(entity -> {
-                    try {
-                        return primaryKeyField.get(entity);
-                    }
-                    catch (IllegalAccessException e) {
-                        throw new RuntimeException("Cannot access the primary key field", e);
-                    }
-                })
-                .collect(Collectors.toSet());
+        String entitieName = "";
+        Column columnAnnotation = primaryKeyField.getAnnotation(Column.class);
+        if (columnAnnotation != null && !columnAnnotation.name().isEmpty()) {
+            entitieName =  columnAnnotation.name();
+        }
+        else {
+            entitieName = primaryKeyField.getName();
+        }
         // 使用 StringBuilder 构建 DELETE SQL 语句
         StringBuilder sqlBuilder = new StringBuilder("DELETE FROM ");
         sqlBuilder.append(getTableName(entities.iterator().next().getClass()))
-                .append(" WHERE ").append(primaryKeyField.getName()).append(" IN ( :ids )");
+                .append(" WHERE ").append(entitieName).append("  = :")
+                .append(primaryKeyField.getName());
         //最终执行sql
-        batchExecute(sqlBuilder.toString(), ids, INT1);
+        batchExecute(sqlBuilder.toString(), entities, entities.size());
 
 
     }
@@ -509,7 +510,11 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
 
         toQueryPredicate(sqlBuilder, parseEntityNameMap, specification, param);
 
-        List<M> queried = (List<M>) query(sqlBuilder.toString(), param);
+        Object queriedObject = query(sqlBuilder.toString(), param);
+        if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+            return (M) queriedObject;
+        }
+        List<M> queried = (List<M>) queriedObject;
         if (CollectionUtils.isEmpty(queried)) {
             try {
                 return clazz.getDeclaredConstructor().newInstance();
@@ -524,21 +529,26 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
     private void toQueryPredicate(final StringBuilder sqlBuilder, final Map<String, Object> parseEntityNameMap,
                                   final AbstractQueryWrapper<T> specification, final DataParam param) {
         if (specification.getSelectionList().isEmpty()) {
-            sqlBuilder.append(String.join(", ", parseEntityNameMap.keySet()));
+            sqlBuilder.append(parseEntityNameMap.values().stream()
+                    .map(Object::toString) // 将每个对象转换为字符串
+                    .collect(Collectors.joining(", "))); // 使用逗号和空格连接
         }
         else {
             for (int i = 0; i < specification.getSelectionList().size(); ++i) {
+                if (i > 0) {
+                    sqlBuilder.append(", ");
+                }
                 toSelection(sqlBuilder, parseEntityNameMap, specification.getSelectionList().get(i));
             }
         }
-        sqlBuilder.append(" FROM ").append(getTableName(entityClazz));
+        sqlBuilder.append(" FROM ").append(getTableName(entityClazz)).append(" ");
         toPredicate(specification, parseEntityNameMap, sqlBuilder, param);
         if (MapUtils.isEmpty(param.getParamMap())) {
             param.setParamMap(new HashMap<String, Object>());
         }
         // 处理分组
         if (!specification.getGroupList().isEmpty()) {
-            sqlBuilder.append("GROUP BY ");
+            sqlBuilder.append(" GROUP BY ");
             String groupByFields = specification.getGroupList().stream()
                     .map(group -> parseEntityNameMap.getOrDefault(group, group))
                     .map(Object::toString)
@@ -548,7 +558,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
 
         // 构建 ORDER BY 子句
         if (!specification.getOrderByList().isEmpty()) {
-            sqlBuilder.append("ORDER BY ");
+            sqlBuilder.append(" ORDER BY ");
             String orderByClauses = specification.getOrderByList().stream()
                     .map(order -> {
                         String columnName = parseEntityNameMap.getOrDefault(order.getProperty(),
@@ -874,7 +884,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
     @Override
     public void save(final T entity) {
         // 解析实体类并获取表结构信息
-        Map<String, Object> columnValues = parseEntity(entity);
+        Map<String, Object> columnValues = parseEntity(entity, false);
         if (MapUtils.isEmpty(columnValues)) {
             throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR);
         }
@@ -916,7 +926,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
 
         // 获取所有字段名并构建字段列表
-        Map<String, Object> parseEntityMap = parseEntityName(entitys.getFirst());
+        Map<String, Object> parseEntityMap = parseEntityName(entitys.getFirst(), true);
 
 
         // 使用 StringBuilder 构建 INSERT SQL 语句
@@ -939,14 +949,14 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
         sqlBuilder.append(columns).append(") VALUES (").append(values).append(")");
         //最终执行sql
-        batchExecute(sqlBuilder.toString(), entitys, INT1);
+        batchExecute(sqlBuilder.toString(), entitys, entitys.size());
 
     }
 
     @Override
     public void update(final T pojo) {
         // 解析实体类并获取表结构信息
-        Map<String, Object> columnValues = parseEntity(pojo);
+        Map<String, Object> columnValues = parseEntity(pojo, false);
         if (MapUtils.isEmpty(columnValues)) {
             throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR);
         }
@@ -1001,6 +1011,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
         //获取 解析实体类，提取带有@Column注解的字段及属性名称
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
+        Map<String, Object> paramSetMap = new HashMap<>();
         StringBuilder sqlBuilder = new StringBuilder().append("UPDATE ")
                 .append(getTableName(entityClazz)).append(" SET ");
         boolean noFirst = false; //判断是否是第一次进入循环
@@ -1013,9 +1024,10 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
             }
             sqlBuilder.append(parseEntityNameMap.get(entry.getKey())).append(" = :")
                     .append(parseEntityNameMap.get(entry.getKey())).append("set");
-            parseEntityNameMap.put(parseEntityNameMap.get(entry.getKey()) + "set", entry.getValue());
+            paramSetMap.put(parseEntityNameMap.get(entry.getKey()) + "set", entry.getValue());
         }
         DataParam param = new DataParam();
+        param.setParamMap(paramSetMap);
         toPredicate(wrapper, parseEntityNameMap, sqlBuilder, param);
         // 如果没有条件直接抛出异常
         Assert.notEmpty(param.getParamMap(), ErrorCodeDef.PARAM_NOT_NULL, "修改的条件");
@@ -1036,6 +1048,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
         //获取 解析实体类，提取带有@Column注解的字段及属性名称
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
+        Map<String, Object> paramSetMap = new HashMap<>();
         StringBuilder sqlBuilder = new StringBuilder().append("UPDATE ")
                 .append(getTableName(entityClazz)).append(" SET ");
         boolean noFirst = false; //判断是否是第一次进入循环
@@ -1048,9 +1061,10 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
             }
             sqlBuilder.append(parseEntityNameMap.get(entry.getKey())).append(" = :")
                     .append(parseEntityNameMap.get(entry.getKey())).append("set");
-            parseEntityNameMap.put(parseEntityNameMap.get(entry.getKey()) + "set", entry.getValue());
+            paramSetMap.put(parseEntityNameMap.get(entry.getKey()) + "set", entry.getValue());
         }
         DataParam param = new DataParam();
+        param.setParamMap(paramSetMap);
         toPredicate(wrapper, parseEntityNameMap, sqlBuilder, param);
         // 如果没有条件直接抛出异常
         Assert.notEmpty(param.getParamMap(), ErrorCodeDef.PARAM_NOT_NULL, "修改的条件");
@@ -1085,29 +1099,30 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
 
         // 获取所有字段名并构建字段列表
-        Map<String, Object> parseEntityMap = parseEntity(entitys.getFirst());
+        Map<String, Object> parseEntityMap = parseEntityName(entitys.getFirst(), false);
 
         // 使用 StringBuilder 构建 INSERT SQL 语句
-        StringBuilder sqlBuilder = new StringBuilder("update ");
+        StringBuilder sqlBuilder = new StringBuilder("UPDATE ");
         sqlBuilder.append(getTableName(entityClazz)).append(" SET ");
         StringBuilder setters = new StringBuilder();
 
-        for (String col : parseEntityMap.keySet()) {
+        for (Map.Entry<String, Object> entry : parseEntityMap.entrySet()) {
             // 跳过主键字段，因为它不是要更新的数据部分
-            if (StringUtils.equals("ENTITY_ID", col) || Objects.equals(col, parseEntityMap.get("ENTITY_ID"))) {
+            if (StringUtils.equals("ENTITY_ID", entry.getKey())
+                    || Objects.equals(entry.getKey(), parseEntityMap.get("ENTITY_ID"))) {
                 continue;
             }
             if (setters.length() > 0) {
                 setters.append(", ");
             }
-            setters.append(col).append(" = :").append(col); // 使用命名参数
+            setters.append(entry.getKey()).append(" = :").append(entry.getValue()); // 使用命名参数
         }
 
         sqlBuilder.append(setters).append(" WHERE ").append(parseEntityMap.get("ENTITY_ID"))
-                .append("= :").append(parseEntityMap.get(parseEntityMap.get("ENTITY_ID")));
+                .append("= :").append(parseEntityMap.get("ENTITY_ID"));
 
         //最终执行sql
-        batchExecute(sqlBuilder.toString(), entitys, INT1);
+        batchExecute(sqlBuilder.toString(), entitys, entitys.size());
     }
 
     @Override
@@ -1145,9 +1160,10 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
      * 解析实体类，提取带有@Column注解的字段及其值
      *
      * @param entity
+     * @param continueEntity
      * @return Map<String, Object>
      */
-    private Map<String, Object> parseEntity(final T entity) {
+    private Map<String, Object> parseEntity(final T entity, final boolean continueEntity) {
         // 解析实体类，提取带有@Column注解的字段及其值
         Map<String, Object> columnValues = new HashMap<>();
         try {
@@ -1158,6 +1174,9 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
                     field.setAccessible(true); // 取消Java的访问控制检查
                     if (field.isAnnotationPresent(Id.class)) {
                         columnValues.put("ENTITY_ID", columnAnnotation.name());
+                    }
+                    if (continueEntity && Objects.isNull(field.get(entity))) {
+                        continue;
                     }
                     columnValues.put(columnAnnotation.name(), field.get(entity));
 
@@ -1175,9 +1194,10 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
      * 解析实体类，提取带有@Column注解的字段及属性名称
      *
      * @param entity
+     * @param continueEntity
      * @return Map<String, Object>
      */
-    private Map<String, Object> parseEntityName(final T entity) {
+    private Map<String, Object> parseEntityName(final T entity, final boolean continueEntity) {
         // 解析实体类，提取带有@Column注解的name 和其对应的 类的属性名
         Map<String, Object> columnValues = new HashMap<>();
         try {
@@ -1190,7 +1210,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
                     field.setAccessible(true); // 取消Java的访问控制检查
                     String columnName = columnAnnotation.name(); // 获取@Column注解的name属性
                     String fieldName = field.getName(); // 获取字段名
-                    if (Objects.isNull(field.get(entity))) {
+                    if (continueEntity && Objects.isNull(field.get(entity))) {
                         continue;
                     }
                     if (field.isAnnotationPresent(Id.class)) {
@@ -1317,8 +1337,15 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
                 sqlBuilder.append(")");
             }
         }
-        param.setParamMap(paramMap);
-
+        // 获取当前的参数映射并合并新的参数
+        Map<String, Object> currentParamMap = param.getParamMap();
+        if (currentParamMap == null) {
+            param.setParamMap(paramMap);
+        }
+        else {
+            currentParamMap.putAll(paramMap);
+            param.setParamMap(currentParamMap);
+        }
     }
 
     /**
@@ -1343,39 +1370,39 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case NE:
-                sqlBuilder.append(fieldName).append(" <> ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" <> :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case GE:
-                sqlBuilder.append(fieldName).append(" >= ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" >= :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case GREATER_THAN_OR_EQUAL_TO:
-                sqlBuilder.append(fieldName).append(" >= ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" >= :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case GT:
-                sqlBuilder.append(fieldName).append(" > ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" > :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case GREATER_THAN:
-                sqlBuilder.append(fieldName).append(" > ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" > :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case LE:
-                sqlBuilder.append(fieldName).append(" <= ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" <= :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case LESS_THAN_OR_EQUAL_TO:
-                sqlBuilder.append(fieldName).append(" <= ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" <= :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case LT:
-                sqlBuilder.append(fieldName).append(" < ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" < :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case LESS_THAN:
-                sqlBuilder.append(fieldName).append(" < ").append(fieldName);
+                sqlBuilder.append(fieldName).append(" < :").append(fieldName);
                 paramMap.put(fieldName, predicate.getValue());
                 break;
             case IN:
@@ -1391,13 +1418,13 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
             case LIKE:
                 String value = (String) predicate.getValue();
                 Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
-                sqlBuilder.append(fieldName).append(" LIKE ").append(value);
+                sqlBuilder.append(fieldName).append(" LIKE (:").append(value).append(")");
                 paramMap.put(fieldName, value);
                 break;
             case NOTLIKE:
                 value = (String) predicate.getValue();
                 Assert.notEmpty(value, ErrorCodeDef.PARAM_NOT_NULL, predicate.getFieldName());
-                sqlBuilder.append(fieldName).append(" NOT LIKE :").append(fieldName);
+                sqlBuilder.append(fieldName).append(" NOT LIKE (:").append(fieldName).append(")");
                 paramMap.put(fieldName, value);
                 break;
             case ISNULL:
@@ -1408,8 +1435,8 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
                 break;
             case BETWEEN:
                 Comparable[] objs = (Comparable[]) predicate.getValue();
-                sqlBuilder.append(fieldName).append(" BETWEEN :").append(fieldName + "begin")
-                        .append(" AND :").append(fieldName + "end");
+                sqlBuilder.append(fieldName).append(" BETWEEN (:").append(fieldName + "begin")
+                        .append(" AND :").append(fieldName + "end").append(")");
                 paramMap.put(fieldName + "begin", objs[0]);
                 paramMap.put(fieldName + "end", objs[1]);
                 break;
