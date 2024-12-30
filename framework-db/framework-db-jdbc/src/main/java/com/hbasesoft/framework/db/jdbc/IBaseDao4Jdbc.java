@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import com.hbasesoft.framework.db.core.BaseDao;
 import com.hbasesoft.framework.db.core.BaseEntity;
+import com.hbasesoft.framework.db.core.DaoException;
 
 /**
  * <Description> <br>
@@ -35,4 +36,15 @@ public interface IBaseDao4Jdbc<T extends BaseEntity> extends BaseDao<T> {
      * @return int[]
      */
     int[] batchExecute(String sql, Collection<T> objcts, int commitNumber);
+
+    /**
+     * Description: <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param sql
+     * @return numbers
+     * @throws DaoException <br>
+     */
+    int updateBySql(String sql) throws DaoException;
 }

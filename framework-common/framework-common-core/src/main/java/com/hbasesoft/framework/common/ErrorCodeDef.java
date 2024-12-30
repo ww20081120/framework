@@ -249,7 +249,10 @@ public enum ErrorCodeDef implements ErrorCode {
     UNSPORT_DAO_OPERATOR(SYSTEM_PREFIX + 74, "不支持的DAO操作"),
 
     /** 没有流程可以被编译 */
-    NO_PROCESS_TO_COMPILE(SYSTEM_PREFIX + 75, "没有流程可以被编译"),;
+    NO_PROCESS_TO_COMPILE(SYSTEM_PREFIX + 75, "没有流程可以被编译"),
+
+    /** 实体解析异常 */
+    ANALYSIS_ENTITY_ERROR(SYSTEM_PREFIX + 76, "解析实体类异常"),;
 
     /** code */
     private final int code;
