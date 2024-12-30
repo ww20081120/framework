@@ -16,5 +16,6 @@
 		<module>framework-db-jdbc</module>
 		<module>framework-db-cg</module>
 		<module>framework-db-orm</module>
+		<module>framework-db-mongo</module>
 	</modules>
 </project>
