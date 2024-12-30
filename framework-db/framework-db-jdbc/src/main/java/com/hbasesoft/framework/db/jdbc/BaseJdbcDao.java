@@ -6,6 +6,8 @@
 package com.hbasesoft.framework.db.jdbc;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -16,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -90,6 +93,22 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
     private static final int INT1 = 1000;
 
     /**
+     *  定义一个静态的不可变集合，包含所有标量类型
+     */
+    private static final List<Class<?>> SCALAR_TYPES = Arrays.asList(
+            Integer.class, int.class,
+            Long.class, long.class,
+            Double.class, double.class,
+            Float.class, float.class,
+            Short.class, short.class,
+            Byte.class, byte.class,
+            Boolean.class, boolean.class,
+            String.class,
+            BigInteger.class,
+            BigDecimal.class
+    );
+
+    /**
      *
      */
     private static final int PAGE_SIZE = 10;
@@ -148,9 +167,9 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
             }
             else {
                 Class<?> beanType = param.getBeanType();
-                if (beanType.equals(Integer.class) || beanType.equals(int.class)) {
+                if (SCALAR_TYPES.contains(beanType)) {
                     // 处理标量查询
-                    return getJdbcTemplate().queryForObject(sql, dataMap, Integer.class);
+                    return getJdbcTemplate().queryForObject(sql, dataMap, beanType);
                 }
                 else if (Serializable.class.equals(beanType)) {
                     beanType = param.getReturnType();
@@ -511,17 +530,12 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         toQueryPredicate(sqlBuilder, parseEntityNameMap, specification, param);
 
         Object queriedObject = query(sqlBuilder.toString(), param);
-        if (clazz.equals(Integer.class) || clazz.equals(int.class)) {
+        if (SCALAR_TYPES.contains(clazz)) {
             return (M) queriedObject;
         }
         List<M> queried = (List<M>) queriedObject;
         if (CollectionUtils.isEmpty(queried)) {
-            try {
-                return clazz.getDeclaredConstructor().newInstance();
-            }
-            catch (Exception e) {
-                throw new RuntimeException("Failed to instantiate entity class: " + entityClazz.getName(), e);
-            }
+            return null;
         }
         return queried.get(0);
     }
@@ -667,12 +681,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         // 执行 SQL
         List<T> queried = (List<T>) query(sqlBuilder.toString(), param);
         if (CollectionUtils.isEmpty(queried)) {
-            try {
-                return (T) entityClazz.getDeclaredConstructor().newInstance();
-            }
-            catch (Exception e) {
-                throw new RuntimeException("Failed to instantiate entity class: " + entityClazz.getName(), e);
-            }
+            return null;
         }
         return queried.get(0);
     }
@@ -730,9 +739,8 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         DataParam param = new DataParam();
         param.setBeanType(clazz);
         toQueryPredicate(sqlBuilder, parseEntityNameMap, wrapper, param);
-        param.getParamMap().put(DaoConstants.PAGE_INDEX, 1);
-        param.getParamMap().put(DaoConstants.PAGE_SIZE, INT1);
-        PagerList query = (PagerList) query(sqlBuilder.toString(), param);
+        sqlBuilder.append(" limit ").append(INT1);
+        List<M> query = (List<M>) query(sqlBuilder.toString(), param);
         return query;
     }
 
@@ -896,7 +904,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         StringBuilder columns = new StringBuilder();
         StringBuilder values = new StringBuilder();
         for (String col : columnValues.keySet()) {
-            if (StringUtils.equals("ENTITY_ID", col) || Objects.equals(col, columnValues.get("ENTITY_ID"))) {
+            if (StringUtils.equals("ENTITY_ID", col)) {
                 continue;
             }
             if (columns.length() > 0) {
@@ -936,7 +944,6 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         StringBuilder values = new StringBuilder();
         for (Map.Entry<String, Object> entry : parseEntityMap.entrySet()) {
             if (StringUtils.equals("ENTITY_ID", entry.getKey())
-                    || Objects.equals(entry.getKey(), parseEntityMap.get("ENTITY_ID"))
                     || Objects.isNull(entry.getValue())) {
                 continue;
             }
