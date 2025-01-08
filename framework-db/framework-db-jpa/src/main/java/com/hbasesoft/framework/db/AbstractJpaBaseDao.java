@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -95,7 +96,11 @@ public abstract class AbstractJpaBaseDao<T extends BaseEntity> implements BaseJp
                         ? cb.desc(root.get(wrapper.getOrderByList().get(i).getProperty()))
                         : cb.asc(root.get(wrapper.getOrderByList().get(i).getProperty()));
                 }
-                return query.orderBy(orders).where(predicates).getRestriction();
+
+                if (ArrayUtils.isNotEmpty(predicates)) {
+                    query.where(predicates);
+                }
+                return query.orderBy(orders).getRestriction();
             }
 
         };
