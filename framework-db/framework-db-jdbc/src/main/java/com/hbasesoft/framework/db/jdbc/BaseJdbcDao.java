@@ -29,7 +29,6 @@ import javax.persistence.Table;
 import javax.sql.DataSource;
 
 import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.criteria.AbstractQueryWrapper;
 import com.hbasesoft.framework.db.core.criteria.AbstractWrapper;
@@ -923,7 +922,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
     @Override
     public void saveBatch(final List<T> entitys) {
         if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
-            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+            throw new DaoException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
         if (CollectionUtils.isEmpty(entitys)) {
             return;
@@ -1095,7 +1094,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
     @Override
     public void updateBatch(final List<T> entitys) {
         if (entitys.size() > GlobalConstants.DEFAULT_LINES) {
-            throw new UtilException(ErrorCodeDef.TOO_MANY_OBJECTS);
+            throw new DaoException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
         if (CollectionUtils.isEmpty(entitys)) {
             return;
