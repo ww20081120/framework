@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.message.core.event;
 
+import java.io.Closeable;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,8 +15,6 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 import com.hbasesoft.framework.message.core.MessageSubscriber;
 import com.hbasesoft.framework.tracing.core.TraceLogUtil;
-
-import io.micrometer.tracing.Tracer.SpanInScope;
 
 /**
  * <Description> <br>
@@ -71,7 +70,7 @@ public interface EventListener<T> extends MessageSubscriber {
     @SuppressWarnings("unchecked")
     default void onMessage(final String channel, final byte[] data) {
         long current = System.currentTimeMillis();
-        try (SpanInScope scope = TraceLogUtil.before(current, channel, new Object[] {
+        try (Closeable scope = TraceLogUtil.before(current, channel, new Object[] {
             DataUtil.base64Encode(data)
         })) {
             EventData<T> eventData = SerializationUtil.unserial(EventData.class, data);

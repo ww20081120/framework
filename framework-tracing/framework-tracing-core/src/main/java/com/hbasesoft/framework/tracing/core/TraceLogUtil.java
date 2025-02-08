@@ -5,20 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.tracing.core;
 
+import java.io.Closeable;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.ServiceLoader;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.context.ApplicationContext;
-
-import com.hbasesoft.framework.common.utils.ContextHolder;
-import com.hbasesoft.framework.common.utils.PropertyHolder;
-
-import io.micrometer.tracing.Span;
-import io.micrometer.tracing.Tracer;
-import io.micrometer.tracing.Tracer.SpanInScope;
 
 /**
  * <Description> <br>
@@ -32,16 +23,26 @@ import io.micrometer.tracing.Tracer.SpanInScope;
  */
 public final class TraceLogUtil {
 
-    private TraceLogUtil() {
-    }
+    /**
+     * 
+     */
+    private static TraceLogUtil instance = new TraceLogUtil();
 
-    /** tracer */
-    private static Tracer tracer;
+    /** tracerAgent */
+    private final TracerAgent tracerAgent;
 
     /**
-     * transLoggerServices
+     * 
      */
-    private static Iterable<TraceLoggerService> transLoggerServices;
+    private TraceLogUtil() {
+        ServiceLoader<TracerAgent> tracerAgents = ServiceLoader.load(TracerAgent.class);
+        if (tracerAgents.iterator().hasNext()) {
+            tracerAgent = tracerAgents.iterator().next();
+        }
+        else {
+            tracerAgent = new MicrometerTracerAgent();
+        }
+    }
 
     /**
      * Description: 获取traceId <br>
@@ -51,12 +52,7 @@ public final class TraceLogUtil {
      * @return <br>
      */
     public static String getTraceId() {
-        Tracer tc = getTracer();
-        if (tc != null) {
-            // 使用CurrentTraceContext来获取当前活跃的Span
-            return tc.currentTraceContext().context().traceId();
-        }
-        return "No Trace in context";
+        return instance.tracerAgent.getTraceId();
     }
 
     /**
@@ -69,7 +65,7 @@ public final class TraceLogUtil {
      * @param args
      * @return <br>
      */
-    public static SpanInScope before(final long beginTime, final Method method, final Object[] args) {
+    public static Closeable before(final long beginTime, final Method method, final Object[] args) {
         return before(beginTime, getMethodSignature(method), args);
     }
 
@@ -83,33 +79,8 @@ public final class TraceLogUtil {
      * @param args
      * @return <br>
      */
-    public static SpanInScope before(final long beginTime, final String methodName, final Object[] args) {
-        Tracer tc = getTracer();
-        if (tc != null) {
-
-            // 父Span
-            Span parentSpan = tc.currentSpan();
-
-            // 当前的Span
-            Span span = null;
-            if (parentSpan != null) {
-                span = tc.spanBuilder().setParent(parentSpan.context()).name(methodName)
-                    .startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
-            }
-            else {
-                span = tc.spanBuilder().name(methodName).startTimestamp(beginTime, TimeUnit.MILLISECONDS).start();
-            }
-
-            SpanInScope scope = tc.withSpan(span);
-
-            // 执行记录
-            for (TraceLoggerService service : getTransLoggerServices()) {
-                service.before(span, parentSpan, beginTime, methodName, args);
-            }
-            return scope;
-        }
-
-        return null;
+    public static Closeable before(final long beginTime, final String methodName, final Object[] args) {
+        return instance.tracerAgent.before(beginTime, methodName, args);
     }
 
     /**
@@ -135,23 +106,7 @@ public final class TraceLogUtil {
      * @param returnValue <br>
      */
     public static void afterReturning(final long beginTime, final String methodName, final Object returnValue) {
-        Tracer tc = getTracer();
-        if (tc != null) {
-            // 当前的Span
-            Span span = tc.currentSpan();
-            if (span != null) {
-                long endTime = System.currentTimeMillis();
-                try {
-                    // 执行记录
-                    for (TraceLoggerService service : getTransLoggerServices()) {
-                        service.afterReturn(span, endTime, endTime - beginTime, methodName, returnValue);
-                    }
-                }
-                finally {
-                    span.end(endTime, TimeUnit.MILLISECONDS);
-                }
-            }
-        }
+        instance.tracerAgent.afterReturning(beginTime, methodName, returnValue);
     }
 
     /**
@@ -177,23 +132,7 @@ public final class TraceLogUtil {
      * @param e <br>
      */
     public static void afterThrowing(final long beginTime, final String methodName, final Throwable e) {
-        Tracer tc = getTracer();
-        if (tc != null) {
-            // 当前的Span
-            Span span = tc.currentSpan();
-            if (span != null) {
-                long endTime = System.currentTimeMillis();
-                try {
-                    // 执行记录
-                    for (TraceLoggerService service : getTransLoggerServices()) {
-                        service.afterThrow(span, endTime, endTime - beginTime, methodName, e);
-                    }
-                }
-                finally {
-                    span.end(endTime, TimeUnit.MILLISECONDS);
-                }
-            }
-        }
+        instance.tracerAgent.afterThrowing(beginTime, methodName, e);
     }
 
     /**
@@ -220,32 +159,4 @@ public final class TraceLogUtil {
         return sbuf.toString();
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author yang.zhipeng <br>
-     * @taskId <br>
-     * @return <br>
-     */
-    private static Iterable<TraceLoggerService> getTransLoggerServices() {
-        if (transLoggerServices == null) {
-            if (PropertyHolder.getBooleanProperty("logservice.aways.log", true)) {
-                transLoggerServices = ServiceLoader.load(TraceLoggerService.class);
-            }
-            else {
-                transLoggerServices = new ArrayList<>();
-            }
-        }
-        return transLoggerServices;
-    }
-
-    private static Tracer getTracer() {
-        if (tracer == null) {
-            ApplicationContext context = ContextHolder.getContext();
-            if (context != null) {
-                tracer = context.getBean(Tracer.class);
-            }
-        }
-        return tracer;
-    }
 }

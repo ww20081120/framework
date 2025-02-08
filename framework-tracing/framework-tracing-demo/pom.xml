@@ -11,7 +11,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-tracing-file</artifactId>
+			<artifactId>framework-tracing-skywalking</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

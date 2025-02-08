@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hbasesoft.framework.tracing.core.TraceLogUtil;
+
 import jakarta.annotation.Resource;
 
 /**
@@ -40,6 +42,6 @@ public class DemoController {
      */
     @GetMapping("/say")
     public String say(final @RequestParam("name") String name) {
-        return demoService.say(name);
+        return TraceLogUtil.getTraceId() + ":" + demoService.say(name);
     }
 }
