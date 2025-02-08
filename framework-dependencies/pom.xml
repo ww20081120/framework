@@ -92,6 +92,21 @@
 				<artifactId>framework-tracing-file</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-tracing-otlp</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-tracing-skywalking</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-tracing-zipkin</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
 
 			<!--framework-message-->
 			<dependency>
