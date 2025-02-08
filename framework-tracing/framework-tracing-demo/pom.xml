@@ -11,7 +11,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-tracing-skywalking</artifactId>
+			<artifactId>framework-tracing-file</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
@@ -44,5 +44,12 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 </project>
