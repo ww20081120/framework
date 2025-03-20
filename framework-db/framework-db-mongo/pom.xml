@@ -15,12 +15,15 @@
 			<artifactId>framework-db-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.hbasesoft.framework</groupId>-->
+<!--			<artifactId>framework-db-orm</artifactId>-->
+<!--			<version>${project.parent.version}</version>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-db-orm</artifactId>
-			<version>${project.parent.version}</version>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.mongodb</groupId>

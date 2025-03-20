@@ -1,1 +1,2 @@
 com.hbasesoft.framework.db.mongo.config.DataBase4MongoConfig
+com.hbasesoft.framework.db.mongo.config.DynamicTransactionManagementConfigurer

@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 public final class MongodbSourceUtil {
 
     /** 前缀长度 */
-    private static final int PREFIX_LENGTH = 6;
+    private static final int PREFIX_LENGTH = 8;
     /**
      * 初始化连接大小
      */
@@ -91,7 +91,7 @@ public final class MongodbSourceUtil {
     public static void init() {
         synchronized (dataSourceMap) {
             for (String key : PropertyHolder.getProperties().keySet()) {
-                if (key.endsWith("mongodb.uri")) {
+                if (key.endsWith(".mongodb.url")) {
                     String name = key.substring(0, key.indexOf(".mongodb.") + PREFIX_LENGTH);
                     LoggerUtil.info("开始注册{0}数据源", name);
                     regist(name, PropertyHolder.getProperties().get(key));
@@ -153,11 +153,12 @@ public final class MongodbSourceUtil {
     }
 
     private static MongoClient regist(final String name, final String dbParam) {
-        String uid = new StringBuilder().append(dbParam).toString();
+        String connectionStringWithRetryWrites = addRetryWritesParameter(dbParam);
+        String uid = new StringBuilder().append(connectionStringWithRetryWrites).toString();
         dataSourceMap.put(name, uid);
         MongoClient mongoDatabase = mongoTemplateHolder.get(uid);
         if (mongoDatabase == null) {
-            ConnectionString connectionString = new ConnectionString(dbParam);
+            ConnectionString connectionString = new ConnectionString(connectionStringWithRetryWrites);
             String database = connectionString.getDatabase();
             dateSourceNames.put(name, database);
             // 如果你需要自定义连接池设置，可以像下面这样创建：
@@ -172,6 +173,7 @@ public final class MongodbSourceUtil {
                     // 维护任务的频率 指定执行连接池维护任务的频率（毫秒），如定期检查和移除超时的连接。
                     .maintenanceFrequency(TIME_BETWEEN_EVICTION_RUNS_MILLIS, TimeUnit.MILLISECONDS)
                     .maxConnecting(MAX_ACTIVE)//建立的最大连接数
+
                     .build();
 
             MongoClientSettings settings = MongoClientSettings.builder()
@@ -182,6 +184,25 @@ public final class MongodbSourceUtil {
             mongoTemplateHolder.put(uid, mongoDatabase);
         }
         return mongoDatabase;
+    }
+
+    /**
+     * 动态添加 retryWrites=false 参数到连接字符串
+     * @param dbParam <br>
+     * @return String
+     */
+    private static String addRetryWritesParameter(final String dbParam) {
+        if (!dbParam.contains("retryWrites=false")) {
+            if (dbParam.contains("?")) {
+                // 如果已经有其他查询参数，则直接添加&retryWrites=false
+                return dbParam + "&retryWrites=false";
+            }
+            else {
+                // 如果没有查询参数，则添加?retryWrites=false
+                return dbParam + "?retryWrites=false";
+            }
+        }
+        return dbParam;
     }
 
     public static Collection<String> getAllDatasourceCode() {

@@ -1,0 +1,1 @@
+db.student.find({"AGE": 20})
