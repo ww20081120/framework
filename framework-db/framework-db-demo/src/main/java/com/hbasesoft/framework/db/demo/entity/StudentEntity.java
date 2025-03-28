@@ -1,18 +1,16 @@
 package com.hbasesoft.framework.db.demo.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.hbasesoft.framework.db.core.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * <Description> T_MEM_ACCOUNT的Entity<br>
- * 
+ *
  * @author 工具生成<br>
  * @version 1.0<br>
  * @CreateDate 2018年05月01日 <br>
@@ -58,7 +56,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -69,7 +67,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param id <br>
@@ -80,7 +78,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -91,7 +89,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param name <br>
@@ -102,7 +100,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -113,7 +111,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param age <br>
@@ -124,7 +122,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -135,7 +133,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param score <br>
@@ -146,7 +144,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -157,7 +155,7 @@ public class StudentEntity extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param courseName <br>

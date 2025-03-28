@@ -6,9 +6,11 @@
 package com.hbasesoft.framework.db.mongo;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +21,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
+import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
+
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoConstants;
@@ -47,7 +51,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
@@ -56,10 +59,15 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
-import org.springframework.data.mongodb.core.mapping.Field;
+import java.lang.reflect.Field;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import static com.hbasesoft.framework.common.ErrorCodeDef.DAO_PROPERTY_IS_EMPTY;
 
@@ -111,6 +119,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             Byte.class, byte.class,
             Boolean.class, boolean.class,
             String.class,
+            Date.class,
             BigInteger.class,
             BigDecimal.class
     );
@@ -305,11 +314,84 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 // 去掉下划线并首字母大写
                 String fieldName = "_id".equals(key) ? "id" : convertFieldName(key);
                 //找不到 就去父类找
-                java.lang.reflect.Field field = Objects.isNull(clazz.getDeclaredField(fieldName))
+                Field field = Objects.isNull(clazz.getDeclaredField(fieldName))
                     ? clazz.getSuperclass().getDeclaredField(fieldName) : clazz.getDeclaredField(fieldName);
+                if (field == null) {
+                    continue; // 如果字段不存在，则跳过
+                }
                 field.setAccessible(true);
-                Object object = convertValue(document.get(key), field.getType());
-                field.set(entity, object);
+                // 获取字段值
+                Object fieldValue = document.get(key);
+                // 如果字段类型是复杂类型（如自定义类），递归处理
+                if (List.class.isAssignableFrom(field.getType())) {
+                    List<?> mongoList;
+                    if (!(fieldValue instanceof List)) {
+                        mongoList = Collections.singletonList(fieldValue); // 将单个值包装成 List
+                    }
+                    else {
+                        mongoList = (List<?>) fieldValue;
+                    }
+                    ParameterizedType listType = (ParameterizedType) field.getGenericType();
+                    Class<?> listItemType = (Class<?>) listType.getActualTypeArguments()[0]; // 获取 List 的泛型类型
+                    List<Object> resultList = new ArrayList<>();
+                    for (Object item : mongoList) {
+                        if (SCALAR_TYPES.contains(listItemType)) {
+                            // 如果是基本数据类型，直接添加到结果列表
+                            resultList.add(item);
+                        }
+                        else {
+                            // 如果是复杂类型，递归解析
+                            Object nestedEntity = mapToEntity((Document) item, listItemType);
+                            resultList.add(nestedEntity);
+                        }
+                    }
+                    field.set(entity, resultList);
+                }
+                else if (Map.class.isAssignableFrom(field.getType())) {
+                    Map<String, Object> mongoMap;
+                    if (!(fieldValue instanceof Map)) {
+                        mongoMap = JSONObject.parseObject((String) fieldValue, Map.class);
+                    }
+                    else {
+                        mongoMap = (Map<String, Object>) fieldValue;
+                    }
+                    ParameterizedType mapType = (ParameterizedType) field.getGenericType();
+                    Class<?> valueType = (Class<?>) mapType.getActualTypeArguments()[1]; // 获取 Map 的 Value 泛型类型
+                    Map<String, Object> resultMap = new HashMap<>();
+                    for (Map.Entry<String, Object> entry : mongoMap.entrySet()) {
+                        String key1 = entry.getKey();
+                        Object value = entry.getValue();
+
+                        if (SCALAR_TYPES.contains(valueType)) {
+                            // 如果是基本数据类型，直接放入结果 Map
+                            resultMap.put(key1, value);
+                        }
+                        else {
+                            // 如果是复杂类型，递归解析
+                            Object nestedEntity = mapToEntity((Document) value, valueType);
+                            resultMap.put(key1, nestedEntity);
+                        }
+                    }
+                    field.set(entity, resultMap);
+                }
+                else  if (!SCALAR_TYPES.contains(field.getType())) {
+                    if (fieldValue instanceof Document) {
+                        // 递归处理嵌套对象
+                        Object nestedEntity = mapToEntity((Document) fieldValue, field.getType());
+                        field.set(entity, nestedEntity);
+                    }
+                    else if (fieldValue instanceof Map) {
+                        // 如果字段值是 Map，则将其转换为 Document
+                        Document nestedDoc = new Document((Map<String, Object>) fieldValue);
+                        Object nestedEntity = mapToEntity(nestedDoc, field.getType());
+                        field.set(entity, nestedEntity);
+                    }
+                }
+                else {
+                    // 否则，进行普通类型转换
+                    Object convertedValue = convertValue(fieldValue, field.getType());
+                    field.set(entity, "id".equals(fieldName) ? convertedValue.toString() : convertedValue);
+                }
             }
             return entity;
         }
@@ -330,9 +412,13 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             // 如果值为null或已经是目标类型的实例，则直接返回
             return value;
         }
-
         if (targetType == String.class) {
-            return value.toString();
+            if (value instanceof String) {
+                return value.toString();
+            }
+            else {
+                return JSONObject.toJSONString(value);
+            }
         }
         else if (Number.class.isAssignableFrom(targetType)) {
             BigDecimal number = new BigDecimal(value.toString());
@@ -385,9 +471,6 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         // 默认情况下尝试将值转换为字符串
         return value.toString();
     }
-
-
-
 
     /**
      * 将MongoDB中的字段名转换为Java实体类中的字段名
@@ -443,22 +526,58 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                     }
                     else if (item instanceof String && ((String) item).startsWith("$")) {
                         // 替换列表中的字符串占位符
-                        String strValue = (String) item;
-                        if (dataMap.containsKey(strValue.substring(1))) {
-                            list.set(i, dataMap.get(strValue.substring(1)));
-                        }
+                        list.set(i,  parseValue((String) value, dataMap));
                     }
                 }
             }
             else if (value instanceof String) {
-                String strValue = (String) value;
                 // 检查是否是需要替换的占位符
-                if (strValue.startsWith("$") && dataMap.containsKey(strValue.substring(1))) {
-                    doc.put(key, dataMap.get(strValue.substring(1)));
-                }
+                doc.put(key, parseValue((String) value, dataMap));
             }
         }
     }
+
+    /**
+     *  参数解析对$ 获取其内部值
+     * @param value
+     * @param dataMap
+     * @return Object
+     */
+    public static Object parseValue(final String value, final Map<String, Object> dataMap) {
+        if (value == null || dataMap == null || dataMap.isEmpty()) {
+            return value; // 返回原始值（如果输入无效）
+        }
+        // 去除外层 $ 或 ${} 提取参数名
+        String parameter = value;
+        if (parameter.startsWith("${") && parameter.endsWith("}")) {
+            // 处理 ${parameter} 格式
+            parameter = parameter.substring(2, parameter.length() - 1);
+        }
+        else if (parameter.startsWith("$")) {
+            // 处理 $parameter 格式
+            parameter = parameter.substring(1);
+        }
+        if (parameter == value) {
+            return value;
+        }
+
+        // 对参数名进行 . 切割
+        String[] parts = parameter.split("\\.");
+
+        // 从 dataMap 中逐层获取值
+        Object result = dataMap.get(parts[0]);
+        for (int i = 1; i < parts.length && result != null; i++) {
+            if (result instanceof Map) {
+                result = ((Map<?, ?>) result).get(parts[i]); // 获取下一层级的值
+            }
+            else {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(result));
+                result = jsonObject.get((parts[i]));
+            }
+        }
+        return result != null ? result : value; // 如果未找到值，返回原始值
+    }
+
 
 
     /**
@@ -565,7 +684,35 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      */
     @Override
     public void delete(final T entity) {
-        getMongoTemplate().remove(entity);
+        // 解析实体类并获取表结构信息 （true表示忽略空值）
+        Map<String, Object> columnValues = parseEntity(entity, true);
+        if (MapUtils.isEmpty(columnValues)) {
+            throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR);
+        }
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entity.getClass());
+        // 构建查询条件
+        Query query = buildQueryFromColumnValues(columnValues);
+        if (Objects.isNull(query.getQueryObject()) || query.getQueryObject().isEmpty()) {
+            throw new DaoException(ErrorCodeDef.PARAM_NOT_NULL, "删除条件");
+        }
+        getMongoTemplate().remove(query, collectionName);
+    }
+
+    /**
+     *  构建查询条件
+     * @param columnValues
+     * @return Query
+     */
+    private Query buildQueryFromColumnValues(final Map<String, Object> columnValues) {
+        Query query = new Query();
+        for (Map.Entry<String, Object> entry : columnValues.entrySet()) {
+            if (StringUtils.equals("ENTITY_ID", entry.getKey())) {
+                continue;
+            }
+            query.addCriteria(Criteria.where(entry.getKey()).is(entry.getValue()));
+        }
+        return query;
     }
 
     /**
@@ -581,13 +728,14 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             throw new DaoException(ErrorCodeDef.TOO_MANY_OBJECTS);
         }
         // 构建查询条件，这里假设每个实体都有一个 getId 方法返回其唯一标识符
-        java.lang.reflect.Field field = findPrimaryKeyField(entities.iterator().next().getClass());
-
-        if (null == field) {
-            throw new IllegalStateException("Document does not have an @Id annotated field.");
+        Field field = findPrimaryKeyField(entities.iterator().next().getClass());
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entities.iterator().next().getClass());
+        if (null == field || StringUtils.isBlank(collectionName)) {
+            throw new IllegalStateException("Entity does not have an @Id annotated field.");
         }
-        String key = field.getAnnotation(Field.class) != null
-                ? field.getAnnotation(Field.class).name() : field.getName();
+        String key = field.getAnnotation(Column.class) != null
+                ? "_id" : field.getName();
 
         List<Object> idList = entities.stream()
                 .map(entity -> {
@@ -601,7 +749,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
 
         Query query = new Query(Criteria.where(key).in(idList));
         // 使用 MongoTemplate 执行批量删除
-        getMongoTemplate().remove(query, entityClazz);
+        getMongoTemplate().remove(query, collectionName);
     }
 
     /**
@@ -613,14 +761,16 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      */
     @Override
     public void deleteById(final Serializable id) {
-        java.lang.reflect.Field field = findPrimaryKeyField(getEntityClazz());
-        if (null == field) {
-            throw new IllegalStateException("Document does not have an @Id annotated field.");
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
+        Field field = findPrimaryKeyField(getEntityClazz());
+        if (null == field || StringUtils.isBlank(collectionName)) {
+            throw new IllegalStateException("Entity does not have an @Id annotated field.");
         }
-        String key = field.getAnnotation(Field.class) != null
-                ? field.getAnnotation(Field.class).name() : field.getName();
+        String key = field.getAnnotation(Column.class) != null
+                ? "_id" : field.getName();
         Query query = new Query(Criteria.where(key).is(id));
-        getMongoTemplate().remove(query, entityClazz);
+        getMongoTemplate().remove(query, collectionName);
     }
 
     /**
@@ -635,14 +785,16 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         if (ids == null || ids.isEmpty()) {
             return;
         }
-        java.lang.reflect.Field field = findPrimaryKeyField(getEntityClazz());
-        if (null == field) {
-            throw new IllegalStateException("Document does not have an @Id annotated field.");
+        Field field = findPrimaryKeyField(getEntityClazz());
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
+        if (null == field || StringUtils.isBlank(collectionName)) {
+            throw new IllegalStateException("Entity does not have an @Id annotated field.");
         }
-        String key = field.getAnnotation(Field.class) != null
-                ? field.getAnnotation(Field.class).name() : field.getName();
+        String key = field.getAnnotation(Column.class) != null
+                ? "_id" : field.getName();
         Query query = new Query(Criteria.where(key).in(new ArrayList<>(ids)));
-        getMongoTemplate().remove(query, entityClazz);
+        getMongoTemplate().remove(query, collectionName);
     }
 
     /**
@@ -659,9 +811,11 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
 
     private void deleteBySpecification(final AbstractWrapper<?> wrapper) {
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
-        if (!entityClazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document.class)) {
-            throw new IllegalArgumentException("The provided class is not an Document.");
+        if (!entityClazz.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
         Query query = new Query();
         Criteria criteria = toPredicate(wrapper, parseEntityNameMap);
@@ -669,7 +823,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         Assert.notNull(criteria, ErrorCodeDef.PARAM_NOT_NULL, "删除的条件");
         query.addCriteria(criteria);
         //执行 sql
-        getMongoTemplate().remove(query, entityClazz);
+        getMongoTemplate().remove(query, collectionName);
     }
 
 
@@ -713,18 +867,18 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      * @return <M> M
      */
     public <M> M getBySpecification(final AbstractQueryWrapper<T> specification, final Class<M> clazz) {
-
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
-        if (!entityClazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document.class)) {
-            throw new IllegalArgumentException("The provided class is not an Document.");
+        if (!entityClazz.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
         Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
-        TypedAggregation<T> aggregation = toQueryPredicate(parseEntityNameMap, specification, entityClazz, null, null);
-
+        Aggregation aggregation = toQueryPredicate(parseEntityNameMap, specification, null, null);
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
         if (SCALAR_TYPES.contains(clazz)) {
             //执行 sql
-            AggregationResults<Map> results = getMongoTemplate().aggregate(aggregation, Map.class);
+            AggregationResults<Map> results = getMongoTemplate().aggregate(aggregation, collectionName, Map.class);
             Assert.isTrue(Objects.nonNull(results) && Objects.nonNull(results.getMappedResults()),
                     ErrorCodeDef.EXECUTE_ERROR);
             //基本数据类型如计算等 操作 查询不到的时候结果是null 返回基本数据类型默认值
@@ -737,21 +891,22 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 return (M) result.get(targetField);
             }
         }
-        AggregationResults<M> results = getMongoTemplate().aggregate(aggregation, entityClazz, clazz);
+        AggregationResults<Map> results = getMongoTemplate().aggregate(aggregation, collectionName, Map.class);
         Assert.isTrue(Objects.nonNull(results) && Objects.nonNull(results.getMappedResults()),
                 ErrorCodeDef.EXECUTE_ERROR);
-        return (M) results.getMappedResults().stream().findFirst().orElse(null);
+        // 解析实体类，获取字段映射关系
+        Map<String, Object> columnMapping = parseEntityName(clazz, false);
+        T t = queryMapToEntity(results.getMappedResults().stream().findFirst().get(), (Class<T>) clazz, columnMapping);
+        return (M) t;
     }
 
-    private TypedAggregation<T> toQueryPredicate(final Map<String, Object> parseEntityNameMap,
-                                                 final AbstractQueryWrapper<T> specification, final Class<T> clazz,
-                                                 final Integer pi, final Integer pageSize) {
+    private Aggregation toQueryPredicate(final Map<String, Object> parseEntityNameMap,
+                                         final AbstractQueryWrapper<T> specification,
+                                         final Integer pi, final Integer pageSize) {
         // 构建匹配条件 (WHERE)
         Criteria criteria = toPredicate(specification, parseEntityNameMap);
-
         // 创建聚合管道(排序和分组 使用)
         List<AggregationOperation> operations = new ArrayList<>();
-
         // 添加匹配操作
         if (criteria != null && !criteria.getCriteriaObject().isEmpty()) {
             MatchOperation matchOperation = Aggregation.match(criteria);
@@ -761,8 +916,31 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         if (specification.getGroupList().isEmpty()) {
             if (specification != null && specification.getSelectionList() != null
                     && !specification.getSelectionList().isEmpty()) {
+                // 分离普通字段和运算字段
+                List<TempSelection> regularFields = new ArrayList<>();
+                List<TempSelection> aggregationFields = new ArrayList<>();
+                //需要group的类型
+                List<Operator> aggregationOperators = Arrays.asList(Operator.AVG, Operator.COUNT, Operator.MAX,
+                        Operator.MIN, Operator.SUM, Operator.SUMMING);
                 for (TempSelection selection : specification.getSelectionList()) {
-                    toSelection(operations, parseEntityNameMap, selection);
+                    if (aggregationOperators.contains(selection.getOperator())) {
+                        aggregationFields.add(selection);
+                    }
+                    else {
+                        regularFields.add(selection);
+                    }
+                }
+                // 处理普通字段
+                if (CollectionUtils.isNotEmpty(regularFields)) {
+                    ProjectionOperation projectOperation = Aggregation.project();
+                    for (TempSelection selection : regularFields) {
+                        projectOperation = toSelection(projectOperation, parseEntityNameMap, selection);
+                    }
+                    operations.add(projectOperation);
+                }
+                // 处理运算字段
+                if (CollectionUtils.isNotEmpty(aggregationFields)) {
+                    handleAggregationOperations(operations, aggregationFields, parseEntityNameMap);
                 }
             }
             else {
@@ -770,27 +948,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 operations.add(Aggregation.project().andInclude(parseEntityNameMap.values().toArray(new String[0])));
             }
         }
-
-        // 处理分组 (GROUP BY)
-//        if (!specification.getGroupList().isEmpty()) {
-//            GroupOperation groupOperation = Aggregation.group(
-//                    specification.getGroupList().stream()
-//                            .map(group -> parseEntityNameMap.getOrDefault(group, group).toString())
-//                            .toArray(String[]::new));
-//
-//            if (specification != null && specification.getSelectionList() != null
-//                    && !specification.getSelectionList().isEmpty()) {
-//
-//            }else{
-//                // 将所有字段都放到 $group 阶段中，并保持原来的字段名
-//                for (Object field : parseEntityNameMap.values()) {
-//                    groupOperation = groupOperation.last((String) field).as((String) field);
-//                }
-//            }
-//            // 添加 $group 阶段到聚合操作中
-//            operations.add(groupOperation);
-//        }
-
+        // 或者使用 ObjectMapper 转换为 JSON 字符串
         if (!specification.getGroupList().isEmpty()) {
             // 获取分组字段列表，并转换为需要的形式
             List<String> groupFields = specification.getGroupList().stream()
@@ -808,8 +966,8 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 for (Object field : parseEntityNameMap.values()) {
                     String fieldName = field.toString();
                     if (!groupFields.contains(fieldName)) { // 不对分组字段应用 $last 操作
-                        groupOperation = groupOperation.last(
-                                "id".equals(fieldName) ? "_" + fieldName : fieldName).as(fieldName);
+                        groupOperation = groupOperation.last(fieldName).as("_id".equals(fieldName)
+                                ? "collect" + fieldName : fieldName);
                     }
                 }
             }
@@ -818,8 +976,6 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             ProjectionOperation projectOperation = Aggregation.project();
             // 首先排除默认的_id字段
             projectOperation = projectOperation.andExclude("_id");
-
-//            projectOperation = projectOperation.and("_id").as("id");
 
             // 提取分组字段
             if (groupFields.size() == 1) {
@@ -849,7 +1005,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             else {
                 for (Object field : parseEntityNameMap.values()) {
                     String fieldName = field.toString();
-                    if (!groupFields.contains(fieldName)) { // 排除分组字段
+                    if (!groupFields.contains(fieldName) && !"_id".equals(fieldName)) { // 排除分组字段
                         projectOperation = projectOperation.andInclude(fieldName);
                     }
                 }
@@ -861,7 +1017,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                     projectOperation = projectOperation.and(fieldName).as(alia);
                 }
             }
-
+            projectOperation = projectOperation.and("collect_id").as("id");
 
             // 添加 $group 和 $project 阶段到聚合操作中
             operations.add(groupOperation);
@@ -893,7 +1049,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             // 添加限制操作以限制返回的文档数量为 1000
             operations.add(Aggregation.limit(MAX_SIZE));
         }
-        return Aggregation.newAggregation(clazz, operations);
+        return Aggregation.newAggregation(operations);
     }
 
     private TypedAggregation<T> toCountQueryPredicate(final Map<String, Object> parseEntityNameMap,
@@ -917,6 +1073,49 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         // 返回构建好的聚合对象
         return Aggregation.newAggregation(clazz, operations);
     }
+
+    private String getFieldName(final String field, final Map<String, Object> parseEntityNameMap) {
+        String[] fieldParts = field.split("\\.", 2);
+        String topLevelField = fieldParts[0];
+        String mappedTopLevelField = (String) parseEntityNameMap.getOrDefault(topLevelField, topLevelField);
+        return fieldParts.length > 1 ? mappedTopLevelField + "." + fieldParts[1] : mappedTopLevelField;
+    }
+
+    private void handleAggregationOperations(final List<AggregationOperation> operations,
+                                             final List<TempSelection> aggregationFields,
+                                             final Map<String, Object> parseEntityNameMap) {
+        GroupOperation group = Aggregation.group();
+        // 添加运算字段
+        for (TempSelection selection : aggregationFields) {
+            // 分割字段名称以支持嵌套字段
+            String fieldName = getFieldName(selection.getField(), parseEntityNameMap);
+            String alias = selection.getAlias();
+            switch (selection.getOperator()) {
+                case SUM:
+                    group.sum(fieldName).as(alias != null ? alias : fieldName);
+                    break;
+                case AVG:
+                    group.avg(fieldName).as(alias != null ? alias : fieldName);
+                    break;
+                case COUNT:
+                    group.count().as(alias != null ? alias : "count");
+                    break;
+                case MAX:
+                    group.max(fieldName).as(alias != null ? alias : fieldName);
+                    break;
+                case MIN:
+                    group.min(fieldName).as(alias != null ? alias : fieldName);
+                    break;
+                case DIFF:
+                    throw new DaoException(ErrorCodeDef.PARAM_ERROR, "DIFF requires two fields.");
+                default:
+                    break;
+            }
+        }
+        // 将合并后的 $group 阶段添加到操作列表中
+        operations.add(group);
+    }
+
 
     private GroupOperation groupToSelection(final GroupOperation groupOperation,
                                             final Map<String, Object> parseEntityNameMap,
@@ -963,56 +1162,127 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
     }
 
 
-    private void toSelection(final List<AggregationOperation> operations, final Map<String, Object> parseEntityNameMap,
-                             final TempSelection tempSelection) {
+    private ProjectionOperation toSelection(final ProjectionOperation projectOperation,
+            final Map<String, Object> parseEntityNameMap, final TempSelection tempSelection) {
         // 分割字段名称以支持嵌套字段
-        String[] fieldParts = tempSelection.getField().split("\\.", 2);
-        String topLevelField = fieldParts[0];
-        String mappedTopLevelField = (String) parseEntityNameMap.getOrDefault(topLevelField, topLevelField);
-        String fieldName = fieldParts.length > 1 ? mappedTopLevelField + "." + fieldParts[1] : mappedTopLevelField;
+        String fieldName = getFieldName(tempSelection.getField(), parseEntityNameMap);
         String alias = tempSelection.getAlias();
         switch (tempSelection.getOperator()) {
-            case SUM:
-                operations.add(Aggregation.group().sum(fieldName).as(alias != null ? alias : fieldName));
-                break;
-            case AVG:
-                operations.add(Aggregation.group().avg(fieldName).as(alias != null ? alias : fieldName));
-                break;
-            case COUNT:
-                operations.add(Aggregation.group().count().as(alias != null ? alias : "count"));
-                break;
-            case MAX:
-                operations.add(Aggregation.group().max(fieldName).as(alias != null ? alias : fieldName));
-                break;
-            case MIN:
-                operations.add(Aggregation.group().min(fieldName).as(alias != null ? alias : fieldName));
-                break;
             case DIFF:
                 if (tempSelection.getField2() != null) {
                     String secondFieldName = parseEntityNameMap.getOrDefault(tempSelection.getField2(),
                             tempSelection.getField2()).toString();
-                    // 使用 $project 来计算差异
-                    operations.add(Aggregation.project().andExpression(String.format("%s - %s",
-                            fieldName, secondFieldName)).as(alias));
+                    return projectOperation.andExpression(String.format("%s - %s", fieldName, secondFieldName))
+                            .as(alias);
                 }
                 else {
                     throw new DaoException(ErrorCodeDef.PARAM_ERROR, "DIFF requires two fields.");
                 }
-                break;
-            case SUMMING:
-                if (tempSelection.getField2() != null) {
-                    String secondFieldName = parseEntityNameMap.getOrDefault(tempSelection.getField2(),
-                            tempSelection.getField2()).toString();
-                    operations.add(Aggregation.group().sum(String.format("%s + %s", fieldName,
-                            secondFieldName)).as(alias));
-                }
-                else {
-                    throw new DaoException(ErrorCodeDef.PARAM_ERROR, "SUMMING requires two fields.");
-                }
-                break;
             default:
-                operations.add(Aggregation.group().first(fieldName).as(alias != null ? alias : fieldName));
-                break;
+                // 普通字段选择使用 $project
+                return projectOperation.and(fieldName).as(alias != null ? alias : fieldName);
+        }
+    }
+
+    /**
+     * 结果映射
+     * @param object
+     * @param queryEntityClazz
+     * @param columnMapping
+     * @return T
+     */
+    private T queryMapToEntity(final Map object, final Class<T> queryEntityClazz,
+                               final Map<String, Object> columnMapping) {
+        try {
+            if (object == null || object.size() == 0) {
+                return null;
+            }
+            // 创建实体类实例
+            T entity = queryEntityClazz.getDeclaredConstructor().newInstance();
+            for (Object keyObj : object.keySet()) {
+                String mongoFieldName = (String) keyObj;
+                Object mongoFieldValue = object.get(mongoFieldName);
+
+                // 检查是否存在 @Column 注解映射
+                String fieldName = (String) columnMapping.get(mongoFieldName);
+                if (fieldName == null) {
+                    // 如果没有 @Column 注解，转换字段名格式
+                    fieldName = convertFieldName(mongoFieldName);
+                }
+
+                // 设置字段值
+                Field field = Objects.isNull(queryEntityClazz.getDeclaredField(fieldName))
+                        ? queryEntityClazz.getSuperclass().getDeclaredField(fieldName)
+                        : queryEntityClazz.getDeclaredField(fieldName);
+                if (List.class.isAssignableFrom(field.getType())) {
+                    List<?> mongoList;
+                    if (!(mongoFieldValue instanceof List)) {
+                        mongoList = Collections.singletonList(mongoFieldValue); // 将单个值包装成 List
+                    }
+                    else {
+                        mongoList = (List<?>) mongoFieldValue;
+                    }
+                    ParameterizedType listType = (ParameterizedType) field.getGenericType();
+                    Class<?> listItemType = (Class<?>) listType.getActualTypeArguments()[0]; // 获取 List 的泛型类型
+                    List<Object> resultList = new ArrayList<>();
+                    for (Object item : mongoList) {
+                        if (SCALAR_TYPES.contains(listItemType)) {
+                            // 如果是基本数据类型，直接添加到结果列表
+                            resultList.add(item);
+                        }
+                        else {
+                            // 如果是复杂类型，递归解析
+                            Object nestedEntity = queryMapToEntity((Map<String, Object>) item,
+                                    (Class<T>) listItemType, new HashMap<>());
+                            resultList.add(nestedEntity);
+                        }
+                    }
+                    field.set(entity, resultList);
+                }
+                else if (Map.class.isAssignableFrom(field.getType())) {
+                    Map<String, Object> mongoMap;
+                    if (!(mongoFieldValue instanceof Map)) {
+                        mongoMap = JSONObject.parseObject((String) mongoFieldValue, Map.class);
+                    }
+                    else {
+                        mongoMap = (Map<String, Object>) mongoFieldValue;
+                    }
+                    ParameterizedType mapType = (ParameterizedType) field.getGenericType();
+                    Class<?> valueType = (Class<?>) mapType.getActualTypeArguments()[1]; // 获取 Map 的 Value 泛型类型
+                    Map<String, Object> resultMap = new HashMap<>();
+                    for (Map.Entry<String, Object> entry : mongoMap.entrySet()) {
+                        String key = entry.getKey();
+                        Object value = entry.getValue();
+
+                        if (SCALAR_TYPES.contains(valueType)) {
+                            // 如果是基本数据类型，直接放入结果 Map
+                            resultMap.put(key, value);
+                        }
+                        else {
+                            // 如果是复杂类型，递归解析
+                            Object nestedEntity = queryMapToEntity((Map<String, Object>) value,
+                                    (Class<T>) valueType, new HashMap<>());
+                            resultMap.put(key, nestedEntity);
+                        }
+                    }
+                    field.set(entity, resultMap);
+                }
+                else if (!SCALAR_TYPES.contains(field.getType())) {
+                        // 如果字段值是对象或者map，就默认转map
+                    Object nestedEntity = queryMapToEntity((Map<String, Object>) mongoFieldValue,
+                            (Class<T>) field.getType(), columnMapping);
+                    field.set(entity, nestedEntity);
+                }
+                else  {
+                    field.setAccessible(true);
+                    field.set(entity, "_id".equals(mongoFieldName) ? mongoFieldValue.toString() : mongoFieldValue);
+                }
+            }
+            return entity;
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new DaoException(DAO_PROPERTY_IS_EMPTY);
         }
     }
 
@@ -1070,15 +1340,21 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      */
     @Override
     public T get(final Serializable id) {
-        java.lang.reflect.Field field = findPrimaryKeyField(getEntityClazz());
+        Field field = findPrimaryKeyField(getEntityClazz());
         if (null == field) {
-            throw new IllegalStateException("Document does not have an @Id annotated field.");
+            throw new IllegalStateException("Entity does not have an @Id annotated field.");
         }
-        String key = field.getAnnotation(Field.class) != null
-                ? field.getAnnotation(Field.class).name() : field.getName();
+        String key = field.getAnnotation(Column.class) != null
+                ? "_id" : field.getName();
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
         Query query = new Query(Criteria.where(key).is(id));
-        T one = getMongoTemplate().findOne(query, entityClazz);
-        return one;
+
+        Map one = getMongoTemplate().findOne(query, Map.class, collectionName);
+
+        Map<String, Object> columnMapping = parseEntityName(entityClazz, false);
+        T t = queryMapToEntity(one, entityClazz, columnMapping);
+        return t;
     }
 
     /**
@@ -1167,18 +1443,22 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      */
     public <M> List<M> queryBySpecification(final AbstractQueryWrapper<T> wrapper, final Class<M> clazz) {
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
-        if (!entityClazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document.class)) {
-            throw new IllegalArgumentException("The provided class is not an Document.");
+        if (!entityClazz.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
         Assert.notNull(wrapper, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
 
-        TypedAggregation<T> queryPredicate = toQueryPredicate(parseEntityNameMap, wrapper,
-                (Class<T>) clazz, null, null);
-
+        Aggregation queryPredicate = toQueryPredicate(parseEntityNameMap, wrapper, null, null);
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
         // 使用 MongoTemplate 执行聚合查询，并将结果映射到指定的类
-        List<M> results = getMongoTemplate().aggregate(queryPredicate, entityClazz, clazz).getMappedResults();
-        return results;
+        List<Map> results = getMongoTemplate().aggregate(queryPredicate, collectionName, Map.class).getMappedResults();
+
+        Map<String, Object> columnMapping = parseEntityName(clazz, false);
+        List<M> resultList = (List<M>) results.stream().map(result ->
+                queryMapToEntity(result, (Class<T>) clazz, columnMapping)).collect(Collectors.toList());
+        return resultList;
     }
 
 
@@ -1237,8 +1517,15 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
         // 创建一个空的 Query 对象，这将匹配集合中的所有文档
         Query query = new Query();
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
         // 执行查询并返回结果列表
-        return getMongoTemplate().find(query, entityClazz);
+        List<Map> objects = getMongoTemplate().find(query, Map.class, collectionName);
+
+        Map<String, Object> columnMapping = parseEntityName(entityClazz, false);
+        List<T> resultList = objects.stream().map(result ->
+                queryMapToEntity(result, entityClazz, columnMapping)).collect(Collectors.toList());
+        return resultList;
     }
 
     /**
@@ -1326,26 +1613,30 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      * @param <M>
      * @return <M> PagerList<M>
      */
-    @Override
-    public <M> PagerList<M> queryPagerBySpecification(final AbstractQueryWrapper<T> wrapper, final int pi,
+    private <M> PagerList<M> queryPagerBySpecification(final AbstractQueryWrapper<T> wrapper, final int pi,
                                                       final int ps, final Class<M> clazz) {
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
-        if (!entityClazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document.class)) {
-            throw new IllegalArgumentException("The provided class is not an Document.");
+        if (!entityClazz.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
         Assert.notNull(wrapper, ErrorCodeDef.PARAM_NOT_NULL, "查询条件");
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
         int pageSize = ps < 1 ? PAGE_SIZE : ps;
         int pageIndex = pi < 1 ? 1 : pi;
-        TypedAggregation<T> queryPredicate = toQueryPredicate(parseEntityNameMap,
-                wrapper, (Class<T>) clazz, pageIndex, pageSize);
-
+        Aggregation queryPredicate = toQueryPredicate(parseEntityNameMap,
+                wrapper, pageIndex, pageSize);
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entityClazz);
         // 使用 MongoTemplate 执行聚合查询，并将结果映射到指定的类
-        List<M> results = getMongoTemplate().aggregate(queryPredicate, entityClazz, clazz).getMappedResults();
+        List<Map> results = getMongoTemplate().aggregate(queryPredicate, collectionName, Map.class).getMappedResults();
+
+        Map<String, Object> columnMapping = parseEntityName(clazz, false);
+        List<M> resultList = (List<M>) results.stream().map(result ->
+                queryMapToEntity(result, (Class<T>) clazz, columnMapping)).collect(Collectors.toList());
 
         TypedAggregation<T> countQueryPredicate = toCountQueryPredicate(parseEntityNameMap, wrapper, (Class<T>) clazz);
         AggregationResults<BasicDBObject> countResults =
-                getMongoTemplate().aggregate(countQueryPredicate, entityClazz, BasicDBObject.class);
+                getMongoTemplate().aggregate(countQueryPredicate, collectionName, BasicDBObject.class);
         BasicDBObject countResult = countResults.getMappedResults().stream().findFirst().orElse(new BasicDBObject());
         long totalCount = countResult.getLong("total", 0L);
 
@@ -1354,7 +1645,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         pagerList.setPageIndex(pi);
         pagerList.setPageSize(pageSize);
         pagerList.setTotalCount(totalCount);
-        pagerList.addAll(results);
+        pagerList.addAll(resultList);
         return pagerList;
     }
 
@@ -1490,8 +1781,18 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      */
     @Override
     public void save(final T entity) {
-        getMongoTemplate().save(entity);
 
+        Map<String, Object> columnValues = parseEntity(entity, false);
+        if (MapUtils.isEmpty(columnValues)) {
+            throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR);
+        }
+        //删除主键标识
+        columnValues.remove("ENTITY_ID");
+        // 获取文档名称（集合名称）
+        String collectionName = getTableName(entity.getClass());
+        // 将实体对象转换为 MongoDB 文档
+        Document document = new Document(columnValues);
+        getMongoTemplate().insert(document, collectionName);
     }
 
     /**
@@ -1510,7 +1811,21 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         if (CollectionUtils.isEmpty(entitys)) {
             return;
         }
-        getMongoTemplate().insert(entitys, entitys.get(0).getClass());
+        // 获取集合名称
+        String collectionName = getTableName(entitys.get(0).getClass());
+        // 将实体列表转换为 MongoDB 文档列表
+        List<Document> documents = new ArrayList<>();
+        for (T entity : entitys) {
+            Map<String, Object> columnValues = parseEntity(entity, false); // 解析实体类
+            if (MapUtils.isEmpty(columnValues)) {
+                continue;
+            }
+            //删除主键标识
+            columnValues.remove("ENTITY_ID");
+            documents.add(new Document(columnValues));
+        }
+        // 构建查询条件，这里假设每个实体都有一个 getId 方法返回其唯一标识符
+        getMongoTemplate().insert(documents, collectionName);
     }
 
     /**
@@ -1543,8 +1858,10 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
             update.set(entry.getKey(), entry.getValue());
 
         }
+        // 获取集合名称
+        String collectionName = getTableName(pojo.getClass());
         // 执行更新操作
-        getMongoTemplate().updateFirst(query, update, pojo.getClass());
+        getMongoTemplate().updateFirst(query, update, collectionName);
 
 
     }
@@ -1564,13 +1881,12 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
     /**
      * @param wrapper
      */
-    @Override
-    public void updateBySpecification(final UpdateWrapper<T> wrapper) {
+    private void updateBySpecification(final UpdateWrapper<T> wrapper) {
 
         Assert.notEmpty(wrapper.getValueMap(), ErrorCodeDef.PARAM_NOT_NULL, "修改的内容");
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
-        if (!entityClazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document.class)) {
-            throw new IllegalArgumentException("The provided class is not an Document.");
+        if (!entityClazz.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
         //获取 解析实体类，提取带有@Column注解的字段及属性名称
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
@@ -1588,8 +1904,10 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 ErrorCodeDef.PARAM_NOT_NULL, "修改的条件");
         //执行 sql
         Query query = new Query(criteria);
+        // 获取集合名称
+        String collectionName = getTableName(entityClazz);
         // 执行更新操作
-        getMongoTemplate().updateMulti(query, update, entityClazz);
+        getMongoTemplate().updateMulti(query, update, collectionName);
     }
 
     /**
@@ -1639,13 +1957,12 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
     /**
      * @param wrapper
      */
-    @Override
-    public void updateBySpecification(final LambdaUpdateWrapper<?> wrapper) {
+    private void updateBySpecification(final LambdaUpdateWrapper<?> wrapper) {
 
         Assert.notEmpty(wrapper.getValueMap(), ErrorCodeDef.PARAM_NOT_NULL, "修改的内容");
         Assert.notNull(entityClazz, ErrorCodeDef.PROXY_TARGET_NOT_FOUND);
-        if (!entityClazz.isAnnotationPresent(org.springframework.data.mongodb.core.mapping.Document.class)) {
-            throw new IllegalArgumentException("The provided class is not an Document.");
+        if (!entityClazz.isAnnotationPresent(Entity.class)) {
+            throw new IllegalArgumentException("The provided class is not an Entity.");
         }
         //获取 解析实体类，提取带有@Column注解的字段及属性名称
         Map<String, Object> parseEntityNameMap = parseEntityName(entityClazz, true);
@@ -1661,8 +1978,10 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 ErrorCodeDef.PARAM_NOT_NULL, "修改的条件");
         //执行 sql
         Query query = new Query(criteria);
+        // 获取集合名称
+        String collectionName = getTableName(entityClazz);
         // 执行更新操作
-        getMongoTemplate().updateMulti(query, update, entityClazz);
+        getMongoTemplate().updateMulti(query, update, collectionName);
     }
 
     /**
@@ -1678,22 +1997,45 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
     }
 
     /**
+     * 根据@Entity注解获取表名，默认使用类名的小写形式
+     *
+     * @param entityClass
+     * @return String
+     */
+    private String getTableName(final Class<?> entityClass) {
+        // 根据@Entity注解获取表名，默认使用类名的小写形式
+        Entity entityAnnotation = entityClass.getAnnotation(Entity.class);
+        if (entityAnnotation != null && !entityAnnotation.name().isEmpty()) {
+            return entityAnnotation.name();
+        }
+        else {
+            Table tableAnnotation = entityClass.getAnnotation(Table.class);
+            if (tableAnnotation != null && !tableAnnotation.name().isEmpty()) {
+                return tableAnnotation.name();
+            }
+            return entityClass.getSimpleName().toLowerCase();
+        }
+    }
+
+    /**
      * 解析实体类，提取带有@Column注解的字段及其值
      *
      * @param entity
-     * @param continueEntity
+     * @param continueEntity   这是一个控制参数，允许调用者决定是否忽略空值字段。
      * @return Map<String, Object>
      */
     private Map<String, Object> parseEntity(final T entity, final boolean continueEntity) {
         // 解析实体类，提取带有@Column注解的字段及其值
         Map<String, Object> columnValues = new HashMap<>();
         try {
-            for (java.lang.reflect.Field field : entity.getClass().getDeclaredFields()) {
-                Field columnAnnotation = field.getAnnotation(Field.class);
+            for (Field field : entity.getClass().getDeclaredFields()) {
+                Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation != null) {
                     field.setAccessible(true); // 取消Java的访问控制检查
                     if (field.isAnnotationPresent(Id.class)) {
-                        columnValues.put("ENTITY_ID", columnAnnotation.name());
+                        columnValues.put("ENTITY_ID", "_id");
+                        columnValues.put("_id", field.get(entity));
+                        continue;
                     }
                     if (continueEntity && Objects.isNull(field.get(entity))) {
                         continue;
@@ -1713,45 +2055,8 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
     /**
      * 解析实体类，提取带有@Column注解的字段及属性名称
      *
-     * @param entity
-     * @param continueEntity
-     * @return Map<String, Object>
-     */
-    private Map<String, Object> parseEntityName(final T entity, final boolean continueEntity) {
-        // 解析实体类，提取带有@Column注解的name 和其对应的 类的属性名
-        Map<String, Object> columnValues = new HashMap<>();
-        try {
-            // 获取类的所有声明字段，包括私有字段
-            for (java.lang.reflect.Field field : entity.getClass().getDeclaredFields()) {
-                // 检查字段是否有@Column注解
-                if (field.isAnnotationPresent(Field.class)) {
-                    Field columnAnnotation = field.getAnnotation(Field.class);
-                    field.setAccessible(true); // 取消Java的访问控制检查
-                    String columnName = columnAnnotation.name(); // 获取@Column注解的name属性
-                    String fieldName = field.getName(); // 获取字段名
-                    if (continueEntity && Objects.isNull(field.get(entity))) {
-                        continue;
-                    }
-                    if (field.isAnnotationPresent(Id.class)) {
-                        columnValues.put("ENTITY_ID", columnName);
-                    }
-                    // 将@Column注解的name和字段名存入map
-                    columnValues.put(columnName, fieldName);
-                }
-            }
-        }
-        catch (IllegalAccessException e) {
-            logger.error(e.getMessage(), e);
-            new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
-        }
-        return columnValues;
-    }
-
-    /**
-     * 解析实体类，提取带有@Column注解的字段及属性名称
-     *
      * @param clazz
-     * @param keyIsFieldName 当 为true的时候  那么 属性名为key
+     * @param keyIsFieldName 当 为true的时候  那么 属性名为key 当 为false的时候  那么 @Column注解的name为key
      * @return Map<String, Object>
      */
     private Map<String, Object> parseEntityName(final Class<?> clazz, final boolean keyIsFieldName) {
@@ -1759,11 +2064,13 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         Map<String, Object> columnValues = new HashMap<>();
 
         // 获取类的所有声明字段，包括私有字段
-        for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
+        for (Field field : clazz.getDeclaredFields()) {
             // 检查字段是否有@Column注解
-            if (field.isAnnotationPresent(Field.class)) {
-                Field columnAnnotation = field.getAnnotation(Field.class);
-                String columnName = columnAnnotation.name(); // 获取@Column注解的name属性
+            if (field.isAnnotationPresent(Column.class)) {
+                Column columnAnnotation = field.getAnnotation(Column.class);
+
+                String columnName = field.isAnnotationPresent(Id.class)
+                        ? "_id" : columnAnnotation.name(); // 获取@Column注解的name属性
                 String fieldName = field.getName(); // 获取字段名
                 // 将@Column注解的name和字段名存入map
                 if (keyIsFieldName) {
@@ -1785,8 +2092,8 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
      * @param clazz
      * @return Field
      */
-    private java.lang.reflect.Field findPrimaryKeyField(final Class<?> clazz) {
-        for (java.lang.reflect.Field field : clazz.getDeclaredFields()) {
+    private Field findPrimaryKeyField(final Class<?> clazz) {
+        for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(Id.class)) {
                 field.setAccessible(true); // 解除私有访问限制
                 return field;

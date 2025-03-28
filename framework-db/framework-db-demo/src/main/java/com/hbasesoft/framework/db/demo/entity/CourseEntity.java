@@ -1,9 +1,6 @@
 package com.hbasesoft.framework.db.demo.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import com.hbasesoft.framework.db.core.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,10 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+//import org.hibernate.annotations.GenericGenerator;
 
 /**
  * <Description> T_MEM_ACCOUNT的Entity<br>
- * 
+ *
  * @author 工具生成<br>
  * @version 1.0<br>
  * @CreateDate 2018年05月01日 <br>
@@ -40,7 +38,7 @@ public class CourseEntity extends BaseEntity {
     /** ID */
     @Id
     @GeneratedValue(generator = "paymentableGenerator")
-    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
+//    @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
     @Column(name = "id")
     private String id;
 

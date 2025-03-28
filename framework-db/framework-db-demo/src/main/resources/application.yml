@@ -7,6 +7,9 @@ spring: #应用配置
   
 master: #主数据库配置
  db:
-  type: h2
+  type: mongodb # mongodb
   url: jdbc:h2:./target/test
-  
+ mongodb:
+  url: mongodb://localhost:27017/test01?retryWrites=false
+#mongodb:
+# uri: mongodb://localhost:27017/test01

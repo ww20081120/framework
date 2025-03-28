@@ -13,6 +13,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-db-mongo</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
 			<artifactId>framework-db-jpa</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

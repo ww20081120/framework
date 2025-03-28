@@ -3,11 +3,10 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.demo.dao;
+package com.hbasesoft.framework.db.demo.dao.mongodb;
 
-import com.hbasesoft.framework.db.BaseJpaDao;
-import com.hbasesoft.framework.db.Dao;
-import com.hbasesoft.framework.db.demo.entity.CourseEntity;
+import com.hbasesoft.framework.db.demo.dao.CourseDao;
+import com.hbasesoft.framework.db.mongo.Dao4Mongo;
 
 /**
  * <Description> <br>
@@ -19,7 +18,7 @@ import com.hbasesoft.framework.db.demo.entity.CourseEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo.dao <br>
  */
-@Dao
-public interface ICourseDao extends BaseJpaDao<CourseEntity> {
+@Dao4Mongo
+public interface ICourseMongoDBDao extends CourseDao {
 
 }

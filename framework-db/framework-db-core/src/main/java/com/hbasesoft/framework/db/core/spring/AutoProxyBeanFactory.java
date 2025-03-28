@@ -149,39 +149,75 @@ public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
         ISqlExcutor baseDao = sqlExcutorFactory.create();
         handler.setSqlExcutor(baseDao);
 
-        // 继承泛型的类需要获取到范性类
+        // 获取实体类类型
+        Class<?> entityClazz = findEntityClass(clazz);
 
-        Class<?> entityClazz = null;
-        ParameterizedType type = (ParameterizedType) clazz.getGenericSuperclass();
-        if (type != null) {
-            for (Type t2 : type.getActualTypeArguments()) {
-                Class<?> t3 = (Class<?>) t2;
-                if (BaseEntity.class.isAssignableFrom(t3)) {
-                    entityClazz = t3;
+        if (entityClazz != null) {
+            baseDao.setEntityClazz(entityClazz);
+        }
+        return handler;
+    }
+
+    /**
+     * 递归查找 BaseEntity 的子类
+     * @param clazz 当前类
+     * @return 找到的实体类类型，如果没有找到则返回 null
+     */
+    private Class<?> findEntityClass(final Class<?> clazz) {
+        // 如果当前类是 Object，则停止递归
+        if (clazz == null || clazz.equals(Object.class)) {
+            return null;
+        }
+
+        // 检查当前类的泛型父类
+        ParameterizedType genericSuperclass = getParameterizedType(clazz.getGenericSuperclass());
+        if (genericSuperclass != null) {
+            for (Type typeArgument : genericSuperclass.getActualTypeArguments()) {
+                if (typeArgument instanceof Class<?>) {
+                    Class<?> candidate = (Class<?>) typeArgument;
+                    if (BaseEntity.class.isAssignableFrom(candidate)) {
+                        return candidate;
+                    }
                 }
             }
         }
 
-        if (entityClazz == null) {
-            Type[] interfacesTypes = clazz.getGenericInterfaces();
-            for (Type t : interfacesTypes) {
-                if (t instanceof ParameterizedType) {
-                    ParameterizedType pt = (ParameterizedType) t;
-
-                    Type[] genericType2 = pt.getActualTypeArguments();
-                    for (Type t2 : genericType2) {
-                        Class<?> t3 = (Class<?>) t2;
-                        if (BaseEntity.class.isAssignableFrom(t3)) {
-                            entityClazz = t3;
+        // 检查当前类的泛型接口
+        for (Type interfaceType : clazz.getGenericInterfaces()) {
+            ParameterizedType parameterizedInterface = getParameterizedType(interfaceType);
+            if (parameterizedInterface != null) {
+                for (Type typeArgument : parameterizedInterface.getActualTypeArguments()) {
+                    if (typeArgument instanceof Class<?>) {
+                        Class<?> candidate = (Class<?>) typeArgument;
+                        if (BaseEntity.class.isAssignableFrom(candidate)) {
+                            return candidate;
                         }
                     }
                 }
             }
         }
-        if (entityClazz != null) {
-            baseDao.setEntityClazz(entityClazz);
+        if (clazz.isInterface()) {
+            for (Class<?> superInterface : clazz.getInterfaces()) {
+                Class<?> result = findEntityClass(superInterface);
+                if (result != null) {
+                    return result;
+                }
+            }
         }
-        return handler;
+        // 如果当前类没有找到，递归查找父类
+        return null;
+    }
+
+    /**
+     * 获取 ParameterizedType 对象
+     * @param type 类型
+     * @return 如果是 ParameterizedType 则返回，否则返回 null
+     */
+    private ParameterizedType getParameterizedType(final Type type) {
+        if (type instanceof ParameterizedType) {
+            return (ParameterizedType) type;
+        }
+        return null;
     }
 
     /**

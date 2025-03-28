@@ -3,23 +3,23 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.mongo;
+package com.hbasesoft.framework.db.demo.dao.mysql;
 
-import com.hbasesoft.framework.db.core.BaseDao;
-import com.hbasesoft.framework.db.core.BaseEntity;
-
+//import com.hbasesoft.framework.db.Dao;
+import com.hbasesoft.framework.db.Dao;
+import com.hbasesoft.framework.db.demo.dao.StaffDao;
 
 /**
  * <Description> <br>
  * 
- * @param <T> T
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @param <T> T
- * @CreateDate 2019年4月3日 <br>
+ * @CreateDate 2024年7月20日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.db.hibernate <br>
+ * @see com.hbasesoft.framework.db.demo.dao <br>
  */
-public interface BaseMongoDao<T extends BaseEntity> extends BaseDao<T> {
+@Dao
+public interface StaffMySqlDao extends StaffDao {
+
 }

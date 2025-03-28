@@ -617,4 +617,5 @@ public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
      */
     void updateByLambda(LambdaUpdateWrapper<T> wrapper);
 
+
 }

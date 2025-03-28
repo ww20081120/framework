@@ -5,8 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.demo.dao;
 
-import com.hbasesoft.framework.db.BaseJpaDao;
-import com.hbasesoft.framework.db.Dao;
+import com.hbasesoft.framework.db.core.BaseDao;
+//import com.hbasesoft.framework.db.demo.entity.mysql.StaffEntity;
 import com.hbasesoft.framework.db.demo.entity.StaffEntity;
 
 /**
@@ -19,7 +19,6 @@ import com.hbasesoft.framework.db.demo.entity.StaffEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo.dao <br>
  */
-@Dao
-public interface StaffDao extends BaseJpaDao<StaffEntity> {
+public interface StaffDao extends BaseDao<StaffEntity> {
 
 }

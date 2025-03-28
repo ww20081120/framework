@@ -3,16 +3,16 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.db.demo.dao;
+package com.hbasesoft.framework.db.demo.dao.mongodb;
 
 import java.util.List;
 
 import com.hbasesoft.framework.common.annotation.Key;
-import com.hbasesoft.framework.db.BaseJpaDao;
-import com.hbasesoft.framework.db.Dao;
+import com.hbasesoft.framework.db.demo.dao.StudentDao;
+import com.hbasesoft.framework.db.demo.entity.StudentEntity;
+import com.hbasesoft.framework.db.mongo.Dao4Mongo;
 import com.hbasesoft.framework.db.core.DaoConstants;
 import com.hbasesoft.framework.db.core.annotation.Sql;
-import com.hbasesoft.framework.db.demo.entity.StudentEntity;
 
 /**
  * <Description> <br>
@@ -24,8 +24,8 @@ import com.hbasesoft.framework.db.demo.entity.StudentEntity;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.demo.dao <br>
  */
-@Dao
-public interface IStudentDao extends BaseJpaDao<StudentEntity> {
+@Dao4Mongo
+public interface IStudentMongoDBDao extends StudentDao {
 
     /**
      * Description: <br>
@@ -34,6 +34,7 @@ public interface IStudentDao extends BaseJpaDao<StudentEntity> {
      * @taskId <br>
      *         <br>
      */
+    @Sql("create table if not exists t_student(id int auto_increment primary key, name varchar(100), age int)")
     void createTable();
 
     /**
@@ -68,7 +69,7 @@ public interface IStudentDao extends BaseJpaDao<StudentEntity> {
      * @param pageSize
      * @return <br>
      */
-    @Sql
+    @Sql("select * from t_student_course sc, t_course c ")
     List<StudentEntity> queryStudentCourse(@Key("entity") StudentEntity studentEntity,
-        @Key(DaoConstants.PAGE_INDEX) int pageIndex, @Key(DaoConstants.PAGE_SIZE) int pageSize);
+          @Key(DaoConstants.PAGE_INDEX) int pageIndex, @Key(DaoConstants.PAGE_SIZE) int pageSize);
 }

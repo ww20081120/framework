@@ -21,6 +21,10 @@
 <!--			<version>${project.parent.version}</version>-->
 <!--		</dependency>-->
 		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 		</dependency>
@@ -32,12 +36,6 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>javax.persistence-api</artifactId>
-			<version>2.2</version>
 		</dependency>
 
 	</dependencies>

@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.db.demo.entity;
 
 import com.hbasesoft.framework.db.core.BaseEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 

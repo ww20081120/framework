@@ -22,10 +22,10 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import javax.sql.DataSource;
 
 import com.hbasesoft.framework.common.GlobalConstants;

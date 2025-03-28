@@ -60,7 +60,13 @@ public class AbstractAnnotationHandler {
     private static Logger logger = new Logger(AbstractAnnotationHandler.class);
 
     /** IGenericBaseDao 的方法签名 */
-    private static Map<String, Method> genericBaseDaoMethodMap = new HashMap<String, Method>();
+    private static Map<String, Map<String, Method>> genericBaseDaoMethodMapHolder
+            = new HashMap<>();
+
+    /**
+     *
+     */
+    private  Map<String, Method> genericBaseDaoMethodMap;
 
     /** dao config */
     private DaoConfig daoConfig;
@@ -72,9 +78,11 @@ public class AbstractAnnotationHandler {
      */
     public AbstractAnnotationHandler(final DaoConfig daoConfig) {
         this.daoConfig = daoConfig;
-        if (MapUtils.isEmpty(genericBaseDaoMethodMap)) {
-            Class<?> daoClazz = daoConfig.getBaseDaoType();
-            if (daoClazz != null) {
+        Class<?> daoClazz = daoConfig.getBaseDaoType();
+        if (daoClazz != null) {
+            genericBaseDaoMethodMap = genericBaseDaoMethodMapHolder.get(daoClazz.getName());
+            if (MapUtils.isEmpty(genericBaseDaoMethodMap)) {
+                genericBaseDaoMethodMap = new HashMap<>();
                 List<Method> methods = getAllPublicMethods(daoClazz);
                 for (Method m : methods) {
                     genericBaseDaoMethodMap.put(getMethodSignature(m), m);
@@ -89,6 +97,7 @@ public class AbstractAnnotationHandler {
                             }
                         }
                     }
+                    genericBaseDaoMethodMapHolder.put(daoClazz.getName(), genericBaseDaoMethodMap);
                 }
             }
         }

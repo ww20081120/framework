@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hbasesoft.framework.db.demo.dao.IStudentDao;
+import com.hbasesoft.framework.db.demo.dao.mongodb.IStudentMongoDBDao;
 
 import jakarta.annotation.Resource;
 
@@ -28,7 +28,7 @@ public class BaseJpaDaoTest {
 
     /** dao */
     @Resource
-    private IStudentDao iStudentDao;
+    private IStudentMongoDBDao iStudentMongoDBDao;
 
     /**
      * Description: <br>
@@ -40,7 +40,7 @@ public class BaseJpaDaoTest {
     @BeforeEach
     @Transactional
     public void createTable() {
-        iStudentDao.createTable();
+        iStudentMongoDBDao.createTable();
     }
 
 }

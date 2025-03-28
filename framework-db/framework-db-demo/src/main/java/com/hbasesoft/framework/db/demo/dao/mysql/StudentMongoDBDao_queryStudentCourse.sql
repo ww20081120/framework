@@ -8,7 +8,7 @@ where
         s.id = sc.student_id
   and
         c.id = sc.course_id
-#if($entity.name)
+    #if($entity.name)
   and s.name like :entity.name
 #end
 
