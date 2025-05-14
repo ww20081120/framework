@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
-	<property name="springAppName" value="framework-log-demo"></property>
+	<property name="springAppName" value="@project.artifactId@"></property>
 
 	<property name="LOG_FILE"
-		value="${user.home}/log/hbasesoft/${springAppName}" />
+		value="${user.home}/log/hbasesoft/${springAppName}"/>
+
+	<property name="MAX_FIILE_SIZE" value="20MB"/>
+	<property name="MAX_HISTORY" value="7"/>
+	<property name="TOTAL_SIZE_CAP" value="10GB"/>
 
 	<property name="CONSOLE_LOG_PATTERN"
-		value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{traceId:-},%X{spanId:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+		value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-} %X{tid}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+	<property name="SQL_LOG_PATTERN"
+		value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %X{tid} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %m%n"/>
 
 	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
 		<resetJUL>true</resetJUL>
@@ -20,9 +27,12 @@
 			<!-- Minimum logging level to be presented in the console logs -->
 			<level>INFO</level>
 		</filter>
-		<encoder>
-			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
-			<charset>utf8</charset>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
 		</encoder>
 	</appender>
 
@@ -31,18 +41,27 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_FILE}/debug.log</file>
 		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_FILE}/debug.%d{yyyy-MM-dd}.gz
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/debug.%d{yyyy-MM-dd}.%i.gz
 			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">
 			<level>DEBUG</level>
 			<onMatch>ACCEPT</onMatch>
 			<onMismatch>DENY</onMismatch>
 		</filter>
-		<encoder>
-			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
-			<charset>utf8</charset>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
 		</encoder>
 	</appender>
 
@@ -50,17 +69,26 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_FILE}/info.log</file>
 		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_FILE}/info.%d{yyyy-MM-dd}.gz</fileNamePattern>
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/info.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">
 			<level>INFO</level>
 			<onMatch>ACCEPT</onMatch>
 			<onMismatch>DENY</onMismatch>
 		</filter>
-		<encoder>
-			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
-			<charset>utf8</charset>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
 		</encoder>
 	</appender>
 
@@ -68,18 +96,27 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_FILE}/warn.log</file>
 		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_FILE}/warn.%d{yyyy-MM-dd}.gz
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/warn.%d{yyyy-MM-dd}.%i.gz
 			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">
 			<level>WARN</level>
 			<onMatch>ACCEPT</onMatch>
 			<onMismatch>DENY</onMismatch>
 		</filter>
-		<encoder>
-			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
-			<charset>utf8</charset>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
 		</encoder>
 	</appender>
 
@@ -87,49 +124,80 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_FILE}/error.log</file>
 		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_FILE}/error.%d{yyyy-MM-dd}.gz
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/error.%d{yyyy-MM-dd}.%i.gz
 			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
 		</rollingPolicy>
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">
 			<level>ERROR</level>
 			<onMatch>ACCEPT</onMatch>
 			<onMismatch>DENY</onMismatch>
 		</filter>
-		<encoder>
-			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
-			<charset>utf8</charset>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
 		</encoder>
 	</appender>
 
-	<!-- Appender to log to file in a JSON format -->
-	<appender name="transAppender"
+	<appender name="sqlAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_FILE}/trans.log</file>
+		<file>${LOG_FILE}/sql.log</file>
 		<rollingPolicy
-			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_FILE}/trans.json.%d{yyyy-MM-dd}.gz
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/sql.%d{yyyy-MM-dd}.%i.gz
 			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
 		</rollingPolicy>
-		<encoder>
-			<pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr([${springAppName:-}]){yellow} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
-			<charset>utf8</charset>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+		</filter>
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${SQL_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
 		</encoder>
 	</appender>
 
-	<logger name="io.opentelemetry"
-		level="INFO" additivity="true">
-		<appender-ref ref="transAppender" />
+	<appender name="grpcAppender"
+		class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.log.GRPCLogClientAppender">
+		<encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+			<layout
+				class="org.apache.skywalking.apm.toolkit.log.logback.v1.x.mdc.TraceIdMDCPatternLogbackLayout">
+				<pattern>${SQL_LOG_PATTERN}</pattern>
+				<charset>utf8</charset>
+			</layout>
+		</encoder>
+	</appender>
+
+	<logger name="framework.sql.log" level="INFO" additivity="false">
+		<appender-ref ref="sqlAppender"/>
 	</logger>
 
 	<logger name="com.hbasesoft" level="DEBUG">
-		<appender-ref ref="debugAppender" />
-		<appender-ref ref="infoAppender" />
-		<appender-ref ref="warnAppender" />
-		<appender-ref ref="errorAppender" />
+		<appender-ref ref="debugAppender"/>
 	</logger>
 
 	<root level="INFO">
-		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="consoleAppender"/>
+		<appender-ref ref="grpcAppender"/>
+		<appender-ref ref="infoAppender"/>
+		<appender-ref ref="warnAppender"/>
+		<appender-ref ref="errorAppender"/>
 	</root>
 </configuration>

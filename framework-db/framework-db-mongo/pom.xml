@@ -15,11 +15,7 @@
 			<artifactId>framework-db-core</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.hbasesoft.framework</groupId>-->
-<!--			<artifactId>framework-db-orm</artifactId>-->
-<!--			<version>${project.parent.version}</version>-->
-<!--		</dependency>-->
+
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
 			<artifactId>jakarta.persistence-api</artifactId>

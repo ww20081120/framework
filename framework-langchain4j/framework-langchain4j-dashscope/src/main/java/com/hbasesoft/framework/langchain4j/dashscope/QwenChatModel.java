@@ -8,9 +8,9 @@ package com.hbasesoft.framework.langchain4j.dashscope;
 import java.util.List;
 
 import com.alibaba.dashscope.aigc.generation.Generation;
+import com.alibaba.dashscope.aigc.generation.GenerationParam;
+import com.alibaba.dashscope.aigc.generation.GenerationParam.ResultFormat;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
-import com.alibaba.dashscope.aigc.generation.models.QwenParam;
-import com.alibaba.dashscope.aigc.generation.models.QwenParam.ResultFormat;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
 
@@ -86,7 +86,7 @@ public class QwenChatModel implements ChatLanguageModel {
     @Override
     public Response<AiMessage> generate(final List<ChatMessage> messages) {
         try {
-            QwenParam param = QwenParam.builder().apiKey(apiKey).model(modelName).topP(topP).topK(topK)
+            GenerationParam param = GenerationParam.builder().apiKey(apiKey).model(modelName).topP(topP).topK(topK)
                 .enableSearch(enableSearch).seed(seed).messages(QwenHelper.toQwenMessages(messages))
                 .resultFormat(ResultFormat.MESSAGE).build();
 

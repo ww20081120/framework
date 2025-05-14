@@ -5,11 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.langchain4j.dashscope;
 
-import static com.alibaba.dashscope.aigc.generation.models.QwenParam.ResultFormat.MESSAGE;
-
 import com.alibaba.dashscope.aigc.generation.Generation;
+import com.alibaba.dashscope.aigc.generation.GenerationParam;
+import com.alibaba.dashscope.aigc.generation.GenerationParam.ResultFormat;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
-import com.alibaba.dashscope.aigc.generation.models.QwenParam;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
 
@@ -82,8 +81,8 @@ public class QwenLanguageModel implements LanguageModel {
     @Override
     public Response<String> generate(final String prompt) {
         try {
-            QwenParam param = QwenParam.builder().apiKey(apiKey).model(modelName).topP(topP).topK(topK)
-                .enableSearch(enableSearch).seed(seed).prompt(prompt).resultFormat(MESSAGE).build();
+            GenerationParam param = GenerationParam.builder().apiKey(apiKey).model(modelName).topP(topP).topK(topK)
+                .enableSearch(enableSearch).seed(seed).prompt(prompt).resultFormat(ResultFormat.MESSAGE).build();
 
             GenerationResult generationResult = generation.call(param);
 

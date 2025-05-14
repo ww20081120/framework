@@ -5,12 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.langchain4j.dashscope;
 
-import static com.alibaba.dashscope.aigc.generation.models.QwenParam.ResultFormat.MESSAGE;
-
 import java.util.List;
 
+import com.alibaba.dashscope.aigc.generation.GenerationParam;
+import com.alibaba.dashscope.aigc.generation.GenerationParam.ResultFormat;
 import com.alibaba.dashscope.aigc.generation.GenerationResult;
-import com.alibaba.dashscope.aigc.generation.models.QwenParam;
 import com.alibaba.dashscope.common.ResultCallback;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.UtilException;
@@ -57,9 +56,9 @@ public class QwenStreamingChatModel extends QwenChatModel implements StreamingCh
     @Override
     public void generate(final List<ChatMessage> messages, final StreamingResponseHandler<AiMessage> handler) {
         try {
-            QwenParam param = QwenParam.builder().apiKey(getApiKey()).model(getModelName()).topP(getTopP())
+            GenerationParam param = GenerationParam.builder().apiKey(getApiKey()).model(getModelName()).topP(getTopP())
                 .topK(getTopK()).enableSearch(getEnableSearch()).seed(getSeed())
-                .messages(QwenHelper.toQwenMessages(messages)).resultFormat(MESSAGE).build();
+                .messages(QwenHelper.toQwenMessages(messages)).resultFormat(ResultFormat.MESSAGE).build();
 
             QwenStreamingResponseBuilder responseBuilder = new QwenStreamingResponseBuilder();
 
