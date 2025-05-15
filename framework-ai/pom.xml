@@ -7,4 +7,8 @@
   </parent>
   <artifactId>framework-ai</artifactId>
   <packaging>pom</packaging>
+  <modules>
+  	<module>framework-ai-core</module>
+  	<module>framework-ai-demo</module>
+  </modules>
 </project>

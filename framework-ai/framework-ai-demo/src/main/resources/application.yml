@@ -1,0 +1,15 @@
+project: #项目信息
+  name: @project.artifactId@
+  version: @project.parent.version@
+  model: dev
+
+spring:
+  application:
+    name: ${project.name}
+  ai:
+    dashscope:
+      api-key: sk-de5f9e23e93b4c8d94a99bfe95442668
+      
+logging:
+  level:
+    root: debug
