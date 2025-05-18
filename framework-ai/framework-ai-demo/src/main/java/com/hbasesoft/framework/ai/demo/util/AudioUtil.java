@@ -3,6 +3,7 @@ package com.hbasesoft.framework.ai.demo.util;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.IOUtils;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -104,6 +105,36 @@ public class AudioUtil {
         gui.callback = callback;
     }
 
+    public static void playFromMemory(byte[] audioData, AudioFormat format) {
+        SourceDataLine line = null;
+        try {
+            ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
+            AudioInputStream ais = new AudioInputStream(bais, format, audioData.length / format.getFrameSize());
+
+            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+            line = (SourceDataLine) AudioSystem.getLine(info);
+            line.open(format);
+            line.start();
+
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+            while ((bytesRead = ais.read(buffer)) != -1) {
+                line.write(buffer, 0, bytesRead);
+            }
+
+            line.drain();
+        }
+        catch (LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (line != null) {
+                line.stop();
+                line.close();
+            }
+        }
+    }
+
     /**
      * 回调函数，用于在录音完成后返回录音数据。
      */
@@ -199,6 +230,8 @@ public class AudioUtil {
         /** 录音数据 */
         private ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
+        private TargetDataLine targetDataLine;
+
         /** 是否录音 */
         private volatile boolean recording = true;
 
@@ -206,7 +239,7 @@ public class AudioUtil {
         public void run() {
             try {
                 DataLine.Info info = new DataLine.Info(TargetDataLine.class, AUDIO_FORMAT);
-                TargetDataLine targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
+                targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
                 targetDataLine.open(AUDIO_FORMAT);
                 targetDataLine.start();
 
@@ -217,6 +250,10 @@ public class AudioUtil {
                         outStream.write(buffer, 0, bytesRead);
                     }
                 }
+
+                // 停止并关闭设备
+                targetDataLine.stop();
+                targetDataLine.close();
 
             }
             catch (LineUnavailableException e) {
@@ -231,6 +268,11 @@ public class AudioUtil {
 
         public void stop() {
             recording = false;
+            if (targetDataLine != null && targetDataLine.isOpen()) {
+                targetDataLine.stop();
+                targetDataLine.close();
+            }
+            IOUtils.closeQuietly(outStream);
         }
     }
 }
