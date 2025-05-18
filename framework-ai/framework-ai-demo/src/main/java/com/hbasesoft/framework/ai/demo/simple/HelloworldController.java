@@ -5,37 +5,43 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.demo.simple;
 
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import reactor.core.publisher.Flux;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2025年5月14日 <br>
- * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.demo.simple <br>
+ * @since V1.0<br>
  */
-@RequestMapping("/helloworld")
+@RequestMapping("/simple/helloworld")
 @RestController
 public class HelloworldController {
 
-    /** */
+    /** 默认的 Prompt */
     private static final String DEFAULT_PROMPT = "你是一个博学的智能聊天助手，请根据用户提问回答！";
 
-    /** */
+    /** 默认的 核心采样  Nucleus Sampling */
     private static final double TOP_P = 0.7;
 
-    /** */
+    /** 默认的 最大 token */
+    private static final Integer MAX_TOKEN = 150;
+
+    /** ChatClient */
     private final ChatClient dashScopeChatClient;
 
     /**
@@ -54,14 +60,53 @@ public class HelloworldController {
 
     /**
      * Description: <br>
-     * 
+     *
+     * @param input
+     * @return <br>
      * @author 王伟<br>
      * @taskId <br>
-     * @param query
-     * @return <br>
      */
-    @GetMapping("/simple/chat")
-    public String simpleChat(final String query) {
-        return dashScopeChatClient.prompt(query).call().content();
+    @GetMapping("/chat")
+    public String simpleChat(final String input) {
+        return dashScopeChatClient.prompt(input).call().content();
+    }
+
+    /**
+     * Description: 使用prompt作为参数进行输入 <br>
+     *
+     * @param input
+     * @return
+     */
+    @GetMapping("/chatWithPrompt")
+    public String simpleChatPrompt(final String input) {
+        Prompt prompt = new Prompt(input);
+        return dashScopeChatClient.prompt(prompt).call().content();
+    }
+
+    /**
+     * Description: ChatClient 流式调用 <br>
+     *
+     * @param input
+     * @param response
+     * @return
+     */
+    @GetMapping("/chatWithStream")
+    public Flux<String> simpleChatStream(final String input, final HttpServletResponse response) {
+        response.setContentType("text/event-stream");
+        response.setCharacterEncoding("UTF-8");
+        ChatOptions options = DashScopeChatOptions.builder().withTopP(TOP_P).withMaxToken(MAX_TOKEN).build();
+        return dashScopeChatClient.prompt(input).options(options).stream().content();
+    }
+
+    /**
+     * Description: 使用 ChatOptions 配置参数进行输入 <br>
+     *
+     * @param input
+     * @return
+     */
+    @GetMapping("/chatWithOptions")
+    public String simpleChatWithOptions(final String input) {
+        ChatOptions options = DashScopeChatOptions.builder().withTopP(TOP_P).withMaxToken(MAX_TOKEN).build();
+        return dashScopeChatClient.prompt(input).options(options).call().content();
     }
 }
