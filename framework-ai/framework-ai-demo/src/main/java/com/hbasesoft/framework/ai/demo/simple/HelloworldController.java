@@ -5,8 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.demo.simple;
 
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -16,6 +14,10 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+
+import jakarta.servlet.http.HttpServletResponse;
 import reactor.core.publisher.Flux;
 
 /**
@@ -35,7 +37,7 @@ public class HelloworldController {
     /** 默认的 Prompt */
     private static final String DEFAULT_PROMPT = "你是一个博学的智能聊天助手，请根据用户提问回答！";
 
-    /** 默认的 核心采样  Nucleus Sampling */
+    /** 默认的 核心采样 Nucleus Sampling */
     private static final double TOP_P = 0.7;
 
     /** 默认的 最大 token */
@@ -75,7 +77,7 @@ public class HelloworldController {
      * Description: 使用prompt作为参数进行输入 <br>
      *
      * @param input
-     * @return
+     * @return 聊天返回
      */
     @GetMapping("/chatWithPrompt")
     public String simpleChatPrompt(final String input) {
@@ -88,7 +90,7 @@ public class HelloworldController {
      *
      * @param input
      * @param response
-     * @return
+     * @return 聊天返回
      */
     @GetMapping("/chatWithStream")
     public Flux<String> simpleChatStream(final String input, final HttpServletResponse response) {
@@ -102,7 +104,7 @@ public class HelloworldController {
      * Description: 使用 ChatOptions 配置参数进行输入 <br>
      *
      * @param input
-     * @return
+     * @return 聊天返回
      */
     @GetMapping("/chatWithOptions")
     public String simpleChatWithOptions(final String input) {

@@ -1,6 +1,7 @@
 package com.hbasesoft.framework.ai.demo.util;
 
 import com.hbasesoft.framework.common.utils.UtilException;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -16,11 +17,10 @@ public class ImageShow {
 
     /**
      * Description: 显示网络图片 <br>
-     *
-     * @param imageUrl
-     * @return void <br>
+     * 
      * @author 王伟<br>
      * @taskId <br>
+     * @param imageUrl <br>
      */
     public static void showImage(final String imageUrl) {
         try {

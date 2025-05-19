@@ -1,17 +1,33 @@
 package com.hbasesoft.framework.ai.demo.util;
 
-import com.hbasesoft.framework.common.utils.date.DateUtil;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.apache.commons.io.IOUtils;
-
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.TargetDataLine;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import org.apache.commons.io.IOUtils;
+
+import com.hbasesoft.framework.common.utils.date.DateUtil;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * <Description> 声音工具<br>
@@ -72,11 +88,11 @@ public class AudioUtil {
     // ================== 方法实现 ==================
 
     /**
-     * 启动默认录音界面。 显示一个简单的录音控制窗口，用户可点击按钮开始或停止录音。
-     *
-     * @return void
-     * @author 王伟
-     * @since 2021/11/13 21:09
+     * Description: 启动默认录音界面。 显示一个简单的录音控制窗口，用户可点击按钮开始或停止录音。<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
      */
     public static void recorder() {
         RecorderGUI gui = new RecorderGUI();
@@ -89,12 +105,13 @@ public class AudioUtil {
     }
 
     /**
-     * 启动录音界面并设置回调。 当用户点击“停止录音”后，会通过指定的 Callback 返回录音数据。
-     *
-     * @param callback 录音完成后的回调函数
-     * @return void
+     * Description: 启动录音界面并设置回调。 当用户点击“停止录音”后，会通过指定的 Callback 返回录音数据 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param callback 录音完成后的回调函数<br>
      */
-    public static void recorder(Callback callback) {
+    public static void recorder(final Callback callback) {
         RecorderGUI gui = new RecorderGUI();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -105,7 +122,15 @@ public class AudioUtil {
         gui.callback = callback;
     }
 
-    public static void playFromMemory(byte[] audioData, AudioFormat format) {
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param audioData
+     * @param format <br>
+     */
+    public static void playFromMemory(final byte[] audioData, final AudioFormat format) {
         SourceDataLine line = null;
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
@@ -136,17 +161,44 @@ public class AudioUtil {
     }
 
     /**
-     * 回调函数，用于在录音完成后返回录音数据。
+     * <Description> 回调函数，用于在录音完成后返回录音数据。<br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2025年5月19日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.ai.demo.util <br>
      */
     @FunctionalInterface
-    public static interface Callback {
+    public interface Callback {
+
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param data <br>
+         */
         void onRecord(byte[] data);
     }
 
     /**
-     * 录音GUI界面，提供开始/停止录音按钮和状态提示。
+     * <Description> 录音GUI界面，提供开始/停止录音按钮和状态提示。<br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2025年5月19日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.ai.demo.util <br>
      */
     public static class RecorderGUI extends JFrame {
+
+        /**
+         * serialVersionUID <br>
+         */
+        private static final long serialVersionUID = -1712731921815229606L;
 
         /** 开始录音按钮 */
         private JButton recordBtn = new JButton("开始录音");
@@ -199,14 +251,17 @@ public class AudioUtil {
         }
 
         /**
-         * WAV 文件保存（核心代码来自网页1）
-         *
-         * @param data 录音数据字节数组
+         * Description: WAV 文件保存<br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @param data 录音数据字节数组 <br>
          */
-        private void saveToWAV(byte[] data) {
+        private void saveToWAV(final byte[] data) {
             JFileChooser fileChooser = new JFileChooser();
 
-            String defaultName = DEFAULT_AUDIO_FILENAME_PREFIX + DateUtil.getCurrentTimestamp() + DEFAULT_AUDIO_FILE_EXTENSION;
+            String defaultName = DEFAULT_AUDIO_FILENAME_PREFIX + DateUtil.getCurrentTimestamp()
+                + DEFAULT_AUDIO_FILE_EXTENSION;
             fileChooser.setSelectedFile(new File(defaultName));
 
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -223,13 +278,21 @@ public class AudioUtil {
     }
 
     /**
-     * 录音线程实现
+     * <Description> 录音线程实现<br>
+     * 
+     * @author 王伟<br>
+     * @version 1.0<br>
+     * @taskId <br>
+     * @CreateDate 2025年5月19日 <br>
+     * @since V1.0<br>
+     * @see com.hbasesoft.framework.ai.demo.util <br>
      */
     public static class Recorder implements Runnable {
 
         /** 录音数据 */
         private ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
+        /** targetDataLine */
         private TargetDataLine targetDataLine;
 
         /** 是否录音 */
@@ -262,10 +325,24 @@ public class AudioUtil {
             }
         }
 
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         * @return <br>
+         */
         public ByteArrayOutputStream getOutStream() {
             return outStream;
         }
 
+        /**
+         * Description: <br>
+         * 
+         * @author 王伟<br>
+         * @taskId <br>
+         *         <br>
+         */
         public void stop() {
             recording = false;
             if (targetDataLine != null && targetDataLine.isOpen()) {

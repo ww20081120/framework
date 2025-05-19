@@ -1,8 +1,17 @@
 package com.hbasesoft.framework.ai.demo.simple;
 
-import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.ai.image.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.Map;
+
+import org.springframework.ai.image.ImageModel;
+import org.springframework.ai.image.ImageOptions;
+import org.springframework.ai.image.ImageOptionsBuilder;
+import org.springframework.ai.image.ImagePrompt;
+import org.springframework.ai.image.ImageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Map;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * <Description> 生成图片的演示 <br>
@@ -49,7 +55,7 @@ public class ImageController {
     /**
      * Description: 生成图片 <br>
      *
-     * @param input    提示词 <br>
+     * @param input 提示词 <br>
      * @param response <br>
      */
     @GetMapping("/generate")
@@ -79,18 +85,17 @@ public class ImageController {
      * @param height
      * @param width
      * @param style
-     * @return
+     * @return 图片返回
      */
     @GetMapping("/multipleConditions")
     public ResponseEntity<?> multipleConditions(
-        @RequestParam(value = "subject", defaultValue = "一只会编程的猫") String subject,
-        @RequestParam(value = "environment", defaultValue = "办公室") String environment,
-        @RequestParam(value = "height", defaultValue = "1024") Integer height,
-        @RequestParam(value = "width", defaultValue = "1024") Integer width,
-        @RequestParam(value = "style", defaultValue = "生动") String style) {
+        final @RequestParam(value = "subject", defaultValue = "一只会编程的猫") String subject,
+        final @RequestParam(value = "environment", defaultValue = "办公室") String environment,
+        final @RequestParam(value = "height", defaultValue = "1024") Integer height,
+        final @RequestParam(value = "width", defaultValue = "1024") Integer width,
+        final @RequestParam(value = "style", defaultValue = "生动") String style) {
 
-        String prompt = String.format("一个%s，置身于%s的环境中，使用%s的艺术风格，高清4K画质，细节精致", subject,
-            environment, style);
+        String prompt = String.format("一个%s，置身于%s的环境中，使用%s的艺术风格，高清4K画质，细节精致", subject, environment, style);
 
         ImageOptions options = ImageOptionsBuilder.builder().height(height).width(width).build();
 
