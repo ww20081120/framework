@@ -6,14 +6,12 @@
 
 package com.hbasesoft.framework.ai.demo.graph.node;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.alibaba.cloud.ai.graph.OverAllState;
+import com.alibaba.cloud.ai.graph.action.NodeAction;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
 
-import com.alibaba.cloud.ai.graph.OverAllState;
-import com.alibaba.cloud.ai.graph.action.NodeAction;
+import java.util.Map;
 
 public class SummarizerNode implements NodeAction {
 
@@ -36,8 +34,6 @@ public class SummarizerNode implements NodeAction {
         ChatResponse response = chatClient.prompt(prompt).call().chatResponse();
         String summary = response.getResult().getOutput().getText();
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("summary", summary);
-        return Map.of();
+        return Map.of("summary", summary);
     }
 }

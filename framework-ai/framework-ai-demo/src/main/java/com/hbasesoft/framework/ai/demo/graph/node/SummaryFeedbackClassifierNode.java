@@ -8,17 +8,47 @@ package com.hbasesoft.framework.ai.demo.graph.node;
 
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.action.NodeAction;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
-public class SummaryFeedbackClassifierNode implements NodeAction  {
+public class SummaryFeedbackClassifierNode implements NodeAction {
+
+    private final ChatClient chatClient;
+
+    private final String inputKey;
+
+    public SummaryFeedbackClassifierNode(final ChatClient chatClient, final String inputKey) {
+        this.chatClient = chatClient;
+        this.inputKey = inputKey;
+    }
+
     /**
      * @param t
      * @return
      * @throws Exception
      */
     @Override
-    public Map<String, Object> apply(OverAllState t) throws Exception {
-        return Map.of();
+    public Map<String, Object> apply(OverAllState state) throws Exception {
+        String summary = (String) state.value(inputKey).orElse("");
+        if (!StringUtils.hasText(summary)) {
+            throw new IllegalArgumentException("summary is empty in state");
+        }
+
+        String prompt = """
+            以下是一个自动生成的中文摘要。请你判断它是否让用户满意。如果满意，请返回 "positive"，否则返回 "negative"：
+            
+            摘要内容：
+            %s
+            """.formatted(summary);
+
+        ChatResponse response = chatClient.prompt(prompt).call().chatResponse();
+        String output = response.getResult().getOutput().getText();
+
+        String classification = output.toLowerCase().contains("positive") ? "positive" : "negative";
+
+        return Map.of("summary_feedback", classification);
     }
 }
