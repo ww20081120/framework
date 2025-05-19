@@ -1,7 +1,7 @@
 package com.hbasesoft.framework.ai.demo;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -26,7 +26,8 @@ public class AIDemoApplication {
      */
     public static void main(final String[] args) {
         Bootstrap.before();
-        ConfigurableApplicationContext context = SpringApplication.run(AIDemoApplication.class, args);
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(AIDemoApplication.class).headless(false)
+            .run(args);
         Bootstrap.after(context);
     }
 }
