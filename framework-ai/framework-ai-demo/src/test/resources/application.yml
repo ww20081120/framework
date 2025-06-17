@@ -1,0 +1,15 @@
+project: #项目信息
+  name: framework-ai-demo
+  version:  1.0.0
+  model: dev
+
+spring:
+  application:
+    name: ${project.name}
+  ai:
+    dashscope:
+      api-key: sk-de5f9e23e93b4c8d94a99bfe95442668
+
+logging:
+  level:
+    root: debug
