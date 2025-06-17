@@ -1,5 +1,12 @@
 package com.hbasesoft.framework.ai.demo.jmanus.llm;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -282,4 +289,88 @@ public class LlmService {
     // 当你完成任务后，可以通过总结采取的步骤和每一步的输出来最终确定计划，
     // 并调用Terminate工具记录结果。
     // """;
+
+    /**
+     * 智能体执行过程中使用的大模型
+     */
+    private final ChatClient agentExecutionClient;
+
+    /**
+     * 用于规划任务的大模型，帮助为任务完成创建结构化的计划
+     */
+    private final ChatClient planningChatClient;
+
+    /**
+     * 用于总结任务结果的大模型
+     */
+    private final ChatClient finalizeChatClient;
+
+    /**
+     * 对话记忆， 用于存储历史聊天记录，最大容量为1000
+     */
+    private final ChatMemory conversationMemory = MessageWindowChatMemory.builder().maxMessages(1000).build();
+
+    /**
+     * 智能体记忆，用于执行任务
+     */
+    private final ChatMemory agentMemory = MessageWindowChatMemory.builder().maxMessages(1000).build();
+
+    /**
+     * 智能体执行模型
+     */
+    private final ChatModel chatModel;
+
+    public LlmService(ChatModel chatModel) {
+        this.chatModel = chatModel;
+
+        // 执行和总结规划，用相同的memory
+        this.planningChatClient = ChatClient.builder(chatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor()) //  记录对话
+                .defaultOptions(OpenAiChatOptions.builder().temperature(0.1).build()) // 模型温度
+                .build();
+
+        // 每个Agent执行过程中，用独立的memory
+        this.agentExecutionClient = ChatClient.builder(chatModel)
+                // .defaultAdvisors(MessageChatMemoryAdvisor.builder(agentMemory).build())
+                .defaultAdvisors(new SimpleLoggerAdvisor()) //  记录对话
+                .defaultOptions(OpenAiChatOptions.builder().internalToolExecutionEnabled(false).build()) // 模型温度
+                .build();
+
+        this.finalizeChatClient = ChatClient.builder(chatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(conversationMemory).build())
+                .defaultAdvisors(new SimpleLoggerAdvisor())
+                .build();
+    }
+
+    public ChatClient getAgentChatClient() {
+        return agentExecutionClient;
+    }
+
+    public ChatMemory getAgentMemory() {
+        return agentMemory;
+    }
+
+    public void clearAgentMemory(String planId) {
+        this.agentMemory.clear(planId);
+    }
+
+    public ChatClient getPlanningChatClient() {
+        return planningChatClient;
+    }
+
+    public void clearConversationMemory(String planId) {
+        this.conversationMemory.clear(planId);
+    }
+
+    public ChatClient getFinalizeChatClient() {
+        return finalizeChatClient;
+    }
+
+    public ChatModel getChatModel() {
+        return chatModel;
+    }
+
+    public ChatMemory getConversationMemory() {
+        return conversationMemory;
+    }
 }

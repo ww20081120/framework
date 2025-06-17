@@ -10,6 +10,8 @@ import static com.alibaba.cloud.ai.graph.StateGraph.END;
 
 import java.util.Map;
 
+import com.alibaba.cloud.ai.graph.OverAllStateFactory;
+import com.alibaba.cloud.ai.graph.exception.GraphStateException;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.model.ChatModel;
@@ -17,7 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.cloud.ai.graph.GraphRepresentation;
-import com.alibaba.cloud.ai.graph.GraphStateException;
 import com.alibaba.cloud.ai.graph.OverAllState;
 import com.alibaba.cloud.ai.graph.StateGraph;
 import com.alibaba.cloud.ai.graph.action.AsyncEdgeAction;
@@ -49,7 +50,7 @@ public class WritingAssistantAutoconfiguration {
         ChatClient chatClient = ChatClient.builder(chatModel).defaultAdvisors(new SimpleLoggerAdvisor()).build();
 
         // 定义全局状态工厂，创建 OverAllState 实例，并注册状态字段及更新策略
-        AgentStateFactory<OverAllState> stateFactory = (inputs) -> {
+        OverAllStateFactory stateFactory = () -> {
             OverAllState state = new OverAllState();
             // 注册状态字段及其更新策略为 ReplaceStrategy（覆盖更新）
 
@@ -67,13 +68,11 @@ public class WritingAssistantAutoconfiguration {
 
             // 保存由 title_generator 节点基于改写后的内容生成的标题。
             state.registerKeyAndStrategy("title", new ReplaceStrategy());
-            // 输入初始数据到状态中
-            state.input(inputs);
             return state;
         };
 
         // 创建状态图对象，指定名称和状态工厂
-        StateGraph graph = new StateGraph("Writing Assistant with Feedback Loop", stateFactory);
+        StateGraph graph = new StateGraph("Writing Assistant with Feedback Loop", stateFactory.create());
 
         // 添加各个功能节点
         graph

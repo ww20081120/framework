@@ -1,5 +1,9 @@
 package com.hbasesoft.framework.ai.demo.jmanus.agent;
 
+/**
+ * AgentState 枚举类定义了代理的不同状态。
+ * 每个状态都有一个对应的字符串表示，可用于日志记录、状态显示等场景。
+ */
 public enum AgentState {
 
     /** 未启动 */
