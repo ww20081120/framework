@@ -25,4 +25,7 @@ public class ExecutionContext {
      */
     private boolean userMemory = false;
 
+    /** 标记计划执行是否成功 */
+    private boolean success = false;
+
 }

@@ -1,6 +1,7 @@
 package com.hbasesoft.framework.ai.jmanus.recorder;
 
 import com.hbasesoft.framework.ai.jmanus.recorder.entity.AgentExecutionRecord;
+import com.hbasesoft.framework.ai.jmanus.recorder.entity.PlanExecutionRecord;
 import com.hbasesoft.framework.ai.jmanus.recorder.entity.ThinkActRecord;
 
 /**
@@ -14,12 +15,12 @@ public interface PlanExecutionRecorder {
      * @param stepRecord 计划执行记录
      * @return 计划ID
      */
-    String recordPlanExecution(PlanExecutionRecorder stepRecord);
+    String recordPlanExecution(PlanExecutionRecord stepRecord);
 
     /**
      * 记录智能体执行实例， 关联到特定的计划
      *
-     * @param planId      计划ID
+     * @param planId 计划ID
      * @param agentRecord 智能体执行记录
      * @return 智能体执行ID
      */
@@ -37,7 +38,7 @@ public interface PlanExecutionRecorder {
     /**
      * 标记计划执行完成
      *
-     * @param planId  计划ID
+     * @param planId 计划ID
      * @param summary 计划总结
      */
     void recordPlanCompletion(String planId, String summary);
@@ -48,7 +49,7 @@ public interface PlanExecutionRecorder {
      * @param planId 计划ID
      * @return 计划执行记录
      */
-    PlanExecutionRecorder getExecutionRecorder(String planId);
+    PlanExecutionRecord getExecutionRecord(String planId);
 
     /**
      * 将制定计划ID的执行记录保存到持久化存储 此方法会递归调用 PlanExecutionRecord、 AgentExecutionRecord、 ThinkActRecord 的 save 方法
@@ -56,12 +57,12 @@ public interface PlanExecutionRecorder {
      * @param planId 计划ID
      * @return 是否保存成功
      */
-    boolean savePlanExecutionRecorders(String planId);
+    boolean savePlanExecutionRecords(String planId);
 
     /**
      * 保存所有执行记录 此方法会递归调用 PlanExecutionRecord、 AgentExecutionRecord、 ThinkActRecord 的 save 方法
      */
-    void saveAllExecutionRecorders();
+    void saveAllExecutionRecords();
 
     /**
      * 获取指定计划的当前智能体执行记录
