@@ -10,5 +10,6 @@
   <modules>
   	<module>framework-ai-core</module>
   	<module>framework-ai-demo</module>
+      <module>framework-ai-jmanus</module>
   </modules>
 </project>

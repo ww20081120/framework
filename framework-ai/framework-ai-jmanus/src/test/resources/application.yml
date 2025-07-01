@@ -1,5 +1,6 @@
 project: #项目信息
-  name: framework-ai-demo
+  name: framework-ai-jmanus
+  version: 4.1
   model: dev
 
 spring:
@@ -8,7 +9,7 @@ spring:
   ai:
     dashscope:
       api-key: ${DASHSCOPE_API_KEY}
-      
-logging:
-  level:
-    root: debug
+
+#logging:
+#  level:
+#    root: DEBUG
