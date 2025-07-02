@@ -1,11 +1,11 @@
 package com.hbasesoft.framework.ai.jmanus.recorder.entity;
 
-import com.hbasesoft.framework.ai.jmanus.recorder.entity.AgentExecutionRecord;
+import java.util.Date;
+
 import com.hbasesoft.framework.common.utils.date.DateUtil;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 /**
  * 记录智能体在单个执行步骤中的思考和行动过程。 作为AgentExecutionRecord的子步骤存在，专注于记录思考和行动阶段的处理消息。
@@ -14,19 +14,16 @@ import java.util.Date;
  * <p>
  * 1. 基本信息 (Basic Info) - id: 记录的唯一标识 - stepNumber: 步骤编号 - parentExecutionId: 父执行记录ID
  * <p>
- * 2. 思考阶段 (Think Phase) - thinkStartTime: 思考开始时间 - thinkInput: 思考输入内容 - thinkOutput:
- * 思考输出结果 - thinkEndTime: 思考结束时间
+ * 2. 思考阶段 (Think Phase) - thinkStartTime: 思考开始时间 - thinkInput: 思考输入内容 - thinkOutput: 思考输出结果 - thinkEndTime: 思考结束时间
  * <p>
- * 3. 行动阶段 (Act Phase) - actStartTime: 行动开始时间 - toolName: 使用的工具名称 - toolParameters: 工具参数 -
- * actionNeeded: 是否需要执行动作 - actionDescription: 行动描述 - actionResult: 行动执行结果 - actEndTime:
- * 行动结束时间 - status: 执行状态 - errorMessage: 错误信息（如有）
+ * 3. 行动阶段 (Act Phase) - actStartTime: 行动开始时间 - toolName: 使用的工具名称 - toolParameters: 工具参数 - actionNeeded: 是否需要执行动作 -
+ * actionDescription: 行动描述 - actionResult: 行动执行结果 - actEndTime: 行动结束时间 - status: 执行状态 - errorMessage: 错误信息（如有）
  *
  * @see AgentExecutionRecord
  */
 @NoArgsConstructor
 @Data
 public class ThinkActRecord {
-
 
     // 记录的唯一标识符
     private Long id;
@@ -79,7 +76,6 @@ public class ThinkActRecord {
         this.thinkStartTime = DateUtil.getCurrentDate();
     }
 
-
     /**
      * 记录思考阶段开始
      */
@@ -88,7 +84,6 @@ public class ThinkActRecord {
         this.thinkInput = thinkInput;
     }
 
-
     /**
      * 记录思考阶段结束
      */
@@ -96,7 +91,6 @@ public class ThinkActRecord {
         this.thinkEndTime = DateUtil.getCurrentDate();
         this.thinkOutput = thinkOutput;
     }
-
 
     /**
      * 记录行动阶段开始
@@ -108,7 +102,6 @@ public class ThinkActRecord {
         this.toolName = toolName;
         this.toolParameters = toolParameters;
     }
-
 
     /**
      * 记录行动阶段结束
@@ -129,6 +122,7 @@ public class ThinkActRecord {
 
     /**
      * 保存记录到持久化存储 空实现，由具体的存储实现来覆盖
+     * 
      * @return 保存后的记录ID
      */
     public Long save() {

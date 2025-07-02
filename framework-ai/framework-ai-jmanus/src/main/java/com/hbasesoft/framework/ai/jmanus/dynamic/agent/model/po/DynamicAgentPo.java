@@ -31,6 +31,11 @@ import java.util.List;
 public class DynamicAgentPo extends BaseEntity {
 
     /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 8526003709620073848L;
+
+    /**
      * 主键ID，采用自增策略生成
      */
     @Id
