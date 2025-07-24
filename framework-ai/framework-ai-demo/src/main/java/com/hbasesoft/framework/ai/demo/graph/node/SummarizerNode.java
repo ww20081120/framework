@@ -15,16 +15,23 @@ import java.util.Map;
 
 public class SummarizerNode implements NodeAction {
 
+    /** 聊天客户端 */
     private final ChatClient chatClient;
 
+    /**
+     * 构造函数
+     *
+     * @param chatClient 聊天客户端
+     */
     public SummarizerNode(final ChatClient chatClient) {
         this.chatClient = chatClient;
     }
 
     /**
-     * @param t
-     * @return
-     * @throws Exception
+     * 对原始文本进行摘要
+     *
+     * @param state 全局状态
+     * @return 包含摘要的映射
      */
     @Override
     public Map<String, Object> apply(final OverAllState state) {

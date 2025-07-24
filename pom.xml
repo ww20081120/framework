@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.5.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -35,9 +35,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- 解决编译时中文乱码-->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
         <fastjson2.version>2.0.57</fastjson2.version>
-        <ognl.version>3.3.4</ognl.version>
+        <ognl.version>3.4.7</ognl.version>
         <velocity.version>2.4.1</velocity.version>
         <thumbnailator.version>0.4.20</thumbnailator.version>
         <commons-lang3.version>3.17.0</commons-lang3.version>
@@ -50,12 +50,12 @@
         <curator.version>5.8.0</curator.version>
         <jcommander.version>2.0</jcommander.version>
         <dom4j.version>2.1.4</dom4j.version>
-        <caffeine.version>3.2.0</caffeine.version>
+        <caffeine.version>3.2.2</caffeine.version>
         <flumn.version>1.11.0</flumn.version>
         <jsch.version>0.1.55</jsch.version>
         <elasticjob.version>3.0.4</elasticjob.version>
         <jaxb.version>4.0.5</jaxb.version>
-        <xxl-job.version>3.1.0</xxl-job.version>
+        <xxl-job.version>3.1.1</xxl-job.version>
         <mysql.version>9.3.0</mysql.version>
         <lombok.version>1.18.38</lombok.version>
         <langchain4j.version>0.23.0</langchain4j.version>
@@ -334,6 +334,38 @@
                 <artifactId>apm-toolkit-micrometer-registry</artifactId>
                 <version>${skywalking.version}</version>
             </dependency>
+            
+            <!-- OpenTelemetry dependencies -->
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-api</artifactId>
+                <version>1.45.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-sdk</artifactId>
+                <version>1.45.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-exporter-common</artifactId>
+                <version>1.45.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-exporter-logging-otlp</artifactId>
+                <version>1.45.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry.semconv</groupId>
+                <artifactId>opentelemetry-semconv</artifactId>
+                <version>1.29.0-alpha</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bridge-otel</artifactId>
+                <version>1.4.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -385,7 +417,7 @@
                                 <!--
                                 注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
                                 <pre-commit>
-                                    echo "begin to execute hook"gst
+                                    echo "begin to execute hook"
                                     mvn checkstyle:check
                                     RESULT=$?
                                     exit $RESULT

@@ -16,12 +16,25 @@ import com.alibaba.cloud.ai.graph.action.NodeAction;
 
 public class RewordingNode implements NodeAction {
 
+    /** 聊天客户端 */
     private final ChatClient chatClient;
 
+    /**
+     * 构造函数
+     *
+     * @param chatClient 聊天客户端
+     */
     public RewordingNode(final ChatClient chatClient) {
         this.chatClient = chatClient;
     }
 
+    /**
+     * 执行节点逻辑，对摘要进行改写
+     *
+     * @param state 全局状态
+     * @return 包含改写后内容的映射
+     * @throws Exception 异常
+     */
     @Override
     public Map<String, Object> apply(final OverAllState state) throws Exception {
         // 从全局状态中获取摘要内容

@@ -16,22 +16,32 @@ import java.util.Map;
 
 public class SummaryFeedbackClassifierNode implements NodeAction {
 
+    /** 聊天客户端 */
     private final ChatClient chatClient;
 
+    /** 输入键 */
     private final String inputKey;
 
+    /**
+     * 构造函数
+     *
+     * @param chatClient 聊天客户端
+     * @param inputKey 输入键
+     */
     public SummaryFeedbackClassifierNode(final ChatClient chatClient, final String inputKey) {
         this.chatClient = chatClient;
         this.inputKey = inputKey;
     }
 
     /**
-     * @param t
-     * @return
-     * @throws Exception
+     * 分类摘要反馈
+     *
+     * @param state 全局状态
+     * @return 包含反馈分类的映射
+     * @throws Exception 异常
      */
     @Override
-    public Map<String, Object> apply(OverAllState state) throws Exception {
+    public Map<String, Object> apply(final OverAllState state) throws Exception {
         String summary = (String) state.value(inputKey).orElse("");
         if (!StringUtils.hasText(summary)) {
             throw new IllegalArgumentException("summary is empty in state");

@@ -35,29 +35,34 @@ import reactor.core.publisher.Sinks;
 @RequestMapping("/simple/audio")
 public class AudioController {
 
-    /**
-     * 音频转录模型
-     */
-    private final AudioTranscriptionModel transcriptionModel;
+    /** 音频采样率 */
+private static final int SAMPLE_RATE = 16000;
+    
+/** 音频转录模型 */
+private final AudioTranscriptionModel transcriptionModel;
+
+/** 模型 */
+private static final String DEFAULT_MODEL_2 = "paraformer-realtime-v2";
+
+/** 调度器 */
+private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+/**
+ * 构造函数
+ *
+ * @param transcriptionModel 音频转录模型
+ */
+public AudioController(final AudioTranscriptionModel transcriptionModel) {
+    this.transcriptionModel = transcriptionModel;
+}
 
     /**
-     * 模型
-     */
-    private static final String DEFAULT_MODEL_2 = "paraformer-realtime-v2";
-
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
-    /**
-     * 构造函数
-     *
-     * @param transcriptionModel 音频转录模型
-     */
-    public AudioController(final AudioTranscriptionModel transcriptionModel) {
-        this.transcriptionModel = transcriptionModel;
-    }
-
-    @RequestMapping("/stt")
-    public Flux<String> stt() {
+ * 语音转文字接口
+ *
+ * @return 文字流
+ */
+@RequestMapping("/stt")
+public Flux<String> stt() {
 
         // 创建一个 Sinks.Many（支持多播）
         Sinks.Many<String> sink = Sinks.many().multicast().onBackpressureBuffer();
@@ -72,7 +77,7 @@ public class AudioController {
 
                 // 创建音频转录任务
                 AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(new FileSystemResource(tempFile),
-                    DashScopeAudioTranscriptionOptions.builder().withSampleRate(16000)
+                    DashScopeAudioTranscriptionOptions.builder().withSampleRate(SAMPLE_RATE)
                         .withFormat(DashScopeAudioTranscriptionOptions.AudioFormat.PCM)
                         .withDisfluencyRemovalEnabled(false).build());
 
@@ -100,7 +105,14 @@ public class AudioController {
         return flux;
     }
 
-    private void checkTaskStatus(String taskId, Sinks.Many<String> sink, CountDownLatch latch) {
+    /**
+     * 检查任务状态
+     *
+     * @param taskId 任务ID
+     * @param sink 数据流
+     * @param latch 闭锁
+     */
+    private void checkTaskStatus(final String taskId, final Sinks.Many<String> sink, final CountDownLatch latch) {
         try {
             AudioTranscriptionResponse fetchResponse = transcriptionModel.fetch(taskId);
             DashScopeAudioTranscriptionApi.Response.Output fetchOutput = Objects

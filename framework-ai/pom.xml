@@ -11,5 +11,6 @@
   	<module>framework-ai-core</module>
   	<module>framework-ai-demo</module>
       <module>framework-ai-jmanus</module>
+      <module>framework-ai-demo-nl2sql</module>
   </modules>
 </project>

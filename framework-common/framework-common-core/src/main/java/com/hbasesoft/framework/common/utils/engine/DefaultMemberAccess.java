@@ -8,9 +8,9 @@ package com.hbasesoft.framework.common.utils.engine;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
-import java.util.Map;
 
 import ognl.MemberAccess;
+import ognl.OgnlContext;
 
 /**
  * This class provides methods for setting up and restoring access in a Field. Java 2 provides access utilities for
@@ -123,17 +123,17 @@ public class DefaultMemberAccess implements MemberAccess {
     }
 
     /**
-     * Description: <br>
+     * Sets up access for a member, saving the previous state.
      * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param context
-     * @param target
-     * @param member
-     * @param propertyName
-     * @return <br>
+     * @param context The current execution context.
+     * @param target The object being accessed.
+     * @param member The member being accessed.
+     * @param propertyName The property name being accessed.
+     * @return The previous access state that was set (to be restored later).
      */
-    public Object setup(final Map context, final Object target, final Member member, final String propertyName) {
+    @Override
+    public Object setup(final OgnlContext context, final Object target, final Member member, 
+            final String propertyName) {
         Object result = null;
 
         if (isAccessible(context, target, member, propertyName)) {
@@ -148,36 +148,34 @@ public class DefaultMemberAccess implements MemberAccess {
     }
 
     /**
-     * Description: <br>
+     * Restores access for a member based on the previous state.
      * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param context
-     * @param target
-     * @param member
-     * @param propertyName
-     * @param state <br>
+     * @param context The current execution context.
+     * @param target The object being accessed.
+     * @param member The member being accessed.
+     * @param propertyName The property name being accessed.
+     * @param state The previous access state that was returned from setup().
      */
-    public void restore(final Map context, final Object target, final Member member, final String propertyName,
-        final Object state) {
+    @Override
+    public void restore(final OgnlContext context, final Object target, final Member member, 
+            final String propertyName, final Object state) {
         if (state != null) {
             ((AccessibleObject) member).setAccessible(((Boolean) state).booleanValue());
         }
     }
 
     /**
-     * Description: Returns true if the given member is accessible or can be made accessible by this object.<br>
+     * Returns true if the given member is accessible or can be made accessible by this object.
      * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param context
-     * @param target
-     * @param member
-     * @param propertyName
-     * @return <br>
+     * @param context The current execution context.
+     * @param target The object being accessed.
+     * @param member The member being accessed.
+     * @param propertyName The property name being accessed.
+     * @return True if the member is accessible, false otherwise.
      */
-    public boolean isAccessible(final Map context, final Object target, final Member member,
-        final String propertyName) {
+    @Override
+    public boolean isAccessible(final OgnlContext context, final Object target, final Member member,
+            final String propertyName) {
         int modifiers = member.getModifiers();
         boolean result = Modifier.isPublic(modifiers);
 

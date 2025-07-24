@@ -1,0 +1,10 @@
+project: #项目信息
+  name: framework-ai-demo-nl2sql
+  model: dev
+
+spring:
+  application:
+    name: ${project.name}
+  ai:
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY}

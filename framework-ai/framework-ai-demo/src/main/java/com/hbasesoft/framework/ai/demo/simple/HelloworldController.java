@@ -59,8 +59,8 @@ public class HelloworldController {
     /**
      * Description: <br>
      *
-     * @param input
-     * @return <br>
+     * @param input 用户输入
+     * @return 聊天返回结果
      * @author 王伟<br>
      * @taskId <br>
      */
@@ -72,7 +72,7 @@ public class HelloworldController {
     /**
      * Description: 使用prompt作为参数进行输入 <br>
      *
-     * @param input
+     * @param input 用户输入
      * @return 聊天返回
      */
     @GetMapping("/chatWithPrompt")
@@ -84,8 +84,8 @@ public class HelloworldController {
     /**
      * Description: ChatClient 流式调用 <br>
      *
-     * @param input
-     * @param response
+     * @param input 用户输入
+     * @param response HTTP响应对象
      * @return 聊天返回
      */
     @GetMapping("/chatWithStream")
@@ -99,7 +99,7 @@ public class HelloworldController {
     /**
      * Description: 使用 ChatOptions 配置参数进行输入 <br>
      *
-     * @param input
+     * @param input 用户输入
      * @return 聊天返回
      */
     @GetMapping("/chatWithOptions")

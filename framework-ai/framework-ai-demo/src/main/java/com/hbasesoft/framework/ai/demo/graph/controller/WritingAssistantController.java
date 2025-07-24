@@ -13,12 +13,25 @@ import java.util.Map;
 @RequestMapping("/graph/writingAssistant")
 public class WritingAssistantController {
 
+    /** 编译后的状态图 */
     private final CompiledGraph compiledGraph;
 
+    /**
+     * 构造函数
+     *
+     * @param stateGraph 状态图
+     * @throws GraphStateException 状态图异常
+     */
     public WritingAssistantController(final StateGraph stateGraph) throws GraphStateException {
         this.compiledGraph = stateGraph.compile();
     }
 
+    /**
+     * 写作助手接口
+     *
+     * @param input 输入文本
+     * @return 处理结果
+     */
     @GetMapping("/write")
     public Map<String, Object> write(final String input) {
         var resultFuture = compiledGraph.invoke(Map.of("original_text", input));
