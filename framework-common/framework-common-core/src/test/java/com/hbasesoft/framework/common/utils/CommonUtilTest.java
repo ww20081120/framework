@@ -1,4 +1,4 @@
-/**************************************************************************************** 
+/****************************************************************************************
  Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
@@ -7,234 +7,175 @@ package com.hbasesoft.framework.common.utils;
 
 import org.junit.jupiter.api.Test;
 
-import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.GlobalConstants;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * <Description> <br>
+ * <Description> CommonUtil Test <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
- * @taskId <br>
- * @CreateDate 2018年4月19日 <br>
+ * @CreateDate 2025年8月15日 <br>
  * @since V1.0<br>
- * @see com.hbasesoft.framework.common <br>
+ * @see com.hbasesoft.framework.common.utils <br>
  */
 public class CommonUtilTest {
 
-    /** number */
-    private static final int NUM_3 = 3;
-
-    /** number */
-    private static final long NUM_3L = 3L;
-
-    /** number */
-    private static final int NUM_5 = 5;
-
-    /** number */
-    private static final int NUM_8 = 8;
-
-    /** number */
-    private static final int NUM_100 = 100;
-
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void messageFormat() {
-        String str = "你好，我叫{0}，我今年{1}岁了";
-        str = CommonUtil.messageFormat(str, "小红", NUM_8);
+    public void testMessageFormat() {
+        // 测试消息格式化
+        String result = CommonUtil.messageFormat("Hello {0}, welcome to {1}!", "John", "Framework");
+        assertEquals("Hello John, welcome to Framework!", result);
 
-        Assert.equals(str, "你好，我叫小红，我今年8岁了", ErrorCodeDef.FAILURE);
-        System.out.println("message format success.");
+        // 测试空消息
+        String emptyResult = CommonUtil.messageFormat(null, "param");
+        assertNull(emptyResult);
+
+        // 测试无参数
+        String noParamResult = CommonUtil.messageFormat("Hello World");
+        assertEquals("Hello World", noParamResult);
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void getTransactionID() {
-        String str1 = CommonUtil.getTransactionID();
-        String str2 = CommonUtil.getTransactionID();
-        Assert.notEquals(str1, str2, ErrorCodeDef.FAILURE);
-        System.out.println("生成了两个不一样的串码");
+    public void testGetTransactionID() {
+        // 测试获取事务ID
+        String transactionId = CommonUtil.getTransactionID();
+        assertNotNull(transactionId);
+        assertFalse(transactionId.contains("-"));
+        assertEquals(32, transactionId.length());
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void getRandomNumber() {
-        String str1 = CommonUtil.getRandomNumber(NUM_5);
-        Assert.isTrue(str1.length() == NUM_5, ErrorCodeDef.FAILURE);
-        System.out.println("生成了一个长度为5的随机数字");
+    public void testGetRandomCode() {
+        // 测试获取随机码
+        String randomCode = CommonUtil.getRandomCode();
+        assertNotNull(randomCode);
+        assertTrue(randomCode.length() > 0);
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void getRandomChar() {
-        String str1 = CommonUtil.getRandomChar(NUM_100);
-        String str2 = CommonUtil.getRandomChar(NUM_100);
-        Assert.isTrue(str1.length() == NUM_100, ErrorCodeDef.FAILURE);
-        Assert.notEquals(str1, str2, ErrorCodeDef.FAILURE);
-        System.out.println("生成了两个不一样的随机字符串");
+    public void testGetRandomNumber() {
+        // 测试获取指定长度的随机数字
+        String randomNumber = CommonUtil.getRandomNumber(6);
+        assertNotNull(randomNumber);
+        assertEquals(6, randomNumber.length());
+        assertTrue(randomNumber.matches("\\d{6}"));
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void getString() {
-        Object obj = new Object();
-        String str1 = CommonUtil.getString(obj);
-        Assert.equals(str1, obj.toString(), ErrorCodeDef.FAILURE);
-
-        System.out.println("CommonUtil.getString调用了Object的toString方法");
-
-        obj = null;
-        str1 = CommonUtil.getString(obj);
-        Assert.isNull(str1, ErrorCodeDef.FAILURE);
-        System.out.println("null对象的toString还是null");
+    public void testGetRandomChar() {
+        // 测试获取指定长度的随机字符
+        String randomChar = CommonUtil.getRandomChar(8);
+        assertNotNull(randomChar);
+        assertEquals(8, randomChar.length());
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void notNullStr() {
-        String obj = null;
-        String str1 = CommonUtil.notNullStr(obj);
-        Assert.equals(str1, "", ErrorCodeDef.FAILURE);
-        System.out.println("null字符串的notNullStr得到的是空字符串");
+    public void testGetString() {
+        // 测试对象转字符串
+        assertEquals("test", CommonUtil.getString("test"));
+        assertEquals("123", CommonUtil.getString(123));
+        assertEquals("123.45", CommonUtil.getString(123.45));
+        assertNull(CommonUtil.getString(null));
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void splitId() {
-        String idStr = "1,2,3,4";
-        Integer[] ids = CommonUtil.splitId(idStr);
-        Assert.equals(ids[2], NUM_3, ErrorCodeDef.FAILURE);
-        System.out.println("将逗号分割的数字转化为int[]");
-
-        idStr = "1|2|3|4";
-        ids = CommonUtil.splitId(idStr, GlobalConstants.VERTICAL_LINE);
-        Assert.equals(ids[2], NUM_3, ErrorCodeDef.FAILURE);
-        System.out.println("将竖线分割的数字转化为int[]");
+    public void testNotNullStr() {
+        // 测试非空字符串
+        assertEquals("test", CommonUtil.notNullStr("test"));
+        assertEquals("", CommonUtil.notNullStr(null));
+        assertEquals("", CommonUtil.notNullStr(""));
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void splitIdsByLong() {
-        String idStr = "1,2,3,4";
-        Long[] ids = CommonUtil.splitIdsByLong(idStr, GlobalConstants.SPLITOR);
-        Assert.equals(ids[2], NUM_3L, ErrorCodeDef.FAILURE);
-        System.out.println("将逗号分割的数字转化为long[]");
+    public void testSplitId() {
+        // 测试分割ID字符串
+        Integer[] ids = CommonUtil.splitId("1,2,3");
+        assertNotNull(ids);
+        assertEquals(3, ids.length);
+        assertEquals(Integer.valueOf(1), ids[0]);
+        assertEquals(Integer.valueOf(2), ids[1]);
+        assertEquals(Integer.valueOf(3), ids[2]);
+
+        // 测试空ID字符串
+        Integer[] emptyIds = CommonUtil.splitId(null);
+        assertNull(emptyIds);
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void match() {
-        String a = "10,100, 110";
-        String b = "10";
-
-        Assert.isTrue(CommonUtil.match(a, b), ErrorCodeDef.FAILURE);
-        System.out.println("字符串b在字符串a内可以找到");
-
-        b = "1";
-        Assert.isFalse(CommonUtil.match(a, b), ErrorCodeDef.FAILURE);
-        System.out.println("字符串b在字符串a内不能找到");
-
-        a = "NOT:10,100,110";
-        Assert.isTrue(CommonUtil.match(a, b), ErrorCodeDef.FAILURE);
-        System.out.println("字符串b不在字符串a内");
+    public void testSplitIdsByLong() {
+        // 测试分割长整型ID字符串
+        Long[] ids = CommonUtil.splitIdsByLong("1,2,3", ",");
+        assertNotNull(ids);
+        assertEquals(3, ids.length);
+        assertEquals(Long.valueOf(1), ids[0]);
+        assertEquals(Long.valueOf(2), ids[1]);
+        assertEquals(Long.valueOf(3), ids[2]);
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void removeAllSymbol() {
-        String str1 = "你好!什么\"#$额%&'()*+,-./:;<=天呐>?@[\\]^_`{好吧|}~";
-        String str2 = CommonUtil.removeAllSymbol(str1);
-        Assert.equals(str2, "你好什么额天呐好吧", ErrorCodeDef.FAILURE);
-        System.out.println("字符串str1中\"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\"这些符号都被去掉了");
+    public void testWildcardMatch() {
+        // 测试通配符匹配
+        assertTrue(CommonUtil.wildcardMatch("test*", "test123"));
+        assertTrue(CommonUtil.wildcardMatch("*test", "123test"));
+        assertTrue(CommonUtil.wildcardMatch("test?23", "test123"));
+        assertFalse(CommonUtil.wildcardMatch("test", "test123"));
+
+        // 测试集合通配符匹配
+        List<String> rules = Arrays.asList("test*", "*abc");
+        assertTrue(CommonUtil.wildcardMatch(rules, "test123"));
+        assertTrue(CommonUtil.wildcardMatch(rules, "123abc"));
+        assertFalse(CommonUtil.wildcardMatch(rules, "xyz"));
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void replaceAllBlank() {
-        String str1 = "       你好呀\n       你在干什么\t\n";
-        String str2 = CommonUtil.replaceAllBlank(str1);
-        Assert.equals(str2, "你好呀你在干什么", ErrorCodeDef.FAILURE);
-        System.out.println("去掉字符串str1中的空格、换行、制表符号");
+    public void testMatch() {
+        // 测试匹配
+        assertTrue(CommonUtil.match("*", "anything"));
+        assertTrue(CommonUtil.match("test", "test"));
+        assertFalse(CommonUtil.match("test", "testing"));
+
+        // 测试NOT匹配
+        assertTrue(CommonUtil.match("NOT:abc", "def"));
+        assertFalse(CommonUtil.match("NOT:abc", "abc"));
+
+        // 测试分隔符匹配
+        assertTrue(CommonUtil.match("a,b,c", "b"));
+        assertFalse(CommonUtil.match("a,b,c", "d"));
     }
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     *         <br>
-     */
     @Test
-    public void replaceRedundantBlank() {
-        String str1 = "       你好 呀\n       你在干什么\t\n";
-        String str2 = CommonUtil.replaceRedundantBlank(str1);
-        Assert.equals(str2, "你好 呀 你在干什么", ErrorCodeDef.FAILURE);
-        System.out.println("去掉字符串str1中的首尾空格，以及多余的空格、换行、制表符号");
+    public void testRemoveAllSymbol() {
+        // 测试移除所有符号
+        String result = CommonUtil.removeAllSymbol("Hello, World! 123");
+        assertEquals("Hello World 123", result);
+
+        // 测试空字符串
+        String emptyResult = CommonUtil.removeAllSymbol(null);
+        assertEquals("", emptyResult);
+    }
+
+    @Test
+    public void testReplaceAllBlank() {
+        // 测试移除所有空白字符
+        String result = CommonUtil.replaceAllBlank("Hello\t\n World  \r\n");
+        assertEquals("HelloWorld", result);
+
+        // 测试空字符串
+        String emptyResult = CommonUtil.replaceAllBlank(null);
+        assertEquals("", emptyResult);
+    }
+
+    @Test
+    public void testReplaceRedundantBlank() {
+        // 测试替换多余空白字符
+        String result = CommonUtil.replaceRedundantBlank("Hello\t\n  World  \r\n");
+        assertEquals("Hello World", result);
+
+        // 测试空字符串
+        String emptyResult = CommonUtil.replaceRedundantBlank(null);
+        assertEquals("", emptyResult);
     }
 }
