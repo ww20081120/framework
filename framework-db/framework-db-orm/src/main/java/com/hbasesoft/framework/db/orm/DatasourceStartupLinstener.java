@@ -22,26 +22,38 @@ import com.hbasesoft.framework.db.orm.util.DataSourceUtil;
  */
 public class DatasourceStartupLinstener implements StartupListener {
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param context <br>
-     */
-    public void complete(final ApplicationContext context) {
-        DataSourceUtil.init();
-    }
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 *         <br>
+	 */
+	@Override
+	public void init() {
+		DataSourceUtil.init();
+	}
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public LoadOrder getOrder() {
-        return LoadOrder.MIDDLE;
-    }
+//	/**
+//	 * Description: <br>
+//	 * 
+//	 * @author 王伟<br>
+//	 * @taskId <br>
+//	 * @param context <br>
+//	 */
+//	public void complete(final ApplicationContext context) {
+//		DataSourceUtil.init();
+//	}
+
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	@Override
+	public LoadOrder getOrder() {
+		return LoadOrder.MIDDLE;
+	}
 }

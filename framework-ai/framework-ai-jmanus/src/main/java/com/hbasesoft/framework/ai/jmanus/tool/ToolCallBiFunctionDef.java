@@ -21,68 +21,75 @@ import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.tool <br>
  */
-public interface ToolCallBiFunctionDef<T> extends BiFunction<T, ToolContext, ToolExecuteResult> {
+public interface ToolCallBiFunctionDef<I> extends BiFunction<I, ToolContext, ToolExecuteResult> {
 
-    /**
-     * 获取工具组的名称
-     * 
-     * @return 返回工具的唯一标识名称
-     */
-    String getServiceGroup();
+	/**
+	 * Get the name of the tool group
+	 * 
+	 * @return Returns the unique identifier name of the tool
+	 */
+	String getServiceGroup();
 
-    /**
-     * 获取工具的名称
-     * 
-     * @return 返回工具的唯一标识名称
-     */
-    String getName();
+	/**
+	 * Get the name of the tool
+	 * 
+	 * @return Returns the unique identifier name of the tool
+	 */
+	String getName();
 
-    /**
-     * 获取工具的描述信息
-     * 
-     * @return 返回工具的功能描述
-     */
-    String getDescription();
+	/**
+	 * Get the description information of the tool
+	 * 
+	 * @return Returns the functional description of the tool
+	 */
+	String getDescription();
 
-    /**
-     * 获取工具的参数定义模式
-     * 
-     * @return 返回 JSON 格式的参数定义模式
-     */
-    String getParameters();
+	/**
+	 * Get the parameter definition schema of the tool
+	 * 
+	 * @return Returns JSON format parameter definition schema
+	 */
+	String getParameters();
 
-    /**
-     * 获取工具的输入类型
-     * 
-     * @return 返回工具接受的输入参数类型 Class
-     */
-    Class<T> getInputType();
+	/**
+	 * Get the input type of the tool
+	 * 
+	 * @return Returns the input parameter type Class that the tool accepts
+	 */
+	Class<I> getInputType();
 
-    /**
-     * 判断工具是否直接返回结果
-     * 
-     * @return 如果工具直接返回结果则返回 true，否则返回 false
-     */
-    boolean isReturnDirect();
+	/**
+	 * Determine whether the tool returns results directly
+	 * 
+	 * @return Returns true if the tool returns results directly, otherwise false
+	 */
+	boolean isReturnDirect();
 
-    /**
-     * 设置关联的 Agent 实例
-     * 
-     * @param planId 要关联的计划 ID
-     */
-    public void setPlanId(String planId);
+	/**
+	 * Set the associated Agent instance
+	 * 
+	 * @param planId The plan ID to associate
+	 */
+	public void setCurrentPlanId(String planId);
 
-    /**
-     * 获取工具的当前状态字符串
-     * 
-     * @return 返回描述工具当前状态的字符串
-     */
-    String getCurrentToolStateString();
+	/**
+	 * root plan id is the global parent of the whole execution plan id .
+	 * 
+	 * @param rootPlanId
+	 */
+	public void setRootPlanId(String rootPlanId);
 
-    /**
-     * 清理指定 planId 的所有相关资源
-     * 
-     * @param planId 计划 ID
-     */
-    void cleanup(String planId);
+	/**
+	 * Get the current status string of the tool
+	 * 
+	 * @return Returns a string describing the current status of the tool
+	 */
+	String getCurrentToolStateString();
+
+	/**
+	 * Clean up all related resources for the specified planId
+	 * 
+	 * @param planId Plan ID
+	 */
+	void cleanup(String planId);
 }

@@ -1,200 +1,208 @@
+/*
+ * Copyright 2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.hbasesoft.framework.ai.jmanus.planning.model.vo;
-
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
-import com.hbasesoft.framework.ai.jmanus.agent.AgentState;
-import lombok.Data;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hbasesoft.framework.ai.jmanus.agent.AgentState;
 
 /**
- * 计划实体类， 用于管理执行计划的相关信息
+ * Plan entity class for managing execution plan related information
  */
-@Data
-public class ExecutionPlan {
-    /**
-     * 执行计划类，用于定义和管理一个执行计划的详细信息
-     */
-    private String planId; // 计划ID，用于唯一标识一个执行计划
+public class ExecutionPlan extends AbstractExecutionPlan {
 
-    private String title; // 计划标题，概括执行计划的主题
+	private List<ExecutionStep> steps;
 
-    private String planningThinking; // 规划思路，记录制定计划时的思考和依据
+	/**
+	 * Plan type for Jackson polymorphic deserialization
+	 */
+	private String planType = "simple";
 
-    private String executionParams; // 执行参数，存储执行计划所需的参数配置
+	/**
+	 * Default constructor - required for Jackson deserialization
+	 */
+	public ExecutionPlan() {
+		super();
+		this.steps = new ArrayList<>();
+	}
 
-    private List<ExecutionStep> steps; // 执行步骤列表，包含完成计划所需的具体步骤
+	public ExecutionPlan(String currentPlanId, String parentPlanId, String title) {
+		super(currentPlanId, parentPlanId, title);
+		this.steps = new ArrayList<>();
+	}
 
-    /**
-     * 构造方法，初始化执行计划的基本信息
-     *
-     * @param planId 计划ID，用于唯一标识一个执行计划
-     * @param title  计划标题，概括执行计划的主题
-     */
-    public ExecutionPlan(String planId, String title) {
-        this.planId = planId;
-        this.title = title;
-        this.steps = new ArrayList<>(); // 初始化执行步骤列表为空的ArrayList
-        this.executionParams = ""; // 初始化执行参数为空字符串
-    }
+	@JsonIgnore
+	public String getPlanType() {
+		return planType;
+	}
 
-    /**
-     * 添加执行步骤到执行步骤列表中
-     *
-     * @param step 要添加的执行步骤，不能为空
-     *             <p>
-     *             此方法将一个执行步骤对象添加到内部维护的执行步骤列表中
-     *             它允许在执行流程中动态地增加步骤
-     */
-    public void addStep(ExecutionStep step) {
-        this.steps.add(step); // 添加一个执行步骤到执行步骤列表中
-    }
+	public void setPlanType(String planType) {
+		this.planType = planType;
+	}
 
-    public void removeStep(ExecutionStep step) {
-        this.steps.remove(step); // 添加一个执行步骤到执行步骤列表中
-    }
+	// ExecutionPlan specific methods
 
-    public int getStepCount() {
-        return this.steps.size(); // 获取执行步骤列表的长度，即执行步骤的个数
-    }
+	public List<ExecutionStep> getSteps() {
+		return steps;
+	}
 
-    /**
-     * 获取计划执行状态的字符串格式
-     * 此方法构建并返回一个字符串，该字符串包含了计划的执行参数和全局步骤计划的状态
-     * 如果只显示已完成和第一个正在进行中的步骤，则通过参数控制
-     *
-     * @param onlyCompletedAndFirstInProgress 如果为true，仅显示已完成的步骤和第一个正在进行中的步骤；否则，显示所有步骤
-     * @return 包含执行参数和全局步骤计划状态的字符串
-     */
-    public String getPlanExecutionStateStringFormat(boolean onlyCompletedAndFirstInProgress) {
-        StringBuilder state = new StringBuilder();
-        state.append("\n- 执行参数: ").append("\n");
-        // 根据executionParams是否为空，添加相应的信息到state中
-        if (StringUtils.isNotEmpty(executionParams)) {
-            state.append(executionParams).append("\n\n");
-        } else {
-            state.append("未提供执行参数。\n\n");
-        }
+	public void setSteps(List<ExecutionStep> steps) {
+		this.steps = steps;
+	}
 
-        // 添加全局步骤计划的状态到state中
-        state.append("- 全局步骤计划:\n");
-        state.append(getStepsExecutionStateStringFormat(onlyCompletedAndFirstInProgress));
+	@JsonIgnore
+	public int getStepCount() {
+		return steps.size();
+	}
 
-        return state.toString();
-    }
+	// Implementation of AbstractExecutionPlan abstract methods
 
-    /**
-     * 获取步骤执行状态的字符串格式
-     *
-     * @param onlyCompletedAndFirstInProgress 当为true时，只输出所有已完成的步骤和第一个进行中的步骤
-     * @return 格式化的步骤执行状态字符串
-     */
-    public String getStepsExecutionStateStringFormat(boolean onlyCompletedAndFirstInProgress) {
-        StringBuilder state = new StringBuilder();
-        boolean foundInProgress = false;
+	@Override
+	@JsonIgnore
+	public List<ExecutionStep> getAllSteps() {
+		return new ArrayList<>(steps);
+	}
 
-        for (int i = 0; i < steps.size(); i++) {
-            ExecutionStep step = steps.get(i);
+	@Override
+	@JsonIgnore
+	public int getTotalStepCount() {
+		return getStepCount();
+	}
 
-            // 如果onlyCompletedAndFirstInProgress为true，则只显示COMPLETED状态的步骤和第一个IN_PROGRESS状态的步骤
-            if (onlyCompletedAndFirstInProgress) {
-                // 如果是COMPLETED状态，始终显示
-                if (step.getStatus() == AgentState.COMPLETED) {
-                    // 什么都不做，继续显示
-                } else if (step.getStatus() == AgentState.IN_PROGRESS && !foundInProgress) {
-                    foundInProgress = true;
-                }
-                // 其他所有情况（不是COMPLETED且不是第一个IN_PROGRESS）
-                else {
-                    continue;  // 跳过不符合条件的步骤
-                }
-            }
+	@Override
+	public void addStep(ExecutionStep step) {
+		this.steps.add(step);
+	}
 
-            String symbol = switch (step.getStatus()) {
-                case COMPLETED -> "[completed]";
-                case IN_PROGRESS -> "[in_progress]";
-                case BLOCKED -> "[blocked]";
-                case NOT_STARTED -> "[not_started]";
-                default -> "[ ]";
-            };
+	@Override
+	public void removeStep(ExecutionStep step) {
+		this.steps.remove(step);
+	}
 
-            state.append(i + 1)
-                    .append(".  **步骤 ")
-                    .append(i)
-                    .append(":**\n")
-                    .append("    *   **状态:** ")
-                    .append(symbol)
-                    .append("\n")
-                    .append("    *   **操作:** ")
-                    .append(step.getStepRequirement())
-                    .append("\n");
+	@Override
+	@JsonIgnore
+	public boolean isEmpty() {
+		return steps.isEmpty();
+	}
 
-            String result = step.getResult();
-            if (StringUtils.isNotEmpty(result)) {
-                state.append("    *   **结果:** ").append(result).append("\n\n");
-            }
-        }
-        return state.toString();
-    }
+	@Override
+	protected void clearSteps() {
+		steps.clear();
+	}
 
-    /**
-     * 获取所有步骤执行状态的字符串格式（兼容旧版本）
-     *
-     * @return 格式化的步骤执行状态字符串
-     */
-    public String getStepsExecutionStateStringFormat() {
-        return getStepsExecutionStateStringFormat(false);
-    }
+	// state.append("Global Goal (The global goal is just a directional guidance, you
+	// don't need to complete the global goal in the current request, just focus on the
+	// currently executing step): ")
+	// .append("\n")
+	// .append(title)
+	// .append("\n");
+	@Override
+	@JsonIgnore
+	public String getPlanExecutionStateStringFormat(boolean onlyCompletedAndFirstInProgress) {
+		StringBuilder state = new StringBuilder();
 
-    public String toJson() {
-        JSONObject obj = new JSONObject();
-        obj.put("planId", planId);
-        obj.put("title", title);
-        obj.put("steps", steps.stream().map(ExecutionStep::toJson).map(JSONObject::parseObject).collect(Collectors.toList()));
-        return obj.toJSONString();
-    }
+		state.append(
+				"- User Original Requirements (This requirement is the user's initial input, information can be referenced, but in the current interaction round only the current step requirements need to be completed!) :\n");
+		state.append(title).append("\n");
+		if (getUserRequest() != null && !getUserRequest().isEmpty()) {
+			state.append("").append(getUserRequest()).append("\n\n");
+		}
+		state.append("\n- Execution Parameters: ").append("\n");
+		if (executionParams != null && !executionParams.isEmpty()) {
+			state.append(executionParams).append("\n\n");
+		}
+		else {
+			state.append("No execution parameters provided.\n\n");
+		}
 
-    /**
-     * 从JSON字符串解析并创建ExecutionPlan对象
-     *
-     * @param planJson  JSON字符串
-     * @param newPlanId 新的计划ID（可选，如果提供将覆盖JSON中的planId）
-     * @return 解析后的ExecutionPlan对象
-     * @throws Exception 如果解析失败则抛出异常
-     */
-    public static ExecutionPlan fromJson(String planJson, String newPlanId) throws Exception {
-        JSONObject rootNode = JSONObject.parseObject(planJson);
+		state.append("- Historical Executed Step Records:\n");
+		state.append(getStepsExecutionStateStringFormat(onlyCompletedAndFirstInProgress));
 
-        // 获取计划标题
-        String title = rootNode.containsKey("title") ? rootNode.getString("title") : "来自模板的计划";
+		return state.toString();
+	}
 
-        // 使用新的计划ID或从JSON中获取
-        String planId = StringUtils.isNotEmpty(newPlanId) ? newPlanId : (rootNode.containsKey("planId") ? rootNode.getString("planId") : "unknown-plan");
+	/**
+	 * Get step execution status in string format
+	 * @param onlyCompletedAndFirstInProgress When true, only output all completed steps
+	 * and the first step in progress
+	 * @return Formatted step execution status string
+	 */
+	@JsonIgnore
+	public String getStepsExecutionStateStringFormat(boolean onlyCompletedAndFirstInProgress) {
+		StringBuilder state = new StringBuilder();
+		boolean foundInProgress = false;
 
-        // 创建新的ExecutionPlan对象
-        ExecutionPlan plan = new ExecutionPlan(planId, title);
-        if (rootNode.containsKey("steps")) {
-            JSONArray steps = rootNode.getJSONArray("steps");
-            if (CollectionUtils.isNotEmpty(steps)) {
-                int stepIndex = 0;
-                for (int i = 0; i < steps.size(); i++) {
-                    // 调用ExecutionStep的fromJson方法创建步骤
-                    ExecutionStep step = ExecutionStep.fromJson(steps.getJSONObject(i));
-                    Integer stepIndexValFromJson = step.getStepIndex();
-                    if (stepIndexValFromJson != null) {
-                        stepIndex = stepIndexValFromJson;
-                    } else {
-                        step.setStepIndex(stepIndex);
-                    }
-                    plan.addStep(step);
-                    stepIndex++;
-                }
-            }
-        }
-        return plan;
-    }
+		for (int i = 0; i < steps.size(); i++) {
+			ExecutionStep step = steps.get(i);
+
+			// If onlyCompletedAndFirstInProgress is true, only show COMPLETED status
+			// steps and the first IN_PROGRESS status step
+			if (onlyCompletedAndFirstInProgress) {
+				// If it's COMPLETED status, always show
+				if (step.getStatus() == AgentState.COMPLETED) {
+					// Do nothing, continue to show
+				}
+				// If it's IN_PROGRESS status and haven't found other IN_PROGRESS steps
+				// yet
+				else if (step.getStatus() == AgentState.IN_PROGRESS && !foundInProgress) {
+					foundInProgress = true; // Mark that IN_PROGRESS step has been found
+				}
+				// All other cases (not COMPLETED and not the first IN_PROGRESS)
+				else {
+					continue; // Skip steps that don't meet the criteria
+				}
+			}
+
+			String symbol = switch (step.getStatus()) {
+				case COMPLETED -> "[completed]";
+				case IN_PROGRESS -> "[in_progress]";
+				case BLOCKED -> "[blocked]";
+				case NOT_STARTED -> "[not_started]";
+				default -> "[ ]";
+			};
+
+			state.append(i + 1)
+				.append(".  **Step ")
+				.append(i)
+				.append(":**\n")
+				.append("    *   **Status:** ")
+				.append(symbol)
+				.append("\n")
+				.append("    *   **Action:** ")
+				.append(step.getStepRequirement())
+				.append("\n");
+
+			String result = step.getResult();
+			if (result != null && !result.isEmpty()) {
+				state.append("    *   **Result:** ").append(result).append("\n\n");
+			}
+
+		}
+		return state.toString();
+	}
+
+	/**
+	 * Get all step execution status in string format (compatible with old version)
+	 * @return Formatted step execution status string
+	 */
+	@JsonIgnore
+	public String getStepsExecutionStateStringFormat() {
+		return getStepsExecutionStateStringFormat(false);
+	}
+
 }

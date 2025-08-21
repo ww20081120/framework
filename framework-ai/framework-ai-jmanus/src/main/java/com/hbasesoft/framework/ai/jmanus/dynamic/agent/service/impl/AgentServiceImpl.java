@@ -7,8 +7,11 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -21,16 +24,18 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.vo.AgentConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.vo.Tool;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.DynamicAgentLoader;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.McpService;
-import com.hbasesoft.framework.ai.jmanus.planning.service.PlanningFactory;
-import com.hbasesoft.framework.ai.jmanus.planning.service.PlanningFactory.ToolCallBackContext;
-import com.hbasesoft.framework.ai.jmanus.tool.TerminateTool;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.po.DynamicModelPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
+import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.model.vo.NamespaceConfig;
+import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.service.NamespaceService;
+import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
+import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory;
+import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory.ToolCallBackContext;
+import com.hbasesoft.framework.ai.jmanus.tool.terminate.TerminateTool;
 import com.hbasesoft.framework.common.ErrorCodeDef;
-import com.hbasesoft.framework.common.GlobalConstants;
-import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.Assert;
-import com.hbasesoft.framework.common.utils.CommonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -43,232 +48,283 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.impl <br>
  */
+
 @Service
 public class AgentServiceImpl implements AgentService {
 
-    private static final String DEFAULT_AGENT_NAME = "DEFAULT_AGENT";
+	private final IDynamicAgentLoader dynamicAgentLoader;
 
-    private final DynamicAgentLoader dynamicAgentLoader;
+	private final DynamicAgentDao repository;
 
-    private final DynamicAgentDao dynamicAgentDao;
+	private final IPlanningFactory planningFactory;
 
-    private final PlanningFactory planningFactory;
+	private final IMcpService mcpService;
 
-    private final McpService mcpService;
+	private final NamespaceService namespaceService;
 
-    @Autowired
-    public AgentServiceImpl(@Lazy DynamicAgentLoader dynamicAgentLoader, DynamicAgentDao dynamicAgentDao,
-        @Lazy PlanningFactory planningFactory, @Lazy McpService mcpService) {
-        this.dynamicAgentLoader = dynamicAgentLoader;
-        this.dynamicAgentDao = dynamicAgentDao;
-        this.planningFactory = planningFactory;
-        this.mcpService = mcpService;
-    }
+	@Autowired
+	@Lazy
+	private ILlmService llmService;
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public List<AgentConfig> getAllAgents() {
-        return dynamicAgentDao.queryAll().stream().map(this::mapToAgentConfig).collect(Collectors.toList());
-    }
+	@Autowired
+	@Lazy
+	private ToolCallingManager toolCallingManager;
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id
-     * @return <br>
-     */
-    @Override
-    public AgentConfig getAgentById(String id) {
-        DynamicAgentPo entity = dynamicAgentDao.get(Long.parseLong(id));
-        Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, id);
-        return mapToAgentConfig(entity);
-    }
+	@Autowired
+	public AgentServiceImpl(@Lazy IDynamicAgentLoader dynamicAgentLoader, DynamicAgentDao repository,
+			@Lazy IPlanningFactory planningFactory, @Lazy IMcpService mcpService, NamespaceService namespaceService) {
+		this.dynamicAgentLoader = dynamicAgentLoader;
+		this.repository = repository;
+		this.planningFactory = planningFactory;
+		this.mcpService = mcpService;
+		this.namespaceService = namespaceService;
+	}
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param agentConfig
-     * @return <br>
-     */
-    @Override
-    public AgentConfig createAgent(AgentConfig agentConfig) {
-        try {
-            DynamicAgentPo existingAgent = dynamicAgentDao
-                .getByLambda(q -> q.eq(DynamicAgentPo::getAgentName, agentConfig.getName()));
-            if (existingAgent != null) {
-                LoggerUtil.info("找到名称一样的Agent：{0}, 做更新!", agentConfig.getName());
-                agentConfig.setId(existingAgent.getId().toString());
-                return updateAgent(agentConfig);
-            }
+	@Override
+	public List<AgentConfig> getAllAgentsByNamespace(String namespace) {
+		List<DynamicAgentPo> entities;
+		if (namespace == null || namespace.trim().isEmpty()) {
+			// If namespace is null or empty, use default namespace
+			namespace = "default";
+			LoggerUtil.info("Namespace not specified, using default namespace: {0}", namespace);
+		}
+		String ns = namespace.trim();
+		entities = repository.queryByLambda(q -> q.eq(DynamicAgentPo::getNamespace, ns));
+		return entities.stream().map(this::mapToAgentConfig).collect(Collectors.toList());
+	}
 
-            DynamicAgentPo po = new DynamicAgentPo();
-            updateEntityFromConfig(po, agentConfig);
-            dynamicAgentDao.save(po);
-            LoggerUtil.info("成功创建一个新的Agent：{0}", agentConfig.getName());
-            return mapToAgentConfig(po);
-        }
-        catch (Exception e) {
-            LoggerUtil.error(e);
-            // 如果是唯一性约束冲突异常，尝试返回现有代理
-            if (e.getMessage() != null && e.getMessage().contains("Unique")) {
-                DynamicAgentPo existingAgent = dynamicAgentDao
-                    .getByLambda(q -> q.eq(DynamicAgentPo::getAgentName, agentConfig.getName()));
-                if (existingAgent != null) {
-                    LoggerUtil.info("返回现有代理: {0}", agentConfig.getName());
-                    return mapToAgentConfig(existingAgent);
-                }
-            }
-            throw e;
-        }
-    }
+	@Override
+	public AgentConfig getAgentById(String id) {
+		DynamicAgentPo entity = repository.get(Long.parseLong(id));
+		Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, "agent");
+		return mapToAgentConfig(entity);
+	}
 
-    private void updateEntityFromConfig(DynamicAgentPo po, AgentConfig agentConfig) {
-        po.setAgentName(agentConfig.getName());
-        po.setAgentDescription(agentConfig.getDescription());
-        po.setNextStepPrompt(agentConfig.getNextStepPrompt());
+	@Override
+	public AgentConfig createAgent(AgentConfig config) {
+		try {
+			// Set default namespace if namespace is null or empty
+			if (config.getNamespace() == null || config.getNamespace().trim().isEmpty()) {
+				String defaultNamespace = getDefaultNamespace();
+				config.setNamespace(defaultNamespace);
+				LoggerUtil.info("Namespace not specified for Agent: {0}, using default namespace: {1}",
+						config.getName(), defaultNamespace);
+			}
 
-        // 1. 创建新集合以确保工具列表的唯一性和顺序
-        java.util.Set<String> toolSet = new java.util.LinkedHashSet<>();
-        List<String> availableTools = agentConfig.getAvailableTools();
-        if (availableTools != null) {
-            toolSet.addAll(availableTools);
-        }
+			// Check if an Agent with the same name already exists
+			DynamicAgentPo existingAgent = repository
+					.getByLambda(q -> q.eq(DynamicAgentPo::getAgentName, config.getName()));
+			if (existingAgent != null) {
+				LoggerUtil.info("Found Agent with same name: {0}, updating Agent", config.getName());
+				config.setId(existingAgent.getId().toString());
+				return updateAgent(config);
+			}
 
-        // 2. 添加终止工具（若集合中不存在）
-        if (!toolSet.contains(TerminateTool.NAME)) {
-            LoggerUtil.info("为代理[{0}]添加必要工具: {1}", agentConfig.getName(), TerminateTool.NAME);
-            toolSet.add(TerminateTool.NAME);
-        }
+			DynamicAgentPo entity = new DynamicAgentPo();
+			entity = mergePrompts(entity, config.getName());
+			updateEntityFromConfig(entity, config);
+			repository.save(entity);
+			LoggerUtil.info("Successfully created new Agent: {0}", config.getName());
+			return mapToAgentConfig(entity);
+		} catch (Exception e) {
+			LoggerUtil.warn("Exception occurred during Agent creation: {0}, error message: {1}", config.getName(),
+					e.getMessage());
+			// If it's a uniqueness constraint violation exception, try returning the
+			// existing Agent
+			if (e.getMessage() != null && e.getMessage().contains("Unique")) {
+				DynamicAgentPo existingAgent = repository
+						.getByLambda(q -> q.eq(DynamicAgentPo::getAgentName, config.getName()));
+				if (existingAgent != null) {
+					LoggerUtil.info("Return existing Agent: {0}", config.getName());
+					return mapToAgentConfig(existingAgent);
+				}
+			}
+			throw e;
+		}
+	}
 
-        // 3. 转换为列表并设置到实体中
-        po.setAvailableToolKeys(new java.util.ArrayList<>(toolSet));
-        po.setClassName(agentConfig.getName());
-    }
+	@Override
+	public AgentConfig updateAgent(AgentConfig config) {
+		DynamicAgentPo entity = repository.get(config.getId());
+		Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, "agent");
+		updateEntityFromConfig(entity, config);
+		repository.save(entity);
+		return mapToAgentConfig(entity);
+	}
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param agentConfig
-     * @return <br>
-     */
-    @Override
-    public AgentConfig updateAgent(AgentConfig agentConfig) {
-        DynamicAgentPo entity = dynamicAgentDao.get(Long.parseLong(agentConfig.getId()));
-        updateEntityFromConfig(entity, agentConfig);
-        dynamicAgentDao.update(entity);
-        return mapToAgentConfig(entity);
-    }
+	@Override
+	public void deleteAgent(String id) {
+		DynamicAgentPo entity = repository.get(id);
+		Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, "agent");
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param id <br>
-     */
-    @Override
-    public void deleteAgent(String id) {
-        DynamicAgentPo entity = dynamicAgentDao.get(Long.parseLong(id));
-        if (DEFAULT_AGENT_NAME.equals(entity.getAgentName())) {
-            throw new IllegalArgumentException("默认智能体不能删除");
-        }
-        dynamicAgentDao.deleteById(entity.getId());
-    }
+		// Protect built-in agents from deletion
+		if (Boolean.TRUE.equals(entity.getBuiltIn())) {
+			throw new IllegalArgumentException("Cannot delete built-in Agent: " + entity.getAgentName());
+		}
 
-    /**
-     * 获取所有可用工具的列表。 该方法会生成一个唯一的 UUID，使用该 UUID 从 PlanningFactory 获取工具回调上下文， 并将其转换为 Tool 对象列表。最后，无论操作是否成功，都会调用 McpService
-     * 的 close 方法关闭相关资源。
-     * 
-     * @return 可用工具的列表
-     */
-    @Override
-    public List<Tool> getAvailableTools() {
-        String uuid = CommonUtil.getTransactionID();
+		repository.deleteById(Long.parseLong(id));
+	}
 
-        try {
-            Map<String, ToolCallBackContext> toolcallContext = planningFactory.toolCallbackMap(uuid);
-            return toolcallContext.entrySet().stream().map(entry -> {
-                Tool tool = new Tool();
-                tool.setKey(entry.getKey());
-                tool.setName(entry.getKey()); // You might want to provide a more friendly
-                tool.setDescription(entry.getValue().getFunctionInstance().getDescription());
-                tool.setEnabled(true);
-                tool.setServiceGroup(entry.getValue().getFunctionInstance().getServiceGroup());
-                return tool;
-            }).collect(Collectors.toList());
-        }
-        finally {
-            mcpService.close(uuid);
-        }
-    }
+	public List<Tool> getAvailableTools() {
 
-    /**
-     * 创建一个动态的基础代理对象。 该方法会根据传入的代理名称、计划 ID 和初始代理设置，尝试加载一个动态代理对象， 并为其设置计划 ID 和工具回调映射，最后返回加载好的基础代理对象。
-     * 
-     * @param name 代理的名称，用于标识要加载的代理
-     * @param planId 计划的 ID，将关联到代理对象上
-     * @param initialAgentSetting 初始代理设置，包含一些用于初始化代理的配置信息
-     * @return 加载好的基础代理对象
-     * @throws 若在加载基础代理过程中出现异常，则抛出该异常
-     */
-    @Override
-    public BaseAgent createDynamicBaseAgent(String name, String planId, Map<String, Object> initialAgentSetting) {
-        LoggerUtil.info("创建一个新的BaseAgent: {0}, planId: {1}", name, planId);
+		String uuid = UUID.randomUUID().toString();
+		String expectedReturnInfo = "dummyColumn1, dummyColumn2";
+		try {
+			Map<String, ToolCallBackContext> toolcallContext = planningFactory.toolCallbackMap(uuid, uuid,
+					expectedReturnInfo);
+			return toolcallContext.entrySet().stream().map(entry -> {
+				Tool tool = new Tool();
+				tool.setKey(entry.getKey());
+				tool.setName(entry.getKey()); // You might want to provide a more friendly
+				// name
+				tool.setDescription(entry.getValue().getFunctionInstance().getDescription());
+				tool.setEnabled(true);
+				tool.setServiceGroup(entry.getValue().getFunctionInstance().getServiceGroup());
+				return tool;
+			}).collect(Collectors.toList());
+		} finally {
+			mcpService.close(uuid);
+		}
+	}
 
-        try {
-            // 通过 dynamicAgentLoader 根据代理名称和初始设置加载已存在的动态代理对象
-            DynamicAgent agent = dynamicAgentLoader.loadAgent(name, initialAgentSetting);
-            agent.setPlanId(planId);
+	private AgentConfig mapToAgentConfig(DynamicAgentPo entity) {
+		AgentConfig config = new AgentConfig();
+		entity = mergePrompts(entity, entity.getAgentName());
+		config.setId(entity.getId().toString());
+		config.setName(entity.getAgentName());
+		config.setDescription(entity.getAgentDescription());
+		config.setSystemPrompt(entity.getSystemPrompt());
+		config.setNextStepPrompt(entity.getNextStepPrompt());
+		config.setAvailableTools(entity.getAvailableToolKeys());
+		config.setClassName(entity.getClassName());
+		config.setNamespace(entity.getNamespace());
+		config.setBuiltIn(entity.getBuiltIn());
+		DynamicModelPo model = entity.getModel();
+		config.setModel(model == null ? null : model.mapToModelConfig());
+		return config;
+	}
 
-            // 从 PlanningFactory 获取工具回调映射，该映射包含工具与其回调上下文的关联信息
-            Map<String, ToolCallBackContext> toolCallbackMap = planningFactory.toolCallbackMap(planId);
-            // 为动态代理对象设置工具回调提供者
-            agent.setToolCallbackProvider(new ToolCallbackProvider() {
+	/**
+	 * Get default namespace code when no namespace is specified. Uses the first
+	 * available namespace from getAllNamespaces(), or "default" if no namespaces
+	 * exist.
+	 * 
+	 * @return default namespace code
+	 */
+	private String getDefaultNamespace() {
+		try {
+			List<NamespaceConfig> namespaces = namespaceService.getAllNamespaces();
+			if (!namespaces.isEmpty()) {
+				// Find the namespace with code "default" first
+				for (NamespaceConfig namespace : namespaces) {
+					if ("default".equals(namespace.getCode())) {
+						LoggerUtil.debug("Found default namespace with code: {0}", namespace.getCode());
+						return namespace.getCode();
+					}
+				}
+				// If no "default" code namespace found, use the first one
+				String firstNamespaceCode = namespaces.get(0).getCode();
+				LoggerUtil.debug("Using first namespace as default: {0}", firstNamespaceCode);
+				return firstNamespaceCode;
+			} else {
+				// If no namespaces exist, return "default"
+				LoggerUtil.warn("No namespaces found, using fallback default namespace code: default");
+				return "default";
+			}
+		} catch (Exception e) {
+			LoggerUtil.error("Error getting default namespace, using fallback: {0}", e.getMessage());
+			return "default";
+		}
+	}
 
-                @Override
-                public Map<String, ToolCallBackContext> getToolCallBackContext() {
-                    return toolCallbackMap;
-                }
-            });
-            LoggerUtil.info("成功加载BaseAgent: {0}, 可用的工具量为: {1}", name, agent.getToolCallList().size());
-            return agent;
-        }
-        catch (Exception e) {
-            LoggerUtil.error(e);
-            throw new ServiceException(e);
-        }
-    }
+	private void updateEntityFromConfig(DynamicAgentPo entity, AgentConfig config) {
+		// Set default namespace if namespace is null or empty
+		if (config.getNamespace() == null || config.getNamespace().trim().isEmpty()) {
+			String defaultNamespace = getDefaultNamespace();
+			config.setNamespace(defaultNamespace);
+			LoggerUtil.info("Namespace not specified for Agent: {0}, using default namespace: {1}", config.getName(),
+					defaultNamespace);
+		}
 
-    /**
-     * 合并提示信息，处理已弃用的 SystemPrompt 属性。 如果 DynamicAgentEntity 对象的 SystemPrompt 属性不为空，将其内容合并到 NextStepPrompt 中， 并将
-     * SystemPrompt 属性置空。
-     * 
-     * @param entity 动态代理实体对象，包含系统提示和下一步提示信息
-     * @param agentName 代理的名称，用于日志记录
-     * @return 处理后的 DynamicAgentEntity 对象
-     */
-    private AgentConfig mapToAgentConfig(DynamicAgentPo entity) {
-        AgentConfig config = new AgentConfig();
-        config.setId(entity.getId().toString());
-        config.setName(entity.getAgentName());
-        config.setDescription(entity.getAgentDescription());
-        config.setSystemPrompt(GlobalConstants.BLANK);
-        config.setNextStepPrompt(entity.getNextStepPrompt());
-        config.setAvailableTools(entity.getAvailableToolKeys());
-        config.setClassName(entity.getClassName());
-        return config;
-    }
+		entity.setAgentName(config.getName());
+		entity.setAgentDescription(config.getDescription());
+		String nextStepPrompt = config.getNextStepPrompt();
+		entity = mergePrompts(entity, config.getName());
+		entity.setNextStepPrompt(nextStepPrompt);
+
+		// 1. Create new collection to ensure uniqueness and order
+		java.util.Set<String> toolSet = new java.util.LinkedHashSet<>();
+		List<String> availableTools = config.getAvailableTools();
+		if (availableTools != null) {
+			toolSet.addAll(availableTools);
+		}
+		// 2. Add TerminateTool (if not exists)
+		if (!toolSet.contains(TerminateTool.name)) {
+			LoggerUtil.info("Adding necessary tool for Agent[{0}]: {1}", config.getName(), TerminateTool.name);
+			toolSet.add(TerminateTool.name);
+		}
+		// 3. Convert to List and set
+		entity.setAvailableToolKeys(new java.util.ArrayList<>(toolSet));
+		entity.setClassName(config.getName());
+		ModelConfig model = config.getModel();
+		if (model != null) {
+			entity.setModel(new DynamicModelPo(model.getId()));
+		}
+
+		// 4. Set the user-selected namespace
+		entity.setNamespace(config.getNamespace());
+
+		// 5. Set builtIn if provided (only allow setting to false for existing built-in
+		// agents)
+		if (config.getBuiltIn() != null) {
+			entity.setBuiltIn(config.getBuiltIn());
+		}
+	}
+
+	private DynamicAgentPo mergePrompts(DynamicAgentPo entity, String agentName) {
+		// The SystemPrompt property here is deprecated, use nextStepPrompt directly
+		if (StringUtils.isNotBlank(entity.getSystemPrompt())) {
+			String systemPrompt = entity.getSystemPrompt();
+			String nextPrompt = entity.getNextStepPrompt();
+			// The SystemPrompt property here is deprecated, use nextStepPrompt directly
+			if (nextPrompt != null && !nextPrompt.trim().isEmpty()) {
+				nextPrompt = systemPrompt + "\n" + nextPrompt;
+			}
+			LoggerUtil.warn(
+					"Agent[{0}] SystemPrompt is not empty, but the property is deprecated, only keep nextPrompt. This time merge the agent content. If you need this content to take effect in prompt, please directly update the unique prompt in the interface. Current specified value: {1}",
+					agentName, nextPrompt);
+			entity.setSystemPrompt(" ");
+		}
+		return entity;
+	}
+
+	@Override
+	public BaseAgent createDynamicBaseAgent(String name, String planId, String rootPlanId,
+			Map<String, Object> initialAgentSetting, String expectedReturnInfo) {
+
+		LoggerUtil.info("Create new BaseAgent: {0}, planId: {1}", name, planId);
+
+		try {
+			// Load existing Agent through dynamicAgentLoader
+			DynamicAgent agent = dynamicAgentLoader.loadAgent(name, initialAgentSetting);
+
+			// Set planId
+			agent.setCurrentPlanId(planId);
+			agent.setRootPlanId(rootPlanId);
+			// Set tool callback mapping
+			Map<String, ToolCallBackContext> toolCallbackMap = planningFactory.toolCallbackMap(planId, rootPlanId,
+					expectedReturnInfo);
+			agent.setToolCallbackProvider(new ToolCallbackProvider() {
+
+				@Override
+				public Map<String, ToolCallBackContext> getToolCallBackContext() {
+					return toolCallbackMap;
+				}
+			});
+			return agent;
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to create dynamic base agent: " + name, e);
+		}
+	}
 
 }

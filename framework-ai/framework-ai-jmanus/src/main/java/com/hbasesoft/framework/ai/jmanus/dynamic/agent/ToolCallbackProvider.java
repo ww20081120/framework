@@ -7,7 +7,8 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.agent;
 
 import java.util.Map;
 
-import com.hbasesoft.framework.ai.jmanus.planning.service.PlanningFactory;
+import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory.ToolCallBackContext;
+
 
 /**
  * <Description> <br>
@@ -27,6 +28,6 @@ public interface ToolCallbackProvider {
      * 
      * @return 一个包含工具标识和对应工具回调上下文的映射
      */
-    Map<String, PlanningFactory.ToolCallBackContext> getToolCallBackContext();
+    Map<String, ToolCallBackContext> getToolCallBackContext();
 
 }
