@@ -3,8 +3,6 @@
  */
 package com.hbasesoft.framework.db.core;
 
-import java.io.Serializable;
-
 import com.alibaba.fastjson2.JSON;
 
 /**
@@ -17,20 +15,20 @@ import com.alibaba.fastjson2.JSON;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.bean <br>
  */
-public abstract class BaseEntity implements Serializable {
-    /**
-     * serialVersionUID
-     */
-    private static final long serialVersionUID = 540091732380370744L;
+public abstract class BaseEntity implements IBaseEntity {
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 540091732380370744L;
 
-    /**
-     * toString
-     * 
-     * @see java.lang.Object#toString()
-     * @return <br>
-     */
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
-    }
+	/**
+	 * toString
+	 * 
+	 * @see java.lang.Object#toString()
+	 * @return <br>
+	 */
+	@Override
+	public String toString() {
+		return JSON.toJSONString(this);
+	}
 }

@@ -15,7 +15,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.advisor.CustomMessageChatMemoryAdvisor;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.enums.PromptEnum;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptService;
@@ -45,7 +45,7 @@ import reactor.core.publisher.Flux;
  */
 public class PlanCreator {
 
-	private final List<DynamicAgentPo> agents;
+	private final List<DynamicAgent> agents;
 
 	private final ILlmService llmService;
 
@@ -59,7 +59,7 @@ public class PlanCreator {
 
 	private final StreamingResponseHandler streamingResponseHandler;
 
-	public PlanCreator(List<DynamicAgentPo> agents, ILlmService llmService, PlanningToolInterface planningTool,
+	public PlanCreator(List<DynamicAgent> agents, ILlmService llmService, PlanningToolInterface planningTool,
 			PlanExecutionRecorder recorder, PromptService promptService, IManusProperties manusProperties,
 			StreamingResponseHandler streamingResponseHandler) {
 		this.agents = agents;
@@ -169,11 +169,11 @@ public class PlanCreator {
 	 * @param agents agent list
 	 * @return formatted agent information
 	 */
-	private String buildAgentsInfo(List<DynamicAgentPo> agents) {
+	private String buildAgentsInfo(List<DynamicAgent> agents) {
 		StringBuilder agentsInfo = new StringBuilder("Available Agents:\n");
-		for (DynamicAgentPo agent : agents) {
-			agentsInfo.append("- Agent Name: ").append(agent.getAgentName()).append("\n  Description: ")
-					.append(agent.getAgentDescription()).append("\n");
+		for (DynamicAgent agent : agents) {
+			agentsInfo.append("- Agent Name: ").append(agent.getName()).append("\n  Description: ")
+					.append(agent.getDescription()).append("\n");
 		}
 		return agentsInfo.toString();
 	}

@@ -31,8 +31,8 @@ import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.ToolCallbackProvider;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServiceVo;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpTool;
@@ -160,9 +160,10 @@ public class PlanningFactory implements IPlanningFactory {
 		this.tableProcessingService = tableProcessingService;
 	}
 
+	@Override
 	public PlanningCoordinator createPlanningCoordinator(ExecutionContext context) {
 		// Add all dynamic agents from the database
-		List<DynamicAgentPo> agentEntities = dynamicAgentLoader.getAgents(context);
+		List<DynamicAgent> agentEntities = dynamicAgentLoader.getAgents(context);
 
 		PlanningToolInterface planningTool = new PlanningTool();
 
@@ -182,7 +183,7 @@ public class PlanningFactory implements IPlanningFactory {
 	public PlanningCoordinator createPlanningCoordinator(String planId) {
 
 		// Add all dynamic agents from the database
-		List<DynamicAgentPo> agentEntities = dynamicAgentLoader.getAllAgents();
+		List<DynamicAgent> agentEntities = dynamicAgentLoader.getAllAgents();
 
 		PlanningToolInterface planningTool = new PlanningTool();
 
@@ -198,6 +199,7 @@ public class PlanningFactory implements IPlanningFactory {
 		return planningCoordinator;
 	}
 
+	@Override
 	public Map<String, ToolCallBackContext> toolCallbackMap(String planId, String rootPlanId,
 			String expectedReturnInfo) {
 		Map<String, ToolCallBackContext> toolCallbackMap = new HashMap<>();

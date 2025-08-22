@@ -27,23 +27,11 @@ public class DatasourceStartupLinstener implements StartupListener {
 	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
-	 *         <br>
+	 * @param context <br>
 	 */
-	@Override
-	public void init() {
+	public void complete(final ApplicationContext context) {
 		DataSourceUtil.init();
 	}
-
-//	/**
-//	 * Description: <br>
-//	 * 
-//	 * @author 王伟<br>
-//	 * @taskId <br>
-//	 * @param context <br>
-//	 */
-//	public void complete(final ApplicationContext context) {
-//		DataSourceUtil.init();
-//	}
 
 	/**
 	 * Description: <br>

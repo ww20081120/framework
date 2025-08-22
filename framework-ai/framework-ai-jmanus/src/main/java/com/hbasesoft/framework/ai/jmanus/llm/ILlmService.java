@@ -8,7 +8,7 @@ package com.hbasesoft.framework.ai.jmanus.llm;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 
-import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.po.DynamicModelPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 
 /** 
  * <Description> <br> 
@@ -39,7 +39,7 @@ public interface ILlmService {
 	 * @param model
 	 * @return ChatClient
 	 */
-	ChatClient getDynamicChatClient(DynamicModelPo model);
+	ChatClient getDynamicChatClient(ModelConfig model);
 
 	/**
 	 * Get Agent memory

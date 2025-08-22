@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.hbasesoft.framework.ai.jmanus.agent.BaseAgent;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
@@ -37,7 +37,7 @@ public class PlanExecutor extends AbstractPlanExecutor {
 	 * @param agentService Agent service
 	 * @param llmService LLM service
 	 */
-	public PlanExecutor(List<DynamicAgentPo> agents, PlanExecutionRecorder recorder, AgentService agentService,
+	public PlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
 			ILlmService llmService, IManusProperties manusProperties) {
 		super(agents, recorder, agentService, llmService, manusProperties);
 	}

@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import com.hbasesoft.framework.ai.jmanus.agent.AgentState;
 import com.hbasesoft.framework.ai.jmanus.agent.BaseAgent;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
@@ -43,7 +43,7 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 	// other characters
 	protected final Pattern pattern = Pattern.compile("^\\s*\\[([^\\]]+)\\]");
 
-	protected final List<DynamicAgentPo> agents;
+	protected final List<DynamicAgent> agents;
 
 	protected final AgentService agentService;
 
@@ -62,7 +62,7 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 
 	public static final String EXECUTION_ENV_STRING_KEY = "current_step_env_data";
 
-	public AbstractPlanExecutor(List<DynamicAgentPo> agents, PlanExecutionRecorder recorder,
+	public AbstractPlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder,
 			AgentService agentService, ILlmService llmService, IManusProperties manusProperties) {
 		this.agents = agents;
 		this.recorder = recorder;
@@ -133,9 +133,9 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 	 */
 	protected BaseAgent getExecutorForStep(String stepType, ExecutionContext context, Map<String, Object> initSettings,
 			String expectedReturnInfo) {
-		for (DynamicAgentPo agent : agents) {
-			if (agent.getAgentName().equalsIgnoreCase(stepType)) {
-				BaseAgent executor = agentService.createDynamicBaseAgent(agent.getAgentName(),
+		for (DynamicAgent agent : agents) {
+			if (agent.getName().equalsIgnoreCase(stepType)) {
+				BaseAgent executor = agentService.createDynamicBaseAgent(agent.getName(),
 						context.getPlan().getCurrentPlanId(), context.getPlan().getRootPlanId(), initSettings,
 						expectedReturnInfo);
 				// Set thinkActRecordId from context for sub-plan executions

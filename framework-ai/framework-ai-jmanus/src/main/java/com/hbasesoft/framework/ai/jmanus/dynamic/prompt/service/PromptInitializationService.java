@@ -5,9 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -17,7 +17,7 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service;
  */
 public interface PromptInitializationService {
 
-	 void initializePromptsForNamespace(String namespace);
-	 
-	 void initializePromptsForNamespaceWithLanguage(String namespace, String language);
+	void initializePromptsForNamespace(String namespace);
+
+	void initializePromptsForNamespaceWithLanguage(String namespace, String language);
 }

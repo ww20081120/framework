@@ -10,9 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
+import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -27,11 +29,11 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 
 @Service
-public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
+public class UnifiedDirectoryManager implements IUnifiedDirectoryManager, StartupListener {
 
 	private final IManusProperties manusProperties;
 
-	private final String workingDirectoryPath;
+	private String workingDirectoryPath;
 
 	// Directory structure constants
 	private static final String EXTENSIONS_DIR = "extensions";
@@ -40,7 +42,20 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 
 	public UnifiedDirectoryManager(IManusProperties manusProperties) {
 		this.manusProperties = manusProperties;
-		this.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
+
+	}
+
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param context <br>
+	 */
+	@Override
+	public void complete(ApplicationContext context) {
+		UnifiedDirectoryManager udm = context.getBean(UnifiedDirectoryManager.class);
+		udm.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
 	}
 
 	/**

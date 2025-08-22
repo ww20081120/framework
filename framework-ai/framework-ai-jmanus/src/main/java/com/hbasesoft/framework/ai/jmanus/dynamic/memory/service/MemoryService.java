@@ -5,9 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.memory.service;
 
-import java.util.List;
-
-import com.hbasesoft.framework.ai.jmanus.dynamic.memory.po.MemoryPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.memory.vo.MemoryVo;
 
 /**
  * <Description> <br>
@@ -20,13 +18,6 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.memory.po.MemoryPo;
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.memory.service <br>
  */
 public interface MemoryService {
-	List<MemoryPo> getMemories();
 
-	void deleteMemory(String id);
-
-	MemoryPo saveMemory(MemoryPo memoryEntity);
-
-	MemoryPo updateMemory(MemoryPo memoryEntity);
-
-	MemoryPo singleMemory(String memoryId);
+	MemoryVo saveMemory(MemoryVo memoryEntity);
 }

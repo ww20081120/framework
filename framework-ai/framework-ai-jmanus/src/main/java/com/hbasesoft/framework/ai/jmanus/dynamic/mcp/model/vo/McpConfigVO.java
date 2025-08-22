@@ -8,15 +8,14 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigStatus;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigType;
 
 import lombok.Data;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -36,8 +35,6 @@ public class McpConfigVO {
 	private String connectionConfig;
 
 	private List<String> toolNames; // Add tool name list for frontend display
-
-	private final ObjectMapper objectMapper;
 
 	// New field-based properties
 	private String command;

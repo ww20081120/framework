@@ -30,8 +30,8 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.model.dao.DynamicModelDao;
-import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.po.DynamicModelPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.service.DynamicModelService;
 import com.hbasesoft.framework.ai.jmanus.event.JmanusListener;
 import com.hbasesoft.framework.ai.jmanus.event.ModelChangeEvent;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -77,7 +77,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 	private IManusProperties manusProperties;
 
 	@Autowired
-	private DynamicModelDao dynamicModelRepository;
+	private DynamicModelService dynamicModelService;
 
 	@Autowired
 	private ChatMemoryRepository chatMemoryRepository;
@@ -93,10 +93,9 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 		try {
 			LoggerUtil.info("Checking and init ChatClient instance...");
 
-			DynamicModelPo defaultModel = dynamicModelRepository
-					.getByLambda(q -> q.eq(DynamicModelPo::isDefault, true));
+			ModelConfig defaultModel = dynamicModelService.getDefault();
 			if (defaultModel == null) {
-				List<DynamicModelPo> availableModels = dynamicModelRepository.queryAll();
+				List<ModelConfig> availableModels = dynamicModelService.queryAll();
 				if (!availableModels.isEmpty()) {
 					defaultModel = availableModels.get(0);
 					LoggerUtil.info("Cannot find default model, use the first one: {0}", defaultModel.getModelName());
@@ -116,7 +115,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 		}
 	}
 
-	private void initializeChatClientsWithModel(DynamicModelPo model) {
+	private void initializeChatClientsWithModel(ModelConfig model) {
 		OpenAiChatOptions.Builder optionsBuilder = OpenAiChatOptions.builder();
 
 		if (model.getTemperature() != null) {
@@ -152,10 +151,9 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 
 	private void tryLazyInitialization() {
 		try {
-			DynamicModelPo defaultModel = dynamicModelRepository
-					.getByLambda(q -> q.eq(DynamicModelPo::isDefault, true));
+			ModelConfig defaultModel = dynamicModelService.getDefault();
 			if (defaultModel == null) {
-				List<DynamicModelPo> availableModels = dynamicModelRepository.queryAll();
+				List<ModelConfig> availableModels = dynamicModelService.queryAll();
 				if (!availableModels.isEmpty()) {
 					defaultModel = availableModels.get(0);
 				}
@@ -184,7 +182,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 	}
 
 	@Override
-	public ChatClient getDynamicChatClient(DynamicModelPo model) {
+	public ChatClient getDynamicChatClient(ModelConfig model) {
 		Long modelId = model.getId();
 		if (clients.containsKey(modelId)) {
 			return clients.get(modelId);
@@ -192,7 +190,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 		return buildOrUpdateDynamicChatClient(model);
 	}
 
-	public ChatClient buildOrUpdateDynamicChatClient(DynamicModelPo model) {
+	public ChatClient buildOrUpdateDynamicChatClient(ModelConfig model) {
 		Long modelId = model.getId();
 		String host = model.getBaseUrl();
 		String apiKey = model.getApiKey();
@@ -292,11 +290,11 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 
 	@Override
 	public void onEvent(ModelChangeEvent event) {
-		DynamicModelPo DynamicModelPo = event.getDynamicModelEntity();
+		ModelConfig DynamicModelPo = event.getDynamicModelEntity();
 
 		initializeChatClientsWithModel(DynamicModelPo);
 
-		if (DynamicModelPo.isDefault()) {
+		if (DynamicModelPo.getIsDefault()) {
 			LoggerUtil.info("Model updated");
 			this.planningChatClient = null;
 			this.agentExecutionClient = null;
@@ -305,13 +303,13 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 		}
 	}
 
-	private ChatClient buildPlanningChatClient(DynamicModelPo DynamicModelPo, OpenAiChatOptions defaultOptions) {
+	private ChatClient buildPlanningChatClient(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
 		OpenAiChatModel chatModel = openAiChatModel(DynamicModelPo, defaultOptions);
 		return ChatClient.builder(chatModel).defaultAdvisors(new SimpleLoggerAdvisor())
 				.defaultOptions(OpenAiChatOptions.fromOptions(defaultOptions)).build();
 	}
 
-	private ChatClient buildAgentExecutionClient(DynamicModelPo DynamicModelPo, OpenAiChatOptions defaultOptions) {
+	private ChatClient buildAgentExecutionClient(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
 		defaultOptions.setInternalToolExecutionEnabled(false);
 		OpenAiChatModel chatModel = openAiChatModel(DynamicModelPo, defaultOptions);
 		return ChatClient.builder(chatModel)
@@ -320,14 +318,14 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 				.defaultOptions(OpenAiChatOptions.fromOptions(defaultOptions)).build();
 	}
 
-	private ChatClient buildFinalizeChatClient(DynamicModelPo DynamicModelPo, OpenAiChatOptions defaultOptions) {
+	private ChatClient buildFinalizeChatClient(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
 		OpenAiChatModel chatModel = openAiChatModel(DynamicModelPo, defaultOptions);
 		return ChatClient.builder(chatModel)
 				// .defaultAdvisors(MessageChatMemoryAdvisor.builder(conversationMemory).build())
 				.defaultAdvisors(new SimpleLoggerAdvisor()).build();
 	}
 
-	public OpenAiChatModel openAiChatModel(DynamicModelPo DynamicModelPo, OpenAiChatOptions defaultOptions) {
+	public OpenAiChatModel openAiChatModel(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
 		defaultOptions.setModel(DynamicModelPo.getModelName());
 		if (defaultOptions.getTemperature() == null && DynamicModelPo.getTemperature() != null) {
 			defaultOptions.setTemperature(DynamicModelPo.getTemperature());
@@ -362,7 +360,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 			return getDefaultChatClient();
 		}
 
-		DynamicModelPo model = dynamicModelRepository.get(modelId);
+		ModelConfig model = dynamicModelService.get(modelId);
 		if (model == null) {
 			return getDefaultChatClient();
 		}
@@ -372,12 +370,12 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 
 	@Override
 	public ChatClient getDefaultChatClient() {
-		DynamicModelPo defaultModel = dynamicModelRepository.getByLambda(q -> q.eq(DynamicModelPo::isDefault, true));
+		ModelConfig defaultModel = dynamicModelService.getDefault();
 		if (defaultModel != null) {
 			return getDynamicChatClient(defaultModel);
 		}
 
-		List<DynamicModelPo> availableModels = dynamicModelRepository.queryAll();
+		List<ModelConfig> availableModels = dynamicModelService.queryAll();
 		if (!availableModels.isEmpty()) {
 			return getDynamicChatClient(availableModels.get(0));
 		}
@@ -386,7 +384,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 	}
 
 	private OpenAiApi openAiApi(RestClient.Builder restClientBuilder, WebClient.Builder webClientBuilder,
-			DynamicModelPo DynamicModelPo) {
+			ModelConfig DynamicModelPo) {
 		Map<String, String> headers = DynamicModelPo.getHeaders();
 		MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
 		if (headers != null) {

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.config.McpProperties;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigStatus;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.po.McpConfigPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServerConfig;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
@@ -41,7 +41,7 @@ public class McpConfigValidator {
 	 * @param mcpConfigEntity MCP configuration entity
 	 * @throws IOException Thrown when validation fails
 	 */
-	public void validateMcpConfigPo(McpConfigPo mcpConfigEntity) throws IOException {
+	public void validateMcpConfigPo(McpConfigVO mcpConfigEntity) throws IOException {
 		String serverName = mcpConfigEntity.getMcpServerName();
 
 		// Validate server name
@@ -148,7 +148,7 @@ public class McpConfigValidator {
 	 * @param mcpConfigEntity MCP configuration entity
 	 * @return true if enabled, false if disabled
 	 */
-	public boolean isEnabled(McpConfigPo mcpConfigEntity) {
+	public boolean isEnabled(McpConfigVO mcpConfigEntity) {
 		return mcpConfigEntity.getStatus() != null && mcpConfigEntity.getStatus() == McpConfigStatus.ENABLE;
 	}
 

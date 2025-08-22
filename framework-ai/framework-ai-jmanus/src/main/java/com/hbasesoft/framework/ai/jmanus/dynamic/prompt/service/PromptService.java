@@ -24,33 +24,13 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.vo.PromptVO;
  */
 public interface PromptService {
 
-	List<PromptVO> getAll();
-
-	List<PromptVO> getAllByNamespace(String namespace);
-
-	PromptVO getById(Long id);
-
 	PromptVO getPromptByName(String promptName);
-
-	PromptVO create(PromptVO promptVO);
-
-	PromptVO update(PromptVO promptVO);
-
-	void delete(Long id);
 
 	Message createSystemMessage(String promptName, Map<String, Object> variables);
 
 	Message createUserMessage(String promptName, Map<String, Object> variables);
-
-	Message createMessage(String promptName, Map<String, Object> variables);
-
+	
 	String renderPrompt(String promptName, Map<String, Object> variables);
 
 	void reinitializePrompts();
-
-	void importSpecificPromptFromLanguage(String promptName, String language);
-
-	void importAllPromptsFromLanguage(String language);
-
-	String[] getSupportedLanguages();
 }

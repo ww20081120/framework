@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.config.McpProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.po.McpConfigPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServerConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServiceVo;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -59,7 +59,7 @@ public class McpConnectionFactory {
 	 * @return MCP service entity
 	 * @throws IOException Thrown when creation fails
 	 */
-	public McpServiceVo createConnection(McpConfigPo McpConfigPo) throws IOException {
+	public McpServiceVo createConnection(McpConfigVO McpConfigPo) throws IOException {
 		String serverName = McpConfigPo.getMcpServerName();
 
 		// Validate configuration entity

@@ -21,7 +21,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.agent.BaseAgent;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
 import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory.ToolCallBackContext;
@@ -100,7 +100,7 @@ public class MapReducePlanExecutor extends AbstractPlanExecutor {
 
 	private volatile long lastConfigCheckTime;
 
-	public MapReducePlanExecutor(List<DynamicAgentPo> agents, PlanExecutionRecorder recorder, AgentService agentService,
+	public MapReducePlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
 			ILlmService llmService, IManusProperties manusProperties, ObjectMapper objectMapper) {
 		super(agents, recorder, agentService, llmService, manusProperties);
 		OBJECT_MAPPER = objectMapper;

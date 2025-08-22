@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.event;
 
-import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.po.DynamicModelPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 
 /**
  * <Description> <br>
@@ -19,16 +19,16 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.po.DynamicModelPo;
  */
 public class ModelChangeEvent implements JmanusEvent {
 
-	private DynamicModelPo dynamicModelEntity;
+	private ModelConfig dynamicModelEntity;
 
 	private long createTime;
 
-	public ModelChangeEvent(DynamicModelPo dynamicModelEntity) {
+	public ModelChangeEvent(ModelConfig dynamicModelEntity) {
 		this.dynamicModelEntity = dynamicModelEntity;
 		this.createTime = System.currentTimeMillis();
 	}
 
-	public DynamicModelPo getDynamicModelEntity() {
+	public ModelConfig getDynamicModelEntity() {
 		return dynamicModelEntity;
 	}
 

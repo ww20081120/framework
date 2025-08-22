@@ -7,7 +7,7 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.namespace.service;
 
 import java.util.List;
 
-import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.model.vo.NamespaceConfig;
+import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.vo.NamespaceConfig;
 
 /** 
  * <Description> <br> 
@@ -20,14 +20,5 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.model.vo.NamespaceCon
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.namespace.service <br>
  */
 public interface NamespaceService {
-
 	List<NamespaceConfig> getAllNamespaces();
-
-	NamespaceConfig getNamespaceById(String id);
-
-	NamespaceConfig createNamespace(NamespaceConfig namespaceConfig);
-
-	NamespaceConfig updateNamespace(NamespaceConfig namespaceConfig);
-
-	void deleteNamespace(String id);
 }

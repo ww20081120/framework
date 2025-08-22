@@ -20,15 +20,10 @@
 		    <artifactId>spring-ai-starter-model-openai</artifactId>
 		</dependency>
         <dependency>
-            <groupId>com.hbasesoft.framework</groupId>
-            <artifactId>framework-db-jpa</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-           <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
         </dependency>
-          <!-- MCP SDK -->
+		<!-- MCP SDK -->
         <dependency>
             <groupId>io.modelcontextprotocol.sdk</groupId>
             <artifactId>mcp</artifactId>
@@ -39,7 +34,6 @@
             <artifactId>mcp-spring-webflux</artifactId>
             <version>0.11.0</version>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
@@ -51,14 +45,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
-          <!-- HttpClient core library -->
+
+		<!-- HttpClient core library -->
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
         </dependency>
-        
-        <!-- EasyExcel for Excel processing -->
+
+		<!-- EasyExcel for Excel processing -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
@@ -89,36 +83,5 @@
             <groupId>org.apache.httpcomponents.core5</groupId>
             <artifactId>httpcore5</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-           <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-mysql</artifactId>
-		</dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

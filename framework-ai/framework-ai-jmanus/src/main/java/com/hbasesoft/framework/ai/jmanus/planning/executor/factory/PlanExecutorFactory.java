@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
 import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
@@ -103,7 +103,7 @@ public class PlanExecutorFactory implements IPlanExecutorFactory {
 	 */
 	private PlanExecutorInterface createSimpleExecutor() {
 		LoggerUtil.debug("Creating simple plan executor");
-		List<DynamicAgentPo> agents = dynamicAgentLoader.getAllAgents();
+		List<DynamicAgent> agents = dynamicAgentLoader.getAllAgents();
 		return new PlanExecutor(agents, recorder, agentService, llmService, manusProperties);
 	}
 
@@ -114,7 +114,7 @@ public class PlanExecutorFactory implements IPlanExecutorFactory {
 	 */
 	private PlanExecutorInterface createDirectResponseExecutor() {
 		LoggerUtil.debug("Creating direct response executor");
-		List<DynamicAgentPo> agents = dynamicAgentLoader.getAllAgents();
+		List<DynamicAgent> agents = dynamicAgentLoader.getAllAgents();
 		return new DirectResponseExecutor(agents, recorder, agentService, llmService, manusProperties);
 	}
 
@@ -125,7 +125,7 @@ public class PlanExecutorFactory implements IPlanExecutorFactory {
 	 */
 	private PlanExecutorInterface createAdvancedExecutor() {
 		LoggerUtil.debug("Creating advanced MapReduce plan executor");
-		List<DynamicAgentPo> agents = dynamicAgentLoader.getAllAgents();
+		List<DynamicAgent> agents = dynamicAgentLoader.getAllAgents();
 		return new MapReducePlanExecutor(agents, recorder, agentService, llmService, manusProperties, objectMapper);
 	}
 

@@ -6,11 +6,8 @@
 package com.hbasesoft.framework.ai.jmanus.config;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.transaction.annotation.Transactional;
-
-import com.hbasesoft.framework.ai.jmanus.config.model.po.ConfigPo;
+import com.hbasesoft.framework.ai.jmanus.config.model.vo.ConfigVo;
 
 /**
  * <Description> <br>
@@ -30,33 +27,7 @@ public interface IConfigService {
 	 * @param configPath the configuration path
 	 * @return the configuration value, or null if not found
 	 */
-	@Transactional(readOnly = true)
 	String getConfigValue(String configPath);
-
-	/**
-	 * Update configuration value
-	 * 
-	 * @param configPath the configuration path
-	 * @param newValue   the new value
-	 */
-	void updateConfig(String configPath, String newValue);
-
-	/**
-	 * Get all configurations
-	 * 
-	 * @return list of all configurations
-	 */
-	@Transactional(readOnly = true)
-	List<ConfigPo> getAllConfigs();
-
-	/**
-	 * Get configuration by path
-	 * 
-	 * @param configPath the configuration path
-	 * @return optional configuration entity
-	 */
-	@Transactional(readOnly = true)
-	Optional<ConfigPo> getConfig(String configPath);
 
 	/**
 	 * Reset configuration to default value
@@ -71,15 +42,14 @@ public interface IConfigService {
 	 * @param groupName the group name
 	 * @return list of configurations in the group
 	 */
-	@Transactional(readOnly = true)
-	List<ConfigPo> getConfigsByGroup(String groupName);
+	List<ConfigVo> getConfigsByGroup(String groupName);
 
 	/**
 	 * Batch update configurations
 	 * 
 	 * @param configs list of configurations to update
 	 */
-	void batchUpdateConfigs(List<ConfigPo> configs);
+	void batchUpdateConfigs(List<ConfigVo> configs);
 
 	/**
 	 * Reset all configurations to their default values

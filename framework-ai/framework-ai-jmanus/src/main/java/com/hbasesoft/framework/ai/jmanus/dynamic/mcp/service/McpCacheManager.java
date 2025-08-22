@@ -19,17 +19,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.config.ManusProperties;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.config.McpProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.dao.McpConfigDao;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigStatus;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.po.McpConfigPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServiceVo;
+import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 
 /**
@@ -44,7 +43,7 @@ import jakarta.annotation.PreDestroy;
  */
 
 @Component
-public class McpCacheManager {
+public class McpCacheManager implements StartupListener {
 
 	/**
 	 * MCP connection result wrapper class
@@ -153,7 +152,7 @@ public class McpCacheManager {
 
 	private final McpConnectionFactory connectionFactory;
 
-	private final McpConfigDao mcpConfigDao;
+	private final IMcpService mcpService;
 
 	private final McpProperties mcpProperties;
 
@@ -179,28 +178,37 @@ public class McpCacheManager {
 	// Cache update interval (10 minutes)
 	private static final long CACHE_UPDATE_INTERVAL_MINUTES = 10;
 
-	public McpCacheManager(McpConnectionFactory connectionFactory, McpConfigDao mcpConfigDao,
-			McpProperties mcpProperties, ManusProperties manusProperties) {
+	public McpCacheManager(McpConnectionFactory connectionFactory, IMcpService mcpService, McpProperties mcpProperties,
+			ManusProperties manusProperties) {
 		this.connectionFactory = connectionFactory;
-		this.mcpConfigDao = mcpConfigDao;
+		this.mcpService = mcpService;
 		this.mcpProperties = mcpProperties;
 		this.manusProperties = manusProperties;
+	}
 
-		// Initialize thread pool
-		updateConnectionExecutor();
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param context <br>
+	 */
+	@Override
+	public void complete(ApplicationContext context) {
+		McpCacheManager mm = context.getBean(McpCacheManager.class);
+		mm.updateConnectionExecutor();
+		mm.initializeCache();
 	}
 
 	/**
 	 * Automatically load cache on startup
 	 */
-	@PostConstruct
 	public void initializeCache() {
 		LoggerUtil.info("Initializing MCP cache manager with double buffer mechanism");
 
 		try {
 			// Load initial cache on startup
-			Map<String, McpServiceVo> initialCache = loadMcpServices(
-					mcpConfigDao.queryByLambda(q -> q.eq(McpConfigPo::getStatus, McpConfigStatus.ENABLE)));
+			Map<String, McpServiceVo> initialCache = loadMcpServices(mcpService.queryServices());
 
 			// Set both active cache and background cache
 			doubleCache.updateBackgroundCache(initialCache);
@@ -238,8 +246,7 @@ public class McpCacheManager {
 			LoggerUtil.debug("Starting scheduled cache update task");
 
 			// Query all enabled configurations
-			List<McpConfigPo> configs = mcpConfigDao
-					.queryByLambda(q -> q.eq(McpConfigPo::getStatus, McpConfigStatus.ENABLE));
+			List<McpConfigVO> configs = mcpService.queryServices();
 
 			// Build new data in background cache
 			Map<String, McpServiceVo> newCache = loadMcpServices(configs);
@@ -331,7 +338,7 @@ public class McpCacheManager {
 	 * @return MCP service entity mapping
 	 * @throws IOException Thrown when loading fails
 	 */
-	private Map<String, McpServiceVo> loadMcpServices(List<McpConfigPo> mcpConfigEntities) throws IOException {
+	private Map<String, McpServiceVo> loadMcpServices(List<McpConfigVO> mcpConfigEntities) throws IOException {
 		Map<String, McpServiceVo> toolCallbackMap = new ConcurrentHashMap<>();
 
 		if (mcpConfigEntities == null || mcpConfigEntities.isEmpty()) {
@@ -431,7 +438,7 @@ public class McpCacheManager {
 	 * @param config MCP configuration entity
 	 * @return Connection result
 	 */
-	private McpConnectionResult createConnectionWithRetry(McpConfigPo config) {
+	private McpConnectionResult createConnectionWithRetry(McpConfigVO config) {
 		String serverName = config.getMcpServerName();
 		String connectionType = config.getConnectionType().toString();
 		long startTime = System.currentTimeMillis();
@@ -515,8 +522,7 @@ public class McpCacheManager {
 			LoggerUtil.info("Manually triggering cache reload");
 
 			// Query all enabled configurations
-			List<McpConfigPo> configs = mcpConfigDao
-					.queryByLambda(q -> q.eq(McpConfigPo::getStatus, McpConfigStatus.ENABLE));
+			List<McpConfigVO> configs = mcpService.queryServices();
 
 			// Build new data in background cache
 			Map<String, McpServiceVo> newCache = loadMcpServices(configs);

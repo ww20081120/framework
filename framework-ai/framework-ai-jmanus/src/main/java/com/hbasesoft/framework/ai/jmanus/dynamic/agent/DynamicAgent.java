@@ -36,7 +36,7 @@ import com.hbasesoft.framework.ai.jmanus.agent.AgentExecResult;
 import com.hbasesoft.framework.ai.jmanus.agent.AgentState;
 import com.hbasesoft.framework.ai.jmanus.agent.ReActAgent;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.po.DynamicModelPo;
+import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.enums.PromptEnum;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
@@ -91,7 +91,7 @@ public class DynamicAgent extends ReActAgent {
 
 	private final IUserInputService userInputService;
 
-	private final DynamicModelPo model;
+	private final ModelConfig model;
 
 	private final StreamingResponseHandler streamingResponseHandler;
 
@@ -114,7 +114,7 @@ public class DynamicAgent extends ReActAgent {
 			IManusProperties manusProperties, String name, String description, String nextStepPrompt,
 			List<String> availableToolKeys, ToolCallingManager toolCallingManager,
 			Map<String, Object> initialAgentSetting, IUserInputService userInputService, PromptService promptService,
-			DynamicModelPo model, StreamingResponseHandler streamingResponseHandler) {
+			ModelConfig model, StreamingResponseHandler streamingResponseHandler) {
 		super(llmService, planExecutionRecorder, manusProperties, initialAgentSetting, promptService);
 		this.agentName = name;
 		this.agentDescription = description;

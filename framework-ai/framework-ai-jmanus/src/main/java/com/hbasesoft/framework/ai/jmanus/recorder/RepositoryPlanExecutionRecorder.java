@@ -11,20 +11,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.agent.AgentState;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionStep;
-import com.hbasesoft.framework.ai.jmanus.recorder.dao.PlanExecutionRecordDao;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.AgentExecutionRecord;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.ExecutionStatus;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.PlanExecutionRecord;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.ThinkActRecord;
-import com.hbasesoft.framework.ai.jmanus.recorder.model.po.PlanExecutionRecordPo;
+import com.hbasesoft.framework.ai.jmanus.recorder.model.vo.RecorderVo;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-
-import jakarta.annotation.Resource;
 
 /**
  * <Description> <br>
@@ -40,8 +38,8 @@ import jakarta.annotation.Resource;
 @Component
 public class RepositoryPlanExecutionRecorder implements PlanExecutionRecorder {
 
-	@Resource
-	private PlanExecutionRecordDao planExecutionRecordRepository;
+	@Autowired
+	private RecorderService recorderService;
 
 	/**
 	 * Record think-act execution with PlanExecutionRecord parameter
@@ -99,7 +97,7 @@ public class RepositoryPlanExecutionRecorder implements PlanExecutionRecorder {
 	 */
 	@Override
 	public void removeExecutionRecord(String planId) {
-		planExecutionRecordRepository.deleteById(planId);
+		recorderService.deleteById(planId);
 	}
 
 	/**
@@ -316,7 +314,7 @@ public class RepositoryPlanExecutionRecorder implements PlanExecutionRecorder {
 		thinkActRecord.setActStartTime(LocalDateTime.now());
 
 		if (params.getModelName() != null) {
-			if(planExecutionRecord != null) {
+			if (planExecutionRecord != null) {
 				planExecutionRecord.setModelName(params.getModelName());
 			}
 			agentExecutionRecord.setModelName(params.getModelName());
@@ -596,14 +594,14 @@ public class RepositoryPlanExecutionRecorder implements PlanExecutionRecorder {
 	}
 
 	private PlanExecutionRecord getExecutionRecord(String rootPlanId) {
-		PlanExecutionRecordPo entity = planExecutionRecordRepository.get(rootPlanId);
+		RecorderVo entity = recorderService.get(rootPlanId);
 		return entity != null ? entity.getPlanExecutionRecord() : null;
 	}
 
 	private void saveExecutionRecord(PlanExecutionRecord planExecutionRecord) {
-		PlanExecutionRecordPo entity = planExecutionRecordRepository.get(planExecutionRecord.getRootPlanId());
+		RecorderVo entity = recorderService.get(planExecutionRecord.getRootPlanId());
 		if (entity == null) {
-			entity = new PlanExecutionRecordPo();
+			entity = new RecorderVo();
 			entity.setPlanId(planExecutionRecord.getRootPlanId());
 			entity.setGmtCreate(new Date());
 		}
@@ -611,7 +609,7 @@ public class RepositoryPlanExecutionRecorder implements PlanExecutionRecorder {
 		entity.setPlanExecutionRecord(planExecutionRecord);
 		entity.setGmtModified(new Date());
 
-		planExecutionRecordRepository.save(entity);
+		recorderService.save(entity);
 	}
 
 	private void updateThinkActRecord(PlanExecutionRecord parentPlan, ThinkActRecord record) {

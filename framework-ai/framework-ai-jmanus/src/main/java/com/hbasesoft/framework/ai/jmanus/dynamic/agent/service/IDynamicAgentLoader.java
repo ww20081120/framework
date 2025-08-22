@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.po.DynamicAgentPo;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
 
 /**
@@ -38,9 +37,9 @@ public interface IDynamicAgentLoader {
 	 * 
 	 * @return List of Agent entities
 	 */
-	List<DynamicAgentPo> getAllAgents();
+	List<DynamicAgent> getAllAgents();
 
-	default List<DynamicAgentPo> getAgents(ExecutionContext context) {
+	default List<DynamicAgent> getAgents(ExecutionContext context) {
 		return getAllAgents();
 	}
 
