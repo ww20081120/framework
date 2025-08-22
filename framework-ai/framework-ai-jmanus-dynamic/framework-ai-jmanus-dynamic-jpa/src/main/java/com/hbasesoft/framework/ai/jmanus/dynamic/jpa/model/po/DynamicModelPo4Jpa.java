@@ -68,8 +68,8 @@ public class DynamicModelPo4Jpa extends BaseEntity {
 	@Column(name = "type", nullable = false)
 	private String type;
 
-	@Column(name = "is_default", nullable = false, columnDefinition = "boolean default false")
-	private Boolean isDefault;
+	@Column(name = "is_default", nullable = false)
+	private Integer isDefault;
 
 	@Column(name = "temperature")
 	private Double temperature;
@@ -96,7 +96,7 @@ public class DynamicModelPo4Jpa extends BaseEntity {
 		config.setModelName(this.getModelName());
 		config.setModelDescription(this.getModelDescription());
 		config.setType(this.getType());
-		config.setIsDefault(this.getIsDefault());
+		config.setIsDefault(this.getIsDefault() == 0 ? false : true);
 		config.setTemperature(this.getTemperature());
 		config.setTopP(this.getTopP());
 		config.setCompletionsPath(this.getCompletionsPath());

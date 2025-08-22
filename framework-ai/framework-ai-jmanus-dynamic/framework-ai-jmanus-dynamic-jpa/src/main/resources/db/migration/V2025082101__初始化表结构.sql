@@ -58,7 +58,7 @@ CREATE TABLE dynamic_models (
     model_name VARCHAR(255) NOT NULL COMMENT '模型名称',
     model_description VARCHAR(1000) NOT NULL COMMENT '模型描述',
     type VARCHAR(255) NOT NULL COMMENT '模型类型',
-    is_default BOOLEAN DEFAULT FALSE COMMENT '是否默认模型',
+    is_default TINYINT(1) DEFAULT 0 COMMENT '是否默认模型',
     temperature DOUBLE COMMENT '温度参数',
     top_p DOUBLE COMMENT 'Top P参数',
     completions_path VARCHAR(255) COMMENT '补全路径'

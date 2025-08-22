@@ -27,6 +27,7 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.config.McpProperties;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServiceVo;
 import com.hbasesoft.framework.common.StartupListener;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import jakarta.annotation.PreDestroy;
@@ -152,7 +153,7 @@ public class McpCacheManager implements StartupListener {
 
 	private final McpConnectionFactory connectionFactory;
 
-	private final IMcpService mcpService;
+	private IMcpService mcpService;
 
 	private final McpProperties mcpProperties;
 
@@ -178,12 +179,15 @@ public class McpCacheManager implements StartupListener {
 	// Cache update interval (10 minutes)
 	private static final long CACHE_UPDATE_INTERVAL_MINUTES = 10;
 
-	public McpCacheManager(McpConnectionFactory connectionFactory, IMcpService mcpService, McpProperties mcpProperties,
+	public McpCacheManager(McpConnectionFactory connectionFactory, McpProperties mcpProperties,
 			ManusProperties manusProperties) {
 		this.connectionFactory = connectionFactory;
-		this.mcpService = mcpService;
 		this.mcpProperties = mcpProperties;
 		this.manusProperties = manusProperties;
+	}
+
+	public void init() {
+
 	}
 
 	/**
@@ -208,7 +212,7 @@ public class McpCacheManager implements StartupListener {
 
 		try {
 			// Load initial cache on startup
-			Map<String, McpServiceVo> initialCache = loadMcpServices(mcpService.queryServices());
+			Map<String, McpServiceVo> initialCache = loadMcpServices(getMcpService().queryServices());
 
 			// Set both active cache and background cache
 			doubleCache.updateBackgroundCache(initialCache);
@@ -246,7 +250,7 @@ public class McpCacheManager implements StartupListener {
 			LoggerUtil.debug("Starting scheduled cache update task");
 
 			// Query all enabled configurations
-			List<McpConfigVO> configs = mcpService.queryServices();
+			List<McpConfigVO> configs = getMcpService().queryServices();
 
 			// Build new data in background cache
 			Map<String, McpServiceVo> newCache = loadMcpServices(configs);
@@ -522,7 +526,7 @@ public class McpCacheManager implements StartupListener {
 			LoggerUtil.info("Manually triggering cache reload");
 
 			// Query all enabled configurations
-			List<McpConfigVO> configs = mcpService.queryServices();
+			List<McpConfigVO> configs = getMcpService().queryServices();
 
 			// Build new data in background cache
 			Map<String, McpServiceVo> newCache = loadMcpServices(configs);
@@ -678,4 +682,10 @@ public class McpCacheManager implements StartupListener {
 		return sb.toString();
 	}
 
+	private IMcpService getMcpService() {
+		if (mcpService == null) {
+			mcpService = ContextHolder.getContext().getBean(IMcpService.class);
+		}
+		return mcpService;
+	}
 }
