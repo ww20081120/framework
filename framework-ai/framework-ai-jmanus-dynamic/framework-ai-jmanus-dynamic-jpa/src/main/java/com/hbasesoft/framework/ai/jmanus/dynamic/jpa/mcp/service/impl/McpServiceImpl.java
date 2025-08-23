@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -70,6 +71,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * @return Configuration entity list
 	 * @throws IOException IO exception
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public List<McpConfigPo4Jpa> saveMcpServers(String configJson) throws IOException {
 		List<McpConfigPo4Jpa> entityList = new ArrayList<>();
@@ -113,21 +115,21 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 				mcpConfigEntity = ContextHolder.getContext().getBean(McpConfigPo4Jpa.class);
 				mcpConfigEntity.setConnectionConfig(serverConfigJson);
 				mcpConfigEntity.setMcpServerName(serverName);
-				mcpConfigEntity.setConnectionType(connectionType);
+				mcpConfigEntity.setConnectionType(connectionType.name());
 				// Set status, use from serverConfig if available, otherwise use default
 				// value
 				if (serverConfig.getStatus() != null) {
-					mcpConfigEntity.setStatus(serverConfig.getStatus());
+					mcpConfigEntity.setStatus(serverConfig.getStatus().name());
 				} else {
-					mcpConfigEntity.setStatus(McpConfigStatus.ENABLE);
+					mcpConfigEntity.setStatus(McpConfigStatus.ENABLE.name());
 				}
 			} else {
 				mcpConfigEntity.setConnectionConfig(serverConfigJson);
-				mcpConfigEntity.setConnectionType(connectionType);
+				mcpConfigEntity.setConnectionType(connectionType.name());
 				// Update status, use from serverConfig if available, otherwise keep
 				// original value
 				if (serverConfig.getStatus() != null) {
-					mcpConfigEntity.setStatus(serverConfig.getStatus());
+					mcpConfigEntity.setStatus(serverConfig.getStatus().name());
 				}
 			}
 
@@ -149,6 +151,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * @return Configuration entity
 	 * @throws IOException IO exception
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public McpConfigPo4Jpa saveMcpServer(McpServerRequestVO requestVO) throws IOException {
 		// Validate request data
@@ -197,8 +200,8 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 		// Update entity
 		mcpConfigEntity.setMcpServerName(requestVO.getMcpServerName());
 		mcpConfigEntity.setConnectionConfig(configJson);
-		mcpConfigEntity.setConnectionType(connectionType);
-		mcpConfigEntity.setStatus(serverConfig.getStatus());
+		mcpConfigEntity.setConnectionType(connectionType.name());
+		mcpConfigEntity.setStatus(serverConfig.getStatus().name());
 
 		// Save to database
 		mcpConfigDao.save(mcpConfigEntity);
@@ -216,6 +219,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * 
 	 * @param id Server ID
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void removeMcpServer(long id) {
 		removeMcpServer((Object) id);
@@ -226,6 +230,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * 
 	 * @param mcpServerName Server name
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void removeMcpServer(String mcpServerName) {
 		removeMcpServer((Object) mcpServerName);
@@ -261,6 +266,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * 
 	 * @return MCP configuration entity list
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public List<McpConfigPo4Jpa> getMcpServers() {
 		return mcpConfigDao.queryAll();
@@ -272,6 +278,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * @param id MCP configuration ID
 	 * @return Optional MCP configuration entity
 	 */
+	@Transactional(readOnly = true)
 	public Optional<McpConfigPo4Jpa> findById(Long id) {
 		return Optional.ofNullable(mcpConfigDao.get(id));
 	}
@@ -282,6 +289,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * @param planId Plan ID
 	 * @return MCP service entity list
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public List<McpServiceVo> getFunctionCallbacks(String planId) {
 		return cacheManager.getServiceEntities(planId);
@@ -292,6 +300,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * 
 	 * @param planId Plan ID
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void close(String planId) {
 		cacheManager.invalidateCache(planId);
@@ -324,17 +333,18 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * @param status Target status
 	 * @return true if updated successfully, false otherwise
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean updateMcpServerStatus(Long id, McpConfigStatus status) {
 		McpConfigPo4Jpa entity = mcpConfigDao.get(id);
 		Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, "id");
-		if (entity.getStatus() == status) {
+		if (entity.getStatus().equals(status.name())) {
 			LoggerUtil.info("MCP server {0} is already {1}", entity.getMcpServerName(), status);
 			return true;
 		}
 
 		try {
-			entity.setStatus(status);
+			entity.setStatus(status.name());
 			mcpConfigDao.save(entity);
 
 			// Clear cache to reload services
@@ -351,6 +361,8 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	private McpConfigVO convert(McpConfigPo4Jpa po) {
 		McpConfigVO vo = new McpConfigVO();
 		BeanUtils.copyProperties(po, vo);
+		vo.setStatus(null == po.getStatus() ? null : McpConfigStatus.valueOf(po.getStatus()));
+		vo.setConnectionType(null == po.getConnectionType() ? null : McpConfigType.valueOf(po.getConnectionType()));
 		return vo;
 	}
 
@@ -361,9 +373,10 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	 * @taskId <br>
 	 * @return <br>
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public List<McpConfigVO> queryServices() {
-		return mcpConfigDao.queryByLambda(q -> q.eq(McpConfigPo4Jpa::getStatus, McpConfigStatus.ENABLE)).stream()
+		return mcpConfigDao.queryByLambda(q -> q.eq(McpConfigPo4Jpa::getStatus, McpConfigStatus.ENABLE.name())).stream()
 				.map(this::convert).toList();
 	}
 

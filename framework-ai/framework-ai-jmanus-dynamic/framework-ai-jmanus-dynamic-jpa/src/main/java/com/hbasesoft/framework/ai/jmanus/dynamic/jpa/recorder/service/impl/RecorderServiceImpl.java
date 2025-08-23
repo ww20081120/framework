@@ -8,6 +8,7 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.service.impl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.dao.PlanExecutionRecordDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.po.PlanExecutionRecordPo4Jpa;
@@ -37,6 +38,7 @@ public class RecorderServiceImpl implements RecorderService {
 	 * @taskId <br>
 	 * @param planId <br>
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteById(String planId) {
 		planExecutionRecordDao.deleteById(planId);
@@ -50,6 +52,7 @@ public class RecorderServiceImpl implements RecorderService {
 	 * @param rootPlanId
 	 * @return <br>
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public RecorderVo get(String rootPlanId) {
 		PlanExecutionRecordPo4Jpa entity = planExecutionRecordDao.get(rootPlanId);
@@ -68,6 +71,7 @@ public class RecorderServiceImpl implements RecorderService {
 	 * @taskId <br>
 	 * @param entity <br>
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void save(RecorderVo entity) {
 		PlanExecutionRecordPo4Jpa entityJpa = new PlanExecutionRecordPo4Jpa();

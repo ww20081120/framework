@@ -1,3 +1,1 @@
-com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.McpCacheManager
-com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager
-com.hbasesoft.framework.ai.jmanus.llm.LlmService
+com.hbasesoft.framework.ai.jmanus.init.InitStartupListener

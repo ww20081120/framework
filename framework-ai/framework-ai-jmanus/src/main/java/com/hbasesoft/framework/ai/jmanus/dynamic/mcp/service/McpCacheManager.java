@@ -44,7 +44,7 @@ import jakarta.annotation.PreDestroy;
  */
 
 @Component
-public class McpCacheManager implements StartupListener {
+public class McpCacheManager {
 
 	/**
 	 * MCP connection result wrapper class
@@ -185,29 +185,16 @@ public class McpCacheManager implements StartupListener {
 		this.mcpProperties = mcpProperties;
 		this.manusProperties = manusProperties;
 	}
-
+	
 	public void init() {
-
-	}
-
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param context <br>
-	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		McpCacheManager mm = context.getBean(McpCacheManager.class);
-		mm.updateConnectionExecutor();
-		mm.initializeCache();
+		updateConnectionExecutor();
+		initializeCache();
 	}
 
 	/**
 	 * Automatically load cache on startup
 	 */
-	public void initializeCache() {
+	private void initializeCache() {
 		LoggerUtil.info("Initializing MCP cache manager with double buffer mechanism");
 
 		try {

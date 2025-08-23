@@ -17,9 +17,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +32,7 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.config.po.ConfigPo4Jpa;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.config.service.IConfigManagerService;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.utils.TransactionUtil;
 
@@ -50,14 +48,10 @@ import com.hbasesoft.framework.db.core.utils.TransactionUtil;
  */
 
 @Service
-public class ConfigService
-		implements IConfigService, IConfigManagerService, ApplicationListener<ContextRefreshedEvent> {
+public class ConfigService implements IConfigService, IConfigManagerService {
 
 	@Autowired
 	private ConfigDao configRepository;
-
-	@Autowired
-	private ApplicationContext applicationContext;
 
 	@Autowired
 	private Environment environment;
@@ -66,17 +60,17 @@ public class ConfigService
 
 	private boolean initialized = false;
 
-	@Override
-	public void onApplicationEvent(ContextRefreshedEvent event) {
+	public void init() {
 		if (!initialized) {
 			initialized = true;
-			init();
+			initConfig();
 		}
 	}
 
-	private void init() {
+	private void initConfig() {
 		// Only get beans with @ConfigurationProperties annotation
-		Map<String, Object> configBeans = applicationContext.getBeansWithAnnotation(ConfigurationProperties.class);
+		Map<String, Object> configBeans = ContextHolder.getContext()
+				.getBeansWithAnnotation(ConfigurationProperties.class);
 		LoggerUtil.info("Found {0} configuration beans", configBeans.size());
 		TransactionUtil.withSession((ts, tm) -> {
 			// Initialize each configuration bean
@@ -167,6 +161,7 @@ public class ConfigService
 				});
 	}
 
+	@Transactional(readOnly = true)
 	public String getConfigValue(String configPath) {
 		// Check cache
 		ConfigCacheEntry<String> cacheEntry = configCache.get(configPath);
@@ -184,7 +179,7 @@ public class ConfigService
 		return null;
 	}
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void updateConfig(String configPath, String newValue) {
 		ConfigPo4Jpa entity = configRepository.getByLambda(q -> q.eq(ConfigPo4Jpa::getConfigPath, configPath));
 		Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, "configPath");
@@ -196,7 +191,8 @@ public class ConfigService
 		configCache.put(configPath, new ConfigCacheEntry<>(newValue));
 
 		// Update all beans using this configuration
-		Map<String, Object> configBeans = applicationContext.getBeansWithAnnotation(ConfigurationProperties.class);
+		Map<String, Object> configBeans = ContextHolder.getContext()
+				.getBeansWithAnnotation(ConfigurationProperties.class);
 		configBeans.values().forEach(bean -> updateBeanConfig(bean, configPath, newValue));
 	}
 
@@ -241,10 +237,12 @@ public class ConfigService
 		throw new IllegalArgumentException("Unsupported type: " + targetType);
 	}
 
+	@Transactional(readOnly = true)
 	public List<ConfigPo4Jpa> getAllConfigs() {
 		return configRepository.queryAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Optional<ConfigPo4Jpa> getConfig(String configPath) {
 		return Optional.ofNullable(configRepository.getByLambda(q -> q.eq(ConfigPo4Jpa::getConfigPath, configPath)));
 	}
@@ -255,6 +253,7 @@ public class ConfigService
 		return configVo;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public void resetConfig(String configPath) {
 		ConfigPo4Jpa entity = configRepository.getByLambda(q -> q.eq(ConfigPo4Jpa::getConfigPath, configPath));
 		Assert.notNull(entity, ErrorCodeDef.PARAM_NOT_NULL, "configPath");
@@ -263,7 +262,8 @@ public class ConfigService
 		configRepository.save(entity);
 
 		// Update all beans using this configuration
-		Map<String, Object> configBeans = applicationContext.getBeansWithAnnotation(ConfigurationProperties.class);
+		Map<String, Object> configBeans = ContextHolder.getContext()
+				.getBeansWithAnnotation(ConfigurationProperties.class);
 		configBeans.values().forEach(bean -> updateBeanConfig(bean, configPath, entity.getDefaultValue()));
 	}
 
@@ -273,6 +273,7 @@ public class ConfigService
 	 * @param groupName Configuration group name
 	 * @return All configuration items in this group
 	 */
+	@Transactional(readOnly = true)
 	public List<ConfigVo> getConfigsByGroup(String groupName) {
 		return configRepository.queryByLambda(q -> q.eq(ConfigPo4Jpa::getConfigGroup, groupName)).stream()
 				.map(this::convert).collect(Collectors.toList());
@@ -283,7 +284,7 @@ public class ConfigService
 	 * 
 	 * @param configs List of configuration items to update
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void batchUpdateConfigs(List<ConfigVo> configs) {
 		for (ConfigVo config : configs) {
 			ConfigPo4Jpa existingConfig = configRepository.get(config.getId());
@@ -294,7 +295,8 @@ public class ConfigService
 			configRepository.save(existingConfig);
 
 			// Update all beans using this configuration
-			Map<String, Object> configBeans = applicationContext.getBeansWithAnnotation(ConfigurationProperties.class);
+			Map<String, Object> configBeans = ContextHolder.getContext()
+					.getBeansWithAnnotation(ConfigurationProperties.class);
 			configBeans.values().forEach(
 					bean -> updateBeanConfig(bean, existingConfig.getConfigPath(), existingConfig.getConfigValue()));
 		}
@@ -303,7 +305,7 @@ public class ConfigService
 	/**
 	 * Reset all configurations to their default values
 	 */
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void resetAllConfigsToDefaults() {
 		List<ConfigPo4Jpa> allConfigs = configRepository.queryAll();
 
@@ -313,7 +315,7 @@ public class ConfigService
 				configRepository.save(config);
 
 				// Update all beans using this configuration
-				Map<String, Object> configBeans = applicationContext
+				Map<String, Object> configBeans = ContextHolder.getContext()
 						.getBeansWithAnnotation(ConfigurationProperties.class);
 				configBeans.values()
 						.forEach(bean -> updateBeanConfig(bean, config.getConfigPath(), config.getDefaultValue()));

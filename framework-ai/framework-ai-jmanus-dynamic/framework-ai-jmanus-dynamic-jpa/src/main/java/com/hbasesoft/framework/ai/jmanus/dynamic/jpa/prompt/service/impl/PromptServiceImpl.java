@@ -17,6 +17,7 @@ import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.dao.PromptDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.po.PromptPo4Jpa;
@@ -56,11 +57,13 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		this.promptLoader = promptLoader;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<PromptVO> getAll() {
 		return promptRepository.queryAll().stream().map(this::mapToPromptVO).collect(Collectors.toList());
 	}
-
+	
+	@Transactional(readOnly = true)
 	@Override
 	public List<PromptVO> getAllByNamespace(String namespace) {
 		List<PromptPo4Jpa> entities;
@@ -73,6 +76,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return entities.stream().map(this::mapToPromptVO).collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public PromptVO getById(Long id) {
 		PromptPo4Jpa entity = promptRepository.get(id);
@@ -80,6 +84,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return mapToPromptVO(entity);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public PromptVO getPromptByName(String promptName) {
 		PromptPo4Jpa entity = promptRepository
@@ -90,6 +95,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return mapToPromptVO(entity);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public PromptVO create(PromptVO promptVO) {
 		if (promptVO.invalid()) {
@@ -117,6 +123,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return mapToPromptVO(promptEntity);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public PromptVO update(PromptVO promptVO) {
 		if (promptVO.invalid()) {
@@ -140,6 +147,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return mapToPromptVO(promptEntity);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void delete(Long id) {
 		PromptPo4Jpa entity = promptRepository.get(id);
@@ -151,6 +159,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		promptRepository.deleteById(id);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Message createSystemMessage(String promptName, Map<String, Object> variables) {
 		PromptPo4Jpa promptEntity = promptRepository
@@ -163,6 +172,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return template.createMessage(variables != null ? variables : Map.of());
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Message createUserMessage(String promptName, Map<String, Object> variables) {
 		PromptPo4Jpa promptEntity = promptRepository
@@ -175,6 +185,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return template.createMessage(variables != null ? variables : Map.of());
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Message createMessage(String promptName, Map<String, Object> variables) {
 		PromptPo4Jpa promptEntity = promptRepository
@@ -204,6 +215,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	 * @param variables  Variable mapping
 	 * @return Rendered prompt
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public String renderPrompt(String promptName, Map<String, Object> variables) {
 		PromptPo4Jpa promptEntity = promptRepository
@@ -221,6 +233,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return PromptEnum.getSupportedLanguages();
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void importSpecificPromptFromLanguage(String promptName, String language) {
 		LoggerUtil.info("Starting to reset prompt: {0} to language default: {1}", promptName, language);
@@ -258,6 +271,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		}
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void importAllPromptsFromLanguage(String language) {
 		LoggerUtil.info("Starting to reset all prompts to language default: {0}", language);
@@ -286,6 +300,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		return entity;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public void reinitializePrompts() {
 		LoggerUtil.info("Starting prompt namespace correction");
 

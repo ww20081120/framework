@@ -20,6 +20,8 @@ import com.hbasesoft.framework.ai.jmanus.config.model.vo.ConfigVo;
  * @see com.hbasesoft.framework.ai.jmanus.config <br>
  */
 public interface IConfigService {
+	
+	void init();
 
 	/**
 	 * Get configuration value by path

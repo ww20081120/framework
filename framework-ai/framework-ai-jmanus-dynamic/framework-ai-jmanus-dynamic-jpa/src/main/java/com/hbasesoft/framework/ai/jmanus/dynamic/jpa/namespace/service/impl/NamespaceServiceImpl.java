@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.namespace.dao.NamespaceDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.namespace.po.NamespacePo4Jpa;
@@ -44,11 +45,13 @@ public class NamespaceServiceImpl implements NamespaceService, NamespaceManagerS
 	@Autowired
 	private PromptInitializationService promptInitializationService;
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<NamespaceConfig> getAllNamespaces() {
 		return repository.queryAll().stream().map(NamespacePo4Jpa::mapToNamespaceConfig).collect(Collectors.toList());
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public NamespaceConfig getNamespaceById(String id) {
 		NamespacePo4Jpa entity = repository.get(Long.parseLong(id));
@@ -56,6 +59,7 @@ public class NamespaceServiceImpl implements NamespaceService, NamespaceManagerS
 		return entity.mapToNamespaceConfig();
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public NamespaceConfig createNamespace(NamespaceConfig config) {
 		try {
@@ -110,6 +114,7 @@ public class NamespaceServiceImpl implements NamespaceService, NamespaceManagerS
 		}
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public NamespaceConfig updateNamespace(NamespaceConfig config) {
 		NamespacePo4Jpa entity = repository.get(config.getId());
@@ -119,6 +124,7 @@ public class NamespaceServiceImpl implements NamespaceService, NamespaceManagerS
 		return entity.mapToNamespaceConfig();
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteNamespace(String id) {
 		repository.deleteById(Long.parseLong(id));

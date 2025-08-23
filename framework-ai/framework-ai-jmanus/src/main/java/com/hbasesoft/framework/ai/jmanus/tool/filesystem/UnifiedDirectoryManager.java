@@ -29,7 +29,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 
 @Service
-public class UnifiedDirectoryManager implements IUnifiedDirectoryManager, StartupListener {
+public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 
 	private final IManusProperties manusProperties;
 
@@ -44,18 +44,9 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager, Startu
 		this.manusProperties = manusProperties;
 
 	}
-
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param context <br>
-	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		UnifiedDirectoryManager udm = context.getBean(UnifiedDirectoryManager.class);
-		udm.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
+	
+	public void init() {
+		this.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
 	}
 
 	/**

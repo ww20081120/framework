@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.model.dao.DynamicModelDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.model.po.DynamicModelPo4Jpa;
@@ -39,9 +40,10 @@ public class DynamicModelServiceImpl implements DynamicModelService {
 	 * @taskId <br>
 	 * @return <br>
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public ModelConfig getDefault() {
-		return convert(dynamicModelRepository.getByLambda(q -> q.eq(DynamicModelPo4Jpa::getIsDefault, true)));
+		return convert(dynamicModelRepository.getByLambda(q -> q.eq(DynamicModelPo4Jpa::getIsDefault, 1)));
 	}
 
 	private ModelConfig convert(DynamicModelPo4Jpa po) {
@@ -60,6 +62,7 @@ public class DynamicModelServiceImpl implements DynamicModelService {
 	 * @taskId <br>
 	 * @return <br>
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public List<ModelConfig> queryAll() {
 		return dynamicModelRepository.queryAll().stream().map(this::convert).toList();
@@ -73,6 +76,7 @@ public class DynamicModelServiceImpl implements DynamicModelService {
 	 * @param modelId
 	 * @return <br>
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public ModelConfig get(Long modelId) {
 		return convert(dynamicModelRepository.get(modelId));

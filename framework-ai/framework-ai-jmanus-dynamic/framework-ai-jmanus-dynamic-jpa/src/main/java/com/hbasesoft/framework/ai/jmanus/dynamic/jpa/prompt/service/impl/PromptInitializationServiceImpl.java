@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.dao.PromptDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.po.PromptPo4Jpa;
@@ -43,6 +44,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 	 * 
 	 * @param namespace Namespace
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public void initializePromptsForNamespace(String namespace) {
 		String defaultLanguage = "en";
 		for (PromptEnum prompt : PromptEnum.values()) {
@@ -50,6 +52,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 		}
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public void initializePromptsForNamespaceWithLanguage(String namespace, String language) {
 		for (PromptEnum prompt : PromptEnum.values()) {
 			updatePromptForLanguage(namespace, prompt, language);
@@ -69,8 +72,8 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 		// Start transaction to handle PostgreSQL large object compatibility issues in
 		// auto-commit mode
 		PromptPo4Jpa promptEntity = TransactionUtil.withSession((tm, ts) -> {
-			return promptRepository.getByLambda(
-					q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, prompt.getPromptName()));
+			return promptRepository.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace)
+					.eq(PromptPo4Jpa::getPromptName, prompt.getPromptName()));
 		});
 
 		if (promptEntity == null) {
@@ -101,8 +104,8 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 
 	private void updatePromptForLanguage(String namespace, PromptEnum prompt, String language) {
 		PromptPo4Jpa promptEntity = TransactionUtil.withSession((tm, ts) -> {
-			return promptRepository.getByLambda(
-					q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, prompt.getPromptName()));
+			return promptRepository.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace)
+					.eq(PromptPo4Jpa::getPromptName, prompt.getPromptName()));
 		});
 
 		if (promptEntity != null) {

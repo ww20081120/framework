@@ -7,9 +7,6 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.model.po;
 
 import java.util.Map;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
@@ -36,8 +33,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "dynamic_models")
-@Component
-@Scope("prototype")
 public class DynamicModelPo4Jpa extends BaseEntity {
 
 	/**
@@ -55,7 +50,6 @@ public class DynamicModelPo4Jpa extends BaseEntity {
 	@Column(name = "api_key", nullable = false)
 	private String apiKey;
 
-	// @Convert(converter = MapToStringConverter.class)
 	@Column(name = "headers", columnDefinition = "VARCHAR(2048)")
 	private String headers;
 
@@ -90,7 +84,7 @@ public class DynamicModelPo4Jpa extends BaseEntity {
 	public ModelConfig mapToModelConfig() {
 		ModelConfig config = new ModelConfig();
 		config.setId(this.getId());
-		config.setHeaders(this.getHeaders());
+		config.setHeaders(new MapToStringConverter().convertToEntityAttribute(this.getHeaders()));
 		config.setBaseUrl(this.getBaseUrl());
 		config.setApiKey(maskValue(this.getApiKey()));
 		config.setModelName(this.getModelName());
@@ -115,10 +109,6 @@ public class DynamicModelPo4Jpa extends BaseEntity {
 		String front = value.substring(0, 4);
 		String end = value.substring(length - 4);
 		return front + "*".repeat(length - 8) + end;
-	}
-
-	public Map<String, String> getHeaders() {
-		return new MapToStringConverter().convertToEntityAttribute(this.headers);
 	}
 
 	public void setHeaders(Map<String, String> headers) {

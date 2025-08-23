@@ -49,14 +49,12 @@ public class McpConfigPo4Jpa extends BaseEntity {
 	private String mcpServerName;
 
 	@Column(name = "connection_type", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private McpConfigType connectionType;
+	private String connectionType;
 
 	@Column(name = "connection_config", nullable = false, length = 4000)
 	private String connectionConfig;
 
 	@Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE'")
-	@Enumerated(EnumType.STRING)
-	private McpConfigStatus status = McpConfigStatus.ENABLE; // Default to enabled status
+	private String status = McpConfigStatus.ENABLE.name(); // Default to enabled status
 
 }

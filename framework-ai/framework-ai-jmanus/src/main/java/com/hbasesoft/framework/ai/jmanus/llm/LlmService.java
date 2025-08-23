@@ -22,7 +22,6 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.retry.RetryUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -35,14 +34,13 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.model.service.DynamicModelService;
 import com.hbasesoft.framework.ai.jmanus.event.JmanusListener;
 import com.hbasesoft.framework.ai.jmanus.event.ModelChangeEvent;
-import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import io.micrometer.observation.ObservationRegistry;
 import reactor.core.publisher.Flux;
 
 @Service
-public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>, StartupListener {
+public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent> {
 
 	private ChatClient agentExecutionClient;
 
@@ -89,20 +87,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 	public LlmService() {
 	}
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param context <br>
-	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		LlmService llmService = context.getBean(LlmService.class);
-		llmService.initializeChatClients();
-	}
-
-	public void initializeChatClients() {
+	public void init() {
 		try {
 			LoggerUtil.info("Checking and init ChatClient instance...");
 

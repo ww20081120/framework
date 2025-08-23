@@ -6,7 +6,6 @@
 package com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.IPromptDataInitializer;
@@ -24,7 +23,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.impl <br>
  */
 @Component
-public class PromptDataInitializer implements CommandLineRunner, IPromptDataInitializer {
+public class PromptDataInitializer implements IPromptDataInitializer {
 
 	private final PromptInitializationService promptInitializationService;
 
@@ -35,8 +34,7 @@ public class PromptDataInitializer implements CommandLineRunner, IPromptDataInit
 		this.promptInitializationService = promptInitializationService;
 	}
 
-	@Override
-	public void run(String... args) {
+	public void init() {
 		try {
 			promptInitializationService.initializePromptsForNamespace(namespace);
 		} catch (Exception e) {
