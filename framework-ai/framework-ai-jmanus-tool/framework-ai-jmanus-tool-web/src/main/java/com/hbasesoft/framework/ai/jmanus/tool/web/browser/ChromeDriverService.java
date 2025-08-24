@@ -94,8 +94,7 @@ public class ChromeDriverService implements IChromeDriverService {
 				writer.write(objectMapper.writeValueAsString(cookies));
 			}
 			log.info("Cookies saved to {}", cookieFile);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Failed to save cookies", e);
 		}
 	}
@@ -119,8 +118,7 @@ public class ChromeDriverService implements IChromeDriverService {
 				driver.getCurrentPage().context().addCookies(cookies);
 			}
 			log.info("Cookies loaded from {} to all drivers", cookieFile);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Failed to load cookies for all drivers", e);
 		}
 	}
@@ -131,13 +129,15 @@ public class ChromeDriverService implements IChromeDriverService {
 		this.innerStorageService = innerStorageService;
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.objectMapper = objectMapper;
+	}
+
+	public void init() {
 		// Use UnifiedDirectoryManager to get the shared directory for playwright
 		try {
 			java.nio.file.Path playwrightDir = unifiedDirectoryManager.getWorkingDirectory().resolve("playwright");
 			unifiedDirectoryManager.ensureDirectoryExists(playwrightDir);
 			this.sharedDir = playwrightDir.toString();
-		}
-		catch (java.io.IOException e) {
+		} catch (java.io.IOException e) {
 			log.error("Failed to create playwright directory", e);
 			this.sharedDir = unifiedDirectoryManager.getWorkingDirectory().resolve("playwright").toString();
 		}
@@ -167,8 +167,7 @@ public class ChromeDriverService implements IChromeDriverService {
 			currentDriver = createNewDriver(); // createNewDriver will now pass sharedDir
 			if (currentDriver != null) { // Check if driver creation was successful
 				drivers.put(planId, currentDriver);
-			}
-			else {
+			} else {
 				// Handle the case where driver creation failed, e.g., log an error or
 				// throw an exception
 				log.error("Failed to create new driver for planId: {}. createNewDriver returned null.", planId);
@@ -176,8 +175,7 @@ public class ChromeDriverService implements IChromeDriverService {
 				// throw new RuntimeException("Failed to create new driver for planId: " +
 				// planId);
 			}
-		}
-		finally {
+		} finally {
 			driverLock.unlock();
 		}
 
@@ -188,8 +186,7 @@ public class ChromeDriverService implements IChromeDriverService {
 		try {
 			drivers.clear();
 			log.info("Successfully cleaned up all Playwright processes	");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Error cleaning up Browser processes", e);
 		}
 	}
@@ -225,8 +222,7 @@ public class ChromeDriverService implements IChromeDriverService {
 			if (playwrightInitializer != null && playwrightInitializer.canInitialize()) {
 				log.info("Using SpringBootPlaywrightInitializer");
 				playwright = playwrightInitializer.createPlaywright();
-			}
-			else {
+			} else {
 				log.info("Using standard Playwright initialization");
 				playwright = Playwright.create();
 			}
@@ -246,8 +242,7 @@ public class ChromeDriverService implements IChromeDriverService {
 			if (manusProperties.getBrowserHeadless()) {
 				log.info("Enable Playwright headless mode");
 				options.setHeadless(true);
-			}
-			else {
+			} else {
 				log.info("Enable Playwright non-headless mode");
 				options.setHeadless(false);
 			}
@@ -266,13 +261,11 @@ public class ChromeDriverService implements IChromeDriverService {
 			}
 
 			return new DriverWrapper(playwright, browser, page, this.sharedDir, objectMapper);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			if (playwright != null) {
 				try {
 					playwright.close();
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					log.warn("Failed to close failed Playwright instance", ex);
 				}
 			}
@@ -290,13 +283,13 @@ public class ChromeDriverService implements IChromeDriverService {
 		}
 
 		switch (browserName.toLowerCase()) {
-			case "webkit":
-				return playwright.webkit();
-			case "firefox":
-				return playwright.firefox();
-			case "chromium":
-			default:
-				return playwright.chromium();
+		case "webkit":
+			return playwright.webkit();
+		case "firefox":
+			return playwright.firefox();
+		case "chromium":
+		default:
+			return playwright.chromium();
 		}
 	}
 

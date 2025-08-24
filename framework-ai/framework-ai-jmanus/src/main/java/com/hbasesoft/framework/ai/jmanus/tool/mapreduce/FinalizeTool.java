@@ -123,9 +123,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 	// Track if any operation has completed, allowing termination
 	private volatile boolean operationCompleted = false;
 
-	public FinalizeTool(String planId, IManusProperties manusProperties, MapReduceSharedStateManager sharedStateManager,
+	public FinalizeTool(IManusProperties manusProperties, MapReduceSharedStateManager sharedStateManager,
 			UnifiedDirectoryManager unifiedDirectoryManager) {
-		this.currentPlanId = planId;
 		this.manusProperties = manusProperties;
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;

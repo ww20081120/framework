@@ -140,9 +140,8 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 
 	private String terminationTimestamp = "";
 
-	public ReduceOperationTool(String planId, IManusProperties manusProperties,
-			MapReduceSharedStateManager sharedStateManager, UnifiedDirectoryManager unifiedDirectoryManager) {
-		this.currentPlanId = planId;
+	public ReduceOperationTool(IManusProperties manusProperties, MapReduceSharedStateManager sharedStateManager,
+			UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;
 	}

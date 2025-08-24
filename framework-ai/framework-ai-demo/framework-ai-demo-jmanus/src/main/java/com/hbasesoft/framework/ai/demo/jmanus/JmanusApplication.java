@@ -23,7 +23,7 @@ import com.hbasesoft.framework.common.Bootstrap;
  * @see com.hbasesoft.framework.ai.demo.jmanus <br>
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "com.hbasesoft.framework.ai.*")
+@ComponentScan(basePackages = "com.hbasesoft.framework.ai")
 public class JmanusApplication {
 
 	/**

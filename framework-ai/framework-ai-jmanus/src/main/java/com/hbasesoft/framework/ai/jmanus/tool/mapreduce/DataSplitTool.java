@@ -155,10 +155,9 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	private final ObjectMapper objectMapper;
 
-	public DataSplitTool(String planId, IManusProperties manusProperties,
+	public DataSplitTool(IManusProperties manusProperties,
 			MapReduceSharedStateManager sharedStateManager, UnifiedDirectoryManager unifiedDirectoryManager,
 			ObjectMapper objectMapper) {
-		this.currentPlanId = planId;
 		this.manusProperties = manusProperties;
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;

@@ -170,10 +170,8 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 	private final ObjectMapper objectMapper;
 
 	// Main constructor
-	public MapOutputTool(String planId, IManusProperties manusProperties,
-			IMapReduceSharedStateManager sharedStateManager, UnifiedDirectoryManager unifiedDirectoryManager,
-			ObjectMapper objectMapper) {
-		this.currentPlanId = planId;
+	public MapOutputTool(IManusProperties manusProperties, IMapReduceSharedStateManager sharedStateManager,
+			UnifiedDirectoryManager unifiedDirectoryManager, ObjectMapper objectMapper) {
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;
 		this.objectMapper = objectMapper;

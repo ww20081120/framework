@@ -115,9 +115,6 @@ public class PlanningFactory implements IPlanningFactory {
 	@Autowired
 	private StreamingResponseHandler streamingResponseHandler;
 
-	@Autowired
-	private TerminateTool terminateTool;
-
 	// @Autowired
 	// @Lazy
 	// private CronService cronService;
@@ -189,14 +186,16 @@ public class PlanningFactory implements IPlanningFactory {
 			return toolCallbackMap;
 		}
 		if (agentInit) {
+			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
 			Map<String, ToolCallBiFunctionDef> toolsMap = ContextHolder.getContext()
 					.getBeansOfType(ToolCallBiFunctionDef.class);
 			toolsMap.values().forEach(tool -> {
+				tool.setCurrentPlanId(planId);
 				toolDefinitions.add(tool);
 			});
 
 		} else {
-			toolDefinitions.add(terminateTool);
+			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
 		}
 
 		List<McpServiceVo> functionCallbacks = mcpService.getFunctionCallbacks(planId);
