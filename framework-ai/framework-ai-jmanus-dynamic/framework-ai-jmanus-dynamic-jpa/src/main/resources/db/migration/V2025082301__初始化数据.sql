@@ -76,3 +76,23 @@ INSERT INTO dynamic_agents (
     'default',
     false
 );
+
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'bash');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'browser_use');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'data_split_tool');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'terminate');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'doc_loader');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'file_merge_tool');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'mapreduce_finalize_tool');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'form_input');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'google_search');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'inner_storage_content_tool');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'jsx_generator_operator');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'vue_component_generator');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'map_output_tool');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'planning');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'ppt_generator_operator');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'python_execute');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'reduce_operation_tool');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'table_processor');
+INSERT INTO `dynamic_agent_tools` (`agent_id`, `tool_key`) VALUES (1, 'text_file_operator');

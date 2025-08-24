@@ -5,12 +5,14 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.config.model.enums.ConfigInputType;
+import com.hbasesoft.framework.common.GlobalConstants;
 
 /**
  * <Description> <br>
@@ -219,12 +221,12 @@ public class ManusProperties implements IManusProperties {
 	// Begin--------------------------------------------------------------------------------------------
 
 	@ConfigProperty(group = "manus", subGroup = "general", key = "baseDir", path = "manus.baseDir", description = "manus.general.baseDir.description", defaultValue = "", inputType = ConfigInputType.TEXT)
-	private volatile String baseDir = "";
+	private volatile String baseDir = GlobalConstants.FILE_STORAGE_PATH + "/manus";
 
 	public String getBaseDir() {
 		String configPath = "manus.baseDir";
 		String value = configService.getConfigValue(configPath);
-		if (value != null) {
+		if (StringUtils.isNotEmpty(value)) {
 			baseDir = value;
 		}
 		return baseDir;
