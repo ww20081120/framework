@@ -8,8 +8,8 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.simple.agent;
 import java.util.Map;
 
 import com.hbasesoft.framework.ai.jmanus.agent.BaseAgent;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.vo.AgentConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
 
 /** 
  * <Description> <br> 

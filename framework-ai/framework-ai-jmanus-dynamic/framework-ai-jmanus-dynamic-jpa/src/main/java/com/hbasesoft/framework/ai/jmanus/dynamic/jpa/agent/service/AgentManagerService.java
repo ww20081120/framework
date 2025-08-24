@@ -7,8 +7,8 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.service;
 
 import java.util.List;
 
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.vo.AgentConfig;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.model.vo.Tool;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.Tool;
 
 /**
  * <Description> <br>

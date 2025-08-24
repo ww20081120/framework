@@ -48,27 +48,15 @@ import com.hbasesoft.framework.ai.jmanus.planning.finalizer.PlanFinalizer;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
 import com.hbasesoft.framework.ai.jmanus.recorder.PlanExecutionRecorder;
 import com.hbasesoft.framework.ai.jmanus.tool.ToolCallBiFunctionDef;
-import com.hbasesoft.framework.ai.jmanus.tool.bash.Bash;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
-import com.hbasesoft.framework.ai.jmanus.tool.docLoader.DocLoaderTool;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
-import com.hbasesoft.framework.ai.jmanus.tool.fromInput.FormInputTool;
-import com.hbasesoft.framework.ai.jmanus.tool.innerStorage.FileMergeTool;
-import com.hbasesoft.framework.ai.jmanus.tool.innerStorage.InnerStorageContentTool;
 import com.hbasesoft.framework.ai.jmanus.tool.innerStorage.SmartContentSavingService;
-import com.hbasesoft.framework.ai.jmanus.tool.jsxGenerator.JsxGeneratorOperator;
-import com.hbasesoft.framework.ai.jmanus.tool.mapreduce.DataSplitTool;
-import com.hbasesoft.framework.ai.jmanus.tool.mapreduce.FinalizeTool;
-import com.hbasesoft.framework.ai.jmanus.tool.mapreduce.MapOutputTool;
 import com.hbasesoft.framework.ai.jmanus.tool.mapreduce.MapReduceSharedStateManager;
-import com.hbasesoft.framework.ai.jmanus.tool.mapreduce.ReduceOperationTool;
 import com.hbasesoft.framework.ai.jmanus.tool.planning.PlanningTool;
 import com.hbasesoft.framework.ai.jmanus.tool.planning.PlanningToolInterface;
-import com.hbasesoft.framework.ai.jmanus.tool.tableProcessor.TableProcessingService;
 import com.hbasesoft.framework.ai.jmanus.tool.terminate.TerminateTool;
-import com.hbasesoft.framework.ai.jmanus.tool.textOperator.TextFileOperator;
-import com.hbasesoft.framework.ai.jmanus.tool.textOperator.TextFileService;
 import com.hbasesoft.framework.ai.jmanus.tool.workflow.SummaryWorkflow;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -90,15 +78,9 @@ public class PlanningFactory implements IPlanningFactory {
 
 	private final IManusProperties manusProperties;
 
-	private final TextFileService textFileService;
-
 	private final SmartContentSavingService innerStorageService;
 
 	private final UnifiedDirectoryManager unifiedDirectoryManager;
-
-	// private final DataSourceService dataSourceService;
-
-	private final TableProcessingService tableProcessingService;
 
 	private final IMcpService mcpService;
 
@@ -133,6 +115,9 @@ public class PlanningFactory implements IPlanningFactory {
 	@Autowired
 	private StreamingResponseHandler streamingResponseHandler;
 
+	@Autowired
+	private TerminateTool terminateTool;
+
 	// @Autowired
 	// @Lazy
 	// private CronService cronService;
@@ -143,21 +128,15 @@ public class PlanningFactory implements IPlanningFactory {
 	@Value("${agent.init: true}")
 	private Boolean agentInit = true;
 
-	@Autowired
-	private JsxGeneratorOperator jsxGeneratorOperator;
-
-	public PlanningFactory(PlanExecutionRecorder recorder, IManusProperties manusProperties,
-			TextFileService textFileService, IMcpService mcpService, SmartContentSavingService innerStorageService,
-			UnifiedDirectoryManager unifiedDirectoryManager, TableProcessingService tableProcessingService) {
+	public PlanningFactory(PlanExecutionRecorder recorder, IManusProperties manusProperties, IMcpService mcpService,
+			SmartContentSavingService innerStorageService, UnifiedDirectoryManager unifiedDirectoryManager) {
 		// this.chromeDriverService = chromeDriverService;
 		this.recorder = recorder;
 		this.manusProperties = manusProperties;
-		this.textFileService = textFileService;
 		this.mcpService = mcpService;
 		this.innerStorageService = innerStorageService;
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		// this.dataSourceService = dataSourceService;
-		this.tableProcessingService = tableProcessingService;
 	}
 
 	@Override
@@ -204,42 +183,20 @@ public class PlanningFactory implements IPlanningFactory {
 			String expectedReturnInfo) {
 		Map<String, ToolCallBackContext> toolCallbackMap = new HashMap<>();
 		List<ToolCallBiFunctionDef<?>> toolDefinitions = new ArrayList<>();
-//		if (chromeDriverService == null) {
-//			log.error("ChromeDriverService is null, skipping BrowserUseTool registration");
-//			return toolCallbackMap;
-//		}
+//		
 		if (innerStorageService == null) {
 			LoggerUtil.error("SmartContentSavingService is null, skipping BrowserUseTool registration");
 			return toolCallbackMap;
 		}
 		if (agentInit) {
-			// Add all tool definitions
-			// toolDefinitions.add(BrowserUseTool.getInstance(chromeDriverService,
-			// innerStorageService, objectMapper));
-			// toolDefinitions.add(DatabaseUseTool.getInstance(dataSourceService,
-			// objectMapper));
-			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
-			toolDefinitions.add(new Bash(unifiedDirectoryManager, objectMapper));
-			toolDefinitions.add(new DocLoaderTool());
-			toolDefinitions.add(new TextFileOperator(textFileService, innerStorageService, objectMapper));
-			// toolDefinitions.add(new InnerStorageTool(unifiedDirectoryManager));
-			// toolDefinitions.add(pptGeneratorOperator);
-			toolDefinitions.add(jsxGeneratorOperator);
-			toolDefinitions.add(new InnerStorageContentTool(unifiedDirectoryManager, summaryWorkflow, recorder));
-			toolDefinitions.add(new FileMergeTool(unifiedDirectoryManager));
-			// toolDefinitions.add(new GoogleSearch());
-			// toolDefinitions.add(new PythonExecute());
-			toolDefinitions.add(new FormInputTool(objectMapper));
-			toolDefinitions.add(new DataSplitTool(planId, manusProperties, sharedStateManager, unifiedDirectoryManager,
-					objectMapper, tableProcessingService));
-			toolDefinitions.add(new MapOutputTool(planId, manusProperties, sharedStateManager, unifiedDirectoryManager,
-					objectMapper));
-			toolDefinitions
-					.add(new ReduceOperationTool(planId, manusProperties, sharedStateManager, unifiedDirectoryManager));
-			toolDefinitions.add(new FinalizeTool(planId, manusProperties, sharedStateManager, unifiedDirectoryManager));
-			// toolDefinitions.add(new CronTool(cronService, objectMapper));
+			Map<String, ToolCallBiFunctionDef> toolsMap = ContextHolder.getContext()
+					.getBeansOfType(ToolCallBiFunctionDef.class);
+			toolsMap.values().forEach(tool -> {
+				toolDefinitions.add(tool);
+			});
+
 		} else {
-			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
+			toolDefinitions.add(terminateTool);
 		}
 
 		List<McpServiceVo> functionCallbacks = mcpService.getFunctionCallbacks(planId);

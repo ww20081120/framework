@@ -14,11 +14,12 @@ import java.util.List;
 
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
 import com.hbasesoft.framework.ai.jmanus.tool.AbstractBaseTool;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
 import com.hbasesoft.framework.ai.jmanus.tool.terminate.TerminableTool;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -34,6 +35,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @see com.hbasesoft.framework.ai.jmanus.tool.mapreduce <br>
  */
 
+@Component
 public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput> implements TerminableTool {
 
 	// ==================== Configuration Constants ====================

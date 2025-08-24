@@ -8,7 +8,7 @@ package com.hbasesoft.framework.ai.jmanus.tool.planning;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.PlanInterface;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 
 /**
  * <Description> <br>

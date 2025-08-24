@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.ai.openai.api.OpenAiApi.FunctionTool;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.metadata.ToolMetadata;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionPlan;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionStep;
 import com.hbasesoft.framework.ai.jmanus.tool.AbstractBaseTool;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -22,7 +23,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @see com.hbasesoft.framework.ai.jmanus.tool <br>
  * @since V1.0<br>
  */
-
+@Component
 public class PlanningTool extends AbstractBaseTool<PlanningTool.PlanningInput> implements PlanningToolInterface {
 
 	private ExecutionPlan currentPlan;
@@ -217,8 +218,8 @@ public class PlanningTool extends AbstractBaseTool<PlanningTool.PlanningInput> i
 
 	public ToolExecuteResult createPlan(String planId, String title, List<String> steps, String terminateColumns) {
 		if (title == null || steps == null || steps.isEmpty()) {
-			LoggerUtil.info("Missing required parameters when creating plan: planId={0}, title={1}, steps={2}", planId, title,
-					steps);
+			LoggerUtil.info("Missing required parameters when creating plan: planId={0}, title={1}, steps={2}", planId,
+					title, steps);
 			return new ToolExecuteResult("Required parameters missing");
 		}
 

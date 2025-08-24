@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.tool.AbstractBaseTool;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /** 
@@ -30,8 +30,10 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 
 /**
- * LLM form input tool: supports multiple input items with labels and descriptions.
+ * LLM form input tool: supports multiple input items with labels and
+ * descriptions.
  */
+@Component
 public class FormInputTool extends AbstractBaseTool<FormInputTool.UserFormInput> {
 
 	private final ObjectMapper objectMapper;
@@ -135,8 +137,7 @@ public class FormInputTool extends AbstractBaseTool<FormInputTool.UserFormInput>
 			OpenAiApi.FunctionTool.Function function = new OpenAiApi.FunctionTool.Function(getToolDescription(), name,
 					getToolParameters());
 			return new OpenAiApi.FunctionTool(function);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LoggerUtil.warn("Failed to load prompt-based tool definition, using legacy configuration", e);
 			OpenAiApi.FunctionTool.Function function = new OpenAiApi.FunctionTool.Function(LEGACY_DESCRIPTION, name,
 					LEGACY_PARAMETERS);
@@ -315,17 +316,17 @@ public class FormInputTool extends AbstractBaseTool<FormInputTool.UserFormInput>
 		try {
 			String formJson = objectMapper.writeValueAsString(formInput);
 			return new ToolExecuteResult(formJson);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LoggerUtil.error("Error serializing form input", e);
 			return new ToolExecuteResult("{\"error\": \"Failed to process form input: " + e.getMessage() + "\"}");
 		}
 	}
 
 	/**
-	 * Get the latest form structure defined by LLM (including description and input item
-	 * labels and current values). This form structure will be used to present to users in
-	 * the frontend.
+	 * Get the latest form structure defined by LLM (including description and input
+	 * item labels and current values). This form structure will be used to present
+	 * to users in the frontend.
+	 * 
 	 * @return latest UserFormInput object, or null if not yet defined.
 	 */
 	public UserFormInput getLatestUserFormInput() {
@@ -335,7 +336,9 @@ public class FormInputTool extends AbstractBaseTool<FormInputTool.UserFormInput>
 	/**
 	 * Set user-submitted form input values. These values will update the value of
 	 * corresponding input items in currentFormDefinition.
-	 * @param submittedItems list of input items submitted by user (label-value pairs).
+	 * 
+	 * @param submittedItems list of input items submitted by user (label-value
+	 *                       pairs).
 	 */
 	public void setUserFormInputValues(List<InputItem> submittedItems) {
 		if (this.currentFormDefinition == null || this.currentFormDefinition.getInputs() == null) {
@@ -422,12 +425,11 @@ public class FormInputTool extends AbstractBaseTool<FormInputTool.UserFormInput>
 		try {
 			StringBuilder stateBuilder = new StringBuilder("FormInputTool Status:\n");
 			stateBuilder
-				.append(String.format("Description: %s\nInput Items: %s\n", currentFormDefinition.getDescription(),
-						objectMapper.writeValueAsString(currentFormDefinition.getInputs())));
+					.append(String.format("Description: %s\nInput Items: %s\n", currentFormDefinition.getDescription(),
+							objectMapper.writeValueAsString(currentFormDefinition.getInputs())));
 			stateBuilder.append(String.format("Current input state: %s\n", inputState.toString()));
 			return stateBuilder.toString();
-		}
-		catch (JsonProcessingException e) {
+		} catch (JsonProcessingException e) {
 			LoggerUtil.error("Error serializing currentFormDefinition for state string", e);
 			return String.format("FormInputTool Status: Error serializing input items. Current input state: %s",
 					inputState.toString());

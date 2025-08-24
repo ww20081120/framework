@@ -65,6 +65,8 @@
         <skywalking.version>9.4.0</skywalking.version>
         <spring-ai-alibaba.version>1.0.0.2</spring-ai-alibaba.version>
         <spring-ai.version>1.0.0</spring-ai.version>
+        <webdrivermanager.version>6.1.0</webdrivermanager.version>
+        <playwright.version>1.53.0</playwright.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -335,7 +337,26 @@
                 <version>${skywalking.version}</version>
             </dependency>
             
-            <!-- OpenTelemetry dependencies -->
+            <dependency>
+	            <groupId>io.github.bonigarcia</groupId>
+	            <artifactId>webdrivermanager</artifactId>
+	            <version>${webdrivermanager.version}</version>
+	        </dependency>
+	
+	        <!-- Playwright for browser automation -->
+	        <dependency>
+	            <groupId>com.microsoft.playwright</groupId>
+	            <artifactId>playwright</artifactId>
+	            <version>${playwright.version}</version>
+	        </dependency>
+	        
+	        <dependency>
+	            <groupId>org.apache.poi</groupId>
+	            <artifactId>poi-ooxml</artifactId>
+	            <version>5.2.3</version>
+	        </dependency>
+
+			<!-- OpenTelemetry dependencies -->
             <dependency>
                 <groupId>io.opentelemetry</groupId>
                 <artifactId>opentelemetry-api</artifactId>

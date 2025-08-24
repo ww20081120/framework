@@ -7,8 +7,6 @@ package com.hbasesoft.framework.ai.jmanus.tool;
 
 import org.springframework.ai.chat.model.ToolContext;
 
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
-
 /** 
  * <Description> <br> 
  *  

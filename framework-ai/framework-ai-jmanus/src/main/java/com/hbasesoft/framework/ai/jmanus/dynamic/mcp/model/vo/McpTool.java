@@ -13,13 +13,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpStateHolderService;
 import com.hbasesoft.framework.ai.jmanus.tool.AbstractBaseTool;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.ai.jmanus.tool.innerStorage.ISmartContentSavingService;
 import com.hbasesoft.framework.ai.jmanus.tool.innerStorage.SmartProcessResult;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -85,8 +85,7 @@ public class McpTool extends AbstractBaseTool<Map<String, Object>> {
 		String jsonInput;
 		try {
 			jsonInput = objectMapper.writeValueAsString(inputMap);
-		}
-		catch (JsonProcessingException e) {
+		} catch (JsonProcessingException e) {
 			return new ToolExecuteResult("Error: Failed to serialize input to JSON - " + e.getMessage());
 		}
 
@@ -95,8 +94,8 @@ public class McpTool extends AbstractBaseTool<Map<String, Object>> {
 			result = "";
 		}
 
-		SmartProcessResult smartProcessResult = smartContentSavingService
-			.processContent(currentPlanId, result, getName());
+		SmartProcessResult smartProcessResult = smartContentSavingService.processContent(currentPlanId, result,
+				getName());
 		result = smartProcessResult.getSummary();
 		// Here we can store the result to McpStateHolderService
 		McpState mcpState = mcpStateHolderService.getMcpState(currentPlanId);

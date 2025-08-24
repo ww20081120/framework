@@ -9,8 +9,6 @@ import java.util.function.BiFunction;
 
 import org.springframework.ai.chat.model.ToolContext;
 
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
-
 /**
  * <Description> 工具定义接口，提供统一的工具定义方法 <br>
  * 

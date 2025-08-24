@@ -8,8 +8,10 @@ package com.hbasesoft.framework.ai.jmanus.tool.terminate;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+
 import com.hbasesoft.framework.ai.jmanus.tool.AbstractBaseTool;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -22,6 +24,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.tool.terminate <br>
  */
+@Component
 public class TerminateTool extends AbstractBaseTool<Map<String, Object>> implements TerminableTool {
 
 	public static final String name = "terminate";

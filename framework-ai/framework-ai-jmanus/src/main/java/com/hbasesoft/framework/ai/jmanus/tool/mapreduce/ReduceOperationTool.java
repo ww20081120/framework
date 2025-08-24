@@ -15,10 +15,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
 import com.hbasesoft.framework.ai.jmanus.tool.AbstractBaseTool;
-import com.hbasesoft.framework.ai.jmanus.tool.code.ToolExecuteResult;
+import com.hbasesoft.framework.ai.jmanus.tool.ToolExecuteResult;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
 import com.hbasesoft.framework.ai.jmanus.tool.terminate.TerminableTool;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -34,6 +35,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @see com.hbasesoft.framework.ai.jmanus.tool.mapreduce <br>
  */
 
+@Component
 public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.ReduceOperationInput>
 		implements TerminableTool {
 

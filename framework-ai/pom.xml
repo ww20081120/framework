@@ -11,5 +11,6 @@
       <module>framework-ai-jmanus</module>
       <module>framework-ai-jmanus-dynamic</module>
       <module>framework-ai-demo</module>
+      <module>framework-ai-jmanus-tool</module>
   </modules>
 </project>
