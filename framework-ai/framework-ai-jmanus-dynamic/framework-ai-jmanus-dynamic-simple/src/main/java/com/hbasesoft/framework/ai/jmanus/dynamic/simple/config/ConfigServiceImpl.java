@@ -88,4 +88,16 @@ public class ConfigServiceImpl implements IConfigService {
 
 	}
 
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author 王伟<br>
+	 * @taskId <br> <br>
+	 */ 
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

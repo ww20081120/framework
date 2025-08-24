@@ -36,7 +36,7 @@ public interface RecorderService {
 	 * @param rootPlanId
 	 * @return <br>
 	 */
-	RecorderVo get(String rootPlanId);
+	RecorderVo getByRootPlanId(String rootPlanId);
 
 	/**
 	 * Description: <br>

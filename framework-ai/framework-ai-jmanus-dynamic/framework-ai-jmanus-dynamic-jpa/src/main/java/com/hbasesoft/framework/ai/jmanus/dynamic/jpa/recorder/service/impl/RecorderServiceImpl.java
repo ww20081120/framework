@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.dao.PlanExecutionRecordDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.po.PlanExecutionRecordPo4Jpa;
+import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.po.StringAttributeConverter;
 import com.hbasesoft.framework.ai.jmanus.recorder.RecorderService;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.vo.RecorderVo;
 
@@ -41,7 +42,7 @@ public class RecorderServiceImpl implements RecorderService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void deleteById(String planId) {
-		planExecutionRecordDao.deleteById(planId);
+		planExecutionRecordDao.deleteByLambda(q -> q.eq(PlanExecutionRecordPo4Jpa::getPlanId, planId));
 	}
 
 	/**
@@ -54,13 +55,16 @@ public class RecorderServiceImpl implements RecorderService {
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public RecorderVo get(String rootPlanId) {
-		PlanExecutionRecordPo4Jpa entity = planExecutionRecordDao.get(rootPlanId);
+	public RecorderVo getByRootPlanId(String rootPlanId) {
+		PlanExecutionRecordPo4Jpa entity = planExecutionRecordDao
+				.getByLambda(q -> q.eq(PlanExecutionRecordPo4Jpa::getPlanId, rootPlanId));
 		if (entity == null) {
 			return null;
 		}
 		RecorderVo recorderVo = new RecorderVo();
 		BeanUtils.copyProperties(entity, recorderVo);
+		recorderVo.setPlanExecutionRecord(
+				new StringAttributeConverter().convertToEntityAttribute(entity.getPlanExecutionRecord()));
 		return recorderVo;
 	}
 
@@ -76,7 +80,15 @@ public class RecorderServiceImpl implements RecorderService {
 	public void save(RecorderVo entity) {
 		PlanExecutionRecordPo4Jpa entityJpa = new PlanExecutionRecordPo4Jpa();
 		BeanUtils.copyProperties(entity, entityJpa);
-		planExecutionRecordDao.save(entityJpa);
+		if (entityJpa.getId() == null) {
+			planExecutionRecordDao
+					.updateByLambda(q -> q.set(PlanExecutionRecordPo4Jpa::getGmtModified, entityJpa.getGmtCreate())
+							.set(PlanExecutionRecordPo4Jpa::getPlanExecutionRecord, entityJpa.getPlanExecutionRecord())
+							.eq(PlanExecutionRecordPo4Jpa::getId, entity.getId()));
+
+		} else {
+			planExecutionRecordDao.save(entityJpa);
+		}
 	}
 
 }

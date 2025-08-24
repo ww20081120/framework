@@ -288,57 +288,57 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 
 	@Override
 	public void onEvent(ModelChangeEvent event) {
-		ModelConfig DynamicModelPo = event.getDynamicModelEntity();
+		ModelConfig dynamicModelPo = event.getDynamicModelEntity();
 
-		initializeChatClientsWithModel(DynamicModelPo);
+		initializeChatClientsWithModel(dynamicModelPo);
 
-		if (DynamicModelPo.getIsDefault()) {
+		if (dynamicModelPo.getIsDefault()) {
 			LoggerUtil.info("Model updated");
 			this.planningChatClient = null;
 			this.agentExecutionClient = null;
 			this.finalizeChatClient = null;
-			initializeChatClientsWithModel(DynamicModelPo);
+			initializeChatClientsWithModel(dynamicModelPo);
 		}
 	}
 
-	private ChatClient buildPlanningChatClient(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
-		OpenAiChatModel chatModel = openAiChatModel(DynamicModelPo, defaultOptions);
+	private ChatClient buildPlanningChatClient(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
+		OpenAiChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
 		return ChatClient.builder(chatModel).defaultAdvisors(new SimpleLoggerAdvisor())
 				.defaultOptions(OpenAiChatOptions.fromOptions(defaultOptions)).build();
 	}
 
-	private ChatClient buildAgentExecutionClient(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
+	private ChatClient buildAgentExecutionClient(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
 		defaultOptions.setInternalToolExecutionEnabled(false);
-		OpenAiChatModel chatModel = openAiChatModel(DynamicModelPo, defaultOptions);
+		OpenAiChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
 		return ChatClient.builder(chatModel)
 				// .defaultAdvisors(MessageChatMemoryAdvisor.builder(agentMemory).build())
 				.defaultAdvisors(new SimpleLoggerAdvisor())
 				.defaultOptions(OpenAiChatOptions.fromOptions(defaultOptions)).build();
 	}
 
-	private ChatClient buildFinalizeChatClient(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
-		OpenAiChatModel chatModel = openAiChatModel(DynamicModelPo, defaultOptions);
+	private ChatClient buildFinalizeChatClient(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
+		OpenAiChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
 		return ChatClient.builder(chatModel)
 				// .defaultAdvisors(MessageChatMemoryAdvisor.builder(conversationMemory).build())
 				.defaultAdvisors(new SimpleLoggerAdvisor()).build();
 	}
 
-	public OpenAiChatModel openAiChatModel(ModelConfig DynamicModelPo, OpenAiChatOptions defaultOptions) {
-		defaultOptions.setModel(DynamicModelPo.getModelName());
-		if (defaultOptions.getTemperature() == null && DynamicModelPo.getTemperature() != null) {
-			defaultOptions.setTemperature(DynamicModelPo.getTemperature());
+	public OpenAiChatModel openAiChatModel(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
+		defaultOptions.setModel(dynamicModelPo.getModelName());
+		if (defaultOptions.getTemperature() == null && dynamicModelPo.getTemperature() != null) {
+			defaultOptions.setTemperature(dynamicModelPo.getTemperature());
 		}
-		if (defaultOptions.getTopP() == null && DynamicModelPo.getTopP() != null) {
-			defaultOptions.setTopP(DynamicModelPo.getTopP());
+		if (defaultOptions.getTopP() == null && dynamicModelPo.getTopP() != null) {
+			defaultOptions.setTopP(dynamicModelPo.getTopP());
 		}
-		Map<String, String> headers = DynamicModelPo.getHeaders();
+		Map<String, String> headers = dynamicModelPo.getHeaders();
 		if (headers == null) {
 			headers = new HashMap<>();
 		}
 		headers.put("User-Agent", "JManus/3.0.2-SNAPSHOT");
 		defaultOptions.setHttpHeaders(headers);
 		var openAiApi = openAiApi(restClientBuilderProvider.getIfAvailable(RestClient::builder),
-				webClientBuilderProvider.getIfAvailable(WebClient::builder), DynamicModelPo);
+				webClientBuilderProvider.getIfAvailable(WebClient::builder), dynamicModelPo);
 		OpenAiChatOptions options = OpenAiChatOptions.fromOptions(defaultOptions);
 		var chatModel = OpenAiChatModel.builder().openAiApi(openAiApi).defaultOptions(options)
 				// .toolCallingManager(toolCallingManager)
@@ -382,8 +382,8 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 	}
 
 	private OpenAiApi openAiApi(RestClient.Builder restClientBuilder, WebClient.Builder webClientBuilder,
-			ModelConfig DynamicModelPo) {
-		Map<String, String> headers = DynamicModelPo.getHeaders();
+			ModelConfig dynamicModelPo) {
+		Map<String, String> headers = dynamicModelPo.getHeaders();
 		MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
 		if (headers != null) {
 			headers.forEach((key, value) -> multiValueMap.add(key, value));
@@ -395,9 +395,9 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 				.codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
 				.filter((request, next) -> next.exchange(request).timeout(Duration.ofMinutes(10)));
 
-		String completionsPath = DynamicModelPo.getCompletionsPath();
+		String completionsPath = dynamicModelPo.getCompletionsPath();
 
-		return new OpenAiApi(DynamicModelPo.getBaseUrl(), new SimpleApiKey(DynamicModelPo.getApiKey()), multiValueMap,
+		return new OpenAiApi(dynamicModelPo.getBaseUrl(), new SimpleApiKey(dynamicModelPo.getApiKey()), multiValueMap,
 				completionsPath, "/v1/embeddings", restClientBuilder, enhancedWebClientBuilder,
 				RetryUtils.DEFAULT_RESPONSE_ERROR_HANDLER) {
 			@Override

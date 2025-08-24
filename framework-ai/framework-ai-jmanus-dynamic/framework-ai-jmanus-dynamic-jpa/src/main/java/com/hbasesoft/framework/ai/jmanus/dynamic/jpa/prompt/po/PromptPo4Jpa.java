@@ -5,9 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.po;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.hbasesoft.framework.db.core.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -35,8 +32,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "prompt", uniqueConstraints = { @UniqueConstraint(columnNames = { "namespace", "prompt_name" }) })
-@Component
-@Scope("prototype")
 public class PromptPo4Jpa extends BaseEntity {
 
 	/**

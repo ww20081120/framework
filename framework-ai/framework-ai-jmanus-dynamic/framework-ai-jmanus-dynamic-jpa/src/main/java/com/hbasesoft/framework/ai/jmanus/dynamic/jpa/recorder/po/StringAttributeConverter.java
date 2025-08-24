@@ -6,18 +6,18 @@
 package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.po;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.ai.util.json.JsonParser;
 
 import com.alibaba.fastjson2.JSON;
-import org.springframework.ai.util.json.JsonParser;
 import com.hbasesoft.framework.ai.jmanus.recorder.JManusSpringEnvironmentHolder;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.PlanExecutionRecord;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.SerializeType;
 
 import jakarta.persistence.AttributeConverter;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -25,7 +25,6 @@ import jakarta.persistence.AttributeConverter;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.recorder.model.po <br>
  */
-
 public class StringAttributeConverter implements AttributeConverter<PlanExecutionRecord, String> {
 
 	private final static String SERIALIZE_TYPE_KEY = "agent.serialize";
@@ -36,7 +35,7 @@ public class StringAttributeConverter implements AttributeConverter<PlanExecutio
 			return null;
 		}
 		if (SerializeType.FASTJSON
-			.equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
+				.equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
 			return JSON.toJSONString(attribute);
 		}
 		return JsonParser.toJson(attribute);
@@ -48,7 +47,7 @@ public class StringAttributeConverter implements AttributeConverter<PlanExecutio
 			return null;
 		}
 		if (SerializeType.FASTJSON
-			.equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
+				.equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
 			return JSON.parseObject(json, PlanExecutionRecord.class);
 		}
 		return JsonParser.fromJson(json, PlanExecutionRecord.class);

@@ -7,13 +7,13 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.config.ManusProperties;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
@@ -58,7 +58,7 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 
 	private final StreamingResponseHandler streamingResponseHandler;
 
-	@Value("${namespace.value: default}")
+	@Value("${namespace.value:default}")
 	private String namespace;
 
 	public DynamicAgentLoader(DynamicAgentDao repository, @Lazy ILlmService llmService, PlanExecutionRecorder recorder,
@@ -74,6 +74,7 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 		this.streamingResponseHandler = streamingResponseHandler;
 	}
 
+	@Transactional(readOnly = true)
 	public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
 		DynamicAgentPo4Jpa entity = repository.getByLambda(
 				q -> q.eq(DynamicAgentPo4Jpa::getNamespace, namespace).eq(DynamicAgentPo4Jpa::getAgentName, agentName));
@@ -95,13 +96,14 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 				userInputService, promptService, config, streamingResponseHandler);
 	}
 
+	@Transactional(readOnly = true)
 	public List<DynamicAgent> getAllAgents() {
-		return repository.queryByLambda(q -> q.eq(DynamicAgentPo4Jpa::getNamespace, namespace)).stream()
-				.filter(entity -> Objects.equals(entity.getNamespace(), namespace)).map(t -> {
-					return convert(t, null);
-				}).toList();
+		return repository.queryByLambda(q -> q.eq(DynamicAgentPo4Jpa::getNamespace, namespace)).stream().map(t -> {
+			return convert(t, new java.util.HashMap<String, Object>());
+		}).toList();
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<DynamicAgent> getAgents(ExecutionContext context) {
 		return IDynamicAgentLoader.super.getAgents(context);

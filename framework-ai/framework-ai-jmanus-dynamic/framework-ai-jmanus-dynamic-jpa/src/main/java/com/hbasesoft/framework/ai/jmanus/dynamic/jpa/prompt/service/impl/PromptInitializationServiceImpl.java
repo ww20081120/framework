@@ -13,7 +13,6 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.po.PromptPo4Jpa;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.enums.PromptEnum;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptInitializationService;
 import com.hbasesoft.framework.ai.jmanus.prompt.PromptLoader;
-import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.utils.TransactionUtil;
 
@@ -46,7 +45,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public void initializePromptsForNamespace(String namespace) {
-		String defaultLanguage = "en";
+		String defaultLanguage = "zh";
 		for (PromptEnum prompt : PromptEnum.values()) {
 			createPromptIfNotExists(namespace, prompt, defaultLanguage);
 		}
@@ -77,7 +76,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 		});
 
 		if (promptEntity == null) {
-			promptEntity = ContextHolder.getContext().getBean(PromptPo4Jpa.class);
+			promptEntity = new PromptPo4Jpa();
 			promptEntity.setPromptName(prompt.getPromptName());
 			promptEntity.setNamespace(namespace);
 			promptEntity.setPromptDescription(prompt.getPromptDescriptionForLanguage(language));

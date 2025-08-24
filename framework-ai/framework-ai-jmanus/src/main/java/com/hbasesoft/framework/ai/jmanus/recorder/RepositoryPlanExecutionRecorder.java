@@ -594,12 +594,12 @@ public class RepositoryPlanExecutionRecorder implements PlanExecutionRecorder {
 	}
 
 	private PlanExecutionRecord getExecutionRecord(String rootPlanId) {
-		RecorderVo entity = recorderService.get(rootPlanId);
+		RecorderVo entity = recorderService.getByRootPlanId(rootPlanId);
 		return entity != null ? entity.getPlanExecutionRecord() : null;
 	}
 
 	private void saveExecutionRecord(PlanExecutionRecord planExecutionRecord) {
-		RecorderVo entity = recorderService.get(planExecutionRecord.getRootPlanId());
+		RecorderVo entity = recorderService.getByRootPlanId(planExecutionRecord.getRootPlanId());
 		if (entity == null) {
 			entity = new RecorderVo();
 			entity.setPlanId(planExecutionRecord.getRootPlanId());

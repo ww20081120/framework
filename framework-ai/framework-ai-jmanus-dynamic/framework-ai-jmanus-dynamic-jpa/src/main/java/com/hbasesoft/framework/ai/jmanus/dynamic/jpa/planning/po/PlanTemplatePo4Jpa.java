@@ -7,9 +7,6 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.planning.po;
 
 import java.util.Date;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.hbasesoft.framework.db.core.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -37,8 +34,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "plan_template")
-@Component
-@Scope("prototype")
 public class PlanTemplatePo4Jpa extends BaseEntity {
 	/**
 	 * serialVersionUID

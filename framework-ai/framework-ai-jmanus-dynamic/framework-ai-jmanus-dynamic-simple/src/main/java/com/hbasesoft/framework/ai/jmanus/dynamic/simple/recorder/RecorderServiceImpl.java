@@ -42,7 +42,7 @@ public class RecorderServiceImpl implements RecorderService {
 	 * @return <br>
 	 */
 	@Override
-	public RecorderVo get(String rootPlanId) {
+	public RecorderVo getByRootPlanId(String rootPlanId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

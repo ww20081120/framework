@@ -7,9 +7,6 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.recorder.po;
 
 import java.util.Date;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.hbasesoft.framework.ai.jmanus.recorder.model.PlanExecutionRecord;
 import com.hbasesoft.framework.db.core.BaseEntity;
 
@@ -36,8 +33,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "plan_execution_record")
-@Component
-@Scope("prototype")
 public class PlanExecutionRecordPo4Jpa extends BaseEntity {
 
 	/**
@@ -61,10 +56,6 @@ public class PlanExecutionRecordPo4Jpa extends BaseEntity {
 	// @Convert(converter = StringAttributeConverter.class)
 	@Column(name = "plan_execution_record")
 	private String planExecutionRecord;
-
-	public PlanExecutionRecord getPlanExecutionRecord() {
-		return new StringAttributeConverter().convertToEntityAttribute(planExecutionRecord);
-	}
 
 	public void setPlanExecutionRecord(PlanExecutionRecord planExecutionRecord) {
 		this.planExecutionRecord = new StringAttributeConverter().convertToDatabaseColumn(planExecutionRecord);
