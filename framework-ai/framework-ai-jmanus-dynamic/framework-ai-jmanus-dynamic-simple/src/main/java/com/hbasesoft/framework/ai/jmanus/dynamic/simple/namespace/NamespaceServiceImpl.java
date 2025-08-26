@@ -31,7 +31,6 @@ public class NamespaceServiceImpl implements NamespaceService {
 	 */
 	@Override
 	public List<NamespaceConfig> getAllNamespaces() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

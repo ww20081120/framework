@@ -29,14 +29,16 @@ public class PromptServiceImpl implements PromptService {
 	 *  
 	 * @author 王伟<br>
 	 * @taskId <br>
+	 * @param namespace
 	 * @param promptName
 	 * @return <br>
-	 */
+	 */ 
 	@Override
-	public PromptVO getPromptByName(String promptName) {
+	public PromptVO getPromptByName(String namespace, String promptName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 	/**
 	 * Description: <br> 
@@ -46,7 +48,7 @@ public class PromptServiceImpl implements PromptService {
 	 * @param promptName
 	 * @param variables
 	 * @return <br>
-	 */
+	 */ 
 	@Override
 	public Message createSystemMessage(String promptName, Map<String, Object> variables) {
 		// TODO Auto-generated method stub
@@ -61,7 +63,7 @@ public class PromptServiceImpl implements PromptService {
 	 * @param promptName
 	 * @param variables
 	 * @return <br>
-	 */
+	 */ 
 	@Override
 	public Message createUserMessage(String promptName, Map<String, Object> variables) {
 		// TODO Auto-generated method stub
@@ -76,7 +78,7 @@ public class PromptServiceImpl implements PromptService {
 	 * @param promptName
 	 * @param variables
 	 * @return <br>
-	 */
+	 */ 
 	@Override
 	public String renderPrompt(String promptName, Map<String, Object> variables) {
 		// TODO Auto-generated method stub
@@ -88,11 +90,38 @@ public class PromptServiceImpl implements PromptService {
 	 *  
 	 * @author 王伟<br>
 	 * @taskId <br> <br>
-	 */
+	 */ 
 	@Override
 	public void reinitializePrompts() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param promptVO
+	 * @return <br>
+	 */ 
+	@Override
+	public PromptVO create(PromptVO promptVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param promptVO
+	 * @return <br>
+	 */ 
+	@Override
+	public PromptVO update(PromptVO promptVO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

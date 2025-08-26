@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.prompt.AssistantPromptTemplate;
@@ -62,7 +63,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	public List<PromptVO> getAll() {
 		return promptRepository.queryAll().stream().map(this::mapToPromptVO).collect(Collectors.toList());
 	}
-	
+
 	@Transactional(readOnly = true)
 	@Override
 	public List<PromptVO> getAllByNamespace(String namespace) {
@@ -86,9 +87,10 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public PromptVO getPromptByName(String promptName) {
+	public PromptVO getPromptByName(String ns, String promptName) {
+		String na = StringUtils.isEmpty(ns) ? namespace : ns;
 		PromptPo4Jpa entity = promptRepository
-				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
+				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, na).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (entity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -105,8 +107,9 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		if (Boolean.TRUE.equals(promptVO.getBuiltIn())) {
 			throw new IllegalArgumentException("Cannot create built-in prompt");
 		}
-		PromptPo4Jpa prompt = promptRepository.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, promptVO.getNamespace())
-				.eq(PromptPo4Jpa::getPromptName, promptVO.getPromptName()));
+		PromptPo4Jpa prompt = promptRepository
+				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, promptVO.getNamespace())
+						.eq(PromptPo4Jpa::getPromptName, promptVO.getPromptName()));
 		if (prompt != null) {
 			LoggerUtil.error(
 					"Found Prompt is existed: promptName :{0} , namespace:{1}, type :{2}, String messageType:{3}",
@@ -162,8 +165,8 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Message createSystemMessage(String promptName, Map<String, Object> variables) {
-		PromptPo4Jpa promptEntity = promptRepository
-				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
+		PromptPo4Jpa promptEntity = promptRepository.getByLambda(
+				q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -175,8 +178,8 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Message createUserMessage(String promptName, Map<String, Object> variables) {
-		PromptPo4Jpa promptEntity = promptRepository
-				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
+		PromptPo4Jpa promptEntity = promptRepository.getByLambda(
+				q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -188,8 +191,8 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Message createMessage(String promptName, Map<String, Object> variables) {
-		PromptPo4Jpa promptEntity = promptRepository
-				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
+		PromptPo4Jpa promptEntity = promptRepository.getByLambda(
+				q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -218,8 +221,8 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	@Transactional(readOnly = true)
 	@Override
 	public String renderPrompt(String promptName, Map<String, Object> variables) {
-		PromptPo4Jpa promptEntity = promptRepository
-				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
+		PromptPo4Jpa promptEntity = promptRepository.getByLambda(
+				q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -250,8 +253,8 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 			throw new IllegalArgumentException("Unknown prompt: " + promptName);
 		}
 
-		PromptPo4Jpa entity = promptRepository
-				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
+		PromptPo4Jpa entity = promptRepository.getByLambda(
+				q -> q.eq(PromptPo4Jpa::getNamespace, namespace).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (entity != null) {
 			String promptPath = promptEnum.getPromptPathForLanguage(language);
 			String newContent = promptLoader.loadPrompt(promptPath);
@@ -328,6 +331,19 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		LoggerUtil.info(
 				"Prompt namespace correction completed. Summary: {0} prompts updated, {1} prompts already valid.",
 				updatedCount, validCount);
+	}
+
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param string
+	 * @return <br>
+	 */
+	@Override
+	public PromptVO getPromptByName(String string) {
+		return getPromptByName(namespace, string);
 	}
 
 }

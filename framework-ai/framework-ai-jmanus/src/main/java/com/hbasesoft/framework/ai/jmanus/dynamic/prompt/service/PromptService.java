@@ -5,7 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.messages.Message;
@@ -24,13 +23,29 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.vo.PromptVO;
  */
 public interface PromptService {
 
-	PromptVO getPromptByName(String promptName);
+	PromptVO getPromptByName(String namespace, String promptName);
+
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param string
+	 * @return <br>
+	 */
+	default PromptVO getPromptByName(String string) {
+		return getPromptByName(null, string);
+	}
 
 	Message createSystemMessage(String promptName, Map<String, Object> variables);
 
 	Message createUserMessage(String promptName, Map<String, Object> variables);
-	
+
 	String renderPrompt(String promptName, Map<String, Object> variables);
 
 	void reinitializePrompts();
+
+	PromptVO create(PromptVO promptVO);
+
+	PromptVO update(PromptVO promptVO);
 }

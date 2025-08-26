@@ -26,8 +26,7 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigType;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServerConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServerRequestVO;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServiceVo;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.AbstractMcpService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.McpCacheManager;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.McpConfigValidator;
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -46,21 +45,19 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service <br>
  */
 @Service
-public class McpServiceImpl implements IMcpService, McpMangerService {
+public class McpServiceImpl extends AbstractMcpService implements McpMangerService {
 
 	private final McpConfigDao mcpConfigDao;
 
 	private final McpConfigValidator configValidator;
 
-	private final McpCacheManager cacheManager;
-
 	private final ObjectMapper objectMapper;
 
 	public McpServiceImpl(McpConfigDao McpConfigDao, McpConfigValidator configValidator, McpCacheManager cacheManager,
 			ObjectMapper objectMapper) {
+		super(cacheManager);
 		this.mcpConfigDao = McpConfigDao;
 		this.configValidator = configValidator;
-		this.cacheManager = cacheManager;
 		this.objectMapper = objectMapper;
 	}
 
@@ -284,29 +281,6 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 	}
 
 	/**
-	 * Get MCP service entity list
-	 * 
-	 * @param planId Plan ID
-	 * @return MCP service entity list
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public List<McpServiceVo> getFunctionCallbacks(String planId) {
-		return cacheManager.getServiceEntities(planId);
-	}
-
-	/**
-	 * Close MCP service for specified plan
-	 * 
-	 * @param planId Plan ID
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void close(String planId) {
-		cacheManager.invalidateCache(planId);
-	}
-
-	/**
 	 * Enable MCP server
 	 * 
 	 * @param id MCP server ID
@@ -345,7 +319,7 @@ public class McpServiceImpl implements IMcpService, McpMangerService {
 
 		try {
 			entity.setStatus(status.name());
-			mcpConfigDao.save(entity);
+			mcpConfigDao.update(entity);
 
 			// Clear cache to reload services
 			cacheManager.invalidateAllCache();

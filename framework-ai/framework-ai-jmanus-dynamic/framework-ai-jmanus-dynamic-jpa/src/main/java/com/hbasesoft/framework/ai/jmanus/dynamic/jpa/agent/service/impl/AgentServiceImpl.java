@@ -59,6 +59,7 @@ public class AgentServiceImpl extends AbstractAgentService implements AgentServi
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<AgentConfig> getAllAgentsByNamespace(String namespace) {
 		List<DynamicAgentPo4Jpa> entities;
 		if (namespace == null || namespace.trim().isEmpty()) {

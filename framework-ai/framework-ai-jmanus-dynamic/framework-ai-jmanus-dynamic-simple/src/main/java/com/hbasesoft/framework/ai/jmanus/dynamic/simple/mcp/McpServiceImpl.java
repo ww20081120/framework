@@ -9,8 +9,8 @@ import java.util.List;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigStatus;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpServiceVo;
-import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.AbstractMcpService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.McpCacheManager;
 
 /**
  * <Description> <br>
@@ -22,33 +22,13 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpService;
  * @since V1.0<br>
  * @see com.hbasesoft.ai.jmanus.dynamic.simple.mcp <br>
  */
-public class McpServiceImpl implements IMcpService {
+public class McpServiceImpl extends AbstractMcpService {
 
 	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param planId
-	 * @return <br>
+	 * @param cacheManager
 	 */
-	@Override
-	public List<McpServiceVo> getFunctionCallbacks(String planId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param planId <br>
-	 */
-	@Override
-	public void close(String planId) {
-		// TODO Auto-generated method stub
-
+	public McpServiceImpl(McpCacheManager cacheManager) {
+		super(cacheManager);
 	}
 
 	/**

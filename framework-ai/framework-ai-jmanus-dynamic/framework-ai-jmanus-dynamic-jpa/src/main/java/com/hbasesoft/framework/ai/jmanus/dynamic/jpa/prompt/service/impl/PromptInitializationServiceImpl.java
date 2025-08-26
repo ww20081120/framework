@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.dao.PromptDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.po.PromptPo4Jpa;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.enums.PromptEnum;
+import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.vo.PromptVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptInitializationService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.jmanus.prompt.PromptLoader;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.utils.TransactionUtil;
@@ -29,12 +31,12 @@ import com.hbasesoft.framework.db.core.utils.TransactionUtil;
 @Service
 public class PromptInitializationServiceImpl implements PromptInitializationService {
 
-	private final PromptDao promptRepository;
+	private final PromptService promptService;
 
 	private final PromptLoader promptLoader;
 
-	public PromptInitializationServiceImpl(PromptDao promptRepository, PromptLoader promptLoader) {
-		this.promptRepository = promptRepository;
+	public PromptInitializationServiceImpl(PromptService promptService, PromptLoader promptLoader) {
+		this.promptService = promptService;
 		this.promptLoader = promptLoader;
 	}
 
@@ -70,13 +72,9 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 	private void createPromptIfNotExists(String namespace, PromptEnum prompt, String language) {
 		// Start transaction to handle PostgreSQL large object compatibility issues in
 		// auto-commit mode
-		PromptPo4Jpa promptEntity = TransactionUtil.withSession((tm, ts) -> {
-			return promptRepository.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace)
-					.eq(PromptPo4Jpa::getPromptName, prompt.getPromptName()));
-		});
-
+		PromptVO promptEntity = promptService.getPromptByName(namespace, prompt.getPromptName());
 		if (promptEntity == null) {
-			promptEntity = new PromptPo4Jpa();
+			promptEntity = new PromptVO();
 			promptEntity.setPromptName(prompt.getPromptName());
 			promptEntity.setNamespace(namespace);
 			promptEntity.setPromptDescription(prompt.getPromptDescriptionForLanguage(language));
@@ -89,7 +87,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 			promptEntity.setPromptContent(promptContent);
 
 			try {
-				promptRepository.save(promptEntity);
+				promptService.create(promptEntity);
 				LoggerUtil.info("Created prompt: {0} for namespace: {1} with language: {2}", prompt.getPromptName(),
 						namespace, language);
 			} catch (Exception e) {
@@ -102,10 +100,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 	}
 
 	private void updatePromptForLanguage(String namespace, PromptEnum prompt, String language) {
-		PromptPo4Jpa promptEntity = TransactionUtil.withSession((tm, ts) -> {
-			return promptRepository.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, namespace)
-					.eq(PromptPo4Jpa::getPromptName, prompt.getPromptName()));
-		});
+		PromptVO promptEntity = promptService.getPromptByName(namespace, prompt.getPromptName());
 
 		if (promptEntity != null) {
 			promptEntity.setPromptDescription(prompt.getPromptDescriptionForLanguage(language));
@@ -115,7 +110,7 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 			promptEntity.setPromptContent(promptContent);
 
 			try {
-				promptRepository.save(promptEntity);
+				promptService.update(promptEntity);
 				LoggerUtil.info("Updated prompt: {0} for namespace: {1} with language: {2}", prompt.getPromptName(),
 						namespace, language);
 			} catch (Exception e) {

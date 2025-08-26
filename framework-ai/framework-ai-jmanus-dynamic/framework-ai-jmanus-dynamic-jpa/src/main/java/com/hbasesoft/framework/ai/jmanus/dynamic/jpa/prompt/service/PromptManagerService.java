@@ -30,10 +30,6 @@ public interface PromptManagerService {
 
 	PromptVO getById(Long id);
 
-	PromptVO create(PromptVO promptVO);
-
-	PromptVO update(PromptVO promptVO);
-
 	void delete(Long id);
 
 	Message createMessage(String promptName, Map<String, Object> variables);
