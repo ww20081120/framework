@@ -12,7 +12,8 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
 
 /**
- * <Description> <br>
+ * 动态代理加载器接口<br>
+ * 该接口定义了动态加载和获取智能代理的方法。
  * 
  * @author 王伟<br>
  * @version 1.0<br>
@@ -24,21 +25,27 @@ import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
 public interface IDynamicAgentLoader {
 
 	/**
-	 * Load Agent
+	 * 根据代理名称和初始设置加载代理
 	 * 
-	 * @param agentName           Agent name
-	 * @param initialAgentSetting Initial Agent settings
-	 * @return Dynamic Agent
+	 * @param agentName 代理名称
+	 * @param initialAgentSetting 初始代理设置
+	 * @return 动态代理实例
 	 */
 	DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting);
 
 	/**
-	 * Get all Agents
+	 * 获取所有代理
 	 * 
-	 * @return List of Agent entities
+	 * @return 代理实体列表
 	 */
 	List<DynamicAgent> getAllAgents();
 
+	/**
+	 * 根据执行上下文获取代理列表
+	 * 
+	 * @param context 执行上下文
+	 * @return 代理列表
+	 */
 	default List<DynamicAgent> getAgents(ExecutionContext context) {
 		return getAllAgents();
 	}

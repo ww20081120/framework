@@ -21,15 +21,9 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.Tool;
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.service <br>
  */
 public interface AgentManagerService {
-
-	List<AgentConfig> getAllAgentsByNamespace(String namespace);
-
 	AgentConfig getAgentById(String id);
 
 	AgentConfig createAgent(AgentConfig agentConfig);
 
 	void deleteAgent(String id);
-
-	List<Tool> getAvailableTools();
-
 }

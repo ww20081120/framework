@@ -21,7 +21,7 @@ import com.hbasesoft.framework.ai.jmanus.config.model.vo.ConfigVo;
  */
 public interface IConfigService {
 	
-	void init();
+	default void init() {}
 
 	/**
 	 * Get configuration value by path

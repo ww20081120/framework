@@ -3,24 +3,19 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.service.impl;
+package com.hbasesoft.framework.ai.jmanus.dynamic.agent.service;
 
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.model.tool.ToolCallingManager;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.config.ManusProperties;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
-import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.dao.DynamicAgentDao;
-import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.po.DynamicAgentPo4Jpa;
-import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.model.po.DynamicModelPo4Jpa;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
@@ -42,7 +37,7 @@ import com.hbasesoft.framework.ai.jmanus.recorder.PlanExecutionRecorder;
 @Service
 public class DynamicAgentLoader implements IDynamicAgentLoader {
 
-	private final DynamicAgentDao repository;
+	private final AgentService agentService;
 
 	private final ILlmService llmService;
 
@@ -61,10 +56,11 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	@Value("${namespace.value:default}")
 	private String namespace;
 
-	public DynamicAgentLoader(DynamicAgentDao repository, @Lazy ILlmService llmService, PlanExecutionRecorder recorder,
-			ManusProperties properties, @Lazy ToolCallingManager toolCallingManager, IUserInputService userInputService,
-			PromptService promptService, StreamingResponseHandler streamingResponseHandler) {
-		this.repository = repository;
+	public DynamicAgentLoader(AgentService agentService, @Lazy ILlmService llmService,
+			PlanExecutionRecorder recorder, ManusProperties properties, @Lazy ToolCallingManager toolCallingManager,
+			IUserInputService userInputService, PromptService promptService,
+			StreamingResponseHandler streamingResponseHandler) {
+		this.agentService = agentService;
 		this.llmService = llmService;
 		this.recorder = recorder;
 		this.properties = properties;
@@ -74,36 +70,25 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 		this.streamingResponseHandler = streamingResponseHandler;
 	}
 
-	@Transactional(readOnly = true)
 	public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
-		DynamicAgentPo4Jpa entity = repository.getByLambda(
-				q -> q.eq(DynamicAgentPo4Jpa::getNamespace, namespace).eq(DynamicAgentPo4Jpa::getAgentName, agentName));
-		if (entity == null) {
-			throw new IllegalArgumentException("Agent not found: " + agentName);
-		}
-		return convert(entity, initialAgentSetting);
+		AgentConfig agentConfig = agentService.getAgentByName(agentName, agentName);
+		return convert(agentConfig, initialAgentSetting);
 	}
 
-	private DynamicAgent convert(DynamicAgentPo4Jpa entity, Map<String, Object> initialAgentSetting) {
-		DynamicModelPo4Jpa model = entity.getModel();
-		ModelConfig config = new ModelConfig();
-		if (model != null) {
-			BeanUtils.copyProperties(model, config);
-		}
+	private DynamicAgent convert(AgentConfig agentConfig, Map<String, Object> initialAgentSetting) {
+		ModelConfig config = agentConfig.getModel();
 
-		return new DynamicAgent(llmService, recorder, properties, entity.getAgentName(), entity.getAgentDescription(),
-				entity.getNextStepPrompt(), entity.getAvailableToolKeys(), toolCallingManager, initialAgentSetting,
-				userInputService, promptService, config, streamingResponseHandler);
+		return new DynamicAgent(llmService, recorder, properties, agentConfig.getName(), agentConfig.getDescription(),
+				agentConfig.getNextStepPrompt(), agentConfig.getAvailableTools(), toolCallingManager,
+				initialAgentSetting, userInputService, promptService, config, streamingResponseHandler);
 	}
 
-	@Transactional(readOnly = true)
 	public List<DynamicAgent> getAllAgents() {
-		return repository.queryByLambda(q -> q.eq(DynamicAgentPo4Jpa::getNamespace, namespace)).stream().map(t -> {
+		return agentService.getAllAgentsByNamespace(namespace).stream().map(t -> {
 			return convert(t, new java.util.HashMap<String, Object>());
 		}).toList();
 	}
 
-	@Transactional(readOnly = true)
 	@Override
 	public List<DynamicAgent> getAgents(ExecutionContext context) {
 		return IDynamicAgentLoader.super.getAgents(context);

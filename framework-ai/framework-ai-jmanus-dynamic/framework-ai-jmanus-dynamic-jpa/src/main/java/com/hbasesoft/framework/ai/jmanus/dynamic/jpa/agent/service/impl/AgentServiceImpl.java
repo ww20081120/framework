@@ -6,23 +6,18 @@
 package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.service.impl;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.hbasesoft.framework.ai.jmanus.agent.BaseAgent;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.DynamicAgent;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.ToolCallbackProvider;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AbstractAgentService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.Tool;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.dao.DynamicAgentDao;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.po.DynamicAgentPo4Jpa;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.service.AgentManagerService;
@@ -31,9 +26,7 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.model.model.vo.ModelConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.service.NamespaceService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.vo.NamespaceConfig;
-import com.hbasesoft.framework.ai.jmanus.llm.ILlmService;
 import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory;
-import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory.ToolCallBackContext;
 import com.hbasesoft.framework.ai.jmanus.tool.terminate.TerminateTool;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
@@ -51,33 +44,17 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 
 @Service
-public class AgentServiceImpl implements AgentService, AgentManagerService {
-
-	private final IDynamicAgentLoader dynamicAgentLoader;
+public class AgentServiceImpl extends AbstractAgentService implements AgentService, AgentManagerService {
 
 	private final DynamicAgentDao repository;
-
-	private final IPlanningFactory planningFactory;
-
-	private final IMcpService mcpService;
 
 	private final NamespaceService namespaceService;
 
 	@Autowired
-	@Lazy
-	private ILlmService llmService;
-
-	@Autowired
-	@Lazy
-	private ToolCallingManager toolCallingManager;
-
-	@Autowired
 	public AgentServiceImpl(@Lazy IDynamicAgentLoader dynamicAgentLoader, DynamicAgentDao repository,
 			@Lazy IPlanningFactory planningFactory, @Lazy IMcpService mcpService, NamespaceService namespaceService) {
-		this.dynamicAgentLoader = dynamicAgentLoader;
+		super(planningFactory, dynamicAgentLoader, mcpService);
 		this.repository = repository;
-		this.planningFactory = planningFactory;
-		this.mcpService = mcpService;
 		this.namespaceService = namespaceService;
 	}
 
@@ -164,28 +141,6 @@ public class AgentServiceImpl implements AgentService, AgentManagerService {
 		}
 
 		repository.deleteById(Long.parseLong(id));
-	}
-
-	public List<Tool> getAvailableTools() {
-
-		String uuid = UUID.randomUUID().toString();
-		String expectedReturnInfo = "dummyColumn1, dummyColumn2";
-		try {
-			Map<String, ToolCallBackContext> toolcallContext = planningFactory.toolCallbackMap(uuid, uuid,
-					expectedReturnInfo);
-			return toolcallContext.entrySet().stream().map(entry -> {
-				Tool tool = new Tool();
-				tool.setKey(entry.getKey());
-				tool.setName(entry.getKey()); // You might want to provide a more friendly
-				// name
-				tool.setDescription(entry.getValue().getFunctionInstance().getDescription());
-				tool.setEnabled(true);
-				tool.setServiceGroup(entry.getValue().getFunctionInstance().getServiceGroup());
-				return tool;
-			}).collect(Collectors.toList());
-		} finally {
-			mcpService.close(uuid);
-		}
 	}
 
 	private AgentConfig mapToAgentConfig(DynamicAgentPo4Jpa entity) {
@@ -299,33 +254,24 @@ public class AgentServiceImpl implements AgentService, AgentManagerService {
 		return entity;
 	}
 
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param namespace
+	 * @param agentName
+	 * @return <br>
+	 */
+	@Transactional(readOnly = true)
 	@Override
-	public BaseAgent createDynamicBaseAgent(String name, String planId, String rootPlanId,
-			Map<String, Object> initialAgentSetting, String expectedReturnInfo) {
-
-		LoggerUtil.info("Create new BaseAgent: {0}, planId: {1}", name, planId);
-
-		try {
-			// Load existing Agent through dynamicAgentLoader
-			DynamicAgent agent = dynamicAgentLoader.loadAgent(name, initialAgentSetting);
-
-			// Set planId
-			agent.setCurrentPlanId(planId);
-			agent.setRootPlanId(rootPlanId);
-			// Set tool callback mapping
-			Map<String, ToolCallBackContext> toolCallbackMap = planningFactory.toolCallbackMap(planId, rootPlanId,
-					expectedReturnInfo);
-			agent.setToolCallbackProvider(new ToolCallbackProvider() {
-
-				@Override
-				public Map<String, ToolCallBackContext> getToolCallBackContext() {
-					return toolCallbackMap;
-				}
-			});
-			return agent;
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to create dynamic base agent: " + name, e);
+	public AgentConfig getAgentByName(String namespace, String agentName) {
+		DynamicAgentPo4Jpa entity = repository.getByLambda(
+				q -> q.eq(DynamicAgentPo4Jpa::getNamespace, namespace).eq(DynamicAgentPo4Jpa::getAgentName, agentName));
+		if (entity == null) {
+			throw new IllegalArgumentException("Agent not found: " + agentName);
 		}
+		return mapToAgentConfig(entity);
 	}
 
 }

@@ -5,15 +5,19 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.simple.agent;
 
-import java.util.Map;
+import java.util.List;
 
-import com.hbasesoft.framework.ai.jmanus.agent.BaseAgent;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
+import org.springframework.stereotype.Service;
+
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AbstractAgentService;
+import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
+import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.IMcpService;
+import com.hbasesoft.framework.ai.jmanus.planning.IPlanningFactory;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -21,11 +25,22 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.simple.agent <br>
  */
-public class AgentServiceImpl implements AgentService {
+@Service
+public class AgentServiceImpl extends AbstractAgentService {
 
 	/**
-	 * Description: <br> 
-	 *  
+	 * @param planningFactory
+	 * @param dynamicAgentLoader
+	 * @param mcpService
+	 */
+	public AgentServiceImpl(IPlanningFactory planningFactory, IDynamicAgentLoader dynamicAgentLoader,
+			IMcpService mcpService) {
+		super(planningFactory, dynamicAgentLoader, mcpService);
+	}
+
+	/**
+	 * Description: <br>
+	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
 	 * @param agentConfig
@@ -33,6 +48,20 @@ public class AgentServiceImpl implements AgentService {
 	 */
 	@Override
 	public AgentConfig updateAgent(AgentConfig agentConfig) {
+		return null;
+	}
+
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param namespace
+	 * @param agentName
+	 * @return <br>
+	 */ 
+	@Override
+	public AgentConfig getAgentByName(String namespace, String agentName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -42,17 +71,11 @@ public class AgentServiceImpl implements AgentService {
 	 *  
 	 * @author 王伟<br>
 	 * @taskId <br>
-	 * @param name
-	 * @param currentPlanId
-	 * @param rootPlanId
-	 * @param initialAgentSetting
-	 * @param expectedReturnInfo
+	 * @param namespace
 	 * @return <br>
-	 */
+	 */ 
 	@Override
-	public BaseAgent createDynamicBaseAgent(String name, String currentPlanId, String rootPlanId,
-			Map<String, Object> initialAgentSetting, String expectedReturnInfo) {
-		// TODO Auto-generated method stub
+	public List<AgentConfig> getAllAgentsByNamespace(String namespace) {
 		return null;
 	}
 

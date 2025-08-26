@@ -71,8 +71,8 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 		} else {
 			findEntity = new MemoryPo4Jpa();
 			BeanUtils.copyProperties(memoryEntity, findEntity);
+			memoryRepository.save(findEntity);
 		}
-		memoryRepository.save(findEntity);
 		findEntity.setMessages(chatMemory.get(findEntity.getMemoryId()));
 		return convert(findEntity);
 	}
@@ -93,7 +93,7 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 			throw new IllegalArgumentException();
 		}
 		findEntity.setMemoryName(memoryEntity.getMemoryName());
-		memoryRepository.save(findEntity);
+		memoryRepository.update(findEntity);
 		findEntity.setMessages(chatMemory.get(findEntity.getMemoryId()));
 		return findEntity;
 	}
