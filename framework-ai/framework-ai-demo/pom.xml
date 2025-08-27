@@ -13,5 +13,6 @@
       <module>framework-ai-demo-ollama</module>
       <module>framework-ai-demo-embabel</module>
       <module>framework-ai-demo-jmanus</module>
+      <module>framework-ai-jmanus-simple</module>
   </modules>
 </project>

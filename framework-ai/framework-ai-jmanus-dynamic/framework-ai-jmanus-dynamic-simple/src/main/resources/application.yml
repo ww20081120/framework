@@ -1,0 +1,22 @@
+# AI模型配置示例
+ai:
+  models:
+    configs:
+      - baseUrl: "https://api.openai.com/v1"
+        apiKey: "your-openai-api-key"
+        modelName: "gpt-4"
+        modelDescription: "OpenAI GPT-4模型"
+        type: "openai"
+        isDefault: true
+        temperature: 0.7
+        topP: 0.9
+        completionsPath: "/chat/completions"
+      - baseUrl: "https://api.anthropic.com/v1"
+        apiKey: "your-anthropic-api-key"
+        modelName: "claude-3"
+        modelDescription: "Anthropic Claude-3模型"
+        type: "anthropic"
+        isDefault: false
+        temperature: 0.8
+        topP: 0.95
+        completionsPath: "/messages"

@@ -233,11 +233,6 @@ public class ConfigServiceImpl implements IConfigService {
 	 * @param bean 配置Bean
 	 */
 	private void initializeConfig(Object bean) {
-		// Collect all valid config paths from the bean
-		Set<String> validConfigPaths = Arrays.stream(bean.getClass().getDeclaredFields())
-				.filter(field -> field.isAnnotationPresent(ConfigProperty.class))
-				.map(field -> field.getAnnotation(ConfigProperty.class).path()).collect(Collectors.toSet());
-
 		// Initialize/update configurations defined in the bean
 		Arrays.stream(bean.getClass().getDeclaredFields())
 				.filter(field -> field.isAnnotationPresent(ConfigProperty.class)).forEach(field -> {
@@ -278,7 +273,6 @@ public class ConfigServiceImpl implements IConfigService {
 		if (content.trim().isEmpty()) {
 			return new ConcurrentHashMap<>();
 		}
-
 		return objectMapper.readValue(content, Map.class);
 	}
 
