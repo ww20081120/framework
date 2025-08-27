@@ -61,7 +61,6 @@ public class NamespacePo4Jpa extends BaseEntity {
 		config.setCode(this.getCode());
 		config.setHost(this.getHost());
 		config.setDescription(this.getDescription());
-		config.setHost(this.getHost());
 		return config;
 	}
 }

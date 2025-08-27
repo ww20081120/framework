@@ -5,7 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.simple.namespace;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.service.NamespaceService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.vo.NamespaceConfig;
@@ -20,8 +24,12 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.namespace.vo.NamespaceConfig;
  * @since V1.0<br>
  * @see com.hbasesoft.ai.jmanus.dynamic.simple.namespace <br>
  */
+@Service
 public class NamespaceServiceImpl implements NamespaceService {
 
+	@Value("${namespace.value:default}")
+	private String namespace;
+	
 	/**
 	 * Description: <br> 
 	 *  
@@ -31,7 +39,15 @@ public class NamespaceServiceImpl implements NamespaceService {
 	 */
 	@Override
 	public List<NamespaceConfig> getAllNamespaces() {
-		return null;
+		List<NamespaceConfig> namespaces = new ArrayList<>();
+		NamespaceConfig config = new NamespaceConfig();
+		config.setId(1L);
+		config.setName("Default Namespace");
+		config.setCode(namespace);
+		config.setDescription("Default namespace configuration");
+		config.setHost("localhost");
+		namespaces.add(config);
+		return namespaces;
 	}
 
 }

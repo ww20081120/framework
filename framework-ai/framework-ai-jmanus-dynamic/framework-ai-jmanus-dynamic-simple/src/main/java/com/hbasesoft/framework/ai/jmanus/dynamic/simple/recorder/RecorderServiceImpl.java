@@ -5,8 +5,18 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.simple.recorder;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.jmanus.recorder.RecorderService;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.vo.RecorderVo;
+import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -18,7 +28,20 @@ import com.hbasesoft.framework.ai.jmanus.recorder.model.vo.RecorderVo;
  * @since V1.0<br>
  * @see com.hbasesoft.ai.jmanus.dynamic.simple.recorder <br>
  */
+@Service
 public class RecorderServiceImpl implements RecorderService {
+
+	private final UnifiedDirectoryManager unifiedDirectoryManager;
+
+	private final ObjectMapper objectMapper;
+
+	public RecorderServiceImpl(UnifiedDirectoryManager unifiedDirectoryManager) {
+		this.unifiedDirectoryManager = unifiedDirectoryManager;
+		this.objectMapper = new ObjectMapper();
+	}
+
+	@Value("${namespace.value:default}")
+	private String namespace;
 
 	/**
 	 * Description: <br>
@@ -29,8 +52,15 @@ public class RecorderServiceImpl implements RecorderService {
 	 */
 	@Override
 	public void deleteById(String planId) {
-		// TODO Auto-generated method stub
-
+		try {
+			Path filePath = getFilePath(planId);
+			if (Files.exists(filePath)) {
+				Files.delete(filePath);
+				LoggerUtil.info("已删除记录文件: {0}", filePath);
+			}
+		} catch (IOException e) {
+			LoggerUtil.error(e, "删除记录文件失败: {0}", planId);
+		}
 	}
 
 	/**
@@ -43,7 +73,15 @@ public class RecorderServiceImpl implements RecorderService {
 	 */
 	@Override
 	public RecorderVo getByRootPlanId(String rootPlanId) {
-		// TODO Auto-generated method stub
+		try {
+			Path filePath = getFilePath(rootPlanId);
+			if (Files.exists(filePath)) {
+				String content = Files.readString(filePath);
+				return objectMapper.readValue(content, RecorderVo.class);
+			}
+		} catch (IOException e) {
+			LoggerUtil.error(e, "读取记录文件失败: {0}", rootPlanId);
+		}
 		return null;
 	}
 
@@ -56,8 +94,32 @@ public class RecorderServiceImpl implements RecorderService {
 	 */
 	@Override
 	public void save(RecorderVo entity) {
-		// TODO Auto-generated method stub
+		try {
+			Path filePath = getFilePath(entity.getPlanId());
 
+			// 确保目录存在
+			Path directory = filePath.getParent();
+			if (directory != null) {
+				unifiedDirectoryManager.ensureDirectoryExists(directory);
+			}
+
+			// 将实体写入JSON文件
+			String content = objectMapper.writeValueAsString(entity);
+			Files.writeString(filePath, content);
+			LoggerUtil.info("已保存记录文件: {0}", filePath);
+		} catch (IOException e) {
+			LoggerUtil.error(e, "保存记录文件失败: {0}", entity.getPlanId());
+		}
+	}
+
+	/**
+	 * 获取文件路径：工作目录/{namespace}/{planId}.json
+	 * 
+	 * @param planId 计划ID
+	 * @return 文件路径
+	 */
+	private Path getFilePath(String planId) {
+		return unifiedDirectoryManager.getWorkingDirectory().resolve(namespace).resolve(planId + ".json");
 	}
 
 }

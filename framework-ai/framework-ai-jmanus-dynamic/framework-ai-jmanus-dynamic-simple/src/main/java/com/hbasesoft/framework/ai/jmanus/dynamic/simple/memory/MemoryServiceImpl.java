@@ -5,8 +5,11 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.jmanus.dynamic.simple.memory;
 
+import org.springframework.stereotype.Service;
+
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.service.MemoryService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.vo.MemoryVo;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> <br>
@@ -18,6 +21,7 @@ import com.hbasesoft.framework.ai.jmanus.dynamic.memory.vo.MemoryVo;
  * @since V1.0<br>
  * @see com.hbasesoft.ai.jmanus.dynamic.simple.memory <br>
  */
+@Service
 public class MemoryServiceImpl implements MemoryService {
 
 	/**
@@ -30,8 +34,8 @@ public class MemoryServiceImpl implements MemoryService {
 	 */
 	@Override
 	public MemoryVo saveMemory(MemoryVo memoryEntity) {
-		// TODO Auto-generated method stub
-		return null;
+		LoggerUtil.info("保存内存信息: {0}", memoryEntity);
+		return memoryEntity;
 	}
 
 }
