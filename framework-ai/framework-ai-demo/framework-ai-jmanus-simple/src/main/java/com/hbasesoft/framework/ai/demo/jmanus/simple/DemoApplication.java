@@ -5,12 +5,16 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.demo.jmanus.simple;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
-/** 
- * <Description> <br> 
- *  
+import com.hbasesoft.framework.common.Bootstrap;
+
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -19,11 +23,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @see com.hbasesoft.framework.ai.demo.embabel <br>
  */
 @SpringBootApplication
+@ComponentScan(basePackages = "com.hbasesoft.framework.ai")
 public class DemoApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class);
-    }
+	/**
+	 * Description: <br>
+	 *
+	 * @param args <br>
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 */
+	public static void main(final String[] args) {
+		Bootstrap.before();
+		ConfigurableApplicationContext context = new SpringApplicationBuilder(DemoApplication.class).run(args);
+		Bootstrap.after(context);
+	}
 }
-
-

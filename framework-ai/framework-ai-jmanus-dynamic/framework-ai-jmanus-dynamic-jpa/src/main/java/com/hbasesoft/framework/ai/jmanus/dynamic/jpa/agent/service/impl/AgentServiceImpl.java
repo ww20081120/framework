@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AbstractAgentService;
-import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.service.IDynamicAgentLoader;
 import com.hbasesoft.framework.ai.jmanus.dynamic.agent.vo.AgentConfig;
 import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.agent.dao.DynamicAgentDao;
@@ -44,7 +43,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  */
 
 @Service
-public class AgentServiceImpl extends AbstractAgentService implements AgentService, AgentManagerService {
+public class AgentServiceImpl extends AbstractAgentService implements AgentManagerService {
 
 	private final DynamicAgentDao repository;
 

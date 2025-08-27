@@ -27,7 +27,7 @@ public class PromptDataInitializer implements IPromptDataInitializer {
 
 	private final PromptInitializationService promptInitializationService;
 
-	@Value("${namespace.value: default}")
+	@Value("${namespace.value:default}")
 	private String namespace;
 
 	public PromptDataInitializer(PromptInitializationService promptInitializationService) {

@@ -3,20 +3,16 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.service.impl;
+package com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.impl;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.dao.PromptDao;
-import com.hbasesoft.framework.ai.jmanus.dynamic.jpa.prompt.po.PromptPo4Jpa;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.enums.PromptEnum;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.vo.PromptVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptInitializationService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.jmanus.prompt.PromptLoader;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
-import com.hbasesoft.framework.db.core.utils.TransactionUtil;
 
 /**
  * <Description> <br>
@@ -45,7 +41,6 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 	 * 
 	 * @param namespace Namespace
 	 */
-	@Transactional(rollbackFor = Exception.class)
 	public void initializePromptsForNamespace(String namespace) {
 		String defaultLanguage = "zh";
 		for (PromptEnum prompt : PromptEnum.values()) {
@@ -53,7 +48,6 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 		}
 	}
 
-	@Transactional(rollbackFor = Exception.class)
 	public void initializePromptsForNamespaceWithLanguage(String namespace, String language) {
 		for (PromptEnum prompt : PromptEnum.values()) {
 			updatePromptForLanguage(namespace, prompt, language);

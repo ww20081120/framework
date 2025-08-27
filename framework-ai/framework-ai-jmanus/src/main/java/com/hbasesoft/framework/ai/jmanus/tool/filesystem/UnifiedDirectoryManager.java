@@ -10,11 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
-import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -45,7 +43,7 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 		this.manusProperties = manusProperties;
 
 	}
-	
+
 	public void init() {
 		this.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
 	}
@@ -69,8 +67,7 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 	}
 
 	/**
-	 * 获取根计划目录 (baseDir/extensions/inner_storage/rootPlanId)
-	 * 此目录可被当前任务及其所有子任务访问
+	 * 获取根计划目录 (baseDir/extensions/inner_storage/rootPlanId) 此目录可被当前任务及其所有子任务访问
 	 * 
 	 * @param rootPlanId 根计划ID
 	 * @return 根计划目录的Path对象
@@ -83,8 +80,7 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 	}
 
 	/**
-	 * 获取根计划目录下的子任务目录
-	 * (baseDir/extensions/inner_storage/rootPlanId/subTaskId)
+	 * 获取根计划目录下的子任务目录 (baseDir/extensions/inner_storage/rootPlanId/subTaskId)
 	 * 
 	 * @param rootPlanId 根计划ID
 	 * @param subTaskId  子任务ID
@@ -98,8 +94,7 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 	}
 
 	/**
-	 * 获取指定目录并进行安全验证。如果ManusProperties配置不允许外部访问，
-	 * 则只允许访问工作目录内的目录。
+	 * 获取指定目录并进行安全验证。如果ManusProperties配置不允许外部访问， 则只允许访问工作目录内的目录。
 	 * 
 	 * @param targetPath 目标目录路径（绝对或相对）
 	 * @return 验证后的目录Path对象
@@ -142,8 +137,7 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 	}
 
 	/**
-	 * 验证路径是否在允许的工作目录范围内。此方法通过确保所有文件操作
-	 * 保持在指定的工作目录内来强制执行安全策略，除非明确允许外部访问。
+	 * 验证路径是否在允许的工作目录范围内。此方法通过确保所有文件操作 保持在指定的工作目录内来强制执行安全策略，除非明确允许外部访问。
 	 * 
 	 * @param targetPath 要验证的路径
 	 * @return 如果路径被允许返回true，否则返回false
@@ -164,9 +158,8 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 			// 如果在工作目录外，则检查配置
 			boolean allowExternal = manusProperties.getAllowExternalAccess();
 
-			LoggerUtil.debug(
-					"路径验证 - 工作目录: {0}, 目标: {1}, 是否在内: {2}, 允许外部: {3}, 最终结果: {4}",
-					workingDir, normalizedTarget, isWithinWorkingDir, allowExternal, allowExternal);
+			LoggerUtil.debug("路径验证 - 工作目录: {0}, 目标: {1}, 是否在内: {2}, 允许外部: {3}, 最终结果: {4}", workingDir, normalizedTarget,
+					isWithinWorkingDir, allowExternal, allowExternal);
 
 			return allowExternal;
 		} catch (Exception e) {

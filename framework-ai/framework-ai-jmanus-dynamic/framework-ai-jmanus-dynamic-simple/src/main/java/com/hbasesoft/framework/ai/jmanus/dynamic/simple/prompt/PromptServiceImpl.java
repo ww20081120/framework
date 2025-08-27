@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -144,14 +145,8 @@ public class PromptServiceImpl implements PromptService {
 			return content;
 		}
 
-		// 简单的变量替换实现
-		for (Map.Entry<String, Object> entry : variables.entrySet()) {
-			String placeholder = "{{" + entry.getKey() + "}}";
-			String value = entry.getValue() != null ? entry.getValue().toString() : "";
-			content = content.replace(placeholder, value);
-		}
-
-		return content;
+		PromptTemplate template = new PromptTemplate(content);
+		return template.render(variables != null ? variables : Map.of());
 	}
 
 	/**

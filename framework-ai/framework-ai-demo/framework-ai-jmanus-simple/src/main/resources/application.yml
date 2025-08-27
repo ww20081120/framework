@@ -6,6 +6,16 @@ project: #项目信息
 spring:
   application:
     name: ${project.name}
+  ai:
+    openai:
+      api-key: ms-375d4f20-87a5-4f25-a090-2568666c502f
+      base-url: https://api-inference.modelscope.cn/v1/
+      chat:
+        options:
+          model: Qwen/Qwen3-Coder-480B-A35B-Instruct
+          temperature: 0.7
+      embedding:
+        enabled: false  
 
 # AI模型配置示例
 ai:

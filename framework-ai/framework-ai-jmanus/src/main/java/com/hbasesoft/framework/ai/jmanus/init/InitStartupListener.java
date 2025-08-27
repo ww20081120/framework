@@ -35,20 +35,20 @@ public class InitStartupListener implements StartupListener {
 	 */
 	@Override
 	public void complete(ApplicationContext context) {
-		McpCacheManager mm = context.getBean(McpCacheManager.class);
-		mm.init();
-
 		UnifiedDirectoryManager udm = context.getBean(UnifiedDirectoryManager.class);
 		udm.init();
+
+		IConfigService configService = context.getBean(IConfigService.class);
+		configService.init();
+
+		McpCacheManager mm = context.getBean(McpCacheManager.class);
+		mm.init();
 
 		LlmService llmService = context.getBean(LlmService.class);
 		llmService.init();
 
 		PromptDataInitializer pdi = context.getBean(PromptDataInitializer.class);
 		pdi.init();
-		
-		IConfigService configService = context.getBean(IConfigService.class);
-		configService.init();
 
 	}
 }

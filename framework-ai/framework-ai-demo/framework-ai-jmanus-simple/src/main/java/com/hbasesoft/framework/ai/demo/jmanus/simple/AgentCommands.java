@@ -9,9 +9,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.shell.standard.ShellComponent;
-import org.springframework.shell.standard.ShellMethod;
-import org.springframework.shell.standard.ShellOption;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.GetExchange;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.service.MemoryService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.vo.MemoryVo;
@@ -30,7 +32,8 @@ import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.demo.jmanus.simple <br>
  */
-@ShellComponent
+@RequestMapping("/api/agent")
+@RestController
 public class AgentCommands {
 
 	@Autowired
@@ -47,8 +50,8 @@ public class AgentCommands {
 
 	private String rootPlanId;
 
-	@ShellMethod(key = "solve", value = "使用 JManus代理解决编码任务")
-	public String solveCodingTask(@ShellOption(help = "编码任务描述") String task) {
+	@GetMapping("/solve")
+	public String solveCodingTask(@RequestParam("task") String task) {
 		if (StringUtils.isAllBlank(task)) {
 			return "处理任务失败: Query content cannot be empty";
 		}
@@ -88,24 +91,10 @@ public class AgentCommands {
 		}
 	}
 
-	@ShellMethod(key = "clean", value = "清理上下文")
+	@GetExchange("/clean")
 	public String clean() {
 		memoryId = null;
 		rootPlanId = null;
 		return "清理成功";
-	}
-
-	@ShellMethod(key = "help", value = "显示可用命令")
-	public String help() {
-		return """
-				可用命令:
-				solve --task "<description>"  - 解决编码任务
-				clean                         - 清理上下文
-				help                          - 显示此帮助信息
-				exit                          - 退出 shell
-
-				示例:
-				solve --task "创建一个简单的计算器 Java 类"
-				""";
 	}
 }

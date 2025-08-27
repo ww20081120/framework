@@ -23,6 +23,7 @@ import com.hbasesoft.framework.ai.jmanus.llm.StreamingResponseHandler;
 import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
 import com.hbasesoft.framework.ai.jmanus.planning.service.IUserInputService;
 import com.hbasesoft.framework.ai.jmanus.recorder.PlanExecutionRecorder;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 
 /**
  * <Description> <br>
@@ -36,8 +37,6 @@ import com.hbasesoft.framework.ai.jmanus.recorder.PlanExecutionRecorder;
  */
 @Service
 public class DynamicAgentLoader implements IDynamicAgentLoader {
-
-	private final AgentService agentService;
 
 	private final ILlmService llmService;
 
@@ -53,14 +52,15 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 
 	private final StreamingResponseHandler streamingResponseHandler;
 
+	private AgentService agentService;
+
 	@Value("${namespace.value:default}")
 	private String namespace;
 
-	public DynamicAgentLoader(AgentService agentService, @Lazy ILlmService llmService,
-			PlanExecutionRecorder recorder, ManusProperties properties, @Lazy ToolCallingManager toolCallingManager,
-			IUserInputService userInputService, PromptService promptService,
-			StreamingResponseHandler streamingResponseHandler) {
-		this.agentService = agentService;
+	public DynamicAgentLoader(@Lazy ILlmService llmService, PlanExecutionRecorder recorder, ManusProperties properties,
+			@Lazy ToolCallingManager toolCallingManager, IUserInputService userInputService,
+			PromptService promptService, StreamingResponseHandler streamingResponseHandler) {
+		// this.agentService = agentService;
 		this.llmService = llmService;
 		this.recorder = recorder;
 		this.properties = properties;
@@ -71,7 +71,7 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	}
 
 	public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
-		AgentConfig agentConfig = agentService.getAgentByName(agentName, agentName);
+		AgentConfig agentConfig = getAgentService().getAgentByName(agentName, agentName);
 		return convert(agentConfig, initialAgentSetting);
 	}
 
@@ -84,7 +84,7 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	}
 
 	public List<DynamicAgent> getAllAgents() {
-		return agentService.getAllAgentsByNamespace(namespace).stream().map(t -> {
+		return getAgentService().getAllAgentsByNamespace(namespace).stream().map(t -> {
 			return convert(t, new java.util.HashMap<String, Object>());
 		}).toList();
 	}
@@ -92,6 +92,13 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	@Override
 	public List<DynamicAgent> getAgents(ExecutionContext context) {
 		return IDynamicAgentLoader.super.getAgents(context);
+	}
+	
+	private AgentService getAgentService() {
+		if (agentService == null) {
+			agentService = ContextHolder.getContext().getBean(AgentService.class);
+		}
+		return agentService;
 	}
 
 }

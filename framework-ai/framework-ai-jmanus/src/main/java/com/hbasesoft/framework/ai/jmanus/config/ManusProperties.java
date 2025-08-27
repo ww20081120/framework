@@ -224,11 +224,11 @@ public class ManusProperties implements IManusProperties {
 	private volatile String baseDir = GlobalConstants.FILE_STORAGE_PATH + "/manus";
 
 	public String getBaseDir() {
-		String configPath = "manus.baseDir";
-		String value = configService.getConfigValue(configPath);
-		if (StringUtils.isNotEmpty(value)) {
-			baseDir = value;
-		}
+//		String configPath = "manus.baseDir";
+//		String value = configService.getConfigValue(configPath);
+//		if (StringUtils.isNotEmpty(value)) {
+//			baseDir = value;
+//		}
 		return baseDir;
 	}
 
