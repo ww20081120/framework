@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.vo.PromptVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
@@ -47,7 +50,9 @@ public class PromptServiceImpl implements PromptService {
 	@Value("${namespace.value:default}")
 	private String namespace;
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	/** Prompt缓存，用于提高性能 */
 	private final Map<String, PromptVO> promptCache = new ConcurrentHashMap<>();
@@ -67,6 +72,10 @@ public class PromptServiceImpl implements PromptService {
 	 */
 	@Override
 	public PromptVO getPromptByName(String namespace, String promptName) {
+		if (StringUtils.isEmpty(namespace)) {
+			namespace = this.namespace;
+		}
+
 		// 使用namespace和promptName作为缓存key
 		String cacheKey = namespace + ":" + promptName;
 		PromptVO cachedPrompt = promptCache.get(cacheKey);

@@ -9,8 +9,10 @@ import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.ai.jmanus.config.IConfigService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.McpCacheManager;
+import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.model.enums.PromptEnum;
 import com.hbasesoft.framework.ai.jmanus.dynamic.prompt.service.impl.PromptDataInitializer;
 import com.hbasesoft.framework.ai.jmanus.llm.LlmService;
+import com.hbasesoft.framework.ai.jmanus.prompt.PromptDescriptionLoader;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
 import com.hbasesoft.framework.common.StartupListener;
 
@@ -50,5 +52,7 @@ public class InitStartupListener implements StartupListener {
 		PromptDataInitializer pdi = context.getBean(PromptDataInitializer.class);
 		pdi.init();
 
+		PromptDescriptionLoader promptDescriptionLoader = context.getBean(PromptDescriptionLoader.class);
+		PromptEnum.setDescriptionLoader(promptDescriptionLoader);
 	}
 }

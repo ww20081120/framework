@@ -65,6 +65,7 @@ public abstract class AbstractAgentService implements AgentService {
 			});
 			return agent;
 		} catch (Exception e) {
+			LoggerUtil.error("Failed to create dynamic base agent: " + name, e);
 			throw new RuntimeException("Failed to create dynamic base agent: " + name, e);
 		}
 	}

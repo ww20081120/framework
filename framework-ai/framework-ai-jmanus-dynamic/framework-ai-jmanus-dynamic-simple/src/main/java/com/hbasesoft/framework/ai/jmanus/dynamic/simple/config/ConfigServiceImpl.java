@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -21,6 +20,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hbasesoft.framework.ai.jmanus.config.ConfigProperty;
 import com.hbasesoft.framework.ai.jmanus.config.IConfigService;
 import com.hbasesoft.framework.ai.jmanus.config.model.ConfigCacheEntry;
@@ -46,7 +47,9 @@ public class ConfigServiceImpl implements IConfigService {
 	private UnifiedDirectoryManager unifiedDirectoryManager;
 
 	/** ObjectMapper用于JSON序列化和反序列化 */
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	/** 配置缓存，用于提高配置读取性能 */
 	private final Map<String, ConfigCacheEntry<String>> configCache = new ConcurrentHashMap<>();

@@ -60,7 +60,6 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	public DynamicAgentLoader(@Lazy ILlmService llmService, PlanExecutionRecorder recorder, ManusProperties properties,
 			@Lazy ToolCallingManager toolCallingManager, IUserInputService userInputService,
 			PromptService promptService, StreamingResponseHandler streamingResponseHandler) {
-		// this.agentService = agentService;
 		this.llmService = llmService;
 		this.recorder = recorder;
 		this.properties = properties;
@@ -71,7 +70,7 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	}
 
 	public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
-		AgentConfig agentConfig = getAgentService().getAgentByName(agentName, agentName);
+		AgentConfig agentConfig = getAgentService().getAgentByName(namespace, agentName);
 		return convert(agentConfig, initialAgentSetting);
 	}
 
@@ -93,7 +92,7 @@ public class DynamicAgentLoader implements IDynamicAgentLoader {
 	public List<DynamicAgent> getAgents(ExecutionContext context) {
 		return IDynamicAgentLoader.super.getAgents(context);
 	}
-	
+
 	private AgentService getAgentService() {
 		if (agentService == null) {
 			agentService = ContextHolder.getContext().getBean(AgentService.class);

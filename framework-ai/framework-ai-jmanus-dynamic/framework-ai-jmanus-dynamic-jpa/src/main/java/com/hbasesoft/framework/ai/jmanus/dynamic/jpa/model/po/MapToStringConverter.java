@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import jakarta.persistence.AttributeConverter;
 
@@ -26,7 +28,9 @@ import jakarta.persistence.AttributeConverter;
 //@Converter
 public class MapToStringConverter implements AttributeConverter<Map<String, String>, String> {
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 
 	@Override

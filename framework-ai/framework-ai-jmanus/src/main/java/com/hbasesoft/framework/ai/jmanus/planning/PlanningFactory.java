@@ -95,7 +95,6 @@ public class PlanningFactory implements IPlanningFactory {
 	@Lazy
 	private ToolCallingManager toolCallingManager;
 
-	@Autowired
 	private IDynamicAgentLoader dynamicAgentLoader;
 
 	@Autowired
@@ -139,7 +138,7 @@ public class PlanningFactory implements IPlanningFactory {
 	@Override
 	public PlanningCoordinator createPlanningCoordinator(ExecutionContext context) {
 		// Add all dynamic agents from the database
-		List<DynamicAgent> agentEntities = dynamicAgentLoader.getAgents(context);
+		List<DynamicAgent> agentEntities = getDynamicAgentLoader().getAgents(context);
 
 		PlanningToolInterface planningTool = new PlanningTool();
 
@@ -159,7 +158,7 @@ public class PlanningFactory implements IPlanningFactory {
 	public PlanningCoordinator createPlanningCoordinator(String planId) {
 
 		// Add all dynamic agents from the database
-		List<DynamicAgent> agentEntities = dynamicAgentLoader.getAllAgents();
+		List<DynamicAgent> agentEntities = getDynamicAgentLoader().getAllAgents();
 
 		PlanningToolInterface planningTool = new PlanningTool();
 
@@ -253,4 +252,10 @@ public class PlanningFactory implements IPlanningFactory {
 		return () -> new HashMap<String, PlanningFactory.ToolCallBackContext>();
 	}
 
+	private IDynamicAgentLoader getDynamicAgentLoader() {
+		if (dynamicAgentLoader == null) {
+			dynamicAgentLoader = ContextHolder.getContext().getBean(IDynamicAgentLoader.class);
+		}
+		return dynamicAgentLoader;
+	}
 }

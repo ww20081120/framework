@@ -12,6 +12,8 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigStatus;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigType;
 
@@ -35,7 +37,9 @@ public class McpServerConfig {
 	 */
 	public McpServerConfig() {
 		this.env = new HashMap<>();
-		this.objectMapper = new ObjectMapper();
+		this.objectMapper = new ObjectMapper()
+				.registerModule(new JavaTimeModule())
+				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 	}
 
 	public McpServerConfig(ObjectMapper objectMapper) {

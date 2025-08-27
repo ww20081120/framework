@@ -43,6 +43,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -228,7 +230,9 @@ public class PptGeneratorService implements IPptGeneratorService {
 	 */
 	private void replaceTextWithTemplate(XMLSlideShow presentation, String templateContent) throws IOException {
 		try {
-			ObjectMapper objectMapper = new ObjectMapper();
+			ObjectMapper objectMapper = new ObjectMapper()
+					.registerModule(new JavaTimeModule())
+					.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 			JsonNode templateNode = objectMapper.readTree(templateContent);
 
 			if (templateNode.has("slides")) {
@@ -408,7 +412,9 @@ public class PptGeneratorService implements IPptGeneratorService {
 		}
 
 		// Write the template information to the JSON file
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = new ObjectMapper()
+				.registerModule(new JavaTimeModule())
+				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		mapper.writeValue(jsonFilePath.toFile(), templateMap);
 
@@ -528,7 +534,9 @@ public class PptGeneratorService implements IPptGeneratorService {
 		}
 
 		result.set("slides", slidesArray);
-		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectMapper objectMapper = new ObjectMapper()
+				.registerModule(new JavaTimeModule())
+				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		return objectMapper.writeValueAsString(result);
 	}
 

@@ -16,6 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.enums.McpConfigStatus;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.jmanus.dynamic.mcp.service.AbstractMcpService;
@@ -42,7 +44,9 @@ public class McpServiceImpl extends AbstractMcpService {
 	private final UnifiedDirectoryManager unifiedDirectoryManager;
 
 	/** ObjectMapper用于JSON序列化和反序列化 */
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	public McpServiceImpl(McpCacheManager cacheManager, UnifiedDirectoryManager unifiedDirectoryManager) {
 		super(cacheManager);

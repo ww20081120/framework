@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hbasesoft.framework.ai.jmanus.recorder.RecorderService;
 import com.hbasesoft.framework.ai.jmanus.recorder.model.vo.RecorderVo;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
@@ -38,6 +40,10 @@ public class RecorderServiceImpl implements RecorderService {
 	public RecorderServiceImpl(UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.objectMapper = new ObjectMapper();
+		// 注册JavaTimeModule以支持Java 8的时间类型序列化
+		this.objectMapper.registerModule(new JavaTimeModule());
+		// 禁用时间戳序列化，使用标准格式
+		this.objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 	}
 
 	@Value("${namespace.value:default}")

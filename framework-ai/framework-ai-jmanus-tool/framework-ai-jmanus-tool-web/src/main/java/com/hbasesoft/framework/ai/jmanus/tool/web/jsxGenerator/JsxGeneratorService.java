@@ -33,6 +33,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.hbasesoft.framework.ai.jmanus.config.IManusProperties;
 import com.hbasesoft.framework.ai.jmanus.tool.filesystem.UnifiedDirectoryManager;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
@@ -49,7 +51,9 @@ public class JsxGeneratorService implements ApplicationRunner, IJsxGeneratorServ
 	@Autowired
 	private UnifiedDirectoryManager unifiedDirectoryManager;
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper()
+			.registerModule(new JavaTimeModule())
+			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	// Store component states for each plan
 	private final ConcurrentHashMap<String, ComponentState> componentStates = new ConcurrentHashMap<>();

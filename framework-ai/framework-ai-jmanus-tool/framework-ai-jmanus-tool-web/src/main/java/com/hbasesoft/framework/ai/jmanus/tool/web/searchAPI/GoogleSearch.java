@@ -57,7 +57,7 @@ public class GoogleSearch extends AbstractBaseTool<GoogleSearch.GoogleSearchInpu
 			        },
 			        "type": {
 			            "type": "string",
-			            "description": "search resource type parameter. Currently, only six types are supported. The default parameter is search. Supported types include: search, news, images, videos, places, maps.",
+			            "description": "search resource type parameter. Currently, only six types are supported. The default parameter is search. Supported types include: search, news, images, videos, places, maps."
 			        },
 			        "number": {
 			            "type": "integer",
@@ -68,7 +68,7 @@ public class GoogleSearch extends AbstractBaseTool<GoogleSearch.GoogleSearchInpu
 			    "required": ["query"]
 			}
 			""";
-
+	
 	private static final String name = "google_search";
 
 	private static final String description = """
@@ -261,12 +261,6 @@ public class GoogleSearch extends AbstractBaseTool<GoogleSearch.GoogleSearchInpu
 		@com.fasterxml.jackson.annotation.JsonProperty("number")
 		private Integer number;
 
-	}
-
-	public static void main(String[] args) {
-		GoogleSearch googleSearch = new GoogleSearch(new ObjectMapper());
-		ToolExecuteResult result = googleSearch.run("{\"query\":\"What is AI?\",\"number\":2}");
-		System.out.println(result.getOutput());
 	}
 
 }

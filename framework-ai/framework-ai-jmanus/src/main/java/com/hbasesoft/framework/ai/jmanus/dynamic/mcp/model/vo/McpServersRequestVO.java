@@ -8,6 +8,8 @@ package com.hbasesoft.framework.ai.jmanus.dynamic.mcp.model.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * <Description> <br>
@@ -27,7 +29,9 @@ public class McpServersRequestVO {
 	 * Default constructor for Jackson deserialization
 	 */
 	public McpServersRequestVO() {
-		this.objectMapper = new ObjectMapper();
+		this.objectMapper = new ObjectMapper()
+				.registerModule(new JavaTimeModule())
+				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 	}
 
 	public McpServersRequestVO(ObjectMapper objectMapper) {
