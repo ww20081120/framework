@@ -56,4 +56,7 @@ public class ModelConfig {
 	/** 补全请求的路径 */
 	private String completionsPath;
 
+	public String getApiKey() {
+		return apiKey;
+	}
 }

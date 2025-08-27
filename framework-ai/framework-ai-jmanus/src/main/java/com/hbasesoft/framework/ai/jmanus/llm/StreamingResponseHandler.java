@@ -218,7 +218,7 @@ public class StreamingResponseHandler {
 				metadataRateLimitRef.set(new EmptyRateLimit());
 
 			}).doOnError(e -> {
-				// log.error("Aggregation Error", e);
+				LoggerUtil.error("Aggregation Error", e);
 				jmanusEventPublisher.publish(new PlanExceptionEvent(planId, e));
 			}).blockLast();
 

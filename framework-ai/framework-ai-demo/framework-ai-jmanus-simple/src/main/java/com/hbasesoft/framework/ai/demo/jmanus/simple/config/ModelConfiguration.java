@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.ai.demo.jmanus.simple;
+package com.hbasesoft.framework.ai.demo.jmanus.simple.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,20 +32,10 @@ public class ModelConfiguration {
 	 */
 	@Bean
 	public ModelConfig openAIModelConfig() {
-		return ModelConfigBuilder.builder().baseUrl("https://api.openai.com/v1").apiKey("your-openai-api-key")
-				.modelName("gpt-4-turbo").modelDescription("OpenAI GPT-4 Turbo模型").type("openai").isDefault(false)
-				.temperature(0.7).topP(0.9).completionsPath("/chat/completions").build();
-	}
-
-	/**
-	 * 创建Anthropic模型配置Bean
-	 * 
-	 * @return Anthropic模型配置
-	 */
-	@Bean
-	public ModelConfig anthropicModelConfig() {
-		return ModelConfigBuilder.builder().baseUrl("https://api.anthropic.com/v1").apiKey("your-anthropic-api-key")
-				.modelName("claude-3-opus").modelDescription("Anthropic Claude-3 Opus模型").type("anthropic")
-				.isDefault(false).temperature(0.8).topP(0.95).completionsPath("/messages").build();
+		return ModelConfigBuilder.builder().baseUrl("https://api-inference.modelscope.cn")
+				.apiKey("ms-3d95b37a-e856-4409-99ab-b977fa65950e").modelName("Qwen/Qwen3-Coder-480B-A35B-Instruct")
+				.modelDescription(
+						"Qwen3-Coder 是通义千问团队开源的最新 AI 编程大模型，具备卓越的代码生成与智能代理能力，支持超长上下文，适用于多种智能编程场景。模型及工具已在魔搭社区、HuggingFace 等平台开源，开发者可免费下载和使用")
+				.type("openai").isDefault(true).temperature(0.7).topP(0.9).completionsPath("/v1/chat/completions").build();
 	}
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.GetExchange;
 
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.service.MemoryService;
 import com.hbasesoft.framework.ai.jmanus.dynamic.memory.vo.MemoryVo;
@@ -34,7 +33,7 @@ import com.hbasesoft.framework.ai.jmanus.planning.model.vo.ExecutionContext;
  */
 @RequestMapping("/api/agent")
 @RestController
-public class AgentCommands {
+public class ManusController {
 
 	@Autowired
 	@Lazy
@@ -82,6 +81,7 @@ public class AgentCommands {
 
 			// Asynchronous execution of task
 			memoryService.saveMemory(new MemoryVo(context.getMemoryId(), task));
+			
 			ExecutionContext ctx = planningFlow.executePlan(context);
 
 			// 返回结果
@@ -91,7 +91,7 @@ public class AgentCommands {
 		}
 	}
 
-	@GetExchange("/clean")
+	@GetMapping("/clean")
 	public String clean() {
 		memoryId = null;
 		rootPlanId = null;
