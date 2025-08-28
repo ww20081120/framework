@@ -338,6 +338,10 @@ public class ThinkActRecord {
 
 		private String id;
 
+		// Default constructor for Jackson deserialization
+		public ActToolInfo() {
+		}
+
 		public ActToolInfo(String name, String arguments, String id) {
 			this.name = name;
 			this.parameters = arguments;

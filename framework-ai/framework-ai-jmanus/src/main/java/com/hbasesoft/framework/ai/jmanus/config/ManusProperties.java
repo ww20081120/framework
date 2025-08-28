@@ -117,7 +117,7 @@ public class ManusProperties implements IManusProperties {
 	// Agent Settings
 	// Begin---------------------------------------------------------------------------------------------
 
-	@ConfigProperty(group = "manus", subGroup = "agent", key = "maxSteps", path = "manus.maxSteps", description = "manus.agent.maxSteps.description", defaultValue = "20", inputType = ConfigInputType.NUMBER)
+	@ConfigProperty(group = "manus", subGroup = "agent", key = "maxSteps", path = "manus.maxSteps", description = "manus.agent.maxSteps.description", defaultValue = "5", inputType = ConfigInputType.NUMBER)
 	private volatile Integer maxSteps;
 
 	public Integer getMaxSteps() {

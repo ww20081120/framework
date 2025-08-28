@@ -119,7 +119,10 @@ public class DynamicAgent extends ReActAgent {
 		this.agentName = name;
 		this.agentDescription = description;
 		this.nextStepPrompt = nextStepPrompt;
-		this.availableToolKeys = availableToolKeys;
+		this.availableToolKeys = new ArrayList<String>(availableToolKeys);
+		if (!this.availableToolKeys.contains("terminate")) {
+			this.availableToolKeys.add("terminate");
+		}
 		this.toolCallingManager = toolCallingManager;
 		this.userInputService = userInputService;
 		this.model = model;
