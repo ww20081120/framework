@@ -8,9 +8,7 @@
   <artifactId>framework-ai</artifactId>
   <packaging>pom</packaging>
   <modules>
-      <module>framework-ai-jmanus</module>
-      <module>framework-ai-jmanus-dynamic</module>
       <module>framework-ai-demo</module>
-      <module>framework-ai-jmanus-tool</module>
+      <module>framework-ai-agent</module>
   </modules>
 </project>

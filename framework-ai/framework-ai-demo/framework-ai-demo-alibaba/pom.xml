@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
-		<artifactId>framework-ai</artifactId>
+		<artifactId>framework-ai-demo</artifactId>
 		<version>4.1</version>
 	</parent>
 	<artifactId>framework-ai-demo-alibaba</artifactId>
@@ -15,9 +15,8 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.hbasesoft.framework</groupId>
-			<artifactId>framework-ai-core</artifactId>
-			<version>${project.parent.version}</version>
+		    <groupId>com.alibaba.cloud.ai</groupId>
+		    <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
