@@ -62,8 +62,8 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 
 	public static final String EXECUTION_ENV_STRING_KEY = "current_step_env_data";
 
-	public AbstractPlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder,
-			AgentService agentService, ILlmService llmService, IManusProperties manusProperties) {
+	public AbstractPlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
+			ILlmService llmService, IManusProperties manusProperties) {
 		this.agents = agents;
 		this.recorder = recorder;
 		this.agentService = agentService;

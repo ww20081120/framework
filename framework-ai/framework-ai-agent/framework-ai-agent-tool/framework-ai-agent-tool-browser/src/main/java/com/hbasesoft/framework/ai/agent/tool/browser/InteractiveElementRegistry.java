@@ -29,8 +29,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 
 /**
- * A class that manages a collection of interactive elements on a page, providing global
- * index access.
+ * A class that manages a collection of interactive elements on a page,
+ * providing global index access.
  */
 public class InteractiveElementRegistry {
 
@@ -421,6 +421,7 @@ public class InteractiveElementRegistry {
 
 	/**
 	 * Refresh all interactive elements on the specified page
+	 * 
 	 * @param page The page to process
 	 */
 	public void refresh(Page page) {
@@ -440,20 +441,21 @@ public class InteractiveElementRegistry {
 
 	/**
 	 * Wait for the page to fully load
+	 * 
 	 * @param page Page instance
 	 */
 	private void waitForPageLoad(Page page) {
 		try {
 			page.waitForLoadState(LoadState.DOMCONTENTLOADED);
 			log.info("Page loaded");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warn("Error waiting for page load: {}", e.getMessage());
 		}
 	}
 
 	/**
 	 * Process interactive elements in a single iframe
+	 * 
 	 * @param page current browser page
 	 */
 	@SuppressWarnings("unchecked")
@@ -462,7 +464,7 @@ public class InteractiveElementRegistry {
 			int index = 0;
 			for (Frame frame : page.frames()) {
 				List<Map<String, Object>> elementMapList = (List<Map<String, Object>>) frame
-					.evaluate(EXTRACT_INTERACTIVE_ELEMENTS_JS, index);
+						.evaluate(EXTRACT_INTERACTIVE_ELEMENTS_JS, index);
 				for (Map<String, Object> elementMap : elementMapList) {
 					Integer globalIndex = (Integer) elementMap.get("index");
 					InteractiveElement element = new InteractiveElement(globalIndex, frame, elementMap);
@@ -472,14 +474,14 @@ public class InteractiveElementRegistry {
 				index = interactiveElements.size();
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warn("Error processing page elements: {}", e.getMessage());
 		}
 	}
 
 	/**
 	 * Get all interactive elements list
+	 * 
 	 * @return Interactive elements list
 	 */
 	public List<InteractiveElement> getAllElements(Page page) {
@@ -489,6 +491,7 @@ public class InteractiveElementRegistry {
 
 	/**
 	 * Get interactive element by global index
+	 * 
 	 * @param index Global index
 	 * @return The corresponding interactive element, or empty if not found
 	 */
@@ -498,6 +501,7 @@ public class InteractiveElementRegistry {
 
 	/**
 	 * Get the number of currently registered elements
+	 * 
 	 * @return Number of elements
 	 */
 	public int size() {
@@ -506,6 +510,7 @@ public class InteractiveElementRegistry {
 
 	/**
 	 * Generate detailed information text for all elements
+	 * 
 	 * @return Formatted element information string
 	 */
 	public String generateElementsInfoText(Page page) {
@@ -518,7 +523,8 @@ public class InteractiveElementRegistry {
 
 	/**
 	 * Perform an action on a specific index element
-	 * @param index The global index of the element
+	 * 
+	 * @param index  The global index of the element
 	 * @param action The action to perform, such as click, fill, etc.
 	 * @return Whether the action was successful
 	 */
@@ -530,8 +536,7 @@ public class InteractiveElementRegistry {
 				// Execute the specified action
 				action.execute(element);
 				return true;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.error("Error performing element action: {}", e.getMessage());
 				return false;
 			}
@@ -547,6 +552,7 @@ public class InteractiveElementRegistry {
 
 		/**
 		 * Execute an action on an element
+		 * 
 		 * @param element The element to operate on
 		 */
 		void execute(InteractiveElement element);

@@ -20,6 +20,6 @@ import com.hbasesoft.framework.db.core.BaseDao;
  * @see com.hbasesoft.framework.ai.agent.jpa.prompt.dao <br>
  */
 @Dao
-public interface PromptDao extends BaseDao<PromptPo4Jpa>  {
+public interface PromptDao extends BaseDao<PromptPo4Jpa> {
 
 }

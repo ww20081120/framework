@@ -5,9 +5,9 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.event;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -20,4 +20,3 @@ public interface JmanusListener<T extends JmanusEvent> {
 	void onEvent(T event);
 
 }
-

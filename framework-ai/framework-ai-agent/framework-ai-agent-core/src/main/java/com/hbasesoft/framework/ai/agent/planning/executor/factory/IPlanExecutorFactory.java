@@ -8,9 +8,9 @@ package com.hbasesoft.framework.ai.agent.planning.executor.factory;
 import com.hbasesoft.framework.ai.agent.planning.executor.PlanExecutorInterface;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.PlanInterface;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -41,4 +41,3 @@ public interface IPlanExecutorFactory {
 	PlanExecutorInterface createExecutorByType(String planType, String planId);
 
 }
-

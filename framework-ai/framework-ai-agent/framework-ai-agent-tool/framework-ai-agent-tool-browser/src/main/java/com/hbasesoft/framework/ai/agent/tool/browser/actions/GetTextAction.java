@@ -37,8 +37,7 @@ public class GetTextAction extends BrowserAction {
 				if (text != null && !text.isEmpty()) {
 					allText.append(text).append("\\n");
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// Ignore frames without body
 			}
 		}
@@ -46,8 +45,10 @@ public class GetTextAction extends BrowserAction {
 
 		// Log only first 10 lines for brevity
 		String[] lines = result.split("\n");
-		String logPreview = lines.length > 10 ? String.join("\n", java.util.Arrays.copyOf(lines, 10)) + "\n... (total "
-				+ lines.length + " lines, showing first 10)" : result;
+		String logPreview = lines.length > 10
+				? String.join("\n", java.util.Arrays.copyOf(lines, 10)) + "\n... (total " + lines.length
+						+ " lines, showing first 10)"
+				: result;
 		log.info("get_text all frames body is {}", logPreview);
 		log.debug("get_text all frames body is {}", result);
 		return new ToolExecuteResult(result);

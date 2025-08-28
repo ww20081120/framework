@@ -65,8 +65,7 @@ public class MoveToAndClickAction extends BrowserAction {
 							new Object[] { x, y, markerId });
 					if (result != null) {
 						log.info("Debug: Created red dot at position ({}, {}) , result <{}>", x, y, result);
-					}
-					else {
+					} else {
 						log.warn("Debug: Failed to create red dot at position ({}, {}) , result <{}>", x, y, result);
 					}
 					log.info("Element at position ({}, {}): {}", x, y);
@@ -75,8 +74,7 @@ public class MoveToAndClickAction extends BrowserAction {
 				page.mouse().click(x, y);
 				log.info("Clicked at position ({}, {})", x, y);
 
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.error("Failed to move to and click at position ({}, {}): {}", x, y, e.getMessage(), e);
 				// Let the common method handle the result string for errors.
 				// The clickAndSwitchToNewTabIfOpened method expects a Runnable that might

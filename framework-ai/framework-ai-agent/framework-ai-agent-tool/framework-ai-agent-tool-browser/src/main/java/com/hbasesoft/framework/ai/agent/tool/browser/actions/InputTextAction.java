@@ -56,21 +56,18 @@ public class InputTextAction extends BrowserAction {
 			// Set character input delay to 100ms, adjustable as needed
 			Locator.PressSequentiallyOptions options = new Locator.PressSequentiallyOptions().setDelay(100);
 			elementLocator.pressSequentially(text, options);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// 4. If fill fails, try pressSequentially
 			try {
 				elementLocator.fill(""); // Clear again
 				elementLocator.fill(text); // Direct fill
-			}
-			catch (Exception e2) {
+			} catch (Exception e2) {
 				// 5. If still fails, use JS assignment and trigger input event
 				try {
 					elementLocator.evaluate(
 							"(el, value) => { el.value = value; el.dispatchEvent(new Event('input', { bubbles: true })); }",
 							text);
-				}
-				catch (Exception e3) {
+				} catch (Exception e3) {
 					return new ToolExecuteResult("Input failed: " + e3.getMessage());
 				}
 			}

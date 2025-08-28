@@ -52,8 +52,9 @@ public abstract class BrowserAction {
 
 	/**
 	 * Get browser operation timeout configuration
+	 * 
 	 * @return Timeout in milliseconds, returns default value of 30 seconds if not
-	 * configured
+	 *         configured
 	 */
 	protected Integer getBrowserTimeoutMs() {
 		Integer timeout = getBrowserUseTool().getManusProperties().getBrowserRequestTimeout();
@@ -62,7 +63,9 @@ public abstract class BrowserAction {
 
 	/**
 	 * Get browser operation timeout configuration
-	 * @return Timeout in seconds, returns default value of 30 seconds if not configured
+	 * 
+	 * @return Timeout in seconds, returns default value of 30 seconds if not
+	 *         configured
 	 */
 	protected Integer getBrowserTimeoutSec() {
 		Integer timeout = getBrowserUseTool().getManusProperties().getBrowserRequestTimeout();
@@ -71,20 +74,21 @@ public abstract class BrowserAction {
 
 	/**
 	 * Simulate human behavior
+	 * 
 	 * @param element Playwright ElementHandle instance
 	 */
 	protected void simulateHumanBehavior(ElementHandle element) {
 		try {
 			// Add random delay
 			Thread.sleep(new Random().nextInt(500) + 200);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
 	}
 
 	/**
 	 * Get DriverWrapper instance
+	 * 
 	 * @return DriverWrapper
 	 */
 	protected DriverWrapper getDriverWrapper() {
@@ -94,6 +98,7 @@ public abstract class BrowserAction {
 
 	/**
 	 * Get current page Page instance
+	 * 
 	 * @return Current Playwright Page instance
 	 */
 	protected Page getCurrentPage() {
@@ -103,6 +108,7 @@ public abstract class BrowserAction {
 
 	/**
 	 * Retrieve the interaction elements of the specified index
+	 * 
 	 * @param index element index
 	 * @return InteractiveElement
 	 */
@@ -115,6 +121,7 @@ public abstract class BrowserAction {
 
 	/**
 	 * Get interactive elements
+	 * 
 	 * @param page Playwright Page instance
 	 * @return List of interactive elements
 	 */
@@ -152,15 +159,13 @@ public abstract class BrowserAction {
 			}
 			return "successfully.";
 
-		}
-		catch (TimeoutError e) {
+		} catch (TimeoutError e) {
 			log.warn(
 					"No popup detected by waitForPopup within timeout. Click action was performed. Checking page states...");
 
 			List<Page> pagesAfterTimeout = context.pages();
-			List<Page> newPagesByDiff = pagesAfterTimeout.stream()
-				.filter(p -> !urlsBeforeClick.contains(p.url()))
-				.collect(Collectors.toList());
+			List<Page> newPagesByDiff = pagesAfterTimeout.stream().filter(p -> !urlsBeforeClick.contains(p.url()))
+					.collect(Collectors.toList());
 
 			if (!newPagesByDiff.isEmpty()) {
 				Page newlyFoundPage = newPagesByDiff.get(0);
@@ -185,14 +190,12 @@ public abstract class BrowserAction {
 			}
 			log.info("No new tab or significant navigation detected after timeout.");
 			return "successfully, but no new tab was detected by waitForPopup or URL diff.";
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Exception during click or popup handling: {}", e.getMessage(), e);
 
 			List<Page> pagesAfterError = context.pages();
 			List<Page> newPagesByDiffAfterError = pagesAfterError.stream()
-				.filter(p -> !urlsBeforeClick.contains(p.url()))
-				.collect(Collectors.toList());
+					.filter(p -> !urlsBeforeClick.contains(p.url())).collect(Collectors.toList());
 			if (!newPagesByDiffAfterError.isEmpty()) {
 				Page newlyFoundPage = newPagesByDiffAfterError.get(0);
 				log.info("New tab found by diffing URLs after an error: {}", newlyFoundPage.url());

@@ -1,7 +1,7 @@
-/**************************************************************************************** 
- Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
- transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
- or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+/****************************************************************************************
+ * Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or    *
+ * transmission in whole or in part, in any form or by any means, electronic, mechanical*
+ * or otherwise, is prohibited without the prior written consent of the copyright owner.*
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.tool.mapreduce;
 
@@ -15,15 +15,26 @@ import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
-/** 
- * <Description> <br> 
- *  
- * @author 王伟<br>
- * @version 1.0<br>
- * @taskId <br>
- * @CreateDate 2025年8月20日 <br>
- * @since V1.0<br>
- * @see com.hbasesoft.framework.ai.agent.tool.mapreduce <br>
+/**
+ * MapReduceSharedStateManager manages shared state information for MapReduce
+ * workflows. It maintains state across multiple tasks and plans, including task
+ * statuses, split results, and operation results.
+ * 
+ * <p>
+ * This class is responsible for:
+ * <ul>
+ * <li>Managing plan state information with thread-safe operations</li>
+ * <li>Tracking task statuses and results</li>
+ * <li>Maintaining split results for map tasks</li>
+ * <li>Providing status overview of all active plans</li>
+ * </ul>
+ * 
+ * @author 王伟
+ * @version 1.0
+ * @taskId
+ * @CreateDate 2025年8月20日
+ * @since V1.0
+ * @see com.hbasesoft.framework.ai.agent.tool.mapreduce
  */
 @Component
 public class MapReduceSharedStateManager implements IMapReduceSharedStateManager {
@@ -33,13 +44,13 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 	 */
 	private final Map<String, PlanState> planStates = new ConcurrentHashMap<>();
 
-
 	/**
 	 * Get or create plan state
+	 * 
 	 * @param planId Plan ID
 	 * @return Plan state
 	 */
-	public PlanState getOrCreatePlanState(String planId) {
+	public PlanState getOrCreatePlanState(final String planId) {
 		if (planId == null || planId.trim().isEmpty()) {
 			throw new IllegalArgumentException("planId cannot be empty");
 		}
@@ -52,18 +63,20 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Get plan state (return null if not exists)
+	 * 
 	 * @param planId Plan ID
 	 * @return Plan state, return null if not exists
 	 */
-	public PlanState getPlanState(String planId) {
+	public PlanState getPlanState(final String planId) {
 		return planStates.get(planId);
 	}
 
 	/**
 	 * Clean up plan state
+	 * 
 	 * @param planId Plan ID
 	 */
-	public void cleanupPlanState(String planId) {
+	public void cleanupPlanState(final String planId) {
 		PlanState removed = planStates.remove(planId);
 		if (removed != null) {
 			LoggerUtil.info("Cleaned up shared state for plan {0}", planId);
@@ -72,10 +85,11 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Get next task ID
+	 * 
 	 * @param planId Plan ID
 	 * @return Task ID
 	 */
-	public String getNextTaskId(String planId) {
+	public String getNextTaskId(final String planId) {
 		PlanState planState = getOrCreatePlanState(planId);
 		int taskNumber = planState.getTaskCounter().getAndIncrement();
 		return String.format("task_%03d", taskNumber);
@@ -83,10 +97,11 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Add split result
-	 * @param planId Plan ID
+	 * 
+	 * @param planId        Plan ID
 	 * @param taskDirectory Task directory
 	 */
-	public void addSplitResult(String planId, String taskDirectory) {
+	public void addSplitResult(final String planId, final String taskDirectory) {
 		PlanState planState = getOrCreatePlanState(planId);
 		planState.getSplitResults().add(taskDirectory);
 		LoggerUtil.debug("Added split result for plan {0}: {1}", planId, taskDirectory);
@@ -94,10 +109,11 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Get split result list
+	 * 
 	 * @param planId Plan ID
 	 * @return Copy of split result list
 	 */
-	public List<String> getSplitResults(String planId) {
+	public List<String> getSplitResults(final String planId) {
 		PlanState planState = getPlanState(planId);
 		if (planState == null) {
 			return new ArrayList<>();
@@ -107,10 +123,11 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Set split result list
-	 * @param planId Plan ID
+	 * 
+	 * @param planId       Plan ID
 	 * @param splitResults Split result list
 	 */
-	public void setSplitResults(String planId, List<String> splitResults) {
+	public void setSplitResults(final String planId, final List<String> splitResults) {
 		PlanState planState = getOrCreatePlanState(planId);
 		planState.getSplitResults().clear();
 		planState.getSplitResults().addAll(splitResults);
@@ -119,23 +136,25 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Record Map task status
-	 * @param planId Plan ID
-	 * @param taskId Task ID
+	 * 
+	 * @param planId     Plan ID
+	 * @param taskId     Task ID
 	 * @param taskStatus Task status
 	 */
-	public void recordMapTaskStatus(String planId, String taskId, TaskStatus taskStatus) {
+	public void recordMapTaskStatus(final String planId, final String taskId, final TaskStatus taskStatus) {
 		PlanState planState = getOrCreatePlanState(planId);
 		planState.getMapTaskStatuses().put(taskId, taskStatus);
-		LoggerUtil.debug("Recorded task {0} status for plan {1}: {2}", taskId, planId, taskStatus.status);
+		LoggerUtil.debug("Recorded task {0} status for plan {1}: {2}", taskId, planId, taskStatus.getStatus());
 	}
 
 	/**
 	 * Get Map task status
+	 * 
 	 * @param planId Plan ID
 	 * @param taskId Task ID
 	 * @return Task status
 	 */
-	public TaskStatus getMapTaskStatus(String planId, String taskId) {
+	public TaskStatus getMapTaskStatus(final String planId, final String taskId) {
 		PlanState planState = getPlanState(planId);
 		if (planState == null) {
 			return null;
@@ -145,10 +164,11 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Get all Map task statuses
+	 * 
 	 * @param planId Plan ID
 	 * @return Copy of task status mapping
 	 */
-	public Map<String, TaskStatus> getAllMapTaskStatuses(String planId) {
+	public Map<String, TaskStatus> getAllMapTaskStatuses(final String planId) {
 		PlanState planState = getPlanState(planId);
 		if (planState == null) {
 			return new HashMap<>();
@@ -158,20 +178,22 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Set last operation result
+	 * 
 	 * @param planId Plan ID
 	 * @param result Operation result
 	 */
-	public void setLastOperationResult(String planId, String result) {
+	public void setLastOperationResult(final String planId, final String result) {
 		PlanState planState = getOrCreatePlanState(planId);
 		planState.setLastOperationResult(result);
 	}
 
 	/**
 	 * Get last operation result
+	 * 
 	 * @param planId Plan ID
 	 * @return Last operation result
 	 */
-	public String getLastOperationResult(String planId) {
+	public String getLastOperationResult(final String planId) {
 		PlanState planState = getPlanState(planId);
 		if (planState == null) {
 			return "";
@@ -181,20 +203,22 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Set last processed file
-	 * @param planId Plan ID
+	 * 
+	 * @param planId   Plan ID
 	 * @param filePath File path
 	 */
-	public void setLastProcessedFile(String planId, String filePath) {
+	public void setLastProcessedFile(final String planId, final String filePath) {
 		PlanState planState = getOrCreatePlanState(planId);
 		planState.setLastProcessedFile(filePath);
 	}
 
 	/**
 	 * Get last processed file
+	 * 
 	 * @param planId Plan ID
 	 * @return Last processed file path
 	 */
-	public String getLastProcessedFile(String planId) {
+	public String getLastProcessedFile(final String planId) {
 		PlanState planState = getPlanState(planId);
 		if (planState == null) {
 			return "";
@@ -204,10 +228,11 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 
 	/**
 	 * Get current tool status string
+	 * 
 	 * @param planId Plan ID
 	 * @return Status string
 	 */
-	public String getCurrentToolStateString(String planId) {
+	public String getCurrentToolStateString(final String planId) {
 		PlanState planState = getPlanState(planId);
 		if (planState == null) {
 			return "reduce_operation_tool current status:\n- Plan ID: " + planId + " (status does not exist)\n";
@@ -217,17 +242,16 @@ public class MapReduceSharedStateManager implements IMapReduceSharedStateManager
 		sb.append("reduce_operation_tool current status:\n");
 		sb.append("- Plan ID: ").append(planId).append("\n");
 		sb.append("- Last processed file: ")
-			.append(planState.getLastProcessedFile().isEmpty() ? "None" : planState.getLastProcessedFile())
-			.append("\n");
-		sb.append("- Last operation result: ")
-			.append(planState.getLastOperationResult().isEmpty() ? "None"
-					: "Completed: " + planState.getLastOperationResult())
-			.append("\n");
+				.append(planState.getLastProcessedFile().isEmpty() ? "None" : planState.getLastProcessedFile())
+				.append("\n");
+		sb.append("- Last operation result: ").append(planState.getLastOperationResult().isEmpty() ? "None"
+				: "Completed: " + planState.getLastOperationResult()).append("\n");
 		return sb.toString();
 	}
 
 	/**
 	 * Get status overview of all plans
+	 * 
 	 * @return Status overview string
 	 */
 	public String getAllPlansOverview() {

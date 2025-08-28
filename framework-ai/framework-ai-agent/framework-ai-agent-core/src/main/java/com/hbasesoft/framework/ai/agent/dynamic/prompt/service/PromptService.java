@@ -27,7 +27,7 @@ public interface PromptService {
 	/**
 	 * 根据命名空间和提示名称获取Prompt对象
 	 * 
-	 * @param namespace 命名空间，用于区分不同环境或模块下的Prompt
+	 * @param namespace  命名空间，用于区分不同环境或模块下的Prompt
 	 * @param promptName Prompt名称，用于唯一标识一个Prompt
 	 * @return PromptVO对象，包含Prompt的详细信息
 	 */
@@ -47,7 +47,7 @@ public interface PromptService {
 	 * 创建系统消息
 	 * 
 	 * @param promptName Prompt名称，用于获取对应的Prompt模板
-	 * @param variables 变量映射，用于替换Prompt模板中的占位符
+	 * @param variables  变量映射，用于替换Prompt模板中的占位符
 	 * @return Message对象，表示系统消息
 	 */
 	Message createSystemMessage(String promptName, Map<String, Object> variables);
@@ -56,7 +56,7 @@ public interface PromptService {
 	 * 创建用户消息
 	 * 
 	 * @param promptName Prompt名称，用于获取对应的Prompt模板
-	 * @param variables 变量映射，用于替换Prompt模板中的占位符
+	 * @param variables  变量映射，用于替换Prompt模板中的占位符
 	 * @return Message对象，表示用户消息
 	 */
 	Message createUserMessage(String promptName, Map<String, Object> variables);
@@ -65,14 +65,13 @@ public interface PromptService {
 	 * 渲染Prompt模板
 	 * 
 	 * @param promptName Prompt名称，用于获取对应的Prompt模板
-	 * @param variables 变量映射，用于替换Prompt模板中的占位符
+	 * @param variables  变量映射，用于替换Prompt模板中的占位符
 	 * @return 渲染后的Prompt字符串
 	 */
 	String renderPrompt(String promptName, Map<String, Object> variables);
 
 	/**
-	 * 重新初始化所有Prompt
-	 * 该方法用于重新加载或刷新Prompt配置
+	 * 重新初始化所有Prompt 该方法用于重新加载或刷新Prompt配置
 	 */
 	void reinitializePrompts();
 

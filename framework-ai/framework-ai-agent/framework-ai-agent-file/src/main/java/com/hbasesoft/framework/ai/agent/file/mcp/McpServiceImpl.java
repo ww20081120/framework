@@ -44,8 +44,7 @@ public class McpServiceImpl extends AbstractMcpService {
 	private final UnifiedDirectoryManager unifiedDirectoryManager;
 
 	/** ObjectMapper用于JSON序列化和反序列化 */
-	private final ObjectMapper objectMapper = new ObjectMapper()
-			.registerModule(new JavaTimeModule())
+	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	public McpServiceImpl(McpCacheManager cacheManager, UnifiedDirectoryManager unifiedDirectoryManager) {

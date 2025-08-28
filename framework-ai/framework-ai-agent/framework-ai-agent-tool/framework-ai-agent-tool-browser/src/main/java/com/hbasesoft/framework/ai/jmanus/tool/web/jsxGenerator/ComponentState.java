@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Component state class for storing current component file path, last operation result,
- * and component metadata
+ * Component state class for storing current component file path, last operation
+ * result, and component metadata
  */
 public class ComponentState {
 

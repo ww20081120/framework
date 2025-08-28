@@ -9,9 +9,9 @@ import java.util.List;
 
 import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -22,31 +22,31 @@ import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
 public interface DynamicModelService {
 
 	/**
-	 * Description: <br> 
-	 *  
+	 * Description: <br>
+	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
 	 * @return <br>
-	 */ 
+	 */
 	ModelConfig getDefault();
 
 	/**
-	 * Description: <br> 
-	 *  
+	 * Description: <br>
+	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
 	 * @return <br>
-	 */ 
+	 */
 	List<ModelConfig> queryAll();
 
 	/**
-	 * Description: <br> 
-	 *  
+	 * Description: <br>
+	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
 	 * @param modelId
 	 * @return <br>
-	 */ 
+	 */
 	ModelConfig get(Long modelId);
 
 }

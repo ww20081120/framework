@@ -16,9 +16,9 @@ import com.hbasesoft.framework.ai.agent.config.IManusProperties;
 import com.hbasesoft.framework.ai.agent.tool.filesystem.UnifiedDirectoryManager;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -44,10 +44,11 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 	}
 
 	/**
-	 * Intelligently process content, automatically store and return summary if content is
-	 * too long
-	 * @param planId Plan ID
-	 * @param content Content
+	 * Intelligently process content, automatically store and return summary if
+	 * content is too long
+	 * 
+	 * @param planId        Plan ID
+	 * @param content       Content
 	 * @param callingMethod Calling method name
 	 * @return Processing result containing filename and summary
 	 */
@@ -62,15 +63,18 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 		if (!infiniteContextEnabled) {
 			// When infinite context is disabled, return content directly without any
 			// processing
-			LoggerUtil.info("Infinite context disabled for plan {0}, returning content directly without smart processing",
+			LoggerUtil.info(
+					"Infinite context disabled for plan {0}, returning content directly without smart processing",
 					planId);
 			return new SmartProcessResult(null, content);
 		}
 
-		// Use configured threshold from ManusProperties when infinite context is enabled
+		// Use configured threshold from ManusProperties when infinite context is
+		// enabled
 		int threshold = manusProperties.getInfiniteContextTaskContextSize();
 
-		LoggerUtil.info("Processing content for plan {0}: content length = {1}, threshold = {2}, infinite context enabled",
+		LoggerUtil.info(
+				"Processing content for plan {0}: content length = {1}, threshold = {2}, infinite context enabled",
 				planId, content.length(), threshold);
 
 		// If content is within threshold, return directly
@@ -80,7 +84,8 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 			return new SmartProcessResult(null, content);
 		}
 
-		LoggerUtil.info("Content length {0} exceeds threshold {1}, triggering auto storage", content.length(), threshold);
+		LoggerUtil.info("Content length {0} exceeds threshold {1}, triggering auto storage", content.length(),
+				threshold);
 
 		try {
 			// Generate storage filename
@@ -98,12 +103,12 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 			// Generate simplified summary
 			String summary = generateSmartSummary(content, storageFileName, callingMethod);
 
-			LoggerUtil.info("Content exceeds threshold ({0} bytes), saved to storage file: {1}", threshold, storageFileName);
+			LoggerUtil.info("Content exceeds threshold ({0} bytes), saved to storage file: {1}", threshold,
+					storageFileName);
 
 			return new SmartProcessResult(storageFileName, summary);
 
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			LoggerUtil.error("Failed to save content to storage for plan {0}", planId, e);
 			// If save fails, return truncated content
 			return new SmartProcessResult(null,
@@ -116,7 +121,7 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 	 */
 	private String generateStorageFileName(String planId) {
 		String timestamp = java.time.LocalDateTime.now()
-			.format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+				.format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
 		// Generate 4-digit random number
 		int randomNum = (int) (Math.random() * 9000) + 1000; // 1000-9999
 		return String.format("%s_%s_%04d.md", planId, timestamp, randomNum);
@@ -139,7 +144,8 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 	private String generateSmartSummary(String content, String storageFileName, String callingMethod) {
 		// Build calling method information
 		String methodInfo = (callingMethod != null && !callingMethod.trim().isEmpty())
-				? "Successfully called " + callingMethod + " function,\n\n" : "";
+				? "Successfully called " + callingMethod + " function,\n\n"
+				: "";
 
 		return String.format(
 				"""
@@ -173,6 +179,7 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 
 	/**
 	 * Check if infinite context is enabled
+	 * 
 	 * @return true if infinite context is enabled, false otherwise
 	 */
 	private boolean isInfiniteContextEnabled() {

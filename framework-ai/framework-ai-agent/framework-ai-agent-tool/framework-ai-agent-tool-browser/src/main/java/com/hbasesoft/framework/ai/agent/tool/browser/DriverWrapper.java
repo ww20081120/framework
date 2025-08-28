@@ -96,8 +96,7 @@ public class DriverWrapper {
 			this.cookiePath = Paths.get("playwright-cookies-default.json");
 			log.warn("Warning: cookieDir was not provided or was empty. Using default cookie path: {}",
 					this.cookiePath.toAbsolutePath());
-		}
-		else {
+		} else {
 			this.cookiePath = Paths.get(cookieDir, "playwright-cookies.json");
 		}
 		loadCookies();
@@ -123,15 +122,12 @@ public class DriverWrapper {
 			if (cookies != null && !cookies.isEmpty()) {
 				this.currentPage.context().addCookies(cookies);
 				log.info("Cookies loaded successfully from: {}", this.cookiePath.toAbsolutePath());
-			}
-			else {
+			} else {
 				log.info("No cookies found in file or cookies list was empty: {}", this.cookiePath.toAbsolutePath());
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			log.info("Failed to load cookies from {}: {}", this.cookiePath.toAbsolutePath(), e.getMessage());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.info("An unexpected error occurred while loading cookies from {}: {}", this.cookiePath.toAbsolutePath(),
 					e.getMessage());
 		}
@@ -156,11 +152,9 @@ public class DriverWrapper {
 			byte[] jsonData = objectMapper.writeValueAsBytes(cookies);
 			Files.write(this.cookiePath, jsonData);
 			log.info("Cookies saved successfully to: {}", this.cookiePath.toAbsolutePath());
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			log.info("Failed to save cookies to {}: {}", this.cookiePath.toAbsolutePath(), e.getMessage());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.info("An unexpected error occurred while saving cookies to {}: {}", this.cookiePath.toAbsolutePath(),
 					e.getMessage());
 		}
@@ -201,16 +195,14 @@ public class DriverWrapper {
 		if (this.currentPage != null) {
 			try {
 				this.currentPage.close();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.info("Error closing current page: {}", e.getMessage());
 			}
 		}
 		if (this.browser != null) {
 			try {
 				this.browser.close();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.info("Error closing browser: {}", e.getMessage());
 			}
 		}

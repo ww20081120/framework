@@ -51,8 +51,7 @@ public class JsxGeneratorService implements ApplicationRunner, IJsxGeneratorServ
 	@Autowired
 	private UnifiedDirectoryManager unifiedDirectoryManager;
 
-	private final ObjectMapper objectMapper = new ObjectMapper()
-			.registerModule(new JavaTimeModule())
+	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	// Store component states for each plan

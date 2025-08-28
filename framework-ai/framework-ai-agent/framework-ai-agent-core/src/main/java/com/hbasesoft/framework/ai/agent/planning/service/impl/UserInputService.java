@@ -17,9 +17,9 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.UserInputWaitState;
 import com.hbasesoft.framework.ai.agent.planning.service.IUserInputService;
 import com.hbasesoft.framework.ai.agent.tool.fromInput.FormInputTool;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -58,31 +58,29 @@ public class UserInputService implements IUserInputService {
 			if (latestFormInput != null) {
 				waitState.setFormDescription(latestFormInput.getDescription());
 				if (latestFormInput.getInputs() != null) {
-					List<Map<String, String>> formInputsForState = latestFormInput.getInputs()
-						.stream()
-						.map(inputItem -> {
-							Map<String, String> inputMap = new HashMap<>();
-							inputMap.put("label", inputItem.getLabel());
-							inputMap.put("value", inputItem.getValue() != null ? inputItem.getValue() : "");
-							if (inputItem.getName() != null) {
-								inputMap.put("name", inputItem.getName());
-							}
-							if (inputItem.getType() != null) {
-								inputMap.put("type", inputItem.getType());
-							}
-							if (inputItem.getPlaceholder() != null) {
-								inputMap.put("placeholder", inputItem.getPlaceholder());
-							}
-							if (inputItem.getRequired() != null) {
-								inputMap.put("required", inputItem.getRequired().toString());
-							}
-							if (inputItem.getOptions() != null && !inputItem.getOptions().isEmpty()) {
-								inputMap.put("options", String.join(",", inputItem.getOptions()));
-							}
+					List<Map<String, String>> formInputsForState = latestFormInput.getInputs().stream()
+							.map(inputItem -> {
+								Map<String, String> inputMap = new HashMap<>();
+								inputMap.put("label", inputItem.getLabel());
+								inputMap.put("value", inputItem.getValue() != null ? inputItem.getValue() : "");
+								if (inputItem.getName() != null) {
+									inputMap.put("name", inputItem.getName());
+								}
+								if (inputItem.getType() != null) {
+									inputMap.put("type", inputItem.getType());
+								}
+								if (inputItem.getPlaceholder() != null) {
+									inputMap.put("placeholder", inputItem.getPlaceholder());
+								}
+								if (inputItem.getRequired() != null) {
+									inputMap.put("required", inputItem.getRequired().toString());
+								}
+								if (inputItem.getOptions() != null && !inputItem.getOptions().isEmpty()) {
+									inputMap.put("options", String.join(",", inputItem.getOptions()));
+								}
 
-							return inputMap;
-						})
-						.collect(Collectors.toList());
+								return inputMap;
+							}).collect(Collectors.toList());
 					waitState.setFormInputs(formInputsForState);
 				}
 			}
@@ -122,8 +120,7 @@ public class UserInputService implements IUserInputService {
 			formInputTool.setUserFormInputValues(inputItems);
 			formInputTool.markUserInputReceived();
 			return true;
-		}
-		else {
+		} else {
 			if (formInputTool == null) {
 				throw new IllegalArgumentException("FormInputTool not found for planId: " + planId);
 			}
@@ -133,4 +130,3 @@ public class UserInputService implements IUserInputService {
 	}
 
 }
-

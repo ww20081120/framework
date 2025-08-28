@@ -7,9 +7,9 @@ package com.hbasesoft.framework.ai.agent.planning.executor;
 
 import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -19,11 +19,11 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
  */
 public interface PlanExecutorInterface {
 
-
 	/**
 	 * Execute all steps of the entire plan
-	 * @param context Execution context containing user request and execution process
-	 * information
+	 * 
+	 * @param context Execution context containing user request and execution
+	 *                process information
 	 */
 	void executeAllSteps(ExecutionContext context);
 }

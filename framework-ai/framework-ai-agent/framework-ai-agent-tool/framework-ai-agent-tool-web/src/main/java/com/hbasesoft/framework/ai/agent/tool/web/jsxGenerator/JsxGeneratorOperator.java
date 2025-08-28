@@ -26,7 +26,6 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Component
 public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxInput> {
 
-
 	private final IJsxGeneratorService jsxGeneratorService;
 
 	private final ObjectMapper objectMapper;
@@ -47,48 +46,45 @@ public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxI
 	 */
 	private String createDetailedErrorMessage(String action, String missingParam, JsxGeneratorTool.JsxInput input) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Error: ")
-			.append(missingParam)
-			.append(" parameter is required for ")
-			.append(action)
-			.append(" operation.\n");
+		sb.append("Error: ").append(missingParam).append(" parameter is required for ").append(action)
+				.append(" operation.\n");
 		sb.append("Received parameters: ").append(input.toString()).append("\n");
 		sb.append("Expected format for ").append(action).append(":\n");
 
 		switch (action) {
-			case "generate_vue":
-				sb.append("{\n");
-				sb.append("  \"action\": \"generate_vue\",\n");
-				sb.append("  \"component_type\": \"<string>\",  // Required: button, form, chart, counter, etc.\n");
-				sb.append("  \"component_data\": {             // Optional: component specifications\n");
-				sb.append("    \"name\": \"<string>\",\n");
-				sb.append("    \"data\": {},\n");
-				sb.append("    \"methods\": {},\n");
-				sb.append("    \"template\": \"<string>\",\n");
-				sb.append("    \"style\": \"<string>\"\n");
-				sb.append("  }\n");
-				sb.append("}");
-				break;
-			case "apply_template":
-				sb.append("{\n");
-				sb.append("  \"action\": \"apply_template\",\n");
-				sb.append("  \"template_name\": \"<string>\",   // Required: template name\n");
-				sb.append("  \"template_data\": {}             // Optional: data for template\n");
-				sb.append("}");
-				break;
-			case "save":
-				sb.append("{\n");
-				sb.append("  \"action\": \"save\",\n");
-				sb.append("  \"file_path\": \"<string>\",       // Required: path to save file\n");
-				sb.append("  \"vue_sfc_code\": \"<string>\"    // Required: Vue SFC code\n");
-				sb.append("}");
-				break;
-			case "validate":
-				sb.append("{\n");
-				sb.append("  \"action\": \"validate\",\n");
-				sb.append("  \"vue_sfc_code\": \"<string>\"    // Required: Vue SFC code to validate\n");
-				sb.append("}");
-				break;
+		case "generate_vue":
+			sb.append("{\n");
+			sb.append("  \"action\": \"generate_vue\",\n");
+			sb.append("  \"component_type\": \"<string>\",  // Required: button, form, chart, counter, etc.\n");
+			sb.append("  \"component_data\": {             // Optional: component specifications\n");
+			sb.append("    \"name\": \"<string>\",\n");
+			sb.append("    \"data\": {},\n");
+			sb.append("    \"methods\": {},\n");
+			sb.append("    \"template\": \"<string>\",\n");
+			sb.append("    \"style\": \"<string>\"\n");
+			sb.append("  }\n");
+			sb.append("}");
+			break;
+		case "apply_template":
+			sb.append("{\n");
+			sb.append("  \"action\": \"apply_template\",\n");
+			sb.append("  \"template_name\": \"<string>\",   // Required: template name\n");
+			sb.append("  \"template_data\": {}             // Optional: data for template\n");
+			sb.append("}");
+			break;
+		case "save":
+			sb.append("{\n");
+			sb.append("  \"action\": \"save\",\n");
+			sb.append("  \"file_path\": \"<string>\",       // Required: path to save file\n");
+			sb.append("  \"vue_sfc_code\": \"<string>\"    // Required: Vue SFC code\n");
+			sb.append("}");
+			break;
+		case "validate":
+			sb.append("{\n");
+			sb.append("  \"action\": \"validate\",\n");
+			sb.append("  \"vue_sfc_code\": \"<string>\"    // Required: Vue SFC code to validate\n");
+			sb.append("}");
+			break;
 		}
 
 		return sb.toString();
@@ -107,8 +103,7 @@ public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxI
 				// Handle list templates operation
 				var templates = jsxGeneratorService.getAvailableTemplates();
 				return new ToolExecuteResult("Available templates: " + String.join(", ", templates));
-			}
-			else if ("generate_vue".equals(input.getAction())) {
+			} else if ("generate_vue".equals(input.getAction())) {
 				// Handle generate Vue SFC operation
 				String componentType = input.getComponentType();
 				var componentData = input.getComponentData();
@@ -121,14 +116,14 @@ public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxI
 					LoggerUtil.info("No component_data provided, using empty map for component generation");
 				}
 
-				LoggerUtil.info("JsxGeneratorOperator - Generating Vue SFC with componentType: {0}, componentData keys: {1}",
+				LoggerUtil.info(
+						"JsxGeneratorOperator - Generating Vue SFC with componentType: {0}, componentData keys: {1}",
 						componentType, componentData.keySet());
 				String vueSfcCode = jsxGeneratorService.generateVueSFC(componentType, componentData);
 				jsxGeneratorService.updateComponentState(planId, null, "Vue SFC generated successfully");
 				return new ToolExecuteResult(
 						"Vue SFC generated successfully for component type '" + componentType + "':\n" + vueSfcCode);
-			}
-			else if ("apply_template".equals(input.getAction())) {
+			} else if ("apply_template".equals(input.getAction())) {
 				// Handle apply template operation
 				String templateName = input.getTemplateName();
 				var templateData = input.getTemplateData();
@@ -146,8 +141,7 @@ public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxI
 				String generatedCode = jsxGeneratorService.applyHandlebarsTemplate(templateName, templateData);
 				jsxGeneratorService.updateComponentState(planId, null, "Template applied successfully");
 				return new ToolExecuteResult("Template '" + templateName + "' applied successfully:\n" + generatedCode);
-			}
-			else if ("save".equals(input.getAction())) {
+			} else if ("save".equals(input.getAction())) {
 				// Handle save operation
 				String filePath = input.getFilePath();
 				String vueSfcCode = input.getVueSfcCode();
@@ -163,8 +157,7 @@ public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxI
 						vueSfcCode.length());
 				String savedPath = jsxGeneratorService.saveVueSfcToFile(planId, filePath, vueSfcCode);
 				return new ToolExecuteResult("Vue SFC file saved successfully to: " + savedPath);
-			}
-			else if ("validate".equals(input.getAction())) {
+			} else if ("validate".equals(input.getAction())) {
 				// Handle validate operation
 				String vueSfcCode = input.getVueSfcCode();
 
@@ -175,19 +168,16 @@ public class JsxGeneratorOperator extends AbstractBaseTool<JsxGeneratorTool.JsxI
 				LoggerUtil.info("JsxGeneratorOperator - Validating Vue SFC code, length: {0}", vueSfcCode.length());
 				String validationResult = jsxGeneratorService.validateVueSfc(vueSfcCode);
 				return new ToolExecuteResult("Validation result: " + validationResult);
-			}
-			else {
+			} else {
 				return new ToolExecuteResult("Unsupported operation: " + input.getAction()
 						+ ". Supported operations: generate_vue, apply_template, save, validate, list_templates");
 			}
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			String planId = this.currentPlanId;
 			jsxGeneratorService.updateComponentState(planId, null,
 					"Error: Parameter validation failed: " + e.getMessage());
 			return new ToolExecuteResult("Parameter validation failed: " + e.getMessage());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LoggerUtil.error("JSX generation failed", e);
 			String planId = this.currentPlanId;
 			jsxGeneratorService.updateComponentState(planId, null, "Error: JSX generation failed: " + e.getMessage());

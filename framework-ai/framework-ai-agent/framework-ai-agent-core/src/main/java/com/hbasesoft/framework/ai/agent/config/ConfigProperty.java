@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 
 import com.hbasesoft.framework.ai.agent.config.model.enums.ConfigInputType;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -42,15 +42,16 @@ public @interface ConfigProperty {
 	String key();
 
 	/**
-	 * Configuration item YAML full path, used to find specific configuration items as
-	 * default values in the database
+	 * Configuration item YAML full path, used to find specific configuration items
+	 * as default values in the database
 	 */
 	String path();
 
 	/**
 	 * Configuration item description
 	 * <p>
-	 * Supports internationalization key format: config.desc.{group}.{subGroup}.{key}
+	 * Supports internationalization key format:
+	 * config.desc.{group}.{subGroup}.{key}
 	 */
 	String description() default "";
 

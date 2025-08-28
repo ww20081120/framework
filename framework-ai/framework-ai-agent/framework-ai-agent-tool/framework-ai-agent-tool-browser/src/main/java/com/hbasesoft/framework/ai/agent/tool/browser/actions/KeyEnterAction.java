@@ -38,8 +38,7 @@ public class KeyEnterAction extends BrowserAction {
 		// Execute the enter operation
 		try {
 			enterElement.getLocator().press("Enter");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return new ToolExecuteResult("Failed to press Enter on element at index " + index + ": " + e.getMessage());
 		}
 		return new ToolExecuteResult("Hit the enter key at index " + index);

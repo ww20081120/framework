@@ -8,9 +8,9 @@ package com.hbasesoft.framework.ai.demo.embabel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -21,9 +21,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DemoApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class);
-    }
+	/**
+	 * Main method to start the application.
+	 *
+	 * @param args command line arguments
+	 */
+	public static void main(final String[] args) {
+		SpringApplication.run(DemoApplication.class);
+	}
 }
-
-

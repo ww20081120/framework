@@ -86,13 +86,11 @@ public class LinuxShellExecutor implements ShellCommandExecutor {
 						}
 					}
 					return processOutput(currentProcess);
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					return "Error: Process interrupted - " + e.getMessage();
 				}
-			}
-			catch (Throwable e) {
+			} catch (Throwable e) {
 				log.error("Exception executing Linux command", e);
 				return "Error: " + e.getClass().getSimpleName() + " - " + e.getMessage();
 			}
@@ -110,8 +108,7 @@ public class LinuxShellExecutor implements ShellCommandExecutor {
 					// If process doesn't respond to SIGINT, force terminate
 					currentProcess.destroyForcibly();
 				}
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				currentProcess.destroyForcibly();
 			}
@@ -145,11 +142,9 @@ public class LinuxShellExecutor implements ShellCommandExecutor {
 		int exitCode = process.isAlive() ? -1 : process.exitValue();
 		if (exitCode == 0) {
 			return outputBuilder.toString();
-		}
-		else if (exitCode == -1) {
+		} else if (exitCode == -1) {
 			return "Process is still running. Use empty command to get more logs, or 'ctrl+c' to terminate.";
-		}
-		else {
+		} else {
 			return "Error (Exit Code " + exitCode + "): "
 					+ (errorBuilder.length() > 0 ? errorBuilder.toString() : outputBuilder.toString());
 		}

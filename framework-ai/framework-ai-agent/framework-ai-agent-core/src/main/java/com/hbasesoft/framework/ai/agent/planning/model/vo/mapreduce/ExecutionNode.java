@@ -24,32 +24,35 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionStep;
 /**
  * Execution node interface defining common behaviors for all execution nodes
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type",
-		visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
 @JsonSubTypes({ @JsonSubTypes.Type(value = SequentialNode.class, name = "sequential"),
 		@JsonSubTypes.Type(value = MapReduceNode.class, name = "mapreduce") })
 public interface ExecutionNode {
 
 	/**
 	 * Get node type
+	 * 
 	 * @return Node type
 	 */
 	MapReduceStepType getType();
 
 	/**
 	 * Get all execution steps in the node
+	 * 
 	 * @return Execution step list
 	 */
 	List<ExecutionStep> getAllSteps();
 
 	/**
 	 * Get total number of steps in the node
+	 * 
 	 * @return Total step count
 	 */
 	int getTotalStepCount();
 
 	/**
 	 * Get string representation of the node
+	 * 
 	 * @return Node string
 	 */
 	String getNodeInStr();

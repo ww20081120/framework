@@ -62,13 +62,11 @@ public class PptGeneratorOperator extends AbstractBaseTool<PptInput> {
 							"No local templates, please check the folder extensions/pptGenerator/template available");
 				}
 				return new ToolExecuteResult(templateList);
-			}
-			else if ("getTemplate".equals(input.getAction())) {
+			} else if ("getTemplate".equals(input.getAction())) {
 				// Handle get template operation
 				String templateContent = pptGeneratorService.getTemplate(input.getPath());
 				return new ToolExecuteResult(templateContent);
-			}
-			else if (!"create".equals(input.getAction())) {
+			} else if (!"create".equals(input.getAction())) {
 				return new ToolExecuteResult("Unsupported operations: " + input.getAction()
 						+ ", Only supports the 'create', 'getTemplateList' and 'getTemplate' operations");
 			}
@@ -82,13 +80,11 @@ public class PptGeneratorOperator extends AbstractBaseTool<PptInput> {
 			pptGeneratorService.updateFileState(planId, path, "Success: PPT file generated successfully");
 
 			return new ToolExecuteResult("PPT file generated successfully, save path: " + path);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			String planId = this.currentPlanId;
 			pptGeneratorService.updateFileState(planId, null, "Error: Parameter validation failed: " + e.getMessage());
 			return new ToolExecuteResult("Parameter validation failed: " + e.getMessage());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("PPT generation failed", e);
 			String planId = this.currentPlanId;
 			pptGeneratorService.updateFileState(planId, null, "Error: PPT generation failed: " + e.getMessage());

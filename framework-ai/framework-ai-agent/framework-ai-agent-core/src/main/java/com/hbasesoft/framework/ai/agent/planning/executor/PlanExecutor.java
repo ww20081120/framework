@@ -17,9 +17,9 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionStep;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.PlanInterface;
 import com.hbasesoft.framework.ai.agent.recorder.PlanExecutionRecorder;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -32,10 +32,11 @@ public class PlanExecutor extends AbstractPlanExecutor {
 
 	/**
 	 * Constructor for PlanExecutor
-	 * @param agents List of dynamic agent entities
-	 * @param recorder Plan execution recorder
+	 * 
+	 * @param agents       List of dynamic agent entities
+	 * @param recorder     Plan execution recorder
 	 * @param agentService Agent service
-	 * @param llmService LLM service
+	 * @param llmService   LLM service
 	 */
 	public PlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
 			ILlmService llmService, IManusProperties manusProperties) {
@@ -44,8 +45,9 @@ public class PlanExecutor extends AbstractPlanExecutor {
 
 	/**
 	 * Execute all steps of the entire plan
-	 * @param context Execution context containing user request and execution process
-	 * information
+	 * 
+	 * @param context Execution context containing user request and execution
+	 *                process information
 	 */
 	@Override
 	public void executeAllSteps(ExecutionContext context) {
@@ -67,8 +69,7 @@ public class PlanExecutor extends AbstractPlanExecutor {
 			}
 
 			context.setSuccess(true);
-		}
-		finally {
+		} finally {
 			performCleanup(context, lastExecutor);
 		}
 	}

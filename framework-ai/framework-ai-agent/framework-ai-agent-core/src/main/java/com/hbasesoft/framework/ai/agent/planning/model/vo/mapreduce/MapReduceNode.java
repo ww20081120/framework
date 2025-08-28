@@ -62,7 +62,9 @@ public class MapReduceNode extends AbstractExecutionNode {
 	}
 
 	/**
-	 * Get string representation of node type for Jackson serialization/deserialization
+	 * Get string representation of node type for Jackson
+	 * serialization/deserialization
+	 * 
 	 * @return Type string
 	 */
 	@JsonProperty("type")
@@ -72,6 +74,7 @@ public class MapReduceNode extends AbstractExecutionNode {
 
 	/**
 	 * Set node type for Jackson deserialization, actually performs no operation
+	 * 
 	 * @param typeString Type string
 	 */
 	@JsonProperty("type")
@@ -197,6 +200,7 @@ public class MapReduceNode extends AbstractExecutionNode {
 
 	/**
 	 * Get all steps (Data Prepared + Map + Reduce + Post Process)
+	 * 
 	 * @return List of all steps
 	 */
 	@JsonIgnore
@@ -219,6 +223,7 @@ public class MapReduceNode extends AbstractExecutionNode {
 
 	/**
 	 * Get string representation of the node
+	 * 
 	 * @return Node string
 	 */
 	@JsonIgnore

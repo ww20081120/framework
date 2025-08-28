@@ -27,12 +27,14 @@ public interface ITextFileService {
 
 	/**
 	 * Get internal storage service
+	 * 
 	 * @return Internal storage service
 	 */
 	ISmartContentSavingService getInnerStorageService();
 
 	/**
 	 * Get file status for specified plan
+	 * 
 	 * @param planId Plan ID
 	 * @return File status
 	 */
@@ -40,12 +42,14 @@ public interface ITextFileService {
 
 	/**
 	 * Close files for specified plan
+	 * 
 	 * @param planId Plan ID
 	 */
 	void closeFileForPlan(String planId);
 
 	/**
 	 * Check if file type is supported
+	 * 
 	 * @param filePath File path
 	 * @return Whether supported
 	 */
@@ -53,6 +57,7 @@ public interface ITextFileService {
 
 	/**
 	 * Get file extension
+	 * 
 	 * @param filePath File path
 	 * @return File extension
 	 */
@@ -60,22 +65,25 @@ public interface ITextFileService {
 
 	/**
 	 * Validate and get absolute path
+	 * 
 	 * @param workingDirectoryPath Working directory path
-	 * @param filePath File path
+	 * @param filePath             File path
 	 * @throws IOException IO exception
 	 */
 	void validateAndGetAbsolutePath(String workingDirectoryPath, String filePath) throws IOException;
 
 	/**
 	 * Update file status
-	 * @param planId Plan ID
-	 * @param filePath File path
+	 * 
+	 * @param planId          Plan ID
+	 * @param filePath        File path
 	 * @param operationResult Operation result
 	 */
 	void updateFileState(String planId, String filePath, String operationResult);
 
 	/**
 	 * Get current file path
+	 * 
 	 * @param planId Plan ID
 	 * @return Current file path
 	 */
@@ -83,12 +91,14 @@ public interface ITextFileService {
 
 	/**
 	 * Get Manus properties
+	 * 
 	 * @return Manus properties
 	 */
 	IManusProperties getManusProperties();
 
 	/**
 	 * Get last operation result
+	 * 
 	 * @param planId Plan ID
 	 * @return Last operation result
 	 */

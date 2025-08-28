@@ -47,8 +47,7 @@ public class ConfigServiceImpl implements IConfigService {
 	private UnifiedDirectoryManager unifiedDirectoryManager;
 
 	/** ObjectMapper用于JSON序列化和反序列化 */
-	private final ObjectMapper objectMapper = new ObjectMapper()
-			.registerModule(new JavaTimeModule())
+	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	/** 配置缓存，用于提高配置读取性能 */

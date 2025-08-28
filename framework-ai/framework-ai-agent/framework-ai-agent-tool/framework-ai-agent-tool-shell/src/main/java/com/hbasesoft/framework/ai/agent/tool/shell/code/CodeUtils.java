@@ -59,8 +59,7 @@ public class CodeUtils {
 			if (extracted.isEmpty()) {
 				extracted.add(Pair.of(UNKNOWN, content));
 			}
-		}
-		else {
+		} else {
 			Pattern codePattern = Pattern.compile("\\{3\\}(\\w+)?\\s*([\\s\\S]*?){3}|([\\^]+)`");
 			Matcher matcher = codePattern.matcher(content);
 			while (matcher.find()) {
@@ -81,8 +80,7 @@ public class CodeUtils {
 		for (Map<String, Object> item : itemList) {
 			if (item.get("type").equals("text")) {
 				rst += item.get("text");
-			}
-			else {
+			} else {
 				assert item instanceof Map && item.get("type").equals("image_url") : "Wrong content format.";
 				rst += "";
 			}
@@ -119,8 +117,7 @@ public class CodeUtils {
 		String file_dir = Paths.get(filepath).getParent().toString();
 		try {
 			Files.createDirectories(Paths.get(file_dir));
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -129,8 +126,7 @@ public class CodeUtils {
 				FileWriter fout = new FileWriter(filepath);
 				fout.write(code);
 				fout.close();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -147,8 +143,7 @@ public class CodeUtils {
 			cmds.add("python3");
 			cmds.add(filepath);
 			executeCommandResult = CodeUtils.executeCommand(cmds.toArray(new String[] {}));
-		}
-		else if (lang.equals("sh")) {
+		} else if (lang.equals("sh")) {
 			String[] cmd = { "sh", filepath, };
 			executeCommandResult = CodeUtils.executeCommand(cmd);
 		}
@@ -190,8 +185,7 @@ public class CodeUtils {
 			executeCommandResult.setExitCode(exitCode);
 			executeCommandResult.setOutput(errorResult);
 			return executeCommandResult;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("executePythonCode error", e);
 			return null;
 		}
@@ -205,8 +199,7 @@ public class CodeUtils {
 				if (!((response = reader.readLine()) != null)) {
 					break;
 				}
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 			}
 			resultList.add(response);
 		}

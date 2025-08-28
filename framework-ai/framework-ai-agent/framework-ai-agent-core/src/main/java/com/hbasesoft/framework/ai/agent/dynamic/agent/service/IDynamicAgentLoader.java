@@ -27,7 +27,7 @@ public interface IDynamicAgentLoader {
 	/**
 	 * 根据代理名称和初始设置加载代理
 	 * 
-	 * @param agentName 代理名称
+	 * @param agentName           代理名称
 	 * @param initialAgentSetting 初始代理设置
 	 * @return 动态代理实例
 	 */

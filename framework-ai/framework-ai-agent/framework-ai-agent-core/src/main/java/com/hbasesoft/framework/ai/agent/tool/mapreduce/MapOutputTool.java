@@ -170,8 +170,8 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 	private final ObjectMapper objectMapper;
 
 	// Main constructor
-	public MapOutputTool(IManusProperties manusProperties, IMapReduceSharedStateManager sharedStateManager,
-			UnifiedDirectoryManager unifiedDirectoryManager, ObjectMapper objectMapper) {
+	public MapOutputTool(final IManusProperties manusProperties, final IMapReduceSharedStateManager sharedStateManager,
+			final UnifiedDirectoryManager unifiedDirectoryManager, final ObjectMapper objectMapper) {
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;
 		this.objectMapper = objectMapper;
@@ -189,8 +189,10 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 
 	/**
 	 * Set shared state manager
+	 * 
+	 * @param sharedStateManager the shared state manager to set
 	 */
-	public void setSharedStateManager(IMapReduceSharedStateManager sharedStateManager) {
+	public void setSharedStateManager(final IMapReduceSharedStateManager sharedStateManager) {
 		this.sharedStateManager = sharedStateManager;
 	}
 
@@ -229,9 +231,12 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 
 	/**
 	 * Execute Map output recording operation
+	 * 
+	 * @param input the map output input parameters
+	 * @return the tool execution result
 	 */
 	@Override
-	public ToolExecuteResult run(MapOutputInput input) {
+	public ToolExecuteResult run(final MapOutputInput input) {
 		LoggerUtil.info("MapOutputTool input: taskId={0}, hasValue={1}", input.getTaskId(), input.isHasValue());
 		try {
 			String taskId = input.getTaskId();
@@ -269,7 +274,7 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 	 * @param data the data rows
 	 * @return formatted string representation of the structured data
 	 */
-	private String formatStructuredData(String data) {
+	private String formatStructuredData(final String data) {
 		if (data == null || data.isEmpty()) {
 			return "";
 		}
@@ -280,8 +285,12 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 	 * Record Map task output result with completed status by default. Task ID is
 	 * provided as parameter instead of being obtained from the current execution
 	 * context.
+	 * 
+	 * @param content the content to be recorded
+	 * @param taskId  the task ID
+	 * @return the tool execution result
 	 */
-	private ToolExecuteResult recordMapTaskOutput(String content, String taskId) {
+	private ToolExecuteResult recordMapTaskOutput(final String content, final String taskId) {
 		try {
 			// Get timeout configuration for this operation
 			Integer timeout = getMapReduceTimeout();
@@ -334,11 +343,11 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 			// Store in shared state manager
 			if (sharedStateManager != null) {
 				IMapReduceSharedStateManager.TaskStatus sharedTaskStatus = new MapReduceSharedStateManager.TaskStatus();
-				sharedTaskStatus.taskId = taskStatus.taskId;
-				sharedTaskStatus.inputFile = taskStatus.inputFile;
-				sharedTaskStatus.outputFilePath = taskStatus.outputFilePath;
-				sharedTaskStatus.status = taskStatus.status;
-				sharedTaskStatus.timestamp = taskStatus.timestamp;
+				sharedTaskStatus.setTaskId(taskStatus.getTaskId());
+				sharedTaskStatus.setInputFile(taskStatus.getInputFile());
+				sharedTaskStatus.setOutputFilePath(taskStatus.getOutputFilePath());
+				sharedTaskStatus.setStatus(taskStatus.getStatus());
+				sharedTaskStatus.setTimestamp(taskStatus.getTimestamp());
 				sharedStateManager.recordMapTaskStatus(currentPlanId, taskId, sharedTaskStatus);
 			}
 
@@ -377,8 +386,13 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 		return sb.toString();
 	}
 
+	/**
+	 * Clean up resources for the given plan ID
+	 * 
+	 * @param planId the plan ID to clean up
+	 */
 	@Override
-	public void cleanup(String planId) {
+	public void cleanup(final String planId) {
 		// Clean up shared state
 		if (sharedStateManager != null && planId != null) {
 			sharedStateManager.cleanupPlanState(planId);
@@ -386,8 +400,15 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 		LoggerUtil.info("MapOutputTool cleanup completed for planId: {0}", planId);
 	}
 
+	/**
+	 * Apply the tool with the given input and tool context
+	 * 
+	 * @param input       the map output input parameters
+	 * @param toolContext the tool context
+	 * @return the tool execution result
+	 */
 	@Override
-	public ToolExecuteResult apply(MapOutputInput input, ToolContext toolContext) {
+	public ToolExecuteResult apply(final MapOutputInput input, final ToolContext toolContext) {
 		return run(input);
 	}
 
@@ -400,8 +421,11 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 
 	/**
 	 * Get plan directory path
+	 * 
+	 * @param planId the plan ID
+	 * @return the plan directory path
 	 */
-	private Path getPlanDirectory(String planId) {
+	private Path getPlanDirectory(final String planId) {
 		return getInnerStorageRoot().resolve(planId);
 	}
 
@@ -431,17 +455,115 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 	@SuppressWarnings("unused")
 	private static class TaskStatus {
 
-		public String taskId;
+		/** Task ID */
+		private String taskId;
 
-		public String inputFile;
+		/** Input file path */
+		private String inputFile;
 
-		public String outputFilePath;
+		/** Output file path */
+		private String outputFilePath;
 
-		public String status;
+		/** Task status */
+		private String status;
 
-		public String timestamp;
+		/** Timestamp */
+		private String timestamp;
+
+		/**
+		 * Get task ID
+		 * 
+		 * @return task ID
+		 */
+		public String getTaskId() {
+			return taskId;
+		}
+
+		/**
+		 * Set task ID
+		 * 
+		 * @param taskId task ID
+		 */
+		public void setTaskId(String taskId) {
+			this.taskId = taskId;
+		}
+
+		/**
+		 * Get input file path
+		 * 
+		 * @return input file path
+		 */
+		public String getInputFile() {
+			return inputFile;
+		}
+
+		/**
+		 * Set input file path
+		 * 
+		 * @param inputFile input file path
+		 */
+		public void setInputFile(String inputFile) {
+			this.inputFile = inputFile;
+		}
+
+		/**
+		 * Get output file path
+		 * 
+		 * @return output file path
+		 */
+		public String getOutputFilePath() {
+			return outputFilePath;
+		}
+
+		/**
+		 * Set output file path
+		 * 
+		 * @param outputFilePath output file path
+		 */
+		public void setOutputFilePath(String outputFilePath) {
+			this.outputFilePath = outputFilePath;
+		}
+
+		/**
+		 * Get task status
+		 * 
+		 * @return task status
+		 */
+		public String getStatus() {
+			return status;
+		}
+
+		/**
+		 * Set task status
+		 * 
+		 * @param status task status
+		 */
+		public void setStatus(String status) {
+			this.status = status;
+		}
+
+		/**
+		 * Get timestamp
+		 * 
+		 * @return timestamp
+		 */
+		public String getTimestamp() {
+			return timestamp;
+		}
+
+		/**
+		 * Set timestamp
+		 * 
+		 * @param timestamp timestamp
+		 */
+		public void setTimestamp(String timestamp) {
+			this.timestamp = timestamp;
+		}
 
 	}
+
+	/** Default timeout for MapReduce operations in seconds */
+	private static final int DEFAULT_MAPREDUCE_TIMEOUT = 300;
 
 	/**
 	 * Get MapReduce operation timeout configuration
@@ -452,7 +574,7 @@ public class MapOutputTool extends AbstractBaseTool<MapOutputTool.MapOutputInput
 	private Integer getMapReduceTimeout() {
 		// For now, use default timeout until the configuration is added to
 		// ManusProperties
-		return 300; // Default timeout is 5 minutes
+		return DEFAULT_MAPREDUCE_TIMEOUT; // Default timeout is 5 minutes
 	}
 
 	// ==================== TerminableTool interface implementation

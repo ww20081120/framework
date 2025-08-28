@@ -83,8 +83,7 @@ public class ExecutionStep {
 		String agentState = null;
 		if (agent != null) {
 			agentState = agent.getState().toString();
-		}
-		else {
+		} else {
 			agentState = AgentState.NOT_STARTED.toString();
 		}
 		StringBuilder sb = new StringBuilder();

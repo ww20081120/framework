@@ -21,31 +21,35 @@ import java.util.Set;
 
 import com.hbasesoft.framework.ai.agent.config.IManusProperties;
 
-
 /**
- * Interface for JSX/Vue component generation operations. Provides methods for creating,
- * saving, and previewing Vue SFC components with Handlebars template support.
+ * Interface for JSX/Vue component generation operations. Provides methods for
+ * creating, saving, and previewing Vue SFC components with Handlebars template
+ * support.
  */
 public interface IJsxGeneratorService {
 
 	/**
 	 * Generate Vue Single File Component based on component specifications
+	 * 
 	 * @param componentType Type of the component (e.g., 'button', 'form', 'chart')
-	 * @param componentData Component data including props, data, methods, computed, etc.
+	 * @param componentData Component data including props, data, methods, computed,
+	 *                      etc.
 	 * @return Generated Vue SFC code
 	 */
 	String generateVueSFC(String componentType, Map<String, Object> componentData);
 
 	/**
 	 * Generate Vue template section
+	 * 
 	 * @param componentType Component type
-	 * @param templateData Template data
+	 * @param templateData  Template data
 	 * @return Generated template HTML
 	 */
 	String generateVueTemplate(String componentType, Map<String, Object> templateData);
 
 	/**
 	 * Generate Vue script section
+	 * 
 	 * @param componentData Component data including data, methods, computed, etc.
 	 * @return Generated script section
 	 */
@@ -53,6 +57,7 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Generate Vue style section
+	 * 
 	 * @param styleData Style specifications
 	 * @return Generated style section
 	 */
@@ -60,6 +65,7 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Apply Handlebars template for quick code generation
+	 * 
 	 * @param templateName Template name (e.g., 'counter-button', 'data-form')
 	 * @param templateData Data to apply to template
 	 * @return Generated code from template
@@ -68,21 +74,24 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Register a new Handlebars template
-	 * @param templateName Template name
+	 * 
+	 * @param templateName    Template name
 	 * @param templateContent Template content
 	 */
 	void registerTemplate(String templateName, String templateContent);
 
 	/**
 	 * Get available template names
+	 * 
 	 * @return Set of available template names
 	 */
 	Set<String> getAvailableTemplates();
 
 	/**
 	 * Save Vue SFC code to a file
-	 * @param planId Plan ID
-	 * @param filePath File path to save the Vue SFC code
+	 * 
+	 * @param planId     Plan ID
+	 * @param filePath   File path to save the Vue SFC code
 	 * @param vueSfcCode Vue SFC code to save
 	 * @return Absolute path of the saved file
 	 * @throws IOException if saving fails
@@ -91,18 +100,20 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Update existing Vue component file
-	 * @param planId Plan ID
-	 * @param filePath File path
+	 * 
+	 * @param planId      Plan ID
+	 * @param filePath    File path
 	 * @param sectionType Section to update ('template', 'script', 'style')
-	 * @param newContent New content for the section
+	 * @param newContent  New content for the section
 	 * @throws IOException if update fails
 	 */
 	void updateVueComponent(String planId, String filePath, String sectionType, String newContent) throws IOException;
 
 	/**
 	 * Generate Sandpack preview configuration
-	 * @param planId Plan ID
-	 * @param filePath Path to the Vue file
+	 * 
+	 * @param planId       Plan ID
+	 * @param filePath     Path to the Vue file
 	 * @param dependencies Additional dependencies needed
 	 * @return Sandpack configuration JSON
 	 */
@@ -110,7 +121,8 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Generate a preview URL for the Vue component in Sandpack
-	 * @param planId Plan ID
+	 * 
+	 * @param planId   Plan ID
 	 * @param filePath Path to the Vue file
 	 * @return Preview URL
 	 */
@@ -118,6 +130,7 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Validate Vue SFC syntax
+	 * 
 	 * @param vueSfcCode Vue SFC code to validate
 	 * @return Validation result with errors if any
 	 */
@@ -125,6 +138,7 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Get component state for specified plan
+	 * 
 	 * @param planId Plan ID
 	 * @return Component state
 	 */
@@ -132,20 +146,23 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Close components for specified plan
+	 * 
 	 * @param planId Plan ID
 	 */
 	void closeComponentForPlan(String planId);
 
 	/**
 	 * Update component state
-	 * @param planId Plan ID
-	 * @param filePath File path
+	 * 
+	 * @param planId          Plan ID
+	 * @param filePath        File path
 	 * @param operationResult Operation result
 	 */
 	void updateComponentState(String planId, String filePath, String operationResult);
 
 	/**
 	 * Get current component file path
+	 * 
 	 * @param planId Plan ID
 	 * @return Current component file path
 	 */
@@ -153,6 +170,7 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Get last operation result for a plan
+	 * 
 	 * @param planId Plan ID
 	 * @return Last operation result
 	 */
@@ -160,6 +178,7 @@ public interface IJsxGeneratorService {
 
 	/**
 	 * Get Manus properties
+	 * 
 	 * @return Manus properties
 	 */
 	IManusProperties getManusProperties();

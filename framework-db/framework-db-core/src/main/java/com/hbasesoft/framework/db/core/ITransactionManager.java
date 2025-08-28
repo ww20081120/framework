@@ -19,5 +19,10 @@ import org.springframework.transaction.PlatformTransactionManager;
  */
 public interface ITransactionManager {
 
-	PlatformTransactionManager getTransactionManager();
+    /**
+     * 获取事务管理器
+     * 
+     * @return PlatformTransactionManager
+     */
+    PlatformTransactionManager getTransactionManager();
 }

@@ -36,33 +36,33 @@ import reactor.core.publisher.Sinks;
 public class AudioController {
 
     /** 音频采样率 */
-private static final int SAMPLE_RATE = 16000;
-    
-/** 音频转录模型 */
-private final AudioTranscriptionModel transcriptionModel;
+    private static final int SAMPLE_RATE = 16000;
 
-/** 模型 */
-private static final String DEFAULT_MODEL_2 = "paraformer-realtime-v2";
+    /** 音频转录模型 */
+    private final AudioTranscriptionModel transcriptionModel;
 
-/** 调度器 */
-private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    /** 模型 */
+    private static final String DEFAULT_MODEL_2 = "paraformer-realtime-v2";
 
-/**
- * 构造函数
- *
- * @param transcriptionModel 音频转录模型
- */
-public AudioController(final AudioTranscriptionModel transcriptionModel) {
-    this.transcriptionModel = transcriptionModel;
-}
+    /** 调度器 */
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
- * 语音转文字接口
- *
- * @return 文字流
- */
-@RequestMapping("/stt")
-public Flux<String> stt() {
+     * 构造函数
+     *
+     * @param transcriptionModel 音频转录模型
+     */
+    public AudioController(final AudioTranscriptionModel transcriptionModel) {
+        this.transcriptionModel = transcriptionModel;
+    }
+
+    /**
+     * 语音转文字接口
+     *
+     * @return 文字流
+     */
+    @RequestMapping("/stt")
+    public Flux<String> stt() {
 
         // 创建一个 Sinks.Many（支持多播）
         Sinks.Many<String> sink = Sinks.many().multicast().onBackpressureBuffer();
@@ -76,10 +76,14 @@ public Flux<String> stt() {
                 IOUtil.writeFile(data, tempFile);
 
                 // 创建音频转录任务
-                AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(new FileSystemResource(tempFile),
-                    DashScopeAudioTranscriptionOptions.builder().withSampleRate(SAMPLE_RATE)
+                AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(
+                    new FileSystemResource(tempFile),
+                    DashScopeAudioTranscriptionOptions.builder()
+                        .withSampleRate(SAMPLE_RATE)
                         .withFormat(DashScopeAudioTranscriptionOptions.AudioFormat.PCM)
-                        .withDisfluencyRemovalEnabled(false).build());
+                        .withDisfluencyRemovalEnabled(false)
+                        .build()
+                );
 
                 // 提交任务
                 AudioTranscriptionResponse submitResponse = transcriptionModel.asyncCall(prompt);
@@ -93,11 +97,11 @@ public Flux<String> stt() {
                 }, 0, 1, java.util.concurrent.TimeUnit.SECONDS);
 
                 latch.await();
-            }
+            } 
             catch (Exception e) {
                 Thread.currentThread().interrupt();
                 LoggerUtil.error(e);
-            }
+            } 
             finally {
                 scheduler.shutdown();
             }
@@ -109,8 +113,8 @@ public Flux<String> stt() {
      * 检查任务状态
      *
      * @param taskId 任务ID
-     * @param sink 数据流
-     * @param latch 闭锁
+     * @param sink   数据流
+     * @param latch  闭锁
      */
     private void checkTaskStatus(final String taskId, final Sinks.Many<String> sink, final CountDownLatch latch) {
         try {
@@ -123,15 +127,15 @@ public Flux<String> stt() {
                 sink.tryEmitNext(fetchResponse.getResult().getOutput());
                 sink.tryEmitComplete(); // 完成流
                 latch.countDown();
-            }
+            } 
             else if (taskStatus.equals(DashScopeAudioTranscriptionApi.TaskStatus.RUNNING)) {
                 System.out.println(fetchResponse.getResult().getOutput());
-            }
+            } 
             else if (taskStatus.equals(DashScopeAudioTranscriptionApi.TaskStatus.FAILED)) {
                 LoggerUtil.warn("Transcription failed.");
                 latch.countDown();
             }
-        }
+        } 
         catch (Exception e) {
             latch.countDown();
             throw new ServiceException(e);

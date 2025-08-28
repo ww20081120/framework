@@ -26,6 +26,7 @@ public interface IChromeDriverService {
 
 	/**
 	 * Get shared directory
+	 * 
 	 * @return Shared directory path
 	 */
 	String getSharedDir();
@@ -42,6 +43,7 @@ public interface IChromeDriverService {
 
 	/**
 	 * Get driver wrapper for specified plan ID
+	 * 
 	 * @param planId Plan ID
 	 * @return Driver wrapper
 	 */
@@ -49,6 +51,7 @@ public interface IChromeDriverService {
 
 	/**
 	 * Close driver for specified plan
+	 * 
 	 * @param planId Plan ID
 	 */
 	void closeDriverForPlan(String planId);
@@ -60,24 +63,28 @@ public interface IChromeDriverService {
 
 	/**
 	 * Set Manus properties
+	 * 
 	 * @param manusProperties Manus properties
 	 */
 	void setManusProperties(IManusProperties manusProperties);
 
 	/**
 	 * Get Manus properties
+	 * 
 	 * @return Manus properties
 	 */
 	IManusProperties getManusProperties();
 
 	/**
 	 * Get internal storage service
+	 * 
 	 * @return Internal storage service
 	 */
 	SmartContentSavingService getInnerStorageService();
 
 	/**
 	 * Get unified directory manager
+	 * 
 	 * @return Unified directory manager
 	 */
 	UnifiedDirectoryManager getUnifiedDirectoryManager();

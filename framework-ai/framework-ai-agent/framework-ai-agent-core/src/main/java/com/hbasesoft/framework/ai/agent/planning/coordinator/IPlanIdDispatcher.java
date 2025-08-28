@@ -16,7 +16,8 @@
 package com.hbasesoft.framework.ai.agent.planning.coordinator;
 
 /**
- * Interface for plan ID dispatcher that manages plan and template ID conversions
+ * Interface for plan ID dispatcher that manages plan and template ID
+ * conversions
  */
 public interface IPlanIdDispatcher {
 

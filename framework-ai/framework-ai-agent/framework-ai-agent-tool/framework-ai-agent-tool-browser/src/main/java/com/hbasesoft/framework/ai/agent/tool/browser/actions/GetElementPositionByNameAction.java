@@ -38,8 +38,8 @@ public class GetElementPositionByNameAction extends BrowserAction {
 	}
 
 	/**
-	 * Element position information class for storing global position and text information
-	 * of each matched element
+	 * Element position information class for storing global position and text
+	 * information of each matched element
 	 */
 	public static class ElementPosition {
 
@@ -109,8 +109,7 @@ public class GetElementPositionByNameAction extends BrowserAction {
 		try {
 			String resultJson = objectMapper.writeValueAsString(positionResults);
 			return new ToolExecuteResult(resultJson);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return new ToolExecuteResult("Error serializing JSON: " + e.getMessage());
 		}
 	}
@@ -127,16 +126,14 @@ public class GetElementPositionByNameAction extends BrowserAction {
 			String text = null;
 			try {
 				text = nthLocator.textContent();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				continue;
 			}
 			if (text != null) {
 				com.microsoft.playwright.options.BoundingBox box = null;
 				try {
 					box = nthLocator.boundingBox();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					continue;
 				}
 				if (box != null) {
@@ -156,8 +153,7 @@ public class GetElementPositionByNameAction extends BrowserAction {
 
 							log.info("Debug: Added red border and text tag for element. result: {}, x: {}, y: {}",
 									result, x, y);
-						}
-						catch (Exception e) {
+						} catch (Exception e) {
 							// ignore style set error
 						}
 					}

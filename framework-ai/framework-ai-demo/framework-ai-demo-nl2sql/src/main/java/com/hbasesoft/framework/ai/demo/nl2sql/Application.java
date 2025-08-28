@@ -16,16 +16,16 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "com.hbasesoft.framework.ai.demo.nl2sql")
 public class Application {
 
-    /**
-     * Description: <br>
-     *
-     * @param args <br>
-     * @author 王伟<br>
-     * @taskId <br>
-     */
-    public static void main(final String[] args) {
-        Bootstrap.before();
-        ConfigurableApplicationContext context = new SpringApplicationBuilder(Application.class).run(args);
-        Bootstrap.after(context);
-    }
+	/**
+	 * Description: <br>
+	 *
+	 * @param args <br>
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 */
+	public static void main(final String[] args) {
+		Bootstrap.before();
+		ConfigurableApplicationContext context = new SpringApplicationBuilder(Application.class).run(args);
+		Bootstrap.after(context);
+	}
 }

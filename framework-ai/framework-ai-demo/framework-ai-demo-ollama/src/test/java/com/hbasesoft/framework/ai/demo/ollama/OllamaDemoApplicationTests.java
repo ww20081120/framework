@@ -8,10 +8,10 @@ import org.springframework.test.context.TestPropertySource;
 @TestPropertySource(locations = "classpath:application-test.yml")
 class OllamaDemoApplicationTests {
 
-    @Test
-    void contextLoads() {
-        // This test verifies that the application context loads successfully
-        // with all the beans properly configured
-    }
+	@Test
+	void contextLoads() {
+		// This test verifies that the application context loads successfully
+		// with all the beans properly configured
+	}
 
 }

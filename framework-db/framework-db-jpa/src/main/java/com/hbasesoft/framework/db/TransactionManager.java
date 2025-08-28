@@ -21,16 +21,16 @@ import com.hbasesoft.framework.db.core.ITransactionManager;
  */
 public class TransactionManager implements ITransactionManager {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Override
-	public PlatformTransactionManager getTransactionManager() {
-		return TransactionManagerHolder.getTransactionManager();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public PlatformTransactionManager getTransactionManager() {
+        return TransactionManagerHolder.getTransactionManager();
+    }
 
 }

@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import com.hbasesoft.framework.ai.agent.dynamic.namespace.service.NamespaceService;
 import com.hbasesoft.framework.ai.agent.dynamic.namespace.vo.NamespaceConfig;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -29,10 +29,10 @@ public class NamespaceServiceImpl implements NamespaceService {
 
 	@Value("${namespace.value:default}")
 	private String namespace;
-	
+
 	/**
-	 * Description: <br> 
-	 *  
+	 * Description: <br>
+	 * 
 	 * @author 王伟<br>
 	 * @taskId <br>
 	 * @return <br>

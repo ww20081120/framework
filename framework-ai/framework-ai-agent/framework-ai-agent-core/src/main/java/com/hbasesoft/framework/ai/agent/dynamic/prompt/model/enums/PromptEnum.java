@@ -24,18 +24,18 @@ public enum PromptEnum {
 
 	/** 规划创建提示 */
 	PLANNING_PLAN_CREATION("PLANNING_PLAN_CREATION", MessageType.SYSTEM, PromptType.PLANNING, true,
-		"planning/plan-creation.txt"),
+			"planning/plan-creation.txt"),
 
 	/** 代理当前步骤环境提示 */
 	AGENT_CURRENT_STEP_ENV("AGENT_CURRENT_STEP_ENV", MessageType.USER, PromptType.AGENT, true,
-		"agent/current-step-env.txt"),
+			"agent/current-step-env.txt"),
 
 	/** 代理步骤执行提示 */
 	AGENT_STEP_EXECUTION("AGENT_STEP_EXECUTION", MessageType.USER, PromptType.AGENT, true, "agent/step-execution.txt"),
 
 	/** 规划终结器提示 */
 	PLANNING_PLAN_FINALIZER("PLANNING_PLAN_FINALIZER", MessageType.USER, PromptType.PLANNING, true,
-		"planning/plan-finalizer.txt"),
+			"planning/plan-finalizer.txt"),
 
 	/** 直接响应提示 */
 	DIRECT_RESPONSE("DIRECT_RESPONSE", MessageType.USER, PromptType.PLANNING, true, "planning/direct-response.txt"),
@@ -45,18 +45,18 @@ public enum PromptEnum {
 
 	/** 摘要规划模板提示 */
 	SUMMARY_PLAN_TEMPLATE("SUMMARY_PLAN_TEMPLATE", MessageType.SYSTEM, PromptType.PLANNING, true,
-		"workflow/summary-plan-template.txt"),
+			"workflow/summary-plan-template.txt"),
 
 	/** 代理调试详细输出提示 */
 	AGENT_DEBUG_DETAIL_OUTPUT("AGENT_DEBUG_DETAIL_OUTPUT", MessageType.SYSTEM, PromptType.AGENT, true,
-		"agent/debug-detail-output.txt"),
+			"agent/debug-detail-output.txt"),
 
 	/** 代理正常输出提示 */
 	AGENT_NORMAL_OUTPUT("AGENT_NORMAL_OUTPUT", MessageType.SYSTEM, PromptType.AGENT, true, "agent/normal-output.txt"),
 
 	/** 代理并行工具调用响应提示 */
 	AGENT_PARALLEL_TOOL_CALLS_RESPONSE("AGENT_PARALLEL_TOOL_CALLS_RESPONSE", MessageType.SYSTEM, PromptType.AGENT, true,
-		"agent/parallel-tool-calls-response.txt");
+			"agent/parallel-tool-calls-response.txt");
 
 	/** 提示名称 */
 	private String promptName;
@@ -74,9 +74,7 @@ public enum PromptEnum {
 	private String promptPath;
 
 	/** 支持的语言列表 */
-	public static final String[] SUPPORTED_LANGUAGES = {
-		"zh", "en"
-	};
+	public static final String[] SUPPORTED_LANGUAGES = { "zh", "en" };
 
 	/** 提示描述加载器 */
 	private static PromptDescriptionLoader descriptionLoader;
@@ -84,11 +82,11 @@ public enum PromptEnum {
 	/**
 	 * 构造函数
 	 * 
-	 * @param promptName 提示名称
+	 * @param promptName  提示名称
 	 * @param messageType 消息类型
-	 * @param type 提示类型
-	 * @param builtIn 是否为内置提示
-	 * @param promptPath 提示路径
+	 * @param type        提示类型
+	 * @param builtIn     是否为内置提示
+	 * @param promptPath  提示路径
 	 */
 	PromptEnum(String promptName, MessageType messageType, PromptType type, Boolean builtIn, String promptPath) {
 		this.promptName = promptName;

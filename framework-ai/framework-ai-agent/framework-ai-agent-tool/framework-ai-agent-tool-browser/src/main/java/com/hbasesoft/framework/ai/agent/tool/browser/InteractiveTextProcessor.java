@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 import com.microsoft.playwright.Page;
 
 /**
- * Utility class specialized in handling interactive text elements in web pages. Provides
- * functionality for finding, analyzing and processing text content in web pages. Uses
- * InteractiveElementRegistry to manage all interactive elements in the page, providing
- * global index access capability.
+ * Utility class specialized in handling interactive text elements in web pages.
+ * Provides functionality for finding, analyzing and processing text content in
+ * web pages. Uses InteractiveElementRegistry to manage all interactive elements
+ * in the page, providing global index access capability.
  */
 public class InteractiveTextProcessor {
 
@@ -47,6 +47,7 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Refresh all interactive elements in the page, including those in iframes
+	 * 
 	 * @param page Page to process
 	 */
 	public void refreshCache(Page page) {
@@ -57,9 +58,10 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Get interactive element at specified index
+	 * 
 	 * @param index Global index
 	 * @return Interactive element corresponding to this index, returns empty if not
-	 * exists
+	 *         exists
 	 */
 	public Optional<InteractiveElement> getElementByIndex(int index) {
 		return elementRegistry.getElementById(index);
@@ -67,6 +69,7 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Get list of all interactive elements
+	 * 
 	 * @return List of interactive elements
 	 */
 	public List<InteractiveElement> getAllElements(Page page) {
@@ -75,6 +78,7 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Click element at specified index
+	 * 
 	 * @param index Element global index
 	 * @return Whether operation was successful
 	 */
@@ -87,8 +91,9 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Fill text in input element at specified index
+	 * 
 	 * @param index Element global index
-	 * @param text Text to fill
+	 * @param text  Text to fill
 	 * @return Whether operation was successful
 	 */
 	public boolean fillText(int index, String text) {
@@ -100,6 +105,7 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Get detailed information of all interactive elements in the web page
+	 * 
 	 * @return Formatted element information string
 	 */
 	public String getInteractiveElementsInfo(Page page) {
@@ -108,6 +114,7 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Get total number of interactive elements
+	 * 
 	 * @return Element count
 	 */
 	public int getElementCount() {
@@ -116,7 +123,8 @@ public class InteractiveTextProcessor {
 
 	/**
 	 * Execute custom operation based on element index
-	 * @param index Element index
+	 * 
+	 * @param index  Element index
 	 * @param action Operation to execute
 	 * @return Whether operation was successful
 	 */

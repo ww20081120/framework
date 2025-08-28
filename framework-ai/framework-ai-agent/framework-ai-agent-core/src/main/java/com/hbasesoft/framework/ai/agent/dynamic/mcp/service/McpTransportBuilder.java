@@ -186,12 +186,13 @@ public class McpTransportBuilder {
 			streamEndpoint = null;
 		}
 
-		LoggerUtil.info("Building Streamable HTTP transport for server: {0} with Url: {1} and Endpoint: {2}", serverName,
-				baseUrl, streamEndpoint);
+		LoggerUtil.info("Building Streamable HTTP transport for server: {0} with Url: {1} and Endpoint: {2}",
+				serverName, baseUrl, streamEndpoint);
 
 		WebClient.Builder webClientBuilder = createWebClientBuilder(baseUrl);
 
-		LoggerUtil.debug("Using WebClientStreamableHttpTransport with endpoint: {0} for STREAMING mode", streamEndpoint);
+		LoggerUtil.debug("Using WebClientStreamableHttpTransport with endpoint: {0} for STREAMING mode",
+				streamEndpoint);
 		return WebClientStreamableHttpTransport.builder(webClientBuilder).objectMapper(objectMapper)
 				.endpoint(streamEndpoint).resumableStreams(true).openConnectionOnStartup(false).build();
 

@@ -11,9 +11,9 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.ResolvableType;
 import org.springframework.stereotype.Component;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -36,8 +36,7 @@ public class JmanusListenerRegister implements BeanPostProcessor {
 			Class<? extends JmanusEvent> jmanusEventClass;
 			try {
 				jmanusEventClass = (Class<? extends JmanusEvent>) eventClass;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new IllegalArgumentException("The listener can only listen to JmanusEvent type");
 			}
 			jmanusEventPublisher.registerListener(jmanusEventClass, (JmanusListener) bean);

@@ -50,8 +50,7 @@ public class PromptServiceImpl implements PromptService {
 	@Value("${namespace.value:default}")
 	private String namespace;
 
-	private final ObjectMapper objectMapper = new ObjectMapper()
-			.registerModule(new JavaTimeModule())
+	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
 	/** Prompt缓存，用于提高性能 */

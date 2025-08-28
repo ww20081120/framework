@@ -28,10 +28,8 @@ import jakarta.persistence.AttributeConverter;
 //@Converter
 public class MapToStringConverter implements AttributeConverter<Map<String, String>, String> {
 
-	private final ObjectMapper objectMapper = new ObjectMapper()
-			.registerModule(new JavaTimeModule())
+	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
 
 	@Override
 	public String convertToDatabaseColumn(Map<String, String> attribute) {

@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -24,115 +24,131 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface IMapReduceSharedStateManager {
 
-
 	/**
 	 * Get or create plan state
+	 * 
 	 * @param planId Plan ID
 	 * @return Plan state
 	 */
-	IMapReduceSharedStateManager.PlanState getOrCreatePlanState(String planId);
+	IMapReduceSharedStateManager.PlanState getOrCreatePlanState(final String planId);
 
 	/**
 	 * Get plan state
+	 * 
 	 * @param planId Plan ID
 	 * @return Plan state
 	 */
-	IMapReduceSharedStateManager.PlanState getPlanState(String planId);
+	IMapReduceSharedStateManager.PlanState getPlanState(final String planId);
 
 	/**
 	 * Clean up plan state
+	 * 
 	 * @param planId Plan ID
 	 */
-	void cleanupPlanState(String planId);
+	void cleanupPlanState(final String planId);
 
 	/**
 	 * Get next task ID
+	 * 
 	 * @param planId Plan ID
 	 * @return Next task ID
 	 */
-	String getNextTaskId(String planId);
+	String getNextTaskId(final String planId);
 
 	/**
 	 * Add split result
-	 * @param planId Plan ID
+	 * 
+	 * @param planId        Plan ID
 	 * @param taskDirectory Task directory
 	 */
-	void addSplitResult(String planId, String taskDirectory);
+	void addSplitResult(final String planId, final String taskDirectory);
 
 	/**
 	 * Get split results
+	 * 
 	 * @param planId Plan ID
 	 * @return Split results list
 	 */
-	List<String> getSplitResults(String planId);
+	List<String> getSplitResults(final String planId);
 
 	/**
 	 * Set split results
-	 * @param planId Plan ID
+	 * 
+	 * @param planId       Plan ID
 	 * @param splitResults Split results list
 	 */
-	void setSplitResults(String planId, List<String> splitResults);
+	void setSplitResults(final String planId, final List<String> splitResults);
 
 	/**
 	 * Record Map task status
-	 * @param planId Plan ID
-	 * @param taskId Task ID
+	 * 
+	 * @param planId     Plan ID
+	 * @param taskId     Task ID
 	 * @param taskStatus Task status
 	 */
-	void recordMapTaskStatus(String planId, String taskId, IMapReduceSharedStateManager.TaskStatus taskStatus);
+	void recordMapTaskStatus(final String planId, final String taskId,
+			final IMapReduceSharedStateManager.TaskStatus taskStatus);
 
 	/**
 	 * Get Map task status
+	 * 
 	 * @param planId Plan ID
 	 * @param taskId Task ID
 	 * @return Task status
 	 */
-	IMapReduceSharedStateManager.TaskStatus getMapTaskStatus(String planId, String taskId);
+	IMapReduceSharedStateManager.TaskStatus getMapTaskStatus(final String planId, final String taskId);
 
 	/**
 	 * Get all Map task statuses
+	 * 
 	 * @param planId Plan ID
 	 * @return All task statuses
 	 */
-	Map<String, IMapReduceSharedStateManager.TaskStatus> getAllMapTaskStatuses(String planId);
+	Map<String, IMapReduceSharedStateManager.TaskStatus> getAllMapTaskStatuses(final String planId);
 
 	/**
 	 * Set last operation result
+	 * 
 	 * @param planId Plan ID
 	 * @param result Operation result
 	 */
-	void setLastOperationResult(String planId, String result);
+	void setLastOperationResult(final String planId, final String result);
 
 	/**
 	 * Get last operation result
+	 * 
 	 * @param planId Plan ID
 	 * @return Last operation result
 	 */
-	String getLastOperationResult(String planId);
+	String getLastOperationResult(final String planId);
 
 	/**
 	 * Set last processed file
-	 * @param planId Plan ID
+	 * 
+	 * @param planId   Plan ID
 	 * @param filePath File path
 	 */
-	void setLastProcessedFile(String planId, String filePath);
+	void setLastProcessedFile(final String planId, final String filePath);
 
 	/**
 	 * Get last processed file
+	 * 
 	 * @param planId Plan ID
 	 * @return Last processed file path
 	 */
-	String getLastProcessedFile(String planId);
+	String getLastProcessedFile(final String planId);
 
 	/**
 	 * Get current tool status string
+	 * 
 	 * @param planId Plan ID
 	 * @return Current tool status string
 	 */
-	String getCurrentToolStateString(String planId);
+	String getCurrentToolStateString(final String planId);
 
 	/**
 	 * Get all plan overview
+	 * 
 	 * @return All plan overview string
 	 */
 	String getAllPlansOverview();
@@ -141,11 +157,12 @@ public interface IMapReduceSharedStateManager {
 	 * Clean up all plan states
 	 */
 	void cleanupAllPlanStates();
-	
+
 	/**
-	 * Plan state inner class containing all shared state information for a single plan
+	 * Plan state inner class containing all shared state information for a single
+	 * plan
 	 */
-	public static class PlanState {
+	class PlanState {
 
 		// Map task status management
 		private final Map<String, TaskStatus> mapTaskStatuses = new ConcurrentHashMap<>();
@@ -202,24 +219,119 @@ public interface IMapReduceSharedStateManager {
 	/**
 	 * Task status class
 	 */
-	public static class TaskStatus {
+	class TaskStatus {
 
-		public String taskId;
+		/** Task ID */
+		private String taskId;
 
-		public String inputFile;
+		/** Input file path */
+		private String inputFile;
 
-		public String outputFilePath;
+		/** Output file path */
+		private String outputFilePath;
 
-		public String status;
+		/** Task status */
+		private String status;
 
-		public String timestamp;
+		/** Timestamp */
+		private String timestamp;
 
 		public TaskStatus() {
 		}
 
-		public TaskStatus(String taskId, String status) {
+		public TaskStatus(final String taskId, final String status) {
 			this.taskId = taskId;
 			this.status = status;
+		}
+
+		/**
+		 * Get task ID
+		 * 
+		 * @return task ID
+		 */
+		public String getTaskId() {
+			return taskId;
+		}
+
+		/**
+		 * Set task ID
+		 * 
+		 * @param taskId task ID
+		 */
+		public void setTaskId(final String taskId) {
+			this.taskId = taskId;
+		}
+
+		/**
+		 * Get input file path
+		 * 
+		 * @return input file path
+		 */
+		public String getInputFile() {
+			return inputFile;
+		}
+
+		/**
+		 * Set input file path
+		 * 
+		 * @param inputFile input file path
+		 */
+		public void setInputFile(final String inputFile) {
+			this.inputFile = inputFile;
+		}
+
+		/**
+		 * Get output file path
+		 * 
+		 * @return output file path
+		 */
+		public String getOutputFilePath() {
+			return outputFilePath;
+		}
+
+		/**
+		 * Set output file path
+		 * 
+		 * @param outputFilePath output file path
+		 */
+		public void setOutputFilePath(final String outputFilePath) {
+			this.outputFilePath = outputFilePath;
+		}
+
+		/**
+		 * Get task status
+		 * 
+		 * @return task status
+		 */
+		public String getStatus() {
+			return status;
+		}
+
+		/**
+		 * Set task status
+		 * 
+		 * @param status task status
+		 */
+		public void setStatus(final String status) {
+			this.status = status;
+		}
+
+		/**
+		 * Get timestamp
+		 * 
+		 * @return timestamp
+		 */
+		public String getTimestamp() {
+			return timestamp;
+		}
+
+		/**
+		 * Set timestamp
+		 * 
+		 * @param timestamp timestamp
+		 */
+		public void setTimestamp(final String timestamp) {
+			this.timestamp = timestamp;
 		}
 
 	}

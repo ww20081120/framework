@@ -1,7 +1,7 @@
-/**************************************************************************************** 
- Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
- transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
- or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+/****************************************************************************************
+ * Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or    *
+ * transmission in whole or in part, in any form or by any means, electronic, mechanical*
+ * or otherwise, is prohibited without the prior written consent of the copyright owner.*
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.tool.mapreduce;
 
@@ -24,56 +24,91 @@ import com.hbasesoft.framework.ai.agent.tool.terminate.TerminableTool;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
- * <Description> <br>
+ * FinalizeTool is responsible for finalizing MapReduce workflow output
+ * processing. It supports operations such as exporting the reduce output file
+ * to a new file with a user-specified name.
  * 
- * @author 王伟<br>
- * @version 1.0<br>
- * @taskId <br>
- * @CreateDate 2025年8月20日 <br>
- * @since V1.0<br>
- * @see com.hbasesoft.framework.ai.agent.tool.mapreduce <br>
+ * <p>
+ * This tool is specifically designed for finalizing MapReduce workflow results
+ * by:
+ * <ul>
+ * <li>Creating a final output file with a meaningful name</li>
+ * <li>Preserving the original reduce output file</li>
+ * <li>Ensuring the final result is properly named and accessible</li>
+ * </ul>
+ * 
+ * @author 王伟
+ * @version 1.0
+ * @taskId
+ * @CreateDate 2025年8月20日
+ * @since V1.0
+ * @see com.hbasesoft.framework.ai.agent.tool.mapreduce
  */
 @Component
 public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> implements TerminableTool {
 
 	// ==================== Configuration Constants ====================
 
-	/**
-	 * Supported operation type: export reduce output to new file
-	 */
+	/** Supported operation type: export reduce output to new file */
 	private static final String ACTION_EXPORT = "export";
 
-	/**
-	 * Source file name for finalize operations (same as ReduceOperationTool)
-	 */
+	/** Source file name for finalize operations (same as ReduceOperationTool) */
 	private static final String REDUCE_FILE_NAME = "reduce_output.md";
+
+	/** Default context size for infinite context tasks */
+	private static final int DEFAULT_CONTEXT_SIZE = 20000;
 
 	/**
 	 * Internal input class for defining Finalize tool input parameters
 	 */
 	public static class FinalizeInput {
 
+		/** Action to perform (e.g., "export") */
 		private String action;
 
+		/** New file name for export operation */
 		@com.fasterxml.jackson.annotation.JsonProperty("new_file_name")
 		private String newFileName;
 
+		/**
+		 * Constructor for FinalizeInput
+		 */
 		public FinalizeInput() {
 		}
 
+		/**
+		 * Get action
+		 * 
+		 * @return the action
+		 */
 		public String getAction() {
 			return action;
 		}
 
-		public void setAction(String action) {
+		/**
+		 * Set action
+		 * 
+		 * @param action the action to set
+		 */
+		public void setAction(final String action) {
 			this.action = action;
 		}
 
+		/**
+		 * Get new file name
+		 * 
+		 * @return the new file name
+		 */
 		public String getNewFileName() {
 			return newFileName;
 		}
 
-		public void setNewFileName(String newFileName) {
+		/**
+		 * Set new file name
+		 * 
+		 * @param newFileName the new file name to set
+		 */
+		public void setNewFileName(final String newFileName) {
 			this.newFileName = newFileName;
 		}
 
@@ -86,7 +121,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 			Supports copying the reduce output file to a new file with user-specified name.
 			Source file: %s
 			Supported operations:
-			- export: Copy the reduce output file to a new file with the specified name in the same directory.
+			- export: Copy the reduce output file to a new file with the specified name in
+			  the same directory.
 
 			This tool is specifically designed for finalizing MapReduce workflow results by:
 			- Creating a final output file with a meaningful name
@@ -104,7 +140,7 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 			        },
 			        "new_file_name": {
 			            "type": "string",
-						"description": "New file name (with extension), used to save the final output result"
+			            "description": "New file name (with extension), used to save the final output result"
 			        }
 			    },
 			    "required": ["action", "new_file_name"],
@@ -123,18 +159,26 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 	// Track if any operation has completed, allowing termination
 	private volatile boolean operationCompleted = false;
 
-	public FinalizeTool(IManusProperties manusProperties, MapReduceSharedStateManager sharedStateManager,
-			UnifiedDirectoryManager unifiedDirectoryManager) {
+	/**
+	 * Constructor for FinalizeTool
+	 * 
+	 * @param manusProperties         the manus properties
+	 * @param sharedStateManager      the shared state manager
+	 * @param unifiedDirectoryManager the unified directory manager
+	 */
+	public FinalizeTool(final IManusProperties manusProperties, final MapReduceSharedStateManager sharedStateManager,
+			final UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.manusProperties = manusProperties;
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;
-
 	}
 
 	/**
 	 * Set shared state manager
+	 * 
+	 * @param sharedStateManager the shared state manager to set
 	 */
-	public void setSharedStateManager(MapReduceSharedStateManager sharedStateManager) {
+	public void setSharedStateManager(final MapReduceSharedStateManager sharedStateManager) {
 		this.sharedStateManager = sharedStateManager;
 	}
 
@@ -145,6 +189,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 
 	/**
 	 * Get task directory list
+	 * 
+	 * @return the list of task directories
 	 */
 	public List<String> getSplitResults() {
 		if (sharedStateManager != null && currentPlanId != null) {
@@ -173,6 +219,11 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 		return "data-processing";
 	}
 
+	/**
+	 * Get tool definition
+	 * 
+	 * @return the tool definition
+	 */
 	public static OpenAiApi.FunctionTool getToolDefinition() {
 		OpenAiApi.FunctionTool.Function function = new OpenAiApi.FunctionTool.Function(TOOL_DESCRIPTION, TOOL_NAME,
 				PARAMETERS_JSON);
@@ -181,9 +232,12 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 
 	/**
 	 * Execute Finalize operation
+	 * 
+	 * @param input the finalize input
+	 * @return the tool execution result
 	 */
 	@Override
-	public ToolExecuteResult run(FinalizeInput input) {
+	public ToolExecuteResult run(final FinalizeInput input) {
 		LoggerUtil.info("FinalizeTool input: action={0}, newFileName={1}", input.getAction(), input.getNewFileName());
 		try {
 			String action = input.getAction();
@@ -199,8 +253,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 				}
 				yield exportFile(newFileName);
 			}
-			default ->
-				new ToolExecuteResult("Unknown operation: " + action + ". Supported operations: " + ACTION_EXPORT);
+			default -> new ToolExecuteResult(
+					"Unknown operation: " + action + ". Supported operations: " + ACTION_EXPORT);
 			};
 
 			// Mark operation as completed for termination capability
@@ -215,8 +269,11 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 
 	/**
 	 * Export (copy) the reduce output file to a new file with the specified name
+	 * 
+	 * @param newFileName the name of the new file to create
+	 * @return the tool execution result
 	 */
-	private ToolExecuteResult exportFile(String newFileName) {
+	private ToolExecuteResult exportFile(final String newFileName) {
 		try {
 			// Get plan directory with hierarchical structure
 			Path planDir = getPlanDirectory();
@@ -230,8 +287,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 				targetFilePath = getInnerStorageRoot().resolve(rootPlanId).resolve(newFileName);
 			} else {
 				// If no hierarchy, throw an exception
-				return new ToolExecuteResult(
-						"Error: Cannot export file - no hierarchical structure found. The tool requires a root plan ID different from the current plan ID.");
+				return new ToolExecuteResult("Error: Cannot export file - no hierarchical structure found. "
+						+ "The tool requires a root plan ID different from the current plan ID.");
 			}
 
 			// Check if source file exists
@@ -263,9 +320,9 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 			// content in the result
 			if (contentLength <= charLimit) {
 				StringBuilder result = new StringBuilder();
-				result.append(String.format(
-						"The function call was successful. The content has been saved to the file(%s). the file content is :\n",
-						newFileName));
+				result.append(
+						String.format("The function call was successful. The content has been saved to the file(%s). "
+								+ "the file content is :\n", newFileName));
 				result.append(fileContent.toString());
 				return new ToolExecuteResult(result.toString());
 			}
@@ -280,8 +337,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 				result.append(" characters, which exceeds the limit of ");
 				result.append(charLimit);
 				result.append(" characters. The content is still too large and has been saved to the new file. ");
-				result.append(
-						"The user can read the file directly or use other functions to further process the oversized file.");
+				result.append("The user can read the file directly or use other functions to further ");
+				result.append("process the oversized file.");
 				return new ToolExecuteResult(result.toString());
 			}
 		} catch (IOException e) {
@@ -301,8 +358,13 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 		return sb.toString();
 	}
 
+	/**
+	 * Clean up resources for the given plan ID
+	 * 
+	 * @param planId the plan ID to clean up
+	 */
 	@Override
-	public void cleanup(String planId) {
+	public void cleanup(final String planId) {
 		// Clean up shared state
 		if (sharedStateManager != null && planId != null) {
 			sharedStateManager.cleanupPlanState(planId);
@@ -310,13 +372,22 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 		LoggerUtil.info("FinalizeTool cleanup completed for planId: {0}", planId);
 	}
 
+	/**
+	 * Apply the tool with the given input and tool context
+	 * 
+	 * @param input       the finalize input
+	 * @param toolContext the tool context
+	 * @return the tool execution result
+	 */
 	@Override
-	public ToolExecuteResult apply(FinalizeInput input, ToolContext toolContext) {
+	public ToolExecuteResult apply(final FinalizeInput input, final ToolContext toolContext) {
 		return run(input);
 	}
 
 	/**
 	 * Get inner storage root directory path
+	 * 
+	 * @return the inner storage root directory path
 	 */
 	private Path getInnerStorageRoot() {
 		return unifiedDirectoryManager.getInnerStorageRoot();
@@ -324,6 +395,8 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 
 	/**
 	 * Get plan directory path with hierarchical structure support
+	 * 
+	 * @return the plan directory path
 	 */
 	private Path getPlanDirectory() {
 		Path innerStorageRoot = getInnerStorageRoot();
@@ -344,9 +417,9 @@ public class FinalizeTool extends AbstractBaseTool<FinalizeTool.FinalizeInput> i
 	private Integer getInfiniteContextTaskContextSize() {
 		if (manusProperties != null) {
 			Integer contextSize = manusProperties.getInfiniteContextTaskContextSize();
-			return contextSize != null ? contextSize : 20000; // Default 20000 characters
+			return contextSize != null ? contextSize : DEFAULT_CONTEXT_SIZE; // Default 20000 characters
 		}
-		return 20000; // Default 20000 characters
+		return DEFAULT_CONTEXT_SIZE; // Default 20000 characters
 	}
 
 	// ==================== TerminableTool interface implementation

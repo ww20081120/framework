@@ -47,13 +47,13 @@ public class HelloworldController {
      */
     public HelloworldController(final ChatClient.Builder chatClientBuilder) {
         dashScopeChatClient = chatClientBuilder.defaultSystem(DEFAULT_PROMPT)
-            // 实现 Chat Memory 的 Advisor
-            // 在使用 Chat Memory 时，需要指定对话 ID，以便 Spring AI 处理上下文。
-            //.defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
-            // 实现 Logger 的 Advisor
-            .defaultAdvisors(new SimpleLoggerAdvisor())
-            // 设置 ChatClient 中 ChatModel 的 Options 参数
-            .defaultOptions(DashScopeChatOptions.builder().withTopP(TOP_P).build()).build();
+                // 实现 Chat Memory 的 Advisor
+                // 在使用 Chat Memory 时，需要指定对话 ID，以便 Spring AI 处理上下文。
+                // .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
+                // 实现 Logger 的 Advisor
+                .defaultAdvisors(new SimpleLoggerAdvisor())
+                // 设置 ChatClient 中 ChatModel 的 Options 参数
+                .defaultOptions(DashScopeChatOptions.builder().withTopP(TOP_P).build()).build();
     }
 
     /**
@@ -84,7 +84,7 @@ public class HelloworldController {
     /**
      * Description: ChatClient 流式调用 <br>
      *
-     * @param input 用户输入
+     * @param input    用户输入
      * @param response HTTP响应对象
      * @return 聊天返回
      */

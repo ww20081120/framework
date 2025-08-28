@@ -78,6 +78,7 @@ public class PptGeneratorService implements IPptGeneratorService {
 
 	/**
 	 * Create a PPT file.
+	 * 
 	 * @param pptInput PPT input parameters.
 	 * @return Path of the generated PPT file.
 	 * @throws IOException IO exception.
@@ -98,12 +99,10 @@ public class PptGeneratorService implements IPptGeneratorService {
 			Path templatePath = Path.of("extensions/pptGenerator/template").resolve(pptInput.getPath());
 			if (Files.exists(templatePath) && isSupportedPptFileType(templatePath.toString())) {
 				presentation = new XMLSlideShow(new FileInputStream(templatePath.toFile()));
-			}
-			else {
+			} else {
 				presentation = new XMLSlideShow();
 			}
-		}
-		else {
+		} else {
 			presentation = new XMLSlideShow();
 		}
 
@@ -111,8 +110,7 @@ public class PptGeneratorService implements IPptGeneratorService {
 			// If templateContent is provided, use it to replace text in the presentation
 			if (StringUtils.isNotBlank(pptInput.getTemplateContent())) {
 				replaceTextWithTemplate(presentation, pptInput.getTemplateContent());
-			}
-			else {
+			} else {
 				if (StringUtils.isBlank(pptInput.getTitle())) {
 					throw new IllegalArgumentException("Title cannot be blank");
 				}
@@ -179,12 +177,10 @@ public class PptGeneratorService implements IPptGeneratorService {
 									XSLFPictureShape pictureShape = contentSlide.createPicture(picture);
 									// Set image position and size.
 									pictureShape.setAnchor(new Rectangle(50, 150, 400, 300));
-								}
-								catch (IOException e) {
+								} catch (IOException e) {
 									log.warn("Failed to load image: {}", imageFile.getAbsolutePath(), e);
 								}
-							}
-							else {
+							} else {
 								log.warn("Specified image file does not exist: {}", imageFile.getAbsolutePath());
 							}
 						}
@@ -200,8 +196,7 @@ public class PptGeneratorService implements IPptGeneratorService {
 				if (Files.isDirectory(outputPathObj)) {
 					// If outputPath is a directory, append fileName to it
 					outputPath = outputPathObj.resolve(pptInput.getFileName()).toString();
-				}
-				else {
+				} else {
 					// If outputPath is a file path, replace the file name
 					outputPath = outputPathObj.getParent().resolve(pptInput.getFileName()).toString();
 				}
@@ -215,13 +210,11 @@ public class PptGeneratorService implements IPptGeneratorService {
 
 			log.info("PPT created successfully: {}", outputPath);
 			return outputPath;
-		}
-		finally {
+		} finally {
 			// Ensure resources are properly released.
 			try {
 				presentation.close();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				log.warn("Failed to close PPT document", e);
 			}
 		}
@@ -229,14 +222,14 @@ public class PptGeneratorService implements IPptGeneratorService {
 
 	/**
 	 * Replace text in presentation with template content.
-	 * @param presentation The presentation to modify.
+	 * 
+	 * @param presentation    The presentation to modify.
 	 * @param templateContent JSON string containing template content.
 	 * @throws IOException IO exception.
 	 */
 	private void replaceTextWithTemplate(XMLSlideShow presentation, String templateContent) throws IOException {
 		try {
-			ObjectMapper objectMapper = new ObjectMapper()
-					.registerModule(new JavaTimeModule())
+			ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 					.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 			JsonNode templateNode = objectMapper.readTree(templateContent);
 
@@ -273,13 +266,11 @@ public class PptGeneratorService implements IPptGeneratorService {
 													String oldText = textRun.getRawText();
 													String updatedText = oldText.replace(oldText, newText);
 													textRun.setText(updatedText);
-												}
-												else {
+												} else {
 													// If no textRun, set text directly
 													textShape.setText(newText);
 												}
-											}
-											else {
+											} else {
 												// If no paragraph, set text directly
 												textShape.setText(newText);
 											}
@@ -292,8 +283,7 @@ public class PptGeneratorService implements IPptGeneratorService {
 					}
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Failed to replace text with template content", e);
 			throw new IOException("Failed to replace text with template content", e);
 		}
@@ -394,7 +384,8 @@ public class PptGeneratorService implements IPptGeneratorService {
 			return Files.readString(jsonFilePath);
 		}
 
-		// If the JSON file does not exist, traverse the template directory to generate it
+		// If the JSON file does not exist, traverse the template directory to generate
+		// it
 		log.info("Template list JSON file does not exist, generating: {}", jsonFilePath);
 		Map<String, Map<String, String>> templateMap = new HashMap<>();
 
@@ -409,16 +400,14 @@ public class PptGeneratorService implements IPptGeneratorService {
 					titleInfo.put("path", relativePath);
 
 					templateMap.put(fileName, titleInfo);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					log.error("Failed to process template file: {}", path, e);
 				}
 			});
 		}
 
 		// Write the template information to the JSON file
-		ObjectMapper mapper = new ObjectMapper()
-				.registerModule(new JavaTimeModule())
+		ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule())
 				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		mapper.writeValue(jsonFilePath.toFile(), templateMap);
@@ -429,6 +418,7 @@ public class PptGeneratorService implements IPptGeneratorService {
 
 	/**
 	 * Get all text content from the first slide of a PPT file
+	 * 
 	 * @param pptPath PPT file path
 	 * @return Map containing description with all text from first slide
 	 * @throws IOException IO exception
@@ -539,8 +529,7 @@ public class PptGeneratorService implements IPptGeneratorService {
 		}
 
 		result.set("slides", slidesArray);
-		ObjectMapper objectMapper = new ObjectMapper()
-				.registerModule(new JavaTimeModule())
+		ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		return objectMapper.writeValueAsString(result);
 	}

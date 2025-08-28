@@ -60,6 +60,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get step node list (more semantic method name)
+	 * 
 	 * @return Step node list
 	 */
 	public List<ExecutionNode> getSteps() {
@@ -68,6 +69,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Set step node list (more semantic method name)
+	 * 
 	 * @param steps Step node list
 	 */
 	public void setSteps(List<ExecutionNode> steps) {
@@ -91,6 +93,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Add sequential execution node
+	 * 
 	 * @param node Sequential execution node
 	 */
 	public void addSequentialNode(SequentialNode node) {
@@ -99,6 +102,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Add MapReduce execution node
+	 * 
 	 * @param node MapReduce execution node
 	 */
 	public void addMapReduceNode(MapReduceNode node) {
@@ -107,6 +111,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get node count
+	 * 
 	 * @return Total node count
 	 */
 	@JsonIgnore
@@ -116,6 +121,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get node by index
+	 * 
 	 * @param index Node index
 	 * @return Node object, return null if index is invalid
 	 */
@@ -127,8 +133,9 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 	}
 
 	/**
-	 * Get all execution steps (flatten steps from all nodes). Return in execution order:
-	 * Data Preparation → Map → Reduce
+	 * Get all execution steps (flatten steps from all nodes). Return in execution
+	 * order: Data Preparation → Map → Reduce
+	 * 
 	 * @return List of all execution steps
 	 */
 	@Override
@@ -151,6 +158,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get total step count
+	 * 
 	 * @return Total step count
 	 */
 	@Override
@@ -161,6 +169,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get sequential node list
+	 * 
 	 * @return Sequential node list
 	 */
 	@JsonIgnore
@@ -176,6 +185,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get MapReduce node list
+	 * 
 	 * @return MapReduce node list
 	 */
 	@JsonIgnore
@@ -191,8 +201,9 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get plan execution status in string format
-	 * @param onlyCompletedAndFirstInProgress When true, only output all completed steps
-	 * and first in-progress step
+	 * 
+	 * @param onlyCompletedAndFirstInProgress When true, only output all completed
+	 *                                        steps and first in-progress step
 	 * @return Plan status string
 	 */
 	@Override
@@ -224,8 +235,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 						}
 					}
 				}
-			}
-			else if (node instanceof MapReduceNode) {
+			} else if (node instanceof MapReduceNode) {
 				MapReduceNode mrNode = (MapReduceNode) node;
 				// sb.append("Type: MapReduce\n");
 				// sb.append("Data Preparation Step Count:
@@ -288,6 +298,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Check if plan is empty
+	 * 
 	 * @return Returns true if no nodes exist
 	 */
 	@Override
@@ -313,8 +324,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 			if (node instanceof SequentialNode) {
 				SequentialNode seqNode = (SequentialNode) node;
 				seqNode.removeStep(step);
-			}
-			else if (node instanceof MapReduceNode) {
+			} else if (node instanceof MapReduceNode) {
 				MapReduceNode mrNode = (MapReduceNode) node;
 				mrNode.getDataPreparedSteps().remove(step);
 				mrNode.getMapSteps().remove(step);
@@ -332,8 +342,9 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 	}
 
 	/**
-	 * Update indices of all steps, incrementing from 0 Set consecutive indices for all
-	 * steps in MapReduce plan (including data preparation, Map and Reduce phases)
+	 * Update indices of all steps, incrementing from 0 Set consecutive indices for
+	 * all steps in MapReduce plan (including data preparation, Map and Reduce
+	 * phases)
 	 */
 	@Override
 	public void updateStepIndices() {
@@ -346,8 +357,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 						step.setStepIndex(index++);
 					}
 				}
-			}
-			else if (node instanceof MapReduceNode) {
+			} else if (node instanceof MapReduceNode) {
 				MapReduceNode mrNode = (MapReduceNode) node;
 				// First set data preparation step indices
 				if (mrNode.getDataPreparedSteps() != null) {
@@ -384,10 +394,11 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Add steps to string builder based on filter conditions
-	 * @param sb String builder
-	 * @param steps Step list
-	 * @param onlyCompletedAndFirstNotStarted Whether to only show completed steps and
-	 * first not started step
+	 * 
+	 * @param sb                              String builder
+	 * @param steps                           Step list
+	 * @param onlyCompletedAndFirstNotStarted Whether to only show completed steps
+	 *                                        and first not started step
 	 */
 	private void appendFilteredSteps(StringBuilder sb, List<ExecutionStep> steps,
 			boolean onlyCompletedAndFirstNotStarted) {
@@ -411,8 +422,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 				}
 				// All other cases (not COMPLETED and not first NOT_STARTED)
 				// Skip steps that don't meet conditions
-			}
-			else {
+			} else {
 				// Show all steps
 				sb.append("    ").append(step.getStepInStr()).append("\n");
 				if (step.getResult() != null) {
@@ -424,6 +434,7 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Determine if currently executing first step of Map phase
+	 * 
 	 * @param mrNode MapReduce node
 	 * @return Returns true if currently executing first step of Map phase
 	 */
@@ -449,7 +460,8 @@ public class MapReduceExecutionPlan extends AbstractExecutionPlan {
 			}
 		}
 
-		// Only return true when data preparation phase is fully completed and first step
+		// Only return true when data preparation phase is fully completed and first
+		// step
 		// of Map phase is about to execute
 		return dataPreparedCompleted && mapFirstStepInProgress;
 	}

@@ -40,7 +40,9 @@ public class SequentialNode extends AbstractExecutionNode {
 	}
 
 	/**
-	 * Get string representation of node type for Jackson serialization/deserialization
+	 * Get string representation of node type for Jackson
+	 * serialization/deserialization
+	 * 
 	 * @return Type string
 	 */
 	@JsonProperty("type")
@@ -50,6 +52,7 @@ public class SequentialNode extends AbstractExecutionNode {
 
 	/**
 	 * Set node type for Jackson deserialization, actually performs no operation
+	 * 
 	 * @param typeString Type string
 	 */
 	@JsonProperty("type")
@@ -105,6 +108,7 @@ public class SequentialNode extends AbstractExecutionNode {
 
 	/**
 	 * Get string representation of the node
+	 * 
 	 * @return Node string
 	 */
 	@JsonIgnore

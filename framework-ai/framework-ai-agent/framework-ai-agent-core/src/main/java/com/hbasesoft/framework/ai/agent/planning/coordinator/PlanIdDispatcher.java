@@ -21,8 +21,8 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 
 /**
  * ID converter, used to handle and convert the relationship between planId and
- * planTemplateId This class helps the system to be compatible with the old and new
- * interfaces, allowing both planId and planTemplateId to be supported
+ * planTemplateId This class helps the system to be compatible with the old and
+ * new interfaces, allowing both planId and planTemplateId to be supported
  */
 @Component
 public class PlanIdDispatcher implements IPlanIdDispatcher {
@@ -37,6 +37,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 	/**
 	 * Check if the ID is in planTemplateId format
+	 * 
 	 * @param id ID to check
 	 * @return true if the ID is in planTemplateId format, false otherwise
 	 */
@@ -46,6 +47,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 	/**
 	 * Check if the ID is in planId format
+	 * 
 	 * @param id ID to check
 	 * @return true if the ID is in planId format, false otherwise
 	 */
@@ -55,6 +57,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 	/**
 	 * Convert planTemplateId to planId
+	 * 
 	 * @param planTemplateId planTemplateId to convert
 	 * @return converted planId
 	 */
@@ -73,8 +76,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 		if (isPlanTemplateId(planTemplateId)) {
 			logger.debug("Generated new unique planId [{0}] from planTemplateId [{1}]", uniqueId, planTemplateId);
-		}
-		else {
+		} else {
 			logger.warn("Unknown ID format [{0}], generated new unique planId [{1}]", planTemplateId, uniqueId);
 		}
 
@@ -83,6 +85,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 	/**
 	 * Convert planId to planTemplateId
+	 * 
 	 * @param planId planId to convert
 	 * @return converted planTemplateId
 	 */
@@ -110,6 +113,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 	/**
 	 * Generate a new planTemplateId
+	 * 
 	 * @return new planTemplateId
 	 */
 	public String generatePlanTemplateId() {
@@ -120,6 +124,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 	/**
 	 * Generate a new planId
+	 * 
 	 * @return new planId
 	 */
 	public String generatePlanId() {
@@ -131,6 +136,7 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 	/**
 	 * Generate an ID of the other type based on the existing ID If it is a planId,
 	 * convert it to planTemplateId If it is a planTemplateId, convert it to planId
+	 * 
 	 * @param id existing ID
 	 * @return converted ID
 	 */
@@ -141,11 +147,9 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 
 		if (isPlanId(id)) {
 			return toPlanTemplateId(id);
-		}
-		else if (isPlanTemplateId(id)) {
+		} else if (isPlanTemplateId(id)) {
 			return toPlanId(id);
-		}
-		else {
+		} else {
 			// Unable to determine the ID type, return the original ID
 			logger.warn("Unable to determine the ID type [{0}], return the original ID", id);
 			return id;
@@ -153,19 +157,22 @@ public class PlanIdDispatcher implements IPlanIdDispatcher {
 	}
 
 	/**
-	 * Generate a unique sub-plan ID based on parent plan ID and think-act record ID This
-	 * method ensures the sub-plan ID is completely different from parent plan ID to
-	 * prevent data corruption and mapping conflicts in the UI
-	 * @param parentPlanId the parent plan ID
+	 * Generate a unique sub-plan ID based on parent plan ID and think-act record ID
+	 * This method ensures the sub-plan ID is completely different from parent plan
+	 * ID to prevent data corruption and mapping conflicts in the UI
+	 * 
+	 * @param parentPlanId     the parent plan ID
 	 * @param thinkActRecordId the think-act record ID
-	 * @return unique sub-plan ID that is guaranteed to be different from parent plan ID
+	 * @return unique sub-plan ID that is guaranteed to be different from parent
+	 *         plan ID
 	 */
 	public String generateSubPlanId(String parentPlanId, Long thinkActRecordId) {
 		if (parentPlanId == null || thinkActRecordId == null) {
 			throw new IllegalArgumentException("Parent plan ID and think-act record ID cannot be null");
 		}
 
-		// Use a different prefix to ensure sub-plan ID is never identical to parent plan
+		// Use a different prefix to ensure sub-plan ID is never identical to parent
+		// plan
 		// ID
 		String subPlanPrefix = "subplan-";
 

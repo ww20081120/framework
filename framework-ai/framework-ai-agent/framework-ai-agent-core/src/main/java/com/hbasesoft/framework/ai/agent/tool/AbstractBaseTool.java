@@ -7,9 +7,9 @@ package com.hbasesoft.framework.ai.agent.tool;
 
 import org.springframework.ai.chat.model.ToolContext;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -45,8 +45,8 @@ public abstract class AbstractBaseTool<I> implements ToolCallBiFunctionDef<I> {
 	}
 
 	/**
-	 * Default implementation delegates to run method Subclasses can override this method
-	 * if needed
+	 * Default implementation delegates to run method Subclasses can override this
+	 * method if needed
 	 */
 	@Override
 	public ToolExecuteResult apply(I input, ToolContext toolContext) {
@@ -54,8 +54,9 @@ public abstract class AbstractBaseTool<I> implements ToolCallBiFunctionDef<I> {
 	}
 
 	/**
-	 * Abstract method that subclasses must implement to define tool-specific execution
-	 * logic
+	 * Abstract method that subclasses must implement to define tool-specific
+	 * execution logic
+	 * 
 	 * @param input Tool input parameters
 	 * @return Tool execution result
 	 */

@@ -15,15 +15,15 @@ import com.hbasesoft.framework.ai.agent.agent.BaseAgent;
  * <p>
  * 数据结构分为三个主要部分：
  * <p>
- * 1. 基本信息 (Basic Info) - id: 记录的唯一标识 - conversationId: 对话唯一标识 - agentName: 智能体名称 -
- * agentDescription: 智能体描述 - startTime: 执行开始时间 - endTime: 执行结束时间
+ * 1. 基本信息 (Basic Info) - id: 记录的唯一标识 - conversationId: 对话唯一标识 - agentName:
+ * 智能体名称 - agentDescription: 智能体描述 - startTime: 执行开始时间 - endTime: 执行结束时间
  * <p>
- * 2. 执行过程数据 (Execution Data) - maxSteps: 最大执行步骤数 - currentStep: 当前执行步骤 - status:
- * 执行状态（IDLE, RUNNING, FINISHED） - thinkActSteps: 思考-行动步骤记录列表，每个元素是ThinkActRecord对象 -
- * agentRequest: 输入提示模板
+ * 2. 执行过程数据 (Execution Data) - maxSteps: 最大执行步骤数 - currentStep: 当前执行步骤 -
+ * status: 执行状态（IDLE, RUNNING, FINISHED） - thinkActSteps:
+ * 思考-行动步骤记录列表，每个元素是ThinkActRecord对象 - agentRequest: 输入提示模板
  * <p>
- * 3. 执行结果 (Execution Result) - isCompleted: 是否完成 - isStuck: 是否卡住 - result: 执行结果 -
- * errorMessage: 错误信息（如有）
+ * 3. 执行结果 (Execution Result) - isCompleted: 是否完成 - isStuck: 是否卡住 - result: 执行结果
+ * - errorMessage: 错误信息（如有）
  *
  * @see BaseAgent
  * @see ThinkActRecord
@@ -98,6 +98,7 @@ public class AgentExecutionRecord {
 
 	/**
 	 * Add a ThinkActRecord as execution step
+	 * 
 	 * @param record ThinkActRecord instance
 	 */
 	public void addThinkActStep(ThinkActRecord record) {
@@ -110,6 +111,7 @@ public class AgentExecutionRecord {
 
 	/**
 	 * Generate unique ID if not already set
+	 * 
 	 * @return Generated or existing ID
 	 */
 	private Long generateId() {
@@ -243,6 +245,7 @@ public class AgentExecutionRecord {
 	/**
 	 * Save record to persistent storage. Empty implementation, to be overridden by
 	 * specific storage implementations. Also recursively saves all ThinkActRecords
+	 * 
 	 * @return Record ID after saving
 	 */
 	public Long save() {

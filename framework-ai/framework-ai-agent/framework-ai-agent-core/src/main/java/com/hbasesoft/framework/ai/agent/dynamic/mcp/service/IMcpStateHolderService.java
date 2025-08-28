@@ -7,9 +7,9 @@ package com.hbasesoft.framework.ai.agent.dynamic.mcp.service;
 
 import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpState;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -19,9 +19,9 @@ import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpState;
  */
 public interface IMcpStateHolderService {
 
-
 	/**
 	 * Get MCP state
+	 * 
 	 * @param key state key
 	 * @return MCP state
 	 */
@@ -29,13 +29,15 @@ public interface IMcpStateHolderService {
 
 	/**
 	 * Set MCP state
-	 * @param key state key
+	 * 
+	 * @param key   state key
 	 * @param state MCP state
 	 */
 	void setMcpState(String key, McpState state);
 
 	/**
 	 * Remove MCP state
+	 * 
 	 * @param key state key
 	 */
 	void removeMcpState(String key);

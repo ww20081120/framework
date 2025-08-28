@@ -45,8 +45,7 @@ public class ClickByElementAction extends BrowserAction {
 				log.info("Executing click action on: {}", element.getText());
 				element.getLocator().click();
 				log.info("Click action completed for element: {}", element.getText());
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.error("Error during click on element {}: {}", element.getText(), e.getMessage());
 				// It's important to rethrow or handle appropriately.
 				// The clickAndSwitchToNewTabIfOpened method expects a Runnable that might

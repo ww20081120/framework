@@ -17,9 +17,9 @@ import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpConfigVO;
 import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpServerConfig;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -38,6 +38,7 @@ public class McpConfigValidator {
 
 	/**
 	 * Validate MCP configuration entity
+	 * 
 	 * @param mcpConfigEntity MCP configuration entity
 	 * @throws IOException Thrown when validation fails
 	 */
@@ -64,8 +65,9 @@ public class McpConfigValidator {
 
 	/**
 	 * Validate server configuration
+	 * 
 	 * @param serverConfig Server configuration
-	 * @param serverName Server name
+	 * @param serverName   Server name
 	 * @throws IOException Thrown when validation fails
 	 */
 	public void validateServerConfig(McpServerConfig serverConfig, String serverName) throws IOException {
@@ -77,8 +79,7 @@ public class McpConfigValidator {
 		if (serverConfig.getCommand() != null && !serverConfig.getCommand().trim().isEmpty()) {
 			// STUDIO type: validate command
 			validateCommand(serverConfig.getCommand(), serverName);
-		}
-		else {
+		} else {
 			// SSE/STREAMING type: validate URL
 			validateUrl(serverConfig.getUrl(), serverName);
 		}
@@ -88,7 +89,8 @@ public class McpConfigValidator {
 
 	/**
 	 * Validate command configuration
-	 * @param command Command
+	 * 
+	 * @param command    Command
 	 * @param serverName Server name
 	 * @throws IOException Thrown when validation fails
 	 */
@@ -100,7 +102,8 @@ public class McpConfigValidator {
 
 	/**
 	 * Validate URL configuration
-	 * @param url URL
+	 * 
+	 * @param url        URL
 	 * @param serverName Server name
 	 * @throws IOException Thrown when validation fails
 	 */
@@ -111,15 +114,15 @@ public class McpConfigValidator {
 
 		try {
 			new URL(url.trim());
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
 			throw new IOException("Invalid URL format: " + url + " for server: " + serverName, e);
 		}
 	}
 
 	/**
 	 * Validate SSE URL format
-	 * @param url URL
+	 * 
+	 * @param url        URL
 	 * @param serverName Server name
 	 * @throws IOException Thrown when validation fails
 	 */
@@ -137,14 +140,14 @@ public class McpConfigValidator {
 				throw new IOException("URL must contain 'sse' in path for SSE connection. " + "Current URL: " + url
 						+ " for server: " + serverName);
 			}
-		}
-		catch (MalformedURLException e) {
+		} catch (MalformedURLException e) {
 			throw new IOException("Invalid URL format: " + url + " for server: " + serverName, e);
 		}
 	}
 
 	/**
 	 * Check if configuration is enabled
+	 * 
 	 * @param mcpConfigEntity MCP configuration entity
 	 * @return true if enabled, false if disabled
 	 */
@@ -154,7 +157,8 @@ public class McpConfigValidator {
 
 	/**
 	 * Validate if server name already exists
-	 * @param serverName Server name
+	 * 
+	 * @param serverName     Server name
 	 * @param existingServer Existing server
 	 * @throws IOException If server name already exists
 	 */
@@ -166,7 +170,8 @@ public class McpConfigValidator {
 
 	/**
 	 * Validate if server exists
-	 * @param serverName Server name
+	 * 
+	 * @param serverName     Server name
 	 * @param existingServer Existing server
 	 * @throws IOException If server does not exist
 	 */

@@ -20,12 +20,14 @@ import java.io.IOException;
 import com.hbasesoft.framework.ai.agent.config.IManusProperties;
 
 /**
- * PPT generator service interface, providing PPT file operation management functions
+ * PPT generator service interface, providing PPT file operation management
+ * functions
  */
 public interface IPptGeneratorService {
 
 	/**
 	 * Get the file state
+	 * 
 	 * @param planId Plan ID
 	 * @return File state
 	 */
@@ -33,14 +35,16 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Update the file state
-	 * @param planId Plan ID
-	 * @param filePath File path
+	 * 
+	 * @param planId          Plan ID
+	 * @param filePath        File path
 	 * @param operationResult Operation result
 	 */
 	void updateFileState(String planId, String filePath, String operationResult);
 
 	/**
 	 * Get the current file path
+	 * 
 	 * @param planId Plan ID
 	 * @return Current file path
 	 */
@@ -48,6 +52,7 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Get the last operation result
+	 * 
 	 * @param planId Plan ID
 	 * @return Last operation result
 	 */
@@ -55,7 +60,8 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Validate PPT file path
-	 * @param planId Plan ID
+	 * 
+	 * @param planId   Plan ID
 	 * @param filePath File path
 	 * @return Validated absolute path
 	 * @throws IOException IO exception
@@ -64,6 +70,7 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Check if the file type is supported
+	 * 
 	 * @param filePath File path
 	 * @return True if supported, false otherwise
 	 */
@@ -71,6 +78,7 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Get the file extension
+	 * 
 	 * @param filePath File path
 	 * @return File extension
 	 */
@@ -78,18 +86,21 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Clean up plan resources
+	 * 
 	 * @param planId Plan ID
 	 */
 	void cleanupForPlan(String planId);
 
 	/**
 	 * Get the Manus configuration properties
+	 * 
 	 * @return Manus configuration properties
 	 */
 	IManusProperties getManusProperties();
 
 	/**
 	 * Get template list
+	 * 
 	 * @return Template list in JSON format
 	 * @throws IOException IO exception
 	 */
@@ -97,6 +108,7 @@ public interface IPptGeneratorService {
 
 	/**
 	 * Get template content
+	 * 
 	 * @param path Template path
 	 * @return Template content in JSON format
 	 * @throws IOException IO exception

@@ -7,9 +7,9 @@ package com.hbasesoft.framework.ai.agent.tool.innerStorage;
 
 import com.hbasesoft.framework.ai.agent.config.IManusProperties;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -19,17 +19,18 @@ import com.hbasesoft.framework.ai.agent.config.IManusProperties;
  */
 public interface ISmartContentSavingService {
 
-
 	/**
 	 * Get Manus properties
+	 * 
 	 * @return Manus properties
 	 */
 	IManusProperties getManusProperties();
 
 	/**
 	 * Process content, automatically store if content is too long
-	 * @param planId Plan ID
-	 * @param content Content
+	 * 
+	 * @param planId        Plan ID
+	 * @param content       Content
 	 * @param callingMethod Calling method name
 	 * @return Processing result containing filename and summary
 	 */

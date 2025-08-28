@@ -140,8 +140,16 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 
 	private String terminationTimestamp = "";
 
-	public ReduceOperationTool(IManusProperties manusProperties, MapReduceSharedStateManager sharedStateManager,
-			UnifiedDirectoryManager unifiedDirectoryManager) {
+	/**
+	 * Constructor for ReduceOperationTool
+	 * 
+	 * @param manusProperties         the manus properties
+	 * @param sharedStateManager      the shared state manager
+	 * @param unifiedDirectoryManager the unified directory manager
+	 */
+	public ReduceOperationTool(final IManusProperties manusProperties,
+			final MapReduceSharedStateManager sharedStateManager,
+			final UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;
 	}
@@ -191,9 +199,12 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 
 	/**
 	 * Execute Reduce operation
+	 * 
+	 * @param input the reduce operation input parameters
+	 * @return the tool execution result
 	 */
 	@Override
-	public ToolExecuteResult run(ReduceOperationInput input) {
+	public ToolExecuteResult run(final ReduceOperationInput input) {
 		LoggerUtil.info("ReduceOperationTool input: hasValue={0}", input.isHasValue());
 		try {
 			String data = input.getData();
@@ -232,12 +243,17 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 	 * Append content to file in root plan directory Similar to
 	 * InnerStorageTool.appendToFile() but operates on root plan directory This
 	 * method is thread-safe and will set termination status after execution
+	 * 
+	 * @param fileName the name of the file to append to
+	 * @param content  the content to append
+	 * @return the tool execution result
 	 */
-	private ToolExecuteResult appendToFile(String fileName, String content) {
+	private ToolExecuteResult appendToFile(final String fileName, final String content) {
 		operationLock.lock();
 		try {
-			if (content == null) {
-				content = "";
+			String contentToWrite = content;
+			if (contentToWrite == null) {
+				contentToWrite = "";
 			}
 
 			// Get file from plan directory with hierarchical structure
@@ -250,25 +266,31 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 			String resultMessage;
 			// If file doesn't exist, create new file
 			if (!Files.exists(filePath)) {
-				Files.writeString(filePath, content);
+				Files.writeString(filePath, contentToWrite);
 				LoggerUtil.info("File created and content added: {0}", fileName);
 				resultMessage = String.format("File created successfully and content added: %s", fileName);
 			} else {
 				// Append content (add newline)
-				Files.writeString(filePath, "\n" + content, StandardOpenOption.APPEND);
+				Files.writeString(filePath, "\n" + contentToWrite, StandardOpenOption.APPEND);
 				LoggerUtil.info("Content appended to file: {0}", fileName);
 				resultMessage = String.format("Content appended successfully: %s", fileName);
 			}
+
+			// Number of lines to display at the end of the file
+			final int linesToDisplay = 3;
+
+			// Width of the separator line
+			final int separatorWidth = 30;
 
 			// Read the file and get last 3 lines with line numbers
 			List<String> lines = Files.readAllLines(filePath);
 			StringBuilder result = new StringBuilder();
 			result.append(resultMessage).append("\n\n");
-			result.append("Last 3 lines of file:\n");
-			result.append("-".repeat(30)).append("\n");
+			result.append("Last ").append(linesToDisplay).append(" lines of file:\n");
+			result.append("-".repeat(separatorWidth)).append("\n");
 
 			int totalLines = lines.size();
-			int startLine = Math.max(0, totalLines - 3);
+			int startLine = Math.max(0, totalLines - linesToDisplay);
 
 			for (int i = startLine; i < totalLines; i++) {
 				result.append(String.format("%4d: %s\n", i + 1, lines.get(i)));
@@ -299,8 +321,13 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 		}
 	}
 
+	/**
+	 * Clean up resources for the given plan ID
+	 * 
+	 * @param planId the plan ID to clean up
+	 */
 	@Override
-	public void cleanup(String planId) {
+	public void cleanup(final String planId) {
 		// Clean up shared state
 		if (sharedStateManager != null && planId != null) {
 			sharedStateManager.cleanupPlanState(planId);
@@ -308,8 +335,15 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 		LoggerUtil.info("ReduceOperationTool cleanup completed for planId: {0}", planId);
 	}
 
+	/**
+	 * Apply the tool with the given input and tool context
+	 * 
+	 * @param input       the reduce operation input parameters
+	 * @param toolContext the tool context
+	 * @return the tool execution result
+	 */
 	@Override
-	public ToolExecuteResult apply(ReduceOperationInput input, ToolContext toolContext) {
+	public ToolExecuteResult apply(final ReduceOperationInput input, final ToolContext toolContext) {
 		return run(input);
 	}
 
@@ -336,8 +370,11 @@ public class ReduceOperationTool extends AbstractBaseTool<ReduceOperationTool.Re
 
 	/**
 	 * Ensure directory exists
+	 * 
+	 * @param directory the directory to ensure exists
+	 * @throws IOException if an I/O error occurs
 	 */
-	private void ensureDirectoryExists(Path directory) throws IOException {
+	private void ensureDirectoryExists(final Path directory) throws IOException {
 		unifiedDirectoryManager.ensureDirectoryExists(directory);
 	}
 

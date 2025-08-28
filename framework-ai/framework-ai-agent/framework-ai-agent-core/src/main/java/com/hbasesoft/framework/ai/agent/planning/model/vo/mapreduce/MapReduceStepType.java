@@ -45,6 +45,7 @@ public enum MapReduceStepType {
 
 	/**
 	 * Get type name used for JSON serialization
+	 * 
 	 * @return JSON type name
 	 */
 	public String getJsonTypeName() {

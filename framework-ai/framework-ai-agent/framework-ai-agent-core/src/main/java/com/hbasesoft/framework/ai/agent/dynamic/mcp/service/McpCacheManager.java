@@ -185,7 +185,7 @@ public class McpCacheManager {
 		this.mcpProperties = mcpProperties;
 		this.manusProperties = manusProperties;
 	}
-	
+
 	public void init() {
 		updateConnectionExecutor();
 		initializeCache();

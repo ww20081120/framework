@@ -10,9 +10,9 @@ import java.util.Map;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.UserInputWaitState;
 import com.hbasesoft.framework.ai.agent.tool.fromInput.FormInputTool;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -22,16 +22,17 @@ import com.hbasesoft.framework.ai.agent.tool.fromInput.FormInputTool;
  */
 public interface IUserInputService {
 
-
 	/**
 	 * Store form input tool
+	 * 
 	 * @param planId Plan ID
-	 * @param tool Form input tool
+	 * @param tool   Form input tool
 	 */
 	void storeFormInputTool(String planId, FormInputTool tool);
 
 	/**
 	 * Get form input tool
+	 * 
 	 * @param planId Plan ID
 	 * @return Form input tool
 	 */
@@ -39,14 +40,16 @@ public interface IUserInputService {
 
 	/**
 	 * Remove form input tool
+	 * 
 	 * @param planId Plan ID
 	 */
 	void removeFormInputTool(String planId);
 
 	/**
 	 * Create user input waiting state
-	 * @param planId Plan ID
-	 * @param message Message
+	 * 
+	 * @param planId        Plan ID
+	 * @param message       Message
 	 * @param formInputTool Form input tool
 	 * @return User input waiting state
 	 */
@@ -54,6 +57,7 @@ public interface IUserInputService {
 
 	/**
 	 * Get waiting state
+	 * 
 	 * @param planId Plan ID
 	 * @return User input waiting state
 	 */
@@ -61,6 +65,7 @@ public interface IUserInputService {
 
 	/**
 	 * Submit user input
+	 * 
 	 * @param planId Plan ID
 	 * @param inputs Input data
 	 * @return Whether submission was successful

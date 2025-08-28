@@ -28,24 +28,24 @@ import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
 @ConfigurationProperties(prefix = "ai.models")
 public class ModelProperties {
 
-    /** 模型配置列表 */
-    private List<ModelConfig> configs = new ArrayList<>();
+	/** 模型配置列表 */
+	private List<ModelConfig> configs = new ArrayList<>();
 
-    /**
-     * 获取模型配置列表
-     * 
-     * @return 模型配置列表
-     */
-    public List<ModelConfig> getConfigs() {
-        return configs;
-    }
+	/**
+	 * 获取模型配置列表
+	 * 
+	 * @return 模型配置列表
+	 */
+	public List<ModelConfig> getConfigs() {
+		return configs;
+	}
 
-    /**
-     * 设置模型配置列表
-     * 
-     * @param configs 模型配置列表
-     */
-    public void setConfigs(List<ModelConfig> configs) {
-        this.configs = configs;
-    }
+	/**
+	 * 设置模型配置列表
+	 * 
+	 * @param configs 模型配置列表
+	 */
+	public void setConfigs(List<ModelConfig> configs) {
+		this.configs = configs;
+	}
 }

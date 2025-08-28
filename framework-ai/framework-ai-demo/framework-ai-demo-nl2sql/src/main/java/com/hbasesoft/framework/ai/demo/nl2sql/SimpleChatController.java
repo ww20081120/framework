@@ -27,15 +27,16 @@ import com.alibaba.cloud.ai.request.SchemaInitRequest;
  */
 @RestController
 public class SimpleChatController {
-    
-    @Autowired
-    private DbConfig dbConfig;
 
-    @PostMapping("/simpleChat")
-    public String simpleNl2Sql(@RequestBody String input) throws Exception {
-        SchemaInitRequest schemaInitRequest = new SchemaInitRequest();
-        schemaInitRequest.setTables(Arrays.asList("categories","order_items","orders","products","users","product_categories"));
+	@Autowired
+	private DbConfig dbConfig;
 
-        return null;
-    }
+	@PostMapping("/simpleChat")
+	public String simpleNl2Sql(@RequestBody String input) throws Exception {
+		SchemaInitRequest schemaInitRequest = new SchemaInitRequest();
+		schemaInitRequest.setTables(
+				Arrays.asList("categories", "order_items", "orders", "products", "users", "product_categories"));
+
+		return null;
+	}
 }

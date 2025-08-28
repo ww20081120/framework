@@ -1,7 +1,7 @@
-/**************************************************************************************** 
- Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
- transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
- or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+/****************************************************************************************
+ * Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or    *
+ * transmission in whole or in part, in any form or by any means, electronic, mechanical*
+ * or otherwise, is prohibited without the prior written consent of the copyright owner.*
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.tool.mapreduce;
 
@@ -80,28 +80,53 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	 */
 	public static class DataSplitInput {
 
+		/** Input file to split */
 		@com.fasterxml.jackson.annotation.JsonProperty("input_file_to_split")
 		private String inputFileToSplit;
 
+		/** Expected output fields */
 		@com.fasterxml.jackson.annotation.JsonProperty("expected_output_fields")
 		private java.util.List<String> expectedOutputFields;
 
+		/**
+		 * Default constructor
+		 */
 		public DataSplitInput() {
 		}
 
+		/**
+		 * Get input file to split
+		 * 
+		 * @return input file to split
+		 */
 		public String getInputFileToSplit() {
 			return inputFileToSplit;
 		}
 
-		public void setInputFileToSplit(String inputFileToSplit) {
+		/**
+		 * Set input file to split
+		 * 
+		 * @param inputFileToSplit input file to split
+		 */
+		public void setInputFileToSplit(final String inputFileToSplit) {
 			this.inputFileToSplit = inputFileToSplit;
 		}
 
+		/**
+		 * Get expected output fields
+		 * 
+		 * @return expected output fields
+		 */
 		public java.util.List<String> getExpectedOutputFields() {
 			return expectedOutputFields;
 		}
 
-		public void setExpectedOutputFields(java.util.List<String> expectedOutputFields) {
+		/**
+		 * Set expected output fields
+		 * 
+		 * @param expectedOutputFields expected output fields
+		 */
+		public void setExpectedOutputFields(final java.util.List<String> expectedOutputFields) {
 			this.expectedOutputFields = expectedOutputFields;
 		}
 
@@ -155,9 +180,16 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	private final ObjectMapper objectMapper;
 
-	public DataSplitTool(IManusProperties manusProperties,
-			MapReduceSharedStateManager sharedStateManager, UnifiedDirectoryManager unifiedDirectoryManager,
-			ObjectMapper objectMapper) {
+	/**
+	 * Constructor for DataSplitTool
+	 * 
+	 * @param manusProperties         the manus properties
+	 * @param sharedStateManager      the shared state manager
+	 * @param unifiedDirectoryManager the unified directory manager
+	 * @param objectMapper            the object mapper
+	 */
+	public DataSplitTool(final IManusProperties manusProperties, final MapReduceSharedStateManager sharedStateManager,
+			final UnifiedDirectoryManager unifiedDirectoryManager, final ObjectMapper objectMapper) {
 		this.manusProperties = manusProperties;
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.sharedStateManager = sharedStateManager;
@@ -166,8 +198,10 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	/**
 	 * Set shared state manager
+	 * 
+	 * @param sharedStateManager the shared state manager to set
 	 */
-	public void setSharedStateManager(MapReduceSharedStateManager sharedStateManager) {
+	public void setSharedStateManager(final MapReduceSharedStateManager sharedStateManager) {
 		this.sharedStateManager = sharedStateManager;
 	}
 
@@ -204,9 +238,12 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	/**
 	 * Execute data split operation
+	 * 
+	 * @param input the data split input
+	 * @return the tool execution result
 	 */
 	@Override
-	public ToolExecuteResult run(DataSplitInput input) {
+	public ToolExecuteResult run(final DataSplitInput input) {
 		LoggerUtil.info("DataSplitTool input: inputFileToSplit={0}, expectedOutputFields={1}",
 				input.getInputFileToSplit(), input.getExpectedOutputFields());
 		try {
@@ -226,9 +263,13 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	/**
 	 * Process complete workflow for file or directory: validate existence -> split
 	 * data
+	 * 
+	 * @param inputFileToSplit     the input file or directory to split
+	 * @param expectedOutputFields the expected output fields
+	 * @return the tool execution result
 	 */
-	private ToolExecuteResult processFileOrDirectory(String inputFileToSplit,
-			java.util.List<String> expectedOutputFields) {
+	private ToolExecuteResult processFileOrDirectory(final String inputFileToSplit,
+			final java.util.List<String> expectedOutputFields) {
 		try {
 			// Ensure planId exists, use default if empty
 			if (currentPlanId == null || currentPlanId.trim().isEmpty()) {
@@ -290,8 +331,8 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 			// Determine output directory - store to
 			// inner_storage/{rootPlanId}/{currentPlanId}/tasks directory
-			// This creates a hierarchical structure where sub-plan data is stored under
-			// the root plan
+			// This creates a hierarchical structure where sub-plan data is stored
+			// under the root plan
 			Path rootPlanDir = getPlanDirectory(rootPlanId);
 			Path currentPlanDir = rootPlanDir.resolve(currentPlanId);
 			Path tasksPath = currentPlanDir.resolve(TASKS_DIRECTORY_NAME);
@@ -357,19 +398,36 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	 */
 	private static class SplitResult {
 
-		List<String> taskDirs;
+		private List<String> taskDirs;
 
-		SplitResult(List<String> taskDirs) {
+		SplitResult(final List<String> taskDirs) {
 			this.taskDirs = taskDirs;
+		}
+
+		/**
+		 * Get task directories
+		 * 
+		 * @return task directories
+		 */
+		public List<String> getTaskDirs() {
+			return taskDirs;
 		}
 
 	}
 
 	/**
 	 * Split single file into task directory structure
+	 * 
+	 * @param filePath  the file path to split
+	 * @param headers   the headers
+	 * @param splitSize the split size
+	 * @param tasksPath the tasks path
+	 * @param delimiter the delimiter
+	 * @return the split result
+	 * @throws IOException if an I/O error occurs
 	 */
-	private SplitResult splitSingleFileToTasks(Path filePath, String headers, int splitSize, Path tasksPath,
-			String delimiter) throws IOException {
+	private SplitResult splitSingleFileToTasks(final Path filePath, final String headers, final int splitSize,
+			final Path tasksPath, final String delimiter) throws IOException {
 		List<String> taskDirs = new ArrayList<>();
 		String fileName = filePath.getFileName().toString();
 
@@ -397,9 +455,8 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 					int startIndex = 0;
 					int chunkCount = 0;
 
-					LoggerUtil.warn(
-							"Line exceeds split size limit ({0} chars > {1} chars), splitting into chunks: file={}",
-							lineWithNewline.length(), splitSize, fileName);
+					LoggerUtil.warn("Line exceeds split size limit ({0} chars > {1} chars), "
+							+ "splitting into chunks: file={}", lineWithNewline.length(), splitSize, fileName);
 
 					while (startIndex < lineContent.length()) {
 						int endIndex = Math.min(startIndex + splitSize, lineContent.length());
@@ -432,8 +489,15 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	/**
 	 * Create task directory structure
+	 * 
+	 * @param tasksPath        the tasks path
+	 * @param content          the content
+	 * @param originalFileName the original file name
+	 * @return the task directory path
+	 * @throws IOException if an I/O error occurs
 	 */
-	private String createTaskDirectory(Path tasksPath, String content, String originalFileName) throws IOException {
+	private String createTaskDirectory(final Path tasksPath, final String content, final String originalFileName)
+			throws IOException {
 		// Generate task ID
 		String taskId = null;
 		if (sharedStateManager != null) {
@@ -476,8 +540,11 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	/**
 	 * Check if file is a text file
+	 * 
+	 * @param fileName the file name
+	 * @return true if the file is a text file, false otherwise
 	 */
-	private boolean isTextFile(String fileName) {
+	private boolean isTextFile(final String fileName) {
 		String lowercaseFileName = fileName.toLowerCase();
 		return lowercaseFileName.endsWith(".csv") || lowercaseFileName.endsWith(".tsv")
 				|| lowercaseFileName.endsWith(".txt") || lowercaseFileName.endsWith(".dat")
@@ -488,8 +555,11 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	/**
 	 * Check if file is a table file
+	 * 
+	 * @param fileName the file name
+	 * @return true if the file is a table file, false otherwise
 	 */
-	private boolean isTableFile(String fileName) {
+	private boolean isTableFile(final String fileName) {
 		String lowercaseFileName = fileName.toLowerCase();
 		return lowercaseFileName.endsWith(".csv") || lowercaseFileName.endsWith(".tsv")
 				|| lowercaseFileName.endsWith(".xls") || lowercaseFileName.endsWith(".xlsx");
@@ -507,7 +577,7 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	}
 
 	@Override
-	public void cleanup(String planId) {
+	public void cleanup(final String planId) {
 		// Clean up shared state
 		if (sharedStateManager != null && planId != null) {
 			sharedStateManager.cleanupPlanState(planId);
@@ -516,12 +586,14 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	}
 
 	@Override
-	public ToolExecuteResult apply(DataSplitInput input, ToolContext toolContext) {
+	public ToolExecuteResult apply(final DataSplitInput input, final ToolContext toolContext) {
 		return run(input);
 	}
 
 	/**
 	 * Get inner storage root directory path
+	 * 
+	 * @return the inner storage root directory path
 	 */
 	private Path getInnerStorageRoot() {
 		return unifiedDirectoryManager.getInnerStorageRoot();
@@ -529,17 +601,26 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 
 	/**
 	 * Get plan directory path
+	 * 
+	 * @param planId the plan ID
+	 * @return the plan directory path
 	 */
-	private Path getPlanDirectory(String planId) {
+	private Path getPlanDirectory(final String planId) {
 		return getInnerStorageRoot().resolve(planId);
 	}
 
 	/**
 	 * Ensure directory exists
+	 * 
+	 * @param directory the directory to ensure exists
+	 * @throws IOException if an I/O error occurs
 	 */
-	private void ensureDirectoryExists(Path directory) throws IOException {
+	private void ensureDirectoryExists(final Path directory) throws IOException {
 		unifiedDirectoryManager.ensureDirectoryExists(directory);
 	}
+
+	/** Default context size for infinite context tasks */
+	private static final int DEFAULT_CONTEXT_SIZE = 20000;
 
 	/**
 	 * Get infinite context task context size
@@ -549,9 +630,9 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	private Integer getInfiniteContextTaskContextSize() {
 		if (manusProperties != null) {
 			Integer contextSize = manusProperties.getInfiniteContextTaskContextSize();
-			return contextSize != null ? contextSize : 20000; // Default 20000 characters
+			return contextSize != null ? contextSize : DEFAULT_CONTEXT_SIZE; // Default 20000 characters
 		}
-		return 20000; // Default 20000 characters
+		return DEFAULT_CONTEXT_SIZE; // Default 20000 characters
 	}
 
 	/**
@@ -560,15 +641,110 @@ public class DataSplitTool extends AbstractBaseTool<DataSplitTool.DataSplitInput
 	@SuppressWarnings("unused")
 	private static class TaskStatus {
 
-		public String taskId;
+		/** Task ID */
+		private String taskId;
 
-		public String inputFile;
+		/** Input file path */
+		private String inputFile;
 
-		public String outputFilePath;
+		/** Output file path */
+		private String outputFilePath;
 
-		public String status;
+		/** Task status */
+		private String status;
 
-		public String timestamp;
+		/** Timestamp */
+		private String timestamp;
+
+		/**
+		 * Get task ID
+		 * 
+		 * @return task ID
+		 */
+		public String getTaskId() {
+			return taskId;
+		}
+
+		/**
+		 * Set task ID
+		 * 
+		 * @param taskId task ID
+		 */
+		public void setTaskId(final String taskId) {
+			this.taskId = taskId;
+		}
+
+		/**
+		 * Get input file path
+		 * 
+		 * @return input file path
+		 */
+		public String getInputFile() {
+			return inputFile;
+		}
+
+		/**
+		 * Set input file path
+		 * 
+		 * @param inputFile input file path
+		 */
+		public void setInputFile(final String inputFile) {
+			this.inputFile = inputFile;
+		}
+
+		/**
+		 * Get output file path
+		 * 
+		 * @return output file path
+		 */
+		public String getOutputFilePath() {
+			return outputFilePath;
+		}
+
+		/**
+		 * Set output file path
+		 * 
+		 * @param outputFilePath output file path
+		 */
+		public void setOutputFilePath(final String outputFilePath) {
+			this.outputFilePath = outputFilePath;
+		}
+
+		/**
+		 * Get task status
+		 * 
+		 * @return task status
+		 */
+		public String getStatus() {
+			return status;
+		}
+
+		/**
+		 * Set task status
+		 * 
+		 * @param status task status
+		 */
+		public void setStatus(final String status) {
+			this.status = status;
+		}
+
+		/**
+		 * Get timestamp
+		 * 
+		 * @return timestamp
+		 */
+		public String getTimestamp() {
+			return timestamp;
+		}
+
+		/**
+		 * Set timestamp
+		 * 
+		 * @param timestamp timestamp
+		 */
+		public void setTimestamp(final String timestamp) {
+			this.timestamp = timestamp;
+		}
 
 	}
 

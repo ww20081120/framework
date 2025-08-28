@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -35,14 +35,13 @@ public class JmanusEventPublisher {
 	public void publish(JmanusEvent event) {
 		Class<? extends JmanusEvent> eventClass = event.getClass();
 		for (Map.Entry<Class<? extends JmanusEvent>, List<JmanusListener<? super JmanusEvent>>> entry : listeners
-			.entrySet()) {
+				.entrySet()) {
 			// Parent classes can also be notified here
 			if (entry.getKey().isAssignableFrom(eventClass)) {
 				for (JmanusListener<? super JmanusEvent> listener : entry.getValue()) {
 					try {
 						listener.onEvent(event);
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						LoggerUtil.error(e, "Error occurred while processing event: {0}", e.getMessage());
 					}
 				}
@@ -56,8 +55,7 @@ public class JmanusEventPublisher {
 			List<JmanusListener<? super JmanusEvent>> list = new ArrayList<>();
 			list.add(listener);
 			listeners.put(eventClass, list);
-		}
-		else {
+		} else {
 			jmanusListeners.add(listener);
 		}
 	}

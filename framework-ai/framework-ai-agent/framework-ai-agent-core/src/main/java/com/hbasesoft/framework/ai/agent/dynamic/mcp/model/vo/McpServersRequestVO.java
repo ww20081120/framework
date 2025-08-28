@@ -29,8 +29,7 @@ public class McpServersRequestVO {
 	 * Default constructor for Jackson deserialization
 	 */
 	public McpServersRequestVO() {
-		this.objectMapper = new ObjectMapper()
-				.registerModule(new JavaTimeModule())
+		this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
 				.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 	}
 

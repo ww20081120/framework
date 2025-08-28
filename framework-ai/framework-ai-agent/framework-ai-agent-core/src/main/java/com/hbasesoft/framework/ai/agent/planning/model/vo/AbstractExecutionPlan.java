@@ -56,8 +56,9 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Constructor with parameters
+	 * 
 	 * @param planId Plan ID
-	 * @param title Plan title
+	 * @param title  Plan title
 	 */
 	public AbstractExecutionPlan(String currentPlanId, String rootPlanId, String title) {
 		this();
@@ -130,6 +131,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Get flat list of all execution steps
+	 * 
 	 * @return All execution steps
 	 */
 	@Override
@@ -137,6 +139,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Get total step count
+	 * 
 	 * @return Total step count
 	 */
 	@Override
@@ -144,6 +147,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Add execution step
+	 * 
 	 * @param step Execution step
 	 */
 	@Override
@@ -151,6 +155,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Remove execution step
+	 * 
 	 * @param step Execution step
 	 */
 	@Override
@@ -158,6 +163,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Check if plan is empty
+	 * 
 	 * @return Return true if plan is empty
 	 */
 	@Override
@@ -165,8 +171,9 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Get string format of plan execution status
-	 * @param onlyCompletedAndFirstInProgress When true, only output all completed steps
-	 * and first in-progress step
+	 * 
+	 * @param onlyCompletedAndFirstInProgress When true, only output all completed
+	 *                                        steps and first in-progress step
 	 * @return Plan status string
 	 */
 	@Override
@@ -183,6 +190,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Get user request
+	 * 
 	 * @return User request string
 	 */
 	public String getUserRequest() {
@@ -191,6 +199,7 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 
 	/**
 	 * Set user request
+	 * 
 	 * @param userRequest User request string
 	 */
 	public void setUserRequest(String userRequest) {
@@ -213,8 +222,8 @@ public abstract class AbstractExecutionPlan implements PlanInterface {
 	}
 
 	/**
-	 * Abstract method to clear steps. Subclasses need to implement specific step clearing
-	 * logic
+	 * Abstract method to clear steps. Subclasses need to implement specific step
+	 * clearing logic
 	 */
 	protected abstract void clearSteps();
 

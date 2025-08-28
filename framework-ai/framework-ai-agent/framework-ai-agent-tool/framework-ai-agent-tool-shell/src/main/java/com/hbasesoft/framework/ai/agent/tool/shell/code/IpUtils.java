@@ -45,10 +45,8 @@ public class IpUtils {
 						}
 
 						ni = (NetworkInterface) nis.nextElement();
-					}
-					while (ni.isLoopback());
-				}
-				while (ni.isVirtual());
+					} while (ni.isLoopback());
+				} while (ni.isVirtual());
 
 				Enumeration<InetAddress> addresses = ni.getInetAddresses();
 
@@ -59,8 +57,7 @@ public class IpUtils {
 					}
 				}
 			}
-		}
-		catch (Throwable var4) {
+		} catch (Throwable var4) {
 		}
 	}
 

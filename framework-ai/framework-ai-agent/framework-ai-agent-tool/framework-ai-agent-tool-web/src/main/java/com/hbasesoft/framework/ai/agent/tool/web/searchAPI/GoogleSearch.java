@@ -68,7 +68,7 @@ public class GoogleSearch extends AbstractBaseTool<GoogleSearch.GoogleSearchInpu
 			    "required": ["query"]
 			}
 			""";
-	
+
 	private static final String name = "google_search";
 
 	private static final String description = """

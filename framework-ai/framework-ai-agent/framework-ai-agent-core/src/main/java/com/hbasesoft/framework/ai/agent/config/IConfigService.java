@@ -20,8 +20,9 @@ import com.hbasesoft.framework.ai.agent.config.model.vo.ConfigVo;
  * @see com.hbasesoft.framework.ai.agent.config <br>
  */
 public interface IConfigService {
-	
-	default void init() {}
+
+	default void init() {
+	}
 
 	/**
 	 * Get configuration value by path

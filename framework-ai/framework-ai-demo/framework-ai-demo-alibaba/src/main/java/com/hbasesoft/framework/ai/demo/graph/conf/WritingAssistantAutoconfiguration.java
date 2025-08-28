@@ -46,14 +46,17 @@ public class WritingAssistantAutoconfiguration {
     @Bean
     public StateGraph writingAssistantGraph(final ChatModel chatModel) throws GraphStateException {
         // 使用 ChatModel 构建 ChatClient，并添加日志插件以便调试查看对话内容
-        ChatClient chatClient = ChatClient.builder(chatModel).defaultAdvisors(new SimpleLoggerAdvisor()).build();
+        ChatClient chatClient = ChatClient.builder(chatModel)
+            .defaultAdvisors(new SimpleLoggerAdvisor())
+            .build();
 
         // 定义全局状态工厂，创建 OverAllState 实例，并注册状态字段及更新策略
         OverAllStateFactory stateFactory = () -> {
             OverAllState state = new OverAllState();
             // 注册状态字段及其更新策略为 ReplaceStrategy（覆盖更新）
 
-            // 存储原始输入文本内容，通常是用户提供的待处理文本存储原始输入文本内容，通常是用户提供的待处理文本
+            // 存储原始输入文本内容，通常是用户提供的待处理文本
+            // 存储原始输入文本内容，通常是用户提供的待处理文本
             state.registerKeyAndStrategy("original_text", new ReplaceStrategy());
 
             // 保存由 summarizer 节点生成的摘要内容。
@@ -71,35 +74,45 @@ public class WritingAssistantAutoconfiguration {
         };
 
         // 创建状态图对象，指定名称和状态工厂
-        StateGraph graph = new StateGraph("Writing Assistant with Feedback Loop", stateFactory.create());
+        StateGraph graph = new StateGraph(
+            "Writing Assistant with Feedback Loop", 
+            stateFactory.create()
+        );
 
         // 添加各个功能节点
         graph
             // 摘要生成节点：使用 SummarizerNode 对原始文本进行摘要
             .addNode("summarizer", AsyncNodeAction.node_async(new SummarizerNode(chatClient)))
             // 反馈分类节点：判断摘要是否满意，决定后续流程
-            .addNode("feedback_classifier",
-                AsyncNodeAction.node_async(new SummaryFeedbackClassifierNode(chatClient, "summary")))
+            .addNode(
+                "feedback_classifier",
+                AsyncNodeAction.node_async(new SummaryFeedbackClassifierNode(chatClient, "summary"))
+            )
             // 改写节点：将摘要内容用更生动的语言重新表达
             .addNode("reworder", AsyncNodeAction.node_async(new RewordingNode(chatClient)))
             // 标题生成节点：基于改写后的内容生成吸引人的标题
             .addNode("title_generator", AsyncNodeAction.node_async(new TitleGeneratorNode(chatClient)))
 
-            // 设置图的起始点为“summarizer”节点
+            // 设置图的起始点为"summarizer"节点
             .addEdge(StateGraph.START, "summarizer")
-            // 从“summarizer”到“feedback_classifier”的边，顺序执行
+            // 从"summarizer"到"feedback_classifier"的边，顺序执行
             .addEdge("summarizer", "feedback_classifier")
-            // 条件分支边：根据“feedback_classifier”的结果决定下一步跳转
-            .addConditionalEdges("feedback_classifier", AsyncEdgeAction.edge_async(new FeedbackDispatcher()),
-                Map.of("positive", "reworder", "negative", "summarizer"))
-            // “reworder”完成后跳转到“title_generator”
+            // 条件分支边：根据"feedback_classifier"的结果决定下一步跳转
+            .addConditionalEdges(
+                "feedback_classifier", 
+                AsyncEdgeAction.edge_async(new FeedbackDispatcher()),
+                Map.of("positive", "reworder", "negative", "summarizer")
+            )
+            // "reworder"完成后跳转到"title_generator"
             .addEdge("reworder", "title_generator")
-            // “title_generator”是最终节点，流程结束
+            // "title_generator"是最终节点，流程结束
             .addEdge("title_generator", END);
 
         // 获取图的 PlantUML 表示形式，并打印出来，便于可视化理解流程
-        GraphRepresentation representation = graph.getGraph(GraphRepresentation.Type.MERMAID,
-            "writing assistant flow");
+        GraphRepresentation representation = graph.getGraph(
+            GraphRepresentation.Type.MERMAID, 
+            "writing assistant flow"
+        );
 
         System.out.println("\n=== Writing Assistant UML Flow ===");
         System.out.println(representation.content());

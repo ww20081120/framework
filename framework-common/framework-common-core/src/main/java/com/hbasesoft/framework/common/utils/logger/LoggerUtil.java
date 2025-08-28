@@ -64,7 +64,7 @@ public final class LoggerUtil {
      * @param params 日志信息
      */
     public static void error(final String message, final Object... params) {
-    	getLogger().error(CommonUtil.messageFormat(message, params));
+        getLogger().error(CommonUtil.messageFormat(message, params));
     }
 
     /**

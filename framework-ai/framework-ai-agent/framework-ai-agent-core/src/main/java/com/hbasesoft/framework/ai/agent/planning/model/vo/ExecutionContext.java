@@ -19,14 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Execution context class for passing and maintaining state information during the
- * creation, execution, and summarization of plans. This class serves as the core data
- * carrier in the plan execution process, passing between various stages of
+ * Execution context class for passing and maintaining state information during
+ * the creation, execution, and summarization of plans. This class serves as the
+ * core data carrier in the plan execution process, passing between various
+ * stages of
  * {@link com.alibaba.cloud.ai.example.manus.planning.coordinator.PlanningCoordinator}.
  *
- * Main responsibilities: - Store plan ID and plan entity information - Save user original
- * request - Maintain plan execution status - Store execution result summary - Control
- * whether execution summary generation is needed
+ * Main responsibilities: - Store plan ID and plan entity information - Save
+ * user original request - Maintain plan execution status - Store execution
+ * result summary - Control whether execution summary generation is needed
  *
  * @see com.alibaba.cloud.ai.example.manus.planning.model.vo.ExecutionPlan
  * @see com.alibaba.cloud.ai.example.manus.planning.coordinator.PlanningCoordinator
@@ -43,7 +44,10 @@ public class ExecutionContext {
 
 	private String rootPlanId;
 
-	/** Execution plan entity containing detailed plan information and execution steps */
+	/**
+	 * Execution plan entity containing detailed plan information and execution
+	 * steps
+	 */
 	private PlanInterface plan;
 
 	/** User's original request content */
@@ -55,8 +59,8 @@ public class ExecutionContext {
 	private String resultSummary;
 
 	/**
-	 * Whether to call large model to generate summary for execution results, true calls
-	 * large model, false does not call and outputs results directly
+	 * Whether to call large model to generate summary for execution results, true
+	 * calls large model, false does not call and outputs results directly
 	 */
 	private boolean needSummary;
 
@@ -64,8 +68,8 @@ public class ExecutionContext {
 	private boolean success = false;
 
 	/**
-	 * Whether to use memory, scenario is if only building plan, then memory should not be
-	 * used, otherwise memory cannot be deleted
+	 * Whether to use memory, scenario is if only building plan, then memory should
+	 * not be used, otherwise memory cannot be deleted
 	 */
 	private boolean useMemory = false;
 
@@ -76,6 +80,7 @@ public class ExecutionContext {
 
 	/**
 	 * Get plan ID
+	 * 
 	 * @return Unique identifier of the plan
 	 */
 	public String getCurrentPlanId() {
@@ -84,6 +89,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set plan ID
+	 * 
 	 * @param currentPlanId Unique identifier of the plan
 	 */
 	public void setCurrentPlanId(String currentPlanId) {
@@ -100,6 +106,7 @@ public class ExecutionContext {
 
 	/**
 	 * Get think-act record ID
+	 * 
 	 * @return Think-act record ID for sub-plan executions
 	 */
 	public Long getThinkActRecordId() {
@@ -108,6 +115,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set think-act record ID
+	 * 
 	 * @param thinkActRecordId Think-act record ID for sub-plan executions
 	 */
 	public void setThinkActRecordId(Long thinkActRecordId) {
@@ -116,6 +124,7 @@ public class ExecutionContext {
 
 	/**
 	 * Get execution plan entity
+	 * 
 	 * @return Execution plan entity object
 	 */
 	public PlanInterface getPlan() {
@@ -124,6 +133,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set execution plan entity
+	 * 
 	 * @param plan Execution plan entity object
 	 */
 	public void setPlan(PlanInterface plan) {
@@ -132,6 +142,7 @@ public class ExecutionContext {
 
 	/**
 	 * Check if execution result summary generation is needed
+	 * 
 	 * @return Returns true if summary generation is needed, otherwise false
 	 */
 	public boolean isNeedSummary() {
@@ -140,6 +151,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set whether execution result summary generation is needed
+	 * 
 	 * @param needSummary Flag indicating whether summary generation is needed
 	 */
 	public void setNeedSummary(boolean needSummary) {
@@ -148,6 +160,7 @@ public class ExecutionContext {
 
 	/**
 	 * Check if plan execution was successful
+	 * 
 	 * @return Returns true if execution was successful, otherwise false
 	 */
 	public boolean isSuccess() {
@@ -156,6 +169,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set plan execution success status
+	 * 
 	 * @param success Flag indicating execution success status
 	 */
 	public void setSuccess(boolean success) {
@@ -176,6 +190,7 @@ public class ExecutionContext {
 
 	/**
 	 * Get user's original request content
+	 * 
 	 * @return User request string
 	 */
 	public String getUserRequest() {
@@ -184,6 +199,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set user's original request content
+	 * 
 	 * @param userRequest User request string
 	 */
 	public void setUserRequest(String userRequest) {
@@ -192,6 +208,7 @@ public class ExecutionContext {
 
 	/**
 	 * Get execution result summary
+	 * 
 	 * @return Summary description of execution results
 	 */
 	public String getResultSummary() {
@@ -200,6 +217,7 @@ public class ExecutionContext {
 
 	/**
 	 * Set execution result summary
+	 * 
 	 * @param resultSummary Summary description of execution results
 	 */
 	public void setResultSummary(String resultSummary) {
@@ -211,6 +229,7 @@ public class ExecutionContext {
 	 * <p>
 	 * This method copies the plan entity, user request, and result summary from the
 	 * passed context to the current instance
+	 * 
 	 * @param context Source execution context instance
 	 */
 	public void updateContext(ExecutionContext context) {

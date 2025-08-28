@@ -24,7 +24,8 @@ import com.microsoft.playwright.Frame;
 import com.microsoft.playwright.Locator;
 
 /**
- * Class representing a single interactive element, holding the element's Locator.
+ * Class representing a single interactive element, holding the element's
+ * Locator.
  */
 public class InteractiveElement {
 
@@ -47,8 +48,9 @@ public class InteractiveElement {
 
 	/**
 	 * Construct an InteractiveElement instance
-	 * @param index Global index
-	 * @param frame Frame where the element is located
+	 * 
+	 * @param index      Global index
+	 * @param frame      Frame where the element is located
 	 * @param elementMap Other parameters of the element
 	 */
 	public InteractiveElement(int index, Frame frame, Map<String, Object> elementMap) {
@@ -56,8 +58,7 @@ public class InteractiveElement {
 		if (elementMap.containsKey("jManusId")) {
 			String jManusId = (String) elementMap.get("jManusId");
 			this.locator = frame.locator("[jmanus-id=\"" + jManusId + "\"]");
-		}
-		else {
+		} else {
 			String xpath = (String) elementMap.get("xpath");
 			this.locator = frame.locator("//" + xpath);
 		}
@@ -68,6 +69,7 @@ public class InteractiveElement {
 
 	/**
 	 * Get the global index of the element
+	 * 
 	 * @return Element index
 	 */
 	public int getIndex() {
@@ -76,6 +78,7 @@ public class InteractiveElement {
 
 	/**
 	 * Get the element's Locator
+	 * 
 	 * @return Element locator
 	 */
 	public Locator getLocator() {
@@ -84,6 +87,7 @@ public class InteractiveElement {
 
 	/**
 	 * Get the element's tag name
+	 * 
 	 * @return Element's HTML tag name
 	 */
 	public String getTagName() {
@@ -92,6 +96,7 @@ public class InteractiveElement {
 
 	/**
 	 * Get the element's text content
+	 * 
 	 * @return Element text
 	 */
 	public String getText() {
@@ -100,6 +105,7 @@ public class InteractiveElement {
 
 	/**
 	 * Get the element's HTML structure
+	 * 
 	 * @return Element's outerHTML
 	 */
 	public String getOuterHtml() {
@@ -108,6 +114,7 @@ public class InteractiveElement {
 
 	/**
 	 * Create a string representation of element information
+	 * 
 	 * @return Formatted element information
 	 */
 	@Override

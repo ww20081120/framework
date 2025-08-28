@@ -105,8 +105,10 @@ public class ExecutionPlan extends AbstractExecutionPlan {
 		steps.clear();
 	}
 
-	// state.append("Global Goal (The global goal is just a directional guidance, you
-	// don't need to complete the global goal in the current request, just focus on the
+	// state.append("Global Goal (The global goal is just a directional guidance,
+	// you
+	// don't need to complete the global goal in the current request, just focus on
+	// the
 	// currently executing step): ")
 	// .append("\n")
 	// .append(title)
@@ -125,8 +127,7 @@ public class ExecutionPlan extends AbstractExecutionPlan {
 		state.append("\n- Execution Parameters: ").append("\n");
 		if (executionParams != null && !executionParams.isEmpty()) {
 			state.append(executionParams).append("\n\n");
-		}
-		else {
+		} else {
 			state.append("No execution parameters provided.\n\n");
 		}
 
@@ -138,8 +139,9 @@ public class ExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get step execution status in string format
-	 * @param onlyCompletedAndFirstInProgress When true, only output all completed steps
-	 * and the first step in progress
+	 * 
+	 * @param onlyCompletedAndFirstInProgress When true, only output all completed
+	 *                                        steps and the first step in progress
 	 * @return Formatted step execution status string
 	 */
 	@JsonIgnore
@@ -169,23 +171,16 @@ public class ExecutionPlan extends AbstractExecutionPlan {
 			}
 
 			String symbol = switch (step.getStatus()) {
-				case COMPLETED -> "[completed]";
-				case IN_PROGRESS -> "[in_progress]";
-				case BLOCKED -> "[blocked]";
-				case NOT_STARTED -> "[not_started]";
-				default -> "[ ]";
+			case COMPLETED -> "[completed]";
+			case IN_PROGRESS -> "[in_progress]";
+			case BLOCKED -> "[blocked]";
+			case NOT_STARTED -> "[not_started]";
+			default -> "[ ]";
 			};
 
-			state.append(i + 1)
-				.append(".  **Step ")
-				.append(i)
-				.append(":**\n")
-				.append("    *   **Status:** ")
-				.append(symbol)
-				.append("\n")
-				.append("    *   **Action:** ")
-				.append(step.getStepRequirement())
-				.append("\n");
+			state.append(i + 1).append(".  **Step ").append(i).append(":**\n").append("    *   **Status:** ")
+					.append(symbol).append("\n").append("    *   **Action:** ").append(step.getStepRequirement())
+					.append("\n");
 
 			String result = step.getResult();
 			if (result != null && !result.isEmpty()) {
@@ -198,6 +193,7 @@ public class ExecutionPlan extends AbstractExecutionPlan {
 
 	/**
 	 * Get all step execution status in string format (compatible with old version)
+	 * 
 	 * @return Formatted step execution status string
 	 */
 	@JsonIgnore

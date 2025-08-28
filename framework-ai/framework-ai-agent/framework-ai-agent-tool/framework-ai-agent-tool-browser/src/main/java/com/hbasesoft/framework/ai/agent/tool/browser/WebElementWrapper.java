@@ -20,9 +20,9 @@ import com.microsoft.playwright.Frame;
 import com.microsoft.playwright.Page;
 
 /**
- * A wrapper class for WebElement, which contains both the element itself and its detailed
- * information. This class allows obtaining an ElementHandle and its related information
- * in one operation when processing web elements.
+ * A wrapper class for WebElement, which contains both the element itself and
+ * its detailed information. This class allows obtaining an ElementHandle and
+ * its related information in one operation when processing web elements.
  */
 public class WebElementWrapper {
 
@@ -38,7 +38,8 @@ public class WebElementWrapper {
 
 	/**
 	 * Construct a new WebElementWrapper instance
-	 * @param element ElementHandle object
+	 * 
+	 * @param element           ElementHandle object
 	 * @param elementInfoString The detailed information string of the element
 	 */
 	public WebElementWrapper(ElementHandle element, String elementInfoString) {
@@ -50,11 +51,13 @@ public class WebElementWrapper {
 
 	/**
 	 * Construct a new WebElementWrapper instance, including iframe information
-	 * @param element ElementHandle object
+	 * 
+	 * @param element           ElementHandle object
 	 * @param elementInfoString The detailed information string of the element
-	 * @param iframeElement The iframe element that the element belongs to
-	 * @param iframePath The path of the iframe, such as "0/2/1" representing the second
-	 * iframe in the third iframe in the first iframe
+	 * @param iframeElement     The iframe element that the element belongs to
+	 * @param iframePath        The path of the iframe, such as "0/2/1" representing
+	 *                          the second iframe in the third iframe in the first
+	 *                          iframe
 	 */
 	public WebElementWrapper(ElementHandle element, String elementInfoString, Frame iframeElement, String iframePath) {
 		this.element = element;
@@ -65,6 +68,7 @@ public class WebElementWrapper {
 
 	/**
 	 * Get the wrapped ElementHandle object
+	 * 
 	 * @return ElementHandle object
 	 */
 	public ElementHandle getElement() {
@@ -73,6 +77,7 @@ public class WebElementWrapper {
 
 	/**
 	 * Get the detailed information string of the element
+	 * 
 	 * @return The detailed information string of the element
 	 */
 	public String getElementInfoString() {
@@ -81,8 +86,9 @@ public class WebElementWrapper {
 
 	/**
 	 * Get the iframe element that the element belongs to
-	 * @return The iframe element that the element belongs to, or null if in the main
-	 * document
+	 * 
+	 * @return The iframe element that the element belongs to, or null if in the
+	 *         main document
 	 */
 	public Frame getIframeElement() {
 		return iframeElement;
@@ -90,6 +96,7 @@ public class WebElementWrapper {
 
 	/**
 	 * Set the iframe element that the element belongs to
+	 * 
 	 * @param iframeElement The iframe element that the element belongs to
 	 */
 	public void setIframeElement(Frame iframeElement) {
@@ -98,8 +105,9 @@ public class WebElementWrapper {
 
 	/**
 	 * Get the path of the iframe
-	 * @return The path of the iframe, such as "0/2/1" representing the second iframe in
-	 * the third iframe in the first iframe
+	 * 
+	 * @return The path of the iframe, such as "0/2/1" representing the second
+	 *         iframe in the third iframe in the first iframe
 	 */
 	public String getIframePath() {
 		return iframePath;
@@ -107,6 +115,7 @@ public class WebElementWrapper {
 
 	/**
 	 * Set the path of the iframe
+	 * 
 	 * @param iframePath The path of the iframe
 	 */
 	public void setIframePath(String iframePath) {
@@ -115,6 +124,7 @@ public class WebElementWrapper {
 
 	/**
 	 * Switch to the correct iframe context before interaction
+	 * 
 	 * @param page The Playwright Page instance
 	 */
 	public void prepareForInteraction(Page page) {
@@ -134,7 +144,9 @@ public class WebElementWrapper {
 	}
 
 	/**
-	 * Get a short description of the element, which can be used for logging and debugging
+	 * Get a short description of the element, which can be used for logging and
+	 * debugging
+	 * 
 	 * @return The string representation of the element
 	 */
 	@Override

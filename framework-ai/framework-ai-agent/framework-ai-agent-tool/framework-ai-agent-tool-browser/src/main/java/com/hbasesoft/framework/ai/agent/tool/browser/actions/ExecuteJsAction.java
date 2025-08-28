@@ -37,8 +37,7 @@ public class ExecuteJsAction extends BrowserAction {
 
 		if (result == null) {
 			return new ToolExecuteResult("Successfully executed JavaScript code.");
-		}
-		else {
+		} else {
 			return new ToolExecuteResult(result.toString());
 		}
 	}

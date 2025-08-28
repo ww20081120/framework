@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
 import com.microsoft.playwright.Playwright;
 
 /**
- * Spring Boot environment Playwright initializer Handles the special requirements for
- * running Playwright in Spring Boot fat jar
+ * Spring Boot environment Playwright initializer Handles the special
+ * requirements for running Playwright in Spring Boot fat jar
  */
 @Component
 public class SpringBootPlaywrightInitializer {
@@ -74,24 +74,20 @@ public class SpringBootPlaywrightInitializer {
 					// Check temp directory for playwright files
 					Path tempPath = Paths.get(tempDir);
 					if (Files.exists(tempPath)) {
-						Files.list(tempPath)
-							.filter(path -> path.getFileName().toString().contains("playwright"))
-							.forEach(path -> log.info("Temp playwright file: {}", path));
+						Files.list(tempPath).filter(path -> path.getFileName().toString().contains("playwright"))
+								.forEach(path -> log.info("Temp playwright file: {}", path));
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					log.warn("Could not list post-creation directories: {}", e.getMessage());
 				}
 				log.info("=====================================");
 
 				return playwright;
-			}
-			finally {
+			} finally {
 				// Always restore original class loader
 				Thread.currentThread().setContextClassLoader(originalClassLoader);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Failed to create Playwright in Spring Boot environment", e);
 			throw new RuntimeException("Failed to initialize Playwright", e);
 		}
@@ -133,8 +129,7 @@ public class SpringBootPlaywrightInitializer {
 		if (Files.exists(browsersPath)) {
 			log.info("Playwright browsers found at: {}", browserPath);
 			System.setProperty("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1");
-		}
-		else {
+		} else {
 			log.warn("Playwright browsers not found at: {}. They will be downloaded on first use.", browserPath);
 		}
 
@@ -161,12 +156,10 @@ public class SpringBootPlaywrightInitializer {
 					if (Files.isDirectory(p)) {
 						Files.list(p).forEach(subPath -> log.info("    - {}", subPath.getFileName()));
 					}
-				}
-				else {
+				} else {
 					log.info("  ✗ Directory not found: {}", path);
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.warn("  ? Could not check path {}: {}", path, e.getMessage());
 			}
 		}
@@ -182,8 +175,7 @@ public class SpringBootPlaywrightInitializer {
 			// Try to find the required classes
 			Class.forName("com.microsoft.playwright.Playwright");
 			return true;
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			log.error("Playwright classes not found in classpath", e);
 			return false;
 		}
