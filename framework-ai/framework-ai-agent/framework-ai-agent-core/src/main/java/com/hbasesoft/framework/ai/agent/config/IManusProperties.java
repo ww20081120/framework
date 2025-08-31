@@ -77,7 +77,7 @@ public interface IManusProperties {
 	/**
 	 * 获取最大步骤数
 	 * 
-	 * @return Integer 最大步骤数 (默认值: 5)
+	 * @return Integer 最大步骤数 (默认值: 20)
 	 */
 	Integer getMaxSteps();
 
