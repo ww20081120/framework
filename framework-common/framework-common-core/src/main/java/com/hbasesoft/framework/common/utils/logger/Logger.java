@@ -64,7 +64,7 @@ public class Logger {
      * 带异常的日志信息
      * 
      * @param message 信息
-     * @param t 异常
+     * @param t       异常
      */
     public void error(final String message, final Throwable t) {
         logger.error(LoggerUtil.getErrorMessage(message, t), t);
@@ -73,12 +73,22 @@ public class Logger {
     /**
      * 记录日志信息
      * 
-     * @param t <br>
+     * @param t       <br>
      * @param message 日志信息 <br>
-     * @param params 日志信息 <br>
+     * @param params  日志信息 <br>
      */
     public void error(final Throwable t, final String message, final Object... params) {
         logger.error(LoggerUtil.getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
+    }
+
+    /**
+     * 记录日志信息
+     * 
+     * @param message 日志信息
+     * @param params  日志信息
+     */
+    public void error(final String message, final Object... params) {
+        logger.error(CommonUtil.messageFormat(message, params));
     }
 
     /**
@@ -109,7 +119,7 @@ public class Logger {
      * 带异常的日志信息
      * 
      * @param message 信息
-     * @param t 异常
+     * @param t       异常
      */
     public void warn(final String message, final Throwable t) {
         if (logger.isWarnEnabled()) {
@@ -120,13 +130,25 @@ public class Logger {
     /**
      * 记录日志信息
      * 
-     * @param t <br>
+     * @param t       <br>
      * @param message 日志信息 <br>
-     * @param params 日志信息 <br>
+     * @param params  日志信息 <br>
      */
     public void warn(final Throwable t, final String message, final Object... params) {
         if (logger.isWarnEnabled()) {
             logger.warn(LoggerUtil.getErrorMessage(CommonUtil.messageFormat(message, params), t), t);
+        }
+    }
+
+    /**
+     * 记录日志信息
+     * 
+     * @param message 日志信息
+     * @param params  日志信息
+     */
+    public void warn(final String message, final Object... params) {
+        if (logger.isWarnEnabled()) {
+            logger.warn(CommonUtil.messageFormat(message, params));
         }
     }
 
@@ -145,7 +167,7 @@ public class Logger {
      * 记录日志信息
      * 
      * @param message 日志信息
-     * @param params 日志信息
+     * @param params  日志信息
      */
     public void debug(final String message, final Object... params) {
         if (logger.isDebugEnabled()) {
@@ -168,7 +190,7 @@ public class Logger {
      * 记录日志信息
      * 
      * @param message 日志信息
-     * @param params 日志信息
+     * @param params  日志信息
      */
     public void info(final String message, final Object... params) {
         if (logger.isInfoEnabled()) {

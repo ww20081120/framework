@@ -19,7 +19,7 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
-import io.opentelemetry.semconv.ResourceAttributes;
+import io.opentelemetry.semconv.ServiceAttributes;
 
 /**
  * <Description> <br>
@@ -45,7 +45,7 @@ public class OpenTelemetryConfig {
     @Bean
     public OpenTelemetrySdk openTelemetrySdk() {
         Resource resource = Resource.getDefault()
-            .merge(Resource.create(Attributes.of(ResourceAttributes.SERVICE_NAME, PropertyHolder.getProjectName())));
+            .merge(Resource.create(Attributes.of(ServiceAttributes.SERVICE_NAME, PropertyHolder.getProjectName())));
         SpanExporter exporter = OtlpJsonLoggingSpanExporter.create();
 
         SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()

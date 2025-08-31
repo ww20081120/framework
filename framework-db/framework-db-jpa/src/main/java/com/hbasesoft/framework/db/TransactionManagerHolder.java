@@ -22,9 +22,9 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
+import com.hbasesoft.framework.common.utils.bean.BasePackagesUtil;
 import com.hbasesoft.framework.db.core.DynamicDataSourceManager;
 import com.hbasesoft.framework.db.core.config.DaoTypeDef;
-import com.hbasesoft.framework.db.core.spring.AutoProxyBeanFactory;
 import com.hbasesoft.framework.db.orm.util.DataSourceUtil;
 
 import lombok.NoArgsConstructor;
@@ -42,76 +42,75 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class TransactionManagerHolder {
 
-    /** transaction */
-    private static Map<String, PlatformTransactionManager> transactionManagerHolder = new ConcurrentHashMap<>();
+	/** transaction */
+	private static Map<String, PlatformTransactionManager> transactionManagerHolder = new ConcurrentHashMap<>();
 
-    /** session factory */
-    private static Map<String, SessionFactory> sessionFactoryHolder = new ConcurrentHashMap<>();
+	/** session factory */
+	private static Map<String, SessionFactory> sessionFactoryHolder = new ConcurrentHashMap<>();
 
-    /**
-     * Description: 获取Spring trascation <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    public static PlatformTransactionManager getTransactionManager() {
-        String key = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
-        return transactionManagerHolder.computeIfAbsent(key, dbCode -> {
-            HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
-            hibernateTransactionManager.setSessionFactory(getSessionFactory(dbCode));
-            return hibernateTransactionManager;
-        });
-    }
+	/**
+	 * Description: 获取Spring trascation <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	public static PlatformTransactionManager getTransactionManager() {
+		String key = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
+		return transactionManagerHolder.computeIfAbsent(key, dbCode -> {
+			HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
+			hibernateTransactionManager.setSessionFactory(getSessionFactory(dbCode));
+			return hibernateTransactionManager;
+		});
+	}
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param key
-     * @return <br>
-     */
-    public static SessionFactory getSessionFactory(final String key) {
-        return sessionFactoryHolder.computeIfAbsent(key, dbCode -> {
-            DataSource dataSource = DataSourceUtil.getDataSource(dbCode);
-            Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, dbCode);
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param key
+	 * @return <br>
+	 */
+	public static SessionFactory getSessionFactory(final String key) {
+		return sessionFactoryHolder.computeIfAbsent(key, dbCode -> {
+			DataSource dataSource = DataSourceUtil.getDataSource(dbCode);
+			Assert.notNull(dataSource, ErrorCodeDef.DB_DATASOURCE_NOT_SET, dbCode);
 
-            LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-            bean.setDataSource(dataSource);
-            Map<String, String> map = PropertyHolder.getProperties();
-            Properties properties = new Properties();
-            int prefixLength = dbCode.length() + 1;
-            String prefix = dbCode + ".hibernate";
-            for (Entry<String, String> entry : map.entrySet()) {
-                if (entry.getKey().startsWith(prefix)) {
-                    properties.setProperty(entry.getKey().substring(prefixLength, entry.getKey().length()),
-                        entry.getValue());
-                }
-            }
-            bean.setHibernateProperties(properties);
-            bean.setPackagesToScan(AutoProxyBeanFactory.getBasePackage());
-            try {
-                bean.afterPropertiesSet();
-            }
-            catch (IOException e) {
-                throw new InitializationException(e);
-            }
-            return bean.getObject();
-        });
+			LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
+			bean.setDataSource(dataSource);
+			Map<String, String> map = PropertyHolder.getProperties();
+			Properties properties = new Properties();
+			int prefixLength = dbCode.length() + 1;
+			String prefix = dbCode + ".hibernate";
+			for (Entry<String, String> entry : map.entrySet()) {
+				if (entry.getKey().startsWith(prefix)) {
+					properties.setProperty(entry.getKey().substring(prefixLength, entry.getKey().length()),
+							entry.getValue());
+				}
+			}
+			bean.setHibernateProperties(properties);
+			bean.setPackagesToScan(BasePackagesUtil.getBasePackages().toArray(new String[0]));
+			try {
+				bean.afterPropertiesSet();
+			} catch (IOException e) {
+				throw new InitializationException(e);
+			}
+			return bean.getObject();
+		});
 
-    }
+	}
 
-    /**
-     * Description: 获取session 工厂 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     * @throws IOException
-     */
-    public static SessionFactory getSessionFactory() {
-        String dbCode = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
-        return getSessionFactory(dbCode);
-    }
+	/**
+	 * Description: 获取session 工厂 <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 * @throws IOException
+	 */
+	public static SessionFactory getSessionFactory() {
+		String dbCode = DynamicDataSourceManager.getInstance(DaoTypeDef.db).getDataSourceCode();
+		return getSessionFactory(dbCode);
+	}
 }

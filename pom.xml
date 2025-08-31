@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modules>
@@ -65,6 +65,15 @@
         <skywalking.version>9.4.0</skywalking.version>
         <spring-ai-alibaba.version>1.0.0.2</spring-ai-alibaba.version>
         <spring-ai.version>1.0.0</spring-ai.version>
+        <webdrivermanager.version>6.1.0</webdrivermanager.version>
+        <playwright.version>1.53.0</playwright.version>
+        <mcp.version>0.11.3</mcp.version>
+        <poi.version>5.4.1</poi.version>
+        <pdfbox.version>3.0.5</pdfbox.version>
+        <easyexcel.version>4.0.3</easyexcel.version>
+        <opentelemetry.version>1.45.0</opentelemetry.version>
+        <opentelemetry-semconv.version>1.36.0</opentelemetry-semconv.version>
+        <otel.version>1.5.3</otel.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -335,36 +344,81 @@
                 <version>${skywalking.version}</version>
             </dependency>
             
-            <!-- OpenTelemetry dependencies -->
+            <dependency>
+	            <groupId>io.github.bonigarcia</groupId>
+	            <artifactId>webdrivermanager</artifactId>
+	            <version>${webdrivermanager.version}</version>
+	        </dependency>
+	
+	        <!-- Playwright for browser automation -->
+	        <dependency>
+	            <groupId>com.microsoft.playwright</groupId>
+	            <artifactId>playwright</artifactId>
+	            <version>${playwright.version}</version>
+	        </dependency>
+	        
+	        <!-- https://mvnrepository.com/artifact/io.modelcontextprotocol.sdk/mcp -->
+			<dependency>
+			    <groupId>io.modelcontextprotocol.sdk</groupId>
+			    <artifactId>mcp</artifactId>
+			    <version>${mcp.version}</version>
+			</dependency>
+			<dependency>
+	            <groupId>io.modelcontextprotocol.sdk</groupId>
+	            <artifactId>mcp-spring-webflux</artifactId>
+	            <version>${mcp.version}</version>
+	        </dependency>
+	        
+	        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+			<dependency>
+			    <groupId>org.apache.poi</groupId>
+			    <artifactId>poi-ooxml</artifactId>
+			    <version>${poi.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+			<dependency>
+			    <groupId>org.apache.pdfbox</groupId>
+			    <artifactId>pdfbox</artifactId>
+			    <version>${pdfbox.version}</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
+			<dependency>
+			    <groupId>com.alibaba</groupId>
+			    <artifactId>easyexcel</artifactId>
+			    <version>${easyexcel.version}</version>
+			</dependency>
+			
+
+			<!-- OpenTelemetry dependencies -->
             <dependency>
                 <groupId>io.opentelemetry</groupId>
                 <artifactId>opentelemetry-api</artifactId>
-                <version>1.45.0</version>
+                <version>${opentelemetry.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.opentelemetry</groupId>
                 <artifactId>opentelemetry-sdk</artifactId>
-                <version>1.45.0</version>
+                <version>${opentelemetry.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.opentelemetry</groupId>
                 <artifactId>opentelemetry-exporter-common</artifactId>
-                <version>1.45.0</version>
+                <version>${opentelemetry.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.opentelemetry</groupId>
                 <artifactId>opentelemetry-exporter-logging-otlp</artifactId>
-                <version>1.45.0</version>
+                <version>${opentelemetry.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.opentelemetry.semconv</groupId>
                 <artifactId>opentelemetry-semconv</artifactId>
-                <version>1.29.0-alpha</version>
+                <version>${opentelemetry-semconv.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-tracing-bridge-otel</artifactId>
-                <version>1.4.1</version>
+                <version>${otel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

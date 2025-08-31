@@ -56,6 +56,16 @@ public final class LoggerUtil {
     public static void error(final String message) {
         getLogger().error(message);
     }
+    
+    /**
+     * 记录日志信息
+     * 
+     * @param message 日志信息
+     * @param params 日志信息
+     */
+    public static void error(final String message, final Object... params) {
+        getLogger().error(CommonUtil.messageFormat(message, params));
+    }
 
     /**
      * 带异常的日志信息
@@ -101,6 +111,19 @@ public final class LoggerUtil {
         org.slf4j.Logger logger = getLogger();
         if (logger.isWarnEnabled()) {
             logger.warn(message);
+        }
+    }
+    
+    /**
+     * 记录日志信息
+     * 
+     * @param message 日志信息
+     * @param params 日志信息
+     */
+    public static void warn(final String message, final Object... params) {
+        org.slf4j.Logger logger = getLogger();
+        if (logger.isWarnEnabled()) {
+            logger.warn(CommonUtil.messageFormat(message, params));
         }
     }
 

@@ -70,8 +70,9 @@ public class LambdaSett {
             fieldType = DATE;
         }
         else {
-            throw new DaoException(ErrorCodeDef.PARAM_ERROR,
-                filedName + " 类型错误， Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
+            throw new DaoException(ErrorCodeDef.PARAM_ERROR, 
+                lambda.getImplClass().getName() + "." + filedName
+                + " 类型错误， Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
         }
     }
 
