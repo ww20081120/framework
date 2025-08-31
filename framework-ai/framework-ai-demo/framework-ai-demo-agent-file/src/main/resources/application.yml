@@ -10,4 +10,4 @@ spring:
     allow-circular-references: true
 
 # 搜索引擎配置
-SERP_API_KEY: 7682d39bea014d638900f7726e678aa5
+SERP_API_KEY: your_api_key
