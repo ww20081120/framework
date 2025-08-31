@@ -157,7 +157,7 @@ public class PlanCreator {
 			context.setPlan(currentPlan);
 
 		} catch (Exception e) {
-			LoggerUtil.error("Error creating plan for request: {0}", context.getUserRequest(), e);
+			LoggerUtil.error(e, "Error creating plan for request: {0}", context.getUserRequest());
 			// Handle the exception
 			throw new RuntimeException("Failed to create plan", e);
 		}

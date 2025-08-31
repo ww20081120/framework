@@ -1,7 +1,9 @@
 package com.hbasesoft.framework.ai.agent.tool.planning;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.ai.openai.api.OpenAiApi.FunctionTool;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.metadata.ToolMetadata;
@@ -184,6 +186,14 @@ public class PlanningTool extends AbstractBaseTool<PlanningTool.PlanningInput> i
 		if (directResponse) {
 			LoggerUtil.info("Direct response mode enabled for planId: {0}", planId);
 			ExecutionPlan plan = new ExecutionPlan(planId, planId, title);
+			if (CollectionUtils.isNotEmpty(steps)) {
+				ExecutionStep execStep = createExecutionStep(steps.get(0), 0);
+				execStep.setStepIndex(0);
+				if (input.getTerminateColumns() != null && !input.getTerminateColumns().isEmpty()) {
+					execStep.setTerminateColumns(input.getTerminateColumns());
+				}
+				plan.setSteps(Arrays.asList(execStep));
+			}
 			plan.setDirectResponse(true);
 			plan.setUserRequest(title); // Here title is the user request content
 			this.currentPlan = plan;

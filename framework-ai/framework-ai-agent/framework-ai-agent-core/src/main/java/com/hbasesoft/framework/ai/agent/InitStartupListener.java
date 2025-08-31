@@ -3,7 +3,7 @@
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
  ****************************************************************************************/
-package com.hbasesoft.framework.ai.agent.init;
+package com.hbasesoft.framework.ai.agent;
 
 import org.springframework.context.ApplicationContext;
 
@@ -54,5 +54,17 @@ public class InitStartupListener implements StartupListener {
 
 		PromptDescriptionLoader promptDescriptionLoader = context.getBean(PromptDescriptionLoader.class);
 		PromptEnum.setDescriptionLoader(promptDescriptionLoader);
+	}
+
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	@Override
+	public LoadOrder getOrder() {
+		return LoadOrder.MIDDLE;
 	}
 }

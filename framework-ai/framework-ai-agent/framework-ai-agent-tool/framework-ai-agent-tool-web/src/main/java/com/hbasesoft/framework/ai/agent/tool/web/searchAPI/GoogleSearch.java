@@ -206,14 +206,16 @@ public class GoogleSearch extends AbstractBaseTool<GoogleSearch.GoogleSearchInpu
 	public ToolExecuteResult run(GoogleSearchInput input) {
 		String query = input.getQuery();
 		Integer numResults = input.getNumber() != null ? input.getNumber() : 2;
+		String type = StringUtils.isNotEmpty(input.getType()) ? input.getType() : "search";
 
-		log.info("GoogleSearch input: query={}, numResults={}", query, numResults);
+		log.info("GoogleSearch input: query={0}, numResults={1}, type={2}", query, numResults, type);
 
 		this.lastQuery = query;
 		this.lastNumResults = numResults;
+		this.lastType = type;
 
 		try {
-			SerpApiService.Request request = new SerpApiService.Request(query, "search", this.lastNumResults);
+			SerpApiService.Request request = new SerpApiService.Request(query, type, this.lastNumResults);
 			JSONObject response = service.apply(request);
 
 			return getResult(response);

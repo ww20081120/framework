@@ -48,6 +48,7 @@ import com.hbasesoft.framework.ai.agent.planning.executor.factory.PlanExecutorFa
 import com.hbasesoft.framework.ai.agent.planning.finalizer.PlanFinalizer;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
 import com.hbasesoft.framework.ai.agent.recorder.PlanExecutionRecorder;
+import com.hbasesoft.framework.ai.agent.tool.AnnotatedToolRegistry;
 import com.hbasesoft.framework.ai.agent.tool.ToolCallBiFunctionDef;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
 import com.hbasesoft.framework.ai.agent.tool.filesystem.UnifiedDirectoryManager;
@@ -113,6 +114,9 @@ public class PlanningFactory implements IPlanningFactory {
 
 	@Autowired
 	private StreamingResponseHandler streamingResponseHandler;
+	
+	@Autowired
+	private AnnotatedToolRegistry annotatedToolRegistry;
 
 	// @Autowired
 	// @Lazy
@@ -189,6 +193,12 @@ public class PlanningFactory implements IPlanningFactory {
 			Map<String, ToolCallBiFunctionDef> toolsMap = ContextHolder.getContext()
 					.getBeansOfType(ToolCallBiFunctionDef.class);
 			toolsMap.values().forEach(tool -> {
+				tool.setCurrentPlanId(planId);
+				toolDefinitions.add(tool);
+			});
+			
+			// Add annotated tools
+			annotatedToolRegistry.getRegisteredTools().values().forEach(tool -> {
 				tool.setCurrentPlanId(planId);
 				toolDefinitions.add(tool);
 			});

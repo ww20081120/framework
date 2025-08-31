@@ -136,8 +136,8 @@ public class DynamicAgent extends ReActAgent {
 		try {
 			return executeWithRetry(3);
 		} catch (Exception e) {
-			LoggerUtil.error(
-					String.format("🚨 Oops! The %s's thinking process hit a snag: %s", getName(), e.getMessage()), e);
+			LoggerUtil.error(e,
+					String.format("🚨 Oops! The %s's thinking process hit a snag: %s", getName(), e.getMessage()));
 			LoggerUtil.info("Exception occurred " + e.getMessage());
 
 			// Record thinking failure
@@ -332,7 +332,7 @@ public class DynamicAgent extends ReActAgent {
 
 			return new AgentExecResult(lastToolCallResult, AgentState.IN_PROGRESS);
 		} catch (Exception e) {
-			LoggerUtil.error(e.getMessage());
+			LoggerUtil.error(e);
 			LoggerUtil.info("Exception occurred", e);
 
 			// Record failed action result

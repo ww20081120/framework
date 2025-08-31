@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.file.agent;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.agent.dynamic.agent.service.AbstractAgentService;
 import com.hbasesoft.framework.ai.agent.dynamic.agent.service.IDynamicAgentLoader;
 import com.hbasesoft.framework.ai.agent.dynamic.agent.vo.AgentConfig;
 import com.hbasesoft.framework.ai.agent.dynamic.mcp.service.IMcpService;
 import com.hbasesoft.framework.ai.agent.dynamic.model.service.DynamicModelService;
 import com.hbasesoft.framework.ai.agent.planning.IPlanningFactory;
+import com.hbasesoft.framework.ai.agent.tool.Action;
+import com.hbasesoft.framework.ai.agent.tool.AnnotatedMethodToolAdapter;
+import com.hbasesoft.framework.ai.agent.tool.AnnotatedToolRegistry;
 import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 
@@ -36,7 +41,7 @@ import com.hbasesoft.framework.common.utils.ContextHolder;
  * @see com.hbasesoft.framework.ai.agent.file.agent <br>
  */
 @Service
-public class AgentServiceImpl extends AbstractAgentService implements StartupListener {
+public class AgentServiceImpl extends AbstractAgentService  {
 
 	/** 缓存Agent配置，确保ID一致性 */
 	private static final Map<String, AgentConfig> AGENT_CONFIG_CACHE = new ConcurrentHashMap<>();
@@ -110,10 +115,7 @@ public class AgentServiceImpl extends AbstractAgentService implements StartupLis
 	 * @taskId <br>
 	 * @param context <br>
 	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		AgentServiceImpl impl = context.getBean(AgentServiceImpl.class);
-
+	void init(ApplicationContext context) {
 		// 清空缓存
 		AGENT_CONFIG_CACHE.clear();
 
@@ -124,16 +126,18 @@ public class AgentServiceImpl extends AbstractAgentService implements StartupLis
 			Object bean = entry.getValue();
 			Agent agentAnnotation = bean.getClass().getAnnotation(Agent.class);
 			if (agentAnnotation != null) {
-				String beanName = impl.getBeanName(bean.getClass(), agentAnnotation);
+				String beanName = getBeanName(bean.getClass(), agentAnnotation);
 				String namespace = agentAnnotation.namespace();
-				String key = impl.getAgentKey(namespace, beanName);
+				String key = getAgentKey(namespace, beanName);
 
 				// 创建AgentConfig对象并缓存
-				AgentConfig config = impl.createAgentConfigFromAnnotation(agentAnnotation, beanName, bean);
+				AgentConfig config = createAgentConfigFromAnnotation(agentAnnotation, beanName, bean);
 				AGENT_CONFIG_CACHE.put(key, config);
+
+				// 扫描Bean中的@Action注解方法并注册为工具
+				registerAnnotatedMethodsAsTools(bean, context, config);
 			}
 		}
-
 	}
 
 	private AgentConfig createAgentConfigFromAnnotation(Agent agentAnnotation, String beanName, Object beanInstance) {
@@ -222,5 +226,40 @@ public class AgentServiceImpl extends AbstractAgentService implements StartupLis
 		}
 		// 否则使用类名作为名称
 		return beanClass.getSimpleName();
+	}
+
+	/**
+	 * 扫描Bean中的@Action注解方法并注册为工具
+	 * 
+	 * @param bean
+	 * @param context
+	 * @param config
+	 */
+	private void registerAnnotatedMethodsAsTools(Object bean, ApplicationContext context, AgentConfig config) {
+		// 获取Bean的所有方法
+		Method[] methods = bean.getClass().getDeclaredMethods();
+
+		// 获取ObjectMapper实例
+		ObjectMapper objectMapper = context.getBean(ObjectMapper.class);
+
+		// 获取AnnotatedToolRegistry实例
+		AnnotatedToolRegistry toolRegistry = context.getBean(AnnotatedToolRegistry.class);
+
+		// 遍历所有方法，查找带有@Action注解的方法
+		for (Method method : methods) {
+			Action actionAnnotation = method.getAnnotation(Action.class);
+			if (actionAnnotation != null) {
+				// 创建适配器并注册为工具
+				AnnotatedMethodToolAdapter toolAdapter = new AnnotatedMethodToolAdapter(bean, method, actionAnnotation,
+						objectMapper);
+
+				// 将工具适配器注册到工具注册表中
+				toolRegistry.registerTool(toolAdapter);
+
+				if (!config.getAvailableTools().contains(toolAdapter.getName())) {
+					config.getAvailableTools().add(toolAdapter.getName());
+				}
+			}
+		}
 	}
 }

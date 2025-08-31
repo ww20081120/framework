@@ -7,12 +7,15 @@ package com.hbasesoft.framework.ai.agent.planning.executor;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.hbasesoft.framework.ai.agent.agent.BaseAgent;
 import com.hbasesoft.framework.ai.agent.config.IManusProperties;
 import com.hbasesoft.framework.ai.agent.dynamic.agent.DynamicAgent;
 import com.hbasesoft.framework.ai.agent.dynamic.agent.service.AgentService;
 import com.hbasesoft.framework.ai.agent.llm.ILlmService;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
+import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionStep;
 import com.hbasesoft.framework.ai.agent.recorder.PlanExecutionRecorder;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
@@ -62,9 +65,20 @@ public class DirectResponseExecutor extends AbstractPlanExecutor {
 
 			LoggerUtil.info("Direct response executor completed successfully for planId: {0}",
 					context.getCurrentPlanId());
+
+			List<ExecutionStep> steps = context.getPlan().getAllSteps();
+
+			if (steps != null && !steps.isEmpty()) {
+				ExecutionStep step = steps.get(0);
+				executeStep(step, context);
+				if (StringUtils.isNotEmpty(step.getResult())) {
+					context.setResultSummary(step.getResult());
+					context.setNeedSummary(false);
+				}
+			}
 			context.setSuccess(true);
 		} catch (Exception e) {
-			LoggerUtil.error("Error during direct response execution for planId: {0}", context.getCurrentPlanId(), e);
+			LoggerUtil.error(e, "Error during direct response execution for planId: {0}", context.getCurrentPlanId());
 			context.setSuccess(false);
 			// Set error message as result summary
 			context.setResultSummary("Direct response execution failed: " + e.getMessage());
