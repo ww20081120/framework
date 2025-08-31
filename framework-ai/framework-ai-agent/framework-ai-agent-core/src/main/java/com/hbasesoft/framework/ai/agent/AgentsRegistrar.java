@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
+import com.hbasesoft.framework.common.utils.bean.BasePackagesUtil;
+
 /**
  * Agents 框架的组件注册器<br>
  * 该类负责动态扫描和注册 Agents 框架的组件。
@@ -36,6 +38,9 @@ public class AgentsRegistrar implements ImportBeanDefinitionRegistrar {
 
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+
+		BasePackagesUtil.addBasePackage(AGENT_PACKAGE);
+
 		// 创建扫描器
 		ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
 
@@ -89,7 +94,8 @@ public class AgentsRegistrar implements ImportBeanDefinitionRegistrar {
 					+ simpleBeanName.substring(1);
 
 			// 检查带前缀的名称是否也存在冲突
-			if (registry.containsBeanDefinition(prefixedBeanName) || registeredBeanNames.containsKey(prefixedBeanName)) {
+			if (registry.containsBeanDefinition(prefixedBeanName)
+					|| registeredBeanNames.containsKey(prefixedBeanName)) {
 				// 如果仍然存在冲突，添加序号后缀
 				Integer count = registeredBeanNames.getOrDefault(prefixedBeanName, 1);
 				String numberedBeanName = prefixedBeanName + count;
