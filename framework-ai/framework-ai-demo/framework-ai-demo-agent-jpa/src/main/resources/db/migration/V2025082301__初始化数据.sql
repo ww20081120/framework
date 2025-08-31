@@ -13,7 +13,7 @@ INSERT INTO dynamic_models (
 ) VALUES (
      1,
     'https://api-inference.modelscope.cn',
-    'ms-375d4f20-87a5-4f25-a090-2568666c502f',
+    'your_api_key',
     'Qwen/Qwen3-Coder-480B-A35B-Instruct',
     'Qwen3 Coder模型',
     'chat',

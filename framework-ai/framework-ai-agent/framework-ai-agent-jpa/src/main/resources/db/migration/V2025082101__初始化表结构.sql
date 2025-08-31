@@ -141,3 +141,14 @@ CREATE TABLE prompt (
     prompt_content TEXT NOT NULL COMMENT '提示词内容',
     UNIQUE KEY unique_namespace_prompt (namespace, prompt_name)
 ) COMMENT='提示词表';
+
+-- AI聊天记忆表
+DROP TABLE IF EXISTS ai_chat_memory;
+CREATE TABLE ai_chat_memory (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '主键ID',
+	conversation_id VARCHAR (256) NOT NULL COMMENT '会话id',
+	content LONGTEXT NOT NULL COMMENT '会话内容',
+	type VARCHAR (100) NOT NULL COMMENT '角色类型：USER、ASSISTANT、SYSTEM、TOOL',
+    create_time DATETIME NOT NULL COMMENT '创建时间',
+	CONSTRAINT chk_message_type CHECK (type IN ('USER', 'ASSISTANT', 'SYSTEM', 'TOOL'))
+);

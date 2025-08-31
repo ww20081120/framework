@@ -5,18 +5,13 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.demo.agent;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hbasesoft.framework.ai.agent.dynamic.memory.service.MemoryService;
@@ -38,7 +33,7 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
  * @see com.hbasesoft.framework.ai.demo.jmanus <br>
  */
 @RestController
-@RequestMapping("/api/executor")
+@RequestMapping("/api/agent")
 public class AgentController {
 
 	@Autowired
@@ -51,49 +46,57 @@ public class AgentController {
 	@Autowired
 	private MemoryService memoryService;
 
-	@PostMapping("/execute")
-	public ResponseEntity<Map<String, Object>> executeQuery(@RequestBody Map<String, String> request) {
-		String query = request.get("input");
-		if (query == null || query.trim().isEmpty()) {
-			return ResponseEntity.badRequest().body(Map.of("error", "Query content cannot be empty"));
-		}
-		ExecutionContext context = new ExecutionContext();
-		context.setUserRequest(query);
-		// Use PlanIdDispatcher to generate a unique plan ID
-		String planId = planIdDispatcher.generatePlanId();
-		context.setCurrentPlanId(planId);
-		context.setRootPlanId(planId);
-		context.setNeedSummary(true);
+	private String memoryId;
 
-		String memoryId = request.get("memoryId");
+	private String rootPlanId;
 
-		if (StringUtils.isEmpty(memoryId)) {
-			memoryId = RandomStringUtils.randomAlphabetic(8);
+	@GetMapping("/solve")
+	public String solveCodingTask(@RequestParam("task") String task) {
+		if (StringUtils.isAllBlank(task)) {
+			return "处理任务失败: Query content cannot be empty";
 		}
 
-		context.setMemoryId(memoryId);
+		try {
+			// 创建 ProcessOptions
 
-		// Get or create planning flow
-		PlanningCoordinator planningFlow = planningFactory.createPlanningCoordinator(context);
+			ExecutionContext context = new ExecutionContext();
+			context.setUserRequest(task);
 
-		// Asynchronous execution of task
-		CompletableFuture.supplyAsync(() -> {
-			try {
-				memoryService.saveMemory(new MemoryVo(context.getMemoryId(), query));
-				return planningFlow.executePlan(context);
-			} catch (Exception e) {
-				LoggerUtil.error("Failed to execute plan", e);
-				throw new RuntimeException("Failed to execute plan: " + e.getMessage(), e);
+			// Use PlanIdDispatcher to generate a unique plan ID
+			String planId = planIdDispatcher.generatePlanId();
+			context.setCurrentPlanId(planId);
+
+			context.setNeedSummary(true);
+			if (rootPlanId == null) {
+				rootPlanId = planId;
 			}
-		});
+			context.setRootPlanId(rootPlanId);
 
-		// Return task ID and initial status
-		Map<String, Object> response = new HashMap<>();
-		response.put("planId", planId);
-		response.put("status", "processing");
-		response.put("message", "Task submitted, processing");
-		response.put("memoryId", memoryId);
+			if (StringUtils.isEmpty(memoryId)) {
+				memoryId = RandomStringUtils.randomAlphabetic(8);
+			}
+			context.setMemoryId(memoryId);
 
-		return ResponseEntity.ok(response);
+			// Get or create planning flow
+			PlanningCoordinator planningFlow = planningFactory.createPlanningCoordinator(context);
+
+			// Asynchronous execution of task
+			memoryService.saveMemory(new MemoryVo(context.getMemoryId(), task));
+
+			ExecutionContext ctx = planningFlow.executePlan(context);
+
+			// 返回结果
+			return "任务处理完成:\n" + ctx.getResultSummary();
+		} catch (Exception e) {
+			LoggerUtil.error(e);
+			return "处理任务时出错: " + e.getMessage();
+		}
+	}
+
+	@GetMapping("/clean")
+	public String clean() {
+		memoryId = null;
+		rootPlanId = null;
+		return "清理成功";
 	}
 }

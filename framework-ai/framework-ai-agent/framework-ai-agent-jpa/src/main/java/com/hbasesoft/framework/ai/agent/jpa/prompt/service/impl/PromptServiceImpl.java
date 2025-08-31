@@ -50,7 +50,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 
 	private final PromptLoader promptLoader;
 
-	@Value("${namespace.value: default}")
+	@Value("${namespace.value:default}")
 	private String namespace;
 
 	public PromptServiceImpl(PromptDao promptRepository, PromptLoader promptLoader) {
@@ -92,7 +92,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 		PromptPo4Jpa entity = promptRepository
 				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, na).eq(PromptPo4Jpa::getPromptName, promptName));
 		if (entity == null) {
-			throw new IllegalArgumentException("Prompt not found: " + promptName);
+			return null;
 		}
 		return mapToPromptVO(entity);
 	}
@@ -104,9 +104,6 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 			throw new IllegalArgumentException("PromptVO filed is invalid");
 		}
 
-		if (Boolean.TRUE.equals(promptVO.getBuiltIn())) {
-			throw new IllegalArgumentException("Cannot create built-in prompt");
-		}
 		PromptPo4Jpa prompt = promptRepository
 				.getByLambda(q -> q.eq(PromptPo4Jpa::getNamespace, promptVO.getNamespace())
 						.eq(PromptPo4Jpa::getPromptName, promptVO.getPromptName()));
@@ -298,7 +295,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	}
 
 	private PromptPo4Jpa mapToPromptPo4Jpa(PromptVO promptVO) {
-		PromptPo4Jpa entity = ContextHolder.getContext().getBean(PromptPo4Jpa.class);
+		PromptPo4Jpa entity = new PromptPo4Jpa();
 		BeanUtils.copyProperties(promptVO, entity);
 		return entity;
 	}
@@ -341,6 +338,7 @@ public class PromptServiceImpl implements PromptService, PromptManagerService {
 	 * @param string
 	 * @return <br>
 	 */
+	@Transactional(readOnly = true)
 	@Override
 	public PromptVO getPromptByName(String string) {
 		return getPromptByName(namespace, string);

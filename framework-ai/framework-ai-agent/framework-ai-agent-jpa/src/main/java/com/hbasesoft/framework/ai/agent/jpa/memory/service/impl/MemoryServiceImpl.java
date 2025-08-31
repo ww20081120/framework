@@ -7,7 +7,7 @@ package com.hbasesoft.framework.ai.agent.jpa.memory.service.impl;
 
 import java.util.List;
 
-import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +38,14 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 	private MemoryDao memoryRepository;
 
 	@Autowired
-	private ChatMemory chatMemory;
+	private ChatMemoryRepository chatMemory;
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<MemoryPo4Jpa> getMemories() {
 		List<MemoryPo4Jpa> memoryEntities = memoryRepository.queryAll();
 		memoryEntities.forEach(memoryEntity -> {
-			List<Message> messages = chatMemory.get(memoryEntity.getMemoryId());
+			List<Message> messages = chatMemory.findByConversationId(memoryEntity.getMemoryId());
 			memoryEntity.setMessages(messages);
 		});
 		memoryEntities.stream()
@@ -57,7 +57,7 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteMemory(String memoryId) {
-		chatMemory.clear(memoryId);
+		chatMemory.deleteByConversationId(memoryId);
 		memoryRepository.deleteByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryId));
 	}
 
@@ -73,7 +73,7 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 			BeanUtils.copyProperties(memoryEntity, findEntity);
 			memoryRepository.save(findEntity);
 		}
-		findEntity.setMessages(chatMemory.get(findEntity.getMemoryId()));
+		findEntity.setMessages(chatMemory.findByConversationId(memoryEntity.getMemoryId()));
 		return convert(findEntity);
 	}
 
@@ -94,7 +94,7 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 		}
 		findEntity.setMemoryName(memoryEntity.getMemoryName());
 		memoryRepository.update(findEntity);
-		findEntity.setMessages(chatMemory.get(findEntity.getMemoryId()));
+		findEntity.setMessages(chatMemory.findByConversationId(findEntity.getMemoryId()));
 		return findEntity;
 	}
 
@@ -105,7 +105,7 @@ public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 		if (findEntity == null) {
 			throw new IllegalArgumentException();
 		}
-		findEntity.setMessages(chatMemory.get(findEntity.getMemoryId()));
+		findEntity.setMessages(chatMemory.findByConversationId(findEntity.getMemoryId()));
 		return findEntity;
 	}
 

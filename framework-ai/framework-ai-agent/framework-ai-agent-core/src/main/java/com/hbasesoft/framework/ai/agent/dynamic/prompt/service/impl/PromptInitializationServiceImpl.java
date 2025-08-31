@@ -85,8 +85,8 @@ public class PromptInitializationServiceImpl implements PromptInitializationServ
 				LoggerUtil.info("Created prompt: {0} for namespace: {1} with language: {2}", prompt.getPromptName(),
 						namespace, language);
 			} catch (Exception e) {
-				LoggerUtil.error("Failed to create prompt: {0} for namespace: {1} with language: {2}",
-						prompt.getPromptName(), namespace, language, e);
+				LoggerUtil.error(e, "Failed to create prompt: {0} for namespace: {1} with language: {2}",
+						prompt.getPromptName(), namespace, language);
 			}
 		} else {
 			LoggerUtil.debug("Prompt already exists: {0} for namespace: {1}", prompt.getPromptName(), namespace);
