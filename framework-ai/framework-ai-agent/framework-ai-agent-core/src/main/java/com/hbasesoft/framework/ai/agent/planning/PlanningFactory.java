@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -51,7 +52,6 @@ import com.hbasesoft.framework.ai.agent.tool.ToolCallBiFunctionDef;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
 import com.hbasesoft.framework.ai.agent.tool.filesystem.UnifiedDirectoryManager;
 import com.hbasesoft.framework.ai.agent.tool.innerStorage.SmartContentSavingService;
-import com.hbasesoft.framework.ai.agent.tool.mapreduce.MapReduceSharedStateManager;
 import com.hbasesoft.framework.ai.agent.tool.planning.PlanningTool;
 import com.hbasesoft.framework.ai.agent.tool.planning.PlanningToolInterface;
 import com.hbasesoft.framework.ai.agent.tool.terminate.TerminateTool;
@@ -97,8 +97,8 @@ public class PlanningFactory implements IPlanningFactory {
 
 	private IDynamicAgentLoader dynamicAgentLoader;
 
-	@Autowired
-	private MapReduceSharedStateManager sharedStateManager;
+	// @Autowired
+	// private MapReduceSharedStateManager sharedStateManager;
 
 	@Autowired
 	@Lazy
@@ -224,7 +224,9 @@ public class PlanningFactory implements IPlanningFactory {
 		return toolCallbackMap;
 	}
 
+	@Override
 	@Bean
+	@Primary
 	public RestClient.Builder createRestClient() {
 		// Create RequestConfig and set the timeout (10 minutes for all timeouts)
 		// Set the connection timeout

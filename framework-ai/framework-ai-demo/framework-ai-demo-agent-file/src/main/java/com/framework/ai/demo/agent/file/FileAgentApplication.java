@@ -10,6 +10,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import com.hbasesoft.framework.ai.agent.EnableAgents;
 import com.hbasesoft.framework.common.Bootstrap;
 
 /**
@@ -22,8 +23,9 @@ import com.hbasesoft.framework.common.Bootstrap;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.demo.embabel <br>
  */
+@EnableAgents
 @SpringBootApplication
-@ComponentScan(basePackages = "com.hbasesoft.framework.ai")
+@ComponentScan(basePackages = "com.framework.ai.demo.agent.file")
 public class FileAgentApplication {
 
 	/**
