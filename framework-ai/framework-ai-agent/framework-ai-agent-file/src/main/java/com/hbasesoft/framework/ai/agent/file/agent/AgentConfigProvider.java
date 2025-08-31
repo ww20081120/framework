@@ -5,9 +5,6 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.file.agent;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Agent配置提供者接口<br>
  * 该接口定义了获取Agent配置信息的方法，允许Agent类通过实现此接口来提供详细的配置信息
@@ -39,12 +36,7 @@ public interface AgentConfigProvider {
 		return "";
 	}
 
-	/**
-	 * 获取可用工具列表
-	 * 
-	 * @return 可用工具列表
-	 */
-	default List<String> getAvailableTools() {
-		return Collections.emptyList();
+	default String[] getActions() {
+		return null;
 	}
 }

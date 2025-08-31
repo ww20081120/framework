@@ -5,9 +5,6 @@
  ****************************************************************************************/
 package com.framework.ai.demo.agent.file;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbasesoft.framework.ai.agent.file.agent.Agent;
 import com.hbasesoft.framework.ai.agent.file.agent.AgentConfigProvider;
 
@@ -22,7 +19,8 @@ import com.hbasesoft.framework.ai.agent.file.agent.AgentConfigProvider;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.simple.agent <br>
  */
-@Agent(name = "simpleAgent", description = "一个简单的示例代理", model = "Qwen/Qwen3-Coder-480B-A35B-Instruct")
+@Agent(name = "simpleAgent", description = "一个简单的示例代理", model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", acions = {
+		"bash", "text_file_operator", "planning", "python_execute", "google_search" })
 public class SimpleAgent implements AgentConfigProvider {
 
 	// 示例Agent类，可以添加具体的业务逻辑方法
@@ -34,10 +32,5 @@ public class SimpleAgent implements AgentConfigProvider {
 	@Override
 	public String getNextStepPrompt() {
 		return "请继续执行下一步操作。";
-	}
-
-	@Override
-	public List<String> getAvailableTools() {
-		return Arrays.asList("bash", "text_file_operator", "planning", "python_execute", "google_search");
 	}
 }

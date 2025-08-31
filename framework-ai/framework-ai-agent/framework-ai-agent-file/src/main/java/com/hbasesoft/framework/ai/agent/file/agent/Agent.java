@@ -13,6 +13,9 @@ import java.lang.annotation.Target;
 
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.ai.agent.agent.BaseAgent;
+import com.hbasesoft.framework.ai.agent.dynamic.agent.DynamicAgent;
+
 /**
  * Agent注解，用于标识和配置智能代理<br>
  * 该注解用于标记智能代理类，并提供代理的基本配置信息
@@ -57,6 +60,46 @@ public @interface Agent {
 	 * @return 命名空间
 	 */
 	String namespace() default "default";
+
+	/**
+	 * 
+	 * Description: 系统提示词 <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	String systemPrompt() default "";
+
+	/**
+	 * 
+	 * Description: 下一步的提示词<br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	String nextStepPrompt() default "";
+
+	/**
+	 * 
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	Class<? extends BaseAgent> agent() default DynamicAgent.class;
+
+	/**
+	 * 
+	 * Description: 工具 <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */
+	String[] acions() default {};
 
 	/**
 	 * 是否为内置代理

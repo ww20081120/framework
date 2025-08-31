@@ -10,7 +10,6 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
-import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.observation.ChatModelObservationConvention;
 import org.springframework.ai.model.SimpleApiKey;
@@ -227,7 +226,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 		if (agentMemory == null) {
 			agentMemory = MessageWindowChatMemory.builder()
 					// in memory use by agent
-					.chatMemoryRepository(new InMemoryChatMemoryRepository()).maxMessages(maxMessages).build();
+					.chatMemoryRepository(chatMemoryRepository).maxMessages(maxMessages).build();
 		}
 		return agentMemory;
 	}
@@ -335,7 +334,7 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 		if (headers == null) {
 			headers = new HashMap<>();
 		}
-		headers.put("User-Agent", "JManus/3.0.2-SNAPSHOT");
+		headers.put("User-Agent", "framework/4.1");
 		defaultOptions.setHttpHeaders(headers);
 		var openAiApi = openAiApi(restClientBuilderProvider.getIfAvailable(RestClient::builder),
 				webClientBuilderProvider.getIfAvailable(WebClient::builder), dynamicModelPo);
