@@ -27,7 +27,6 @@ import com.hbasesoft.framework.ai.agent.planning.IPlanningFactory;
 import com.hbasesoft.framework.ai.agent.tool.Action;
 import com.hbasesoft.framework.ai.agent.tool.AnnotatedMethodToolAdapter;
 import com.hbasesoft.framework.ai.agent.tool.AnnotatedToolRegistry;
-import com.hbasesoft.framework.common.StartupListener;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 
 /**
