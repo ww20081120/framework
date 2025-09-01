@@ -24,8 +24,11 @@ import com.hbasesoft.framework.ai.agent.tool.ActionParam;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.agent.file.agent <br>
  */
-@Agent(name = "DemoAgent", acions = { "bash", "text_file_operator", "planning",
-		"python_execute" }, description = "我能看当前是什么时间，也能算两个数相加， 还能和人打招呼", systemPrompt = """
+@Agent(name = "DemoAgent", 
+acions = { "bash", "text_file_operator", "planning",
+		"python_execute" }, 
+description = "我能看当前是什么时间，也能算两个数相加， 还能和人打招呼", 
+systemPrompt = """
 				 getCurrentDateTime 方法用来获取当前时间的， 
 				 add 是用来相加的方法， 
 				 greet是打招呼的s
