@@ -28,10 +28,6 @@
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-openai</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--		    <groupId>org.springframework.ai</groupId>-->
-<!--		    <artifactId>spring-ai-starter-model-openai</artifactId>-->
-<!--		</dependency>-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
@@ -64,5 +60,12 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+        
+        <!-- 单元测试 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 </project>
