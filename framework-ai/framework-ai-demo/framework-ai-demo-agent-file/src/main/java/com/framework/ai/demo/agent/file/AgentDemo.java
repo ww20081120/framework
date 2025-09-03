@@ -25,7 +25,7 @@ import com.hbasesoft.framework.ai.agent.tool.ActionParam;
  * @see com.hbasesoft.framework.ai.agent.file.agent <br>
  */
 @Agent(name = "DemoAgent", 
-acions = { "bash", "text_file_operator", "planning",
+acions = { "bash", "planning",
 		"python_execute" }, 
 description = "我能看当前是什么时间，也能算两个数相加， 还能和人打招呼", 
 systemPrompt = """
