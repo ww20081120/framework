@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.hbasesoft.framework.ai.agent.config.model.enums.ConfigInputType;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
  * <Description> <br>
@@ -229,7 +230,7 @@ public class ManusProperties implements IManusProperties {
 //		if (StringUtils.isNotEmpty(value)) {
 //			baseDir = value;
 //		}
-		return baseDir;
+		return PropertyHolder.getProperty("manus.baseDir", baseDir);
 	}
 
 	public void setBaseDir(String baseDir) {
