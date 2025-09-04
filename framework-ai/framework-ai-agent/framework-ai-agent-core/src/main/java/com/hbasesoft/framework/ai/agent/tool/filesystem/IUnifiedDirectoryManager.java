@@ -119,5 +119,12 @@ public interface IUnifiedDirectoryManager {
 	 * @throws IOException IO异常
 	 */
 	void cleanupRootPlanDirectory(String rootPlanId) throws IOException;
+	
+	/**
+	 * 设置工作目录路径
+	 * 
+	 * @param workingDirectoryPath 工作目录路径字符串
+	 */
+	void setWorkingDirectory(String workingDirectoryPath);
 
 }

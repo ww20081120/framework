@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.hbasesoft.framework.ai.agent.config.IManusProperties;
@@ -45,7 +46,9 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 	}
 
 	public void init() {
-		this.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
+		if (StringUtils.isEmpty(this.workingDirectoryPath)) {
+			this.workingDirectoryPath = getWorkingDirectory(manusProperties.getBaseDir());
+		}
 	}
 
 	/**
@@ -265,6 +268,18 @@ public class UnifiedDirectoryManager implements IUnifiedDirectoryManager {
 						LoggerUtil.error(e, "删除失败: {0}", path);
 					}
 				});
+	}
+
+	/**
+	 * Description: <br>
+	 * 
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @param workingDirectoryPath <br>
+	 */
+	@Override
+	public void setWorkingDirectory(String workingDirectoryPath) {
+		this.workingDirectoryPath = workingDirectoryPath;
 	}
 
 }
