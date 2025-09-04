@@ -99,7 +99,7 @@ public @interface Agent {
 	 * @taskId <br>
 	 * @return <br>
 	 */
-	String[] acions() default {};
+	String[] actions() default {};
 
 	/**
 	 * 是否为内置代理

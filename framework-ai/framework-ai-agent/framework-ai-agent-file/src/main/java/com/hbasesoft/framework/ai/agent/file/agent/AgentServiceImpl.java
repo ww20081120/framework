@@ -155,8 +155,8 @@ public class AgentServiceImpl extends AbstractAgentService  {
 		config.setSystemPrompt(agentAnnotation.systemPrompt());
 		config.setNextStepPrompt(agentAnnotation.nextStepPrompt());
 		List<String> availableTools = new ArrayList<String>();
-		if (ArrayUtils.isNotEmpty(agentAnnotation.acions())) {
-			for (String action : agentAnnotation.acions()) {
+		if (ArrayUtils.isNotEmpty(agentAnnotation.actions())) {
+			for (String action : agentAnnotation.actions()) {
 				if (!availableTools.contains(action)) {
 					availableTools.add(action);
 				}

@@ -19,7 +19,7 @@ import com.hbasesoft.framework.ai.agent.file.agent.AgentConfigProvider;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.simple.agent <br>
  */
-@Agent(name = "simpleAgent", description = "一个简单的示例代理", model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", acions = {
+@Agent(name = "simpleAgent", description = "一个简单的示例代理", model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", actions = {
 		"bash", "text_file_operator", "planning", "python_execute", "google_search" })
 public class SimpleAgent implements AgentConfigProvider {
 
