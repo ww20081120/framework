@@ -33,4 +33,16 @@ public class AgentInitStartupListener implements StartupListener {
 		AgentServiceImpl impl = context.getBean(AgentServiceImpl.class);
 		impl.init(context);
 	}
+	
+	/**
+	 * Description: <br> 
+	 *  
+	 * @author 王伟<br>
+	 * @taskId <br>
+	 * @return <br>
+	 */ 
+	@Override
+	public LoadOrder getOrder() {
+		return LoadOrder.MIDDLE;
+	}
 }
