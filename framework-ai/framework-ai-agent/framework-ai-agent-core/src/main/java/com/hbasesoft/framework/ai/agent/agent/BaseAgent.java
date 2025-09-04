@@ -196,7 +196,7 @@ public abstract class BaseAgent {
 		this.manusProperties = manusProperties;
 		this.promptService = promptService;
 		this.maxSteps = manusProperties.getMaxSteps();
-		this.initSettingData = Collections.unmodifiableMap(new HashMap<>(initialAgentSetting));
+		this.initSettingData = new HashMap<>(initialAgentSetting);
 	}
 
 	public String run() {
