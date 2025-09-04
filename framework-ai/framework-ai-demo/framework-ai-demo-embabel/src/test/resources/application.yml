@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: embabel-demo
+  threads:
+    virtual:
+      enabled: true
+  output:
+    ansi:
+      enabled: ALWAYS
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+
+management:
+  tracing:
+    enabled: false
+
+embabel:
+  agent-platform:
+    name: embabel-demo
+    description: Embabel 演示代理平台
+    scanning:
+      annotation: true
+      bean: true
+    ranking:
+      max-attempts: 3
+
+  autonomy:
+    agent-confidence-cut-off: 0.6
+    goal-confidence-cut-off: 0.6
+
+  llm-operations:
+    prompts:
+      generate-examples-by-default: true
+
+  models:
+    # 要使用的默认 LLM。这应该与您的 Ollama 实例中可用的模型之一匹配。
+    # 对于 modelscope.cn/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:latest,
+    # 您通常会使用以下命令拉取它: ollama pull modelscope.cn/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:latest
+    # 然后将其引用为 "qwen3-coder" (冒号前的模型名称部分)
+    default-llm: modelscope.cn/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:latest
+
+logging:
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr([%t]){magenta} %clr(%-5level) %clr(%logger{0}){cyan} %clr(-){faint} %msg%n"
+  level:
+    # 我们故意抑制来自 Spring AI 转换器的详细错误消息
+    # 这些消息在控制台中可能会分散注意力
+    # 当不可恢复的错误向上传播时，仍然会记录这些错误
+    org.springframework.ai.converter.BeanOutputConverter: OFF
+
+    # 可以有用设置为 DEBUG 的 Embabel 类
+    com.embabel.agent.core.support.BlackboardWorldStateDeterminer: INFO
+    com.embabel.agent.api.annotation.support.AgentMetadataReader: INFO
+    com.embabel.agent.spi.support.LlmRanker: INFO

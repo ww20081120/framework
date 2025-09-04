@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.hbasesoft.framework.db.core.BaseDao;
-import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
+import com.hbasesoft.framework.db.core.IBaseEntity;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
 import jakarta.persistence.Tuple;
@@ -32,7 +32,7 @@ import jakarta.persistence.criteria.Root;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
+public interface BaseJpaDao<T extends IBaseEntity> extends BaseDao<T> {
 
     /**
      * <Description> <br>
@@ -58,7 +58,8 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
          * @param criteriaBuilder
          * @return <br>
          */
-        Predicate toPredicate(Root<? extends Tuple> root, CriteriaDelete<T> delete, CriteriaBuilder criteriaBuilder);
+        Predicate toPredicate(Root<? extends Tuple> root, CriteriaDelete<T> delete,
+                CriteriaBuilder criteriaBuilder);
     }
 
     /**
@@ -85,7 +86,8 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
          * @param criteriaBuilder
          * @return <br>
          */
-        Predicate toPredicate(Root<? extends Tuple> root, CriteriaQuery<Tuple> query, CriteriaBuilder criteriaBuilder);
+        Predicate toPredicate(Root<? extends Tuple> root, CriteriaQuery<Tuple> query,
+                CriteriaBuilder criteriaBuilder);
     }
 
     /**
@@ -112,7 +114,8 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
          * @param criteriaBuilder
          * @return <br>
          */
-        Predicate toPredicate(Root<? extends Tuple> root, CriteriaUpdate<T> update, CriteriaBuilder criteriaBuilder);
+        Predicate toPredicate(Root<? extends Tuple> root, CriteriaUpdate<T> update,
+                CriteriaBuilder criteriaBuilder);
     }
 
     /**
@@ -187,7 +190,7 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param <M> M
+     * @param <M>      M
      * @param criteria
      * @return <br>
      */
@@ -306,7 +309,7 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * 
      * @author 王伟<br>
      * @taskId <br>
-     * @param <M> M
+     * @param <M>       M
      * @param criteria
      * @param pageIndex
      * @param pageSize
@@ -324,7 +327,8 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * @param pageSize
      * @return <br>
      */
-    PagerList<T> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex, int pageSize);
+    PagerList<T> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex,
+            int pageSize);
 
     /**
      * Description: <br>
@@ -339,7 +343,7 @@ public interface BaseJpaDao<T extends BaseEntity> extends BaseDao<T> {
      * @return <br>
      */
     <M> PagerList<M> queryPagerBySpecification(CriterialQuerySpecification<T> specification, int pageIndex,
-        int pageSize, Class<M> clazz);
+            int pageSize, Class<M> clazz);
 
     /**
      * Description: 根据条件来做更新<br>

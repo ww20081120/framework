@@ -3,8 +3,6 @@
  */
 package com.hbasesoft.framework.db.core;
 
-import java.io.Serializable;
-
 import com.alibaba.fastjson2.JSON;
 
 /**
@@ -17,7 +15,7 @@ import com.alibaba.fastjson2.JSON;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.core.bean <br>
  */
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity implements IBaseEntity {
     /**
      * serialVersionUID
      */

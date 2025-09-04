@@ -1,0 +1,13 @@
+project: #项目信息
+  name: framework-ai-demo-agent-file
+  version: 4.1
+  model: dev
+
+spring:
+  application:
+    name: ${project.name}
+  main:
+    allow-circular-references: true
+
+# 搜索引擎配置
+SERP_API_KEY: your_api_key

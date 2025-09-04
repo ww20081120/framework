@@ -1,0 +1,42 @@
+/**************************************************************************************** 
+ Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
+ transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
+ or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
+ ****************************************************************************************/
+package com.framework.ai.demo.agent.file.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
+import com.hbasesoft.framework.ai.agent.file.model.ModelConfigBuilder;
+
+/**
+ * ModelConfig配置示例类<br>
+ * 展示如何通过@Configuration注解来注入ModelConfig实例
+ * 
+ * @author 王伟<br>
+ * @version 1.0<br>
+ * @taskId <br>
+ * @CreateDate 2025年8月27日 <br>
+ * @since V1.0<br>
+ * @see com.hbasesoft.framework.ai.jmanus.dynamic.simple.model <br>
+ */
+@Configuration
+public class ModelConfiguration {
+
+	/**
+	 * 创建OpenAI模型配置Bean
+	 * 
+	 * @return OpenAI模型配置
+	 */
+	@Bean
+	public ModelConfig openAIModelConfig() {
+		return ModelConfigBuilder.builder().baseUrl("http://localhost:1234")
+				.apiKey("your_api_key").modelName("qwen/qwen3-coder-30b")
+				.modelDescription(
+						"Qwen3-Coder 是通义千问团队开源的最新 AI 编程大模型，具备卓越的代码生成与智能代理能力，支持超长上下文，适用于多种智能编程场景。模型及工具已在魔搭社区、HuggingFace 等平台开源，开发者可免费下载和使用")
+				.type("openai").isDefault(true).temperature(0.7).topP(0.9).completionsPath("/v1/chat/completions")
+				.build();
+	}
+}

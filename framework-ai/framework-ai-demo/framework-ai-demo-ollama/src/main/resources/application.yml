@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: ollama-demo
+  ai:
+    ollama:
+      chat:
+        enabled: true
+        model: modelscope.cn/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:latest
+        base-url: http://localhost:11434
+      embedding:
+        enabled: false
+    retry:
+      max-attempts: 3
+server:
+  port: 8080
+logging:
+  level:
+    com.hbasesoft.framework.ai.demo.ollama: DEBUG

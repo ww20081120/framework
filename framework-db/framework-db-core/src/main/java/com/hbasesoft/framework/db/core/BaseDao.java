@@ -29,7 +29,7 @@ import com.hbasesoft.framework.db.core.utils.PagerList;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.hibernate <br>
  */
-public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
+public interface BaseDao<T extends IBaseEntity> extends ISqlExcutor {
 
     /**
      * <Description> <br>
@@ -460,7 +460,7 @@ public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
      * @param specification
      * @param pageIndex
      * @param pageSize
-     * @param <M> M
+     * @param <M>           M
      * @param clazz
      * @return <br>
      */
@@ -486,7 +486,7 @@ public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
      * @param wrapper
      * @param pageIndex
      * @param pageSize
-     * @param <M> M
+     * @param <M>       M
      * @param clazz
      * @return <br>
      */
@@ -500,12 +500,12 @@ public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
      * @param specification
      * @param pageIndex
      * @param pageSize
-     * @param <M> M
+     * @param <M>           M
      * @param clazz
      * @return <br>
      */
     <M> PagerList<M> queryPagerByLambda(LambdaQuerySpecification<T, M> specification, int pageIndex, int pageSize,
-        Class<M> clazz);
+            Class<M> clazz);
 
     /**
      * Description: <br>
@@ -527,7 +527,7 @@ public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
      * @param wrapper
      * @param pageIndex
      * @param pageSize
-     * @param <M> M
+     * @param <M>       M
      * @param clazz
      * @return <br>
      */
@@ -616,6 +616,5 @@ public interface BaseDao<T extends BaseEntity> extends ISqlExcutor {
      * @param wrapper <br>
      */
     void updateByLambda(LambdaUpdateWrapper<T> wrapper);
-
 
 }
