@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections4.MapUtils;
+
 import com.hbasesoft.framework.ai.agent.agent.AgentState;
 import com.hbasesoft.framework.ai.agent.agent.BaseAgent;
 import com.hbasesoft.framework.ai.agent.config.IManusProperties;
@@ -92,6 +94,11 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 			initSettings.put(CURRENT_STEP_INDEX_KEY, String.valueOf(stepIndex));
 			initSettings.put(STEP_TEXT_KEY, stepText);
 			initSettings.put(EXTRA_PARAMS_KEY, context.getPlan().getExecutionParams());
+			if (MapUtils.isNotEmpty(context.getToolsContext())) {
+				context.getToolsContext().forEach((k, v) -> {
+					initSettings.put(k, v);
+				});
+			}
 
 			BaseAgent executor = getExecutorForStep(stepType, context, initSettings, expectedReturnInfo);
 			if (executor == null) {
