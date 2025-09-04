@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -123,9 +124,12 @@ public class AgentServiceImpl extends AbstractAgentService  {
 		// 遍历所有Bean，创建对应的AgentConfig对象并缓存
 		for (Map.Entry<String, Object> entry : agentBeans.entrySet()) {
 			Object bean = entry.getValue();
-			Agent agentAnnotation = bean.getClass().getAnnotation(Agent.class);
+			// 使用Spring的AnnotationUtils来查找注解，可以正确处理代理类等情况
+			Agent agentAnnotation = AnnotationUtils.findAnnotation(bean.getClass(), Agent.class);
+			
 			if (agentAnnotation != null) {
-				String beanName = getBeanName(bean.getClass(), agentAnnotation);
+				Class<?> beanClass = bean.getClass();
+				String beanName = getBeanName(beanClass, agentAnnotation);
 				String namespace = agentAnnotation.namespace();
 				String key = getAgentKey(namespace, beanName);
 
