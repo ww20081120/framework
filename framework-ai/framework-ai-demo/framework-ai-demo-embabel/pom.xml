@@ -12,12 +12,12 @@
        <embabel-agent.version>0.1.1-SNAPSHOT</embabel-agent.version>
    </properties>
    <dependencies>
-       <!-- Embabel Agent Starter -->
+		<!-- Embabel Agent Starter -->
        <dependency>
            <groupId>com.embabel.agent</groupId>
            <artifactId>embabel-agent-starter</artifactId>
        </dependency>
-       <!-- Spring Boot Starter -->
+		<!-- Spring Boot Starter -->
        <dependency>
            <groupId>org.springframework.boot</groupId>
            <artifactId>spring-boot-starter</artifactId>
@@ -27,8 +27,8 @@
            <artifactId>spring-shell-starter</artifactId>
            <version>3.4.1</version>
        </dependency>
-<!--        Test dependencies -->
-         <!-- Test dependencies -->
+		<!--        Test dependencies -->
+		<!-- Test dependencies -->
         <dependency>
             <groupId>com.embabel.agent</groupId>
             <artifactId>embabel-agent-test</artifactId>

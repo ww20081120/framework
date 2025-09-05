@@ -215,7 +215,7 @@
 				<artifactId>framework-tx-server-storage-db</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
-			
+
 			<!--framework-ai-->
 			<dependency>
 				<groupId>com.hbasesoft.framework</groupId>

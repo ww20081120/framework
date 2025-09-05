@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hbasesoft.framework</groupId>
     <artifactId>framework</artifactId>
@@ -30,10 +30,10 @@
     </modules>
     <properties>
         <java.version>21</java.version>
-        <!-- 解决文件拷贝时的编码 -->
+		<!-- 解决文件拷贝时的编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- 解决编译时中文乱码-->
+		<!-- 解决编译时中文乱码-->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
         <fastjson2.version>2.0.57</fastjson2.version>
@@ -110,14 +110,14 @@
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.jcommander/jcommander -->
+			<!-- https://mvnrepository.com/artifact/org.jcommander/jcommander -->
             <dependency>
                 <groupId>org.jcommander</groupId>
                 <artifactId>jcommander</artifactId>
                 <version>${jcommander.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -125,7 +125,7 @@
                 <version>${commons-lang3.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -139,7 +139,7 @@
                 <version>${velocity.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
             <dependency>
                 <groupId>com.alibaba.fastjson2</groupId>
@@ -169,22 +169,22 @@
                 <version>${commons-io.version}</version>
             </dependency>
 
-            <!-- 处理图片 -->
+			<!-- 处理图片 -->
             <dependency>
                 <groupId>net.coobird</groupId>
                 <artifactId>thumbnailator</artifactId>
                 <version>${thumbnailator.version}</version>
             </dependency>
 
-            <!-- 数据库密码加密工具 -->
+			<!-- 数据库密码加密工具 -->
             <dependency>
                 <groupId>org.jasypt</groupId>
                 <artifactId>jasypt</artifactId>
                 <version>${jasypt.version}</version>
             </dependency>
 
-            <!-- 序列化工具 -->
-            <!--
+			<!-- 序列化工具 -->
+			<!--
             https://mvnrepository.com/artifact/com.esotericsoftware.kryo/kryo5 -->
             <dependency>
                 <groupId>com.esotericsoftware.kryo</groupId>
@@ -198,14 +198,14 @@
                 <version>${druid.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
+			<!-- https://mvnrepository.com/artifact/dom4j/dom4j -->
             <dependency>
                 <groupId>org.dom4j</groupId>
                 <artifactId>dom4j</artifactId>
                 <version>${dom4j.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
             <dependency>
                 <groupId>commons-beanutils</groupId>
@@ -213,7 +213,7 @@
                 <version>${commons-beanutils.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine -->
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
@@ -221,7 +221,7 @@
                 <version>${caffeine.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/org.apache.flume/flume-ng-core -->
             <dependency>
                 <groupId>org.apache.flume</groupId>
@@ -239,7 +239,7 @@
                 <version>${flumn.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
+			<!-- https://mvnrepository.com/artifact/com.jcraft/jsch -->
             <dependency>
                 <groupId>com.jcraft</groupId>
                 <artifactId>jsch</artifactId>
@@ -252,34 +252,34 @@
                 <version>${elasticjob.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
+			<!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
                 <version>${jaxb.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
+			<!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
             <dependency>
                 <groupId>com.xuxueli</groupId>
                 <artifactId>xxl-job-core</artifactId>
                 <version>${xxl-job.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+			<!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
             <dependency>
                 <groupId>com.mysql</groupId>
                 <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+			<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-            <!--
+			<!--
             https://mvnrepository.com/artifact/dev.langchain4j/langchain4j-core -->
             <dependency>
                 <groupId>dev.langchain4j</groupId>
@@ -298,7 +298,7 @@
                 <artifactId>langchain4j-embeddings</artifactId>
                 <version>${langchain4j.version}</version>
             </dependency>
-            <!--
+			<!--
             https://mvnrepository.com/artifact/com.alibaba/dashscope-sdk-java -->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -306,7 +306,7 @@
                 <version>${dashscope.version}</version>
             </dependency>
 
-            <!--
+			<!--
             https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
             <dependency>
                 <groupId>co.elastic.clients</groupId>
@@ -349,15 +349,15 @@
 	            <artifactId>webdrivermanager</artifactId>
 	            <version>${webdrivermanager.version}</version>
 	        </dependency>
-	
-	        <!-- Playwright for browser automation -->
+
+			<!-- Playwright for browser automation -->
 	        <dependency>
 	            <groupId>com.microsoft.playwright</groupId>
 	            <artifactId>playwright</artifactId>
 	            <version>${playwright.version}</version>
 	        </dependency>
-	        
-	        <!-- https://mvnrepository.com/artifact/io.modelcontextprotocol.sdk/mcp -->
+
+			<!-- https://mvnrepository.com/artifact/io.modelcontextprotocol.sdk/mcp -->
 			<dependency>
 			    <groupId>io.modelcontextprotocol.sdk</groupId>
 			    <artifactId>mcp</artifactId>
@@ -368,8 +368,8 @@
 	            <artifactId>mcp-spring-webflux</artifactId>
 	            <version>${mcp.version}</version>
 	        </dependency>
-	        
-	        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+
+			<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 			<dependency>
 			    <groupId>org.apache.poi</groupId>
 			    <artifactId>poi-ooxml</artifactId>
@@ -387,7 +387,7 @@
 			    <artifactId>easyexcel</artifactId>
 			    <version>${easyexcel.version}</version>
 			</dependency>
-			
+
 
 			<!-- OpenTelemetry dependencies -->
             <dependency>
@@ -425,7 +425,7 @@
 
     <build>
         <plugins>
-            <!-- 可以用来批量修改版本的插件 -->
+			<!-- 可以用来批量修改版本的插件 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
@@ -434,7 +434,7 @@
                 </configuration>
             </plugin>
 
-            <!-- 做checkstyle的插件 -->
+			<!-- 做checkstyle的插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -456,7 +456,7 @@
                 </executions>
             </plugin>
 
-            <!-- 在提交代码的时候自动做checkstyle的插件 -->
+			<!-- 在提交代码的时候自动做checkstyle的插件 -->
             <plugin>
                 <groupId>io.github.phillipuniverse</groupId>
                 <artifactId>githook-maven-plugin</artifactId>
@@ -468,7 +468,7 @@
                         </goals>
                         <configuration>
                             <hooks>
-                                <!--
+								<!--
                                 注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
                                 <pre-commit>
                                     echo "begin to execute hook"
@@ -482,14 +482,14 @@
                 </executions>
             </plugin>
 
-            <!-- 编译设置jdk版本的插件 -->
+			<!-- 编译设置jdk版本的插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
 
-            <!-- 编译时把源码打入jar包 -->
-            <!--
+			<!-- 编译时把源码打入jar包 -->
+			<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
