@@ -196,6 +196,14 @@ public abstract class BaseAgent {
 		this.manusProperties = manusProperties;
 		this.promptService = promptService;
 		this.maxSteps = manusProperties.getMaxSteps();
+		if (initialAgentSetting.containsKey("agent_max_steps")) {
+			try {
+				this.maxSteps = Integer.parseInt(initialAgentSetting.get("agent_max_steps").toString());
+			} catch (Exception e) {
+				LoggerUtil.warn("Invalid agent_max_steps value: {0}, using default {1}",
+						initialAgentSetting.get("agent_max_steps"), manusProperties.getMaxSteps());
+			}
+		}
 		this.initSettingData = new HashMap<>(initialAgentSetting);
 	}
 

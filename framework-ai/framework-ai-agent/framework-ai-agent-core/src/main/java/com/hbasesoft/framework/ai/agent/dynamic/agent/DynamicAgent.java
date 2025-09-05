@@ -95,6 +95,8 @@ public class DynamicAgent extends ReActAgent {
 
 	private final StreamingResponseHandler streamingResponseHandler;
 
+	private int retryTimes = 1;
+
 	public void clearUp(String planId) {
 		Map<String, ToolCallBackContext> toolCallBackContext = toolCallbackProvider.getToolCallBackContext();
 		for (ToolCallBackContext toolCallBack : toolCallBackContext.values()) {
@@ -127,6 +129,16 @@ public class DynamicAgent extends ReActAgent {
 		this.userInputService = userInputService;
 		this.model = model;
 		this.streamingResponseHandler = streamingResponseHandler;
+
+		if (initialAgentSetting.containsKey("agent_retry_times")) {
+			try {
+				this.retryTimes = Integer.parseInt(initialAgentSetting.get("agent_retry_times").toString());
+			} catch (Exception e) {
+				LoggerUtil.warn("Invalid agent_retry_times value: {0}, using default 1",
+						initialAgentSetting.get("agent_retry_times"));
+			}
+		}
+
 	}
 
 	@Override
@@ -134,7 +146,7 @@ public class DynamicAgent extends ReActAgent {
 		collectAndSetEnvDataForTools();
 
 		try {
-			return executeWithRetry(3);
+			return executeWithRetry(retryTimes);
 		} catch (Exception e) {
 			LoggerUtil.error(e,
 					String.format("🚨 Oops! The %s's thinking process hit a snag: %s", getName(), e.getMessage()));
@@ -364,7 +376,7 @@ public class DynamicAgent extends ReActAgent {
 			List<ToolResponseMessage.ToolResponse> responses) {
 		for (ToolResponseMessage.ToolResponse toolResponse : responses) {
 			String curToolResp = toolResponse.responseData();
-			LoggerUtil.info("🔧 Tool {0}'s executing result: {1}", getName(), curToolResp);
+			LoggerUtil.info(String.format("🔧 Tool %s's executing result: %s", getName(), curToolResp));
 
 			// Find corresponding ActToolInfo and set result
 			for (ThinkActRecord.ActToolInfo actToolInfo : actToolInfoList) {
