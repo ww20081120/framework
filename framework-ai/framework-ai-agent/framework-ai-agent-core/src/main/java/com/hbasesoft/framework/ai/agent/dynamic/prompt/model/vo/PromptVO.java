@@ -24,37 +24,38 @@ import lombok.Data;
 @Data
 public class PromptVO {
 
-	private Long id;
+    private Long id;
 
-	private String promptName;
+    private String promptName;
 
-	private String namespace;
+    private String namespace;
 
-	private String messageType;
+    private String messageType;
 
-	private String type;
+    private String type;
 
-	private String promptContent;
+    private String promptContent;
 
-	private Boolean builtIn;
+    private Boolean builtIn;
 
-	private String promptDescription;
+    private String promptDescription;
 
-	public Boolean invalid() {
-		return promptName == null || messageType == null || type == null || promptContent == null
-				|| promptDescription == null || builtIn == null || !isValidEnumValue(type, PromptType.class)
-				|| !isValidEnumValue(messageType, MessageType.class);
-	}
+    public Boolean invalid() {
+        return promptName == null || messageType == null || type == null || promptContent == null
+            || promptDescription == null || builtIn == null || !isValidEnumValue(type, PromptType.class)
+            || !isValidEnumValue(messageType, MessageType.class);
+    }
 
-	private static <E extends Enum<E>> boolean isValidEnumValue(String value, Class<E> enumClass) {
-		if (value == null) {
-			return false;
-		}
-		try {
-			Enum.valueOf(enumClass, value);
-			return true;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
-	}
+    private static <E extends Enum<E>> boolean isValidEnumValue(String value, Class<E> enumClass) {
+        if (value == null) {
+            return false;
+        }
+        try {
+            Enum.valueOf(enumClass, value);
+            return true;
+        }
+        catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }

@@ -19,20 +19,20 @@ import com.hbasesoft.framework.ai.agent.config.IManusProperties;
  */
 public interface ISmartContentSavingService {
 
-	/**
-	 * Get Manus properties
-	 * 
-	 * @return Manus properties
-	 */
-	IManusProperties getManusProperties();
+    /**
+     * Get Manus properties
+     * 
+     * @return Manus properties
+     */
+    IManusProperties getManusProperties();
 
-	/**
-	 * Process content, automatically store if content is too long
-	 * 
-	 * @param planId        Plan ID
-	 * @param content       Content
-	 * @param callingMethod Calling method name
-	 * @return Processing result containing filename and summary
-	 */
-	SmartProcessResult processContent(String planId, String content, String callingMethod);
+    /**
+     * Process content, automatically store if content is too long
+     * 
+     * @param planId Plan ID
+     * @param content Content
+     * @param callingMethod Calling method name
+     * @return Processing result containing filename and summary
+     */
+    SmartProcessResult processContent(String planId, String content, String callingMethod);
 }

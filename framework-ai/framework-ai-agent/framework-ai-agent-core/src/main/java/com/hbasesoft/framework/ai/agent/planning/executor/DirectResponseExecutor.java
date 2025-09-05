@@ -32,59 +32,60 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 public class DirectResponseExecutor extends AbstractPlanExecutor {
 
-	/**
-	 * Constructor for DirectResponseExecutor
-	 * 
-	 * @param agents          List of dynamic agent entities
-	 * @param recorder        Plan execution recorder
-	 * @param agentService    Agent service
-	 * @param llmService      LLM service
-	 * @param manusProperties Manus properties
-	 */
-	public DirectResponseExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
-			ILlmService llmService, IManusProperties manusProperties) {
-		super(agents, recorder, agentService, llmService, manusProperties);
-	}
+    /**
+     * Constructor for DirectResponseExecutor
+     * 
+     * @param agents List of dynamic agent entities
+     * @param recorder Plan execution recorder
+     * @param agentService Agent service
+     * @param llmService LLM service
+     * @param manusProperties Manus properties
+     */
+    public DirectResponseExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
+        ILlmService llmService, IManusProperties manusProperties) {
+        super(agents, recorder, agentService, llmService, manusProperties);
+    }
 
-	/**
-	 * Execute direct response plan - records plan execution start and marks as
-	 * successful The actual direct response generation is handled by
-	 * PlanningCoordinator
-	 * 
-	 * @param context Execution context containing user request and plan information
-	 */
-	@Override
-	public void executeAllSteps(ExecutionContext context) {
-		LoggerUtil.info("Executing direct response plan for planId: {0}", context.getCurrentPlanId());
+    /**
+     * Execute direct response plan - records plan execution start and marks as successful The actual direct response
+     * generation is handled by PlanningCoordinator
+     * 
+     * @param context Execution context containing user request and plan information
+     */
+    @Override
+    public void executeAllSteps(ExecutionContext context) {
+        LoggerUtil.info("Executing direct response plan for planId: {0}", context.getCurrentPlanId());
 
-		BaseAgent lastExecutor = null;
+        BaseAgent lastExecutor = null;
 
-		try {
-			// Record plan execution start
-			recorder.recordPlanExecutionStart(context);
+        try {
+            // Record plan execution start
+            recorder.recordPlanExecutionStart(context);
 
-			LoggerUtil.info("Direct response executor completed successfully for planId: {0}",
-					context.getCurrentPlanId());
+            LoggerUtil.info("Direct response executor completed successfully for planId: {0}",
+                context.getCurrentPlanId());
 
-			List<ExecutionStep> steps = context.getPlan().getAllSteps();
+            List<ExecutionStep> steps = context.getPlan().getAllSteps();
 
-			if (steps != null && !steps.isEmpty()) {
-				ExecutionStep step = steps.get(0);
-				executeStep(step, context);
-				if (StringUtils.isNotEmpty(step.getResult())) {
-					context.setResultSummary(step.getResult());
-					context.setNeedSummary(false);
-				}
-			}
-			context.setSuccess(true);
-		} catch (Exception e) {
-			LoggerUtil.error(e, "Error during direct response execution for planId: {0}", context.getCurrentPlanId());
-			context.setSuccess(false);
-			// Set error message as result summary
-			context.setResultSummary("Direct response execution failed: " + e.getMessage());
-		} finally {
-			performCleanup(context, lastExecutor);
-		}
-	}
+            if (steps != null && !steps.isEmpty()) {
+                ExecutionStep step = steps.get(0);
+                executeStep(step, context);
+                if (StringUtils.isNotEmpty(step.getResult())) {
+                    context.setResultSummary(step.getResult());
+                    context.setNeedSummary(false);
+                }
+            }
+            context.setSuccess(true);
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e, "Error during direct response execution for planId: {0}", context.getCurrentPlanId());
+            context.setSuccess(false);
+            // Set error message as result summary
+            context.setResultSummary("Direct response execution failed: " + e.getMessage());
+        }
+        finally {
+            performCleanup(context, lastExecutor);
+        }
+    }
 
 }

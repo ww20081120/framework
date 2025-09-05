@@ -55,7 +55,7 @@ public class ImageController {
     /**
      * Description: 生成图片 <br>
      *
-     * @param input    提示词 <br>
+     * @param input 提示词 <br>
      * @param response <br>
      */
     @GetMapping("/generate")
@@ -71,7 +71,7 @@ public class ImageController {
                 response.getOutputStream().write(in.readAllBytes());
                 response.getOutputStream().flush();
             }
-        } 
+        }
         catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -89,18 +89,13 @@ public class ImageController {
      */
     @GetMapping("/multipleConditions")
     public ResponseEntity<?> multipleConditions(
-            final @RequestParam(value = "subject", defaultValue = "一只会编程的猫") String subject,
-            final @RequestParam(value = "environment", defaultValue = "办公室") String environment,
-            final @RequestParam(value = "height", defaultValue = "1024") Integer height,
-            final @RequestParam(value = "width", defaultValue = "1024") Integer width,
-            final @RequestParam(value = "style", defaultValue = "生动") String style) {
+        final @RequestParam(value = "subject", defaultValue = "一只会编程的猫") String subject,
+        final @RequestParam(value = "environment", defaultValue = "办公室") String environment,
+        final @RequestParam(value = "height", defaultValue = "1024") Integer height,
+        final @RequestParam(value = "width", defaultValue = "1024") Integer width,
+        final @RequestParam(value = "style", defaultValue = "生动") String style) {
 
-        String prompt = String.format(
-            "一个%s，置身于%s的环境中，使用%s的艺术风格，高清4K画质，细节精致", 
-            subject, 
-            environment, 
-            style
-        );
+        String prompt = String.format("一个%s，置身于%s的环境中，使用%s的艺术风格，高清4K画质，细节精致", subject, environment, style);
 
         ImageOptions options = ImageOptionsBuilder.builder().height(height).width(width).build();
 
@@ -109,15 +104,11 @@ public class ImageController {
             String imageUrl = response.getResult().getOutput().getUrl();
             System.out.println(imageUrl);
             return ResponseEntity.ok(response.getResult().getOutput().getUrl());
-        } 
+        }
         catch (Exception e) {
             LoggerUtil.error(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of(
-                    "error", "图像生成失败", 
-                    "message", e.getMessage(), 
-                    "timestamp", LocalDateTime.now()
-                ));
+                .body(Map.of("error", "图像生成失败", "message", e.getMessage(), "timestamp", LocalDateTime.now()));
         }
     }
 }

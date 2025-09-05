@@ -45,8 +45,7 @@ public class OllamaController {
      */
     @GetMapping("/ai/code")
     public String generateCode(
-            @RequestParam(value = "description", defaultValue = 
-            "a simple hello world program") final String description) {
+        @RequestParam(value = "description", defaultValue = "a simple hello world program") final String description) {
         return ollamaService.getCodeGeneration(description);
     }
 
@@ -57,9 +56,8 @@ public class OllamaController {
      * @return the structured output as a Map
      */
     @GetMapping("/ai/structured")
-    public Map<String, Object> generateStructured(
-            @RequestParam(value = "description", defaultValue = 
-            "Return a JSON object with name and age fields") final String description) {
+    public Map<String, Object> generateStructured(@RequestParam(value = "description",
+        defaultValue = "Return a JSON object with name and age fields") final String description) {
         return ollamaService.getStructuredOutput(description);
     }
 }

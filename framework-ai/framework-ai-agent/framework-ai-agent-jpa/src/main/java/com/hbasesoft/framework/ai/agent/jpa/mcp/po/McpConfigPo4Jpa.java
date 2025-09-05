@@ -33,25 +33,25 @@ import lombok.Setter;
 @Table(name = "mcp_config")
 public class McpConfigPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = -1081277357665532464L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = -1081277357665532464L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "mcp_server_name", nullable = false, unique = true)
-	private String mcpServerName;
+    @Column(name = "mcp_server_name", nullable = false, unique = true)
+    private String mcpServerName;
 
-	@Column(name = "connection_type", nullable = false)
-	private String connectionType;
+    @Column(name = "connection_type", nullable = false)
+    private String connectionType;
 
-	@Column(name = "connection_config", nullable = false, length = 4000)
-	private String connectionConfig;
+    @Column(name = "connection_config", nullable = false, length = 4000)
+    private String connectionConfig;
 
-	@Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE'")
-	private String status = McpConfigStatus.ENABLE.name(); // Default to enabled status
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(10) DEFAULT 'ENABLE'")
+    private String status = McpConfigStatus.ENABLE.name(); // Default to enabled status
 
 }

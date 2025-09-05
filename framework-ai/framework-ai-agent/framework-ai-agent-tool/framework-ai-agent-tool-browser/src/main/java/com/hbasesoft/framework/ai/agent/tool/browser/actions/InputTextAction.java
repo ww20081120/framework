@@ -23,57 +23,60 @@ import com.microsoft.playwright.Page;
 
 public class InputTextAction extends BrowserAction {
 
-	public InputTextAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public InputTextAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Integer index = request.getIndex();
-		String text = request.getText();
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Integer index = request.getIndex();
+        String text = request.getText();
 
-		Page page = getCurrentPage(); // Get Playwright Page instance
-		if (index == null || text == null) {
-			return new ToolExecuteResult("Index and text are required for 'input_text' action");
-		}
+        Page page = getCurrentPage(); // Get Playwright Page instance
+        if (index == null || text == null) {
+            return new ToolExecuteResult("Index and text are required for 'input_text' action");
+        }
 
-		// Get interactive elements (InteractiveElement), supports all frames (including
-		// iframe)
-		// Already supports recursion frame
-		InteractiveElement inputElement = getInteractiveElement(index);
-		if (inputElement == null) {
-			return new ToolExecuteResult("Element with index " + index + " not found");
-		}
-		String tagName = inputElement.getTagName();
-		if (!"input".equals(tagName) && !"textarea".equals(tagName)) {
-			return new ToolExecuteResult("Element at index " + index + " is not an input element");
-		}
-		// Get element locator
-		Locator elementLocator = inputElement.getLocator();
-		// 3. Try fill
-		try {
-			elementLocator.fill(""); // Clear first
-			// Set character input delay to 100ms, adjustable as needed
-			Locator.PressSequentiallyOptions options = new Locator.PressSequentiallyOptions().setDelay(100);
-			elementLocator.pressSequentially(text, options);
-		} catch (Exception e) {
-			// 4. If fill fails, try pressSequentially
-			try {
-				elementLocator.fill(""); // Clear again
-				elementLocator.fill(text); // Direct fill
-			} catch (Exception e2) {
-				// 5. If still fails, use JS assignment and trigger input event
-				try {
-					elementLocator.evaluate(
-							"(el, value) => { el.value = value; el.dispatchEvent(new Event('input', { bubbles: true })); }",
-							text);
-				} catch (Exception e3) {
-					return new ToolExecuteResult("Input failed: " + e3.getMessage());
-				}
-			}
-		}
-		return new ToolExecuteResult(
-				"Successfully input: '" + text + "' to the specified element with index: " + index);
-	}
+        // Get interactive elements (InteractiveElement), supports all frames (including
+        // iframe)
+        // Already supports recursion frame
+        InteractiveElement inputElement = getInteractiveElement(index);
+        if (inputElement == null) {
+            return new ToolExecuteResult("Element with index " + index + " not found");
+        }
+        String tagName = inputElement.getTagName();
+        if (!"input".equals(tagName) && !"textarea".equals(tagName)) {
+            return new ToolExecuteResult("Element at index " + index + " is not an input element");
+        }
+        // Get element locator
+        Locator elementLocator = inputElement.getLocator();
+        // 3. Try fill
+        try {
+            elementLocator.fill(""); // Clear first
+            // Set character input delay to 100ms, adjustable as needed
+            Locator.PressSequentiallyOptions options = new Locator.PressSequentiallyOptions().setDelay(100);
+            elementLocator.pressSequentially(text, options);
+        }
+        catch (Exception e) {
+            // 4. If fill fails, try pressSequentially
+            try {
+                elementLocator.fill(""); // Clear again
+                elementLocator.fill(text); // Direct fill
+            }
+            catch (Exception e2) {
+                // 5. If still fails, use JS assignment and trigger input event
+                try {
+                    elementLocator.evaluate(
+                        "(el, value) => { el.value = value; el.dispatchEvent(new Event('input', { bubbles: true })); }",
+                        text);
+                }
+                catch (Exception e3) {
+                    return new ToolExecuteResult("Input failed: " + e3.getMessage());
+                }
+            }
+        }
+        return new ToolExecuteResult(
+            "Successfully input: '" + text + "' to the specified element with index: " + index);
+    }
 
 }

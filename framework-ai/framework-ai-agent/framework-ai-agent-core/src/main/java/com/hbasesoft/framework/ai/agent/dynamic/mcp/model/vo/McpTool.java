@@ -29,93 +29,94 @@ import com.hbasesoft.framework.ai.agent.tool.innerStorage.SmartProcessResult;
  */
 public class McpTool extends AbstractBaseTool<Map<String, Object>> {
 
-	private final ToolCallback toolCallback;
+    private final ToolCallback toolCallback;
 
-	private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-	private String serviceNameString;
+    private String serviceNameString;
 
-	private IMcpStateHolderService mcpStateHolderService;
+    private IMcpStateHolderService mcpStateHolderService;
 
-	private ISmartContentSavingService smartContentSavingService;
+    private ISmartContentSavingService smartContentSavingService;
 
-	public McpTool(ToolCallback toolCallback, String serviceNameString, String planId,
-			IMcpStateHolderService mcpStateHolderService, ISmartContentSavingService smartContentSavingService,
-			ObjectMapper objectMapper) {
-		this.toolCallback = toolCallback;
-		this.objectMapper = objectMapper;
-		this.serviceNameString = serviceNameString;
-		this.currentPlanId = planId;
-		this.mcpStateHolderService = mcpStateHolderService;
-		this.smartContentSavingService = smartContentSavingService;
-	}
+    public McpTool(ToolCallback toolCallback, String serviceNameString, String planId,
+        IMcpStateHolderService mcpStateHolderService, ISmartContentSavingService smartContentSavingService,
+        ObjectMapper objectMapper) {
+        this.toolCallback = toolCallback;
+        this.objectMapper = objectMapper;
+        this.serviceNameString = serviceNameString;
+        this.currentPlanId = planId;
+        this.mcpStateHolderService = mcpStateHolderService;
+        this.smartContentSavingService = smartContentSavingService;
+    }
 
-	@Override
-	public String getName() {
-		return toolCallback.getToolDefinition().name();
-	}
+    @Override
+    public String getName() {
+        return toolCallback.getToolDefinition().name();
+    }
 
-	@Override
-	public String getDescription() {
-		return toolCallback.getToolDefinition().description();
-	}
+    @Override
+    public String getDescription() {
+        return toolCallback.getToolDefinition().description();
+    }
 
-	@Override
-	public String getParameters() {
-		return toolCallback.getToolDefinition().inputSchema();
-	}
+    @Override
+    public String getParameters() {
+        return toolCallback.getToolDefinition().inputSchema();
+    }
 
-	@Override
-	public Class<Map<String, Object>> getInputType() {
-		return (Class<Map<String, Object>>) (Class<?>) Map.class;
-	}
+    @Override
+    public Class<Map<String, Object>> getInputType() {
+        return (Class<Map<String, Object>>) (Class<?>) Map.class;
+    }
 
-	@Override
-	public String getCurrentToolStateString() {
-		McpState mcpState = mcpStateHolderService.getMcpState(currentPlanId);
-		if (mcpState != null) {
-			return mcpState.getState();
-		}
-		return "";
-	}
+    @Override
+    public String getCurrentToolStateString() {
+        McpState mcpState = mcpStateHolderService.getMcpState(currentPlanId);
+        if (mcpState != null) {
+            return mcpState.getState();
+        }
+        return "";
+    }
 
-	@Override
-	public ToolExecuteResult run(Map<String, Object> inputMap) {
-		// Convert Map to JSON string, as ToolCallback expects string input
-		String jsonInput;
-		try {
-			jsonInput = objectMapper.writeValueAsString(inputMap);
-		} catch (JsonProcessingException e) {
-			return new ToolExecuteResult("Error: Failed to serialize input to JSON - " + e.getMessage());
-		}
+    @Override
+    public ToolExecuteResult run(Map<String, Object> inputMap) {
+        // Convert Map to JSON string, as ToolCallback expects string input
+        String jsonInput;
+        try {
+            jsonInput = objectMapper.writeValueAsString(inputMap);
+        }
+        catch (JsonProcessingException e) {
+            return new ToolExecuteResult("Error: Failed to serialize input to JSON - " + e.getMessage());
+        }
 
-		String result = toolCallback.call(jsonInput, null);
-		if (result == null) {
-			result = "";
-		}
+        String result = toolCallback.call(jsonInput, null);
+        if (result == null) {
+            result = "";
+        }
 
-		SmartProcessResult smartProcessResult = smartContentSavingService.processContent(currentPlanId, result,
-				getName());
-		result = smartProcessResult.getSummary();
-		// Here we can store the result to McpStateHolderService
-		McpState mcpState = mcpStateHolderService.getMcpState(currentPlanId);
-		if (mcpState == null) {
-			mcpState = new McpState();
-			mcpStateHolderService.setMcpState(currentPlanId, mcpState);
-		}
-		mcpState.setState(result);
+        SmartProcessResult smartProcessResult = smartContentSavingService.processContent(currentPlanId, result,
+            getName());
+        result = smartProcessResult.getSummary();
+        // Here we can store the result to McpStateHolderService
+        McpState mcpState = mcpStateHolderService.getMcpState(currentPlanId);
+        if (mcpState == null) {
+            mcpState = new McpState();
+            mcpStateHolderService.setMcpState(currentPlanId, mcpState);
+        }
+        mcpState.setState(result);
 
-		return new ToolExecuteResult(result);
-	}
+        return new ToolExecuteResult(result);
+    }
 
-	@Override
-	public void cleanup(String planId) {
-		mcpStateHolderService.removeMcpState(planId);
-	}
+    @Override
+    public void cleanup(String planId) {
+        mcpStateHolderService.removeMcpState(planId);
+    }
 
-	@Override
-	public String getServiceGroup() {
-		return serviceNameString;
-	}
+    @Override
+    public String getServiceGroup() {
+        return serviceNameString;
+    }
 
 }

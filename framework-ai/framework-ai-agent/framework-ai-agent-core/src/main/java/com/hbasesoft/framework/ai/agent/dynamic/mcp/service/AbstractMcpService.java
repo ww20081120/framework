@@ -24,26 +24,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class AbstractMcpService implements IMcpService {
 
-	protected final McpCacheManager cacheManager;
+    protected final McpCacheManager cacheManager;
 
-	/**
-	 * Get MCP service entity list
-	 * 
-	 * @param planId Plan ID
-	 * @return MCP service entity list
-	 */
-	@Override
-	public List<McpServiceVo> getFunctionCallbacks(String planId) {
-		return cacheManager.getServiceEntities(planId);
-	}
+    /**
+     * Get MCP service entity list
+     * 
+     * @param planId Plan ID
+     * @return MCP service entity list
+     */
+    @Override
+    public List<McpServiceVo> getFunctionCallbacks(String planId) {
+        return cacheManager.getServiceEntities(planId);
+    }
 
-	/**
-	 * Close MCP service for specified plan
-	 * 
-	 * @param planId Plan ID
-	 */
-	@Override
-	public void close(String planId) {
-		cacheManager.invalidateCache(planId);
-	}
+    /**
+     * Close MCP service for specified plan
+     * 
+     * @param planId Plan ID
+     */
+    @Override
+    public void close(String planId) {
+        cacheManager.invalidateCache(planId);
+    }
 }

@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class AgentExecResult {
 
-	private String result;
+    private String result;
 
-	private AgentState state;
+    private AgentState state;
 
 }

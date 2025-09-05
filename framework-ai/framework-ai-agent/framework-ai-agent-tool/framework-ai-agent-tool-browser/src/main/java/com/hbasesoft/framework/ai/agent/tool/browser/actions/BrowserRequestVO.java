@@ -18,147 +18,144 @@ package com.hbasesoft.framework.ai.agent.tool.browser.actions;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Browser tool request object for encapsulating browser operation request
- * parameters
+ * Browser tool request object for encapsulating browser operation request parameters
  */
 public class BrowserRequestVO {
 
-	/**
-	 * Browser operation type Supports: navigate, click, input_text, key_enter,
-	 * screenshot, get_html, get_text, execute_js, scroll, switch_tab, new_tab,
-	 * close_tab, refresh, get_element_position, move_to_and_click
-	 */
-	private String action;
+    /**
+     * Browser operation type Supports: navigate, click, input_text, key_enter, screenshot, get_html, get_text,
+     * execute_js, scroll, switch_tab, new_tab, close_tab, refresh, get_element_position, move_to_and_click
+     */
+    private String action;
 
-	/**
-	 * URL address, used for navigate and new_tab operations
-	 */
-	private String url;
+    /**
+     * URL address, used for navigate and new_tab operations
+     */
+    private String url;
 
-	/**
-	 * Element index, used for click, input_text and key_enter operations
-	 */
-	private Integer index;
+    /**
+     * Element index, used for click, input_text and key_enter operations
+     */
+    private Integer index;
 
-	/**
-	 * Text to be input, used for input_text operations
-	 */
-	private String text;
+    /**
+     * Text to be input, used for input_text operations
+     */
+    private String text;
 
-	/**
-	 * JavaScript code, used for execute_js operations
-	 */
-	private String script;
+    /**
+     * JavaScript code, used for execute_js operations
+     */
+    private String script;
 
-	/**
-	 * Scroll pixels, used for scroll operations Positive scrolls down, negative
-	 * scrolls up
-	 */
-	@JsonProperty("scroll_amount")
-	private Integer scrollAmount;
+    /**
+     * Scroll pixels, used for scroll operations Positive scrolls down, negative scrolls up
+     */
+    @JsonProperty("scroll_amount")
+    private Integer scrollAmount;
 
-	/**
-	 * Tab ID, used for switch_tab operations
-	 */
-	@JsonProperty("tab_id")
-	private Integer tabId;
+    /**
+     * Tab ID, used for switch_tab operations
+     */
+    @JsonProperty("tab_id")
+    private Integer tabId;
 
-	/**
-	 * Element name, used for get_element_position operations
-	 */
-	@JsonProperty("element_name")
-	private String elementName;
+    /**
+     * Element name, used for get_element_position operations
+     */
+    @JsonProperty("element_name")
+    private String elementName;
 
-	/**
-	 * X coordinate, used for move_to_and_click operations
-	 */
-	@JsonProperty("position_x")
-	private Double positionX;
+    /**
+     * X coordinate, used for move_to_and_click operations
+     */
+    @JsonProperty("position_x")
+    private Double positionX;
 
-	/**
-	 * Y coordinate, used for move_to_and_click operations
-	 */
-	@JsonProperty("position_y")
-	private Double positionY;
+    /**
+     * Y coordinate, used for move_to_and_click operations
+     */
+    @JsonProperty("position_y")
+    private Double positionY;
 
-	public String getAction() {
-		return action;
-	}
+    public String getAction() {
+        return action;
+    }
 
-	public void setAction(String action) {
-		this.action = action;
-	}
+    public void setAction(String action) {
+        this.action = action;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public Integer getIndex() {
-		return index;
-	}
+    public Integer getIndex() {
+        return index;
+    }
 
-	public void setIndex(Integer index) {
-		this.index = index;
-	}
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public String getScript() {
-		return script;
-	}
+    public String getScript() {
+        return script;
+    }
 
-	public void setScript(String script) {
-		this.script = script;
-	}
+    public void setScript(String script) {
+        this.script = script;
+    }
 
-	public Integer getScrollAmount() {
-		return scrollAmount;
-	}
+    public Integer getScrollAmount() {
+        return scrollAmount;
+    }
 
-	public void setScrollAmount(Integer scrollAmount) {
-		this.scrollAmount = scrollAmount;
-	}
+    public void setScrollAmount(Integer scrollAmount) {
+        this.scrollAmount = scrollAmount;
+    }
 
-	public Integer getTabId() {
-		return tabId;
-	}
+    public Integer getTabId() {
+        return tabId;
+    }
 
-	public void setTabId(Integer tabId) {
-		this.tabId = tabId;
-	}
+    public void setTabId(Integer tabId) {
+        this.tabId = tabId;
+    }
 
-	public String getElementName() {
-		return elementName;
-	}
+    public String getElementName() {
+        return elementName;
+    }
 
-	public void setElementName(String elementName) {
-		this.elementName = elementName;
-	}
+    public void setElementName(String elementName) {
+        this.elementName = elementName;
+    }
 
-	public Double getPositionX() {
-		return positionX;
-	}
+    public Double getPositionX() {
+        return positionX;
+    }
 
-	public void setPositionX(Double positionX) {
-		this.positionX = positionX;
-	}
+    public void setPositionX(Double positionX) {
+        this.positionX = positionX;
+    }
 
-	public Double getPositionY() {
-		return positionY;
-	}
+    public Double getPositionY() {
+        return positionY;
+    }
 
-	public void setPositionY(Double positionY) {
-		this.positionY = positionY;
-	}
+    public void setPositionY(Double positionY) {
+        this.positionY = positionY;
+    }
 
 }

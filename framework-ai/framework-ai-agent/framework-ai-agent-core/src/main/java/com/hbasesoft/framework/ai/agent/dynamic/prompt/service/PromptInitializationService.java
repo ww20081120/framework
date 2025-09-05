@@ -17,7 +17,7 @@ package com.hbasesoft.framework.ai.agent.dynamic.prompt.service;
  */
 public interface PromptInitializationService {
 
-	void initializePromptsForNamespace(String namespace);
+    void initializePromptsForNamespace(String namespace);
 
-	void initializePromptsForNamespaceWithLanguage(String namespace, String language);
+    void initializePromptsForNamespaceWithLanguage(String namespace, String language);
 }

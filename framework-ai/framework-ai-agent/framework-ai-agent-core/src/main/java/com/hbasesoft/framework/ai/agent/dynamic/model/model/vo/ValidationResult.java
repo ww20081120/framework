@@ -22,9 +22,9 @@ import lombok.Data;
 @Data
 public class ValidationResult {
 
-	private boolean valid;
+    private boolean valid;
 
-	private String message;
+    private String message;
 
-	private List<AvailableModel> availableModels;
+    private List<AvailableModel> availableModels;
 }

@@ -29,54 +29,54 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Component
 public class PromptLoader implements IPromptLoader {
 
-	private static final String PROMPT_BASE_PATH = "prompts/";
+    private static final String PROMPT_BASE_PATH = "prompts/";
 
-	// Cache for loaded prompt content
-	private final Map<String, String> promptCache = new ConcurrentHashMap<>();
+    // Cache for loaded prompt content
+    private final Map<String, String> promptCache = new ConcurrentHashMap<>();
 
-	/**
-	 * Load prompt template content
-	 * 
-	 * @param promptPath Relative path of prompt file (relative to prompts
-	 *                   directory)
-	 * @return Prompt content
-	 */
-	public String loadPrompt(String promptPath) {
-		return promptCache.computeIfAbsent(promptPath, this::loadPromptFromResource);
-	}
+    /**
+     * Load prompt template content
+     * 
+     * @param promptPath Relative path of prompt file (relative to prompts directory)
+     * @return Prompt content
+     */
+    public String loadPrompt(String promptPath) {
+        return promptCache.computeIfAbsent(promptPath, this::loadPromptFromResource);
+    }
 
-	/**
-	 * Load prompt content from resource file
-	 * 
-	 * @param promptPath Prompt file path
-	 * @return Prompt content
-	 */
-	private String loadPromptFromResource(String promptPath) {
-		try {
-			String fullPath = PROMPT_BASE_PATH + promptPath;
-			Resource resource = new ClassPathResource(fullPath);
+    /**
+     * Load prompt content from resource file
+     * 
+     * @param promptPath Prompt file path
+     * @return Prompt content
+     */
+    private String loadPromptFromResource(String promptPath) {
+        try {
+            String fullPath = PROMPT_BASE_PATH + promptPath;
+            Resource resource = new ClassPathResource(fullPath);
 
-			if (!resource.exists()) {
-				LoggerUtil.info("Prompt file not found: {0}", fullPath);
-				return "";
-			}
+            if (!resource.exists()) {
+                LoggerUtil.info("Prompt file not found: {0}", fullPath);
+                return "";
+            }
 
-			String content = resource.getContentAsString(StandardCharsets.UTF_8);
-			LoggerUtil.debug("Loaded prompt from: {0}", fullPath);
-			return content;
+            String content = resource.getContentAsString(StandardCharsets.UTF_8);
+            LoggerUtil.debug("Loaded prompt from: {0}", fullPath);
+            return content;
 
-		} catch (IOException e) {
-			LoggerUtil.error(e, "Failed to load prompt from: {0}", promptPath);
-			return "";
-		}
-	}
+        }
+        catch (IOException e) {
+            LoggerUtil.error(e, "Failed to load prompt from: {0}", promptPath);
+            return "";
+        }
+    }
 
-	/**
-	 * Clear prompt cache
-	 */
-	public void clearCache() {
-		promptCache.clear();
-		LoggerUtil.info("Prompt cache cleared");
-	}
+    /**
+     * Clear prompt cache
+     */
+    public void clearCache() {
+        promptCache.clear();
+        LoggerUtil.info("Prompt cache cleared");
+    }
 
 }

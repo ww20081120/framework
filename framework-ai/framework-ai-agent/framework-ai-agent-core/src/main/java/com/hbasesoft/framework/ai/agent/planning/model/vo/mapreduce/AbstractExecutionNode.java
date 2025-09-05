@@ -25,29 +25,29 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionStep;
  */
 public abstract class AbstractExecutionNode implements ExecutionNode {
 
-	@JsonIgnore
-	protected MapReduceStepType type;
+    @JsonIgnore
+    protected MapReduceStepType type;
 
-	protected AbstractExecutionNode(MapReduceStepType type) {
-		this.type = type;
-	}
+    protected AbstractExecutionNode(MapReduceStepType type) {
+        this.type = type;
+    }
 
-	@Override
-	@JsonIgnore
-	public MapReduceStepType getType() {
-		return type;
-	}
+    @Override
+    @JsonIgnore
+    public MapReduceStepType getType() {
+        return type;
+    }
 
-	@Override
-	@JsonIgnore
-	public int getTotalStepCount() {
-		List<ExecutionStep> allSteps = getAllSteps();
-		return allSteps != null ? allSteps.size() : 0;
-	}
+    @Override
+    @JsonIgnore
+    public int getTotalStepCount() {
+        List<ExecutionStep> allSteps = getAllSteps();
+        return allSteps != null ? allSteps.size() : 0;
+    }
 
-	@Override
-	public String toString() {
-		return getNodeInStr();
-	}
+    @Override
+    public String toString() {
+        return getNodeInStr();
+    }
 
 }

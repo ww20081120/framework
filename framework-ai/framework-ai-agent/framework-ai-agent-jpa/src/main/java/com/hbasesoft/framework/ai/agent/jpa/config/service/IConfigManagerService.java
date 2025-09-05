@@ -22,26 +22,26 @@ import com.hbasesoft.framework.ai.agent.jpa.config.po.ConfigPo4Jpa;
  */
 public interface IConfigManagerService {
 
-	/**
-	 * Update configuration value
-	 * 
-	 * @param configPath the configuration path
-	 * @param newValue   the new value
-	 */
-	void updateConfig(String configPath, String newValue);
+    /**
+     * Update configuration value
+     * 
+     * @param configPath the configuration path
+     * @param newValue the new value
+     */
+    void updateConfig(String configPath, String newValue);
 
-	/**
-	 * Get all configurations
-	 * 
-	 * @return list of all configurations
-	 */
-	List<ConfigPo4Jpa> getAllConfigs();
+    /**
+     * Get all configurations
+     * 
+     * @return list of all configurations
+     */
+    List<ConfigPo4Jpa> getAllConfigs();
 
-	/**
-	 * Get configuration by path
-	 * 
-	 * @param configPath the configuration path
-	 * @return optional configuration entity
-	 */
-	Optional<ConfigPo4Jpa> getConfig(String configPath);
+    /**
+     * Get configuration by path
+     * 
+     * @param configPath the configuration path
+     * @return optional configuration entity
+     */
+    Optional<ConfigPo4Jpa> getConfig(String configPath);
 }

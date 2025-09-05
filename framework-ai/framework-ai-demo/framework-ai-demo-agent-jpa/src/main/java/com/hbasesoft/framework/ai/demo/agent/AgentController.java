@@ -36,67 +36,68 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @RequestMapping("/api/agent")
 public class AgentController {
 
-	@Autowired
-	@Lazy
-	private PlanningFactory planningFactory;
+    @Autowired
+    @Lazy
+    private PlanningFactory planningFactory;
 
-	@Autowired
-	private PlanIdDispatcher planIdDispatcher;
+    @Autowired
+    private PlanIdDispatcher planIdDispatcher;
 
-	@Autowired
-	private MemoryService memoryService;
+    @Autowired
+    private MemoryService memoryService;
 
-	private String memoryId;
+    private String memoryId;
 
-	private String rootPlanId;
+    private String rootPlanId;
 
-	@GetMapping("/solve")
-	public String solveCodingTask(@RequestParam("task") String task) {
-		if (StringUtils.isAllBlank(task)) {
-			return "处理任务失败: Query content cannot be empty";
-		}
+    @GetMapping("/solve")
+    public String solveCodingTask(@RequestParam("task") String task) {
+        if (StringUtils.isAllBlank(task)) {
+            return "处理任务失败: Query content cannot be empty";
+        }
 
-		try {
-			// 创建 ProcessOptions
+        try {
+            // 创建 ProcessOptions
 
-			ExecutionContext context = new ExecutionContext();
-			context.setUserRequest(task);
+            ExecutionContext context = new ExecutionContext();
+            context.setUserRequest(task);
 
-			// Use PlanIdDispatcher to generate a unique plan ID
-			String planId = planIdDispatcher.generatePlanId();
-			context.setCurrentPlanId(planId);
+            // Use PlanIdDispatcher to generate a unique plan ID
+            String planId = planIdDispatcher.generatePlanId();
+            context.setCurrentPlanId(planId);
 
-			context.setNeedSummary(true);
-			if (rootPlanId == null) {
-				rootPlanId = planId;
-			}
-			context.setRootPlanId(rootPlanId);
+            context.setNeedSummary(true);
+            if (rootPlanId == null) {
+                rootPlanId = planId;
+            }
+            context.setRootPlanId(rootPlanId);
 
-			if (StringUtils.isEmpty(memoryId)) {
-				memoryId = RandomStringUtils.randomAlphabetic(8);
-			}
-			context.setMemoryId(memoryId);
+            if (StringUtils.isEmpty(memoryId)) {
+                memoryId = RandomStringUtils.randomAlphabetic(8);
+            }
+            context.setMemoryId(memoryId);
 
-			// Get or create planning flow
-			PlanningCoordinator planningFlow = planningFactory.createPlanningCoordinator(context);
+            // Get or create planning flow
+            PlanningCoordinator planningFlow = planningFactory.createPlanningCoordinator(context);
 
-			// Asynchronous execution of task
-			memoryService.saveMemory(new MemoryVo(context.getMemoryId(), task));
+            // Asynchronous execution of task
+            memoryService.saveMemory(new MemoryVo(context.getMemoryId(), task));
 
-			ExecutionContext ctx = planningFlow.executePlan(context);
+            ExecutionContext ctx = planningFlow.executePlan(context);
 
-			// 返回结果
-			return "任务处理完成:\n" + ctx.getResultSummary();
-		} catch (Exception e) {
-			LoggerUtil.error(e);
-			return "处理任务时出错: " + e.getMessage();
-		}
-	}
+            // 返回结果
+            return "任务处理完成:\n" + ctx.getResultSummary();
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e);
+            return "处理任务时出错: " + e.getMessage();
+        }
+    }
 
-	@GetMapping("/clean")
-	public String clean() {
-		memoryId = null;
-		rootPlanId = null;
-		return "清理成功";
-	}
+    @GetMapping("/clean")
+    public String clean() {
+        memoryId = null;
+        rootPlanId = null;
+        return "清理成功";
+    }
 }

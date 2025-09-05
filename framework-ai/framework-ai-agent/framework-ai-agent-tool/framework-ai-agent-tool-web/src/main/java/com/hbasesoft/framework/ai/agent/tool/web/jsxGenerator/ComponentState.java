@@ -19,69 +19,68 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Component state class for storing current component file path, last operation
- * result, and component metadata
+ * Component state class for storing current component file path, last operation result, and component metadata
  */
 public class ComponentState {
 
-	private String currentFilePath = "";
+    private String currentFilePath = "";
 
-	private String lastOperationResult = "";
+    private String lastOperationResult = "";
 
-	private String componentType = "";
+    private String componentType = "";
 
-	private Map<String, Object> componentMetadata = new ConcurrentHashMap<>();
+    private Map<String, Object> componentMetadata = new ConcurrentHashMap<>();
 
-	private String lastGeneratedCode = "";
+    private String lastGeneratedCode = "";
 
-	private final Object componentLock = new Object();
+    private final Object componentLock = new Object();
 
-	public String getCurrentFilePath() {
-		return currentFilePath;
-	}
+    public String getCurrentFilePath() {
+        return currentFilePath;
+    }
 
-	public void setCurrentFilePath(String currentFilePath) {
-		this.currentFilePath = currentFilePath;
-	}
+    public void setCurrentFilePath(String currentFilePath) {
+        this.currentFilePath = currentFilePath;
+    }
 
-	public String getLastOperationResult() {
-		return lastOperationResult;
-	}
+    public String getLastOperationResult() {
+        return lastOperationResult;
+    }
 
-	public void setLastOperationResult(String lastOperationResult) {
-		this.lastOperationResult = lastOperationResult;
-	}
+    public void setLastOperationResult(String lastOperationResult) {
+        this.lastOperationResult = lastOperationResult;
+    }
 
-	public String getComponentType() {
-		return componentType;
-	}
+    public String getComponentType() {
+        return componentType;
+    }
 
-	public void setComponentType(String componentType) {
-		this.componentType = componentType;
-	}
+    public void setComponentType(String componentType) {
+        this.componentType = componentType;
+    }
 
-	public Map<String, Object> getComponentMetadata() {
-		return componentMetadata;
-	}
+    public Map<String, Object> getComponentMetadata() {
+        return componentMetadata;
+    }
 
-	public void setComponentMetadata(Map<String, Object> componentMetadata) {
-		this.componentMetadata = componentMetadata;
-	}
+    public void setComponentMetadata(Map<String, Object> componentMetadata) {
+        this.componentMetadata = componentMetadata;
+    }
 
-	public void addComponentMetadata(String key, Object value) {
-		this.componentMetadata.put(key, value);
-	}
+    public void addComponentMetadata(String key, Object value) {
+        this.componentMetadata.put(key, value);
+    }
 
-	public String getLastGeneratedCode() {
-		return lastGeneratedCode;
-	}
+    public String getLastGeneratedCode() {
+        return lastGeneratedCode;
+    }
 
-	public void setLastGeneratedCode(String lastGeneratedCode) {
-		this.lastGeneratedCode = lastGeneratedCode;
-	}
+    public void setLastGeneratedCode(String lastGeneratedCode) {
+        this.lastGeneratedCode = lastGeneratedCode;
+    }
 
-	public Object getComponentLock() {
-		return componentLock;
-	}
+    public Object getComponentLock() {
+        return componentLock;
+    }
 
 }

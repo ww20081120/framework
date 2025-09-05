@@ -27,27 +27,27 @@ import com.hbasesoft.framework.ai.agent.dynamic.namespace.vo.NamespaceConfig;
 @Service
 public class NamespaceServiceImpl implements NamespaceService {
 
-	@Value("${namespace.value:default}")
-	private String namespace;
+    @Value("${namespace.value:default}")
+    private String namespace;
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Override
-	public List<NamespaceConfig> getAllNamespaces() {
-		List<NamespaceConfig> namespaces = new ArrayList<>();
-		NamespaceConfig config = new NamespaceConfig();
-		config.setId(1L);
-		config.setName("Default Namespace");
-		config.setCode(namespace);
-		config.setDescription("Default namespace configuration");
-		config.setHost("localhost");
-		namespaces.add(config);
-		return namespaces;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public List<NamespaceConfig> getAllNamespaces() {
+        List<NamespaceConfig> namespaces = new ArrayList<>();
+        NamespaceConfig config = new NamespaceConfig();
+        config.setId(1L);
+        config.setName("Default Namespace");
+        config.setCode(namespace);
+        config.setDescription("Default namespace configuration");
+        config.setHost("localhost");
+        namespaces.add(config);
+        return namespaces;
+    }
 
 }

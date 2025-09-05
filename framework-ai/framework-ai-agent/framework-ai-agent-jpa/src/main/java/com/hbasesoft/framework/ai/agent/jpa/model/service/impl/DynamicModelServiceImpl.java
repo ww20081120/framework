@@ -30,55 +30,55 @@ import com.hbasesoft.framework.ai.agent.jpa.model.po.DynamicModelPo4Jpa;
 @Service
 public class DynamicModelServiceImpl implements DynamicModelService {
 
-	@Autowired
-	private DynamicModelDao dynamicModelRepository;
+    @Autowired
+    private DynamicModelDao dynamicModelRepository;
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public ModelConfig getDefault() {
-		return convert(dynamicModelRepository.getByLambda(q -> q.eq(DynamicModelPo4Jpa::getIsDefault, 1)));
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public ModelConfig getDefault() {
+        return convert(dynamicModelRepository.getByLambda(q -> q.eq(DynamicModelPo4Jpa::getIsDefault, 1)));
+    }
 
-	private ModelConfig convert(DynamicModelPo4Jpa po) {
-		if (po == null) {
-			return null;
-		}
-		ModelConfig modelConfig = new ModelConfig();
-		BeanUtils.copyProperties(po, modelConfig);
-		return modelConfig;
-	}
+    private ModelConfig convert(DynamicModelPo4Jpa po) {
+        if (po == null) {
+            return null;
+        }
+        ModelConfig modelConfig = new ModelConfig();
+        BeanUtils.copyProperties(po, modelConfig);
+        return modelConfig;
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public List<ModelConfig> queryAll() {
-		return dynamicModelRepository.queryAll().stream().map(this::convert).toList();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public List<ModelConfig> queryAll() {
+        return dynamicModelRepository.queryAll().stream().map(this::convert).toList();
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param modelId
-	 * @return <br>
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public ModelConfig get(Long modelId) {
-		return convert(dynamicModelRepository.get(modelId));
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param modelId
+     * @return <br>
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public ModelConfig get(Long modelId) {
+        return convert(dynamicModelRepository.get(modelId));
+    }
 }

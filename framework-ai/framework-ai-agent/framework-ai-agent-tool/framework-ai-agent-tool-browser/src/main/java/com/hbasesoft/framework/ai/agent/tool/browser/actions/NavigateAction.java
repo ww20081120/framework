@@ -23,29 +23,29 @@ import com.microsoft.playwright.options.LoadState;
 
 public class NavigateAction extends BrowserAction {
 
-	public NavigateAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public NavigateAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		String url = request.getUrl();
-		Integer timeoutMs = getBrowserTimeoutMs();
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        String url = request.getUrl();
+        Integer timeoutMs = getBrowserTimeoutMs();
 
-		if (url == null) {
-			return new ToolExecuteResult("URL is required for 'navigate' action");
-		}
-		// Auto-complete the URL prefix
-		if (!url.startsWith("http://") && !url.startsWith("https://")) {
-			url = "https://" + url;
-		}
-		Page page = getCurrentPage(); // Get the Playwright Page instance
-		page.navigate(url, new Page.NavigateOptions().setTimeout(timeoutMs));
+        if (url == null) {
+            return new ToolExecuteResult("URL is required for 'navigate' action");
+        }
+        // Auto-complete the URL prefix
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "https://" + url;
+        }
+        Page page = getCurrentPage(); // Get the Playwright Page instance
+        page.navigate(url, new Page.NavigateOptions().setTimeout(timeoutMs));
 
-		// Before calling page.content(), ensure the page is fully loaded
-		page.waitForLoadState(LoadState.DOMCONTENTLOADED, new WaitForLoadStateOptions().setTimeout(timeoutMs));
+        // Before calling page.content(), ensure the page is fully loaded
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED, new WaitForLoadStateOptions().setTimeout(timeoutMs));
 
-		return new ToolExecuteResult("successfully navigated to " + url);
-	}
+        return new ToolExecuteResult("successfully navigated to " + url);
+    }
 
 }

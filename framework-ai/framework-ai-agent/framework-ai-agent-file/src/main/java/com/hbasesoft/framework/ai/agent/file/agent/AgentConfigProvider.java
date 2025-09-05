@@ -18,25 +18,25 @@ package com.hbasesoft.framework.ai.agent.file.agent;
  */
 public interface AgentConfigProvider {
 
-	/**
-	 * 获取系统提示词
-	 * 
-	 * @return 系统提示词
-	 */
-	default String getSystemPrompt() {
-		return "";
-	}
+    /**
+     * 获取系统提示词
+     * 
+     * @return 系统提示词
+     */
+    default String getSystemPrompt() {
+        return "";
+    }
 
-	/**
-	 * 获取下一步提示词
-	 * 
-	 * @return 下一步提示词
-	 */
-	default String getNextStepPrompt() {
-		return "";
-	}
+    /**
+     * 获取下一步提示词
+     * 
+     * @return 下一步提示词
+     */
+    default String getNextStepPrompt() {
+        return "";
+    }
 
-	default String[] getActions() {
-		return null;
-	}
+    default String[] getActions() {
+        return null;
+    }
 }

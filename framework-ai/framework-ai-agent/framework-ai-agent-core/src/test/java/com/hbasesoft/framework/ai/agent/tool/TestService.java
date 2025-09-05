@@ -20,29 +20,27 @@ import java.util.Date;
  * @see com.hbasesoft.framework.ai.agent.tool <br>
  */
 public class TestService {
-    
+
     @Action(description = "Test method with various parameter types including dates")
-    public String testWithDates(
-            @ActionParam(description = "Name parameter") String name,
-            @ActionParam(description = "Birth date parameter") Date birthDate,
-            @ActionParam(description = "Local date parameter") LocalDate localDate,
-            @ActionParam(description = "Local datetime parameter") LocalDateTime localDateTime) {
-        return "Test with dates: name=" + name + ", birthDate=" + birthDate + 
-               ", localDate=" + localDate + ", localDateTime=" + localDateTime;
+    public String testWithDates(@ActionParam(description = "Name parameter") String name,
+        @ActionParam(description = "Birth date parameter") Date birthDate,
+        @ActionParam(description = "Local date parameter") LocalDate localDate,
+        @ActionParam(description = "Local datetime parameter") LocalDateTime localDateTime) {
+        return "Test with dates: name=" + name + ", birthDate=" + birthDate + ", localDate=" + localDate
+            + ", localDateTime=" + localDateTime;
     }
-    
+
     @Action(description = "Test method with object parameter")
     public String testWithObject(@ActionParam(description = "Test object parameter") TestObject testObject) {
         return "Test with object: " + testObject.toString();
     }
-    
+
     @Action(description = "Test method with primitive types")
-    public String testWithPrimitives(
-            @ActionParam(description = "Byte parameter") byte byteValue,
-            @ActionParam(description = "Short parameter") short shortValue,
-            @ActionParam(description = "Float parameter") float floatValue,
-            @ActionParam(description = "Char parameter") char charValue) {
-        return "Test with primitives: byte=" + byteValue + ", short=" + shortValue + 
-               ", float=" + floatValue + ", char=" + charValue;
+    public String testWithPrimitives(@ActionParam(description = "Byte parameter") byte byteValue,
+        @ActionParam(description = "Short parameter") short shortValue,
+        @ActionParam(description = "Float parameter") float floatValue,
+        @ActionParam(description = "Char parameter") char charValue) {
+        return "Test with primitives: byte=" + byteValue + ", short=" + shortValue + ", float=" + floatValue + ", char="
+            + charValue;
     }
 }

@@ -24,30 +24,30 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
  */
 public interface IDynamicAgentLoader {
 
-	/**
-	 * 根据代理名称和初始设置加载代理
-	 * 
-	 * @param agentName           代理名称
-	 * @param initialAgentSetting 初始代理设置
-	 * @return 动态代理实例
-	 */
-	DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting);
+    /**
+     * 根据代理名称和初始设置加载代理
+     * 
+     * @param agentName 代理名称
+     * @param initialAgentSetting 初始代理设置
+     * @return 动态代理实例
+     */
+    DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting);
 
-	/**
-	 * 获取所有代理
-	 * 
-	 * @return 代理实体列表
-	 */
-	List<DynamicAgent> getAllAgents();
+    /**
+     * 获取所有代理
+     * 
+     * @return 代理实体列表
+     */
+    List<DynamicAgent> getAllAgents();
 
-	/**
-	 * 根据执行上下文获取代理列表
-	 * 
-	 * @param context 执行上下文
-	 * @return 代理列表
-	 */
-	default List<DynamicAgent> getAgents(ExecutionContext context) {
-		return getAllAgents();
-	}
+    /**
+     * 根据执行上下文获取代理列表
+     * 
+     * @param context 执行上下文
+     * @return 代理列表
+     */
+    default List<DynamicAgent> getAgents(ExecutionContext context) {
+        return getAllAgents();
+    }
 
 }

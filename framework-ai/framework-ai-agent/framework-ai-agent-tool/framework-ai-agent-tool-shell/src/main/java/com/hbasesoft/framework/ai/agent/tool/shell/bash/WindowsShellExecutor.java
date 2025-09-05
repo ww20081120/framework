@@ -35,125 +35,130 @@ import org.slf4j.LoggerFactory;
  */
 public class WindowsShellExecutor implements ShellCommandExecutor {
 
-	private static final Logger log = LoggerFactory.getLogger(WindowsShellExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(WindowsShellExecutor.class);
 
-	private Process currentProcess;
+    private Process currentProcess;
 
-	private static final int DEFAULT_TIMEOUT = 60; // Default timeout (seconds)
+    private static final int DEFAULT_TIMEOUT = 60; // Default timeout (seconds)
 
-	private BufferedWriter processInput;
+    private BufferedWriter processInput;
 
-	@Override
-	public List<String> execute(List<String> commands, String workingDir) {
-		return commands.stream().map(command -> {
-			try {
-				// If empty command, return additional logs from current process
-				if (command.trim().isEmpty() && currentProcess != null) {
-					return processOutput(currentProcess);
-				}
+    @Override
+    public List<String> execute(List<String> commands, String workingDir) {
+        return commands.stream().map(command -> {
+            try {
+                // If empty command, return additional logs from current process
+                if (command.trim().isEmpty() && currentProcess != null) {
+                    return processOutput(currentProcess);
+                }
 
-				// If ctrl+c command, send interrupt signal
-				if ("ctrl+c".equalsIgnoreCase(command.trim()) && currentProcess != null) {
-					terminate();
-					return "Process terminated by ctrl+c";
-				}
+                // If ctrl+c command, send interrupt signal
+                if ("ctrl+c".equalsIgnoreCase(command.trim()) && currentProcess != null) {
+                    terminate();
+                    return "Process terminated by ctrl+c";
+                }
 
-				// Windows background commands need special handling
-				if (command.endsWith("&")) {
-					command = "start /B " + command.substring(0, command.length() - 1);
-				}
+                // Windows background commands need special handling
+                if (command.endsWith("&")) {
+                    command = "start /B " + command.substring(0, command.length() - 1);
+                }
 
-				ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", command);
-				if (!StringUtils.isEmpty(workingDir)) {
-					pb.directory(new File(workingDir));
-				}
+                ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", command);
+                if (!StringUtils.isEmpty(workingDir)) {
+                    pb.directory(new File(workingDir));
+                }
 
-				// Windows-specific environment variable setup
-				pb.environment().put("PATHEXT", ".COM;.EXE;.BAT;.CMD");
-				pb.environment().put("SystemRoot", System.getenv("SystemRoot"));
+                // Windows-specific environment variable setup
+                pb.environment().put("PATHEXT", ".COM;.EXE;.BAT;.CMD");
+                pb.environment().put("SystemRoot", System.getenv("SystemRoot"));
 
-				currentProcess = pb.start();
-				processInput = new BufferedWriter(new OutputStreamWriter(currentProcess.getOutputStream()));
+                currentProcess = pb.start();
+                processInput = new BufferedWriter(new OutputStreamWriter(currentProcess.getOutputStream()));
 
-				// Set timeout handling
-				try {
-					if (!command.startsWith("start /B")) { // Only set timeout for
-															// non-background commands
-						if (!currentProcess.waitFor(DEFAULT_TIMEOUT, TimeUnit.SECONDS)) {
-							log.warn("Command timed out. Sending termination signal to the process");
-							terminate();
-							// Retry command in background
-							command = "start /B " + command;
-							return execute(Collections.singletonList(command), workingDir).get(0);
-						}
-					}
-					return processOutput(currentProcess);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					return "Error: Process interrupted - " + e.getMessage();
-				}
-			} catch (Throwable e) {
-				log.error("Exception executing Windows command", e);
-				return "Error: " + e.getClass().getSimpleName() + " - " + e.getMessage();
-			}
-		}).collect(Collectors.toList());
-	}
+                // Set timeout handling
+                try {
+                    if (!command.startsWith("start /B")) { // Only set timeout for
+                                                           // non-background commands
+                        if (!currentProcess.waitFor(DEFAULT_TIMEOUT, TimeUnit.SECONDS)) {
+                            log.warn("Command timed out. Sending termination signal to the process");
+                            terminate();
+                            // Retry command in background
+                            command = "start /B " + command;
+                            return execute(Collections.singletonList(command), workingDir).get(0);
+                        }
+                    }
+                    return processOutput(currentProcess);
+                }
+                catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return "Error: Process interrupted - " + e.getMessage();
+                }
+            }
+            catch (Throwable e) {
+                log.error("Exception executing Windows command", e);
+                return "Error: " + e.getClass().getSimpleName() + " - " + e.getMessage();
+            }
+        }).collect(Collectors.toList());
+    }
 
-	@Override
-	public void terminate() {
-		if (currentProcess != null && currentProcess.isAlive()) {
-			try {
-				// Windows uses taskkill command to ensure process and its child processes
-				// are terminated
-				Runtime.getRuntime().exec("taskkill /F /T /PID " + currentProcess.pid());
-				// Wait for process termination
-				if (!currentProcess.waitFor(5, TimeUnit.SECONDS)) {
-					currentProcess.destroyForcibly();
-				}
-			} catch (Exception e) {
-				log.error("Error terminating Windows process", e);
-				currentProcess.destroyForcibly();
-			}
-			log.info("Windows process terminated");
-		}
-	}
+    @Override
+    public void terminate() {
+        if (currentProcess != null && currentProcess.isAlive()) {
+            try {
+                // Windows uses taskkill command to ensure process and its child processes
+                // are terminated
+                Runtime.getRuntime().exec("taskkill /F /T /PID " + currentProcess.pid());
+                // Wait for process termination
+                if (!currentProcess.waitFor(5, TimeUnit.SECONDS)) {
+                    currentProcess.destroyForcibly();
+                }
+            }
+            catch (Exception e) {
+                log.error("Error terminating Windows process", e);
+                currentProcess.destroyForcibly();
+            }
+            log.info("Windows process terminated");
+        }
+    }
 
-	private String processOutput(Process process) throws IOException, InterruptedException {
-		StringBuilder outputBuilder = new StringBuilder();
-		StringBuilder errorBuilder = new StringBuilder();
+    private String processOutput(Process process) throws IOException, InterruptedException {
+        StringBuilder outputBuilder = new StringBuilder();
+        StringBuilder errorBuilder = new StringBuilder();
 
-		// Read standard output
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"))) { // Windows
-																													// uses
-																													// GBK
-																													// encoding
-																													// by
-																													// default
-			String line;
-			while ((line = reader.readLine()) != null) {
-				log.info(line);
-				outputBuilder.append(line).append("\n");
-			}
-		}
+        // Read standard output
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "GBK"))) { // Windows
+                                                                                                                   // uses
+                                                                                                                   // GBK
+                                                                                                                   // encoding
+                                                                                                                   // by
+                                                                                                                   // default
+            String line;
+            while ((line = reader.readLine()) != null) {
+                log.info(line);
+                outputBuilder.append(line).append("\n");
+            }
+        }
 
-		// Read error output
-		try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "GBK"))) {
-			String line;
-			while ((line = errorReader.readLine()) != null) {
-				log.error(line);
-				errorBuilder.append(line).append("\n");
-			}
-		}
+        // Read error output
+        try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "GBK"))) {
+            String line;
+            while ((line = errorReader.readLine()) != null) {
+                log.error(line);
+                errorBuilder.append(line).append("\n");
+            }
+        }
 
-		int exitCode = process.isAlive() ? -1 : process.exitValue();
-		if (exitCode == 0) {
-			return outputBuilder.toString();
-		} else if (exitCode == -1) {
-			return "Process is still running. Use empty command to get more logs, or 'ctrl+c' to terminate.";
-		} else {
-			return "Error (Exit Code " + exitCode + "): "
-					+ (errorBuilder.length() > 0 ? errorBuilder.toString() : outputBuilder.toString());
-		}
-	}
+        int exitCode = process.isAlive() ? -1 : process.exitValue();
+        if (exitCode == 0) {
+            return outputBuilder.toString();
+        }
+        else if (exitCode == -1) {
+            return "Process is still running. Use empty command to get more logs, or 'ctrl+c' to terminate.";
+        }
+        else {
+            return "Error (Exit Code " + exitCode + "): "
+                + (errorBuilder.length() > 0 ? errorBuilder.toString() : outputBuilder.toString());
+        }
+    }
 
 }

@@ -21,12 +21,12 @@ import com.hbasesoft.framework.ai.agent.jpa.memory.po.MemoryPo4Jpa;
  */
 public interface MemoryManagerService {
 
-	List<MemoryPo4Jpa> getMemories();
+    List<MemoryPo4Jpa> getMemories();
 
-	void deleteMemory(String id);
+    void deleteMemory(String id);
 
-	MemoryPo4Jpa updateMemory(MemoryPo4Jpa memoryEntity);
+    MemoryPo4Jpa updateMemory(MemoryPo4Jpa memoryEntity);
 
-	MemoryPo4Jpa singleMemory(String memoryId);
+    MemoryPo4Jpa singleMemory(String memoryId);
 
 }

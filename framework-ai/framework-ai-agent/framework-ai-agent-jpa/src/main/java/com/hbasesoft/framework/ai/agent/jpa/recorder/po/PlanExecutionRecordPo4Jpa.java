@@ -35,29 +35,29 @@ import lombok.Setter;
 @Table(name = "plan_execution_record")
 public class PlanExecutionRecordPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = 3363369708135846871L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 3363369708135846871L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "plan_id", nullable = false, unique = true)
-	private String planId;
+    @Column(name = "plan_id", nullable = false, unique = true)
+    private String planId;
 
-	@Column(name = "gmt_create", nullable = false)
-	private Date gmtCreate;
+    @Column(name = "gmt_create", nullable = false)
+    private Date gmtCreate;
 
-	@Column(name = "gmt_modified", nullable = false)
-	private Date gmtModified;
+    @Column(name = "gmt_modified", nullable = false)
+    private Date gmtModified;
 
-	// @Convert(converter = StringAttributeConverter.class)
-	@Column(name = "plan_execution_record")
-	private String planExecutionRecord;
+    // @Convert(converter = StringAttributeConverter.class)
+    @Column(name = "plan_execution_record")
+    private String planExecutionRecord;
 
-	public void setPlanExecutionRecord(PlanExecutionRecord planExecutionRecord) {
-		this.planExecutionRecord = new StringAttributeConverter().convertToDatabaseColumn(planExecutionRecord);
-	}
+    public void setPlanExecutionRecord(PlanExecutionRecord planExecutionRecord) {
+        this.planExecutionRecord = new StringAttributeConverter().convertToDatabaseColumn(planExecutionRecord);
+    }
 }

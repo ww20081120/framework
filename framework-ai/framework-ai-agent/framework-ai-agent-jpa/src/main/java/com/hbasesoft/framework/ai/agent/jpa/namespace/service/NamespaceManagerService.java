@@ -19,11 +19,11 @@ import com.hbasesoft.framework.ai.agent.dynamic.namespace.vo.NamespaceConfig;
  */
 public interface NamespaceManagerService {
 
-	NamespaceConfig getNamespaceById(String id);
+    NamespaceConfig getNamespaceById(String id);
 
-	NamespaceConfig createNamespace(NamespaceConfig namespaceConfig);
+    NamespaceConfig createNamespace(NamespaceConfig namespaceConfig);
 
-	NamespaceConfig updateNamespace(NamespaceConfig namespaceConfig);
+    NamespaceConfig updateNamespace(NamespaceConfig namespaceConfig);
 
-	void deleteNamespace(String id);
+    void deleteNamespace(String id);
 }

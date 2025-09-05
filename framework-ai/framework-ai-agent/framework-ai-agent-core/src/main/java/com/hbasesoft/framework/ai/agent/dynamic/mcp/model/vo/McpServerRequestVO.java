@@ -26,299 +26,304 @@ import lombok.Data;
 @Data
 public class McpServerRequestVO {
 
-	/**
-	 * Server ID for distinguishing add/update operations. null means add, non-null
-	 * means update
-	 */
-	private Long id;
+    /**
+     * Server ID for distinguishing add/update operations. null means add, non-null means update
+     */
+    private Long id;
 
-	/**
-	 * MCP server name
-	 */
-	@JsonProperty("mcpServerName")
-	private String mcpServerName;
+    /**
+     * MCP server name
+     */
+    @JsonProperty("mcpServerName")
+    private String mcpServerName;
 
-	/**
-	 * Connection type: STUDIO, SSE, STREAMING
-	 */
-	@JsonProperty("connectionType")
-	private String connectionType;
+    /**
+     * Connection type: STUDIO, SSE, STREAMING
+     */
+    @JsonProperty("connectionType")
+    private String connectionType;
 
-	/**
-	 * Command (required for STUDIO type)
-	 */
-	private String command;
+    /**
+     * Command (required for STUDIO type)
+     */
+    private String command;
 
-	/**
-	 * URL (required for SSE/STREAMING type)
-	 */
-	private String url;
+    /**
+     * URL (required for SSE/STREAMING type)
+     */
+    private String url;
 
-	/**
-	 * Parameter list (optional for STUDIO type)
-	 */
-	private List<String> args;
+    /**
+     * Parameter list (optional for STUDIO type)
+     */
+    private List<String> args;
 
-	/**
-	 * Environment variables (optional for STUDIO type)
-	 */
-	private Map<String, String> env;
+    /**
+     * Environment variables (optional for STUDIO type)
+     */
+    private Map<String, String> env;
 
-	/**
-	 * Status: ENABLE, DISABLE
-	 */
-	private String status;
+    /**
+     * Status: ENABLE, DISABLE
+     */
+    private String status;
 
-	// Getters and Setters
-	public Long getId() {
-		return id;
-	}
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getMcpServerName() {
-		return mcpServerName;
-	}
+    public String getMcpServerName() {
+        return mcpServerName;
+    }
 
-	public void setMcpServerName(String mcpServerName) {
-		this.mcpServerName = mcpServerName;
-	}
+    public void setMcpServerName(String mcpServerName) {
+        this.mcpServerName = mcpServerName;
+    }
 
-	public String getConnectionType() {
-		return connectionType;
-	}
+    public String getConnectionType() {
+        return connectionType;
+    }
 
-	public void setConnectionType(String connectionType) {
-		this.connectionType = connectionType;
-	}
+    public void setConnectionType(String connectionType) {
+        this.connectionType = connectionType;
+    }
 
-	public String getCommand() {
-		return command;
-	}
+    public String getCommand() {
+        return command;
+    }
 
-	public void setCommand(String command) {
-		this.command = command;
-	}
+    public void setCommand(String command) {
+        this.command = command;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public List<String> getArgs() {
-		return args;
-	}
+    public List<String> getArgs() {
+        return args;
+    }
 
-	public void setArgs(List<String> args) {
-		this.args = args;
-	}
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
 
-	public Map<String, String> getEnv() {
-		return env;
-	}
+    public Map<String, String> getEnv() {
+        return env;
+    }
 
-	public void setEnv(Map<String, String> env) {
-		this.env = env;
-	}
+    public void setEnv(Map<String, String> env) {
+        this.env = env;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	/**
-	 * Determine if it's an update operation
-	 * 
-	 * @return true for update, false for add
-	 */
-	public boolean isUpdate() {
-		return id != null;
-	}
+    /**
+     * Determine if it's an update operation
+     * 
+     * @return true for update, false for add
+     */
+    public boolean isUpdate() {
+        return id != null;
+    }
 
-	/**
-	 * Validate if request data is valid
-	 * 
-	 * @return true if valid, false if invalid
-	 */
-	public boolean isValid() {
-		return validateWithDetails().isEmpty();
-	}
+    /**
+     * Validate if request data is valid
+     * 
+     * @return true if valid, false if invalid
+     */
+    public boolean isValid() {
+        return validateWithDetails().isEmpty();
+    }
 
-	/**
-	 * Validate request data and return detailed error information
-	 * 
-	 * @return Error message list, empty list means validation passed
-	 */
-	public List<String> validateWithDetails() {
-		List<String> errors = new ArrayList<>();
+    /**
+     * Validate request data and return detailed error information
+     * 
+     * @return Error message list, empty list means validation passed
+     */
+    public List<String> validateWithDetails() {
+        List<String> errors = new ArrayList<>();
 
-		// Basic field validation
-		if (mcpServerName == null || mcpServerName.trim().isEmpty()) {
-			errors.add("MCP name cannot be empty");
-		}
+        // Basic field validation
+        if (mcpServerName == null || mcpServerName.trim().isEmpty()) {
+            errors.add("MCP name cannot be empty");
+        }
 
-		if (connectionType == null || connectionType.trim().isEmpty()) {
-			errors.add("Connection type cannot be empty");
-		}
+        if (connectionType == null || connectionType.trim().isEmpty()) {
+            errors.add("Connection type cannot be empty");
+        }
 
-		// Validate required fields based on connection type
-		if (connectionType != null) {
-			String connectionTypeUpper = connectionType.toUpperCase();
-			switch (connectionTypeUpper) {
-			case "STUDIO":
-				if (command == null || command.trim().isEmpty()) {
-					errors.add("STUDIO type must provide command");
-				}
-				break;
-			case "SSE":
-				if (url == null || url.trim().isEmpty()) {
-					errors.add("SSE type must provide URL");
-				} else if (!isValidUrlFormat(url)) {
-					errors.add("SSE type URL format is invalid: " + url);
-				} else if (!isSSEUrl(url)) {
-					errors.add("SSE type URL path must contain 'sse', current URL: " + url);
-				}
-				break;
-			case "STREAMING":
-				if (url == null || url.trim().isEmpty()) {
-					errors.add("STREAMING type must provide URL");
-				} else if (!isValidUrlFormat(url)) {
-					errors.add("STREAMING type URL format is invalid: " + url);
-				} else if (isSSEUrl(url)) {
-					errors.add("STREAMING type URL path cannot contain 'sse', current URL: " + url);
-				}
-				break;
-			default:
-				errors.add("Unsupported connection type: " + connectionTypeUpper);
-				break;
-			}
-		}
+        // Validate required fields based on connection type
+        if (connectionType != null) {
+            String connectionTypeUpper = connectionType.toUpperCase();
+            switch (connectionTypeUpper) {
+                case "STUDIO":
+                    if (command == null || command.trim().isEmpty()) {
+                        errors.add("STUDIO type must provide command");
+                    }
+                    break;
+                case "SSE":
+                    if (url == null || url.trim().isEmpty()) {
+                        errors.add("SSE type must provide URL");
+                    }
+                    else if (!isValidUrlFormat(url)) {
+                        errors.add("SSE type URL format is invalid: " + url);
+                    }
+                    else if (!isSSEUrl(url)) {
+                        errors.add("SSE type URL path must contain 'sse', current URL: " + url);
+                    }
+                    break;
+                case "STREAMING":
+                    if (url == null || url.trim().isEmpty()) {
+                        errors.add("STREAMING type must provide URL");
+                    }
+                    else if (!isValidUrlFormat(url)) {
+                        errors.add("STREAMING type URL format is invalid: " + url);
+                    }
+                    else if (isSSEUrl(url)) {
+                        errors.add("STREAMING type URL path cannot contain 'sse', current URL: " + url);
+                    }
+                    break;
+                default:
+                    errors.add("Unsupported connection type: " + connectionTypeUpper);
+                    break;
+            }
+        }
 
-		return errors;
-	}
+        return errors;
+    }
 
-	/**
-	 * Validate if URL format is valid
-	 * 
-	 * @param url Server URL
-	 * @return Whether it's a valid URL format
-	 */
-	private boolean isValidUrlFormat(String url) {
-		if (url == null || url.trim().isEmpty()) {
-			return false;
-		}
+    /**
+     * Validate if URL format is valid
+     * 
+     * @param url Server URL
+     * @return Whether it's a valid URL format
+     */
+    private boolean isValidUrlFormat(String url) {
+        if (url == null || url.trim().isEmpty()) {
+            return false;
+        }
 
-		try {
-			new java.net.URL(url.trim());
-			return true;
-		} catch (java.net.MalformedURLException e) {
-			return false;
-		}
-	}
+        try {
+            new java.net.URL(url.trim());
+            return true;
+        }
+        catch (java.net.MalformedURLException e) {
+            return false;
+        }
+    }
 
-	/**
-	 * Determine if URL is SSE connection (consistent with McpServerConfig)
-	 * 
-	 * @param url Server URL
-	 * @return Whether it's SSE URL
-	 */
-	private boolean isSSEUrl(String url) {
-		if (url == null || url.isEmpty()) {
-			return false;
-		}
+    /**
+     * Determine if URL is SSE connection (consistent with McpServerConfig)
+     * 
+     * @param url Server URL
+     * @return Whether it's SSE URL
+     */
+    private boolean isSSEUrl(String url) {
+        if (url == null || url.isEmpty()) {
+            return false;
+        }
 
-		try {
-			java.net.URL parsedUrl = new java.net.URL(url);
-			String path = parsedUrl.getPath();
+        try {
+            java.net.URL parsedUrl = new java.net.URL(url);
+            String path = parsedUrl.getPath();
 
-			// Check if path contains sse
-			boolean pathContainsSse = path != null && path.toLowerCase().contains("sse");
+            // Check if path contains sse
+            boolean pathContainsSse = path != null && path.toLowerCase().contains("sse");
 
-			return pathContainsSse;
-		} catch (java.net.MalformedURLException e) {
-			// If URL format is invalid, return false
-			return false;
-		}
-	}
+            return pathContainsSse;
+        }
+        catch (java.net.MalformedURLException e) {
+            // If URL format is invalid, return false
+            return false;
+        }
+    }
 
-	/**
-	 * Build JSON configuration for single server
-	 * 
-	 * @return JSON string
-	 */
-	public String buildConfigJson() {
-		StringBuilder jsonBuilder = new StringBuilder();
-		jsonBuilder.append("{");
+    /**
+     * Build JSON configuration for single server
+     * 
+     * @return JSON string
+     */
+    public String buildConfigJson() {
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("{");
 
-		// Add command (if exists)
-		if (command != null && !command.trim().isEmpty()) {
-			jsonBuilder.append("\"command\":\"").append(command).append("\"");
-		}
+        // Add command (if exists)
+        if (command != null && !command.trim().isEmpty()) {
+            jsonBuilder.append("\"command\":\"").append(command).append("\"");
+        }
 
-		// Add url (if exists)
-		if (url != null && !url.trim().isEmpty()) {
-			if (jsonBuilder.length() > 1) {
-				jsonBuilder.append(",");
-			}
-			jsonBuilder.append("\"url\":\"").append(url).append("\"");
-		}
+        // Add url (if exists)
+        if (url != null && !url.trim().isEmpty()) {
+            if (jsonBuilder.length() > 1) {
+                jsonBuilder.append(",");
+            }
+            jsonBuilder.append("\"url\":\"").append(url).append("\"");
+        }
 
-		// Add args (if exists)
-		if (args != null && !args.isEmpty()) {
-			if (jsonBuilder.length() > 1) {
-				jsonBuilder.append(",");
-			}
-			jsonBuilder.append("\"args\":[");
-			for (int i = 0; i < args.size(); i++) {
-				if (i > 0) {
-					jsonBuilder.append(",");
-				}
-				jsonBuilder.append("\"").append(args.get(i)).append("\"");
-			}
-			jsonBuilder.append("]");
-		}
+        // Add args (if exists)
+        if (args != null && !args.isEmpty()) {
+            if (jsonBuilder.length() > 1) {
+                jsonBuilder.append(",");
+            }
+            jsonBuilder.append("\"args\":[");
+            for (int i = 0; i < args.size(); i++) {
+                if (i > 0) {
+                    jsonBuilder.append(",");
+                }
+                jsonBuilder.append("\"").append(args.get(i)).append("\"");
+            }
+            jsonBuilder.append("]");
+        }
 
-		// Add env (if exists)
-		if (env != null && !env.isEmpty()) {
-			if (jsonBuilder.length() > 1) {
-				jsonBuilder.append(",");
-			}
-			jsonBuilder.append("\"env\":{");
-			boolean first = true;
-			for (Map.Entry<String, String> entry : env.entrySet()) {
-				if (!first) {
-					jsonBuilder.append(",");
-				}
-				jsonBuilder.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
-				first = false;
-			}
-			jsonBuilder.append("}");
-		}
+        // Add env (if exists)
+        if (env != null && !env.isEmpty()) {
+            if (jsonBuilder.length() > 1) {
+                jsonBuilder.append(",");
+            }
+            jsonBuilder.append("\"env\":{");
+            boolean first = true;
+            for (Map.Entry<String, String> entry : env.entrySet()) {
+                if (!first) {
+                    jsonBuilder.append(",");
+                }
+                jsonBuilder.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
+                first = false;
+            }
+            jsonBuilder.append("}");
+        }
 
-		jsonBuilder.append("}");
-		return jsonBuilder.toString();
-	}
+        jsonBuilder.append("}");
+        return jsonBuilder.toString();
+    }
 
-	/**
-	 * Build complete MCP configuration JSON (including mcpServers wrapper)
-	 * 
-	 * @return Complete JSON string
-	 */
-	public String buildFullConfigJson() {
-		StringBuilder fullJsonBuilder = new StringBuilder();
-		fullJsonBuilder.append("{\n  \"mcpServers\": {\n");
-		fullJsonBuilder.append("    \"").append(mcpServerName).append("\": ");
-		fullJsonBuilder.append(buildConfigJson());
-		fullJsonBuilder.append("\n  }\n}");
-		return fullJsonBuilder.toString();
-	}
+    /**
+     * Build complete MCP configuration JSON (including mcpServers wrapper)
+     * 
+     * @return Complete JSON string
+     */
+    public String buildFullConfigJson() {
+        StringBuilder fullJsonBuilder = new StringBuilder();
+        fullJsonBuilder.append("{\n  \"mcpServers\": {\n");
+        fullJsonBuilder.append("    \"").append(mcpServerName).append("\": ");
+        fullJsonBuilder.append(buildConfigJson());
+        fullJsonBuilder.append("\n  }\n}");
+        return fullJsonBuilder.toString();
+    }
 
 }

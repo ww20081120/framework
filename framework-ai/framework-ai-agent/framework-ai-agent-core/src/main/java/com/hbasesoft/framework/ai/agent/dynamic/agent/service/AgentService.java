@@ -24,44 +24,44 @@ import com.hbasesoft.framework.ai.agent.dynamic.agent.vo.Tool;
  * @see com.hbasesoft.framework.ai.agent.planning.service <br>
  */
 public interface AgentService {
-	/**
-	 * 根据代理名称获取智能代理配置
-	 * 
-	 * @param agentName 代理名称
-	 * @param namespace 命名空间
-	 * @return 代理配置信息
-	 */
-	AgentConfig getAgentByName(String namespace, String agentName);
+    /**
+     * 根据代理名称获取智能代理配置
+     * 
+     * @param agentName 代理名称
+     * @param namespace 命名空间
+     * @return 代理配置信息
+     */
+    AgentConfig getAgentByName(String namespace, String agentName);
 
-	/**
-	 * 获取指定命名空间下的所有智能代理配置
-	 * 
-	 * @param namespace 命名空间
-	 * @return 代理配置信息列表
-	 */
-	List<AgentConfig> getAllAgentsByNamespace(String namespace);
+    /**
+     * 获取指定命名空间下的所有智能代理配置
+     * 
+     * @param namespace 命名空间
+     * @return 代理配置信息列表
+     */
+    List<AgentConfig> getAllAgentsByNamespace(String namespace);
 
-	/**
-	 * 更新智能代理配置
-	 * 
-	 * @param agentConfig 代理配置信息
-	 * @return 更新后的代理配置
-	 */
-	AgentConfig updateAgent(AgentConfig agentConfig);
+    /**
+     * 更新智能代理配置
+     * 
+     * @param agentConfig 代理配置信息
+     * @return 更新后的代理配置
+     */
+    AgentConfig updateAgent(AgentConfig agentConfig);
 
-	/**
-	 * 创建并返回一个可用的BaseAgent对象 该方法类似于PlanningFactory中的createPlanningCoordinator方法
-	 * 
-	 * @param name                代理名称
-	 * @param currentPlanId       当前计划ID，用于标识代理所属的计划
-	 * @param rootPlanId          根计划ID
-	 * @param initialAgentSetting 初始代理设置
-	 * @param expectedReturnInfo  期望返回信息
-	 * @return 创建的BaseAgent对象
-	 */
-	BaseAgent createDynamicBaseAgent(String name, String currentPlanId, String rootPlanId,
-			Map<String, Object> initialAgentSetting, String expectedReturnInfo);
+    /**
+     * 创建并返回一个可用的BaseAgent对象 该方法类似于PlanningFactory中的createPlanningCoordinator方法
+     * 
+     * @param name 代理名称
+     * @param currentPlanId 当前计划ID，用于标识代理所属的计划
+     * @param rootPlanId 根计划ID
+     * @param initialAgentSetting 初始代理设置
+     * @param expectedReturnInfo 期望返回信息
+     * @return 创建的BaseAgent对象
+     */
+    BaseAgent createDynamicBaseAgent(String name, String currentPlanId, String rootPlanId,
+        Map<String, Object> initialAgentSetting, String expectedReturnInfo);
 
-	List<Tool> getAvailableTools();
+    List<Tool> getAvailableTools();
 
 }

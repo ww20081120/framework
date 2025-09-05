@@ -21,20 +21,20 @@ import com.microsoft.playwright.Page;
 
 public class NewTabAction extends BrowserAction {
 
-	public NewTabAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public NewTabAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		String url = request.getUrl();
-		if (url == null) {
-			return new ToolExecuteResult("URL is required for 'new_tab' action");
-		}
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        String url = request.getUrl();
+        if (url == null) {
+            return new ToolExecuteResult("URL is required for 'new_tab' action");
+        }
 
-		Page page = getCurrentPage(); // Open new tab
-		page.navigate(url); // Navigate to specified URL
-		return new ToolExecuteResult("Opened new tab with URL " + url);
-	}
+        Page page = getCurrentPage(); // Open new tab
+        page.navigate(url); // Navigate to specified URL
+        return new ToolExecuteResult("Opened new tab with URL " + url);
+    }
 
 }

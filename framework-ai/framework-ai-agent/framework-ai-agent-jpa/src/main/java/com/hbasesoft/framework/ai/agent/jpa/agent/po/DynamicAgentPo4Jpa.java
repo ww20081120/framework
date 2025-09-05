@@ -44,43 +44,43 @@ import lombok.Setter;
 @Table(name = "dynamic_agents")
 public class DynamicAgentPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = 8526003709620073848L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 8526003709620073848L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "agent_name", nullable = false, unique = true)
-	private String agentName;
+    @Column(name = "agent_name", nullable = false, unique = true)
+    private String agentName;
 
-	@Column(name = "agent_description", nullable = false, length = 1000)
-	private String agentDescription;
+    @Column(name = "agent_description", nullable = false, length = 1000)
+    private String agentDescription;
 
-	@Column(name = "system_prompt", nullable = true, length = 40000)
-	@Deprecated
-	private String systemPrompt = "";
+    @Column(name = "system_prompt", nullable = true, length = 40000)
+    @Deprecated
+    private String systemPrompt = "";
 
-	@Column(name = "next_step_prompt", nullable = false, length = 40000)
-	private String nextStepPrompt;
+    @Column(name = "next_step_prompt", nullable = false, length = 40000)
+    private String nextStepPrompt;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "dynamic_agent_tools", joinColumns = @JoinColumn(name = "agent_id"))
-	@Column(name = "tool_key")
-	private List<String> availableToolKeys;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "dynamic_agent_tools", joinColumns = @JoinColumn(name = "agent_id"))
+    @Column(name = "tool_key")
+    private List<String> availableToolKeys;
 
-	@Column(name = "class_name", nullable = false)
-	private String className;
+    @Column(name = "class_name", nullable = false)
+    private String className;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "model_id")
-	private DynamicModelPo4Jpa model;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "model_id")
+    private DynamicModelPo4Jpa model;
 
-	@Column(name = "namespace", nullable = true)
-	private String namespace;
+    @Column(name = "namespace", nullable = true)
+    private String namespace;
 
-	@Column(name = "built_in", nullable = true)
-	private Boolean builtIn = false;
+    @Column(name = "built_in", nullable = true)
+    private Boolean builtIn = false;
 }

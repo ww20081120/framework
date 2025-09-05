@@ -30,14 +30,14 @@ import com.hbasesoft.framework.ai.demo.AIDemoApplication;
 @SpringBootTest(classes = AIDemoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HelloworldControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-	@Test
-	public void testSimpleChat() throws Exception {
-		// 模拟输入和响应
-		String input = "hello world";
-		// 发送 GET 请求并验证响应
-		mockMvc.perform(get("/simple/helloworld/chat").param("input", input)).andExpect(status().isOk());
-	}
+    @Test
+    public void testSimpleChat() throws Exception {
+        // 模拟输入和响应
+        String input = "hello world";
+        // 发送 GET 请求并验证响应
+        mockMvc.perform(get("/simple/helloworld/chat").param("input", input)).andExpect(status().isOk());
+    }
 }

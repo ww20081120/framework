@@ -28,36 +28,38 @@ import com.hbasesoft.framework.common.utils.logger.Logger;
 @Component
 public class LlmTraceRecorder {
 
-	private static final Logger logger = new Logger("LLM_REQUEST_LOGGER");
+    private static final Logger logger = new Logger("LLM_REQUEST_LOGGER");
 
-	private static final Logger selfLogger = new Logger(LlmTraceRecorder.class);
+    private static final Logger selfLogger = new Logger(LlmTraceRecorder.class);
 
-	private static final ThreadLocal<String> REQUEST_ID = new ThreadLocal<>();
+    private static final ThreadLocal<String> REQUEST_ID = new ThreadLocal<>();
 
-	@Autowired
-	private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-	public void recordRequest(ChatCompletionRequest chatRequest) {
-		try {
-			logger.info("Request[{0}]: {1}", REQUEST_ID.get(), objectMapper.writer().writeValueAsString(chatRequest));
-		} catch (Throwable e) {
-			selfLogger.error("Failed to serialize chat request", e);
-		}
-	}
+    public void recordRequest(ChatCompletionRequest chatRequest) {
+        try {
+            logger.info("Request[{0}]: {1}", REQUEST_ID.get(), objectMapper.writer().writeValueAsString(chatRequest));
+        }
+        catch (Throwable e) {
+            selfLogger.error("Failed to serialize chat request", e);
+        }
+    }
 
-	public void recordResponse(ChatResponse chatResponse) {
-		try {
-			logger.info("Response[{0}]: {1}", REQUEST_ID.get(), objectMapper.writer().writeValueAsString(chatResponse));
-		} catch (Throwable e) {
-			selfLogger.error("Failed to serialize chat response", e);
-		}
-	}
+    public void recordResponse(ChatResponse chatResponse) {
+        try {
+            logger.info("Response[{0}]: {1}", REQUEST_ID.get(), objectMapper.writer().writeValueAsString(chatResponse));
+        }
+        catch (Throwable e) {
+            selfLogger.error("Failed to serialize chat response", e);
+        }
+    }
 
-	public static void initRequest() {
-		REQUEST_ID.set(UUID.randomUUID().toString());
-	}
+    public static void initRequest() {
+        REQUEST_ID.set(UUID.randomUUID().toString());
+    }
 
-	public static void clearRequest() {
-		REQUEST_ID.remove();
-	}
+    public static void clearRequest() {
+        REQUEST_ID.remove();
+    }
 }

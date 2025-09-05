@@ -24,13 +24,13 @@ import lombok.Data;
 @Data
 public class RecorderVo {
 
-	private Long id;
+    private Long id;
 
-	private String planId;
+    private String planId;
 
-	private Date gmtCreate;
+    private Date gmtCreate;
 
-	private Date gmtModified;
+    private Date gmtModified;
 
-	private PlanExecutionRecord planExecutionRecord;
+    private PlanExecutionRecord planExecutionRecord;
 }

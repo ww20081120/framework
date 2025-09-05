@@ -18,9 +18,9 @@ import com.hbasesoft.framework.ai.agent.dynamic.agent.vo.AgentConfig;
  * @see com.hbasesoft.framework.ai.agent.jpa.agent.service <br>
  */
 public interface AgentManagerService {
-	AgentConfig getAgentById(String id);
+    AgentConfig getAgentById(String id);
 
-	AgentConfig createAgent(AgentConfig agentConfig);
+    AgentConfig createAgent(AgentConfig agentConfig);
 
-	void deleteAgent(String id);
+    void deleteAgent(String id);
 }

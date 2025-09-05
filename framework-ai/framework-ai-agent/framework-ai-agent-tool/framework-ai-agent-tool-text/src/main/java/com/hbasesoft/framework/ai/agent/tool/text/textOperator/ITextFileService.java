@@ -25,88 +25,88 @@ import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingSer
  */
 public interface ITextFileService {
 
-	/**
-	 * Get internal storage service
-	 * 
-	 * @return Internal storage service
-	 */
-	ISmartContentSavingService getInnerStorageService();
+    /**
+     * Get internal storage service
+     * 
+     * @return Internal storage service
+     */
+    ISmartContentSavingService getInnerStorageService();
 
-	/**
-	 * Get file status for specified plan
-	 * 
-	 * @param planId Plan ID
-	 * @return File status
-	 */
-	Object getFileState(String planId);
+    /**
+     * Get file status for specified plan
+     * 
+     * @param planId Plan ID
+     * @return File status
+     */
+    Object getFileState(String planId);
 
-	/**
-	 * Close files for specified plan
-	 * 
-	 * @param planId Plan ID
-	 */
-	void closeFileForPlan(String planId);
+    /**
+     * Close files for specified plan
+     * 
+     * @param planId Plan ID
+     */
+    void closeFileForPlan(String planId);
 
-	/**
-	 * Check if file type is supported
-	 * 
-	 * @param filePath File path
-	 * @return Whether supported
-	 */
-	boolean isSupportedFileType(String filePath);
+    /**
+     * Check if file type is supported
+     * 
+     * @param filePath File path
+     * @return Whether supported
+     */
+    boolean isSupportedFileType(String filePath);
 
-	/**
-	 * Get file extension
-	 * 
-	 * @param filePath File path
-	 * @return File extension
-	 */
-	String getFileExtension(String filePath);
+    /**
+     * Get file extension
+     * 
+     * @param filePath File path
+     * @return File extension
+     */
+    String getFileExtension(String filePath);
 
-	/**
-	 * Validate and get absolute path
-	 * 
-	 * @param workingDirectoryPath Working directory path
-	 * @param filePath             File path
-	 * @throws IOException IO exception
-	 */
-	void validateAndGetAbsolutePath(String workingDirectoryPath, String filePath) throws IOException;
+    /**
+     * Validate and get absolute path
+     * 
+     * @param workingDirectoryPath Working directory path
+     * @param filePath File path
+     * @throws IOException IO exception
+     */
+    void validateAndGetAbsolutePath(String workingDirectoryPath, String filePath) throws IOException;
 
-	/**
-	 * Update file status
-	 * 
-	 * @param planId          Plan ID
-	 * @param filePath        File path
-	 * @param operationResult Operation result
-	 */
-	void updateFileState(String planId, String filePath, String operationResult);
+    /**
+     * Update file status
+     * 
+     * @param planId Plan ID
+     * @param filePath File path
+     * @param operationResult Operation result
+     */
+    void updateFileState(String planId, String filePath, String operationResult);
 
-	/**
-	 * Get current file path
-	 * 
-	 * @param planId Plan ID
-	 * @return Current file path
-	 */
-	String getCurrentFilePath(String planId);
+    /**
+     * Get current file path
+     * 
+     * @param planId Plan ID
+     * @return Current file path
+     */
+    String getCurrentFilePath(String planId);
 
-	/**
-	 * Get Manus properties
-	 * 
-	 * @return Manus properties
-	 */
-	IManusProperties getManusProperties();
+    /**
+     * Get Manus properties
+     * 
+     * @return Manus properties
+     */
+    IManusProperties getManusProperties();
 
-	/**
-	 * Get last operation result
-	 * 
-	 * @param planId Plan ID
-	 * @return Last operation result
-	 */
-	String getLastOperationResult(String planId);
+    /**
+     * Get last operation result
+     * 
+     * @param planId Plan ID
+     * @return Last operation result
+     */
+    String getLastOperationResult(String planId);
 
-	/**
-	 * Clean up resources
-	 */
-	void cleanup();
+    /**
+     * Clean up resources
+     */
+    void cleanup();
 
 }

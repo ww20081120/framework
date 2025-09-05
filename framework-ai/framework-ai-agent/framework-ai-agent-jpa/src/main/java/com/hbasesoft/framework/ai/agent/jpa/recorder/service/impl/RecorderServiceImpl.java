@@ -29,66 +29,67 @@ import com.hbasesoft.framework.ai.agent.recorder.model.vo.RecorderVo;
 @Service
 public class RecorderServiceImpl implements RecorderService {
 
-	@Autowired
-	private PlanExecutionRecordDao planExecutionRecordDao;
+    @Autowired
+    private PlanExecutionRecordDao planExecutionRecordDao;
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param planId <br>
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void deleteById(String planId) {
-		planExecutionRecordDao.deleteByLambda(q -> q.eq(PlanExecutionRecordPo4Jpa::getPlanId, planId));
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param planId <br>
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteById(String planId) {
+        planExecutionRecordDao.deleteByLambda(q -> q.eq(PlanExecutionRecordPo4Jpa::getPlanId, planId));
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param rootPlanId
-	 * @return <br>
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public RecorderVo getByRootPlanId(String rootPlanId) {
-		PlanExecutionRecordPo4Jpa entity = planExecutionRecordDao
-				.getByLambda(q -> q.eq(PlanExecutionRecordPo4Jpa::getPlanId, rootPlanId));
-		if (entity == null) {
-			return null;
-		}
-		RecorderVo recorderVo = new RecorderVo();
-		BeanUtils.copyProperties(entity, recorderVo);
-		recorderVo.setPlanExecutionRecord(
-				new StringAttributeConverter().convertToEntityAttribute(entity.getPlanExecutionRecord()));
-		return recorderVo;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param rootPlanId
+     * @return <br>
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public RecorderVo getByRootPlanId(String rootPlanId) {
+        PlanExecutionRecordPo4Jpa entity = planExecutionRecordDao
+            .getByLambda(q -> q.eq(PlanExecutionRecordPo4Jpa::getPlanId, rootPlanId));
+        if (entity == null) {
+            return null;
+        }
+        RecorderVo recorderVo = new RecorderVo();
+        BeanUtils.copyProperties(entity, recorderVo);
+        recorderVo.setPlanExecutionRecord(
+            new StringAttributeConverter().convertToEntityAttribute(entity.getPlanExecutionRecord()));
+        return recorderVo;
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param entity <br>
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void save(RecorderVo entity) {
-		PlanExecutionRecordPo4Jpa entityJpa = new PlanExecutionRecordPo4Jpa();
-		BeanUtils.copyProperties(entity, entityJpa);
-		if (entityJpa.getId() == null) {
-			planExecutionRecordDao
-					.updateByLambda(q -> q.set(PlanExecutionRecordPo4Jpa::getGmtModified, entityJpa.getGmtCreate())
-							.set(PlanExecutionRecordPo4Jpa::getPlanExecutionRecord, entityJpa.getPlanExecutionRecord())
-							.eq(PlanExecutionRecordPo4Jpa::getId, entity.getId()));
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity <br>
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void save(RecorderVo entity) {
+        PlanExecutionRecordPo4Jpa entityJpa = new PlanExecutionRecordPo4Jpa();
+        BeanUtils.copyProperties(entity, entityJpa);
+        if (entityJpa.getId() == null) {
+            planExecutionRecordDao
+                .updateByLambda(q -> q.set(PlanExecutionRecordPo4Jpa::getGmtModified, entityJpa.getGmtCreate())
+                    .set(PlanExecutionRecordPo4Jpa::getPlanExecutionRecord, entityJpa.getPlanExecutionRecord())
+                    .eq(PlanExecutionRecordPo4Jpa::getId, entity.getId()));
 
-		} else {
-			planExecutionRecordDao.save(entityJpa);
-		}
-	}
+        }
+        else {
+            planExecutionRecordDao.save(entityJpa);
+        }
+    }
 
 }

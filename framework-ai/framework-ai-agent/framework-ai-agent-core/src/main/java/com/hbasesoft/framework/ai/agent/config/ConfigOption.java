@@ -29,35 +29,33 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigOption {
 
-	/**
-	 * Option value
-	 */
-	String value();
+    /**
+     * Option value
+     */
+    String value();
 
-	/**
-	 * Option label
-	 * <p>
-	 * Supports internationalization key format:
-	 * config.option.{group}.{subGroup}.{key}.{value}
-	 */
-	String label() default "";
+    /**
+     * Option label
+     * <p>
+     * Supports internationalization key format: config.option.{group}.{subGroup}.{key}.{value}
+     */
+    String label() default "";
 
-	/**
-	 * Option description
-	 * <p>
-	 * Supports internationalization key format:
-	 * config.option.desc.{group}.{subGroup}.{key}.{value}
-	 */
-	String description() default "";
+    /**
+     * Option description
+     * <p>
+     * Supports internationalization key format: config.option.desc.{group}.{subGroup}.{key}.{value}
+     */
+    String description() default "";
 
-	/**
-	 * Option icon (optional)
-	 */
-	String icon() default "";
+    /**
+     * Option icon (optional)
+     */
+    String icon() default "";
 
-	/**
-	 * Whether option is disabled
-	 */
-	boolean disabled() default false;
+    /**
+     * Whether option is disabled
+     */
+    boolean disabled() default false;
 
 }

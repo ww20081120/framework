@@ -18,28 +18,28 @@ package com.hbasesoft.framework.ai.agent.event;
 
 public class PlanExceptionEvent implements JmanusEvent {
 
-	private String planId;
+    private String planId;
 
-	private Throwable throwable;
+    private Throwable throwable;
 
-	private long createTime;
+    private long createTime;
 
-	public PlanExceptionEvent(String planId, Throwable throwable) {
-		this.planId = planId;
-		this.throwable = throwable;
-		this.createTime = System.currentTimeMillis();
-	}
+    public PlanExceptionEvent(String planId, Throwable throwable) {
+        this.planId = planId;
+        this.throwable = throwable;
+        this.createTime = System.currentTimeMillis();
+    }
 
-	public String getPlanId() {
-		return planId;
-	}
+    public String getPlanId() {
+        return planId;
+    }
 
-	public Throwable getThrowable() {
-		return throwable;
-	}
+    public Throwable getThrowable() {
+        return throwable;
+    }
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public long getCreateTime() {
+        return createTime;
+    }
 
 }

@@ -19,26 +19,26 @@ import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpState;
  */
 public interface IMcpStateHolderService {
 
-	/**
-	 * Get MCP state
-	 * 
-	 * @param key state key
-	 * @return MCP state
-	 */
-	McpState getMcpState(String key);
+    /**
+     * Get MCP state
+     * 
+     * @param key state key
+     * @return MCP state
+     */
+    McpState getMcpState(String key);
 
-	/**
-	 * Set MCP state
-	 * 
-	 * @param key   state key
-	 * @param state MCP state
-	 */
-	void setMcpState(String key, McpState state);
+    /**
+     * Set MCP state
+     * 
+     * @param key state key
+     * @param state MCP state
+     */
+    void setMcpState(String key, McpState state);
 
-	/**
-	 * Remove MCP state
-	 * 
-	 * @param key state key
-	 */
-	void removeMcpState(String key);
+    /**
+     * Remove MCP state
+     * 
+     * @param key state key
+     */
+    void removeMcpState(String key);
 }

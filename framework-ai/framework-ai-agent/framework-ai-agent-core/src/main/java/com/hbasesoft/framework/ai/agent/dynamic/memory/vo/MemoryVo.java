@@ -25,23 +25,23 @@ import lombok.Data;
 @Data
 public class MemoryVo {
 
-	private Long id;
+    private Long id;
 
-	private String memoryId;
+    private String memoryId;
 
-	private String memoryName;
+    private String memoryName;
 
-	private Date createTime;
+    private Date createTime;
 
-	private List<Message> messages;
+    private List<Message> messages;
 
-	public MemoryVo() {
-		this.createTime = new Date();
-	}
+    public MemoryVo() {
+        this.createTime = new Date();
+    }
 
-	public MemoryVo(String memoryId, String memoryName) {
-		this.memoryId = memoryId;
-		this.memoryName = memoryName;
-		this.createTime = new Date();
-	}
+    public MemoryVo(String memoryId, String memoryName) {
+        this.memoryId = memoryId;
+        this.memoryName = memoryName;
+        this.createTime = new Date();
+    }
 }

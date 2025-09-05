@@ -42,180 +42,181 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AutoProxyBeanFactory implements BeanFactoryPostProcessor {
 
-	/**
-	 * logger
-	 */
-	private static Logger logger = new Logger(AutoProxyBeanFactory.class);
+    /**
+     * logger
+     */
+    private static Logger logger = new Logger(AutoProxyBeanFactory.class);
 
-	/**
-	 * executor的工厂
-	 */
-	private final ISqlExcutorFactory sqlExcutorFactory;
+    /**
+     * executor的工厂
+     */
+    private final ISqlExcutorFactory sqlExcutorFactory;
 
-	/**
-	 * 注解名称
-	 */
-	private final Class<? extends Annotation> annotationClazz;
+    /**
+     * 注解名称
+     */
+    private final Class<? extends Annotation> annotationClazz;
 
-	/** interceptors */
-	private String[] interceptors;
+    /** interceptors */
+    private String[] interceptors;
 
-	/** config */
-	private DaoConfig config;
+    /** config */
+    private DaoConfig config;
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author yang.zhipeng <br>
-	 * @taskId <br>
-	 * @param beanFactory <br>
-	 * @throws BeansException <br>
-	 */
-	@Override
-	public void postProcessBeanFactory(final @NonNull ConfigurableListableBeanFactory beanFactory)
-			throws BeansException {
-		List<String> backPackages = BasePackagesUtil.getBasePackages(beanFactory);
+    /**
+     * Description: <br>
+     * 
+     * @author yang.zhipeng <br>
+     * @taskId <br>
+     * @param beanFactory <br>
+     * @throws BeansException <br>
+     */
+    @Override
+    public void postProcessBeanFactory(final @NonNull ConfigurableListableBeanFactory beanFactory)
+        throws BeansException {
+        List<String> backPackages = BasePackagesUtil.getBasePackages(beanFactory);
 
-		logger.info("*************************Dao注入列表 {0}***************************", backPackages);
+        logger.info("*************************Dao注入列表 {0}***************************", backPackages);
 
-		if (CollectionUtils.isNotEmpty(backPackages)) {
-			SQLHandler sqlHandler = new SQLHandler(config);
-			try {
-				for (String pack : backPackages) {
-					if (StringUtils.isNotEmpty(pack)) {
-						String tempPack = pack.indexOf("*") == -1 ? pack + ".*" : pack;
-						Set<Class<?>> clazzSet = BeanUtil.getClasses(tempPack,
-								clazz -> clazz.isAnnotationPresent(annotationClazz));
-						String className = null;
-						for (Class<?> clazz : clazzSet) {
-							className = clazz.getName();
-							String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
-							if (beanFactory.containsBean(beanName)) {
-								beanName = className;
-								if (beanFactory.containsBean(beanName)) {
-									continue;
-								}
-							}
+        if (CollectionUtils.isNotEmpty(backPackages)) {
+            SQLHandler sqlHandler = new SQLHandler(config);
+            try {
+                for (String pack : backPackages) {
+                    if (StringUtils.isNotEmpty(pack)) {
+                        String tempPack = pack.indexOf("*") == -1 ? pack + ".*" : pack;
+                        Set<Class<?>> clazzSet = BeanUtil.getClasses(tempPack,
+                            clazz -> clazz.isAnnotationPresent(annotationClazz));
+                        String className = null;
+                        for (Class<?> clazz : clazzSet) {
+                            className = clazz.getName();
+                            String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
+                            if (beanFactory.containsBean(beanName)) {
+                                beanName = className;
+                                if (beanFactory.containsBean(beanName)) {
+                                    continue;
+                                }
+                            }
 
-							// 此处不缓存SQL
-							sqlHandler.invoke(clazz);
+                            // 此处不缓存SQL
+                            sqlHandler.invoke(clazz);
 
-							// 单独加载一个接口的代理类
-							ProxyFactoryBean factoryBean = new ProxyFactoryBean();
-							factoryBean.setBeanFactory(beanFactory);
-							factoryBean.setInterfaces(clazz);
-							factoryBean.setInterceptorNames(interceptors);
-							factoryBean.setTarget(getDaoHandler(clazz));
-							beanFactory.registerSingleton(beanName, factoryBean);
-							logger.info("    success create interface [{0}] with name {1}", className, beanName);
-						}
-					}
-				}
-			} catch (Exception e) {
-				logger.error("------->自动扫描jar包失败", e);
-			}
-		}
+                            // 单独加载一个接口的代理类
+                            ProxyFactoryBean factoryBean = new ProxyFactoryBean();
+                            factoryBean.setBeanFactory(beanFactory);
+                            factoryBean.setInterfaces(clazz);
+                            factoryBean.setInterceptorNames(interceptors);
+                            factoryBean.setTarget(getDaoHandler(clazz));
+                            beanFactory.registerSingleton(beanName, factoryBean);
+                            logger.info("    success create interface [{0}] with name {1}", className, beanName);
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                logger.error("------->自动扫描jar包失败", e);
+            }
+        }
 
-		logger.info("***********************************************************");
-	}
+        logger.info("***********************************************************");
+    }
 
-	private DaoHandler getDaoHandler(final Class<?> clazz) {
-		DaoHandler handler = new DaoHandler(config);
-		ISqlExcutor baseDao = sqlExcutorFactory.create();
-		handler.setSqlExcutor(baseDao);
+    private DaoHandler getDaoHandler(final Class<?> clazz) {
+        DaoHandler handler = new DaoHandler(config);
+        ISqlExcutor baseDao = sqlExcutorFactory.create();
+        handler.setSqlExcutor(baseDao);
 
-		// 获取实体类类型
-		Class<?> entityClazz = findEntityClass(clazz);
+        // 获取实体类类型
+        Class<?> entityClazz = findEntityClass(clazz);
 
-		if (entityClazz != null) {
-			baseDao.setEntityClazz(entityClazz);
-		}
-		return handler;
-	}
+        if (entityClazz != null) {
+            baseDao.setEntityClazz(entityClazz);
+        }
+        return handler;
+    }
 
-	/**
-	 * 递归查找 BaseEntity 的子类
-	 * 
-	 * @param clazz 当前类
-	 * @return 找到的实体类类型，如果没有找到则返回 null
-	 */
-	private Class<?> findEntityClass(final Class<?> clazz) {
-		// 如果当前类是 Object，则停止递归
-		if (clazz == null || clazz.equals(Object.class)) {
-			return null;
-		}
+    /**
+     * 递归查找 BaseEntity 的子类
+     * 
+     * @param clazz 当前类
+     * @return 找到的实体类类型，如果没有找到则返回 null
+     */
+    private Class<?> findEntityClass(final Class<?> clazz) {
+        // 如果当前类是 Object，则停止递归
+        if (clazz == null || clazz.equals(Object.class)) {
+            return null;
+        }
 
-		// 检查当前类的泛型父类
-		ParameterizedType genericSuperclass = getParameterizedType(clazz.getGenericSuperclass());
-		if (genericSuperclass != null) {
-			for (Type typeArgument : genericSuperclass.getActualTypeArguments()) {
-				if (typeArgument instanceof Class<?>) {
-					Class<?> candidate = (Class<?>) typeArgument;
-					if (BaseEntity.class.isAssignableFrom(candidate)) {
-						return candidate;
-					}
-				}
-			}
-		}
+        // 检查当前类的泛型父类
+        ParameterizedType genericSuperclass = getParameterizedType(clazz.getGenericSuperclass());
+        if (genericSuperclass != null) {
+            for (Type typeArgument : genericSuperclass.getActualTypeArguments()) {
+                if (typeArgument instanceof Class<?>) {
+                    Class<?> candidate = (Class<?>) typeArgument;
+                    if (BaseEntity.class.isAssignableFrom(candidate)) {
+                        return candidate;
+                    }
+                }
+            }
+        }
 
-		// 检查当前类的泛型接口
-		for (Type interfaceType : clazz.getGenericInterfaces()) {
-			ParameterizedType parameterizedInterface = getParameterizedType(interfaceType);
-			if (parameterizedInterface != null) {
-				for (Type typeArgument : parameterizedInterface.getActualTypeArguments()) {
-					if (typeArgument instanceof Class<?>) {
-						Class<?> candidate = (Class<?>) typeArgument;
-						if (BaseEntity.class.isAssignableFrom(candidate)) {
-							return candidate;
-						}
-					}
-				}
-			}
-		}
-		if (clazz.isInterface()) {
-			for (Class<?> superInterface : clazz.getInterfaces()) {
-				Class<?> result = findEntityClass(superInterface);
-				if (result != null) {
-					return result;
-				}
-			}
-		}
-		// 如果当前类没有找到，递归查找父类
-		return null;
-	}
+        // 检查当前类的泛型接口
+        for (Type interfaceType : clazz.getGenericInterfaces()) {
+            ParameterizedType parameterizedInterface = getParameterizedType(interfaceType);
+            if (parameterizedInterface != null) {
+                for (Type typeArgument : parameterizedInterface.getActualTypeArguments()) {
+                    if (typeArgument instanceof Class<?>) {
+                        Class<?> candidate = (Class<?>) typeArgument;
+                        if (BaseEntity.class.isAssignableFrom(candidate)) {
+                            return candidate;
+                        }
+                    }
+                }
+            }
+        }
+        if (clazz.isInterface()) {
+            for (Class<?> superInterface : clazz.getInterfaces()) {
+                Class<?> result = findEntityClass(superInterface);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        // 如果当前类没有找到，递归查找父类
+        return null;
+    }
 
-	/**
-	 * 获取 ParameterizedType 对象
-	 * 
-	 * @param type 类型
-	 * @return 如果是 ParameterizedType 则返回，否则返回 null
-	 */
-	private ParameterizedType getParameterizedType(final Type type) {
-		if (type instanceof ParameterizedType) {
-			return (ParameterizedType) type;
-		}
-		return null;
-	}
+    /**
+     * 获取 ParameterizedType 对象
+     * 
+     * @param type 类型
+     * @return 如果是 ParameterizedType 则返回，否则返回 null
+     */
+    private ParameterizedType getParameterizedType(final Type type) {
+        if (type instanceof ParameterizedType) {
+            return (ParameterizedType) type;
+        }
+        return null;
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param config <br>
-	 */
-	public void setConfig(final DaoConfig config) {
-		this.config = config;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param config <br>
+     */
+    public void setConfig(final DaoConfig config) {
+        this.config = config;
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param interceptors <br>
-	 */
-	public void setInterceptors(final String... interceptors) {
-		this.interceptors = interceptors;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param interceptors <br>
+     */
+    public void setInterceptors(final String... interceptors) {
+        this.interceptors = interceptors;
+    }
 }

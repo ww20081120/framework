@@ -30,48 +30,48 @@ import com.hbasesoft.framework.ai.agent.recorder.PlanExecutionRecorder;
 
 public class PlanExecutor extends AbstractPlanExecutor {
 
-	/**
-	 * Constructor for PlanExecutor
-	 * 
-	 * @param agents       List of dynamic agent entities
-	 * @param recorder     Plan execution recorder
-	 * @param agentService Agent service
-	 * @param llmService   LLM service
-	 */
-	public PlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
-			ILlmService llmService, IManusProperties manusProperties) {
-		super(agents, recorder, agentService, llmService, manusProperties);
-	}
+    /**
+     * Constructor for PlanExecutor
+     * 
+     * @param agents List of dynamic agent entities
+     * @param recorder Plan execution recorder
+     * @param agentService Agent service
+     * @param llmService LLM service
+     */
+    public PlanExecutor(List<DynamicAgent> agents, PlanExecutionRecorder recorder, AgentService agentService,
+        ILlmService llmService, IManusProperties manusProperties) {
+        super(agents, recorder, agentService, llmService, manusProperties);
+    }
 
-	/**
-	 * Execute all steps of the entire plan
-	 * 
-	 * @param context Execution context containing user request and execution
-	 *                process information
-	 */
-	@Override
-	public void executeAllSteps(ExecutionContext context) {
-		BaseAgent lastExecutor = null;
-		PlanInterface plan = context.getPlan();
-		plan.updateStepIndices();
+    /**
+     * Execute all steps of the entire plan
+     * 
+     * @param context Execution context containing user request and execution process information
+     */
+    @Override
+    public void executeAllSteps(ExecutionContext context) {
+        BaseAgent lastExecutor = null;
+        PlanInterface plan = context.getPlan();
+        plan.updateStepIndices();
 
-		try {
-			recorder.recordPlanExecutionStart(context);
-			List<ExecutionStep> steps = plan.getAllSteps();
+        try {
+            recorder.recordPlanExecutionStart(context);
+            List<ExecutionStep> steps = plan.getAllSteps();
 
-			if (steps != null && !steps.isEmpty()) {
-				for (ExecutionStep step : steps) {
-					BaseAgent stepExecutor = executeStep(step, context);
-					if (stepExecutor != null) {
-						lastExecutor = stepExecutor;
-					}
-				}
-			}
+            if (steps != null && !steps.isEmpty()) {
+                for (ExecutionStep step : steps) {
+                    BaseAgent stepExecutor = executeStep(step, context);
+                    if (stepExecutor != null) {
+                        lastExecutor = stepExecutor;
+                    }
+                }
+            }
 
-			context.setSuccess(true);
-		} finally {
-			performCleanup(context, lastExecutor);
-		}
-	}
+            context.setSuccess(true);
+        }
+        finally {
+            performCleanup(context, lastExecutor);
+        }
+    }
 
 }

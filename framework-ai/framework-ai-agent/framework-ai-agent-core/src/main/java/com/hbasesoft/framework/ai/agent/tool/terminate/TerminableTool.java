@@ -7,8 +7,8 @@ package com.hbasesoft.framework.ai.agent.tool.terminate;
 
 /**
  * <Description> <br>
- * Interface for tools that can be terminated based on certain conditions
- * Provides simple termination capability check for tools
+ * Interface for tools that can be terminated based on certain conditions Provides simple termination capability check
+ * for tools
  * 
  * @author 王伟<br>
  * @version 1.0<br>
@@ -19,11 +19,11 @@ package com.hbasesoft.framework.ai.agent.tool.terminate;
  */
 public interface TerminableTool {
 
-	/**
-	 * Check if the tool can be terminated at the current state
-	 * 
-	 * @return true if the tool can be terminated, false otherwise
-	 */
-	boolean canTerminate();
+    /**
+     * Check if the tool can be terminated at the current state
+     * 
+     * @return true if the tool can be terminated, false otherwise
+     */
+    boolean canTerminate();
 
 }

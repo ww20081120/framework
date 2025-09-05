@@ -19,32 +19,32 @@ import com.hbasesoft.framework.ai.agent.recorder.model.vo.RecorderVo;
  */
 public interface RecorderService {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param planId <br>
-	 */
-	void deleteById(String planId);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param planId <br>
+     */
+    void deleteById(String planId);
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param rootPlanId
-	 * @return <br>
-	 */
-	RecorderVo getByRootPlanId(String rootPlanId);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param rootPlanId
+     * @return <br>
+     */
+    RecorderVo getByRootPlanId(String rootPlanId);
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param entity <br>
-	 */
-	void save(RecorderVo entity);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity <br>
+     */
+    void save(RecorderVo entity);
 
 }

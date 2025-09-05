@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 public class ValidationRequest {
 
-	private String baseUrl;
+    private String baseUrl;
 
-	private String apiKey;
+    private String apiKey;
 }

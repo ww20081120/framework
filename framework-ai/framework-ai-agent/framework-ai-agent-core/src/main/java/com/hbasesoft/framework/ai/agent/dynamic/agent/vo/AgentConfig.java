@@ -25,36 +25,36 @@ import lombok.Data;
 @Data
 public class AgentConfig {
 
-	/** 代理的唯一标识符 */
-	private String id;
+    /** 代理的唯一标识符 */
+    private String id;
 
-	/** 代理名称 */
-	private String name;
+    /** 代理名称 */
+    private String name;
 
-	/** 代理描述信息 */
-	private String description;
+    /** 代理描述信息 */
+    private String description;
 
-	/** 系统提示词，定义代理的行为和角色 */
-	private String systemPrompt;
+    /** 系统提示词，定义代理的行为和角色 */
+    private String systemPrompt;
 
-	/** 下一步操作提示词 */
-	private String nextStepPrompt;
+    /** 下一步操作提示词 */
+    private String nextStepPrompt;
 
-	/** 代理可用的工具列表 */
-	private List<String> availableTools;
+    /** 代理可用的工具列表 */
+    private List<String> availableTools;
 
-	/** 代理实现类的完整类名 */
-	private String className;
+    /** 代理实现类的完整类名 */
+    private String className;
 
-	/** 代理使用的模型配置 */
-	private ModelConfig model;
+    /** 代理使用的模型配置 */
+    private ModelConfig model;
 
-	/** 代理所属的命名空间 */
-	private String namespace;
+    /** 代理所属的命名空间 */
+    private String namespace;
 
-	/** 是否为内置代理 */
-	private Boolean builtIn = false;
+    /** 是否为内置代理 */
+    private Boolean builtIn = false;
 
-	/** 是否为内置代理（备用字段） */
-	private Boolean isBuiltIn = false;
+    /** 是否为内置代理（备用字段） */
+    private Boolean isBuiltIn = false;
 }

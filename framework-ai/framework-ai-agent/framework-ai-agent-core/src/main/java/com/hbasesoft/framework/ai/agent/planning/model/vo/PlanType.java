@@ -20,37 +20,37 @@ package com.hbasesoft.framework.ai.agent.planning.model.vo;
  */
 public enum PlanType {
 
-	/**
-	 * Traditional simple execution plan
-	 */
-	SIMPLE("Simple Plan", "Suitable for basic task execution with sequential steps"),
+    /**
+     * Traditional simple execution plan
+     */
+    SIMPLE("Simple Plan", "Suitable for basic task execution with sequential steps"),
 
-	/**
-	 * MapReduce mode execution plan
-	 */
-	MAPREDUCE("MapReduce Plan",
-			"Suitable for complex distributed tasks with parallel processing and result aggregation");
+    /**
+     * MapReduce mode execution plan
+     */
+    MAPREDUCE("MapReduce Plan",
+        "Suitable for complex distributed tasks with parallel processing and result aggregation");
 
-	private final String displayName;
+    private final String displayName;
 
-	private final String description;
+    private final String description;
 
-	PlanType(String displayName, String description) {
-		this.displayName = displayName;
-		this.description = description;
-	}
+    PlanType(String displayName, String description) {
+        this.displayName = displayName;
+        this.description = description;
+    }
 
-	public String getDisplayName() {
-		return displayName;
-	}
+    public String getDisplayName() {
+        return displayName;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	@Override
-	public String toString() {
-		return displayName;
-	}
+    @Override
+    public String toString() {
+        return displayName;
+    }
 
 }

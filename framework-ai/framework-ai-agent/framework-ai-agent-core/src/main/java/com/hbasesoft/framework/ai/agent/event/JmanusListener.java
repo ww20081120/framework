@@ -17,6 +17,6 @@ package com.hbasesoft.framework.ai.agent.event;
  */
 public interface JmanusListener<T extends JmanusEvent> {
 
-	void onEvent(T event);
+    void onEvent(T event);
 
 }

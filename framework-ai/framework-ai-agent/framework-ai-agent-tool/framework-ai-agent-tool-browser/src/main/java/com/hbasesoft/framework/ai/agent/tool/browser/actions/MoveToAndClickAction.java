@@ -24,69 +24,70 @@ import com.microsoft.playwright.Page;
 
 public class MoveToAndClickAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MoveToAndClickAction.class);
+    private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MoveToAndClickAction.class);
 
-	public MoveToAndClickAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public MoveToAndClickAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Double x = request.getPositionX();
-		Double y = request.getPositionY();
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Double x = request.getPositionX();
+        Double y = request.getPositionY();
 
-		if (x == null || y == null) {
-			return new ToolExecuteResult("X and Y coordinates are required for 'move_to_and_click' action");
-		}
+        if (x == null || y == null) {
+            return new ToolExecuteResult("X and Y coordinates are required for 'move_to_and_click' action");
+        }
 
-		Page page = getCurrentPage(); // Get the Playwright Page instance
-		boolean isDebug = getBrowserUseTool().getManusProperties().getDebugDetail();
+        Page page = getCurrentPage(); // Get the Playwright Page instance
+        boolean isDebug = getBrowserUseTool().getManusProperties().getDebugDetail();
 
-		String clickResultMessage = clickAndSwitchToNewTabIfOpened(page, () -> {
-			try {
-				// 1. Scroll to the target position (make the target point as close to the
-				// center of the viewport as possible)
+        String clickResultMessage = clickAndSwitchToNewTabIfOpened(page, () -> {
+            try {
+                // 1. Scroll to the target position (make the target point as close to the
+                // center of the viewport as possible)
 
-				Object result = null;
-				String markerId = "__move_click_marker__";
-				if (isDebug) {
-					// 2. Inject a large red dot (only in debug mode)
-					result = page.evaluate(
-							"(args) => {\n" + "  const [x, y, id] = args;\n"
-									+ "  let dot = document.getElementById(id);\n" + "  if (!dot) {\n"
-									+ "    dot = document.createElement('div');\n" + "    dot.id = id;\n"
-									+ "    dot.style.position = 'absolute';\n" + "    dot.style.left = (x) + 'px';\n"
-									+ "    dot.style.top = (y) + 'px';\n" + "    dot.style.width = '24px';\n"
-									+ "    dot.style.height = '24px';\n" + "    dot.style.background = 'red';\n"
-									+ "    dot.style.borderRadius = '50%';\n" + "    dot.style.zIndex = 99999;\n"
-									+ "    dot.style.boxShadow = '0 0 8px 4px #f00';\n"
-									+ "    dot.style.pointerEvents = 'none';\n"
-									+ "    document.body.appendChild(dot);\n" + "  }\n" + "}",
-							new Object[] { x, y, markerId });
-					if (result != null) {
-						log.info("Debug: Created red dot at position ({}, {}) , result <{}>", x, y, result);
-					} else {
-						log.warn("Debug: Failed to create red dot at position ({}, {}) , result <{}>", x, y, result);
-					}
-					log.info("Element at position ({}, {}): {}", x, y);
-				}
+                Object result = null;
+                String markerId = "__move_click_marker__";
+                if (isDebug) {
+                    // 2. Inject a large red dot (only in debug mode)
+                    result = page.evaluate("(args) => {\n" + "  const [x, y, id] = args;\n"
+                        + "  let dot = document.getElementById(id);\n" + "  if (!dot) {\n"
+                        + "    dot = document.createElement('div');\n" + "    dot.id = id;\n"
+                        + "    dot.style.position = 'absolute';\n" + "    dot.style.left = (x) + 'px';\n"
+                        + "    dot.style.top = (y) + 'px';\n" + "    dot.style.width = '24px';\n"
+                        + "    dot.style.height = '24px';\n" + "    dot.style.background = 'red';\n"
+                        + "    dot.style.borderRadius = '50%';\n" + "    dot.style.zIndex = 99999;\n"
+                        + "    dot.style.boxShadow = '0 0 8px 4px #f00';\n" + "    dot.style.pointerEvents = 'none';\n"
+                        + "    document.body.appendChild(dot);\n" + "  }\n" + "}", new Object[] {
+                            x, y, markerId
+                    });
+                    if (result != null) {
+                        log.info("Debug: Created red dot at position ({}, {}) , result <{}>", x, y, result);
+                    }
+                    else {
+                        log.warn("Debug: Failed to create red dot at position ({}, {}) , result <{}>", x, y, result);
+                    }
+                    log.info("Element at position ({}, {}): {}", x, y);
+                }
 
-				page.mouse().click(x, y);
-				log.info("Clicked at position ({}, {})", x, y);
+                page.mouse().click(x, y);
+                log.info("Clicked at position ({}, {})", x, y);
 
-			} catch (Exception e) {
-				log.error("Failed to move to and click at position ({}, {}): {}", x, y, e.getMessage(), e);
-				// Let the common method handle the result string for errors.
-				// The clickAndSwitchToNewTabIfOpened method expects a Runnable that might
-				// throw.
-				if (e instanceof RuntimeException) {
-					throw (RuntimeException) e;
-				}
-				throw new RuntimeException("Failed to move to and click at position (" + x + ", " + y + ")", e);
-			}
-		});
+            }
+            catch (Exception e) {
+                log.error("Failed to move to and click at position ({}, {}): {}", x, y, e.getMessage(), e);
+                // Let the common method handle the result string for errors.
+                // The clickAndSwitchToNewTabIfOpened method expects a Runnable that might
+                // throw.
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
+                throw new RuntimeException("Failed to move to and click at position (" + x + ", " + y + ")", e);
+            }
+        });
 
-		return new ToolExecuteResult("Clicked at position (" + x + ", " + y + ") " + clickResultMessage);
-	}
+        return new ToolExecuteResult("Clicked at position (" + x + ", " + y + ") " + clickResultMessage);
+    }
 
 }

@@ -34,25 +34,25 @@ import lombok.Setter;
 @Table(name = "ai_chat_memory")
 public class MessagePo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = -1961395484601490770L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = -1961395484601490770L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "conversation_id", nullable = false)
-	private String conversationId;
+    @Column(name = "conversation_id", nullable = false)
+    private String conversationId;
 
-	@Column(name = "type", nullable = false)
-	private String type;
+    @Column(name = "type", nullable = false)
+    private String type;
 
-	@Column(name = "content")
-	private String content;
+    @Column(name = "content")
+    private String content;
 
-	@Column(name = "create_time", nullable = false)
-	private Date createTime;
+    @Column(name = "create_time", nullable = false)
+    private Date createTime;
 
 }

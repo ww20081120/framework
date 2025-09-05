@@ -19,5 +19,5 @@ import com.hbasesoft.framework.ai.agent.dynamic.memory.vo.MemoryVo;
  */
 public interface MemoryService {
 
-	MemoryVo saveMemory(MemoryVo memoryEntity);
+    MemoryVo saveMemory(MemoryVo memoryEntity);
 }

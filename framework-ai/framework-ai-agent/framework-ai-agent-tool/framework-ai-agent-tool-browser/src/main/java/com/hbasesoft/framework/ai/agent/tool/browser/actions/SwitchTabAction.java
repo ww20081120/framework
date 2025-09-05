@@ -21,25 +21,25 @@ import com.microsoft.playwright.Page;
 
 public class SwitchTabAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SwitchTabAction.class);
+    private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SwitchTabAction.class);
 
-	public SwitchTabAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public SwitchTabAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Integer tabId = request.getTabId();
-		if (tabId == null || tabId < 0) {
-			return new ToolExecuteResult("Tab ID is out of range for 'switch_tab' action");
-		}
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Integer tabId = request.getTabId();
+        if (tabId == null || tabId < 0) {
+            return new ToolExecuteResult("Tab ID is out of range for 'switch_tab' action");
+        }
 
-		Page page = getCurrentPage(); // Get Playwright Page instance
-		Page targetPage = page.context().pages().get(tabId); // Switch to specified tab
-		if (targetPage == null) {
-			return new ToolExecuteResult("Tab ID " + tabId + " does not exist");
-		}
-		return new ToolExecuteResult("Successfully switched to tab " + tabId);
-	}
+        Page page = getCurrentPage(); // Get Playwright Page instance
+        Page targetPage = page.context().pages().get(tabId); // Switch to specified tab
+        if (targetPage == null) {
+            return new ToolExecuteResult("Tab ID " + tabId + " does not exist");
+        }
+        return new ToolExecuteResult("Successfully switched to tab " + tabId);
+    }
 
 }

@@ -28,16 +28,16 @@ import com.hbasesoft.framework.common.Bootstrap;
 @ComponentScan(basePackages = "com.framework.ai.demo.agent.file")
 public class FileAgentApplication {
 
-	/**
-	 * Description: <br>
-	 *
-	 * @param args <br>
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 */
-	public static void main(final String[] args) {
-		Bootstrap.before();
-		ConfigurableApplicationContext context = new SpringApplicationBuilder(FileAgentApplication.class).run(args);
-		Bootstrap.after(context);
-	}
+    /**
+     * Description: <br>
+     *
+     * @param args <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     */
+    public static void main(final String[] args) {
+        Bootstrap.before();
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(FileAgentApplication.class).run(args);
+        Bootstrap.after(context);
+    }
 }

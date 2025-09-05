@@ -19,219 +19,217 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Abstract execution plan base class containing common properties and basic
- * implementations for all execution plan types
+ * Abstract execution plan base class containing common properties and basic implementations for all execution plan
+ * types
  */
 public abstract class AbstractExecutionPlan implements PlanInterface {
 
-	protected String currentPlanId;
+    protected String currentPlanId;
 
-	protected String rootPlanId;
+    protected String rootPlanId;
 
-	/**
-	 * Plan title
-	 */
-	protected String title;
+    /**
+     * Plan title
+     */
+    protected String title;
 
-	/**
-	 * Planning thinking process
-	 */
-	@JsonIgnore
-	protected String planningThinking;
+    /**
+     * Planning thinking process
+     */
+    @JsonIgnore
+    protected String planningThinking;
 
-	/**
-	 * Execution parameters
-	 */
-	@JsonIgnore
-	protected String executionParams;
+    /**
+     * Execution parameters
+     */
+    @JsonIgnore
+    protected String executionParams;
 
-	private String userRequest;
+    private String userRequest;
 
-	/**
-	 * Default constructor
-	 */
-	public AbstractExecutionPlan() {
-		this.executionParams = "";
-	}
+    /**
+     * Default constructor
+     */
+    public AbstractExecutionPlan() {
+        this.executionParams = "";
+    }
 
-	/**
-	 * Constructor with parameters
-	 * 
-	 * @param planId Plan ID
-	 * @param title  Plan title
-	 */
-	public AbstractExecutionPlan(String currentPlanId, String rootPlanId, String title) {
-		this();
-		this.currentPlanId = currentPlanId;
-		this.rootPlanId = rootPlanId;
-		this.title = title;
-	}
+    /**
+     * Constructor with parameters
+     * 
+     * @param planId Plan ID
+     * @param title Plan title
+     */
+    public AbstractExecutionPlan(String currentPlanId, String rootPlanId, String title) {
+        this();
+        this.currentPlanId = currentPlanId;
+        this.rootPlanId = rootPlanId;
+        this.title = title;
+    }
 
-	// Implementation of PlanInterface basic properties
+    // Implementation of PlanInterface basic properties
 
-	@Override
-	public String getCurrentPlanId() {
-		return currentPlanId;
-	}
+    @Override
+    public String getCurrentPlanId() {
+        return currentPlanId;
+    }
 
-	@Override
-	public void setCurrentPlanId(String currentPlanId) {
-		this.currentPlanId = currentPlanId;
-	}
+    @Override
+    public void setCurrentPlanId(String currentPlanId) {
+        this.currentPlanId = currentPlanId;
+    }
 
-	@Override
-	public String getRootPlanId() {
-		return rootPlanId;
-	}
+    @Override
+    public String getRootPlanId() {
+        return rootPlanId;
+    }
 
-	@Override
-	public void setRootPlanId(String rootPlanId) {
-		this.rootPlanId = rootPlanId;
-	}
+    @Override
+    public void setRootPlanId(String rootPlanId) {
+        this.rootPlanId = rootPlanId;
+    }
 
-	public void setPlanId(String planId) {
-		this.rootPlanId = planId;
-	}
+    public void setPlanId(String planId) {
+        this.rootPlanId = planId;
+    }
 
-	public String getPlanId() {
-		return rootPlanId;
-	}
+    public String getPlanId() {
+        return rootPlanId;
+    }
 
-	@Override
-	public String getTitle() {
-		return title;
-	}
+    @Override
+    public String getTitle() {
+        return title;
+    }
 
-	@Override
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	@Override
-	public String getPlanningThinking() {
-		return planningThinking;
-	}
+    @Override
+    public String getPlanningThinking() {
+        return planningThinking;
+    }
 
-	@Override
-	public void setPlanningThinking(String planningThinking) {
-		this.planningThinking = planningThinking;
-	}
+    @Override
+    public void setPlanningThinking(String planningThinking) {
+        this.planningThinking = planningThinking;
+    }
 
-	@Override
-	public String getExecutionParams() {
-		return executionParams;
-	}
+    @Override
+    public String getExecutionParams() {
+        return executionParams;
+    }
 
-	@Override
-	public void setExecutionParams(String executionParams) {
-		this.executionParams = executionParams != null ? executionParams : "";
-	}
+    @Override
+    public void setExecutionParams(String executionParams) {
+        this.executionParams = executionParams != null ? executionParams : "";
+    }
 
-	// Abstract methods - must be implemented by subclasses
+    // Abstract methods - must be implemented by subclasses
 
-	/**
-	 * Get flat list of all execution steps
-	 * 
-	 * @return All execution steps
-	 */
-	@Override
-	public abstract List<ExecutionStep> getAllSteps();
+    /**
+     * Get flat list of all execution steps
+     * 
+     * @return All execution steps
+     */
+    @Override
+    public abstract List<ExecutionStep> getAllSteps();
 
-	/**
-	 * Get total step count
-	 * 
-	 * @return Total step count
-	 */
-	@Override
-	public abstract int getTotalStepCount();
+    /**
+     * Get total step count
+     * 
+     * @return Total step count
+     */
+    @Override
+    public abstract int getTotalStepCount();
 
-	/**
-	 * Add execution step
-	 * 
-	 * @param step Execution step
-	 */
-	@Override
-	public abstract void addStep(ExecutionStep step);
+    /**
+     * Add execution step
+     * 
+     * @param step Execution step
+     */
+    @Override
+    public abstract void addStep(ExecutionStep step);
 
-	/**
-	 * Remove execution step
-	 * 
-	 * @param step Execution step
-	 */
-	@Override
-	public abstract void removeStep(ExecutionStep step);
+    /**
+     * Remove execution step
+     * 
+     * @param step Execution step
+     */
+    @Override
+    public abstract void removeStep(ExecutionStep step);
 
-	/**
-	 * Check if plan is empty
-	 * 
-	 * @return Return true if plan is empty
-	 */
-	@Override
-	public abstract boolean isEmpty();
+    /**
+     * Check if plan is empty
+     * 
+     * @return Return true if plan is empty
+     */
+    @Override
+    public abstract boolean isEmpty();
 
-	/**
-	 * Get string format of plan execution status
-	 * 
-	 * @param onlyCompletedAndFirstInProgress When true, only output all completed
-	 *                                        steps and first in-progress step
-	 * @return Plan status string
-	 */
-	@Override
-	public abstract String getPlanExecutionStateStringFormat(boolean onlyCompletedAndFirstInProgress);
+    /**
+     * Get string format of plan execution status
+     * 
+     * @param onlyCompletedAndFirstInProgress When true, only output all completed steps and first in-progress step
+     * @return Plan status string
+     */
+    @Override
+    public abstract String getPlanExecutionStateStringFormat(boolean onlyCompletedAndFirstInProgress);
 
-	// Common implementation methods
+    // Common implementation methods
 
-	@Override
-	public void clear() {
-		clearSteps();
-		planningThinking = null;
-		executionParams = "";
-	}
+    @Override
+    public void clear() {
+        clearSteps();
+        planningThinking = null;
+        executionParams = "";
+    }
 
-	/**
-	 * Get user request
-	 * 
-	 * @return User request string
-	 */
-	public String getUserRequest() {
-		return userRequest;
-	}
+    /**
+     * Get user request
+     * 
+     * @return User request string
+     */
+    public String getUserRequest() {
+        return userRequest;
+    }
 
-	/**
-	 * Set user request
-	 * 
-	 * @param userRequest User request string
-	 */
-	public void setUserRequest(String userRequest) {
-		this.userRequest = userRequest;
-	}
+    /**
+     * Set user request
+     * 
+     * @param userRequest User request string
+     */
+    public void setUserRequest(String userRequest) {
+        this.userRequest = userRequest;
+    }
 
-	/**
-	 * Whether it's direct feedback mode
-	 */
-	protected boolean directResponse = false;
+    /**
+     * Whether it's direct feedback mode
+     */
+    protected boolean directResponse = false;
 
-	@Override
-	public boolean isDirectResponse() {
-		return directResponse;
-	}
+    @Override
+    public boolean isDirectResponse() {
+        return directResponse;
+    }
 
-	@Override
-	public void setDirectResponse(boolean directResponse) {
-		this.directResponse = directResponse;
-	}
+    @Override
+    public void setDirectResponse(boolean directResponse) {
+        this.directResponse = directResponse;
+    }
 
-	/**
-	 * Abstract method to clear steps. Subclasses need to implement specific step
-	 * clearing logic
-	 */
-	protected abstract void clearSteps();
+    /**
+     * Abstract method to clear steps. Subclasses need to implement specific step clearing logic
+     */
+    protected abstract void clearSteps();
 
-	@Override
-	public String toString() {
-		return "AbstractExecutionPlan{" + "rootPlanId='" + rootPlanId + '\'' + ", currentPlanId='" + currentPlanId
-				+ '\'' + ", title='" + title + '\'' + ", planningThinking='" + planningThinking + '\''
-				+ ", executionParams='" + executionParams + '\'' + ", userRequest='" + userRequest + '\'' + '}';
-	}
+    @Override
+    public String toString() {
+        return "AbstractExecutionPlan{" + "rootPlanId='" + rootPlanId + '\'' + ", currentPlanId='" + currentPlanId
+            + '\'' + ", title='" + title + '\'' + ", planningThinking='" + planningThinking + '\''
+            + ", executionParams='" + executionParams + '\'' + ", userRequest='" + userRequest + '\'' + '}';
+    }
 
 }

@@ -39,86 +39,86 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
 @Service
 public class JpaMemoryServiceImpl implements ChatMemoryRepository {
 
-	@Autowired
-	private MessageDao messageDao;
+    @Autowired
+    private MessageDao messageDao;
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public @NonNull List<String> findConversationIds() {
-		return messageDao.findConversationIds();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public @NonNull List<String> findConversationIds() {
+        return messageDao.findConversationIds();
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param conversationId
-	 * @return <br>
-	 */
-	@Transactional(readOnly = true)
-	@Override
-	public @NonNull List<Message> findByConversationId(final @NonNull String conversationId) {
-		return messageDao
-				.queryByLambda(
-						q -> q.eq(MessagePo4Jpa::getConversationId, conversationId).orderByDesc(MessagePo4Jpa::getId))
-				.stream().map(this::convert).toList();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param conversationId
+     * @return <br>
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public @NonNull List<Message> findByConversationId(final @NonNull String conversationId) {
+        return messageDao
+            .queryByLambda(
+                q -> q.eq(MessagePo4Jpa::getConversationId, conversationId).orderByDesc(MessagePo4Jpa::getId))
+            .stream().map(this::convert).toList();
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param conversationId
-	 * @param messages       <br>
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void saveAll(final @NonNull String conversationId, final @NonNull List<Message> messages) {
-		List<MessagePo4Jpa> pos = messages.stream().map(m -> convert(conversationId, m)).toList();
-		messageDao.saveBatch(pos);
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param conversationId
+     * @param messages <br>
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void saveAll(final @NonNull String conversationId, final @NonNull List<Message> messages) {
+        List<MessagePo4Jpa> pos = messages.stream().map(m -> convert(conversationId, m)).toList();
+        messageDao.saveBatch(pos);
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param conversationId <br>
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public void deleteByConversationId(final @NonNull String conversationId) {
-		messageDao.deleteByLambda(q -> q.eq(MessagePo4Jpa::getConversationId, conversationId));
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param conversationId <br>
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteByConversationId(final @NonNull String conversationId) {
+        messageDao.deleteByLambda(q -> q.eq(MessagePo4Jpa::getConversationId, conversationId));
+    }
 
-	private MessagePo4Jpa convert(final String conversationId, final Message message) {
-		var po = new MessagePo4Jpa();
-		po.setConversationId(conversationId);
-		po.setContent(message.getText());
-		po.setType(message.getMessageType().name());
-		po.setCreateTime(DateUtil.getCurrentDate());
-		return po;
-	}
+    private MessagePo4Jpa convert(final String conversationId, final Message message) {
+        var po = new MessagePo4Jpa();
+        po.setConversationId(conversationId);
+        po.setContent(message.getText());
+        po.setType(message.getMessageType().name());
+        po.setCreateTime(DateUtil.getCurrentDate());
+        return po;
+    }
 
-	private Message convert(final MessagePo4Jpa po) {
-		var content = po.getContent();
-		var type = MessageType.valueOf(po.getType());
+    private Message convert(final MessagePo4Jpa po) {
+        var content = po.getContent();
+        var type = MessageType.valueOf(po.getType());
 
-		return switch (type) {
-		case USER -> new UserMessage(content);
-		case ASSISTANT -> new AssistantMessage(content);
-		case SYSTEM -> new SystemMessage(content);
-		case TOOL -> new ToolResponseMessage(
-				StringUtils.isNotEmpty(content) ? (JSONArray.parseArray(content, ToolResponse.class)) : List.of());
-		};
-	}
+        return switch (type) {
+            case USER -> new UserMessage(content);
+            case ASSISTANT -> new AssistantMessage(content);
+            case SYSTEM -> new SystemMessage(content);
+            case TOOL -> new ToolResponseMessage(
+                StringUtils.isNotEmpty(content) ? (JSONArray.parseArray(content, ToolResponse.class)) : List.of());
+        };
+    }
 }

@@ -21,63 +21,63 @@ import java.util.Map;
 
 public class UserInputWaitState implements Serializable {
 
-	private String planId;
+    private String planId;
 
-	private String message;
+    private String message;
 
-	private boolean waiting;
+    private boolean waiting;
 
-	private String formDescription;
+    private String formDescription;
 
-	private List<Map<String, String>> formInputs;
+    private List<Map<String, String>> formInputs;
 
-	public UserInputWaitState() {
-	}
+    public UserInputWaitState() {
+    }
 
-	public UserInputWaitState(String planId, String message, boolean waiting) {
-		this.planId = planId;
-		this.message = message;
-		this.waiting = waiting;
-	}
+    public UserInputWaitState(String planId, String message, boolean waiting) {
+        this.planId = planId;
+        this.message = message;
+        this.waiting = waiting;
+    }
 
-	public String getPlanId() {
-		return planId;
-	}
+    public String getPlanId() {
+        return planId;
+    }
 
-	public void setPlanId(String planId) {
-		this.planId = planId;
-	}
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public boolean isWaiting() {
-		return waiting;
-	}
+    public boolean isWaiting() {
+        return waiting;
+    }
 
-	public void setWaiting(boolean waiting) {
-		this.waiting = waiting;
-	}
+    public void setWaiting(boolean waiting) {
+        this.waiting = waiting;
+    }
 
-	public String getFormDescription() {
-		return formDescription;
-	}
+    public String getFormDescription() {
+        return formDescription;
+    }
 
-	public void setFormDescription(String formDescription) {
-		this.formDescription = formDescription;
-	}
+    public void setFormDescription(String formDescription) {
+        this.formDescription = formDescription;
+    }
 
-	public List<Map<String, String>> getFormInputs() {
-		return formInputs;
-	}
+    public List<Map<String, String>> getFormInputs() {
+        return formInputs;
+    }
 
-	public void setFormInputs(List<Map<String, String>> formInputs) {
-		this.formInputs = formInputs;
-	}
+    public void setFormInputs(List<Map<String, String>> formInputs) {
+        this.formInputs = formInputs;
+    }
 
 }

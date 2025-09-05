@@ -38,184 +38,192 @@ import com.microsoft.playwright.options.SameSiteAttribute; // Import for SameSit
 
 public class DriverWrapper {
 
-	private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-	private static final Logger log = LoggerFactory.getLogger(DriverWrapper.class);
+    private static final Logger log = LoggerFactory.getLogger(DriverWrapper.class);
 
-	private Playwright playwright;
+    private Playwright playwright;
 
-	private Page currentPage;
+    private Page currentPage;
 
-	private Browser browser;
+    private Browser browser;
 
-	private InteractiveElementRegistry interactiveElementRegistry;
+    private InteractiveElementRegistry interactiveElementRegistry;
 
-	private final Path cookiePath;
+    private final Path cookiePath;
 
-	// Mixin class for Playwright Cookie deserialization
-	abstract static class PlaywrightCookieMixin {
+    // Mixin class for Playwright Cookie deserialization
+    abstract static class PlaywrightCookieMixin {
 
-		@JsonCreator
-		PlaywrightCookieMixin(@JsonProperty("name") String name, @JsonProperty("value") String value) {
-		}
+        @JsonCreator
+        PlaywrightCookieMixin(@JsonProperty("name") String name, @JsonProperty("value") String value) {
+        }
 
-		@JsonProperty("domain")
-		abstract Cookie setDomain(String domain);
+        @JsonProperty("domain")
+        abstract Cookie setDomain(String domain);
 
-		@JsonProperty("path")
-		abstract Cookie setPath(String path);
+        @JsonProperty("path")
+        abstract Cookie setPath(String path);
 
-		@JsonProperty("expires")
-		abstract Cookie setExpires(Number expires);
+        @JsonProperty("expires")
+        abstract Cookie setExpires(Number expires);
 
-		@JsonProperty("httpOnly")
-		abstract Cookie setHttpOnly(boolean httpOnly);
+        @JsonProperty("httpOnly")
+        abstract Cookie setHttpOnly(boolean httpOnly);
 
-		@JsonProperty("secure")
-		abstract Cookie setSecure(boolean secure);
+        @JsonProperty("secure")
+        abstract Cookie setSecure(boolean secure);
 
-		@JsonProperty("sameSite")
-		abstract Cookie setSameSite(SameSiteAttribute sameSite);
+        @JsonProperty("sameSite")
+        abstract Cookie setSameSite(SameSiteAttribute sameSite);
 
-	}
+    }
 
-	// Move ObjectMapper configuration to constructor
+    // Move ObjectMapper configuration to constructor
 
-	public DriverWrapper(Playwright playwright, Browser browser, Page currentPage, String cookieDir,
-			ObjectMapper objectMapper) {
-		this.playwright = playwright;
-		this.currentPage = currentPage;
-		this.browser = browser;
-		this.interactiveElementRegistry = new InteractiveElementRegistry();
-		this.objectMapper = objectMapper;
-		// Configure ObjectMapper
-		this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-		this.objectMapper.addMixIn(Cookie.class, PlaywrightCookieMixin.class);
+    public DriverWrapper(Playwright playwright, Browser browser, Page currentPage, String cookieDir,
+        ObjectMapper objectMapper) {
+        this.playwright = playwright;
+        this.currentPage = currentPage;
+        this.browser = browser;
+        this.interactiveElementRegistry = new InteractiveElementRegistry();
+        this.objectMapper = objectMapper;
+        // Configure ObjectMapper
+        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        this.objectMapper.addMixIn(Cookie.class, PlaywrightCookieMixin.class);
 
-		if (cookieDir == null || cookieDir.trim().isEmpty()) {
-			this.cookiePath = Paths.get("playwright-cookies-default.json");
-			log.warn("Warning: cookieDir was not provided or was empty. Using default cookie path: {}",
-					this.cookiePath.toAbsolutePath());
-		} else {
-			this.cookiePath = Paths.get(cookieDir, "playwright-cookies.json");
-		}
-		loadCookies();
-	}
+        if (cookieDir == null || cookieDir.trim().isEmpty()) {
+            this.cookiePath = Paths.get("playwright-cookies-default.json");
+            log.warn("Warning: cookieDir was not provided or was empty. Using default cookie path: {}",
+                this.cookiePath.toAbsolutePath());
+        }
+        else {
+            this.cookiePath = Paths.get(cookieDir, "playwright-cookies.json");
+        }
+        loadCookies();
+    }
 
-	private void loadCookies() {
-		if (this.currentPage == null) {
-			log.info("Cannot load cookies: currentPage is null.");
-			return;
-		}
-		if (!Files.exists(this.cookiePath)) {
-			log.info("Cookie file not found, skipping cookie loading: {}", this.cookiePath.toAbsolutePath());
-			return;
-		}
-		try {
-			byte[] jsonData = Files.readAllBytes(this.cookiePath);
-			if (jsonData.length == 0) {
-				log.info("Cookie file is empty, skipping cookie loading: {}", this.cookiePath.toAbsolutePath());
-				return;
-			}
-			List<Cookie> cookies = objectMapper.readValue(jsonData, new TypeReference<List<Cookie>>() {
-			});
-			if (cookies != null && !cookies.isEmpty()) {
-				this.currentPage.context().addCookies(cookies);
-				log.info("Cookies loaded successfully from: {}", this.cookiePath.toAbsolutePath());
-			} else {
-				log.info("No cookies found in file or cookies list was empty: {}", this.cookiePath.toAbsolutePath());
-			}
-		} catch (IOException e) {
-			log.info("Failed to load cookies from {}: {}", this.cookiePath.toAbsolutePath(), e.getMessage());
-		} catch (Exception e) {
-			log.info("An unexpected error occurred while loading cookies from {}: {}", this.cookiePath.toAbsolutePath(),
-					e.getMessage());
-		}
-	}
+    private void loadCookies() {
+        if (this.currentPage == null) {
+            log.info("Cannot load cookies: currentPage is null.");
+            return;
+        }
+        if (!Files.exists(this.cookiePath)) {
+            log.info("Cookie file not found, skipping cookie loading: {}", this.cookiePath.toAbsolutePath());
+            return;
+        }
+        try {
+            byte[] jsonData = Files.readAllBytes(this.cookiePath);
+            if (jsonData.length == 0) {
+                log.info("Cookie file is empty, skipping cookie loading: {}", this.cookiePath.toAbsolutePath());
+                return;
+            }
+            List<Cookie> cookies = objectMapper.readValue(jsonData, new TypeReference<List<Cookie>>() {
+            });
+            if (cookies != null && !cookies.isEmpty()) {
+                this.currentPage.context().addCookies(cookies);
+                log.info("Cookies loaded successfully from: {}", this.cookiePath.toAbsolutePath());
+            }
+            else {
+                log.info("No cookies found in file or cookies list was empty: {}", this.cookiePath.toAbsolutePath());
+            }
+        }
+        catch (IOException e) {
+            log.info("Failed to load cookies from {}: {}", this.cookiePath.toAbsolutePath(), e.getMessage());
+        }
+        catch (Exception e) {
+            log.info("An unexpected error occurred while loading cookies from {}: {}", this.cookiePath.toAbsolutePath(),
+                e.getMessage());
+        }
+    }
 
-	private void saveCookies() {
-		if (this.currentPage == null) {
-			log.info("Cannot save cookies: currentPage is null.");
-			return;
-		}
-		try {
-			List<Cookie> cookies = this.currentPage.context().cookies();
-			if (cookies == null) {
-				cookies = Collections.emptyList();
-			}
+    private void saveCookies() {
+        if (this.currentPage == null) {
+            log.info("Cannot save cookies: currentPage is null.");
+            return;
+        }
+        try {
+            List<Cookie> cookies = this.currentPage.context().cookies();
+            if (cookies == null) {
+                cookies = Collections.emptyList();
+            }
 
-			Path parentDir = this.cookiePath.getParent();
-			if (parentDir != null && !Files.exists(parentDir)) {
-				Files.createDirectories(parentDir);
-			}
+            Path parentDir = this.cookiePath.getParent();
+            if (parentDir != null && !Files.exists(parentDir)) {
+                Files.createDirectories(parentDir);
+            }
 
-			byte[] jsonData = objectMapper.writeValueAsBytes(cookies);
-			Files.write(this.cookiePath, jsonData);
-			log.info("Cookies saved successfully to: {}", this.cookiePath.toAbsolutePath());
-		} catch (IOException e) {
-			log.info("Failed to save cookies to {}: {}", this.cookiePath.toAbsolutePath(), e.getMessage());
-		} catch (Exception e) {
-			log.info("An unexpected error occurred while saving cookies to {}: {}", this.cookiePath.toAbsolutePath(),
-					e.getMessage());
-		}
-	}
+            byte[] jsonData = objectMapper.writeValueAsBytes(cookies);
+            Files.write(this.cookiePath, jsonData);
+            log.info("Cookies saved successfully to: {}", this.cookiePath.toAbsolutePath());
+        }
+        catch (IOException e) {
+            log.info("Failed to save cookies to {}: {}", this.cookiePath.toAbsolutePath(), e.getMessage());
+        }
+        catch (Exception e) {
+            log.info("An unexpected error occurred while saving cookies to {}: {}", this.cookiePath.toAbsolutePath(),
+                e.getMessage());
+        }
+    }
 
-	public InteractiveElementRegistry getInteractiveElementRegistry() {
-		return interactiveElementRegistry;
-	}
+    public InteractiveElementRegistry getInteractiveElementRegistry() {
+        return interactiveElementRegistry;
+    }
 
-	public Playwright getPlaywright() {
-		return playwright;
-	}
+    public Playwright getPlaywright() {
+        return playwright;
+    }
 
-	public void setPlaywright(Playwright playwright) {
-		this.playwright = playwright;
-	}
+    public void setPlaywright(Playwright playwright) {
+        this.playwright = playwright;
+    }
 
-	public Page getCurrentPage() {
-		return currentPage;
-	}
+    public Page getCurrentPage() {
+        return currentPage;
+    }
 
-	public void setCurrentPage(Page currentPage) {
-		this.currentPage = currentPage;
-		// Potentially load cookies if page context changes and it's desired
-		// loadCookies();
-	}
+    public void setCurrentPage(Page currentPage) {
+        this.currentPage = currentPage;
+        // Potentially load cookies if page context changes and it's desired
+        // loadCookies();
+    }
 
-	public Browser getBrowser() {
-		return browser;
-	}
+    public Browser getBrowser() {
+        return browser;
+    }
 
-	public void setBrowser(Browser browser) {
-		this.browser = browser;
-	}
+    public void setBrowser(Browser browser) {
+        this.browser = browser;
+    }
 
-	public void close() {
-		saveCookies();
-		if (this.currentPage != null) {
-			try {
-				this.currentPage.close();
-			} catch (Exception e) {
-				log.info("Error closing current page: {}", e.getMessage());
-			}
-		}
-		if (this.browser != null) {
-			try {
-				this.browser.close();
-			} catch (Exception e) {
-				log.info("Error closing browser: {}", e.getMessage());
-			}
-		}
-		// Playwright instance itself is usually managed by the service that created it.
-		// Closing it here might be premature if other DriverWrappers use the same
-		// Playwright instance.
-		// if (this.playwright != null) {
-		// try {
-		// this.playwright.close();
-		// } catch (Exception e) {
-		// log.info("Error closing playwright: {}", e.getMessage());
-		// }
-		// }
-	}
+    public void close() {
+        saveCookies();
+        if (this.currentPage != null) {
+            try {
+                this.currentPage.close();
+            }
+            catch (Exception e) {
+                log.info("Error closing current page: {}", e.getMessage());
+            }
+        }
+        if (this.browser != null) {
+            try {
+                this.browser.close();
+            }
+            catch (Exception e) {
+                log.info("Error closing browser: {}", e.getMessage());
+            }
+        }
+        // Playwright instance itself is usually managed by the service that created it.
+        // Closing it here might be premature if other DriverWrappers use the same
+        // Playwright instance.
+        // if (this.playwright != null) {
+        // try {
+        // this.playwright.close();
+        // } catch (Exception e) {
+        // log.info("Error closing playwright: {}", e.getMessage());
+        // }
+        // }
+    }
 
 }

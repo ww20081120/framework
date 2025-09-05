@@ -27,30 +27,30 @@ import jakarta.persistence.AttributeConverter;
  */
 public class StringAttributeConverter implements AttributeConverter<PlanExecutionRecord, String> {
 
-	private final static String SERIALIZE_TYPE_KEY = "agent.serialize";
+    private final static String SERIALIZE_TYPE_KEY = "agent.serialize";
 
-	@Override
-	public String convertToDatabaseColumn(PlanExecutionRecord attribute) {
-		if (attribute == null) {
-			return null;
-		}
-		if (SerializeType.FASTJSON
-				.equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
-			return JSON.toJSONString(attribute);
-		}
-		return JsonParser.toJson(attribute);
-	}
+    @Override
+    public String convertToDatabaseColumn(PlanExecutionRecord attribute) {
+        if (attribute == null) {
+            return null;
+        }
+        if (SerializeType.FASTJSON
+            .equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
+            return JSON.toJSONString(attribute);
+        }
+        return JsonParser.toJson(attribute);
+    }
 
-	@Override
-	public PlanExecutionRecord convertToEntityAttribute(String json) {
-		if (StringUtils.isBlank(json)) {
-			return null;
-		}
-		if (SerializeType.FASTJSON
-				.equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
-			return JSON.parseObject(json, PlanExecutionRecord.class);
-		}
-		return JsonParser.fromJson(json, PlanExecutionRecord.class);
-	}
+    @Override
+    public PlanExecutionRecord convertToEntityAttribute(String json) {
+        if (StringUtils.isBlank(json)) {
+            return null;
+        }
+        if (SerializeType.FASTJSON
+            .equalsIgnoreCase(JManusSpringEnvironmentHolder.getEnvironment().getProperty(SERIALIZE_TYPE_KEY))) {
+            return JSON.parseObject(json, PlanExecutionRecord.class);
+        }
+        return JsonParser.fromJson(json, PlanExecutionRecord.class);
+    }
 
 }

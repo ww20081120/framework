@@ -33,34 +33,34 @@ import lombok.Setter;
 @Table(name = "namespace")
 public class NamespacePo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = 8837398615700453899L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 8837398615700453899L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "name", nullable = false)
-	private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-	@Column(name = "code", nullable = false)
-	private String code;
+    @Column(name = "code", nullable = false)
+    private String code;
 
-	@Column(name = "description", nullable = true, length = 1024)
-	private String description;
+    @Column(name = "description", nullable = true, length = 1024)
+    private String description;
 
-	@Column(name = "host")
-	private String host;
+    @Column(name = "host")
+    private String host;
 
-	public NamespaceConfig mapToNamespaceConfig() {
-		NamespaceConfig config = new NamespaceConfig();
-		config.setId(this.getId());
-		config.setName(this.getName());
-		config.setCode(this.getCode());
-		config.setHost(this.getHost());
-		config.setDescription(this.getDescription());
-		return config;
-	}
+    public NamespaceConfig mapToNamespaceConfig() {
+        NamespaceConfig config = new NamespaceConfig();
+        config.setId(this.getId());
+        config.setName(this.getName());
+        config.setCode(this.getCode());
+        config.setHost(this.getHost());
+        config.setDescription(this.getDescription());
+        return config;
+    }
 }
