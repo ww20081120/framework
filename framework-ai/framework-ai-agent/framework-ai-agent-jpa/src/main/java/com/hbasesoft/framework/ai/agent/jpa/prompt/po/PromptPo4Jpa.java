@@ -31,36 +31,40 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "prompt", uniqueConstraints = { @UniqueConstraint(columnNames = { "namespace", "prompt_name" }) })
+@Table(name = "prompt", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {
+        "namespace", "prompt_name"
+    })
+})
 public class PromptPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = 4567444462827997251L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 4567444462827997251L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "prompt_name", nullable = false)
-	private String promptName;
+    @Column(name = "prompt_name", nullable = false)
+    private String promptName;
 
-	@Column(name = "namespace", nullable = true)
-	private String namespace;
+    @Column(name = "namespace", nullable = true)
+    private String namespace;
 
-	@Column(name = "message_type", nullable = false)
-	private String messageType;
+    @Column(name = "message_type", nullable = false)
+    private String messageType;
 
-	@Column(name = "type", nullable = false)
-	private String type;
+    @Column(name = "type", nullable = false)
+    private String type;
 
-	@Column(name = "built_in", nullable = false)
-	private Boolean builtIn;
+    @Column(name = "built_in", nullable = false)
+    private Boolean builtIn;
 
-	@Column(name = "prompt_description", nullable = false, length = 1024)
-	private String promptDescription;
+    @Column(name = "prompt_description", nullable = false, length = 1024)
+    private String promptDescription;
 
-	@Column(name = "prompt_content", columnDefinition = "TEXT", nullable = false)
-	private String promptContent;
+    @Column(name = "prompt_content", columnDefinition = "TEXT", nullable = false)
+    private String promptContent;
 }

@@ -19,47 +19,65 @@ import org.springframework.ai.chat.model.ToolContext;
  */
 public abstract class AbstractBaseTool<I> implements ToolCallBiFunctionDef<I> {
 
-	/**
-	 * Current plan ID for the tool execution context
-	 */
-	protected String currentPlanId;
+    /**
+     * ThreadLocal holder for ToolContext
+     */
+    private static final ThreadLocal<ToolContext> TOOL_CONTEXT_HOLDER = new ThreadLocal<>();
 
-	/**
-	 * Root plan ID is the global parent of the whole execution plan
-	 */
-	protected String rootPlanId;
+    /**
+     * Current plan ID for the tool execution context
+     */
+    protected String currentPlanId;
 
-	@Override
-	public boolean isReturnDirect() {
-		return false;
-	}
+    /**
+     * Root plan ID is the global parent of the whole execution plan
+     */
+    protected String rootPlanId;
 
-	@Override
-	public void setCurrentPlanId(String planId) {
-		this.currentPlanId = planId;
-	}
+    @Override
+    public boolean isReturnDirect() {
+        return false;
+    }
 
-	@Override
-	public void setRootPlanId(String rootPlanId) {
-		this.rootPlanId = rootPlanId;
-	}
+    @Override
+    public void setCurrentPlanId(String planId) {
+        this.currentPlanId = planId;
+    }
 
-	/**
-	 * Default implementation delegates to run method Subclasses can override this
-	 * method if needed
-	 */
-	@Override
-	public ToolExecuteResult apply(I input, ToolContext toolContext) {
-		return run(input);
-	}
+    @Override
+    public void setRootPlanId(String rootPlanId) {
+        this.rootPlanId = rootPlanId;
+    }
 
-	/**
-	 * Abstract method that subclasses must implement to define tool-specific
-	 * execution logic
-	 * 
-	 * @param input Tool input parameters
-	 * @return Tool execution result
-	 */
-	public abstract ToolExecuteResult run(I input);
+    /**
+     * Default implementation delegates to run method Subclasses can override this method if needed
+     */
+    @Override
+    public ToolExecuteResult apply(I input, ToolContext toolContext) {
+        // Set the tool context in the ThreadLocal
+        TOOL_CONTEXT_HOLDER.set(toolContext);
+        try {
+            return run(input);
+        } finally {
+            // Clean up the tool context from the ThreadLocal
+            TOOL_CONTEXT_HOLDER.remove();
+        }
+    }
 
+    /**
+     * Abstract method that subclasses must implement to define tool-specific execution logic
+     * 
+     * @param input Tool input parameters
+     * @return Tool execution result
+     */
+    public abstract ToolExecuteResult run(I input);
+
+    /**
+     * Get the current ToolContext for this thread
+     * 
+     * @return the current ToolContext or null if none is set
+     */
+    public static ToolContext getCurrentToolContext() {
+        return TOOL_CONTEXT_HOLDER.get();
+    }
 }

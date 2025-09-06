@@ -27,9 +27,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class McpServiceVo {
 
-	private McpAsyncClient mcpAsyncClient;
+    private McpAsyncClient mcpAsyncClient;
 
-	private AsyncMcpToolCallbackProvider asyncMcpToolCallbackProvider;
+    private AsyncMcpToolCallbackProvider asyncMcpToolCallbackProvider;
 
-	private String serviceGroup;
+    private String serviceGroup;
 }

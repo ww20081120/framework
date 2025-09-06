@@ -20,27 +20,27 @@ import java.util.Date;
  * @see com.hbasesoft.framework.ai.agent.tool <br>
  */
 public class TestObject {
-    
+
     private String name;
-    
+
     private int age;
-    
+
     private Date birthDate;
-    
+
     private LocalDate localDate;
-    
+
     private LocalDateTime localDateTime;
-    
+
     private boolean active;
-    
+
     private double score;
-    
+
     // Constructors
     public TestObject() {
     }
-    
-    public TestObject(String name, int age, Date birthDate, LocalDate localDate, LocalDateTime localDateTime, 
-                      boolean active, double score) {
+
+    public TestObject(String name, int age, Date birthDate, LocalDate localDate, LocalDateTime localDateTime,
+        boolean active, double score) {
         this.name = name;
         this.age = age;
         this.birthDate = birthDate;
@@ -49,74 +49,67 @@ public class TestObject {
         this.active = active;
         this.score = score;
     }
-    
+
     // Getters and setters
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public int getAge() {
         return age;
     }
-    
+
     public void setAge(int age) {
         this.age = age;
     }
-    
+
     public Date getBirthDate() {
         return birthDate;
     }
-    
+
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
-    
+
     public LocalDate getLocalDate() {
         return localDate;
     }
-    
+
     public void setLocalDate(LocalDate localDate) {
         this.localDate = localDate;
     }
-    
+
     public LocalDateTime getLocalDateTime() {
         return localDateTime;
     }
-    
+
     public void setLocalDateTime(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
     }
-    
+
     public boolean isActive() {
         return active;
     }
-    
+
     public void setActive(boolean active) {
         this.active = active;
     }
-    
+
     public double getScore() {
         return score;
     }
-    
+
     public void setScore(double score) {
         this.score = score;
     }
-    
+
     @Override
     public String toString() {
-        return "TestObject{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                ", birthDate=" + birthDate +
-                ", localDate=" + localDate +
-                ", localDateTime=" + localDateTime +
-                ", active=" + active +
-                ", score=" + score +
-                '}';
+        return "TestObject{" + "name='" + name + '\'' + ", age=" + age + ", birthDate=" + birthDate + ", localDate="
+            + localDate + ", localDateTime=" + localDateTime + ", active=" + active + ", score=" + score + '}';
     }
 }

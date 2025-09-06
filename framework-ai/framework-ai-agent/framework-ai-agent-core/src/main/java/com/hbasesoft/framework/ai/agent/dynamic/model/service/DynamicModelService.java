@@ -21,32 +21,32 @@ import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
  */
 public interface DynamicModelService {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	ModelConfig getDefault();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    ModelConfig getDefault();
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	List<ModelConfig> queryAll();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    List<ModelConfig> queryAll();
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param modelId
-	 * @return <br>
-	 */
-	ModelConfig get(Long modelId);
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param modelId
+     * @return <br>
+     */
+    ModelConfig get(Long modelId);
 
 }

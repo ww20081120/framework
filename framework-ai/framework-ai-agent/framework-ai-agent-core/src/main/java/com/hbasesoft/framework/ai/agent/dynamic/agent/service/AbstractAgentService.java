@@ -34,62 +34,64 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class AbstractAgentService implements AgentService {
 
-	private final IPlanningFactory planningFactory;
+    private final IPlanningFactory planningFactory;
 
-	private final IDynamicAgentLoader dynamicAgentLoader;
+    private final IDynamicAgentLoader dynamicAgentLoader;
 
-	private final IMcpService mcpService;
+    private final IMcpService mcpService;
 
-	@Override
-	public BaseAgent createDynamicBaseAgent(String name, String planId, String rootPlanId,
-			Map<String, Object> initialAgentSetting, String expectedReturnInfo) {
+    @Override
+    public BaseAgent createDynamicBaseAgent(String name, String planId, String rootPlanId,
+        Map<String, Object> initialAgentSetting, String expectedReturnInfo) {
 
-		LoggerUtil.info("Create new BaseAgent: {0}, planId: {1}", name, planId);
+        LoggerUtil.info("Create new BaseAgent: {0}, planId: {1}", name, planId);
 
-		try {
-			// Load existing Agent through dynamicAgentLoader
-			DynamicAgent agent = dynamicAgentLoader.loadAgent(name, initialAgentSetting);
+        try {
+            // Load existing Agent through dynamicAgentLoader
+            DynamicAgent agent = dynamicAgentLoader.loadAgent(name, initialAgentSetting);
 
-			// Set planId
-			agent.setCurrentPlanId(planId);
-			agent.setRootPlanId(rootPlanId);
-			// Set tool callback mapping
-			Map<String, ToolCallBackContext> toolCallbackMap = planningFactory.toolCallbackMap(planId, rootPlanId,
-					expectedReturnInfo);
-			agent.setToolCallbackProvider(new ToolCallbackProvider() {
+            // Set planId
+            agent.setCurrentPlanId(planId);
+            agent.setRootPlanId(rootPlanId);
+            // Set tool callback mapping
+            Map<String, ToolCallBackContext> toolCallbackMap = planningFactory.toolCallbackMap(planId, rootPlanId,
+                expectedReturnInfo);
+            agent.setToolCallbackProvider(new ToolCallbackProvider() {
 
-				@Override
-				public Map<String, ToolCallBackContext> getToolCallBackContext() {
-					return toolCallbackMap;
-				}
-			});
-			return agent;
-		} catch (Exception e) {
-			LoggerUtil.error("Failed to create dynamic base agent: " + name, e);
-			throw new RuntimeException("Failed to create dynamic base agent: " + name, e);
-		}
-	}
+                @Override
+                public Map<String, ToolCallBackContext> getToolCallBackContext() {
+                    return toolCallbackMap;
+                }
+            });
+            return agent;
+        }
+        catch (Exception e) {
+            LoggerUtil.error("Failed to create dynamic base agent: " + name, e);
+            throw new RuntimeException("Failed to create dynamic base agent: " + name, e);
+        }
+    }
 
-	public List<Tool> getAvailableTools() {
+    public List<Tool> getAvailableTools() {
 
-		String uuid = UUID.randomUUID().toString();
-		String expectedReturnInfo = "dummyColumn1, dummyColumn2";
-		try {
-			Map<String, ToolCallBackContext> toolcallContext = planningFactory.toolCallbackMap(uuid, uuid,
-					expectedReturnInfo);
-			return toolcallContext.entrySet().stream().map(entry -> {
-				Tool tool = new Tool();
-				tool.setKey(entry.getKey());
-				tool.setName(entry.getKey()); // You might want to provide a more friendly
-				// name
-				tool.setDescription(entry.getValue().getFunctionInstance().getDescription());
-				tool.setEnabled(true);
-				tool.setServiceGroup(entry.getValue().getFunctionInstance().getServiceGroup());
-				return tool;
-			}).collect(Collectors.toList());
-		} finally {
-			mcpService.close(uuid);
-		}
-	}
+        String uuid = UUID.randomUUID().toString();
+        String expectedReturnInfo = "dummyColumn1, dummyColumn2";
+        try {
+            Map<String, ToolCallBackContext> toolcallContext = planningFactory.toolCallbackMap(uuid, uuid,
+                expectedReturnInfo);
+            return toolcallContext.entrySet().stream().map(entry -> {
+                Tool tool = new Tool();
+                tool.setKey(entry.getKey());
+                tool.setName(entry.getKey()); // You might want to provide a more friendly
+                // name
+                tool.setDescription(entry.getValue().getFunctionInstance().getDescription());
+                tool.setEnabled(true);
+                tool.setServiceGroup(entry.getValue().getFunctionInstance().getServiceGroup());
+                return tool;
+            }).collect(Collectors.toList());
+        }
+        finally {
+            mcpService.close(uuid);
+        }
+    }
 
 }

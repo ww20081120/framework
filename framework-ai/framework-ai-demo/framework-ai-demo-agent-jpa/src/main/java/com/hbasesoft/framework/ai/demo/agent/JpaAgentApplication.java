@@ -28,16 +28,16 @@ import com.hbasesoft.framework.common.Bootstrap;
 @ComponentScan(basePackages = "com.hbasesoft.framework.ai.demo.agent")
 public class JpaAgentApplication {
 
-	/**
-	 * Description: <br>
-	 *
-	 * @param args <br>
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 */
-	public static void main(final String[] args) {
-		Bootstrap.before();
-		ConfigurableApplicationContext context = new SpringApplicationBuilder(JpaAgentApplication.class).run(args);
-		Bootstrap.after(context);
-	}
+    /**
+     * Description: <br>
+     *
+     * @param args <br>
+     * @author 王伟<br>
+     * @taskId <br>
+     */
+    public static void main(final String[] args) {
+        Bootstrap.before();
+        ConfigurableApplicationContext context = new SpringApplicationBuilder(JpaAgentApplication.class).run(args);
+        Bootstrap.after(context);
+    }
 }

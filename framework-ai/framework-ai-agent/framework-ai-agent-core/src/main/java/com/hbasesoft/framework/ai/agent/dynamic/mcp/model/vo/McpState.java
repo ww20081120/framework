@@ -19,5 +19,5 @@ import lombok.Data;
  */
 @Data
 public class McpState {
-	private String state;
+    private String state;
 }

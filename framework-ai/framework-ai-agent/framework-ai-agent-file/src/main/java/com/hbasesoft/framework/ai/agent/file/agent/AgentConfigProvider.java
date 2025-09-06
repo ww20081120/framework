@@ -5,6 +5,10 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.file.agent;
 
+import org.springframework.ai.chat.model.ToolContext;
+
+import com.hbasesoft.framework.ai.agent.tool.AbstractBaseTool;
+
 /**
  * Agent配置提供者接口<br>
  * 该接口定义了获取Agent配置信息的方法，允许Agent类通过实现此接口来提供详细的配置信息
@@ -18,25 +22,43 @@ package com.hbasesoft.framework.ai.agent.file.agent;
  */
 public interface AgentConfigProvider {
 
-	/**
-	 * 获取系统提示词
-	 * 
-	 * @return 系统提示词
-	 */
-	default String getSystemPrompt() {
-		return "";
-	}
+    /**
+     * 获取系统提示词
+     * 
+     * @return 系统提示词
+     */
+    default String getSystemPrompt() {
+        return "";
+    }
 
-	/**
-	 * 获取下一步提示词
-	 * 
-	 * @return 下一步提示词
-	 */
-	default String getNextStepPrompt() {
-		return "";
-	}
+    /**
+     * 获取下一步提示词
+     * 
+     * @return 下一步提示词
+     */
+    default String getNextStepPrompt() {
+        return "";
+    }
 
-	default String[] getActions() {
-		return null;
-	}
+    /**
+     * Description: 获取支持的动作<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    default String[] getActions() {
+        return null;
+    }
+
+    /**
+     * Description: 获取上下文 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    default ToolContext getContext() {
+        return AbstractBaseTool.getCurrentToolContext();
+    }
 }

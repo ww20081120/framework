@@ -21,15 +21,15 @@ import com.hbasesoft.framework.common.StartupListener;
  */
 public class ToolsInitStartupListener implements StartupListener {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param context <br>
-	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		context.getBean(ChromeDriverService.class).init();
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
+    @Override
+    public void complete(ApplicationContext context) {
+        context.getBean(ChromeDriverService.class).init();
+    }
 }

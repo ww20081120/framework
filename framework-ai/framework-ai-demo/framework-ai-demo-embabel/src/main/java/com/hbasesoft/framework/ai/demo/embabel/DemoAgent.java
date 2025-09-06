@@ -34,48 +34,41 @@ public class DemoAgent {
      * Extracts a coding task from user input.
      *
      * @param userInput the user input
-     * @param context   the operation context
+     * @param context the operation context
      * @return the extracted coding task
      */
     @Action
     public CodingTask extractCodingTask(final String userInput, final OperationContext context) {
         return context.ai().withDefaultLlm().createObjectIfPossible(
-                "从用户输入中提取编码任务。识别:\n" + "1. 编程语言\n" + "2. 任务描述\n" + 
-        "3. 任何特定要求\n\n" + "用户输入: " + userInput,
-                CodingTask.class);
+            "从用户输入中提取编码任务。识别:\n" + "1. 编程语言\n" + "2. 任务描述\n" + "3. 任何特定要求\n\n" + "用户输入: " + userInput,
+            CodingTask.class);
     }
 
     /**
      * Generates code for a coding task.
      *
-     * @param task    the coding task
+     * @param task the coding task
      * @param context the operation context
      * @return the generated code solution
      */
     @Action
     public CodeSolution generateCode(final CodingTask task, final OperationContext context) {
-        return context.ai().withDefaultLlm()
-                .createObject(
-                        "为以下任务生成代码解决方案:\n" + "语言: " + task.language() + "\n" + 
-                "任务: " + task.description() + "\n"
-                                + "要求: " + task.requirements() + "\n\n" + 
-                "提供干净、文档齐全的代码，遵循该语言的最佳实践。",
-                        CodeSolution.class);
+        return context.ai().withDefaultLlm().createObject("为以下任务生成代码解决方案:\n" + "语言: " + task.language() + "\n" + "任务: "
+            + task.description() + "\n" + "要求: " + task.requirements() + "\n\n" + "提供干净、文档齐全的代码，遵循该语言的最佳实践。",
+            CodeSolution.class);
     }
 
     /**
      * Explains the generated code solution.
      *
      * @param solution the code solution
-     * @param context  the operation context
+     * @param context the operation context
      * @return the explanation of the code solution
      */
     @Action
     public Explanation explainCode(final CodeSolution solution, final OperationContext context) {
-        return context.ai().withDefaultLlm().createObject("提供以下代码解决方案的详细解释:\n" + 
-    "代码:\n" + solution.code() + "\n\n"
-                + "解释:\n" + "1. 采用的方法\n" + "2. 关键组件及其目的\n" + 
-    "3. 任何重要的考虑因素或权衡", Explanation.class);
+        return context.ai().withDefaultLlm().createObject("提供以下代码解决方案的详细解释:\n" + "代码:\n" + solution.code() + "\n\n"
+            + "解释:\n" + "1. 采用的方法\n" + "2. 关键组件及其目的\n" + "3. 任何重要的考虑因素或权衡", Explanation.class);
     }
 
     /**
@@ -93,47 +86,46 @@ public class DemoAgent {
     /**
      * Provides a complete solution with explanation.
      *
-     * @param task        the coding task
-     * @param solution    the code solution
+     * @param task the coding task
+     * @param solution the code solution
      * @param explanation the explanation
-     * @param context     the operation context
+     * @param context the operation context
      * @return the final response
      */
     @AchievesGoal(description = "提供带有解释的完整编码解决方案")
     @Action
     public FinalResponse provideCompleteSolution(final CodingTask task, final CodeSolution solution,
-            final Explanation explanation, final OperationContext context) {
+        final Explanation explanation, final OperationContext context) {
 
-        return context.ai().withDefaultLlm().createObject(
-                "创建一个结合了编码任务、解决方案和解释的最终格式化响应:\n" + "任务: "
-        + task.description() + "\n" + "解决方案: " + solution.code()
-                        + "\n" + "解释: " + explanation.text() + "\n\n" 
-        + "格式化为干净、专业的响应，并带有适当的 markdown 格式。",
+        return context.ai().withDefaultLlm()
+            .createObject(
+                "创建一个结合了编码任务、解决方案和解释的最终格式化响应:\n" + "任务: " + task.description() + "\n" + "解决方案: " + solution.code()
+                    + "\n" + "解释: " + explanation.text() + "\n\n" + "格式化为干净、专业的响应，并带有适当的 markdown 格式。",
                 FinalResponse.class);
     }
 
     /**
      * Represents a coding task to be solved.
      * 
-     * @param language     the programming language
-     * @param description  the task description
+     * @param language the programming language
+     * @param description the task description
      * @param requirements the specific requirements or constraints
      */
     @JsonClassDescription("要解决的编码任务")
     public record CodingTask(@JsonPropertyDescription("要使用的编程语言") String language,
-            @JsonPropertyDescription("编码任务描述") String description,
-            @JsonPropertyDescription("特定要求或约束") String requirements) {
+        @JsonPropertyDescription("编码任务描述") String description,
+        @JsonPropertyDescription("特定要求或约束") String requirements) {
         /**
          * Constructor for CodingTask.
          *
-         * @param language     the programming language
-         * @param description  the task description
+         * @param language the programming language
+         * @param description the task description
          * @param requirements the specific requirements or constraints
          */
         @JsonCreator
         public CodingTask(@JsonProperty("language") final String language,
-                @JsonProperty("description") final String description,
-                @JsonProperty("requirements") final String requirements) {
+            @JsonProperty("description") final String description,
+            @JsonProperty("requirements") final String requirements) {
             this.language = language;
             this.description = description;
             this.requirements = requirements;
@@ -143,21 +135,20 @@ public class DemoAgent {
     /**
      * Represents a generated code solution.
      * 
-     * @param code  the generated code
+     * @param code the generated code
      * @param notes any additional notes about the solution
      */
     @JsonClassDescription("生成的代码解决方案")
     public record CodeSolution(@JsonPropertyDescription("生成的代码") String code,
-            @JsonPropertyDescription("关于解决方案的任何附加说明") String notes) {
+        @JsonPropertyDescription("关于解决方案的任何附加说明") String notes) {
         /**
          * Constructor for CodeSolution.
          *
-         * @param code  the generated code
+         * @param code the generated code
          * @param notes any additional notes about the solution
          */
         @JsonCreator
-        public CodeSolution(@JsonProperty("code") final String code, 
-        		@JsonProperty("notes") final String notes) {
+        public CodeSolution(@JsonProperty("code") final String code, @JsonProperty("notes") final String notes) {
             this.code = code;
             this.notes = notes;
         }
@@ -187,8 +178,7 @@ public class DemoAgent {
      * @param text the complete formatted response
      */
     @JsonClassDescription("包含完整解决方案的最终格式化响应")
-    public record FinalResponse(@JsonPropertyDescription("完整的格式化响应") 
-    String text) implements HasContent {
+    public record FinalResponse(@JsonPropertyDescription("完整的格式化响应") String text) implements HasContent {
         /**
          * Constructor for FinalResponse.
          *

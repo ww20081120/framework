@@ -19,11 +19,10 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
  */
 public interface PlanExecutorInterface {
 
-	/**
-	 * Execute all steps of the entire plan
-	 * 
-	 * @param context Execution context containing user request and execution
-	 *                process information
-	 */
-	void executeAllSteps(ExecutionContext context);
+    /**
+     * Execute all steps of the entire plan
+     * 
+     * @param context Execution context containing user request and execution process information
+     */
+    void executeAllSteps(ExecutionContext context);
 }

@@ -20,41 +20,41 @@ package com.hbasesoft.framework.ai.agent.planning.model.vo.mapreduce;
  */
 public enum MapReduceStepType {
 
-	/**
-	 * Sequential execution step
-	 */
-	SEQUENTIAL("Sequential Execution", "sequential"),
+    /**
+     * Sequential execution step
+     */
+    SEQUENTIAL("Sequential Execution", "sequential"),
 
-	/**
-	 * MapReduce mode execution step
-	 */
-	MAPREDUCE("MapReduce Mode", "mapreduce");
+    /**
+     * MapReduce mode execution step
+     */
+    MAPREDUCE("MapReduce Mode", "mapreduce");
 
-	private final String description;
+    private final String description;
 
-	private final String jsonTypeName;
+    private final String jsonTypeName;
 
-	MapReduceStepType(String description, String jsonTypeName) {
-		this.description = description;
-		this.jsonTypeName = jsonTypeName;
-	}
+    MapReduceStepType(String description, String jsonTypeName) {
+        this.description = description;
+        this.jsonTypeName = jsonTypeName;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Get type name used for JSON serialization
-	 * 
-	 * @return JSON type name
-	 */
-	public String getJsonTypeName() {
-		return jsonTypeName;
-	}
+    /**
+     * Get type name used for JSON serialization
+     * 
+     * @return JSON type name
+     */
+    public String getJsonTypeName() {
+        return jsonTypeName;
+    }
 
-	@Override
-	public String toString() {
-		return description;
-	}
+    @Override
+    public String toString() {
+        return description;
+    }
 
 }

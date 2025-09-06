@@ -63,15 +63,8 @@ public class AudioUtil {
     private static final boolean BIG_ENDIAN = false;
 
     /** 音频格式对象 */
-    private static final AudioFormat AUDIO_FORMAT = new AudioFormat(
-        ENCODING, 
-        SAMPLE_RATE, 
-        SAMPLE_SIZE_IN_BITS,
-        CHANNELS, 
-        FRAME_SIZE, 
-        FRAME_RATE, 
-        BIG_ENDIAN
-    );
+    private static final AudioFormat AUDIO_FORMAT = new AudioFormat(ENCODING, SAMPLE_RATE, SAMPLE_SIZE_IN_BITS,
+        CHANNELS, FRAME_SIZE, FRAME_RATE, BIG_ENDIAN);
 
     // ================== GUI 相关常量 ==================
 
@@ -135,7 +128,7 @@ public class AudioUtil {
      * @author 王伟<br>
      * @taskId <br>
      * @param audioData
-     * @param format    <br>
+     * @param format <br>
      */
     public static void playFromMemory(final byte[] audioData, final AudioFormat format) {
         SourceDataLine line = null;
@@ -240,13 +233,13 @@ public class AudioUtil {
                     recorderThread.start();
                     recordBtn.setText("停止录音");
                     statusLabel.setText("录音中...");
-                } 
+                }
                 else {
                     if (recorder != null) {
                         recorder.stop();
                         if (callback != null) {
                             callback.onRecord(recorder.getOutStream().toByteArray());
-                        } 
+                        }
                         else {
                             saveToWAV(recorder.getOutStream().toByteArray());
                         }
@@ -267,14 +260,13 @@ public class AudioUtil {
         private void saveToWAV(final byte[] data) {
             JFileChooser fileChooser = new JFileChooser();
 
-            String defaultName = DEFAULT_AUDIO_FILENAME_PREFIX 
-                + DateUtil.getCurrentTimestamp()
+            String defaultName = DEFAULT_AUDIO_FILENAME_PREFIX + DateUtil.getCurrentTimestamp()
                 + DEFAULT_AUDIO_FILE_EXTENSION;
             fileChooser.setSelectedFile(new File(defaultName));
 
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 try (ByteArrayInputStream bais = new ByteArrayInputStream(data);
-                        AudioInputStream ais = new AudioInputStream(bais, AUDIO_FORMAT, data.length / FRAME_SIZE)) {
+                    AudioInputStream ais = new AudioInputStream(bais, AUDIO_FORMAT, data.length / FRAME_SIZE)) {
                     AudioSystem.write(ais, AudioFileFormat.Type.WAVE, fileChooser.getSelectedFile());
                     statusLabel.setText("保存成功: " + fileChooser.getSelectedFile().getName());
                 }

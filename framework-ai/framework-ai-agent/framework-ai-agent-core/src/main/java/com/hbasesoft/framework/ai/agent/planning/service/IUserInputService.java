@@ -22,53 +22,53 @@ import com.hbasesoft.framework.ai.agent.tool.fromInput.FormInputTool;
  */
 public interface IUserInputService {
 
-	/**
-	 * Store form input tool
-	 * 
-	 * @param planId Plan ID
-	 * @param tool   Form input tool
-	 */
-	void storeFormInputTool(String planId, FormInputTool tool);
+    /**
+     * Store form input tool
+     * 
+     * @param planId Plan ID
+     * @param tool Form input tool
+     */
+    void storeFormInputTool(String planId, FormInputTool tool);
 
-	/**
-	 * Get form input tool
-	 * 
-	 * @param planId Plan ID
-	 * @return Form input tool
-	 */
-	FormInputTool getFormInputTool(String planId);
+    /**
+     * Get form input tool
+     * 
+     * @param planId Plan ID
+     * @return Form input tool
+     */
+    FormInputTool getFormInputTool(String planId);
 
-	/**
-	 * Remove form input tool
-	 * 
-	 * @param planId Plan ID
-	 */
-	void removeFormInputTool(String planId);
+    /**
+     * Remove form input tool
+     * 
+     * @param planId Plan ID
+     */
+    void removeFormInputTool(String planId);
 
-	/**
-	 * Create user input waiting state
-	 * 
-	 * @param planId        Plan ID
-	 * @param message       Message
-	 * @param formInputTool Form input tool
-	 * @return User input waiting state
-	 */
-	UserInputWaitState createUserInputWaitState(String planId, String message, FormInputTool formInputTool);
+    /**
+     * Create user input waiting state
+     * 
+     * @param planId Plan ID
+     * @param message Message
+     * @param formInputTool Form input tool
+     * @return User input waiting state
+     */
+    UserInputWaitState createUserInputWaitState(String planId, String message, FormInputTool formInputTool);
 
-	/**
-	 * Get waiting state
-	 * 
-	 * @param planId Plan ID
-	 * @return User input waiting state
-	 */
-	UserInputWaitState getWaitState(String planId);
+    /**
+     * Get waiting state
+     * 
+     * @param planId Plan ID
+     * @return User input waiting state
+     */
+    UserInputWaitState getWaitState(String planId);
 
-	/**
-	 * Submit user input
-	 * 
-	 * @param planId Plan ID
-	 * @param inputs Input data
-	 * @return Whether submission was successful
-	 */
-	boolean submitUserInputs(String planId, Map<String, String> inputs);
+    /**
+     * Submit user input
+     * 
+     * @param planId Plan ID
+     * @param inputs Input data
+     * @return Whether submission was successful
+     */
+    boolean submitUserInputs(String planId, Map<String, String> inputs);
 }

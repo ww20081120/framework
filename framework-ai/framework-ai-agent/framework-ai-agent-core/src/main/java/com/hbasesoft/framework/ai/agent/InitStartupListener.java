@@ -28,43 +28,43 @@ import com.hbasesoft.framework.common.StartupListener;
  */
 public class InitStartupListener implements StartupListener {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param context <br>
-	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		UnifiedDirectoryManager udm = context.getBean(UnifiedDirectoryManager.class);
-		udm.init();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
+    @Override
+    public void complete(ApplicationContext context) {
+        UnifiedDirectoryManager udm = context.getBean(UnifiedDirectoryManager.class);
+        udm.init();
 
-		IConfigService configService = context.getBean(IConfigService.class);
-		configService.init();
+        IConfigService configService = context.getBean(IConfigService.class);
+        configService.init();
 
-		McpCacheManager mm = context.getBean(McpCacheManager.class);
-		mm.init();
+        McpCacheManager mm = context.getBean(McpCacheManager.class);
+        mm.init();
 
-		LlmService llmService = context.getBean(LlmService.class);
-		llmService.init();
+        LlmService llmService = context.getBean(LlmService.class);
+        llmService.init();
 
-		PromptDataInitializer pdi = context.getBean(PromptDataInitializer.class);
-		pdi.init();
+        PromptDataInitializer pdi = context.getBean(PromptDataInitializer.class);
+        pdi.init();
 
-		PromptDescriptionLoader promptDescriptionLoader = context.getBean(PromptDescriptionLoader.class);
-		PromptEnum.setDescriptionLoader(promptDescriptionLoader);
-	}
+        PromptDescriptionLoader promptDescriptionLoader = context.getBean(PromptDescriptionLoader.class);
+        PromptEnum.setDescriptionLoader(promptDescriptionLoader);
+    }
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Override
-	public LoadOrder getOrder() {
-		return LoadOrder.MIDDLE;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public LoadOrder getOrder() {
+        return LoadOrder.MIDDLE;
+    }
 }

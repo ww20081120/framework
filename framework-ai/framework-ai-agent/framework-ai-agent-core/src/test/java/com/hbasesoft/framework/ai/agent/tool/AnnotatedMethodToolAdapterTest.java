@@ -31,139 +31,139 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class AnnotatedMethodToolAdapterTest {
 
-	@Test
-	public void testGetParametersWithDates() throws Exception {
-		// Create test service and method
-		TestService testService = new TestService();
-		java.lang.reflect.Method method = TestService.class.getMethod("testWithDates", String.class, Date.class,
-				LocalDate.class, LocalDateTime.class);
+    @Test
+    public void testGetParametersWithDates() throws Exception {
+        // Create test service and method
+        TestService testService = new TestService();
+        java.lang.reflect.Method method = TestService.class.getMethod("testWithDates", String.class, Date.class,
+            LocalDate.class, LocalDateTime.class);
 
-		Action action = method.getAnnotation(Action.class);
-		ObjectMapper objectMapper = new ObjectMapper();
+        Action action = method.getAnnotation(Action.class);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-		// Create adapter
-		AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
+        // Create adapter
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
 
-		// Get parameters JSON
-		String parametersJson = adapter.getParameters();
-		System.out.println("Parameters JSON: " + parametersJson);
+        // Get parameters JSON
+        String parametersJson = adapter.getParameters();
+        System.out.println("Parameters JSON: " + parametersJson);
 
-		// Verify that the JSON contains the expected structure
-		assertTrue(parametersJson.contains("\"type\":\"object\""));
-		assertTrue(parametersJson.contains("\"name\":{\"type\":\"string\""));
-		assertTrue(parametersJson.contains("\"birthDate\":{\"type\":\"string\",\"format\":\"date-time\""));
-		assertTrue(parametersJson.contains("\"localDate\":{\"type\":\"string\",\"format\":\"date-time\""));
-		assertTrue(parametersJson.contains("\"localDateTime\":{\"type\":\"string\",\"format\":\"date-time\""));
-	}
+        // Verify that the JSON contains the expected structure
+        assertTrue(parametersJson.contains("\"type\":\"object\""));
+        assertTrue(parametersJson.contains("\"name\":{\"type\":\"string\""));
+        assertTrue(parametersJson.contains("\"birthDate\":{\"type\":\"string\",\"format\":\"date-time\""));
+        assertTrue(parametersJson.contains("\"localDate\":{\"type\":\"string\",\"format\":\"date-time\""));
+        assertTrue(parametersJson.contains("\"localDateTime\":{\"type\":\"string\",\"format\":\"date-time\""));
+    }
 
-	@Test
-	public void testGetParametersWithObject() throws Exception {
-		// Create test service and method
-		TestService testService = new TestService();
-		java.lang.reflect.Method method = TestService.class.getMethod("testWithObject", TestObject.class);
+    @Test
+    public void testGetParametersWithObject() throws Exception {
+        // Create test service and method
+        TestService testService = new TestService();
+        java.lang.reflect.Method method = TestService.class.getMethod("testWithObject", TestObject.class);
 
-		Action action = method.getAnnotation(Action.class);
-		ObjectMapper objectMapper = new ObjectMapper();
+        Action action = method.getAnnotation(Action.class);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-		// Create adapter
-		AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
+        // Create adapter
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
 
-		// Get parameters JSON
-		String parametersJson = adapter.getParameters();
-		System.out.println("Parameters JSON: " + parametersJson);
+        // Get parameters JSON
+        String parametersJson = adapter.getParameters();
+        System.out.println("Parameters JSON: " + parametersJson);
 
-		// Verify that the JSON contains the expected structure
-		assertTrue(parametersJson.contains("\"type\":\"object\""));
-		assertTrue(parametersJson.contains("\"testObject\":{\"type\":\"object\""));
-		assertTrue(parametersJson.contains("\"properties\":{\"name\":{\"type\":\"string\""));
-		assertTrue(parametersJson.contains("\"age\":{\"type\":\"integer\""));
-		assertTrue(parametersJson.contains("\"active\":{\"type\":\"boolean\""));
-		assertTrue(parametersJson.contains("\"score\":{\"type\":\"number\""));
-	}
+        // Verify that the JSON contains the expected structure
+        assertTrue(parametersJson.contains("\"type\":\"object\""));
+        assertTrue(parametersJson.contains("\"testObject\":{\"type\":\"object\""));
+        assertTrue(parametersJson.contains("\"properties\":{\"name\":{\"type\":\"string\""));
+        assertTrue(parametersJson.contains("\"age\":{\"type\":\"integer\""));
+        assertTrue(parametersJson.contains("\"active\":{\"type\":\"boolean\""));
+        assertTrue(parametersJson.contains("\"score\":{\"type\":\"number\""));
+    }
 
-	@Test
-	public void testGetParametersWithPrimitives() throws Exception {
-		// Create test service and method
-		TestService testService = new TestService();
-		java.lang.reflect.Method method = TestService.class.getMethod("testWithPrimitives", byte.class, short.class,
-				float.class, char.class);
+    @Test
+    public void testGetParametersWithPrimitives() throws Exception {
+        // Create test service and method
+        TestService testService = new TestService();
+        java.lang.reflect.Method method = TestService.class.getMethod("testWithPrimitives", byte.class, short.class,
+            float.class, char.class);
 
-		Action action = method.getAnnotation(Action.class);
-		ObjectMapper objectMapper = new ObjectMapper();
+        Action action = method.getAnnotation(Action.class);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-		// Create adapter
-		AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
+        // Create adapter
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
 
-		// Get parameters JSON
-		String parametersJson = adapter.getParameters();
-		System.out.println("Parameters JSON: " + parametersJson);
+        // Get parameters JSON
+        String parametersJson = adapter.getParameters();
+        System.out.println("Parameters JSON: " + parametersJson);
 
-		// Verify that the JSON contains the expected structure
-		assertTrue(parametersJson.contains("\"type\":\"object\""));
-		assertTrue(parametersJson.contains("\"byteValue\":{\"type\":\"integer\""));
-		assertTrue(parametersJson.contains("\"shortValue\":{\"type\":\"integer\""));
-		assertTrue(parametersJson.contains("\"floatValue\":{\"type\":\"number\""));
-		assertTrue(parametersJson.contains("\"charValue\":{\"type\":\"string\""));
-	}
+        // Verify that the JSON contains the expected structure
+        assertTrue(parametersJson.contains("\"type\":\"object\""));
+        assertTrue(parametersJson.contains("\"byteValue\":{\"type\":\"integer\""));
+        assertTrue(parametersJson.contains("\"shortValue\":{\"type\":\"integer\""));
+        assertTrue(parametersJson.contains("\"floatValue\":{\"type\":\"number\""));
+        assertTrue(parametersJson.contains("\"charValue\":{\"type\":\"string\""));
+    }
 
-	@Test
-	public void testRunWithDates() throws Exception {
-		// Create test service and method
-		TestService testService = new TestService();
-		java.lang.reflect.Method method = TestService.class.getMethod("testWithDates", String.class, Date.class,
-				LocalDate.class, LocalDateTime.class);
+    @Test
+    public void testRunWithDates() throws Exception {
+        // Create test service and method
+        TestService testService = new TestService();
+        java.lang.reflect.Method method = TestService.class.getMethod("testWithDates", String.class, Date.class,
+            LocalDate.class, LocalDateTime.class);
 
-		Action action = method.getAnnotation(Action.class);
-		ObjectMapper objectMapper = new ObjectMapper();
+        Action action = method.getAnnotation(Action.class);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-		// Create adapter
-		AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
+        // Create adapter
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
 
-		// Create test input
-		Map<String, Object> input = new HashMap<>();
-		input.put("name", "Test User");
-		input.put("birthDate", "2025-09-01T00:00:00Z");
-		input.put("localDate", "2025-09-01");
-		input.put("localDateTime", "2025-09-01T10:30:00");
+        // Create test input
+        Map<String, Object> input = new HashMap<>();
+        input.put("name", "Test User");
+        input.put("birthDate", "2025-09-01T00:00:00Z");
+        input.put("localDate", "2025-09-01");
+        input.put("localDateTime", "2025-09-01T10:30:00");
 
-		// Run the method
-		ToolExecuteResult result = adapter.run(input);
+        // Run the method
+        ToolExecuteResult result = adapter.run(input);
 
-		// Verify the result
-		assertNotNull(result);
-		assertFalse(result.isInterrupted());
-		assertTrue(result.getOutput().contains("Test with dates"));
-		assertTrue(result.getOutput().contains("Test User"));
-	}
+        // Verify the result
+        assertNotNull(result);
+        assertFalse(result.isInterrupted());
+        assertTrue(result.getOutput().contains("Test with dates"));
+        assertTrue(result.getOutput().contains("Test User"));
+    }
 
-	@Test
-	public void testRunWithObject() throws Exception {
-		// Create test service and method
-		TestService testService = new TestService();
-		java.lang.reflect.Method method = TestService.class.getMethod("testWithObject", TestObject.class);
+    @Test
+    public void testRunWithObject() throws Exception {
+        // Create test service and method
+        TestService testService = new TestService();
+        java.lang.reflect.Method method = TestService.class.getMethod("testWithObject", TestObject.class);
 
-		Action action = method.getAnnotation(Action.class);
-		ObjectMapper objectMapper = new ObjectMapper();
+        Action action = method.getAnnotation(Action.class);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-		// Create adapter
-		AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
+        // Create adapter
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
 
-		// Create test input
-		Map<String, Object> input = new HashMap<>();
-		Map<String, Object> objectInput = new HashMap<>();
-		objectInput.put("name", "Test Object");
-		objectInput.put("age", 25);
-		objectInput.put("active", true);
-		objectInput.put("score", 95.5);
-		input.put("testObject", objectInput);
+        // Create test input
+        Map<String, Object> input = new HashMap<>();
+        Map<String, Object> objectInput = new HashMap<>();
+        objectInput.put("name", "Test Object");
+        objectInput.put("age", 25);
+        objectInput.put("active", true);
+        objectInput.put("score", 95.5);
+        input.put("testObject", objectInput);
 
-		// Run the method
-		ToolExecuteResult result = adapter.run(input);
+        // Run the method
+        ToolExecuteResult result = adapter.run(input);
 
-		// Verify the result
-		assertNotNull(result);
-		assertFalse(result.isInterrupted());
-		assertTrue(result.getOutput().contains("Test with object"));
-		assertTrue(result.getOutput().contains("Test Object"));
-	}
+        // Verify the result
+        assertNotNull(result);
+        assertFalse(result.isInterrupted());
+        assertTrue(result.getOutput().contains("Test with object"));
+        assertTrue(result.getOutput().contains("Test Object"));
+    }
 }

@@ -18,63 +18,63 @@ import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
  * @see com.hbasesoft.framework.ai.agent.file.model <br>
  */
 public class ModelConfigBuilder {
-	private ModelConfig modelConfig = new ModelConfig();
+    private ModelConfig modelConfig = new ModelConfig();
 
-	public static ModelConfigBuilder builder() {
-		return new ModelConfigBuilder();
-	}
+    public static ModelConfigBuilder builder() {
+        return new ModelConfigBuilder();
+    }
 
-	public ModelConfigBuilder id(Long id) {
-		modelConfig.setId(id);
-		return this;
-	}
+    public ModelConfigBuilder id(Long id) {
+        modelConfig.setId(id);
+        return this;
+    }
 
-	public ModelConfigBuilder baseUrl(String baseUrl) {
-		modelConfig.setBaseUrl(baseUrl);
-		return this;
-	}
+    public ModelConfigBuilder baseUrl(String baseUrl) {
+        modelConfig.setBaseUrl(baseUrl);
+        return this;
+    }
 
-	public ModelConfigBuilder apiKey(String apiKey) {
-		modelConfig.setApiKey(apiKey);
-		return this;
-	}
+    public ModelConfigBuilder apiKey(String apiKey) {
+        modelConfig.setApiKey(apiKey);
+        return this;
+    }
 
-	public ModelConfigBuilder modelName(String modelName) {
-		modelConfig.setModelName(modelName);
-		return this;
-	}
+    public ModelConfigBuilder modelName(String modelName) {
+        modelConfig.setModelName(modelName);
+        return this;
+    }
 
-	public ModelConfigBuilder modelDescription(String modelDescription) {
-		modelConfig.setModelDescription(modelDescription);
-		return this;
-	}
+    public ModelConfigBuilder modelDescription(String modelDescription) {
+        modelConfig.setModelDescription(modelDescription);
+        return this;
+    }
 
-	public ModelConfigBuilder type(String type) {
-		modelConfig.setType(type);
-		return this;
-	}
+    public ModelConfigBuilder type(String type) {
+        modelConfig.setType(type);
+        return this;
+    }
 
-	public ModelConfigBuilder isDefault(Boolean isDefault) {
-		modelConfig.setIsDefault(isDefault);
-		return this;
-	}
+    public ModelConfigBuilder isDefault(Boolean isDefault) {
+        modelConfig.setIsDefault(isDefault);
+        return this;
+    }
 
-	public ModelConfigBuilder temperature(Double temperature) {
-		modelConfig.setTemperature(temperature);
-		return this;
-	}
+    public ModelConfigBuilder temperature(Double temperature) {
+        modelConfig.setTemperature(temperature);
+        return this;
+    }
 
-	public ModelConfigBuilder topP(Double topP) {
-		modelConfig.setTopP(topP);
-		return this;
-	}
+    public ModelConfigBuilder topP(Double topP) {
+        modelConfig.setTopP(topP);
+        return this;
+    }
 
-	public ModelConfigBuilder completionsPath(String completionsPath) {
-		modelConfig.setCompletionsPath(completionsPath);
-		return this;
-	}
+    public ModelConfigBuilder completionsPath(String completionsPath) {
+        modelConfig.setCompletionsPath(completionsPath);
+        return this;
+    }
 
-	public ModelConfig build() {
-		return modelConfig;
-	}
+    public ModelConfig build() {
+        return modelConfig;
+    }
 }

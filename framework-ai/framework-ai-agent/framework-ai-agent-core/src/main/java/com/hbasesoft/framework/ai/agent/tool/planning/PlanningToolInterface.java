@@ -22,24 +22,24 @@ import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
  */
 public interface PlanningToolInterface {
 
-	/**
-	 * Get current plan ID
-	 * 
-	 * @return Current plan ID, returns null if no plan exists
-	 */
-	String getCurrentPlanId();
+    /**
+     * Get current plan ID
+     * 
+     * @return Current plan ID, returns null if no plan exists
+     */
+    String getCurrentPlanId();
 
-	/**
-	 * Get current execution plan
-	 * 
-	 * @return Current execution plan, returns null if no plan exists
-	 */
-	PlanInterface getCurrentPlan();
+    /**
+     * Get current execution plan
+     * 
+     * @return Current execution plan, returns null if no plan exists
+     */
+    PlanInterface getCurrentPlan();
 
-	/**
-	 * Get function tool callback for LLM integration
-	 * 
-	 * @return FunctionToolCallback instance
-	 */
-	FunctionToolCallback<?, ToolExecuteResult> getFunctionToolCallback();
+    /**
+     * Get function tool callback for LLM integration
+     * 
+     * @return FunctionToolCallback instance
+     */
+    FunctionToolCallback<?, ToolExecuteResult> getFunctionToolCallback();
 }

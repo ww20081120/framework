@@ -23,52 +23,52 @@ import java.util.List;
  */
 public class ExecutionResult {
 
-	private String planId;
+    private String planId;
 
-	private List<ExecutionStep> stepResults;
+    private List<ExecutionStep> stepResults;
 
-	private String executionDetails;
+    private String executionDetails;
 
-	private boolean success;
+    private boolean success;
 
-	// Getters and setters
-	public String getPlanId() {
-		return planId;
-	}
+    // Getters and setters
+    public String getPlanId() {
+        return planId;
+    }
 
-	public void setPlanId(String planId) {
-		this.planId = planId;
-	}
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
 
-	public List<ExecutionStep> getStepResults() {
-		return stepResults;
-	}
+    public List<ExecutionStep> getStepResults() {
+        return stepResults;
+    }
 
-	public void setStepResults(List<ExecutionStep> stepResults) {
-		this.stepResults = stepResults;
-	}
+    public void setStepResults(List<ExecutionStep> stepResults) {
+        this.stepResults = stepResults;
+    }
 
-	public String getExecutionDetails() {
-		return executionDetails;
-	}
+    public String getExecutionDetails() {
+        return executionDetails;
+    }
 
-	public void setExecutionDetails(String executionDetails) {
-		this.executionDetails = executionDetails;
-	}
+    public void setExecutionDetails(String executionDetails) {
+        this.executionDetails = executionDetails;
+    }
 
-	public boolean isSuccess() {
-		return success;
-	}
+    public boolean isSuccess() {
+        return success;
+    }
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
-	public void addStepResult(ExecutionStep stepResult) {
-		if (this.stepResults == null) {
-			this.stepResults = new ArrayList<>();
-		}
-		this.stepResults.add(stepResult);
-	}
+    public void addStepResult(ExecutionStep stepResult) {
+        if (this.stepResults == null) {
+            this.stepResults = new ArrayList<>();
+        }
+        this.stepResults.add(stepResult);
+    }
 
 }

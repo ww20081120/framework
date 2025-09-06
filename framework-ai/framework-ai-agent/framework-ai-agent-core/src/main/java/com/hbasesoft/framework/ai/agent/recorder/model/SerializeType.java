@@ -16,7 +16,7 @@ package com.hbasesoft.framework.ai.agent.recorder.model;
  * @see com.hbasesoft.framework.ai.agent.recorder.model <br>
  */
 public interface SerializeType {
-	String FASTJSON = "fastjson";
+    String FASTJSON = "fastjson";
 
-	String JACKSON = "jackson";
+    String JACKSON = "jackson";
 }

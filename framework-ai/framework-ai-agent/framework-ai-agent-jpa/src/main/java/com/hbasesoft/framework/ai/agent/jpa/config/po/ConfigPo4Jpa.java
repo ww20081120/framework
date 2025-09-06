@@ -41,90 +41,90 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ConfigPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = 6396250254439013884L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = 6396250254439013884L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	/**
-	 * Configuration group
-	 */
-	@Column(name = "config_group", nullable = false)
-	private String configGroup;
+    /**
+     * Configuration group
+     */
+    @Column(name = "config_group", nullable = false)
+    private String configGroup;
 
-	/**
-	 * Configuration sub-group
-	 */
-	@Column(name = "config_sub_group", nullable = false)
-	private String configSubGroup;
+    /**
+     * Configuration sub-group
+     */
+    @Column(name = "config_sub_group", nullable = false)
+    private String configSubGroup;
 
-	/**
-	 * Configuration key
-	 */
-	@Column(name = "config_key", nullable = false)
-	private String configKey;
+    /**
+     * Configuration key
+     */
+    @Column(name = "config_key", nullable = false)
+    private String configKey;
 
-	/**
-	 * Configuration item full path
-	 */
-	@Column(name = "config_path", nullable = false, unique = true)
-	private String configPath;
+    /**
+     * Configuration item full path
+     */
+    @Column(name = "config_path", nullable = false, unique = true)
+    private String configPath;
 
-	/**
-	 * Configuration value
-	 */
-	@Column(name = "config_value", columnDefinition = "TEXT")
-	private String configValue;
+    /**
+     * Configuration value
+     */
+    @Column(name = "config_value", columnDefinition = "TEXT")
+    private String configValue;
 
-	/**
-	 * Default value
-	 */
-	@Column(name = "default_value", columnDefinition = "TEXT")
-	private String defaultValue;
+    /**
+     * Default value
+     */
+    @Column(name = "default_value", columnDefinition = "TEXT")
+    private String defaultValue;
 
-	/**
-	 * Configuration description
-	 */
-	@Column(name = "description", columnDefinition = "TEXT")
-	private String description;
+    /**
+     * Configuration description
+     */
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 
-	/**
-	 * Input type
-	 */
-	@Column(name = "input_type", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private ConfigInputType inputType;
+    /**
+     * Input type
+     */
+    @Column(name = "input_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ConfigInputType inputType;
 
-	/**
-	 * Options JSON string for storing SELECT type option data
-	 */
-	@Column(name = "options_json", columnDefinition = "TEXT")
-	private String optionsJson;
+    /**
+     * Options JSON string for storing SELECT type option data
+     */
+    @Column(name = "options_json", columnDefinition = "TEXT")
+    private String optionsJson;
 
-	/**
-	 * Last update time
-	 */
-	@Column(name = "update_time", nullable = false)
-	private LocalDateTime updateTime;
+    /**
+     * Last update time
+     */
+    @Column(name = "update_time", nullable = false)
+    private LocalDateTime updateTime;
 
-	/**
-	 * Create time
-	 */
-	@Column(name = "create_time", nullable = false)
-	private LocalDateTime createTime;
+    /**
+     * Create time
+     */
+    @Column(name = "create_time", nullable = false)
+    private LocalDateTime createTime;
 
-	@PrePersist
-	protected void onCreate() {
-		createTime = LocalDateTime.now();
-		updateTime = LocalDateTime.now();
-	}
+    @PrePersist
+    protected void onCreate() {
+        createTime = LocalDateTime.now();
+        updateTime = LocalDateTime.now();
+    }
 
-	@PreUpdate
-	protected void onUpdate() {
-		updateTime = LocalDateTime.now();
-	}
+    @PreUpdate
+    protected void onUpdate() {
+        updateTime = LocalDateTime.now();
+    }
 }

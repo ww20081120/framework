@@ -20,24 +20,24 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.PlanInterface;
  */
 public interface IPlanExecutorFactory {
 
-	/**
-	 * Create executor for the given plan
-	 */
-	PlanExecutorInterface createExecutor(PlanInterface plan);
+    /**
+     * Create executor for the given plan
+     */
+    PlanExecutorInterface createExecutor(PlanInterface plan);
 
-	/**
-	 * Get all supported plan types
-	 */
-	String[] getSupportedPlanTypes();
+    /**
+     * Get all supported plan types
+     */
+    String[] getSupportedPlanTypes();
 
-	/**
-	 * Check if a plan type is supported
-	 */
-	boolean isPlanTypeSupported(String planType);
+    /**
+     * Check if a plan type is supported
+     */
+    boolean isPlanTypeSupported(String planType);
 
-	/**
-	 * Create executor by plan type and ID
-	 */
-	PlanExecutorInterface createExecutorByType(String planType, String planId);
+    /**
+     * Create executor by plan type and ID
+     */
+    PlanExecutorInterface createExecutorByType(String planType, String planId);
 
 }

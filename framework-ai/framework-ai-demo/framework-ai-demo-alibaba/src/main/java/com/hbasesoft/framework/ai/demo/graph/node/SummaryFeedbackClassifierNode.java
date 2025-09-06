@@ -26,7 +26,7 @@ public class SummaryFeedbackClassifierNode implements NodeAction {
      * 构造函数
      *
      * @param chatClient 聊天客户端
-     * @param inputKey   输入键
+     * @param inputKey 输入键
      */
     public SummaryFeedbackClassifierNode(final ChatClient chatClient, final String inputKey) {
         this.chatClient = chatClient;
@@ -48,11 +48,11 @@ public class SummaryFeedbackClassifierNode implements NodeAction {
         }
 
         String prompt = """
-                以下是一个自动生成的中文摘要。请你判断它是否让用户满意。如果满意，请返回 "positive"，否则返回 "negative"：
+            以下是一个自动生成的中文摘要。请你判断它是否让用户满意。如果满意，请返回 "positive"，否则返回 "negative"：
 
-                摘要内容：
-                %s
-                """.formatted(summary);
+            摘要内容：
+            %s
+            """.formatted(summary);
 
         ChatResponse response = chatClient.prompt(prompt).call().chatResponse();
         String output = response.getResult().getOutput().getText();

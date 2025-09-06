@@ -21,16 +21,16 @@ import com.microsoft.playwright.Page;
 
 public class RefreshAction extends BrowserAction {
 
-	public RefreshAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public RefreshAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Page page = getCurrentPage(); // Get Playwright Page instance
-		page.reload(); // Refresh current page
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Page page = getCurrentPage(); // Get Playwright Page instance
+        page.reload(); // Refresh current page
 
-		return new ToolExecuteResult("Refreshed current page");
-	}
+        return new ToolExecuteResult("Refreshed current page");
+    }
 
 }

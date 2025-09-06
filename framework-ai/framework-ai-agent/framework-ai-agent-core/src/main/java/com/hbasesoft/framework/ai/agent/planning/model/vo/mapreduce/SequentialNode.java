@@ -27,109 +27,108 @@ import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionStep;
  */
 public class SequentialNode extends AbstractExecutionNode {
 
-	private List<ExecutionStep> steps;
+    private List<ExecutionStep> steps;
 
-	public SequentialNode() {
-		super(MapReduceStepType.SEQUENTIAL);
-		this.steps = new ArrayList<>();
-	}
+    public SequentialNode() {
+        super(MapReduceStepType.SEQUENTIAL);
+        this.steps = new ArrayList<>();
+    }
 
-	public SequentialNode(List<ExecutionStep> steps) {
-		super(MapReduceStepType.SEQUENTIAL);
-		this.steps = steps != null ? steps : new ArrayList<>();
-	}
+    public SequentialNode(List<ExecutionStep> steps) {
+        super(MapReduceStepType.SEQUENTIAL);
+        this.steps = steps != null ? steps : new ArrayList<>();
+    }
 
-	/**
-	 * Get string representation of node type for Jackson
-	 * serialization/deserialization
-	 * 
-	 * @return Type string
-	 */
-	@JsonProperty("type")
-	public String getTypeString() {
-		return "sequential";
-	}
+    /**
+     * Get string representation of node type for Jackson serialization/deserialization
+     * 
+     * @return Type string
+     */
+    @JsonProperty("type")
+    public String getTypeString() {
+        return "sequential";
+    }
 
-	/**
-	 * Set node type for Jackson deserialization, actually performs no operation
-	 * 
-	 * @param typeString Type string
-	 */
-	@JsonProperty("type")
-	public void setTypeString(String typeString) {
-		// Ignore this field during deserialization, type is already set in constructor
-	}
+    /**
+     * Set node type for Jackson deserialization, actually performs no operation
+     * 
+     * @param typeString Type string
+     */
+    @JsonProperty("type")
+    public void setTypeString(String typeString) {
+        // Ignore this field during deserialization, type is already set in constructor
+    }
 
-	public List<ExecutionStep> getSteps() {
-		return steps;
-	}
+    public List<ExecutionStep> getSteps() {
+        return steps;
+    }
 
-	public void setSteps(List<ExecutionStep> steps) {
-		this.steps = steps != null ? steps : new ArrayList<>();
-	}
+    public void setSteps(List<ExecutionStep> steps) {
+        this.steps = steps != null ? steps : new ArrayList<>();
+    }
 
-	public void addStep(ExecutionStep step) {
-		if (steps == null) {
-			steps = new ArrayList<>();
-		}
-		steps.add(step);
-	}
+    public void addStep(ExecutionStep step) {
+        if (steps == null) {
+            steps = new ArrayList<>();
+        }
+        steps.add(step);
+    }
 
-	public void removeStep(ExecutionStep step) {
-		if (steps != null) {
-			steps.remove(step);
-		}
-	}
+    public void removeStep(ExecutionStep step) {
+        if (steps != null) {
+            steps.remove(step);
+        }
+    }
 
-	public ExecutionStep removeStep(int index) {
-		if (steps != null && index >= 0 && index < steps.size()) {
-			return steps.remove(index);
-		}
-		return null;
-	}
+    public ExecutionStep removeStep(int index) {
+        if (steps != null && index >= 0 && index < steps.size()) {
+            return steps.remove(index);
+        }
+        return null;
+    }
 
-	@JsonIgnore
-	public int getStepCount() {
-		return steps != null ? steps.size() : 0;
-	}
+    @JsonIgnore
+    public int getStepCount() {
+        return steps != null ? steps.size() : 0;
+    }
 
-	public ExecutionStep getStep(int index) {
-		if (steps != null && index >= 0 && index < steps.size()) {
-			return steps.get(index);
-		}
-		return null;
-	}
+    public ExecutionStep getStep(int index) {
+        if (steps != null && index >= 0 && index < steps.size()) {
+            return steps.get(index);
+        }
+        return null;
+    }
 
-	@Override
-	@JsonIgnore
-	public List<ExecutionStep> getAllSteps() {
-		return steps != null ? new ArrayList<>(steps) : new ArrayList<>();
-	}
+    @Override
+    @JsonIgnore
+    public List<ExecutionStep> getAllSteps() {
+        return steps != null ? new ArrayList<>(steps) : new ArrayList<>();
+    }
 
-	/**
-	 * Get string representation of the node
-	 * 
-	 * @return Node string
-	 */
-	@JsonIgnore
-	public String getNodeInStr() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("=== Sequential Execution Node ===\n");
-		sb.append("Step Count: ").append(getStepCount()).append("\n");
+    /**
+     * Get string representation of the node
+     * 
+     * @return Node string
+     */
+    @JsonIgnore
+    public String getNodeInStr() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== Sequential Execution Node ===\n");
+        sb.append("Step Count: ").append(getStepCount()).append("\n");
 
-		if (steps != null) {
-			for (int i = 0; i < steps.size(); i++) {
-				ExecutionStep step = steps.get(i);
-				sb.append("  ").append(i + 1).append(". ").append(step.getStepRequirement()).append("\n");
-			}
-		}
+        if (steps != null) {
+            for (int i = 0; i < steps.size(); i++) {
+                ExecutionStep step = steps.get(i);
+                sb.append("  ").append(i + 1).append(". ").append(step.getStepRequirement()).append("\n");
+            }
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
-	@Override
-	public String toString() {
-		return getNodeInStr();
-	}
+    @Override
+    public String toString() {
+        return getNodeInStr();
+    }
 
 }

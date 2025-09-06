@@ -21,42 +21,42 @@ import com.hbasesoft.framework.ai.agent.config.model.vo.ConfigVo;
  */
 public interface IConfigService {
 
-	default void init() {
-	}
+    default void init() {
+    }
 
-	/**
-	 * Get configuration value by path
-	 * 
-	 * @param configPath the configuration path
-	 * @return the configuration value, or null if not found
-	 */
-	String getConfigValue(String configPath);
+    /**
+     * Get configuration value by path
+     * 
+     * @param configPath the configuration path
+     * @return the configuration value, or null if not found
+     */
+    String getConfigValue(String configPath);
 
-	/**
-	 * Reset configuration to default value
-	 * 
-	 * @param configPath the configuration path
-	 */
-	void resetConfig(String configPath);
+    /**
+     * Reset configuration to default value
+     * 
+     * @param configPath the configuration path
+     */
+    void resetConfig(String configPath);
 
-	/**
-	 * Get configurations by group
-	 * 
-	 * @param groupName the group name
-	 * @return list of configurations in the group
-	 */
-	List<ConfigVo> getConfigsByGroup(String groupName);
+    /**
+     * Get configurations by group
+     * 
+     * @param groupName the group name
+     * @return list of configurations in the group
+     */
+    List<ConfigVo> getConfigsByGroup(String groupName);
 
-	/**
-	 * Batch update configurations
-	 * 
-	 * @param configs list of configurations to update
-	 */
-	void batchUpdateConfigs(List<ConfigVo> configs);
+    /**
+     * Batch update configurations
+     * 
+     * @param configs list of configurations to update
+     */
+    void batchUpdateConfigs(List<ConfigVo> configs);
 
-	/**
-	 * Reset all configurations to their default values
-	 */
-	void resetAllConfigsToDefaults();
+    /**
+     * Reset all configurations to their default values
+     */
+    void resetAllConfigsToDefaults();
 
 }

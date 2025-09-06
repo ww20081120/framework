@@ -76,14 +76,10 @@ public class AudioController {
                 IOUtil.writeFile(data, tempFile);
 
                 // 创建音频转录任务
-                AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(
-                    new FileSystemResource(tempFile),
-                    DashScopeAudioTranscriptionOptions.builder()
-                        .withSampleRate(SAMPLE_RATE)
+                AudioTranscriptionPrompt prompt = new AudioTranscriptionPrompt(new FileSystemResource(tempFile),
+                    DashScopeAudioTranscriptionOptions.builder().withSampleRate(SAMPLE_RATE)
                         .withFormat(DashScopeAudioTranscriptionOptions.AudioFormat.PCM)
-                        .withDisfluencyRemovalEnabled(false)
-                        .build()
-                );
+                        .withDisfluencyRemovalEnabled(false).build());
 
                 // 提交任务
                 AudioTranscriptionResponse submitResponse = transcriptionModel.asyncCall(prompt);
@@ -97,11 +93,11 @@ public class AudioController {
                 }, 0, 1, java.util.concurrent.TimeUnit.SECONDS);
 
                 latch.await();
-            } 
+            }
             catch (Exception e) {
                 Thread.currentThread().interrupt();
                 LoggerUtil.error(e);
-            } 
+            }
             finally {
                 scheduler.shutdown();
             }
@@ -113,8 +109,8 @@ public class AudioController {
      * 检查任务状态
      *
      * @param taskId 任务ID
-     * @param sink   数据流
-     * @param latch  闭锁
+     * @param sink 数据流
+     * @param latch 闭锁
      */
     private void checkTaskStatus(final String taskId, final Sinks.Many<String> sink, final CountDownLatch latch) {
         try {
@@ -127,15 +123,15 @@ public class AudioController {
                 sink.tryEmitNext(fetchResponse.getResult().getOutput());
                 sink.tryEmitComplete(); // 完成流
                 latch.countDown();
-            } 
+            }
             else if (taskStatus.equals(DashScopeAudioTranscriptionApi.TaskStatus.RUNNING)) {
                 System.out.println(fetchResponse.getResult().getOutput());
-            } 
+            }
             else if (taskStatus.equals(DashScopeAudioTranscriptionApi.TaskStatus.FAILED)) {
                 LoggerUtil.warn("Transcription failed.");
                 latch.countDown();
             }
-        } 
+        }
         catch (Exception e) {
             latch.countDown();
             throw new ServiceException(e);

@@ -73,201 +73,202 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Service
 public class PlanningFactory implements IPlanningFactory {
 
-	// private final ChromeDriverService chromeDriverService;
+    // private final ChromeDriverService chromeDriverService;
 
-	private final PlanExecutionRecorder recorder;
+    private final PlanExecutionRecorder recorder;
 
-	private final IManusProperties manusProperties;
+    private final IManusProperties manusProperties;
 
-	private final SmartContentSavingService innerStorageService;
+    private final SmartContentSavingService innerStorageService;
 
-	private final UnifiedDirectoryManager unifiedDirectoryManager;
+    private final UnifiedDirectoryManager unifiedDirectoryManager;
 
-	private final IMcpService mcpService;
+    private final IMcpService mcpService;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-	@Autowired
-	@Lazy
-	private ILlmService llmService;
+    @Autowired
+    @Lazy
+    private ILlmService llmService;
 
-	@Autowired
-	@Lazy
-	private ToolCallingManager toolCallingManager;
+    @Autowired
+    @Lazy
+    private ToolCallingManager toolCallingManager;
 
-	private IDynamicAgentLoader dynamicAgentLoader;
+    private IDynamicAgentLoader dynamicAgentLoader;
 
-	// @Autowired
-	// private MapReduceSharedStateManager sharedStateManager;
+    // @Autowired
+    // private MapReduceSharedStateManager sharedStateManager;
 
-	@Autowired
-	@Lazy
-	private SummaryWorkflow summaryWorkflow;
+    @Autowired
+    @Lazy
+    private SummaryWorkflow summaryWorkflow;
 
-	@Autowired
-	@Lazy
-	private PlanExecutorFactory planExecutorFactory;
+    @Autowired
+    @Lazy
+    private PlanExecutorFactory planExecutorFactory;
 
-	@Autowired
-	private PromptService promptService;
+    @Autowired
+    private PromptService promptService;
 
-	@Autowired
-	private StreamingResponseHandler streamingResponseHandler;
-	
-	@Autowired
-	private AnnotatedToolRegistry annotatedToolRegistry;
+    @Autowired
+    private StreamingResponseHandler streamingResponseHandler;
 
-	// @Autowired
-	// @Lazy
-	// private CronService cronService;
+    @Autowired
+    private AnnotatedToolRegistry annotatedToolRegistry;
 
-	// @Autowired
-	// private PptGeneratorOperator pptGeneratorOperator;
+    // @Autowired
+    // @Lazy
+    // private CronService cronService;
 
-	@Value("${agent.init: true}")
-	private Boolean agentInit = true;
+    // @Autowired
+    // private PptGeneratorOperator pptGeneratorOperator;
 
-	public PlanningFactory(PlanExecutionRecorder recorder, IManusProperties manusProperties, IMcpService mcpService,
-			SmartContentSavingService innerStorageService, UnifiedDirectoryManager unifiedDirectoryManager) {
-		// this.chromeDriverService = chromeDriverService;
-		this.recorder = recorder;
-		this.manusProperties = manusProperties;
-		this.mcpService = mcpService;
-		this.innerStorageService = innerStorageService;
-		this.unifiedDirectoryManager = unifiedDirectoryManager;
-		// this.dataSourceService = dataSourceService;
-	}
+    @Value("${agent.init: true}")
+    private Boolean agentInit = true;
 
-	@Override
-	public PlanningCoordinator createPlanningCoordinator(ExecutionContext context) {
-		// Add all dynamic agents from the database
-		List<DynamicAgent> agentEntities = getDynamicAgentLoader().getAgents(context);
+    public PlanningFactory(PlanExecutionRecorder recorder, IManusProperties manusProperties, IMcpService mcpService,
+        SmartContentSavingService innerStorageService, UnifiedDirectoryManager unifiedDirectoryManager) {
+        // this.chromeDriverService = chromeDriverService;
+        this.recorder = recorder;
+        this.manusProperties = manusProperties;
+        this.mcpService = mcpService;
+        this.innerStorageService = innerStorageService;
+        this.unifiedDirectoryManager = unifiedDirectoryManager;
+        // this.dataSourceService = dataSourceService;
+    }
 
-		PlanningToolInterface planningTool = new PlanningTool();
+    @Override
+    public PlanningCoordinator createPlanningCoordinator(ExecutionContext context) {
+        // Add all dynamic agents from the database
+        List<DynamicAgent> agentEntities = getDynamicAgentLoader().getAgents(context);
 
-		PlanCreator planCreator = new PlanCreator(agentEntities, llmService, planningTool, recorder, promptService,
-				manusProperties, streamingResponseHandler);
+        PlanningToolInterface planningTool = new PlanningTool();
 
-		PlanFinalizer planFinalizer = new PlanFinalizer(llmService, recorder, promptService, manusProperties,
-				streamingResponseHandler);
+        PlanCreator planCreator = new PlanCreator(agentEntities, llmService, planningTool, recorder, promptService,
+            manusProperties, streamingResponseHandler);
 
-		PlanningCoordinator planningCoordinator = new PlanningCoordinator(planCreator, planExecutorFactory,
-				planFinalizer);
+        PlanFinalizer planFinalizer = new PlanFinalizer(llmService, recorder, promptService, manusProperties,
+            streamingResponseHandler);
 
-		return planningCoordinator;
-	}
+        PlanningCoordinator planningCoordinator = new PlanningCoordinator(planCreator, planExecutorFactory,
+            planFinalizer);
 
-	// Use the enhanced PlanningCoordinator with dynamic executor selection
-	public PlanningCoordinator createPlanningCoordinator(String planId) {
+        return planningCoordinator;
+    }
 
-		// Add all dynamic agents from the database
-		List<DynamicAgent> agentEntities = getDynamicAgentLoader().getAllAgents();
+    // Use the enhanced PlanningCoordinator with dynamic executor selection
+    public PlanningCoordinator createPlanningCoordinator(String planId) {
 
-		PlanningToolInterface planningTool = new PlanningTool();
+        // Add all dynamic agents from the database
+        List<DynamicAgent> agentEntities = getDynamicAgentLoader().getAllAgents();
 
-		PlanCreator planCreator = new PlanCreator(agentEntities, llmService, planningTool, recorder, promptService,
-				manusProperties, streamingResponseHandler);
+        PlanningToolInterface planningTool = new PlanningTool();
 
-		PlanFinalizer planFinalizer = new PlanFinalizer(llmService, recorder, promptService, manusProperties,
-				streamingResponseHandler);
+        PlanCreator planCreator = new PlanCreator(agentEntities, llmService, planningTool, recorder, promptService,
+            manusProperties, streamingResponseHandler);
 
-		PlanningCoordinator planningCoordinator = new PlanningCoordinator(planCreator, planExecutorFactory,
-				planFinalizer);
+        PlanFinalizer planFinalizer = new PlanFinalizer(llmService, recorder, promptService, manusProperties,
+            streamingResponseHandler);
 
-		return planningCoordinator;
-	}
+        PlanningCoordinator planningCoordinator = new PlanningCoordinator(planCreator, planExecutorFactory,
+            planFinalizer);
 
-	@Override
-	public Map<String, ToolCallBackContext> toolCallbackMap(String planId, String rootPlanId,
-			String expectedReturnInfo) {
-		Map<String, ToolCallBackContext> toolCallbackMap = new HashMap<>();
-		List<ToolCallBiFunctionDef<?>> toolDefinitions = new ArrayList<>();
-//		
-		if (innerStorageService == null) {
-			LoggerUtil.error("SmartContentSavingService is null, skipping BrowserUseTool registration");
-			return toolCallbackMap;
-		}
-		if (agentInit) {
-			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
-			Map<String, ToolCallBiFunctionDef> toolsMap = ContextHolder.getContext()
-					.getBeansOfType(ToolCallBiFunctionDef.class);
-			toolsMap.values().forEach(tool -> {
-				tool.setCurrentPlanId(planId);
-				toolDefinitions.add(tool);
-			});
-			
-			// Add annotated tools
-			annotatedToolRegistry.getRegisteredTools().values().forEach(tool -> {
-				tool.setCurrentPlanId(planId);
-				toolDefinitions.add(tool);
-			});
+        return planningCoordinator;
+    }
 
-		} else {
-			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
-		}
+    @Override
+    public Map<String, ToolCallBackContext> toolCallbackMap(String planId, String rootPlanId,
+        String expectedReturnInfo) {
+        Map<String, ToolCallBackContext> toolCallbackMap = new HashMap<>();
+        List<ToolCallBiFunctionDef<?>> toolDefinitions = new ArrayList<>();
+        //
+        if (innerStorageService == null) {
+            LoggerUtil.error("SmartContentSavingService is null, skipping BrowserUseTool registration");
+            return toolCallbackMap;
+        }
+        if (agentInit) {
+            toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
+            Map<String, ToolCallBiFunctionDef> toolsMap = ContextHolder.getContext()
+                .getBeansOfType(ToolCallBiFunctionDef.class);
+            toolsMap.values().forEach(tool -> {
+                tool.setCurrentPlanId(planId);
+                toolDefinitions.add(tool);
+            });
 
-		List<McpServiceVo> functionCallbacks = mcpService.getFunctionCallbacks(planId);
-		for (McpServiceVo toolCallback : functionCallbacks) {
-			String serviceGroup = toolCallback.getServiceGroup();
-			ToolCallback[] tCallbacks = toolCallback.getAsyncMcpToolCallbackProvider().getToolCallbacks();
-			for (ToolCallback tCallback : tCallbacks) {
-				// The serviceGroup is the name of the tool
-				toolDefinitions.add(new McpTool(tCallback, serviceGroup, planId, new McpStateHolderService(),
-						innerStorageService, objectMapper));
-			}
-		}
+            // Add annotated tools
+            annotatedToolRegistry.getRegisteredTools().values().forEach(tool -> {
+                tool.setCurrentPlanId(planId);
+                toolDefinitions.add(tool);
+            });
 
-		// Create FunctionToolCallback for each tool
-		for (ToolCallBiFunctionDef<?> toolDefinition : toolDefinitions) {
-			FunctionToolCallback<?, ToolExecuteResult> functionToolcallback = FunctionToolCallback
-					.builder(toolDefinition.getName(), toolDefinition).description(toolDefinition.getDescription())
-					.inputSchema(toolDefinition.getParameters()).inputType(toolDefinition.getInputType())
-					.toolMetadata(ToolMetadata.builder().returnDirect(toolDefinition.isReturnDirect()).build()).build();
-			toolDefinition.setCurrentPlanId(planId);
-			toolDefinition.setRootPlanId(rootPlanId);
-			LoggerUtil.info("Registering tool: {0}", toolDefinition.getName());
-			ToolCallBackContext functionToolcallbackContext = new ToolCallBackContext(functionToolcallback,
-					toolDefinition);
-			toolCallbackMap.put(toolDefinition.getName(), functionToolcallbackContext);
-		}
-		return toolCallbackMap;
-	}
+        }
+        else {
+            toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));
+        }
 
-	@Override
-	@Bean
-	@Primary
-	public RestClient.Builder createRestClient() {
-		// Create RequestConfig and set the timeout (10 minutes for all timeouts)
-		// Set the connection timeout
-		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(Timeout.of(10, TimeUnit.MINUTES))
-				.setResponseTimeout(Timeout.of(10, TimeUnit.MINUTES))
-				.setConnectionRequestTimeout(Timeout.of(10, TimeUnit.MINUTES)).build();
+        List<McpServiceVo> functionCallbacks = mcpService.getFunctionCallbacks(planId);
+        for (McpServiceVo toolCallback : functionCallbacks) {
+            String serviceGroup = toolCallback.getServiceGroup();
+            ToolCallback[] tCallbacks = toolCallback.getAsyncMcpToolCallbackProvider().getToolCallbacks();
+            for (ToolCallback tCallback : tCallbacks) {
+                // The serviceGroup is the name of the tool
+                toolDefinitions.add(new McpTool(tCallback, serviceGroup, planId, new McpStateHolderService(),
+                    innerStorageService, objectMapper));
+            }
+        }
 
-		// Create CloseableHttpClient and apply the configuration
-		HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
+        // Create FunctionToolCallback for each tool
+        for (ToolCallBiFunctionDef<?> toolDefinition : toolDefinitions) {
+            FunctionToolCallback<?, ToolExecuteResult> functionToolcallback = FunctionToolCallback
+                .builder(toolDefinition.getName(), toolDefinition).description(toolDefinition.getDescription())
+                .inputSchema(toolDefinition.getParameters()).inputType(toolDefinition.getInputType())
+                .toolMetadata(ToolMetadata.builder().returnDirect(toolDefinition.isReturnDirect()).build()).build();
+            toolDefinition.setCurrentPlanId(planId);
+            toolDefinition.setRootPlanId(rootPlanId);
+            ToolCallBackContext functionToolcallbackContext = new ToolCallBackContext(functionToolcallback,
+                toolDefinition);
+            toolCallbackMap.put(toolDefinition.getName(), functionToolcallbackContext);
+        }
+        LoggerUtil.info("Registering tool: {0}", toolDefinitions.stream().map(ToolCallBiFunctionDef::getName).toList());
+        return toolCallbackMap;
+    }
 
-		// Use HttpComponentsClientHttpRequestFactory to wrap HttpClient
-		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+    @Override
+    @Bean
+    @Primary
+    public RestClient.Builder createRestClient() {
+        // Create RequestConfig and set the timeout (10 minutes for all timeouts)
+        // Set the connection timeout
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(Timeout.of(10, TimeUnit.MINUTES))
+            .setResponseTimeout(Timeout.of(10, TimeUnit.MINUTES))
+            .setConnectionRequestTimeout(Timeout.of(10, TimeUnit.MINUTES)).build();
 
-		// Create RestClient and set the request factory
-		return RestClient.builder().requestFactory(requestFactory);
-	}
+        // Create CloseableHttpClient and apply the configuration
+        HttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
 
-	/**
-	 * Provides an empty ToolCallbackProvider implementation when MCP is disabled
-	 */
-	@Bean
-	@ConditionalOnMissingBean
-	@ConditionalOnProperty(name = "spring.ai.mcp.client.enabled", havingValue = "false")
-	public ToolCallbackProvider emptyToolCallbackProvider() {
-		return () -> new HashMap<String, PlanningFactory.ToolCallBackContext>();
-	}
+        // Use HttpComponentsClientHttpRequestFactory to wrap HttpClient
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
-	private IDynamicAgentLoader getDynamicAgentLoader() {
-		if (dynamicAgentLoader == null) {
-			dynamicAgentLoader = ContextHolder.getContext().getBean(IDynamicAgentLoader.class);
-		}
-		return dynamicAgentLoader;
-	}
+        // Create RestClient and set the request factory
+        return RestClient.builder().requestFactory(requestFactory);
+    }
+
+    /**
+     * Provides an empty ToolCallbackProvider implementation when MCP is disabled
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(name = "spring.ai.mcp.client.enabled", havingValue = "false")
+    public ToolCallbackProvider emptyToolCallbackProvider() {
+        return () -> new HashMap<String, PlanningFactory.ToolCallBackContext>();
+    }
+
+    private IDynamicAgentLoader getDynamicAgentLoader() {
+        if (dynamicAgentLoader == null) {
+            dynamicAgentLoader = ContextHolder.getContext().getBean(IDynamicAgentLoader.class);
+        }
+        return dynamicAgentLoader;
+    }
 }

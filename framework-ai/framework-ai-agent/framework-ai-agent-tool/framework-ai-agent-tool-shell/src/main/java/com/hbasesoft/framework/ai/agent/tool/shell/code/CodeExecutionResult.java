@@ -17,34 +17,34 @@ package com.hbasesoft.framework.ai.agent.tool.shell.code;
 
 public class CodeExecutionResult {
 
-	Integer exitcode;
+    Integer exitcode;
 
-	String logs;
+    String logs;
 
-	String image;
+    String image;
 
-	Integer getExitcode() {
-		return exitcode;
-	}
+    Integer getExitcode() {
+        return exitcode;
+    }
 
-	void setExitcode(Integer exitcode) {
-		this.exitcode = exitcode;
-	}
+    void setExitcode(Integer exitcode) {
+        this.exitcode = exitcode;
+    }
 
-	public String getLogs() {
-		return logs;
-	}
+    public String getLogs() {
+        return logs;
+    }
 
-	public void setLogs(String logs) {
-		this.logs = logs;
-	}
+    public void setLogs(String logs) {
+        this.logs = logs;
+    }
 
-	public String getImage() {
-		return image;
-	}
+    public String getImage() {
+        return image;
+    }
 
-	public void setImage(String image) {
-		this.image = image;
-	}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
 }

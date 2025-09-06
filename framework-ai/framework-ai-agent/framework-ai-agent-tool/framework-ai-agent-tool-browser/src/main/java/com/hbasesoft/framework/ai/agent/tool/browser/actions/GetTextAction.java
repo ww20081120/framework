@@ -21,37 +21,38 @@ import com.microsoft.playwright.Page;
 
 public class GetTextAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(GetTextAction.class);
+    private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(GetTextAction.class);
 
-	public GetTextAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public GetTextAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Page page = getCurrentPage(); // Get Playwright Page instance
-		StringBuilder allText = new StringBuilder();
-		for (com.microsoft.playwright.Frame frame : page.frames()) {
-			try {
-				String text = frame.innerText("body");
-				if (text != null && !text.isEmpty()) {
-					allText.append(text).append("\\n");
-				}
-			} catch (Exception e) {
-				// Ignore frames without body
-			}
-		}
-		String result = allText.toString().trim();
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Page page = getCurrentPage(); // Get Playwright Page instance
+        StringBuilder allText = new StringBuilder();
+        for (com.microsoft.playwright.Frame frame : page.frames()) {
+            try {
+                String text = frame.innerText("body");
+                if (text != null && !text.isEmpty()) {
+                    allText.append(text).append("\\n");
+                }
+            }
+            catch (Exception e) {
+                // Ignore frames without body
+            }
+        }
+        String result = allText.toString().trim();
 
-		// Log only first 10 lines for brevity
-		String[] lines = result.split("\n");
-		String logPreview = lines.length > 10
-				? String.join("\n", java.util.Arrays.copyOf(lines, 10)) + "\n... (total " + lines.length
-						+ " lines, showing first 10)"
-				: result;
-		log.info("get_text all frames body is {}", logPreview);
-		log.debug("get_text all frames body is {}", result);
-		return new ToolExecuteResult(result);
-	}
+        // Log only first 10 lines for brevity
+        String[] lines = result.split("\n");
+        String logPreview = lines.length > 10
+            ? String.join("\n", java.util.Arrays.copyOf(lines, 10)) + "\n... (total " + lines.length
+                + " lines, showing first 10)"
+            : result;
+        log.info("get_text all frames body is {}", logPreview);
+        log.debug("get_text all frames body is {}", result);
+        return new ToolExecuteResult(result);
+    }
 
 }

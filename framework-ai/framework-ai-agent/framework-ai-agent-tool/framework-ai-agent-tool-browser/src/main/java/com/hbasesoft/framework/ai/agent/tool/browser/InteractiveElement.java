@@ -24,113 +24,113 @@ import com.microsoft.playwright.Frame;
 import com.microsoft.playwright.Locator;
 
 /**
- * Class representing a single interactive element, holding the element's
- * Locator.
+ * Class representing a single interactive element, holding the element's Locator.
  */
 public class InteractiveElement {
 
-	private static final Logger log = LoggerFactory.getLogger(InteractiveElement.class);
+    private static final Logger log = LoggerFactory.getLogger(InteractiveElement.class);
 
-	// Global index
-	private int index;
+    // Global index
+    private int index;
 
-	// Element locator
-	private Locator locator;
+    // Element locator
+    private Locator locator;
 
-	// Element type information
-	private String tagName;
+    // Element type information
+    private String tagName;
 
-	// Element text information (if any)
-	private String text;
+    // Element text information (if any)
+    private String text;
 
-	// HTML structure information
-	private String outerHtml;
+    // HTML structure information
+    private String outerHtml;
 
-	/**
-	 * Construct an InteractiveElement instance
-	 * 
-	 * @param index      Global index
-	 * @param frame      Frame where the element is located
-	 * @param elementMap Other parameters of the element
-	 */
-	public InteractiveElement(int index, Frame frame, Map<String, Object> elementMap) {
-		this.index = index;
-		if (elementMap.containsKey("jManusId")) {
-			String jManusId = (String) elementMap.get("jManusId");
-			this.locator = frame.locator("[jmanus-id=\"" + jManusId + "\"]");
-		} else {
-			String xpath = (String) elementMap.get("xpath");
-			this.locator = frame.locator("//" + xpath);
-		}
-		this.tagName = (String) elementMap.get("tagName");
-		this.text = (String) elementMap.get("text");
-		this.outerHtml = (String) elementMap.get("outerHtml");
-	}
+    /**
+     * Construct an InteractiveElement instance
+     * 
+     * @param index Global index
+     * @param frame Frame where the element is located
+     * @param elementMap Other parameters of the element
+     */
+    public InteractiveElement(int index, Frame frame, Map<String, Object> elementMap) {
+        this.index = index;
+        if (elementMap.containsKey("jManusId")) {
+            String jManusId = (String) elementMap.get("jManusId");
+            this.locator = frame.locator("[jmanus-id=\"" + jManusId + "\"]");
+        }
+        else {
+            String xpath = (String) elementMap.get("xpath");
+            this.locator = frame.locator("//" + xpath);
+        }
+        this.tagName = (String) elementMap.get("tagName");
+        this.text = (String) elementMap.get("text");
+        this.outerHtml = (String) elementMap.get("outerHtml");
+    }
 
-	/**
-	 * Get the global index of the element
-	 * 
-	 * @return Element index
-	 */
-	public int getIndex() {
-		return index;
-	}
+    /**
+     * Get the global index of the element
+     * 
+     * @return Element index
+     */
+    public int getIndex() {
+        return index;
+    }
 
-	/**
-	 * Get the element's Locator
-	 * 
-	 * @return Element locator
-	 */
-	public Locator getLocator() {
-		return locator;
-	}
+    /**
+     * Get the element's Locator
+     * 
+     * @return Element locator
+     */
+    public Locator getLocator() {
+        return locator;
+    }
 
-	/**
-	 * Get the element's tag name
-	 * 
-	 * @return Element's HTML tag name
-	 */
-	public String getTagName() {
-		return tagName;
-	}
+    /**
+     * Get the element's tag name
+     * 
+     * @return Element's HTML tag name
+     */
+    public String getTagName() {
+        return tagName;
+    }
 
-	/**
-	 * Get the element's text content
-	 * 
-	 * @return Element text
-	 */
-	public String getText() {
-		return text;
-	}
+    /**
+     * Get the element's text content
+     * 
+     * @return Element text
+     */
+    public String getText() {
+        return text;
+    }
 
-	/**
-	 * Get the element's HTML structure
-	 * 
-	 * @return Element's outerHTML
-	 */
-	public String getOuterHtml() {
-		return outerHtml;
-	}
+    /**
+     * Get the element's HTML structure
+     * 
+     * @return Element's outerHTML
+     */
+    public String getOuterHtml() {
+        return outerHtml;
+    }
 
-	/**
-	 * Create a string representation of element information
-	 * 
-	 * @return Formatted element information
-	 */
-	@Override
-	public String toString() {
-		String content = text.isEmpty() ? outerHtml : text;
+    /**
+     * Create a string representation of element information
+     * 
+     * @return Formatted element information
+     */
+    @Override
+    public String toString() {
+        String content = text.isEmpty() ? outerHtml : text;
 
-		// If using outerHtml, remove jmanus-id attribute and style attribute
-		if (text.isEmpty() && content != null) {
-			content = content.replaceAll("\\s+jmanus-id=\"[^\"]*\"", "");
-			content = content.replaceAll("\\s+style=\"[^\"]*\"", "");
-		}
+        // If using outerHtml, remove jmanus-id attribute and style attribute
+        if (text.isEmpty() && content != null) {
+            content = content.replaceAll("\\s+jmanus-id=\"[^\"]*\"", "");
+            content = content.replaceAll("\\s+style=\"[^\"]*\"", "");
+        }
 
-		if (content.length() > 500) {
-			content = content.substring(0, 500) + " ... " + content.substring(content.length() - 100);
-		}
-		return String.format("[%d] %s: %s", index, tagName, content);
-	}
+        if (content.length() > 500) {
+            content = content.substring(0, 500) + " ... " + content.substring(content.length() - 100);
+        }
+        return String.format("[%d] %s: %s", index, tagName, content);
+    }
 
 }

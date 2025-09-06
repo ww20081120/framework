@@ -21,28 +21,28 @@ import com.hbasesoft.framework.common.StartupListener;
  */
 public class AgentInitStartupListener implements StartupListener {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param context <br>
-	 */
-	@Override
-	public void complete(ApplicationContext context) {
-		AgentServiceImpl impl = context.getBean(AgentServiceImpl.class);
-		impl.init(context);
-	}
-	
-	/**
-	 * Description: <br> 
-	 *  
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */ 
-	@Override
-	public LoadOrder getOrder() {
-		return LoadOrder.MIDDLE;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param context <br>
+     */
+    @Override
+    public void complete(ApplicationContext context) {
+        AgentServiceImpl impl = context.getBean(AgentServiceImpl.class);
+        impl.init(context);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public LoadOrder getOrder() {
+        return LoadOrder.MIDDLE;
+    }
 }

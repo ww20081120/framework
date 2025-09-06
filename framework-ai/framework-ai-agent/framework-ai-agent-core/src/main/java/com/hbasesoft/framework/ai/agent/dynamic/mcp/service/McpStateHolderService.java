@@ -25,18 +25,18 @@ import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpState;
 @Service
 public class McpStateHolderService implements IMcpStateHolderService {
 
-	private Map<String, McpState> mcpStateMap = new ConcurrentHashMap<>();
+    private Map<String, McpState> mcpStateMap = new ConcurrentHashMap<>();
 
-	public McpState getMcpState(String key) {
-		return mcpStateMap.get(key);
-	}
+    public McpState getMcpState(String key) {
+        return mcpStateMap.get(key);
+    }
 
-	public void setMcpState(String key, McpState state) {
-		mcpStateMap.put(key, state);
-	}
+    public void setMcpState(String key, McpState state) {
+        mcpStateMap.put(key, state);
+    }
 
-	public void removeMcpState(String key) {
-		mcpStateMap.remove(key);
-	}
+    public void removeMcpState(String key) {
+        mcpStateMap.remove(key);
+    }
 
 }

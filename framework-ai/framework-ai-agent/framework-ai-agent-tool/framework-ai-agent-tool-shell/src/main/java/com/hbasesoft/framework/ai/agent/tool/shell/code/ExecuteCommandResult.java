@@ -17,24 +17,24 @@ package com.hbasesoft.framework.ai.agent.tool.shell.code;
 
 public class ExecuteCommandResult {
 
-	private String output;
+    private String output;
 
-	private Integer exitCode;
+    private Integer exitCode;
 
-	String getOutput() {
-		return output;
-	}
+    String getOutput() {
+        return output;
+    }
 
-	void setOutput(String output) {
-		this.output = output;
-	}
+    void setOutput(String output) {
+        this.output = output;
+    }
 
-	Integer getExitCode() {
-		return exitCode;
-	}
+    Integer getExitCode() {
+        return exitCode;
+    }
 
-	void setExitCode(Integer exitCode) {
-		this.exitCode = exitCode;
-	}
+    void setExitCode(Integer exitCode) {
+        this.exitCode = exitCode;
+    }
 
 }

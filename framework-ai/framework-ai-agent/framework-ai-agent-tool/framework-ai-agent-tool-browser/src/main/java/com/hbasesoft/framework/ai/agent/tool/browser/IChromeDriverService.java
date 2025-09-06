@@ -24,69 +24,69 @@ import com.hbasesoft.framework.ai.agent.tool.innerStorage.SmartContentSavingServ
  */
 public interface IChromeDriverService {
 
-	/**
-	 * Get shared directory
-	 * 
-	 * @return Shared directory path
-	 */
-	String getSharedDir();
+    /**
+     * Get shared directory
+     * 
+     * @return Shared directory path
+     */
+    String getSharedDir();
 
-	/**
-	 * Save cookies from all drivers to global shared directory
-	 */
-	void saveCookiesToSharedDir();
+    /**
+     * Save cookies from all drivers to global shared directory
+     */
+    void saveCookiesToSharedDir();
 
-	/**
-	 * Load cookies from global shared directory to all drivers
-	 */
-	void loadCookiesFromSharedDir();
+    /**
+     * Load cookies from global shared directory to all drivers
+     */
+    void loadCookiesFromSharedDir();
 
-	/**
-	 * Get driver wrapper for specified plan ID
-	 * 
-	 * @param planId Plan ID
-	 * @return Driver wrapper
-	 */
-	DriverWrapper getDriver(String planId);
+    /**
+     * Get driver wrapper for specified plan ID
+     * 
+     * @param planId Plan ID
+     * @return Driver wrapper
+     */
+    DriverWrapper getDriver(String planId);
 
-	/**
-	 * Close driver for specified plan
-	 * 
-	 * @param planId Plan ID
-	 */
-	void closeDriverForPlan(String planId);
+    /**
+     * Close driver for specified plan
+     * 
+     * @param planId Plan ID
+     */
+    void closeDriverForPlan(String planId);
 
-	/**
-	 * Clean up all resources
-	 */
-	void cleanup();
+    /**
+     * Clean up all resources
+     */
+    void cleanup();
 
-	/**
-	 * Set Manus properties
-	 * 
-	 * @param manusProperties Manus properties
-	 */
-	void setManusProperties(IManusProperties manusProperties);
+    /**
+     * Set Manus properties
+     * 
+     * @param manusProperties Manus properties
+     */
+    void setManusProperties(IManusProperties manusProperties);
 
-	/**
-	 * Get Manus properties
-	 * 
-	 * @return Manus properties
-	 */
-	IManusProperties getManusProperties();
+    /**
+     * Get Manus properties
+     * 
+     * @return Manus properties
+     */
+    IManusProperties getManusProperties();
 
-	/**
-	 * Get internal storage service
-	 * 
-	 * @return Internal storage service
-	 */
-	SmartContentSavingService getInnerStorageService();
+    /**
+     * Get internal storage service
+     * 
+     * @return Internal storage service
+     */
+    SmartContentSavingService getInnerStorageService();
 
-	/**
-	 * Get unified directory manager
-	 * 
-	 * @return Unified directory manager
-	 */
-	UnifiedDirectoryManager getUnifiedDirectoryManager();
+    /**
+     * Get unified directory manager
+     * 
+     * @return Unified directory manager
+     */
+    UnifiedDirectoryManager getUnifiedDirectoryManager();
 
 }

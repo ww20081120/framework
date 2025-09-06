@@ -29,35 +29,37 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Component
 public class JmanusEventPublisher {
 
-	// Listeners cannot be dynamically registered, no need for thread safety
-	private Map<Class<? extends JmanusEvent>, List<JmanusListener<? super JmanusEvent>>> listeners = new HashMap<>();
+    // Listeners cannot be dynamically registered, no need for thread safety
+    private Map<Class<? extends JmanusEvent>, List<JmanusListener<? super JmanusEvent>>> listeners = new HashMap<>();
 
-	public void publish(JmanusEvent event) {
-		Class<? extends JmanusEvent> eventClass = event.getClass();
-		for (Map.Entry<Class<? extends JmanusEvent>, List<JmanusListener<? super JmanusEvent>>> entry : listeners
-				.entrySet()) {
-			// Parent classes can also be notified here
-			if (entry.getKey().isAssignableFrom(eventClass)) {
-				for (JmanusListener<? super JmanusEvent> listener : entry.getValue()) {
-					try {
-						listener.onEvent(event);
-					} catch (Exception e) {
-						LoggerUtil.error(e, "Error occurred while processing event: {0}", e.getMessage());
-					}
-				}
-			}
-		}
-	}
+    public void publish(JmanusEvent event) {
+        Class<? extends JmanusEvent> eventClass = event.getClass();
+        for (Map.Entry<Class<? extends JmanusEvent>, List<JmanusListener<? super JmanusEvent>>> entry : listeners
+            .entrySet()) {
+            // Parent classes can also be notified here
+            if (entry.getKey().isAssignableFrom(eventClass)) {
+                for (JmanusListener<? super JmanusEvent> listener : entry.getValue()) {
+                    try {
+                        listener.onEvent(event);
+                    }
+                    catch (Exception e) {
+                        LoggerUtil.error(e, "Error occurred while processing event: {0}", e.getMessage());
+                    }
+                }
+            }
+        }
+    }
 
-	void registerListener(Class<? extends JmanusEvent> eventClass, JmanusListener<? super JmanusEvent> listener) {
-		List<JmanusListener<? super JmanusEvent>> jmanusListeners = listeners.get(eventClass);
-		if (jmanusListeners == null) {
-			List<JmanusListener<? super JmanusEvent>> list = new ArrayList<>();
-			list.add(listener);
-			listeners.put(eventClass, list);
-		} else {
-			jmanusListeners.add(listener);
-		}
-	}
+    void registerListener(Class<? extends JmanusEvent> eventClass, JmanusListener<? super JmanusEvent> listener) {
+        List<JmanusListener<? super JmanusEvent>> jmanusListeners = listeners.get(eventClass);
+        if (jmanusListeners == null) {
+            List<JmanusListener<? super JmanusEvent>> list = new ArrayList<>();
+            list.add(listener);
+            listeners.put(eventClass, list);
+        }
+        else {
+            jmanusListeners.add(listener);
+        }
+    }
 
 }

@@ -23,36 +23,36 @@ import com.hbasesoft.framework.ai.agent.dynamic.mcp.model.vo.McpServiceVo;
  */
 public interface IMcpService {
 
-	/**
-	 * Get MCP service entity list
-	 * 
-	 * @param planId Plan ID
-	 * @return MCP service entity list
-	 */
-	List<McpServiceVo> getFunctionCallbacks(String planId);
+    /**
+     * Get MCP service entity list
+     * 
+     * @param planId Plan ID
+     * @return MCP service entity list
+     */
+    List<McpServiceVo> getFunctionCallbacks(String planId);
 
-	/**
-	 * Close MCP services for specified plan
-	 * 
-	 * @param planId Plan ID
-	 */
-	void close(String planId);
+    /**
+     * Close MCP services for specified plan
+     * 
+     * @param planId Plan ID
+     */
+    void close(String planId);
 
-	/**
-	 * Update MCP server status
-	 * 
-	 * @param id     MCP server ID
-	 * @param status Target status
-	 * @return true if updated successfully, false otherwise
-	 */
-	boolean updateMcpServerStatus(Long id, McpConfigStatus status);
+    /**
+     * Update MCP server status
+     * 
+     * @param id MCP server ID
+     * @param status Target status
+     * @return true if updated successfully, false otherwise
+     */
+    boolean updateMcpServerStatus(Long id, McpConfigStatus status);
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	List<McpConfigVO> queryServices();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    List<McpConfigVO> queryServices();
 }

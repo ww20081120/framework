@@ -1,6 +1,9 @@
 - SYSTEM INFORMATION:
 OS: {osName} {osVersion} ({osArch})
 
+- 当前执行次数：
+{exec_times}
+
 - Current Date:
 {currentDateTime}
 
@@ -17,5 +20,6 @@ STEP {currentStepIndex} :{stepText}
 3. 做且只做当前要做的步骤要求中的内容
 4. 如果当前要做的步骤要求已经做完，则调用terminate工具来完成当前步骤。
 5. 用户原始需求 是用来有个全局认识的，不要在当前步骤中去完成这个用户原始需求。
+6. 如果已经循环了很多次，每次给的信息都差不多，有可能进入死循环了，要及时调用terminate工具来终止死循环（特别重要）
 
 {parallelToolCallsResponse}

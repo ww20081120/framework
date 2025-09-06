@@ -17,6 +17,6 @@ package com.hbasesoft.framework.ai.agent.recorder.model;
  */
 public enum ExecutionStatus {
 
-	IDLE, RUNNING, FINISHED
+    IDLE, RUNNING, FINISHED
 
 }

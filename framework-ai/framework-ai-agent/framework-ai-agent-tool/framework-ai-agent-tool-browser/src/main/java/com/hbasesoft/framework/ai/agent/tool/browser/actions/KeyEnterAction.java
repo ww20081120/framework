@@ -21,27 +21,28 @@ import com.hbasesoft.framework.ai.agent.tool.browser.InteractiveElement;
 
 public class KeyEnterAction extends BrowserAction {
 
-	public KeyEnterAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public KeyEnterAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Integer index = request.getIndex();
-		if (index == null) {
-			return new ToolExecuteResult("Index is required for 'key_enter' action");
-		}
-		InteractiveElement enterElement = getInteractiveElement(index);
-		if (enterElement == null) {
-			return new ToolExecuteResult("Element with index " + index + " not found");
-		}
-		// Execute the enter operation
-		try {
-			enterElement.getLocator().press("Enter");
-		} catch (Exception e) {
-			return new ToolExecuteResult("Failed to press Enter on element at index " + index + ": " + e.getMessage());
-		}
-		return new ToolExecuteResult("Hit the enter key at index " + index);
-	}
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Integer index = request.getIndex();
+        if (index == null) {
+            return new ToolExecuteResult("Index is required for 'key_enter' action");
+        }
+        InteractiveElement enterElement = getInteractiveElement(index);
+        if (enterElement == null) {
+            return new ToolExecuteResult("Element with index " + index + " not found");
+        }
+        // Execute the enter operation
+        try {
+            enterElement.getLocator().press("Enter");
+        }
+        catch (Exception e) {
+            return new ToolExecuteResult("Failed to press Enter on element at index " + index + ": " + e.getMessage());
+        }
+        return new ToolExecuteResult("Hit the enter key at index " + index);
+    }
 
 }

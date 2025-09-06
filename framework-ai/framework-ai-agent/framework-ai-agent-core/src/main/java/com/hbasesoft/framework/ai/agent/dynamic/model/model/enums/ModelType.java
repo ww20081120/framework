@@ -17,67 +17,63 @@ package com.hbasesoft.framework.ai.agent.dynamic.model.model.enums;
  */
 public enum ModelType {
 
-	/**
-	 * General model: Has multiple capabilities and can handle various tasks (e.g.,
-	 * text generation, reasoning, code)
-	 */
-	GENERAL,
+    /**
+     * General model: Has multiple capabilities and can handle various tasks (e.g., text generation, reasoning, code)
+     */
+    GENERAL,
 
-	/**
-	 * Reasoning model: Used for logical reasoning and decision-making scenarios
-	 */
-	REASONING,
+    /**
+     * Reasoning model: Used for logical reasoning and decision-making scenarios
+     */
+    REASONING,
 
-	/**
-	 * Planner model: Used for task decomposition and plan formulation
-	 */
-	PLANNER,
+    /**
+     * Planner model: Used for task decomposition and plan formulation
+     */
+    PLANNER,
 
-	/**
-	 * Vision model: Used for visual tasks such as image recognition, OCR, and
-	 * object detection
-	 */
-	VISION,
+    /**
+     * Vision model: Used for visual tasks such as image recognition, OCR, and object detection
+     */
+    VISION,
 
-	/**
-	 * Code model: Used for code generation, understanding, and repair
-	 */
-	CODE,
+    /**
+     * Code model: Used for code generation, understanding, and repair
+     */
+    CODE,
 
-	/**
-	 * Text generation model: Used for natural language text generation (e.g.,
-	 * dialogue, article generation)
-	 */
-	TEXT_GENERATION,
+    /**
+     * Text generation model: Used for natural language text generation (e.g., dialogue, article generation)
+     */
+    TEXT_GENERATION,
 
-	/**
-	 * Embedding model: Used for text vectorization and semantic encoding
-	 */
-	EMBEDDING,
+    /**
+     * Embedding model: Used for text vectorization and semantic encoding
+     */
+    EMBEDDING,
 
-	/**
-	 * Classification model: Used for text classification and sentiment analysis
-	 */
-	CLASSIFICATION,
+    /**
+     * Classification model: Used for text classification and sentiment analysis
+     */
+    CLASSIFICATION,
 
-	/**
-	 * Summarization model: Used for generating summaries of long texts
-	 */
-	SUMMARIZATION,
+    /**
+     * Summarization model: Used for generating summaries of long texts
+     */
+    SUMMARIZATION,
 
-	/**
-	 * Multimodal model: Processes multiple modalities such as text and images
-	 * together
-	 */
-	MULTIMODAL,
+    /**
+     * Multimodal model: Processes multiple modalities such as text and images together
+     */
+    MULTIMODAL,
 
-	/**
-	 * Speech model: Used for speech recognition and synthesis
-	 */
-	SPEECH,
+    /**
+     * Speech model: Used for speech recognition and synthesis
+     */
+    SPEECH,
 
-	/**
-	 * Translation model: Used for cross-language translation
-	 */
-	TRANSLATION;
+    /**
+     * Translation model: Used for cross-language translation
+     */
+    TRANSLATION;
 }

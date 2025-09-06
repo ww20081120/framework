@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 public class SmartProcessResult {
 
-	private final String fileName;
+    private final String fileName;
 
-	private final String summary;
+    private final String summary;
 }

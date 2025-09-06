@@ -25,13 +25,13 @@ import com.hbasesoft.framework.db.core.annotation.Sql;
 @Dao
 public interface MessageDao extends BaseDao<MessagePo4Jpa> {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @return <br>
-	 */
-	@Sql(value = "SELECT DISTINCT conversation_id FROM ai_chat_memory", bean = String.class)
-	List<String> findConversationIds();
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Sql(value = "SELECT DISTINCT conversation_id FROM ai_chat_memory", bean = String.class)
+    List<String> findConversationIds();
 }

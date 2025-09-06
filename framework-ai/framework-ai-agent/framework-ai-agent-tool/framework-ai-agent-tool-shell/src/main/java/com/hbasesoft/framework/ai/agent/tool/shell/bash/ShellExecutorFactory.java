@@ -16,44 +16,45 @@
 package com.hbasesoft.framework.ai.agent.tool.shell.bash;
 
 /**
- * Shell executor factory class responsible for creating shell executors for
- * corresponding operating systems
+ * Shell executor factory class responsible for creating shell executors for corresponding operating systems
  */
 public class ShellExecutorFactory {
 
-	/**
-	 * Create shell executor for current operating system
-	 * 
-	 * @return ShellCommandExecutor implementation
-	 */
-	public static ShellCommandExecutor createExecutor() {
-		String os = System.getProperty("os.name").toLowerCase();
-		if (os.contains("win")) {
-			return new WindowsShellExecutor();
-		} else if (os.contains("mac")) {
-			return new MacShellExecutor();
-		} else {
-			return new LinuxShellExecutor();
-		}
-	}
+    /**
+     * Create shell executor for current operating system
+     * 
+     * @return ShellCommandExecutor implementation
+     */
+    public static ShellCommandExecutor createExecutor() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return new WindowsShellExecutor();
+        }
+        else if (os.contains("mac")) {
+            return new MacShellExecutor();
+        }
+        else {
+            return new LinuxShellExecutor();
+        }
+    }
 
-	/**
-	 * Create shell executor for specified operating system type
-	 * 
-	 * @param osType Operating system type: windows/mac/linux
-	 * @return ShellCommandExecutor implementation
-	 */
-	public static ShellCommandExecutor createExecutor(String osType) {
-		switch (osType.toLowerCase()) {
-		case "windows":
-			return new WindowsShellExecutor();
-		case "mac":
-			return new MacShellExecutor();
-		case "linux":
-			return new LinuxShellExecutor();
-		default:
-			throw new IllegalArgumentException("Unsupported OS type: " + osType);
-		}
-	}
+    /**
+     * Create shell executor for specified operating system type
+     * 
+     * @param osType Operating system type: windows/mac/linux
+     * @return ShellCommandExecutor implementation
+     */
+    public static ShellCommandExecutor createExecutor(String osType) {
+        switch (osType.toLowerCase()) {
+            case "windows":
+                return new WindowsShellExecutor();
+            case "mac":
+                return new MacShellExecutor();
+            case "linux":
+                return new LinuxShellExecutor();
+            default:
+                throw new IllegalArgumentException("Unsupported OS type: " + osType);
+        }
+    }
 
 }

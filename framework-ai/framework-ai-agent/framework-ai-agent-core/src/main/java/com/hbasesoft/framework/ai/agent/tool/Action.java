@@ -21,7 +21,9 @@ import java.lang.annotation.Target;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.agent.tool <br>
  */
-@Target({ ElementType.METHOD })
+@Target({
+    ElementType.METHOD
+})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Action {

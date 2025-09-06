@@ -21,25 +21,26 @@ import com.microsoft.playwright.Page;
 
 public class ExecuteJsAction extends BrowserAction {
 
-	public ExecuteJsAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public ExecuteJsAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		String script = request.getScript();
-		if (script == null) {
-			return new ToolExecuteResult("Script is required for 'execute_js' action");
-		}
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        String script = request.getScript();
+        if (script == null) {
+            return new ToolExecuteResult("Script is required for 'execute_js' action");
+        }
 
-		Page page = getCurrentPage(); // Get the Playwright Page instance
-		Object result = page.evaluate(script);
+        Page page = getCurrentPage(); // Get the Playwright Page instance
+        Object result = page.evaluate(script);
 
-		if (result == null) {
-			return new ToolExecuteResult("Successfully executed JavaScript code.");
-		} else {
-			return new ToolExecuteResult(result.toString());
-		}
-	}
+        if (result == null) {
+            return new ToolExecuteResult("Successfully executed JavaScript code.");
+        }
+        else {
+            return new ToolExecuteResult(result.toString());
+        }
+    }
 
 }

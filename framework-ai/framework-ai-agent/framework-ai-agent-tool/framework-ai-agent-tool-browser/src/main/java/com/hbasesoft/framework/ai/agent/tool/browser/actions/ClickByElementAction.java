@@ -22,42 +22,43 @@ import com.microsoft.playwright.Page;
 
 public class ClickByElementAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ClickByElementAction.class);
+    private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ClickByElementAction.class);
 
-	public ClickByElementAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public ClickByElementAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Integer index = request.getIndex();
-		if (index == null) {
-			return new ToolExecuteResult("Index is required for 'click' action");
-		}
-		InteractiveElement element = getInteractiveElement(index);
-		if (element == null) {
-			return new ToolExecuteResult("Element with index " + index + " not found");
-		}
-		log.info("Clicking element: {}", element.getText());
-		Page page = getCurrentPage();
-		String clickResultMessage = clickAndSwitchToNewTabIfOpened(page, () -> {
-			try {
-				log.info("Executing click action on: {}", element.getText());
-				element.getLocator().click();
-				log.info("Click action completed for element: {}", element.getText());
-			} catch (Exception e) {
-				log.error("Error during click on element {}: {}", element.getText(), e.getMessage());
-				// It's important to rethrow or handle appropriately.
-				// The clickAndSwitchToNewTabIfOpened method expects a Runnable that might
-				// throw.
-				// If it's a checked exception not declared by Runnable.run(), wrap it.
-				if (e instanceof RuntimeException) {
-					throw (RuntimeException) e;
-				}
-				throw new RuntimeException("Error clicking element: " + element.getText(), e);
-			}
-		});
-		return new ToolExecuteResult("Successfully clicked element at index " + index + " " + clickResultMessage);
-	}
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Integer index = request.getIndex();
+        if (index == null) {
+            return new ToolExecuteResult("Index is required for 'click' action");
+        }
+        InteractiveElement element = getInteractiveElement(index);
+        if (element == null) {
+            return new ToolExecuteResult("Element with index " + index + " not found");
+        }
+        log.info("Clicking element: {}", element.getText());
+        Page page = getCurrentPage();
+        String clickResultMessage = clickAndSwitchToNewTabIfOpened(page, () -> {
+            try {
+                log.info("Executing click action on: {}", element.getText());
+                element.getLocator().click();
+                log.info("Click action completed for element: {}", element.getText());
+            }
+            catch (Exception e) {
+                log.error("Error during click on element {}: {}", element.getText(), e.getMessage());
+                // It's important to rethrow or handle appropriately.
+                // The clickAndSwitchToNewTabIfOpened method expects a Runnable that might
+                // throw.
+                // If it's a checked exception not declared by Runnable.run(), wrap it.
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
+                throw new RuntimeException("Error clicking element: " + element.getText(), e);
+            }
+        });
+        return new ToolExecuteResult("Successfully clicked element at index " + index + " " + clickResultMessage);
+    }
 
 }

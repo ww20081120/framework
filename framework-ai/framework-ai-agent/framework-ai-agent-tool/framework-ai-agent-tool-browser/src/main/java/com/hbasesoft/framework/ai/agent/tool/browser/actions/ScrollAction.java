@@ -21,26 +21,26 @@ import com.microsoft.playwright.Page;
 
 public class ScrollAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ScrollAction.class);
+    private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ScrollAction.class);
 
-	public ScrollAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public ScrollAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Integer scrollAmount = request.getScrollAmount();
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Integer scrollAmount = request.getScrollAmount();
 
-		if (scrollAmount == null) {
-			return new ToolExecuteResult("Scroll amount is required for 'scroll' action");
-		}
+        if (scrollAmount == null) {
+            return new ToolExecuteResult("Scroll amount is required for 'scroll' action");
+        }
 
-		Page page = getCurrentPage(); // Get Playwright Page instance
-		page.evaluate("window.scrollBy(0, arguments[0])", scrollAmount); // Use Playwright
-		// Execute scroll
+        Page page = getCurrentPage(); // Get Playwright Page instance
+        page.evaluate("window.scrollBy(0, arguments[0])", scrollAmount); // Use Playwright
+        // Execute scroll
 
-		String direction = scrollAmount > 0 ? "down" : "up";
-		return new ToolExecuteResult("Scrolled " + direction + " by " + Math.abs(scrollAmount) + " pixels");
-	}
+        String direction = scrollAmount > 0 ? "down" : "up";
+        return new ToolExecuteResult("Scrolled " + direction + " by " + Math.abs(scrollAmount) + " pixels");
+    }
 
 }

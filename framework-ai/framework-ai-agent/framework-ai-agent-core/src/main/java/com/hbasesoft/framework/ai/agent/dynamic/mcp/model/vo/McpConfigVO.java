@@ -26,24 +26,24 @@ import lombok.Data;
 @Data
 public class McpConfigVO {
 
-	private Long id;
+    private Long id;
 
-	private String mcpServerName;
+    private String mcpServerName;
 
-	private McpConfigType connectionType;
+    private McpConfigType connectionType;
 
-	private String connectionConfig;
+    private String connectionConfig;
 
-	private List<String> toolNames; // Add tool name list for frontend display
+    private List<String> toolNames; // Add tool name list for frontend display
 
-	// New field-based properties
-	private String command;
+    // New field-based properties
+    private String command;
 
-	private String url;
+    private String url;
 
-	private List<String> args;
+    private List<String> args;
 
-	private Map<String, String> env;
+    private Map<String, String> env;
 
-	private McpConfigStatus status;
+    private McpConfigStatus status;
 }

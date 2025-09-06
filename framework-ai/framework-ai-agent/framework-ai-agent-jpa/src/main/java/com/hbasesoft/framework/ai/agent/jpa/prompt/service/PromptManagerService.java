@@ -24,19 +24,19 @@ import com.hbasesoft.framework.ai.agent.dynamic.prompt.model.vo.PromptVO;
  */
 public interface PromptManagerService {
 
-	List<PromptVO> getAll();
+    List<PromptVO> getAll();
 
-	List<PromptVO> getAllByNamespace(String namespace);
+    List<PromptVO> getAllByNamespace(String namespace);
 
-	PromptVO getById(Long id);
+    PromptVO getById(Long id);
 
-	void delete(Long id);
+    void delete(Long id);
 
-	Message createMessage(String promptName, Map<String, Object> variables);
+    Message createMessage(String promptName, Map<String, Object> variables);
 
-	void importSpecificPromptFromLanguage(String promptName, String language);
+    void importSpecificPromptFromLanguage(String promptName, String language);
 
-	void importAllPromptsFromLanguage(String language);
+    void importAllPromptsFromLanguage(String language);
 
-	String[] getSupportedLanguages();
+    String[] getSupportedLanguages();
 }

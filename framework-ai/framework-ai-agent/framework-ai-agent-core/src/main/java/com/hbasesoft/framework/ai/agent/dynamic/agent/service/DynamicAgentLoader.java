@@ -38,66 +38,66 @@ import com.hbasesoft.framework.common.utils.ContextHolder;
 @Service
 public class DynamicAgentLoader implements IDynamicAgentLoader {
 
-	private final ILlmService llmService;
+    private final ILlmService llmService;
 
-	private final PlanExecutionRecorder recorder;
+    private final PlanExecutionRecorder recorder;
 
-	private final ManusProperties properties;
+    private final ManusProperties properties;
 
-	private final ToolCallingManager toolCallingManager;
+    private final ToolCallingManager toolCallingManager;
 
-	private final IUserInputService userInputService;
+    private final IUserInputService userInputService;
 
-	private final PromptService promptService;
+    private final PromptService promptService;
 
-	private final StreamingResponseHandler streamingResponseHandler;
+    private final StreamingResponseHandler streamingResponseHandler;
 
-	private AgentService agentService;
+    private AgentService agentService;
 
-	@Value("${namespace.value:default}")
-	private String namespace;
+    @Value("${namespace.value:default}")
+    private String namespace;
 
-	public DynamicAgentLoader(@Lazy ILlmService llmService, PlanExecutionRecorder recorder, ManusProperties properties,
-			@Lazy ToolCallingManager toolCallingManager, IUserInputService userInputService,
-			PromptService promptService, StreamingResponseHandler streamingResponseHandler) {
-		this.llmService = llmService;
-		this.recorder = recorder;
-		this.properties = properties;
-		this.toolCallingManager = toolCallingManager;
-		this.userInputService = userInputService;
-		this.promptService = promptService;
-		this.streamingResponseHandler = streamingResponseHandler;
-	}
+    public DynamicAgentLoader(@Lazy ILlmService llmService, PlanExecutionRecorder recorder, ManusProperties properties,
+        @Lazy ToolCallingManager toolCallingManager, IUserInputService userInputService, PromptService promptService,
+        StreamingResponseHandler streamingResponseHandler) {
+        this.llmService = llmService;
+        this.recorder = recorder;
+        this.properties = properties;
+        this.toolCallingManager = toolCallingManager;
+        this.userInputService = userInputService;
+        this.promptService = promptService;
+        this.streamingResponseHandler = streamingResponseHandler;
+    }
 
-	public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
-		AgentConfig agentConfig = getAgentService().getAgentByName(namespace, agentName);
-		return convert(agentConfig, initialAgentSetting);
-	}
+    public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
+        AgentConfig agentConfig = getAgentService().getAgentByName(namespace, agentName);
+        return convert(agentConfig, initialAgentSetting);
+    }
 
-	private DynamicAgent convert(AgentConfig agentConfig, Map<String, Object> initialAgentSetting) {
-		ModelConfig config = agentConfig.getModel();
+    private DynamicAgent convert(AgentConfig agentConfig, Map<String, Object> initialAgentSetting) {
+        ModelConfig config = agentConfig.getModel();
 
-		return new DynamicAgent(llmService, recorder, properties, agentConfig.getName(), agentConfig.getDescription(),
-				agentConfig.getNextStepPrompt(), agentConfig.getAvailableTools(), toolCallingManager,
-				initialAgentSetting, userInputService, promptService, config, streamingResponseHandler);
-	}
+        return new DynamicAgent(llmService, recorder, properties, agentConfig.getName(), agentConfig.getDescription(),
+            agentConfig.getNextStepPrompt(), agentConfig.getAvailableTools(), toolCallingManager, initialAgentSetting,
+            userInputService, promptService, config, streamingResponseHandler);
+    }
 
-	public List<DynamicAgent> getAllAgents() {
-		return getAgentService().getAllAgentsByNamespace(namespace).stream().map(t -> {
-			return convert(t, new java.util.HashMap<String, Object>());
-		}).toList();
-	}
+    public List<DynamicAgent> getAllAgents() {
+        return getAgentService().getAllAgentsByNamespace(namespace).stream().map(t -> {
+            return convert(t, new java.util.HashMap<String, Object>());
+        }).toList();
+    }
 
-	@Override
-	public List<DynamicAgent> getAgents(ExecutionContext context) {
-		return IDynamicAgentLoader.super.getAgents(context);
-	}
+    @Override
+    public List<DynamicAgent> getAgents(ExecutionContext context) {
+        return IDynamicAgentLoader.super.getAgents(context);
+    }
 
-	private AgentService getAgentService() {
-		if (agentService == null) {
-			agentService = ContextHolder.getContext().getBean(AgentService.class);
-		}
-		return agentService;
-	}
+    private AgentService getAgentService() {
+        if (agentService == null) {
+            agentService = ContextHolder.getContext().getBean(AgentService.class);
+        }
+        return agentService;
+    }
 
 }

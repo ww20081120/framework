@@ -23,42 +23,46 @@ import java.util.Enumeration;
 
 public class IpUtils {
 
-	private static String LOCAL_IP = "127.0.0.1";
+    private static String LOCAL_IP = "127.0.0.1";
 
-	public IpUtils() {
-	}
+    public IpUtils() {
+    }
 
-	public static String getLocalIp() {
-		return LOCAL_IP;
-	}
+    public static String getLocalIp() {
+        return LOCAL_IP;
+    }
 
-	static {
-		try {
-			Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
+    static {
+        try {
+            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
 
-			label38: while (true) {
-				NetworkInterface ni;
-				do {
-					do {
-						if (!nis.hasMoreElements()) {
-							break label38;
-						}
+            label38:
+            while (true) {
+                NetworkInterface ni;
+                do {
+                    do {
+                        if (!nis.hasMoreElements()) {
+                            break label38;
+                        }
 
-						ni = (NetworkInterface) nis.nextElement();
-					} while (ni.isLoopback());
-				} while (ni.isVirtual());
+                        ni = (NetworkInterface) nis.nextElement();
+                    }
+                    while (ni.isLoopback());
+                }
+                while (ni.isVirtual());
 
-				Enumeration<InetAddress> addresses = ni.getInetAddresses();
+                Enumeration<InetAddress> addresses = ni.getInetAddresses();
 
-				while (addresses.hasMoreElements()) {
-					InetAddress address = (InetAddress) addresses.nextElement();
-					if (address instanceof Inet4Address) {
-						LOCAL_IP = address.getHostAddress();
-					}
-				}
-			}
-		} catch (Throwable var4) {
-		}
-	}
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = (InetAddress) addresses.nextElement();
+                    if (address instanceof Inet4Address) {
+                        LOCAL_IP = address.getHostAddress();
+                    }
+                }
+            }
+        }
+        catch (Throwable var4) {
+        }
+    }
 
 }

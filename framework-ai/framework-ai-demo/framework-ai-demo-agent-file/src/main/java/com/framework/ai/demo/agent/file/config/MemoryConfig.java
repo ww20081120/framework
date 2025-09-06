@@ -28,9 +28,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MemoryConfig {
 
-	@Bean
-	public ChatMemoryRepository chatMemory() {
-		return new InMemoryChatMemoryRepository();
-	}
+    @Bean
+    public ChatMemoryRepository chatMemory() {
+        return new InMemoryChatMemoryRepository();
+    }
 
 }

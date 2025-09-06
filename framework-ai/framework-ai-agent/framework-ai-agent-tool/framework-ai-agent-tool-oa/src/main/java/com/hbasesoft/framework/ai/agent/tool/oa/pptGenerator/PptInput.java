@@ -19,115 +19,115 @@ import java.util.List;
 
 public class PptInput {
 
-	private String action;
+    private String action;
 
-	private String title;
+    private String title;
 
-	private String subtitle;
+    private String subtitle;
 
-	@com.fasterxml.jackson.annotation.JsonProperty("slide_contents")
-	private List<SlideContent> slideContents;
+    @com.fasterxml.jackson.annotation.JsonProperty("slide_contents")
+    private List<SlideContent> slideContents;
 
-	private String path;
+    private String path;
 
-	@com.fasterxml.jackson.annotation.JsonProperty("template_content")
-	private String templateContent;
+    @com.fasterxml.jackson.annotation.JsonProperty("template_content")
+    private String templateContent;
 
-	@com.fasterxml.jackson.annotation.JsonProperty("file_name")
-	private String fileName;
+    @com.fasterxml.jackson.annotation.JsonProperty("file_name")
+    private String fileName;
 
-	public static class SlideContent {
+    public static class SlideContent {
 
-		private String title;
+        private String title;
 
-		private String content;
+        private String content;
 
-		@com.fasterxml.jackson.annotation.JsonProperty("image_path")
-		private String imagePath;
+        @com.fasterxml.jackson.annotation.JsonProperty("image_path")
+        private String imagePath;
 
-		public String getTitle() {
-			return title;
-		}
+        public String getTitle() {
+            return title;
+        }
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-		public String getContent() {
-			return content;
-		}
+        public String getContent() {
+            return content;
+        }
 
-		public void setContent(String content) {
-			this.content = content;
-		}
+        public void setContent(String content) {
+            this.content = content;
+        }
 
-		public String getImagePath() {
-			return imagePath;
-		}
+        public String getImagePath() {
+            return imagePath;
+        }
 
-		public void setImagePath(String imagePath) {
-			this.imagePath = imagePath;
-		}
+        public void setImagePath(String imagePath) {
+            this.imagePath = imagePath;
+        }
 
-	}
+    }
 
-	public PptInput() {
-	}
+    public PptInput() {
+    }
 
-	public String getAction() {
-		return action;
-	}
+    public String getAction() {
+        return action;
+    }
 
-	public void setAction(String action) {
-		this.action = action;
-	}
+    public void setAction(String action) {
+        this.action = action;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getSubtitle() {
-		return subtitle;
-	}
+    public String getSubtitle() {
+        return subtitle;
+    }
 
-	public void setSubtitle(String subtitle) {
-		this.subtitle = subtitle;
-	}
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
 
-	public List<SlideContent> getSlideContents() {
-		return slideContents;
-	}
+    public List<SlideContent> getSlideContents() {
+        return slideContents;
+    }
 
-	public void setSlideContents(List<SlideContent> slideContents) {
-		this.slideContents = slideContents;
-	}
+    public void setSlideContents(List<SlideContent> slideContents) {
+        this.slideContents = slideContents;
+    }
 
-	public String getPath() {
-		return path;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public void setPath(String path) {
-		this.path = path;
-	}
+    public void setPath(String path) {
+        this.path = path;
+    }
 
-	public String getTemplateContent() {
-		return templateContent;
-	}
+    public String getTemplateContent() {
+        return templateContent;
+    }
 
-	public void setTemplateContent(String templateContent) {
-		this.templateContent = templateContent;
-	}
+    public void setTemplateContent(String templateContent) {
+        this.templateContent = templateContent;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
 }

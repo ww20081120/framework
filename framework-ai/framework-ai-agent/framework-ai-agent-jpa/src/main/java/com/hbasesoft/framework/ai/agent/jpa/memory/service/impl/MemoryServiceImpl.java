@@ -34,79 +34,79 @@ import com.hbasesoft.framework.ai.agent.jpa.memory.service.MemoryManagerService;
 @Service
 public class MemoryServiceImpl implements MemoryService, MemoryManagerService {
 
-	@Autowired
-	private MemoryDao memoryRepository;
+    @Autowired
+    private MemoryDao memoryRepository;
 
-	@Autowired
-	private ChatMemoryRepository chatMemory;
+    @Autowired
+    private ChatMemoryRepository chatMemory;
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<MemoryPo4Jpa> getMemories() {
-		List<MemoryPo4Jpa> memoryEntities = memoryRepository.queryAll();
-		memoryEntities.forEach(memoryEntity -> {
-			List<Message> messages = chatMemory.findByConversationId(memoryEntity.getMemoryId());
-			memoryEntity.setMessages(messages);
-		});
-		memoryEntities.stream()
-				.sorted((m1, m2) -> Math.toIntExact(m1.getCreateTime().getTime() - m2.getCreateTime().getTime()))
-				.toList();
-		return memoryEntities;
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<MemoryPo4Jpa> getMemories() {
+        List<MemoryPo4Jpa> memoryEntities = memoryRepository.queryAll();
+        memoryEntities.forEach(memoryEntity -> {
+            List<Message> messages = chatMemory.findByConversationId(memoryEntity.getMemoryId());
+            memoryEntity.setMessages(messages);
+        });
+        memoryEntities.stream()
+            .sorted((m1, m2) -> Math.toIntExact(m1.getCreateTime().getTime() - m2.getCreateTime().getTime())).toList();
+        return memoryEntities;
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void deleteMemory(String memoryId) {
-		chatMemory.deleteByConversationId(memoryId);
-		memoryRepository.deleteByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryId));
-	}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteMemory(String memoryId) {
+        chatMemory.deleteByConversationId(memoryId);
+        memoryRepository.deleteByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryId));
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public MemoryVo saveMemory(MemoryVo memoryEntity) {
-		MemoryPo4Jpa findEntity = memoryRepository
-				.getByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryEntity.getMemoryId()));
-		if (findEntity != null) {
-			findEntity.setMessages(null);
-		} else {
-			findEntity = new MemoryPo4Jpa();
-			BeanUtils.copyProperties(memoryEntity, findEntity);
-			memoryRepository.save(findEntity);
-		}
-		findEntity.setMessages(chatMemory.findByConversationId(memoryEntity.getMemoryId()));
-		return convert(findEntity);
-	}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public MemoryVo saveMemory(MemoryVo memoryEntity) {
+        MemoryPo4Jpa findEntity = memoryRepository
+            .getByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryEntity.getMemoryId()));
+        if (findEntity != null) {
+            findEntity.setMessages(null);
+        }
+        else {
+            findEntity = new MemoryPo4Jpa();
+            BeanUtils.copyProperties(memoryEntity, findEntity);
+            memoryRepository.save(findEntity);
+        }
+        findEntity.setMessages(chatMemory.findByConversationId(memoryEntity.getMemoryId()));
+        return convert(findEntity);
+    }
 
-	private MemoryVo convert(MemoryPo4Jpa memoryEntity) {
-		MemoryVo memoryVo = new MemoryVo();
-		BeanUtils.copyProperties(memoryEntity, memoryVo);
-		memoryVo.setMessages(memoryEntity.getMessages());
-		return memoryVo;
-	}
+    private MemoryVo convert(MemoryPo4Jpa memoryEntity) {
+        MemoryVo memoryVo = new MemoryVo();
+        BeanUtils.copyProperties(memoryEntity, memoryVo);
+        memoryVo.setMessages(memoryEntity.getMessages());
+        return memoryVo;
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public MemoryPo4Jpa updateMemory(MemoryPo4Jpa memoryEntity) {
-		MemoryPo4Jpa findEntity = memoryRepository
-				.getByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryEntity.getMemoryId()));
-		if (findEntity == null) {
-			throw new IllegalArgumentException();
-		}
-		findEntity.setMemoryName(memoryEntity.getMemoryName());
-		memoryRepository.update(findEntity);
-		findEntity.setMessages(chatMemory.findByConversationId(findEntity.getMemoryId()));
-		return findEntity;
-	}
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public MemoryPo4Jpa updateMemory(MemoryPo4Jpa memoryEntity) {
+        MemoryPo4Jpa findEntity = memoryRepository
+            .getByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryEntity.getMemoryId()));
+        if (findEntity == null) {
+            throw new IllegalArgumentException();
+        }
+        findEntity.setMemoryName(memoryEntity.getMemoryName());
+        memoryRepository.update(findEntity);
+        findEntity.setMessages(chatMemory.findByConversationId(findEntity.getMemoryId()));
+        return findEntity;
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public MemoryPo4Jpa singleMemory(String memoryId) {
-		MemoryPo4Jpa findEntity = memoryRepository.getByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryId));
-		if (findEntity == null) {
-			throw new IllegalArgumentException();
-		}
-		findEntity.setMessages(chatMemory.findByConversationId(findEntity.getMemoryId()));
-		return findEntity;
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public MemoryPo4Jpa singleMemory(String memoryId) {
+        MemoryPo4Jpa findEntity = memoryRepository.getByLambda(q -> q.eq(MemoryPo4Jpa::getMemoryId, memoryId));
+        if (findEntity == null) {
+            throw new IllegalArgumentException();
+        }
+        findEntity.setMessages(chatMemory.findByConversationId(findEntity.getMemoryId()));
+        return findEntity;
+    }
 
 }

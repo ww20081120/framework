@@ -17,13 +17,13 @@ package com.hbasesoft.framework.ai.agent.prompt;
  */
 public interface IPromptLoader {
 
-	/**
-	 * Load prompt template from file
-	 */
-	String loadPrompt(String promptPath);
+    /**
+     * Load prompt template from file
+     */
+    String loadPrompt(String promptPath);
 
-	/**
-	 * Clear prompt cache
-	 */
-	void clearCache();
+    /**
+     * Clear prompt cache
+     */
+    void clearCache();
 }

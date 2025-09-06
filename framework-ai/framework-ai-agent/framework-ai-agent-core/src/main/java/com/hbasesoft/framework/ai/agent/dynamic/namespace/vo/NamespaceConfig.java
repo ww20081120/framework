@@ -20,13 +20,13 @@ import lombok.Data;
 @Data
 public class NamespaceConfig {
 
-	private Long id;
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private String code;
+    private String code;
 
-	private String description;
+    private String description;
 
-	private String host;
+    private String host;
 }

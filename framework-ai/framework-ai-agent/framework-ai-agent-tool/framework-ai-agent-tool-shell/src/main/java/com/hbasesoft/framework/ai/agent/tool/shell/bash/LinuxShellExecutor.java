@@ -35,119 +35,124 @@ import org.slf4j.LoggerFactory;
  */
 public class LinuxShellExecutor implements ShellCommandExecutor {
 
-	private static final Logger log = LoggerFactory.getLogger(LinuxShellExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(LinuxShellExecutor.class);
 
-	private Process currentProcess;
+    private Process currentProcess;
 
-	private static final int DEFAULT_TIMEOUT = 60; // Default timeout (seconds)
+    private static final int DEFAULT_TIMEOUT = 60; // Default timeout (seconds)
 
-	private BufferedWriter processInput;
+    private BufferedWriter processInput;
 
-	@Override
-	public List<String> execute(List<String> commands, String workingDir) {
-		return commands.stream().map(command -> {
-			try {
-				// If the command is empty, return the extra logs of the current process
-				if (command.trim().isEmpty() && currentProcess != null) {
-					return processOutput(currentProcess);
-				}
+    @Override
+    public List<String> execute(List<String> commands, String workingDir) {
+        return commands.stream().map(command -> {
+            try {
+                // If the command is empty, return the extra logs of the current process
+                if (command.trim().isEmpty() && currentProcess != null) {
+                    return processOutput(currentProcess);
+                }
 
-				// If the command is ctrl+c, send the interrupt signal
-				if ("ctrl+c".equalsIgnoreCase(command.trim()) && currentProcess != null) {
-					terminate();
-					return "Process terminated by ctrl+c";
-				}
+                // If the command is ctrl+c, send the interrupt signal
+                if ("ctrl+c".equalsIgnoreCase(command.trim()) && currentProcess != null) {
+                    terminate();
+                    return "Process terminated by ctrl+c";
+                }
 
-				ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", command);
-				if (!StringUtils.isEmpty(workingDir)) {
-					pb.directory(new File(workingDir));
-				}
+                ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", command);
+                if (!StringUtils.isEmpty(workingDir)) {
+                    pb.directory(new File(workingDir));
+                }
 
-				// Set Linux environment variables
-				pb.environment().put("LANG", "en_US.UTF-8");
-				pb.environment().put("SHELL", "/bin/bash");
-				pb.environment().put("PATH", System.getenv("PATH") + ":/usr/local/bin");
+                // Set Linux environment variables
+                pb.environment().put("LANG", "en_US.UTF-8");
+                pb.environment().put("SHELL", "/bin/bash");
+                pb.environment().put("PATH", System.getenv("PATH") + ":/usr/local/bin");
 
-				currentProcess = pb.start();
-				processInput = new BufferedWriter(new OutputStreamWriter(currentProcess.getOutputStream()));
+                currentProcess = pb.start();
+                processInput = new BufferedWriter(new OutputStreamWriter(currentProcess.getOutputStream()));
 
-				// Set timeout processing
-				try {
-					if (!command.endsWith("&")) { // Only set timeout if the command is
-													// not a background command
-						if (!currentProcess.waitFor(DEFAULT_TIMEOUT, TimeUnit.SECONDS)) {
-							log.warn("Command timed out. Sending SIGINT to the process");
-							terminate();
-							// Retry the command in the background
-							if (!command.endsWith("&")) {
-								command += " &";
-							}
-							return execute(Collections.singletonList(command), workingDir).get(0);
-						}
-					}
-					return processOutput(currentProcess);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-					return "Error: Process interrupted - " + e.getMessage();
-				}
-			} catch (Throwable e) {
-				log.error("Exception executing Linux command", e);
-				return "Error: " + e.getClass().getSimpleName() + " - " + e.getMessage();
-			}
-		}).collect(Collectors.toList());
-	}
+                // Set timeout processing
+                try {
+                    if (!command.endsWith("&")) { // Only set timeout if the command is
+                                                  // not a background command
+                        if (!currentProcess.waitFor(DEFAULT_TIMEOUT, TimeUnit.SECONDS)) {
+                            log.warn("Command timed out. Sending SIGINT to the process");
+                            terminate();
+                            // Retry the command in the background
+                            if (!command.endsWith("&")) {
+                                command += " &";
+                            }
+                            return execute(Collections.singletonList(command), workingDir).get(0);
+                        }
+                    }
+                    return processOutput(currentProcess);
+                }
+                catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return "Error: Process interrupted - " + e.getMessage();
+                }
+            }
+            catch (Throwable e) {
+                log.error("Exception executing Linux command", e);
+                return "Error: " + e.getClass().getSimpleName() + " - " + e.getMessage();
+            }
+        }).collect(Collectors.toList());
+    }
 
-	@Override
-	public void terminate() {
-		if (currentProcess != null && currentProcess.isAlive()) {
-			// First try sending SIGINT (ctrl+c)
-			currentProcess.destroy();
-			try {
-				// Wait for process to respond to SIGINT
-				if (!currentProcess.waitFor(5, TimeUnit.SECONDS)) {
-					// If process doesn't respond to SIGINT, force terminate
-					currentProcess.destroyForcibly();
-				}
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-				currentProcess.destroyForcibly();
-			}
-			log.info("Linux process terminated");
-		}
-	}
+    @Override
+    public void terminate() {
+        if (currentProcess != null && currentProcess.isAlive()) {
+            // First try sending SIGINT (ctrl+c)
+            currentProcess.destroy();
+            try {
+                // Wait for process to respond to SIGINT
+                if (!currentProcess.waitFor(5, TimeUnit.SECONDS)) {
+                    // If process doesn't respond to SIGINT, force terminate
+                    currentProcess.destroyForcibly();
+                }
+            }
+            catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                currentProcess.destroyForcibly();
+            }
+            log.info("Linux process terminated");
+        }
+    }
 
-	private String processOutput(Process process) throws IOException, InterruptedException {
-		StringBuilder outputBuilder = new StringBuilder();
-		StringBuilder errorBuilder = new StringBuilder();
+    private String processOutput(Process process) throws IOException, InterruptedException {
+        StringBuilder outputBuilder = new StringBuilder();
+        StringBuilder errorBuilder = new StringBuilder();
 
-		// Read standard output
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				log.info(line);
-				outputBuilder.append(line).append("\n");
-			}
-		}
+        // Read standard output
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                log.info(line);
+                outputBuilder.append(line).append("\n");
+            }
+        }
 
-		// Read error output
-		try (BufferedReader errorReader = new BufferedReader(
-				new InputStreamReader(process.getErrorStream(), "UTF-8"))) {
-			String line;
-			while ((line = errorReader.readLine()) != null) {
-				log.error(line);
-				errorBuilder.append(line).append("\n");
-			}
-		}
+        // Read error output
+        try (
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream(), "UTF-8"))) {
+            String line;
+            while ((line = errorReader.readLine()) != null) {
+                log.error(line);
+                errorBuilder.append(line).append("\n");
+            }
+        }
 
-		int exitCode = process.isAlive() ? -1 : process.exitValue();
-		if (exitCode == 0) {
-			return outputBuilder.toString();
-		} else if (exitCode == -1) {
-			return "Process is still running. Use empty command to get more logs, or 'ctrl+c' to terminate.";
-		} else {
-			return "Error (Exit Code " + exitCode + "): "
-					+ (errorBuilder.length() > 0 ? errorBuilder.toString() : outputBuilder.toString());
-		}
-	}
+        int exitCode = process.isAlive() ? -1 : process.exitValue();
+        if (exitCode == 0) {
+            return outputBuilder.toString();
+        }
+        else if (exitCode == -1) {
+            return "Process is still running. Use empty command to get more logs, or 'ctrl+c' to terminate.";
+        }
+        else {
+            return "Error (Exit Code " + exitCode + "): "
+                + (errorBuilder.length() > 0 ? errorBuilder.toString() : outputBuilder.toString());
+        }
+    }
 
 }

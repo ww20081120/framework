@@ -16,5 +16,5 @@ package com.hbasesoft.framework.ai.agent.dynamic.prompt.model.enums;
  * @see com.hbasesoft.framework.ai.agent.dynamic.prompt.model.enums <br>
  */
 public enum PromptType {
-	LLM, PLANNING, AGENT
+    LLM, PLANNING, AGENT
 }

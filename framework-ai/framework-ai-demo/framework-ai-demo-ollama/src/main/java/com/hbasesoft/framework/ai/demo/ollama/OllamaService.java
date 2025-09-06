@@ -41,9 +41,9 @@ public class OllamaService {
      */
     public String getCodeGeneration(final String description) {
         return chatClient.prompt()
-                .system("You are an expert Java developer. Generate clean, efficient, and "
-                        + "well-documented Java code based on the user's request.")
-                .user("Generate Java code for: " + description).call().content();
+            .system("You are an expert Java developer. Generate clean, efficient, and "
+                + "well-documented Java code based on the user's request.")
+            .user("Generate Java code for: " + description).call().content();
     }
 
     /**

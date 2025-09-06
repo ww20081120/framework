@@ -18,28 +18,28 @@ package com.hbasesoft.framework.ai.agent.config.model;
 
 public class ConfigCacheEntry<T> {
 
-	private T value;
+    private T value;
 
-	private long lastUpdateTime;
+    private long lastUpdateTime;
 
-	private static final long EXPIRATION_TIME = 30000; // 30 seconds expiration
+    private static final long EXPIRATION_TIME = 30000; // 30 seconds expiration
 
-	public ConfigCacheEntry(T value) {
-		this.value = value;
-		this.lastUpdateTime = System.currentTimeMillis();
-	}
+    public ConfigCacheEntry(T value) {
+        this.value = value;
+        this.lastUpdateTime = System.currentTimeMillis();
+    }
 
-	public T getValue() {
-		return value;
-	}
+    public T getValue() {
+        return value;
+    }
 
-	public void setValue(T value) {
-		this.value = value;
-		this.lastUpdateTime = System.currentTimeMillis();
-	}
+    public void setValue(T value) {
+        this.value = value;
+        this.lastUpdateTime = System.currentTimeMillis();
+    }
 
-	public boolean isExpired() {
-		return System.currentTimeMillis() - lastUpdateTime > EXPIRATION_TIME;
-	}
+    public boolean isExpired() {
+        return System.currentTimeMillis() - lastUpdateTime > EXPIRATION_TIME;
+    }
 
 }

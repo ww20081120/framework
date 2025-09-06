@@ -20,9 +20,9 @@ import lombok.Data;
 @Data
 public class AvailableModel {
 
-	private String modelName;
+    private String modelName;
 
-	private String displayName;
+    private String displayName;
 
-	private String description;
+    private String description;
 }

@@ -24,18 +24,18 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Service
 public class MemoryServiceImpl implements MemoryService {
 
-	/**
-	 * Description: <br>
-	 * 
-	 * @author 王伟<br>
-	 * @taskId <br>
-	 * @param memoryEntity
-	 * @return <br>
-	 */
-	@Override
-	public MemoryVo saveMemory(MemoryVo memoryEntity) {
-		LoggerUtil.info("保存内存信息: {0}", memoryEntity);
-		return memoryEntity;
-	}
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param memoryEntity
+     * @return <br>
+     */
+    @Override
+    public MemoryVo saveMemory(MemoryVo memoryEntity) {
+        LoggerUtil.info("保存内存信息: {0}", memoryEntity);
+        return memoryEntity;
+    }
 
 }

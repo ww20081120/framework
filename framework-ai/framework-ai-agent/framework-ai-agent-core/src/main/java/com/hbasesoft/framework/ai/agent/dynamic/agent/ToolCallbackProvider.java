@@ -21,12 +21,12 @@ import com.hbasesoft.framework.ai.agent.planning.IPlanningFactory.ToolCallBackCo
  */
 public interface ToolCallbackProvider {
 
-	/**
-	 * 获取工具回调上下文的映射。 该映射的键为工具的标识字符串，值为 PlanningFactory 类中定义的 ToolCallBackContext 对象，
-	 * 每个 ToolCallBackContext 对象包含了与工具相关的回调信息。
-	 * 
-	 * @return 一个包含工具标识和对应工具回调上下文的映射
-	 */
-	Map<String, ToolCallBackContext> getToolCallBackContext();
+    /**
+     * 获取工具回调上下文的映射。 该映射的键为工具的标识字符串，值为 PlanningFactory 类中定义的 ToolCallBackContext 对象， 每个 ToolCallBackContext
+     * 对象包含了与工具相关的回调信息。
+     * 
+     * @return 一个包含工具标识和对应工具回调上下文的映射
+     */
+    Map<String, ToolCallBackContext> getToolCallBackContext();
 
 }

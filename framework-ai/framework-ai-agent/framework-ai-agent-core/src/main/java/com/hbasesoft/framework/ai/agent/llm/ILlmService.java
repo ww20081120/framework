@@ -10,9 +10,9 @@ import org.springframework.ai.chat.memory.ChatMemory;
 
 import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * LLM service interface, providing chat client and memory management functionality
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -20,83 +20,79 @@ import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.agent.llm <br>
  */
-/**
- * LLM service interface, providing chat client and memory management
- * functionality
- */
 public interface ILlmService {
 
-	/**
-	 * Get Agent chat client
-	 * 
-	 * @return ChatClient
-	 */
-	ChatClient getAgentChatClient();
+    /**
+     * Get Agent chat client
+     * 
+     * @return ChatClient
+     */
+    ChatClient getAgentChatClient();
 
-	/**
-	 * Get dynamic chat client
-	 * 
-	 * @param model
-	 * @return ChatClient
-	 */
-	ChatClient getDynamicChatClient(ModelConfig model);
+    /**
+     * Get dynamic chat client
+     * 
+     * @param model
+     * @return ChatClient
+     */
+    ChatClient getDynamicChatClient(ModelConfig model);
 
-	/**
-	 * Get Agent memory
-	 * 
-	 * @param maxMessages maximum number of messages
-	 * @return ChatMemory
-	 */
-	ChatMemory getAgentMemory(Integer maxMessages);
+    /**
+     * Get Agent memory
+     * 
+     * @param maxMessages maximum number of messages
+     * @return ChatMemory
+     */
+    ChatMemory getAgentMemory(Integer maxMessages);
 
-	/**
-	 * Clear Agent memory
-	 * 
-	 * @param planId plan ID
-	 */
-	void clearAgentMemory(String planId);
+    /**
+     * Clear Agent memory
+     * 
+     * @param planId plan ID
+     */
+    void clearAgentMemory(String planId);
 
-	/**
-	 * Get planning chat client
-	 * 
-	 * @return ChatClient
-	 */
-	ChatClient getPlanningChatClient();
+    /**
+     * Get planning chat client
+     * 
+     * @return ChatClient
+     */
+    ChatClient getPlanningChatClient();
 
-	/**
-	 * Clear conversation memory
-	 * 
-	 * @param planId plan ID
-	 */
-	void clearConversationMemory(String planId);
+    /**
+     * Clear conversation memory
+     * 
+     * @param planId plan ID
+     */
+    void clearConversationMemory(String planId);
 
-	/**
-	 * Get finalize chat client
-	 * 
-	 * @return ChatClient
-	 */
-	ChatClient getFinalizeChatClient();
+    /**
+     * Get finalize chat client
+     * 
+     * @return ChatClient
+     */
+    ChatClient getFinalizeChatClient();
 
-	/**
-	 * Get conversation memory
-	 * 
-	 * @param maxMessages maximum number of messages
-	 * @return ChatMemory
-	 */
-	ChatMemory getConversationMemory(Integer maxMessages);
+    /**
+     * Get conversation memory
+     * 
+     * @param maxMessages maximum number of messages
+     * @return ChatMemory
+     */
+    ChatMemory getConversationMemory(Integer maxMessages);
 
-	/**
-	 * Get chat client by model ID
-	 * 
-	 * @param modelId model ID
-	 * @return ChatClient
-	 */
-	ChatClient getChatClientByModelId(Long modelId);
+    /**
+     * Get chat client by model ID
+     * 
+     * @param modelId model ID
+     * @return ChatClient
+     */
+    ChatClient getChatClientByModelId(Long modelId);
 
-	/**
-	 * Get default chat client based on configuration
-	 * 
-	 * @return ChatClient
-	 */
-	ChatClient getDefaultChatClient();
+    /**
+     * Get default chat client based on configuration
+     * 
+     * @return ChatClient
+     */
+    ChatClient getDefaultChatClient();
 }

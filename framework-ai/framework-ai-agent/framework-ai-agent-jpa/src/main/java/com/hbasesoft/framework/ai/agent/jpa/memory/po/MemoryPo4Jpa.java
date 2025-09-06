@@ -38,34 +38,34 @@ import lombok.Setter;
 @Table(name = "dynamic_memories")
 public class MemoryPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = -1961395484601490770L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = -1961395484601490770L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "memory_id", nullable = false)
-	private String memoryId;
+    @Column(name = "memory_id", nullable = false)
+    private String memoryId;
 
-	@Column(name = "memory_name", nullable = false)
-	private String memoryName;
+    @Column(name = "memory_name", nullable = false)
+    private String memoryName;
 
-	@Column(name = "create_time", nullable = false)
-	private Date createTime;
+    @Column(name = "create_time", nullable = false)
+    private Date createTime;
 
-	@Transient
-	private List<Message> messages;
+    @Transient
+    private List<Message> messages;
 
-	public MemoryPo4Jpa() {
-		this.createTime = new Date();
-	}
+    public MemoryPo4Jpa() {
+        this.createTime = new Date();
+    }
 
-	public MemoryPo4Jpa(String memoryId, String memoryName) {
-		this.memoryId = memoryId;
-		this.memoryName = memoryName;
-		this.createTime = new Date();
-	}
+    public MemoryPo4Jpa(String memoryId, String memoryName) {
+        this.memoryId = memoryId;
+        this.memoryName = memoryName;
+        this.createTime = new Date();
+    }
 }

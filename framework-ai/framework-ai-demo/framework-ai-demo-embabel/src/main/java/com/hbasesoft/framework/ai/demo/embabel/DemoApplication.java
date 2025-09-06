@@ -21,12 +21,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DemoApplication {
 
-	/**
-	 * Main method to start the application.
-	 *
-	 * @param args command line arguments
-	 */
-	public static void main(final String[] args) {
-		SpringApplication.run(DemoApplication.class);
-	}
+    /**
+     * Main method to start the application.
+     *
+     * @param args command line arguments
+     */
+    public static void main(final String[] args) {
+        SpringApplication.run(DemoApplication.class);
+    }
 }

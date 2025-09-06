@@ -22,14 +22,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class JManusSpringEnvironmentHolder implements EnvironmentAware {
 
-	private static Environment environment;
+    private static Environment environment;
 
-	public void setEnvironment(Environment environment) {
-		JManusSpringEnvironmentHolder.environment = environment;
-	}
+    public void setEnvironment(Environment environment) {
+        JManusSpringEnvironmentHolder.environment = environment;
+    }
 
-	public static Environment getEnvironment() {
-		return environment;
-	}
+    public static Environment getEnvironment() {
+        return environment;
+    }
 
 }

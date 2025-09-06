@@ -23,25 +23,27 @@ import lombok.Data;
  */
 @Data
 public class ConfigVo {
-	private Long id;
+    private Long id;
 
-	private String configGroup;
+    private String configGroup;
 
-	private String configSubGroup;
+    private String configSubGroup;
 
-	private String configKey;
+    private String configKey;
 
-	private String configPath;
+    private String configPath;
 
-	private String configValue;
+    private String configValue;
 
-	private String defaultValue;
+    private String defaultValue;
 
-	private String description;
+    private String description;
 
-	private ConfigInputType inputType;
-	private String optionsJson;
+    private ConfigInputType inputType;
 
-	private LocalDateTime updateTime;
-	private LocalDateTime createTime;
+    private String optionsJson;
+
+    private LocalDateTime updateTime;
+
+    private LocalDateTime createTime;
 }

@@ -19,21 +19,21 @@ import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
  */
 public class ModelChangeEvent implements JmanusEvent {
 
-	private ModelConfig dynamicModelEntity;
+    private ModelConfig dynamicModelEntity;
 
-	private long createTime;
+    private long createTime;
 
-	public ModelChangeEvent(ModelConfig dynamicModelEntity) {
-		this.dynamicModelEntity = dynamicModelEntity;
-		this.createTime = System.currentTimeMillis();
-	}
+    public ModelChangeEvent(ModelConfig dynamicModelEntity) {
+        this.dynamicModelEntity = dynamicModelEntity;
+        this.createTime = System.currentTimeMillis();
+    }
 
-	public ModelConfig getDynamicModelEntity() {
-		return dynamicModelEntity;
-	}
+    public ModelConfig getDynamicModelEntity() {
+        return dynamicModelEntity;
+    }
 
-	public long getCreateTime() {
-		return createTime;
-	}
+    public long getCreateTime() {
+        return createTime;
+    }
 
 }

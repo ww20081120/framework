@@ -25,22 +25,23 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 @Component
 public class PromptDataInitializer implements IPromptDataInitializer {
 
-	private final PromptInitializationService promptInitializationService;
+    private final PromptInitializationService promptInitializationService;
 
-	@Value("${namespace.value:default}")
-	private String namespace;
+    @Value("${namespace.value:default}")
+    private String namespace;
 
-	public PromptDataInitializer(PromptInitializationService promptInitializationService) {
-		this.promptInitializationService = promptInitializationService;
-	}
+    public PromptDataInitializer(PromptInitializationService promptInitializationService) {
+        this.promptInitializationService = promptInitializationService;
+    }
 
-	public void init() {
-		try {
-			promptInitializationService.initializePromptsForNamespace(namespace);
-		} catch (Exception e) {
-			LoggerUtil.error("Failed to initialize prompt data", e);
-			throw e;
-		}
-	}
+    public void init() {
+        try {
+            promptInitializationService.initializePromptsForNamespace(namespace);
+        }
+        catch (Exception e) {
+            LoggerUtil.error("Failed to initialize prompt data", e);
+            throw e;
+        }
+    }
 
 }

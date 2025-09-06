@@ -24,50 +24,50 @@ import com.hbasesoft.framework.ai.agent.jpa.mcp.po.McpConfigPo4Jpa;
  */
 public interface McpMangerService {
 
-	/**
-	 * Batch save MCP server configurations
-	 * 
-	 * @param configJson MCP configuration JSON string
-	 * @return Configuration entity list
-	 * @throws IOException IO exception
-	 */
-	List<McpConfigPo4Jpa> saveMcpServers(String configJson) throws IOException;
+    /**
+     * Batch save MCP server configurations
+     * 
+     * @param configJson MCP configuration JSON string
+     * @return Configuration entity list
+     * @throws IOException IO exception
+     */
+    List<McpConfigPo4Jpa> saveMcpServers(String configJson) throws IOException;
 
-	/**
-	 * Save single MCP server configuration
-	 * 
-	 * @param requestVO MCP server form request
-	 * @return Configuration entity
-	 * @throws IOException IO exception
-	 */
-	McpConfigPo4Jpa saveMcpServer(McpServerRequestVO requestVO) throws IOException;
+    /**
+     * Save single MCP server configuration
+     * 
+     * @param requestVO MCP server form request
+     * @return Configuration entity
+     * @throws IOException IO exception
+     */
+    McpConfigPo4Jpa saveMcpServer(McpServerRequestVO requestVO) throws IOException;
 
-	/**
-	 * Delete MCP server
-	 * 
-	 * @param id MCP server ID
-	 */
-	void removeMcpServer(long id);
+    /**
+     * Delete MCP server
+     * 
+     * @param id MCP server ID
+     */
+    void removeMcpServer(long id);
 
-	/**
-	 * Delete MCP server
-	 * 
-	 * @param mcpServerName MCP server name
-	 */
-	void removeMcpServer(String mcpServerName);
+    /**
+     * Delete MCP server
+     * 
+     * @param mcpServerName MCP server name
+     */
+    void removeMcpServer(String mcpServerName);
 
-	/**
-	 * Get all MCP server configurations
-	 * 
-	 * @return MCP configuration entity list
-	 */
-	List<McpConfigPo4Jpa> getMcpServers();
+    /**
+     * Get all MCP server configurations
+     * 
+     * @return MCP configuration entity list
+     */
+    List<McpConfigPo4Jpa> getMcpServers();
 
-	/**
-	 * Find MCP configuration by ID
-	 * 
-	 * @param id MCP configuration ID
-	 * @return Optional MCP configuration entity
-	 */
-	Optional<McpConfigPo4Jpa> findById(Long id);
+    /**
+     * Find MCP configuration by ID
+     * 
+     * @param id MCP configuration ID
+     * @return Optional MCP configuration entity
+     */
+    Optional<McpConfigPo4Jpa> findById(Long id);
 }

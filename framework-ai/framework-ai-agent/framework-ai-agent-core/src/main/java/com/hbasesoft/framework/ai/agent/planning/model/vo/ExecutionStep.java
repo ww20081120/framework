@@ -24,76 +24,77 @@ import com.hbasesoft.framework.ai.agent.agent.BaseAgent;
  */
 public class ExecutionStep {
 
-	@JsonIgnore
-	private Integer stepIndex;
+    @JsonIgnore
+    private Integer stepIndex;
 
-	private String stepRequirement;
+    private String stepRequirement;
 
-	@JsonIgnore
-	private String result;
+    @JsonIgnore
+    private String result;
 
-	@JsonIgnore
-	private BaseAgent agent;
+    @JsonIgnore
+    private BaseAgent agent;
 
-	private String terminateColumns;
+    private String terminateColumns;
 
-	public Integer getStepIndex() {
-		return stepIndex;
-	}
+    public Integer getStepIndex() {
+        return stepIndex;
+    }
 
-	public void setStepIndex(Integer stepIndex) {
-		this.stepIndex = stepIndex;
-	}
+    public void setStepIndex(Integer stepIndex) {
+        this.stepIndex = stepIndex;
+    }
 
-	public String getResult() {
-		return result;
-	}
+    public String getResult() {
+        return result;
+    }
 
-	public void setResult(String result) {
-		this.result = result;
-	}
+    public void setResult(String result) {
+        this.result = result;
+    }
 
-	public String getTerminateColumns() {
-		return terminateColumns;
-	}
+    public String getTerminateColumns() {
+        return terminateColumns;
+    }
 
-	public void setTerminateColumns(String terminateColumns) {
-		this.terminateColumns = terminateColumns;
-	}
+    public void setTerminateColumns(String terminateColumns) {
+        this.terminateColumns = terminateColumns;
+    }
 
-	@JsonIgnore
-	public AgentState getStatus() {
-		return agent == null ? AgentState.NOT_STARTED : agent.getState();
-	}
+    @JsonIgnore
+    public AgentState getStatus() {
+        return agent == null ? AgentState.NOT_STARTED : agent.getState();
+    }
 
-	public void setAgent(BaseAgent agent) {
-		this.agent = agent;
-	}
+    public void setAgent(BaseAgent agent) {
+        this.agent = agent;
+    }
 
-	public String getStepRequirement() {
-		return stepRequirement;
-	}
+    public String getStepRequirement() {
+        return stepRequirement;
+    }
 
-	public void setStepRequirement(String stepRequirement) {
-		this.stepRequirement = stepRequirement;
-	}
+    public void setStepRequirement(String stepRequirement) {
+        this.stepRequirement = stepRequirement;
+    }
 
-	@JsonIgnore
-	public String getStepInStr() {
-		String agentState = null;
-		if (agent != null) {
-			agentState = agent.getState().toString();
-		} else {
-			agentState = AgentState.NOT_STARTED.toString();
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append(stepIndex);
-		sb.append(". ");
-		sb.append("[").append(agentState).append("]");
-		sb.append(" ");
-		sb.append(stepRequirement);
+    @JsonIgnore
+    public String getStepInStr() {
+        String agentState = null;
+        if (agent != null) {
+            agentState = agent.getState().toString();
+        }
+        else {
+            agentState = AgentState.NOT_STARTED.toString();
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(stepIndex);
+        sb.append(". ");
+        sb.append("[").append(agentState).append("]");
+        sb.append(" ");
+        sb.append(stepRequirement);
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

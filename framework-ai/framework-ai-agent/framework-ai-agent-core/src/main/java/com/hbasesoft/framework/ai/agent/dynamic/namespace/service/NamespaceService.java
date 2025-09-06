@@ -20,5 +20,5 @@ import com.hbasesoft.framework.ai.agent.dynamic.namespace.vo.NamespaceConfig;
  * @see com.hbasesoft.framework.ai.agent.dynamic.namespace.service <br>
  */
 public interface NamespaceService {
-	List<NamespaceConfig> getAllNamespaces();
+    List<NamespaceConfig> getAllNamespaces();
 }

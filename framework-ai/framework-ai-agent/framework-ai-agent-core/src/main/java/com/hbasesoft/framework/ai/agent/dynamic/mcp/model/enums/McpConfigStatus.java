@@ -16,5 +16,5 @@ package com.hbasesoft.framework.ai.agent.dynamic.mcp.model.enums;
  * @see com.hbasesoft.framework.ai.agent.dynamic.mcp.model.enums <br>
  */
 public enum McpConfigStatus {
-	ENABLE, DISABLE
+    ENABLE, DISABLE
 }

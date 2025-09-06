@@ -44,24 +44,24 @@ import lombok.Setter;
 @Scope("prototype")
 public class PlanTemplateVersionPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "plan_template_id", nullable = false, length = 32)
-	private String planTemplateId;
+    @Column(name = "plan_template_id", nullable = false, length = 32)
+    private String planTemplateId;
 
-	@Column(name = "version_index", nullable = false)
-	private Integer versionIndex;
+    @Column(name = "version_index", nullable = false)
+    private Integer versionIndex;
 
-	@Column(name = "plan_json", columnDefinition = "TEXT", nullable = false)
-	private String planJson;
+    @Column(name = "plan_json", columnDefinition = "TEXT", nullable = false)
+    private String planJson;
 
-	@Column(name = "create_time", nullable = false)
-	private Date createTime;
+    @Column(name = "create_time", nullable = false)
+    private Date createTime;
 }

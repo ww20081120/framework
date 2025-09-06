@@ -21,28 +21,29 @@ import com.microsoft.playwright.Page;
 
 public class GetHtmlAction extends BrowserAction {
 
-	public GetHtmlAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public GetHtmlAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Page page = getCurrentPage(); // Get Playwright Page instance
-		StringBuilder allHtml = new StringBuilder();
-		for (com.microsoft.playwright.Frame frame : page.frames()) {
-			try {
-				String html = frame.content();
-				if (html != null && !html.isEmpty()) {
-					allHtml.append("<!-- frame: ").append(frame.url()).append(" -->\n");
-					allHtml.append(html).append("\n\n");
-				}
-			} catch (Exception e) {
-				// Ignore exceptions
-			}
-		}
-		String result = allHtml.toString();
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Page page = getCurrentPage(); // Get Playwright Page instance
+        StringBuilder allHtml = new StringBuilder();
+        for (com.microsoft.playwright.Frame frame : page.frames()) {
+            try {
+                String html = frame.content();
+                if (html != null && !html.isEmpty()) {
+                    allHtml.append("<!-- frame: ").append(frame.url()).append(" -->\n");
+                    allHtml.append(html).append("\n\n");
+                }
+            }
+            catch (Exception e) {
+                // Ignore exceptions
+            }
+        }
+        String result = allHtml.toString();
 
-		return new ToolExecuteResult(result);
-	}
+        return new ToolExecuteResult(result);
+    }
 
 }

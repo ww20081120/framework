@@ -19,18 +19,19 @@ import com.hbasesoft.framework.ai.agent.file.agent.AgentConfigProvider;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.dynamic.simple.agent <br>
  */
-@Agent(name = "simpleAgent", description = "一个简单的示例代理", model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", acions = {
-		"bash", "text_file_operator", "planning", "python_execute", "google_search" })
+@Agent(name = "simpleAgent", description = "一个简单的示例代理", model = "Qwen/Qwen3-Coder-480B-A35B-Instruct", actions = {
+    "bash", "text_file_operator", "planning", "python_execute", "google_search"
+})
 public class SimpleAgent implements AgentConfigProvider {
 
-	// 示例Agent类，可以添加具体的业务逻辑方法
-	@Override
-	public String getSystemPrompt() {
-		return "你是一个简单的示例代理，用于演示如何提供系统提示词。";
-	}
+    // 示例Agent类，可以添加具体的业务逻辑方法
+    @Override
+    public String getSystemPrompt() {
+        return "你是一个简单的示例代理，用于演示如何提供系统提示词。";
+    }
 
-	@Override
-	public String getNextStepPrompt() {
-		return "请继续执行下一步操作。";
-	}
+    @Override
+    public String getNextStepPrompt() {
+        return "请继续执行下一步操作。";
+    }
 }

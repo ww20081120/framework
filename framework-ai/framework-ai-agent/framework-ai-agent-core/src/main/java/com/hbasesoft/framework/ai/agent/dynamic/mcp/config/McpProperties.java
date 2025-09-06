@@ -29,33 +29,33 @@ import lombok.Setter;
 @ConfigurationProperties("mcp")
 public class McpProperties {
 
-	/**
-	 * Maximum retry count
-	 */
-	private int maxRetries = 3;
+    /**
+     * Maximum retry count
+     */
+    private int maxRetries = 3;
 
-	/**
-	 * Connection timeout duration
-	 */
-	private Duration timeout = Duration.ofSeconds(60);
+    /**
+     * Connection timeout duration
+     */
+    private Duration timeout = Duration.ofSeconds(60);
 
-	/**
-	 * Cache expiration time after access
-	 */
-	private Duration cacheExpireAfterAccess = Duration.ofMinutes(10);
+    /**
+     * Cache expiration time after access
+     */
+    private Duration cacheExpireAfterAccess = Duration.ofMinutes(10);
 
-	/**
-	 * Retry wait time multiplier (seconds)
-	 */
-	private int retryWaitMultiplier = 1;
+    /**
+     * Retry wait time multiplier (seconds)
+     */
+    private int retryWaitMultiplier = 1;
 
-	/**
-	 * SSE URL path suffix
-	 */
-	private String ssePathSuffix = "/sse";
+    /**
+     * SSE URL path suffix
+     */
+    private String ssePathSuffix = "/sse";
 
-	/**
-	 * User agent
-	 */
-	private String userAgent = "MCP-Client/1.0.0";
+    /**
+     * User agent
+     */
+    private String userAgent = "MCP-Client/1.0.0";
 }

@@ -25,34 +25,36 @@ import jakarta.persistence.AttributeConverter;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.jmanus.agent.model.model.po <br>
  */
-//@Converter
+// @Converter
 public class MapToStringConverter implements AttributeConverter<Map<String, String>, String> {
 
-	private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
-			.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-	@Override
-	public String convertToDatabaseColumn(Map<String, String> attribute) {
-		try {
-			return objectMapper.writeValueAsString(attribute);
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Error converting map to string", e);
-		}
-	}
+    @Override
+    public String convertToDatabaseColumn(Map<String, String> attribute) {
+        try {
+            return objectMapper.writeValueAsString(attribute);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Error converting map to string", e);
+        }
+    }
 
-	@Override
-	public Map<String, String> convertToEntityAttribute(String dbData) {
-		// Add null or empty string check
-		if (dbData == null || dbData.isEmpty()) {
-			// Return empty Map or null, depending on business logic
-			return new HashMap<>();
-		}
-		try {
-			return objectMapper.readValue(dbData, new TypeReference<>() {
-			});
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Error converting string to map", e);
-		}
-	}
+    @Override
+    public Map<String, String> convertToEntityAttribute(String dbData) {
+        // Add null or empty string check
+        if (dbData == null || dbData.isEmpty()) {
+            // Return empty Map or null, depending on business logic
+            return new HashMap<>();
+        }
+        try {
+            return objectMapper.readValue(dbData, new TypeReference<>() {
+            });
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Error converting string to map", e);
+        }
+    }
 
 }

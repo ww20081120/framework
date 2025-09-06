@@ -17,28 +17,28 @@ package com.hbasesoft.framework.ai.agent.config.model.enums;
  */
 public enum ConfigInputType {
 
-	/**
-	 * Text input box
-	 */
-	TEXT,
+    /**
+     * Text input box
+     */
+    TEXT,
 
-	/**
-	 * Dropdown select box
-	 */
-	SELECT,
+    /**
+     * Dropdown select box
+     */
+    SELECT,
 
-	/**
-	 * Multiple choice box
-	 */
-	CHECKBOX,
+    /**
+     * Multiple choice box
+     */
+    CHECKBOX,
 
-	/**
-	 * Single choice box (yes/no)
-	 */
-	BOOLEAN,
+    /**
+     * Single choice box (yes/no)
+     */
+    BOOLEAN,
 
-	/**
-	 * Number input box
-	 */
-	NUMBER
+    /**
+     * Number input box
+     */
+    NUMBER
 }

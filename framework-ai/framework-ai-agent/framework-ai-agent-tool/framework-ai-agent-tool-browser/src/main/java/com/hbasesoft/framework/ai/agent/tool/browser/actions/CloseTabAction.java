@@ -21,21 +21,21 @@ import com.microsoft.playwright.Page;
 
 public class CloseTabAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CloseTabAction.class);
+    private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(CloseTabAction.class);
 
-	public CloseTabAction(BrowserUseTool browserUseTool) {
-		super(browserUseTool);
-	}
+    public CloseTabAction(BrowserUseTool browserUseTool) {
+        super(browserUseTool);
+    }
 
-	@Override
-	public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
-		Page page = getCurrentPage(); // Get Playwright's Page instance
+    @Override
+    public ToolExecuteResult execute(BrowserRequestVO request) throws Exception {
+        Page page = getCurrentPage(); // Get Playwright's Page instance
 
-		// Close current page
-		page.close();
+        // Close current page
+        page.close();
 
-		// Refresh tab information
-		return new ToolExecuteResult("Closed current tab");
-	}
+        // Refresh tab information
+        return new ToolExecuteResult("Closed current tab");
+    }
 
 }

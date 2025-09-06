@@ -24,316 +24,315 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface IMapReduceSharedStateManager {
 
-	/**
-	 * Get or create plan state
-	 * 
-	 * @param planId Plan ID
-	 * @return Plan state
-	 */
-	IMapReduceSharedStateManager.PlanState getOrCreatePlanState(final String planId);
+    /**
+     * Get or create plan state
+     * 
+     * @param planId Plan ID
+     * @return Plan state
+     */
+    IMapReduceSharedStateManager.PlanState getOrCreatePlanState(final String planId);
 
-	/**
-	 * Get plan state
-	 * 
-	 * @param planId Plan ID
-	 * @return Plan state
-	 */
-	IMapReduceSharedStateManager.PlanState getPlanState(final String planId);
+    /**
+     * Get plan state
+     * 
+     * @param planId Plan ID
+     * @return Plan state
+     */
+    IMapReduceSharedStateManager.PlanState getPlanState(final String planId);
 
-	/**
-	 * Clean up plan state
-	 * 
-	 * @param planId Plan ID
-	 */
-	void cleanupPlanState(final String planId);
+    /**
+     * Clean up plan state
+     * 
+     * @param planId Plan ID
+     */
+    void cleanupPlanState(final String planId);
 
-	/**
-	 * Get next task ID
-	 * 
-	 * @param planId Plan ID
-	 * @return Next task ID
-	 */
-	String getNextTaskId(final String planId);
+    /**
+     * Get next task ID
+     * 
+     * @param planId Plan ID
+     * @return Next task ID
+     */
+    String getNextTaskId(final String planId);
 
-	/**
-	 * Add split result
-	 * 
-	 * @param planId        Plan ID
-	 * @param taskDirectory Task directory
-	 */
-	void addSplitResult(final String planId, final String taskDirectory);
+    /**
+     * Add split result
+     * 
+     * @param planId Plan ID
+     * @param taskDirectory Task directory
+     */
+    void addSplitResult(final String planId, final String taskDirectory);
 
-	/**
-	 * Get split results
-	 * 
-	 * @param planId Plan ID
-	 * @return Split results list
-	 */
-	List<String> getSplitResults(final String planId);
+    /**
+     * Get split results
+     * 
+     * @param planId Plan ID
+     * @return Split results list
+     */
+    List<String> getSplitResults(final String planId);
 
-	/**
-	 * Set split results
-	 * 
-	 * @param planId       Plan ID
-	 * @param splitResults Split results list
-	 */
-	void setSplitResults(final String planId, final List<String> splitResults);
+    /**
+     * Set split results
+     * 
+     * @param planId Plan ID
+     * @param splitResults Split results list
+     */
+    void setSplitResults(final String planId, final List<String> splitResults);
 
-	/**
-	 * Record Map task status
-	 * 
-	 * @param planId     Plan ID
-	 * @param taskId     Task ID
-	 * @param taskStatus Task status
-	 */
-	void recordMapTaskStatus(final String planId, final String taskId,
-			final IMapReduceSharedStateManager.TaskStatus taskStatus);
+    /**
+     * Record Map task status
+     * 
+     * @param planId Plan ID
+     * @param taskId Task ID
+     * @param taskStatus Task status
+     */
+    void recordMapTaskStatus(final String planId, final String taskId,
+        final IMapReduceSharedStateManager.TaskStatus taskStatus);
 
-	/**
-	 * Get Map task status
-	 * 
-	 * @param planId Plan ID
-	 * @param taskId Task ID
-	 * @return Task status
-	 */
-	IMapReduceSharedStateManager.TaskStatus getMapTaskStatus(final String planId, final String taskId);
+    /**
+     * Get Map task status
+     * 
+     * @param planId Plan ID
+     * @param taskId Task ID
+     * @return Task status
+     */
+    IMapReduceSharedStateManager.TaskStatus getMapTaskStatus(final String planId, final String taskId);
 
-	/**
-	 * Get all Map task statuses
-	 * 
-	 * @param planId Plan ID
-	 * @return All task statuses
-	 */
-	Map<String, IMapReduceSharedStateManager.TaskStatus> getAllMapTaskStatuses(final String planId);
+    /**
+     * Get all Map task statuses
+     * 
+     * @param planId Plan ID
+     * @return All task statuses
+     */
+    Map<String, IMapReduceSharedStateManager.TaskStatus> getAllMapTaskStatuses(final String planId);
 
-	/**
-	 * Set last operation result
-	 * 
-	 * @param planId Plan ID
-	 * @param result Operation result
-	 */
-	void setLastOperationResult(final String planId, final String result);
+    /**
+     * Set last operation result
+     * 
+     * @param planId Plan ID
+     * @param result Operation result
+     */
+    void setLastOperationResult(final String planId, final String result);
 
-	/**
-	 * Get last operation result
-	 * 
-	 * @param planId Plan ID
-	 * @return Last operation result
-	 */
-	String getLastOperationResult(final String planId);
+    /**
+     * Get last operation result
+     * 
+     * @param planId Plan ID
+     * @return Last operation result
+     */
+    String getLastOperationResult(final String planId);
 
-	/**
-	 * Set last processed file
-	 * 
-	 * @param planId   Plan ID
-	 * @param filePath File path
-	 */
-	void setLastProcessedFile(final String planId, final String filePath);
+    /**
+     * Set last processed file
+     * 
+     * @param planId Plan ID
+     * @param filePath File path
+     */
+    void setLastProcessedFile(final String planId, final String filePath);
 
-	/**
-	 * Get last processed file
-	 * 
-	 * @param planId Plan ID
-	 * @return Last processed file path
-	 */
-	String getLastProcessedFile(final String planId);
+    /**
+     * Get last processed file
+     * 
+     * @param planId Plan ID
+     * @return Last processed file path
+     */
+    String getLastProcessedFile(final String planId);
 
-	/**
-	 * Get current tool status string
-	 * 
-	 * @param planId Plan ID
-	 * @return Current tool status string
-	 */
-	String getCurrentToolStateString(final String planId);
+    /**
+     * Get current tool status string
+     * 
+     * @param planId Plan ID
+     * @return Current tool status string
+     */
+    String getCurrentToolStateString(final String planId);
 
-	/**
-	 * Get all plan overview
-	 * 
-	 * @return All plan overview string
-	 */
-	String getAllPlansOverview();
+    /**
+     * Get all plan overview
+     * 
+     * @return All plan overview string
+     */
+    String getAllPlansOverview();
 
-	/**
-	 * Clean up all plan states
-	 */
-	void cleanupAllPlanStates();
+    /**
+     * Clean up all plan states
+     */
+    void cleanupAllPlanStates();
 
-	/**
-	 * Plan state inner class containing all shared state information for a single
-	 * plan
-	 */
-	class PlanState {
+    /**
+     * Plan state inner class containing all shared state information for a single plan
+     */
+    class PlanState {
 
-		// Map task status management
-		private final Map<String, TaskStatus> mapTaskStatuses = new ConcurrentHashMap<>();
+        // Map task status management
+        private final Map<String, TaskStatus> mapTaskStatuses = new ConcurrentHashMap<>();
 
-		// Task counter for generating task IDs
-		private final AtomicInteger taskCounter = new AtomicInteger(1);
+        // Task counter for generating task IDs
+        private final AtomicInteger taskCounter = new AtomicInteger(1);
 
-		// Split results list
-		private final List<String> splitResults = Collections.synchronizedList(new ArrayList<>());
+        // Split results list
+        private final List<String> splitResults = Collections.synchronizedList(new ArrayList<>());
 
-		// Last operation result
-		private volatile String lastOperationResult = "";
+        // Last operation result
+        private volatile String lastOperationResult = "";
 
-		// Last processed file
-		private volatile String lastProcessedFile = "";
+        // Last processed file
+        private volatile String lastProcessedFile = "";
 
-		// Creation timestamp
-		private final long createTime = System.currentTimeMillis();
+        // Creation timestamp
+        private final long createTime = System.currentTimeMillis();
 
-		public Map<String, TaskStatus> getMapTaskStatuses() {
-			return mapTaskStatuses;
-		}
+        public Map<String, TaskStatus> getMapTaskStatuses() {
+            return mapTaskStatuses;
+        }
 
-		public AtomicInteger getTaskCounter() {
-			return taskCounter;
-		}
+        public AtomicInteger getTaskCounter() {
+            return taskCounter;
+        }
 
-		public List<String> getSplitResults() {
-			return splitResults;
-		}
+        public List<String> getSplitResults() {
+            return splitResults;
+        }
 
-		public String getLastOperationResult() {
-			return lastOperationResult;
-		}
+        public String getLastOperationResult() {
+            return lastOperationResult;
+        }
 
-		public void setLastOperationResult(String lastOperationResult) {
-			this.lastOperationResult = lastOperationResult;
-		}
+        public void setLastOperationResult(String lastOperationResult) {
+            this.lastOperationResult = lastOperationResult;
+        }
 
-		public String getLastProcessedFile() {
-			return lastProcessedFile;
-		}
+        public String getLastProcessedFile() {
+            return lastProcessedFile;
+        }
 
-		public void setLastProcessedFile(String lastProcessedFile) {
-			this.lastProcessedFile = lastProcessedFile;
-		}
+        public void setLastProcessedFile(String lastProcessedFile) {
+            this.lastProcessedFile = lastProcessedFile;
+        }
 
-		public long getCreateTime() {
-			return createTime;
-		}
+        public long getCreateTime() {
+            return createTime;
+        }
 
-	}
+    }
 
-	/**
-	 * Task status class
-	 */
-	class TaskStatus {
+    /**
+     * Task status class
+     */
+    class TaskStatus {
 
-		/** Task ID */
-		private String taskId;
+        /** Task ID */
+        private String taskId;
 
-		/** Input file path */
-		private String inputFile;
+        /** Input file path */
+        private String inputFile;
 
-		/** Output file path */
-		private String outputFilePath;
+        /** Output file path */
+        private String outputFilePath;
 
-		/** Task status */
-		private String status;
+        /** Task status */
+        private String status;
 
-		/** Timestamp */
-		private String timestamp;
+        /** Timestamp */
+        private String timestamp;
 
-		public TaskStatus() {
-		}
+        public TaskStatus() {
+        }
 
-		public TaskStatus(final String taskId, final String status) {
-			this.taskId = taskId;
-			this.status = status;
-		}
+        public TaskStatus(final String taskId, final String status) {
+            this.taskId = taskId;
+            this.status = status;
+        }
 
-		/**
-		 * Get task ID
-		 * 
-		 * @return task ID
-		 */
-		public String getTaskId() {
-			return taskId;
-		}
+        /**
+         * Get task ID
+         * 
+         * @return task ID
+         */
+        public String getTaskId() {
+            return taskId;
+        }
 
-		/**
-		 * Set task ID
-		 * 
-		 * @param taskId task ID
-		 */
-		public void setTaskId(final String taskId) {
-			this.taskId = taskId;
-		}
+        /**
+         * Set task ID
+         * 
+         * @param taskId task ID
+         */
+        public void setTaskId(final String taskId) {
+            this.taskId = taskId;
+        }
 
-		/**
-		 * Get input file path
-		 * 
-		 * @return input file path
-		 */
-		public String getInputFile() {
-			return inputFile;
-		}
+        /**
+         * Get input file path
+         * 
+         * @return input file path
+         */
+        public String getInputFile() {
+            return inputFile;
+        }
 
-		/**
-		 * Set input file path
-		 * 
-		 * @param inputFile input file path
-		 */
-		public void setInputFile(final String inputFile) {
-			this.inputFile = inputFile;
-		}
+        /**
+         * Set input file path
+         * 
+         * @param inputFile input file path
+         */
+        public void setInputFile(final String inputFile) {
+            this.inputFile = inputFile;
+        }
 
-		/**
-		 * Get output file path
-		 * 
-		 * @return output file path
-		 */
-		public String getOutputFilePath() {
-			return outputFilePath;
-		}
+        /**
+         * Get output file path
+         * 
+         * @return output file path
+         */
+        public String getOutputFilePath() {
+            return outputFilePath;
+        }
 
-		/**
-		 * Set output file path
-		 * 
-		 * @param outputFilePath output file path
-		 */
-		public void setOutputFilePath(final String outputFilePath) {
-			this.outputFilePath = outputFilePath;
-		}
+        /**
+         * Set output file path
+         * 
+         * @param outputFilePath output file path
+         */
+        public void setOutputFilePath(final String outputFilePath) {
+            this.outputFilePath = outputFilePath;
+        }
 
-		/**
-		 * Get task status
-		 * 
-		 * @return task status
-		 */
-		public String getStatus() {
-			return status;
-		}
+        /**
+         * Get task status
+         * 
+         * @return task status
+         */
+        public String getStatus() {
+            return status;
+        }
 
-		/**
-		 * Set task status
-		 * 
-		 * @param status task status
-		 */
-		public void setStatus(final String status) {
-			this.status = status;
-		}
+        /**
+         * Set task status
+         * 
+         * @param status task status
+         */
+        public void setStatus(final String status) {
+            this.status = status;
+        }
 
-		/**
-		 * Get timestamp
-		 * 
-		 * @return timestamp
-		 */
-		public String getTimestamp() {
-			return timestamp;
-		}
+        /**
+         * Get timestamp
+         * 
+         * @return timestamp
+         */
+        public String getTimestamp() {
+            return timestamp;
+        }
 
-		/**
-		 * Set timestamp
-		 * 
-		 * @param timestamp timestamp
-		 */
-		public void setTimestamp(final String timestamp) {
-			this.timestamp = timestamp;
-		}
+        /**
+         * Set timestamp
+         * 
+         * @param timestamp timestamp
+         */
+        public void setTimestamp(final String timestamp) {
+            this.timestamp = timestamp;
+        }
 
-	}
+    }
 
 }

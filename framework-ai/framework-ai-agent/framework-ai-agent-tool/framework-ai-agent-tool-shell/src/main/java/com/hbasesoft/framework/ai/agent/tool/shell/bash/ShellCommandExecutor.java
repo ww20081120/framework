@@ -18,39 +18,40 @@ package com.hbasesoft.framework.ai.agent.tool.shell.bash;
 import java.util.List;
 
 /**
- * Shell command executor interface. Provides cross-platform (Windows/Linux/Mac)
- * shell command execution capability
+ * Shell command executor interface. Provides cross-platform (Windows/Linux/Mac) shell command execution capability
  */
 public interface ShellCommandExecutor {
 
-	/**
-	 * Execute shell commands
-	 * 
-	 * @param commands   List of commands to execute
-	 * @param workingDir Working directory
-	 * @return List of command execution results
-	 */
-	List<String> execute(List<String> commands, String workingDir);
+    /**
+     * Execute shell commands
+     * 
+     * @param commands List of commands to execute
+     * @param workingDir Working directory
+     * @return List of command execution results
+     */
+    List<String> execute(List<String> commands, String workingDir);
 
-	/**
-	 * Terminate the currently executing process
-	 */
-	void terminate();
+    /**
+     * Terminate the currently executing process
+     */
+    void terminate();
 
-	/**
-	 * Get the current system type
-	 * 
-	 * @return System type (windows/linux/mac)
-	 */
-	default String getOsType() {
-		String os = System.getProperty("os.name").toLowerCase();
-		if (os.contains("win")) {
-			return "windows";
-		} else if (os.contains("mac")) {
-			return "mac";
-		} else {
-			return "linux";
-		}
-	}
+    /**
+     * Get the current system type
+     * 
+     * @return System type (windows/linux/mac)
+     */
+    default String getOsType() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return "windows";
+        }
+        else if (os.contains("mac")) {
+            return "mac";
+        }
+        else {
+            return "linux";
+        }
+    }
 
 }

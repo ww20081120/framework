@@ -26,52 +26,50 @@ import com.hbasesoft.framework.ai.agent.config.model.enums.ConfigInputType;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfigProperty {
 
-	/**
-	 * Top-level group
-	 */
-	String group();
+    /**
+     * Top-level group
+     */
+    String group();
 
-	/**
-	 * Secondary group
-	 */
-	String subGroup();
+    /**
+     * Secondary group
+     */
+    String subGroup();
 
-	/**
-	 * Configuration item key
-	 */
-	String key();
+    /**
+     * Configuration item key
+     */
+    String key();
 
-	/**
-	 * Configuration item YAML full path, used to find specific configuration items
-	 * as default values in the database
-	 */
-	String path();
+    /**
+     * Configuration item YAML full path, used to find specific configuration items as default values in the database
+     */
+    String path();
 
-	/**
-	 * Configuration item description
-	 * <p>
-	 * Supports internationalization key format:
-	 * config.desc.{group}.{subGroup}.{key}
-	 */
-	String description() default "";
+    /**
+     * Configuration item description
+     * <p>
+     * Supports internationalization key format: config.desc.{group}.{subGroup}.{key}
+     */
+    String description() default "";
 
-	/**
-	 * Configuration item default value
-	 */
-	String defaultValue() default "";
+    /**
+     * Configuration item default value
+     */
+    String defaultValue() default "";
 
-	/**
-	 * Configuration item input type
-	 * <p>
-	 * Default is text input box
-	 */
-	ConfigInputType inputType() default ConfigInputType.TEXT;
+    /**
+     * Configuration item input type
+     * <p>
+     * Default is text input box
+     */
+    ConfigInputType inputType() default ConfigInputType.TEXT;
 
-	/**
-	 * Dropdown box options
-	 * <p>
-	 * Only effective when inputType = SELECT
-	 */
-	ConfigOption[] options() default {};
+    /**
+     * Dropdown box options
+     * <p>
+     * Only effective when inputType = SELECT
+     */
+    ConfigOption[] options() default {};
 
 }

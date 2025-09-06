@@ -35,84 +35,83 @@ import lombok.Setter;
 @Table(name = "dynamic_models")
 public class DynamicModelPo4Jpa extends BaseEntity {
 
-	/**
-	 * serialVersionUID <br>
-	 */
-	private static final long serialVersionUID = -1262687376925857455L;
+    /**
+     * serialVersionUID <br>
+     */
+    private static final long serialVersionUID = -1262687376925857455L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "base_url", nullable = false)
-	private String baseUrl;
+    @Column(name = "base_url", nullable = false)
+    private String baseUrl;
 
-	@Column(name = "api_key", nullable = false)
-	private String apiKey;
+    @Column(name = "api_key", nullable = false)
+    private String apiKey;
 
-	@Column(name = "headers", columnDefinition = "VARCHAR(2048)")
-	private String headers;
+    @Column(name = "headers", columnDefinition = "VARCHAR(2048)")
+    private String headers;
 
-	@Column(name = "model_name", nullable = false)
-	private String modelName;
+    @Column(name = "model_name", nullable = false)
+    private String modelName;
 
-	@Column(name = "model_description", nullable = false, length = 1000)
-	private String modelDescription;
+    @Column(name = "model_description", nullable = false, length = 1000)
+    private String modelDescription;
 
-	@Column(name = "type", nullable = false)
-	private String type;
+    @Column(name = "type", nullable = false)
+    private String type;
 
-	@Column(name = "is_default", nullable = false)
-	private Integer isDefault;
+    @Column(name = "is_default", nullable = false)
+    private Integer isDefault;
 
-	@Column(name = "temperature")
-	private Double temperature;
+    @Column(name = "temperature")
+    private Double temperature;
 
-	@Column(name = "top_p")
-	private Double topP;
+    @Column(name = "top_p")
+    private Double topP;
 
-	@Column(name = "completions_path")
-	private String completionsPath;
+    @Column(name = "completions_path")
+    private String completionsPath;
 
-	public DynamicModelPo4Jpa() {
-	}
+    public DynamicModelPo4Jpa() {
+    }
 
-	public DynamicModelPo4Jpa(Long id) {
-		this.id = id;
-	}
+    public DynamicModelPo4Jpa(Long id) {
+        this.id = id;
+    }
 
-	public ModelConfig mapToModelConfig() {
-		ModelConfig config = new ModelConfig();
-		config.setId(this.getId());
-		config.setHeaders(new MapToStringConverter().convertToEntityAttribute(this.getHeaders()));
-		config.setBaseUrl(this.getBaseUrl());
-		config.setApiKey(maskValue(this.getApiKey()));
-		config.setModelName(this.getModelName());
-		config.setModelDescription(this.getModelDescription());
-		config.setType(this.getType());
-		config.setIsDefault(this.getIsDefault() == 0 ? false : true);
-		config.setTemperature(this.getTemperature());
-		config.setTopP(this.getTopP());
-		config.setCompletionsPath(this.getCompletionsPath());
-		return config;
-	}
+    public ModelConfig mapToModelConfig() {
+        ModelConfig config = new ModelConfig();
+        config.setId(this.getId());
+        config.setHeaders(new MapToStringConverter().convertToEntityAttribute(this.getHeaders()));
+        config.setBaseUrl(this.getBaseUrl());
+        config.setApiKey(maskValue(this.getApiKey()));
+        config.setModelName(this.getModelName());
+        config.setModelDescription(this.getModelDescription());
+        config.setType(this.getType());
+        config.setIsDefault(this.getIsDefault() == 0 ? false : true);
+        config.setTemperature(this.getTemperature());
+        config.setTopP(this.getTopP());
+        config.setCompletionsPath(this.getCompletionsPath());
+        return config;
+    }
 
-	/**
-	 * Obscures the string, keeping the first 4 and last 4 characters visible,
-	 * replacing the rest with asterisks (*)
-	 */
-	private String maskValue(String value) {
-		if (value == null || value.length() <= 8) {
-			return "*";
-		}
-		int length = value.length();
-		String front = value.substring(0, 4);
-		String end = value.substring(length - 4);
-		return front + "*".repeat(length - 8) + end;
-	}
+    /**
+     * Obscures the string, keeping the first 4 and last 4 characters visible, replacing the rest with asterisks (*)
+     */
+    private String maskValue(String value) {
+        if (value == null || value.length() <= 8) {
+            return "*";
+        }
+        int length = value.length();
+        String front = value.substring(0, 4);
+        String end = value.substring(length - 4);
+        return front + "*".repeat(length - 8) + end;
+    }
 
-	public void setHeaders(Map<String, String> headers) {
-		this.headers = new MapToStringConverter().convertToDatabaseColumn(headers);
-	}
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = new MapToStringConverter().convertToDatabaseColumn(headers);
+    }
 
 }
