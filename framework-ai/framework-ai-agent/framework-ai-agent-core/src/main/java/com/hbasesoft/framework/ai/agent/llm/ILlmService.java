@@ -10,18 +10,15 @@ import org.springframework.ai.chat.memory.ChatMemory;
 
 import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * LLM service interface, providing chat client and memory management functionality
+ * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
  * @CreateDate 2025年8月18日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.agent.llm <br>
- */
-/**
- * LLM service interface, providing chat client and memory management functionality
  */
 public interface ILlmService {
 

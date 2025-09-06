@@ -38,19 +38,40 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import io.micrometer.observation.ObservationRegistry;
 import reactor.core.publisher.Flux;
 
+/**
+ * LLM service implementation
+ */
 @Service
 public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent> {
 
+    /**
+     * Agent execution chat client
+     */
     private ChatClient agentExecutionClient;
 
+    /**
+     * Planning chat client
+     */
     private ChatClient planningChatClient;
 
+    /**
+     * Finalize chat client
+     */
     private ChatClient finalizeChatClient;
 
+    /**
+     * Conversation memory
+     */
     private ChatMemory conversationMemory;
 
+    /**
+     * Agent memory
+     */
     private ChatMemory agentMemory;
 
+    /**
+     * Dynamic chat clients map
+     */
     private Map<Long, ChatClient> clients = new ConcurrentHashMap<>();
 
     /*
@@ -83,9 +104,15 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
     @Autowired
     private LlmTraceRecorder llmTraceRecorder;
 
+    /**
+     * Constructor
+     */
     public LlmService() {
     }
 
+    /**
+     * Initialize the LLM service
+     */
     public void init() {
         try {
             LoggerUtil.info("Checking and init ChatClient instance...");
@@ -115,6 +142,11 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         }
     }
 
+    /**
+     * Initialize chat clients with the specified model
+     * 
+     * @param model the model configuration
+     */
     private void initializeChatClientsWithModel(ModelConfig model) {
         OpenAiChatOptions.Builder optionsBuilder = OpenAiChatOptions.builder();
 
@@ -149,6 +181,9 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         buildOrUpdateDynamicChatClient(model);
     }
 
+    /**
+     * Try lazy initialization of chat clients
+     */
     private void tryLazyInitialization() {
         try {
             ModelConfig defaultModel = dynamicModelService.getDefault();
@@ -169,6 +204,11 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         }
     }
 
+    /**
+     * Get agent chat client
+     * 
+     * @return ChatClient
+     */
     @Override
     public ChatClient getAgentChatClient() {
         if (agentExecutionClient == null) {
@@ -182,6 +222,12 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         return agentExecutionClient;
     }
 
+    /**
+     * Get dynamic chat client
+     * 
+     * @param model the model configuration
+     * @return ChatClient
+     */
     @Override
     public ChatClient getDynamicChatClient(ModelConfig model) {
         Long modelId = model.getId();
@@ -191,6 +237,12 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         return buildOrUpdateDynamicChatClient(model);
     }
 
+    /**
+     * Build or update dynamic chat client
+     * 
+     * @param model the model configuration
+     * @return ChatClient
+     */
     public ChatClient buildOrUpdateDynamicChatClient(ModelConfig model) {
         Long modelId = model.getId();
         String host = model.getBaseUrl();
@@ -225,6 +277,12 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         return client;
     }
 
+    /**
+     * Get agent memory
+     * 
+     * @param maxMessages maximum number of messages
+     * @return ChatMemory
+     */
     @Override
     public ChatMemory getAgentMemory(Integer maxMessages) {
         if (agentMemory == null) {
@@ -235,6 +293,11 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         return agentMemory;
     }
 
+    /**
+     * Clear agent memory
+     * 
+     * @param memoryId memory ID
+     */
     @Override
     public void clearAgentMemory(String memoryId) {
         if (this.agentMemory != null) {

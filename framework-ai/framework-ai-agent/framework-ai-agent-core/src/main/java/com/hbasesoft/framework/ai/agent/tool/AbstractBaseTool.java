@@ -20,6 +20,11 @@ import org.springframework.ai.chat.model.ToolContext;
 public abstract class AbstractBaseTool<I> implements ToolCallBiFunctionDef<I> {
 
     /**
+     * ThreadLocal holder for ToolContext
+     */
+    private static final ThreadLocal<ToolContext> TOOL_CONTEXT_HOLDER = new ThreadLocal<>();
+
+    /**
      * Current plan ID for the tool execution context
      */
     protected String currentPlanId;
@@ -49,7 +54,14 @@ public abstract class AbstractBaseTool<I> implements ToolCallBiFunctionDef<I> {
      */
     @Override
     public ToolExecuteResult apply(I input, ToolContext toolContext) {
-        return run(input);
+        // Set the tool context in the ThreadLocal
+        TOOL_CONTEXT_HOLDER.set(toolContext);
+        try {
+            return run(input);
+        } finally {
+            // Clean up the tool context from the ThreadLocal
+            TOOL_CONTEXT_HOLDER.remove();
+        }
     }
 
     /**
@@ -60,4 +72,12 @@ public abstract class AbstractBaseTool<I> implements ToolCallBiFunctionDef<I> {
      */
     public abstract ToolExecuteResult run(I input);
 
+    /**
+     * Get the current ToolContext for this thread
+     * 
+     * @return the current ToolContext or null if none is set
+     */
+    public static ToolContext getCurrentToolContext() {
+        return TOOL_CONTEXT_HOLDER.get();
+    }
 }

@@ -250,7 +250,7 @@ public class AgentServiceImpl extends AbstractAgentService {
 
         // 遍历所有方法，查找带有@Action注解的方法
         for (Method method : methods) {
-            Action actionAnnotation = method.getAnnotation(Action.class);
+            Action actionAnnotation = AnnotationUtils.getAnnotation(method, Action.class);
             if (actionAnnotation != null) {
                 // 创建适配器并注册为工具
                 AnnotatedMethodToolAdapter toolAdapter = new AnnotatedMethodToolAdapter(bean, method, actionAnnotation,

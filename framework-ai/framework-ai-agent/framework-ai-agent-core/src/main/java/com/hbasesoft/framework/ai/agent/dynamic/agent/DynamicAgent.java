@@ -209,8 +209,8 @@ public class DynamicAgent extends ReActAgent {
             }
             // Use streaming response handler for better user experience and content
             // merging
-            Flux<ChatResponse> responseFlux = chatClient.prompt(userPrompt).toolCallbacks(callbacks).stream()
-                .chatResponse();
+            Flux<ChatResponse> responseFlux = chatClient.prompt(userPrompt).toolCallbacks(callbacks)
+                .toolContext(getMergedData()).stream().chatResponse();
             streamResult = streamingResponseHandler.processStreamingResponse(responseFlux,
                 "Agent " + getName() + " thinking", getCurrentPlanId());
 
