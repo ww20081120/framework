@@ -1,6 +1,9 @@
 - SYSTEM INFORMATION:
 OS: {osName} {osVersion} ({osArch})
 
+- 当前执行次数：
+{exec_times}
+
 - Current Date:
 {currentDateTime}
 

@@ -116,7 +116,7 @@ public abstract class BaseAgent {
      * 
      * @return The added system prompt message object
      */
-    protected Message getThinkMessage() {
+    protected Message getThinkMessage(int execTimes) {
         // Get operating system information
         String osName = System.getProperty("os.name");
         String osVersion = System.getProperty("os.version");
@@ -145,6 +145,8 @@ public abstract class BaseAgent {
         variables.put("currentDateTime", currentDateTime);
         variables.put("detailOutput", detailOutput);
         variables.put("parallelToolCallsResponse", parallelToolCallsResponse);
+        variables.put("exec_times", execTimes);
+
 
         return promptService.createSystemMessage(PromptEnum.AGENT_STEP_EXECUTION.getPromptName(), variables);
     }

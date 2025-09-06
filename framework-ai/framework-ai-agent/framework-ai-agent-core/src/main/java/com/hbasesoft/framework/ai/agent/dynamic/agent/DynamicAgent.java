@@ -180,7 +180,7 @@ public class DynamicAgent extends ReActAgent {
         int attempt = 0;
         while (attempt < maxRetries) {
             attempt++;
-            Message systemMessage = getThinkMessage();
+            Message systemMessage = getThinkMessage(attempt);
             // Use current env as user message
             Message currentStepEnvMessage = currentStepEnvMessage();
             // Record think message
@@ -542,8 +542,8 @@ public class DynamicAgent extends ReActAgent {
     }
 
     @Override
-    protected Message getThinkMessage() {
-        Message baseThinkPrompt = super.getThinkMessage();
+    protected Message getThinkMessage(int execTimes) {
+        Message baseThinkPrompt = super.getThinkMessage(execTimes);
         Message nextStepWithEnvMessage = getNextStepWithEnvMessage();
         SystemMessage thinkMessage = new SystemMessage("""
             <SystemInfo>
