@@ -33,7 +33,7 @@ public abstract class ReActAgent extends BaseAgent {
      * 
      * @return true indicates action execution is needed, false indicates no action is currently needed
      */
-    protected abstract boolean think();
+    protected abstract boolean think(int currentStep);
 
     /**
      * Execute specific actions Subclass implementation requirements: 1. Execute specific operations based on think()
@@ -51,9 +51,9 @@ public abstract class ReActAgent extends BaseAgent {
      * @return returns thinking complete message if no action is needed, otherwise returns action execution result
      */
     @Override
-    public AgentExecResult step() {
+    public AgentExecResult step(int currentStep) {
 
-        boolean shouldAct = think();
+        boolean shouldAct = think(currentStep);
         if (!shouldAct) {
             AgentExecResult result = new AgentExecResult("Thinking complete - no action needed",
                 AgentState.IN_PROGRESS);

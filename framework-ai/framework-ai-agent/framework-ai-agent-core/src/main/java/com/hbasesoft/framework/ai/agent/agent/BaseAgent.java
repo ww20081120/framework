@@ -205,7 +205,7 @@ public abstract class BaseAgent {
                 currentStep++;
                 LoggerUtil.info("Executing round {0}/{1}", currentStep, maxSteps);
 
-                AgentExecResult stepResult = step();
+                AgentExecResult stepResult = step(currentStep);
 
                 if (isStuck()) {
                     handleStuckState();
@@ -292,7 +292,7 @@ public abstract class BaseAgent {
         return results.isEmpty() ? "" : results.get(results.size() - 1);
     }
 
-    protected abstract AgentExecResult step();
+    protected abstract AgentExecResult step(int currentStep);
 
     private void handleStuckState() {
         LoggerUtil.warn("Agent stuck detected - Missing tool calls");

@@ -144,11 +144,11 @@ public class DynamicAgent extends ReActAgent {
     }
 
     @Override
-    protected boolean think() {
+    protected boolean think(int currentStep) {
         collectAndSetEnvDataForTools();
 
         try {
-            return executeWithRetry(retryTimes);
+            return executeWithRetry(retryTimes, currentStep);
         }
         catch (Exception e) {
             LoggerUtil.error(e,
@@ -176,11 +176,11 @@ public class DynamicAgent extends ReActAgent {
 
     }
 
-    private boolean executeWithRetry(int maxRetries) throws Exception {
+    private boolean executeWithRetry(int maxRetries, int currentStep) throws Exception {
         int attempt = 0;
         while (attempt < maxRetries) {
             attempt++;
-            Message systemMessage = getThinkMessage(attempt);
+            Message systemMessage = getThinkMessage(currentStep);
             // Use current env as user message
             Message currentStepEnvMessage = currentStepEnvMessage();
             // Record think message
