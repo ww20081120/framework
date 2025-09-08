@@ -5,6 +5,8 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils.config;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -133,19 +135,31 @@ public class LocalProperty implements Property {
      *         <br>
      */
     private void init() {
+        String configPath = System.getProperty("spring.config.location");
         String systemConfig = "/application.yml";
-        ClassPathResource cr = null;
         try {
-            cr = new ClassPathResource(systemConfig);
-            if (cr.exists()) {
-                loadYml(cr.getInputStream(), props);
+            if (StringUtils.isNotEmpty(configPath)) {
+                File dir = new File(configPath);
+                File f = new File(dir, systemConfig);
+                if(f.exists()) {
+                    loadYml(new FileInputStream(f), props);
+                } else {
+                    f = new File("/application.properties");
+                    loadProperties(new FileInputStream(f), props);
+                }
             }
             else {
-                systemConfig = "/application.properties";
-                cr = new ClassPathResource(systemConfig);
-                loadProperties(cr.getInputStream(), props);
+                ClassPathResource cr = new ClassPathResource(systemConfig);
+                if (cr.exists()) {
+                    loadYml(cr.getInputStream(), props);
+                }
+                else {
+                    systemConfig = "/application.properties";
+                    cr = new ClassPathResource(systemConfig);
+                    loadProperties(cr.getInputStream(), props);
+                }
+                System.out.println("装入主配置文件:" + systemConfig);
             }
-            System.out.println("装入主配置文件:" + systemConfig);
         }
         catch (Exception e) {
             System.out.println("装入主配置文件" + systemConfig + "失败!");
