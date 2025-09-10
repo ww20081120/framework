@@ -8,10 +8,6 @@ package com.hbasesoft.framework.ai.agent.tool;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.Proxy;
-
-import org.springframework.aop.framework.AopProxyUtils;
-import org.springframework.aop.support.AopUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,9 +17,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.aop.support.AopUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * <Description> Adapter for converting annotated methods to ToolCallBiFunctionDef <br>
@@ -45,50 +45,15 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
 
     private final ObjectMapper objectMapper;
 
+    private final String parameters;
+
     public AnnotatedMethodToolAdapter(Object targetObject, Method method, Action actionAnnotation,
         ObjectMapper objectMapper) {
         this.targetObject = targetObject;
         this.method = method;
         this.actionAnnotation = actionAnnotation;
         this.objectMapper = objectMapper;
-    }
-
-    /**
-     * Get ActionParam annotation from parameter, handling Spring proxy objects
-     * 
-     * @param param The parameter to get annotation from
-     * @return The ActionParam annotation or null if not found
-     */
-    private ActionParam getActionParamAnnotation(Parameter param) {
-        // First try to get annotation directly from the parameter
-        ActionParam actionParam = param.getAnnotation(ActionParam.class);
-        if (actionParam != null) {
-            return actionParam;
-        }
-
-        // If not found and targetObject is a Spring proxy, try to get from target method
-        if (AopUtils.isAopProxy(targetObject)) {
-            try {
-                // Get the target class
-                Class<?> targetClass = AopProxyUtils.ultimateTargetClass(targetObject);
-                
-                // Find the corresponding method in the target class
-                Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
-                
-                // Get the parameter from the target method at the same index
-                Parameter[] targetParameters = targetMethod.getParameters();
-                int paramIndex = java.util.Arrays.asList(method.getParameters()).indexOf(param);
-                
-                if (paramIndex >= 0 && paramIndex < targetParameters.length) {
-                    return targetParameters[paramIndex].getAnnotation(ActionParam.class);
-                }
-            } catch (NoSuchMethodException e) {
-                // If we can't find the method in the target class, return null
-                return null;
-            }
-        }
-        
-        return null;
+        this.parameters = initParameters();
     }
 
     @Override
@@ -116,6 +81,118 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
 
     @Override
     public String getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public Class<Map<String, Object>> getInputType() {
+        return (Class<Map<String, Object>>) (Class<?>) Map.class;
+    }
+
+    @Override
+    public String getCurrentToolStateString() {
+        return "AnnotatedMethodToolAdapter for method: " + method.getName();
+    }
+
+    @Override
+    public void cleanup(String planId) {
+        // No specific cleanup needed for method-based tools
+    }
+
+    @Override
+    public ToolExecuteResult run(Map<String, Object> input) {
+        try {
+            // Convert input parameters to method arguments
+            Parameter[] methodParameters = method.getParameters();
+
+            // If this is a Spring AOP proxy, get parameter names from the target method
+            Parameter[] targetMethodParameters = methodParameters;
+            if (AopUtils.isAopProxy(targetObject)) {
+                try {
+                    Class<?> targetClass = AopProxyUtils.ultimateTargetClass(targetObject);
+                    Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
+                    targetMethodParameters = targetMethod.getParameters();
+                }
+                catch (NoSuchMethodException e) {
+                    // If we can't find the method in the target class, use the proxy method parameters
+                }
+            }
+
+            Object[] args = new Object[methodParameters.length];
+
+            for (int i = 0; i < methodParameters.length; i++) {
+                Parameter param = methodParameters[i];
+                String paramName = (i < targetMethodParameters.length) ? targetMethodParameters[i].getName()
+                    : param.getName();
+                Object value = input.get(paramName);
+
+                // Handle type conversion
+                if (value != null) {
+                    args[i] = convertValue(value, param.getType());
+                }
+                else {
+                    // Check if parameter is required
+                    ActionParam actionParam = getActionParamAnnotation(param);
+                    if (actionParam != null && actionParam.required()) {
+                        throw new IllegalArgumentException("Required parameter '" + paramName + "' is missing");
+                    }
+                    args[i] = null;
+                }
+            }
+
+            // Invoke the method
+            Object result = method.invoke(targetObject, args);
+
+            // Return result as ToolExecuteResult
+            return new ToolExecuteResult(result != null ? result.toString() : "", false);
+        }
+        catch (Exception e) {
+            LoggerUtil.error(e);
+            return new ToolExecuteResult("Error executing tool: " + e.getMessage(), true);
+        }
+    }
+
+    /**
+     * Get ActionParam annotation from parameter, handling Spring proxy objects
+     * 
+     * @param param The parameter to get annotation from
+     * @return The ActionParam annotation or null if not found
+     */
+    private ActionParam getActionParamAnnotation(Parameter param) {
+        // First try to get annotation directly from the parameter
+        ActionParam actionParam = param.getAnnotation(ActionParam.class);
+        if (actionParam != null) {
+            return actionParam;
+        }
+
+        // If not found and targetObject is a Spring proxy, try to get from target method
+        if (AopUtils.isAopProxy(targetObject)) {
+            try {
+                // Get the target class
+                Class<?> targetClass = AopProxyUtils.ultimateTargetClass(targetObject);
+
+                // Find the corresponding method in the target class
+                Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
+
+                // Get the parameter from the target method at the same index
+                Parameter[] targetParameters = targetMethod.getParameters();
+                int paramIndex = java.util.Arrays.asList(method.getParameters()).indexOf(param);
+
+                if (paramIndex >= 0 && paramIndex < targetParameters.length) {
+                    return targetParameters[paramIndex].getAnnotation(ActionParam.class);
+                }
+            }
+            catch (NoSuchMethodException e) {
+                // If we can't find the method in the target class, return null
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    private String initParameters() {
+
         ObjectNode parameters = objectMapper.createObjectNode();
         ObjectNode properties = objectMapper.createObjectNode();
         parameters.put("type", "object");
@@ -123,20 +200,39 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         // Add method parameters as tool parameters
         Parameter[] methodParameters = method.getParameters();
 
+        // If this is a Spring AOP proxy, get parameter names from the target method
+        Parameter[] targetMethodParameters = methodParameters;
+        if (AopUtils.isAopProxy(targetObject)) {
+            try {
+                Class<?> targetClass = AopProxyUtils.ultimateTargetClass(targetObject);
+                Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
+                targetMethodParameters = targetMethod.getParameters();
+            }
+            catch (NoSuchMethodException e) {
+                // If we can't find the method in the target class, use the proxy method parameters
+            }
+        }
+
         // Process parameters
-        for (Parameter param : methodParameters) {
+        for (int i = 0; i < methodParameters.length; i++) {
+            Parameter param = methodParameters[i];
+            String paramName = (i < targetMethodParameters.length) ? targetMethodParameters[i].getName()
+                : param.getName();
             ObjectNode paramNode = objectMapper.createObjectNode();
-            processParameterOrField(param, param.getName(), paramNode);
-            properties.set(param.getName(), paramNode);
+            processParameterOrField(param, paramName, paramNode);
+            properties.set(paramName, paramNode);
         }
 
         parameters.set("properties", properties);
         // Add required parameters
         ArrayNode requiredArray = objectMapper.createArrayNode();
-        for (Parameter param : methodParameters) {
+        for (int i = 0; i < methodParameters.length; i++) {
+            Parameter param = methodParameters[i];
+            String paramName = (i < targetMethodParameters.length) ? targetMethodParameters[i].getName()
+                : param.getName();
             ActionParam actionParam = getActionParamAnnotation(param);
             if (actionParam == null || actionParam.required()) {
-                requiredArray.add(param.getName());
+                requiredArray.add(paramName);
             }
         }
 
@@ -145,6 +241,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         }
 
         return parameters.toString();
+
     }
 
     /**
@@ -306,58 +403,6 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         }
 
         paramNode.set("properties", properties);
-    }
-
-    @Override
-    public Class<Map<String, Object>> getInputType() {
-        return (Class<Map<String, Object>>) (Class<?>) Map.class;
-    }
-
-    @Override
-    public String getCurrentToolStateString() {
-        return "AnnotatedMethodToolAdapter for method: " + method.getName();
-    }
-
-    @Override
-    public void cleanup(String planId) {
-        // No specific cleanup needed for method-based tools
-    }
-
-    @Override
-    public ToolExecuteResult run(Map<String, Object> input) {
-        try {
-            // Convert input parameters to method arguments
-            Parameter[] methodParameters = method.getParameters();
-            Object[] args = new Object[methodParameters.length];
-
-            for (int i = 0; i < methodParameters.length; i++) {
-                Parameter param = methodParameters[i];
-                String paramName = param.getName();
-                Object value = input.get(paramName);
-
-                // Handle type conversion
-                if (value != null) {
-                    args[i] = convertValue(value, param.getType());
-                }
-                else {
-                    // Check if parameter is required
-                    ActionParam actionParam = getActionParamAnnotation(param);
-                    if (actionParam != null && actionParam.required()) {
-                        throw new IllegalArgumentException("Required parameter '" + paramName + "' is missing");
-                    }
-                    args[i] = null;
-                }
-            }
-
-            // Invoke the method
-            Object result = method.invoke(targetObject, args);
-
-            // Return result as ToolExecuteResult
-            return new ToolExecuteResult(result != null ? result.toString() : "", false);
-        }
-        catch (Exception e) {
-            return new ToolExecuteResult("Error executing tool: " + e.getMessage(), true);
-        }
     }
 
     /**
