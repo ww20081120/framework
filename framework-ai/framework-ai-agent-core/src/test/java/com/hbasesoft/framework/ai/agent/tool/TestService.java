@@ -8,6 +8,7 @@ package com.hbasesoft.framework.ai.agent.tool;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <Description> Test service for verifying enhanced parameter handling <br>
@@ -42,5 +43,19 @@ public class TestService {
         @ActionParam(description = "Char parameter") char charValue) {
         return "Test with primitives: byte=" + byteValue + ", short=" + shortValue + ", float=" + floatValue + ", char="
             + charValue;
+    }
+
+    @Action(description = "Test method with list of objects")
+    public String testWithObjectList(@ActionParam(description = "List of test objects") List<TestObject> testObjects) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Test with object list: [");
+        if (testObjects != null) {
+            for (int i = 0; i < testObjects.size(); i++) {
+                if (i > 0) sb.append(", ");
+                sb.append(testObjects.get(i).toString());
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }

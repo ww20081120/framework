@@ -8,6 +8,7 @@ package com.hbasesoft.framework.ai.agent.tool;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <Description> Test object for verifying object parameter handling <br>
@@ -21,18 +22,25 @@ import java.util.Date;
  */
 public class TestObject {
 
+    @ActionParam(description = "Name field")
     private String name;
 
+    @ActionParam(description = "Age field")
     private int age;
 
+    @ActionParam(description = "Birth date field")
     private Date birthDate;
 
+    @ActionParam(description = "Local date field")
     private LocalDate localDate;
 
+    @ActionParam(description = "Local datetime field")
     private LocalDateTime localDateTime;
 
+    @ActionParam(description = "Active status field")
     private boolean active;
 
+    @ActionParam(description = "Score field")
     private double score;
 
     // Constructors
