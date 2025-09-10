@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.tool;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -147,6 +148,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
             return new ToolExecuteResult(result != null ? result.toString() : "", false);
         }
         catch (Exception e) {
+
             LoggerUtil.error(e);
             return new ToolExecuteResult("Error executing tool: " + e.getMessage(), true);
         }
@@ -209,7 +211,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
                 targetMethodParameters = targetMethod.getParameters();
             }
             catch (NoSuchMethodException e) {
-                // If we can't find the method in the target class, use the proxy method parameters
+                LoggerUtil.error(e);
             }
         }
 
@@ -219,7 +221,8 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
             String paramName = (i < targetMethodParameters.length) ? targetMethodParameters[i].getName()
                 : param.getName();
             ObjectNode paramNode = objectMapper.createObjectNode();
-            processParameterOrField(param, paramName, paramNode);
+            ActionParam actionParam = getActionParamAnnotation(param);
+            processParameterOrField(param, paramName, paramNode, actionParam);
             properties.set(paramName, paramNode);
         }
 
@@ -349,33 +352,23 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
      * @param name The name of the parameter or field
      * @param node The node to populate
      */
-    private void processParameterOrField(Object paramOrField, String name, ObjectNode node) {
-        if (paramOrField instanceof Parameter) {
-            Parameter param = (Parameter) paramOrField;
-
+    private void processParameterOrField(Object paramOrField, String name, ObjectNode node, ActionParam actionParam) {
+        if (paramOrField instanceof Parameter param) {
             // Process parameter type
             processType(param.getType(), node);
-
-            ActionParam actionParam = getActionParamAnnotation(param);
-            if (actionParam != null) {
-                if (!actionParam.description().isEmpty()) {
-                    node.put("description", actionParam.description());
-                }
-                node.put("required", actionParam.required());
-            }
-            else {
-                // Default parameter info
-                node.put("description", "Parameter for " + name);
-            }
         }
-        else if (paramOrField instanceof Field) {
-            Field field = (Field) paramOrField;
-
+        else if (paramOrField instanceof Field field) {
             // Process field type
             processType(field.getType(), node);
+        }
 
-            // Add description from field annotations if available
-            // This would typically use @JsonProperty or similar annotations
+        if (actionParam != null) {
+            if (!actionParam.description().isEmpty()) {
+                node.put("description", actionParam.description());
+            }
+            node.put("required", actionParam.required());
+        }
+        else {
             node.put("description", "Field " + name);
         }
     }
@@ -394,12 +387,15 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         // Get all declared fields of the class
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            ObjectNode fieldNode = objectMapper.createObjectNode();
+            // Only process fields with ActionParam annotation
+            ActionParam actionParam = field.getAnnotation(ActionParam.class);
+            if (actionParam != null) {
+                ObjectNode fieldNode = objectMapper.createObjectNode();
+                // Process field
+                processParameterOrField(field, field.getName(), fieldNode, actionParam);
 
-            // Process field
-            processParameterOrField(field, field.getName(), fieldNode);
-
-            properties.set(field.getName(), fieldNode);
+                properties.set(field.getName(), fieldNode);
+            }
         }
 
         paramNode.set("properties", properties);
@@ -481,7 +477,8 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
      * @return The converted array
      */
     private Object convertToArray(Object value, Class<?> arrayType) {
-        if (value instanceof Iterable) {
+
+        if (value instanceof Collection it) {
             Iterable<?> iterable = (Iterable<?>) value;
             Class<?> componentType = arrayType.getComponentType();
 
@@ -536,12 +533,10 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
                 return booleanArray;
             }
             else {
-                // For complex types, try to convert from JSON
-                Object[] objectArray = new Object[iterable instanceof Collection ? ((Collection<?>) iterable).size()
-                    : 10];
+                var objectArray = Array.newInstance(componentType, it.size());
                 int index = 0;
-                for (Object item : iterable) {
-                    objectArray[index++] = objectMapper.convertValue(item, componentType);
+                for (Object item : it) {
+                    Array.set(objectArray, index++, objectMapper.convertValue(item, componentType));
                 }
                 return objectArray;
             }
@@ -549,37 +544,8 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         else {
             // Handle as single value array
             Class<?> componentType = arrayType.getComponentType();
-            if (componentType == String.class) {
-                return new String[] {
-                    value.toString()
-                };
-            }
-            else if (componentType == Integer.class || componentType == int.class) {
-                return new int[] {
-                    Integer.valueOf(value.toString())
-                };
-            }
-            else if (componentType == Long.class || componentType == long.class) {
-                return new long[] {
-                    Long.valueOf(value.toString())
-                };
-            }
-            else if (componentType == Double.class || componentType == double.class) {
-                return new double[] {
-                    Double.valueOf(value.toString())
-                };
-            }
-            else if (componentType == Boolean.class || componentType == boolean.class) {
-                return new boolean[] {
-                    Boolean.valueOf(value.toString())
-                };
-            }
-            else {
-                // For complex types, try to convert from JSON
-                Object[] objectArray = new Object[1];
-                objectArray[0] = objectMapper.convertValue(value, componentType);
-                return objectArray;
-            }
+            // For complex types, try to convert from JSON
+            return objectMapper.convertValue(value, componentType);
         }
     }
 
