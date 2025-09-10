@@ -8,8 +8,6 @@ package com.hbasesoft.framework.ai.agent.tool;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -82,122 +80,12 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
 
         // Add method parameters as tool parameters
         Parameter[] methodParameters = method.getParameters();
+
+        // Process parameters
         for (Parameter param : methodParameters) {
             ObjectNode paramNode = objectMapper.createObjectNode();
-
-            // Get parameter name (Java 8+ with -parameters compiler flag)
-            String paramName = param.getName();
-
-            // Check for @ActionParam annotation
-            // Try to infer type from parameter type
-            Class<?> paramType = param.getType();
-            if (paramType == String.class) {
-                paramNode.put("type", "string");
-            }
-            else if (paramType == Integer.class || paramType == int.class) {
-                paramNode.put("type", "integer");
-            }
-            else if (paramType == Long.class || paramType == long.class) {
-                paramNode.put("type", "integer");
-            }
-            else if (paramType == Double.class || paramType == double.class) {
-                paramNode.put("type", "number");
-            }
-            else if (paramType == Boolean.class || paramType == boolean.class) {
-                paramNode.put("type", "boolean");
-            }
-            else if (paramType == Date.class || paramType == LocalDate.class || paramType == LocalDateTime.class) {
-                paramNode.put("type", "string");
-                paramNode.put("format", "date-time");
-            }
-            else if (paramType.isArray()) {
-                // Handle array types
-                paramNode.put("type", "array");
-                ObjectNode itemsNode = objectMapper.createObjectNode();
-                Class<?> componentType = paramType.getComponentType();
-                if (componentType == String.class) {
-                    itemsNode.put("type", "string");
-                }
-                else if (componentType == Integer.class || componentType == int.class) {
-                    itemsNode.put("type", "integer");
-                }
-                else if (componentType == Long.class || componentType == long.class) {
-                    itemsNode.put("type", "integer");
-                }
-                else if (componentType == Double.class || componentType == double.class) {
-                    itemsNode.put("type", "number");
-                }
-                else if (componentType == Boolean.class || componentType == boolean.class) {
-                    itemsNode.put("type", "boolean");
-                }
-                else if (componentType == Date.class || componentType == LocalDate.class || componentType == LocalDateTime.class) {
-                    itemsNode.put("type", "string");
-                    itemsNode.put("format", "date-time");
-                }
-                else if (componentType.isPrimitive()) {
-                    // Handle other primitive types
-                    if (componentType == byte.class || componentType == short.class) {
-                        itemsNode.put("type", "integer");
-                    }
-                    else if (componentType == float.class) {
-                        itemsNode.put("type", "number");
-                    }
-                    else if (componentType == char.class) {
-                        itemsNode.put("type", "string");
-                    }
-                    else {
-                        // Default to string for other primitives
-                        itemsNode.put("type", "string");
-                    }
-                }
-                else {
-                    // Handle complex object types in arrays
-                    addObjectProperties(componentType, itemsNode);
-                }
-                paramNode.set("items", itemsNode);
-            }
-            else if (Collection.class.isAssignableFrom(paramType)) {
-                // Handle Collection types (List, Set, etc.)
-                paramNode.put("type", "array");
-                ObjectNode itemsNode = objectMapper.createObjectNode();
-                // For Collection types, we can't easily determine the generic type at runtime
-                // So we'll use a generic object type for items
-                itemsNode.put("type", "object");
-                paramNode.set("items", itemsNode);
-            }
-            else if (paramType.isPrimitive()) {
-                // Handle other primitive types
-                if (paramType == byte.class || paramType == short.class) {
-                    paramNode.put("type", "integer");
-                }
-                else if (paramType == float.class) {
-                    paramNode.put("type", "number");
-                }
-                else if (paramType == char.class) {
-                    paramNode.put("type", "string");
-                }
-                else {
-                    // Default to string for other primitives
-                    paramNode.put("type", "string");
-                }
-            }
-            else {
-                // Handle complex object types recursively
-                addObjectProperties(paramType, paramNode);
-            }
-
-            ActionParam actionParam = param.getAnnotation(ActionParam.class);
-            if (actionParam != null) {
-                if (!actionParam.description().isEmpty()) {
-                    paramNode.put("description", actionParam.description());
-                }
-                paramNode.put("required", actionParam.required());
-            }
-            else {
-                // Default parameter info
-                paramNode.put("description", "Parameter for " + paramName);
-            }
-            properties.set(paramName, paramNode);
+            processParameterOrField(param, param.getName(), paramNode);
+            properties.set(param.getName(), paramNode);
         }
 
         parameters.set("properties", properties);
@@ -218,6 +106,142 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
     }
 
     /**
+     * Process type information and populate the parameter node
+     * 
+     * @param type The type to process
+     * @param node The node to populate
+     */
+    private void processType(Class<?> type, ObjectNode node) {
+        if (type == String.class) {
+            node.put("type", "string");
+        }
+        else if (type == Integer.class || type == int.class) {
+            node.put("type", "integer");
+        }
+        else if (type == Long.class || type == long.class) {
+            node.put("type", "integer");
+        }
+        else if (type == Double.class || type == double.class) {
+            node.put("type", "number");
+        }
+        else if (type == Boolean.class || type == boolean.class) {
+            node.put("type", "boolean");
+        }
+        else if (type == Date.class || type == LocalDate.class || type == LocalDateTime.class) {
+            node.put("type", "string");
+            node.put("format", "date-time");
+        }
+        else if (type.isArray()) {
+            // Handle array types
+            node.put("type", "array");
+            ObjectNode itemsNode = objectMapper.createObjectNode();
+            Class<?> componentType = type.getComponentType();
+            if (isPrimitiveType(componentType)) {
+                processType(componentType, itemsNode);
+            }
+            else if (componentType == Date.class || componentType == LocalDate.class
+                || componentType == LocalDateTime.class) {
+                processType(componentType, itemsNode);
+            }
+            else {
+                // Handle complex object types in arrays
+                addObjectProperties(componentType, itemsNode);
+            }
+            node.set("items", itemsNode);
+        }
+        else if (Collection.class.isAssignableFrom(type)) {
+            // Handle Collection types (List, Set, etc.)
+            node.put("type", "array");
+            ObjectNode itemsNode = objectMapper.createObjectNode();
+            // For Collection types, we can't easily determine the generic type at runtime
+            // So we'll use a generic object type for items
+            itemsNode.put("type", "object");
+            node.set("items", itemsNode);
+        }
+        else if (type.isPrimitive()) {
+            // Handle other primitive types
+            processPrimitiveType(type, node);
+        }
+        else {
+            // Handle complex object types recursively
+            addObjectProperties(type, node);
+        }
+    }
+
+    /**
+     * Check if a type is a primitive type
+     * 
+     * @param type The type to check
+     * @return true if the type is a primitive type
+     */
+    private boolean isPrimitiveType(Class<?> type) {
+        return type == String.class || type == Integer.class || type == int.class || type == Long.class
+            || type == long.class || type == Double.class || type == double.class || type == Boolean.class
+            || type == boolean.class || type == byte.class || type == short.class || type == float.class
+            || type == char.class;
+    }
+
+    /**
+     * Process primitive types
+     * 
+     * @param type The primitive type
+     * @param node The node to populate
+     */
+    private void processPrimitiveType(Class<?> type, ObjectNode node) {
+        if (type == byte.class || type == short.class) {
+            node.put("type", "integer");
+        }
+        else if (type == float.class) {
+            node.put("type", "number");
+        }
+        else if (type == char.class) {
+            node.put("type", "string");
+        }
+        else {
+            // Default to string for other primitives
+            node.put("type", "string");
+        }
+    }
+
+    /**
+     * Process a parameter or field, handling type information and metadata
+     * 
+     * @param paramOrField The parameter or field to process
+     * @param name The name of the parameter or field
+     * @param node The node to populate
+     */
+    private void processParameterOrField(Object paramOrField, String name, ObjectNode node) {
+        if (paramOrField instanceof Parameter) {
+            Parameter param = (Parameter) paramOrField;
+
+            // Process parameter type
+            processType(param.getType(), node);
+
+            ActionParam actionParam = param.getAnnotation(ActionParam.class);
+            if (actionParam != null) {
+                if (!actionParam.description().isEmpty()) {
+                    node.put("description", actionParam.description());
+                }
+                node.put("required", actionParam.required());
+            }
+            else {
+                // Default parameter info
+                node.put("description", "Parameter for " + name);
+            }
+        }
+        else if (paramOrField instanceof Field) {
+            Field field = (Field) paramOrField;
+
+            // Process field type
+            processType(field.getType(), node);
+
+            // Add description from field annotations if available
+            // This would typically use @JsonProperty or similar annotations
+            node.put("description", "Field " + name);
+        }
+    }
+
+    /**
      * Recursively add object properties to the parameter node
      * 
      * @param clazz The class to analyze
@@ -232,97 +256,10 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             ObjectNode fieldNode = objectMapper.createObjectNode();
-            Class<?> fieldType = field.getType();
 
-            if (fieldType == String.class) {
-                fieldNode.put("type", "string");
-            }
-            else if (fieldType == Integer.class || fieldType == int.class) {
-                fieldNode.put("type", "integer");
-            }
-            else if (fieldType == Long.class || fieldType == long.class) {
-                fieldNode.put("type", "integer");
-            }
-            else if (fieldType == Double.class || fieldType == double.class) {
-                fieldNode.put("type", "number");
-            }
-            else if (fieldType == Boolean.class || fieldType == boolean.class) {
-                fieldNode.put("type", "boolean");
-            }
-            else if (fieldType == Date.class || fieldType == LocalDate.class || fieldType == LocalDateTime.class) {
-                fieldNode.put("type", "string");
-                fieldNode.put("format", "date-time");
-            }
-            else if (fieldType.isArray()) {
-                // Handle array fields
-                fieldNode.put("type", "array");
-                ObjectNode itemsNode = objectMapper.createObjectNode();
-                Class<?> componentType = fieldType.getComponentType();
-                if (componentType == String.class) {
-                    itemsNode.put("type", "string");
-                }
-                else if (componentType == Integer.class || componentType == int.class) {
-                    itemsNode.put("type", "integer");
-                }
-                else if (componentType == Long.class || componentType == long.class) {
-                    itemsNode.put("type", "integer");
-                }
-                else if (componentType == Double.class || componentType == double.class) {
-                    itemsNode.put("type", "number");
-                }
-                else if (componentType == Boolean.class || componentType == boolean.class) {
-                    itemsNode.put("type", "boolean");
-                }
-                else if (componentType == Date.class || componentType == LocalDate.class || componentType == LocalDateTime.class) {
-                    itemsNode.put("type", "string");
-                    itemsNode.put("format", "date-time");
-                }
-                else if (componentType.isPrimitive()) {
-                    // Handle other primitive types
-                    if (componentType == byte.class || componentType == short.class) {
-                        itemsNode.put("type", "integer");
-                    }
-                    else if (componentType == float.class) {
-                        itemsNode.put("type", "number");
-                    }
-                    else if (componentType == char.class) {
-                        itemsNode.put("type", "string");
-                    }
-                    else {
-                        // Default to string for other primitives
-                        itemsNode.put("type", "string");
-                    }
-                }
-                else {
-                    // Handle complex object types in arrays
-                    addObjectProperties(componentType, itemsNode);
-                }
-                fieldNode.set("items", itemsNode);
-            }
-            else if (fieldType.isPrimitive()) {
-                // Handle other primitive types
-                if (fieldType == byte.class || fieldType == short.class) {
-                    fieldNode.put("type", "integer");
-                }
-                else if (fieldType == float.class) {
-                    fieldNode.put("type", "number");
-                }
-                else if (fieldType == char.class) {
-                    fieldNode.put("type", "string");
-                }
-                else {
-                    // Default to string for other primitives
-                    fieldNode.put("type", "string");
-                }
-            }
-            else {
-                // Recursively handle nested object types
-                addObjectProperties(fieldType, fieldNode);
-            }
+            // Process field
+            processParameterOrField(field, field.getName(), fieldNode);
 
-            // Add description from field annotations if available
-            // This would typically use @JsonProperty or similar annotations
-            fieldNode.put("description", "Field " + field.getName());
             properties.set(field.getName(), fieldNode);
         }
 
@@ -358,168 +295,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
 
                 // Handle type conversion
                 if (value != null) {
-                    Class<?> paramType = param.getType();
-                    if (paramType == String.class) {
-                        args[i] = value.toString();
-                    }
-                    else if (paramType == Integer.class || paramType == int.class) {
-                        args[i] = Integer.valueOf(value.toString());
-                    }
-                    else if (paramType == Long.class || paramType == long.class) {
-                        args[i] = Long.valueOf(value.toString());
-                    }
-                    else if (paramType == Double.class || paramType == double.class) {
-                        args[i] = Double.valueOf(value.toString());
-                    }
-                    else if (paramType == Boolean.class || paramType == boolean.class) {
-                        args[i] = Boolean.valueOf(value.toString());
-                    }
-                    else if (paramType == Date.class) {
-                        // Handle Date type
-                        if (value instanceof String) {
-                            // Try to parse as ISO date format
-                            try {
-                                args[i] = Date.from(java.time.Instant.parse((String) value));
-                            }
-                            catch (Exception e) {
-                                args[i] = new Date(value.toString());
-                            }
-                        }
-                        else {
-                            args[i] = new Date(value.toString());
-                        }
-                    }
-                    else if (paramType == LocalDate.class) {
-                        // Handle LocalDate type
-                        if (value instanceof String) {
-                            args[i] = LocalDate.parse((String) value, DateTimeFormatter.ISO_LOCAL_DATE);
-                        }
-                        else {
-                            args[i] = LocalDate.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
-                        }
-                    }
-                    else if (paramType == LocalDateTime.class) {
-                        // Handle LocalDateTime type
-                        if (value instanceof String) {
-                            args[i] = LocalDateTime.parse((String) value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                        }
-                        else {
-                            args[i] = LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                        }
-                    }
-                    else if (paramType.isArray()) {
-                        // Handle array types
-                        if (value instanceof Iterable) {
-                            Iterable<?> iterable = (Iterable<?>) value;
-                            Class<?> componentType = paramType.getComponentType();
-                            
-                            // Convert to array
-                            if (componentType == String.class) {
-                                if (iterable instanceof Collection) {
-                                    args[i] = ((Collection<?>) iterable).toArray(new String[0]);
-                                } else {
-                                    // Handle non-Collection Iterable
-                                    StringBuilder sb = new StringBuilder();
-                                    for (Object item : iterable) {
-                                        sb.append(item.toString());
-                                    }
-                                    args[i] = new String[] { sb.toString() };
-                                }
-                            }
-                            else if (componentType == Integer.class || componentType == int.class) {
-                                int[] intArray = new int[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
-                                int index = 0;
-                                for (Object item : iterable) {
-                                    intArray[index++] = Integer.valueOf(item.toString());
-                                }
-                                args[i] = intArray;
-                            }
-                            else if (componentType == Long.class || componentType == long.class) {
-                                long[] longArray = new long[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
-                                int index = 0;
-                                for (Object item : iterable) {
-                                    longArray[index++] = Long.valueOf(item.toString());
-                                }
-                                args[i] = longArray;
-                            }
-                            else if (componentType == Double.class || componentType == double.class) {
-                                double[] doubleArray = new double[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
-                                int index = 0;
-                                for (Object item : iterable) {
-                                    doubleArray[index++] = Double.valueOf(item.toString());
-                                }
-                                args[i] = doubleArray;
-                            }
-                            else if (componentType == Boolean.class || componentType == boolean.class) {
-                                boolean[] booleanArray = new boolean[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
-                                int index = 0;
-                                for (Object item : iterable) {
-                                    booleanArray[index++] = Boolean.valueOf(item.toString());
-                                }
-                                args[i] = booleanArray;
-                            }
-                            else {
-                                // For complex types, try to convert from JSON
-                                Object[] objectArray = new Object[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
-                                int index = 0;
-                                for (Object item : iterable) {
-                                    objectArray[index++] = objectMapper.convertValue(item, componentType);
-                                }
-                                args[i] = objectArray;
-                            }
-                        }
-                        else {
-                            // Handle as single value array
-                            Class<?> componentType = paramType.getComponentType();
-                            if (componentType == String.class) {
-                                args[i] = new String[]{value.toString()};
-                            }
-                            else if (componentType == Integer.class || componentType == int.class) {
-                                args[i] = new int[]{Integer.valueOf(value.toString())};
-                            }
-                            else if (componentType == Long.class || componentType == long.class) {
-                                args[i] = new long[]{Long.valueOf(value.toString())};
-                            }
-                            else if (componentType == Double.class || componentType == double.class) {
-                                args[i] = new double[]{Double.valueOf(value.toString())};
-                            }
-                            else if (componentType == Boolean.class || componentType == boolean.class) {
-                                args[i] = new boolean[]{Boolean.valueOf(value.toString())};
-                            }
-                            else {
-                                // For complex types, try to convert from JSON
-                                Object[] objectArray = new Object[1];
-                                objectArray[0] = objectMapper.convertValue(value, componentType);
-                                args[i] = objectArray;
-                            }
-                        }
-                    }
-                    else if (Collection.class.isAssignableFrom(paramType)) {
-                        // Handle Collection types (List, Set, etc.)
-                        if (value instanceof Iterable) {
-                            Iterable<?> iterable = (Iterable<?>) value;
-                            // Convert to List
-                            if (iterable instanceof Collection) {
-                                args[i] = iterable;
-                            } else {
-                                // Convert non-Collection Iterable to List
-                                List<Object> list = new ArrayList<>();
-                                for (Object item : iterable) {
-                                    list.add(item);
-                                }
-                                args[i] = list;
-                            }
-                        } else {
-                            // Handle as single value collection
-                            List<Object> list = new ArrayList<>();
-                            list.add(value);
-                            args[i] = list;
-                        }
-                    }
-                    else {
-                        // For complex types, try to convert from JSON
-                        args[i] = objectMapper.convertValue(value, paramType);
-                    }
+                    args[i] = convertValue(value, param.getType());
                 }
                 else {
                     // Check if parameter is required
@@ -539,6 +315,215 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         }
         catch (Exception e) {
             return new ToolExecuteResult("Error executing tool: " + e.getMessage(), true);
+        }
+    }
+
+    /**
+     * Convert a value to the specified type
+     * 
+     * @param value The value to convert
+     * @param type The target type
+     * @return The converted value
+     */
+    private Object convertValue(Object value, Class<?> type) {
+        if (type == String.class) {
+            return value.toString();
+        }
+        else if (type == Integer.class || type == int.class) {
+            return Integer.valueOf(value.toString());
+        }
+        else if (type == Long.class || type == long.class) {
+            return Long.valueOf(value.toString());
+        }
+        else if (type == Double.class || type == double.class) {
+            return Double.valueOf(value.toString());
+        }
+        else if (type == Boolean.class || type == boolean.class) {
+            return Boolean.valueOf(value.toString());
+        }
+        else if (type == Date.class) {
+            // Handle Date type
+            if (value instanceof String) {
+                // Try to parse as ISO date format
+                try {
+                    return Date.from(java.time.Instant.parse((String) value));
+                }
+                catch (Exception e) {
+                    return new Date(value.toString());
+                }
+            }
+            else {
+                return new Date(value.toString());
+            }
+        }
+        else if (type == LocalDate.class) {
+            // Handle LocalDate type
+            if (value instanceof String) {
+                return LocalDate.parse((String) value, DateTimeFormatter.ISO_LOCAL_DATE);
+            }
+            else {
+                return LocalDate.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE);
+            }
+        }
+        else if (type == LocalDateTime.class) {
+            // Handle LocalDateTime type
+            if (value instanceof String) {
+                return LocalDateTime.parse((String) value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            }
+            else {
+                return LocalDateTime.parse(value.toString(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            }
+        }
+        else if (type.isArray()) {
+            return convertToArray(value, type);
+        }
+        else if (Collection.class.isAssignableFrom(type)) {
+            return convertToCollection(value);
+        }
+        else {
+            // For complex types, try to convert from JSON
+            return objectMapper.convertValue(value, type);
+        }
+    }
+
+    /**
+     * Convert a value to an array of the specified type
+     * 
+     * @param value The value to convert
+     * @param arrayType The target array type
+     * @return The converted array
+     */
+    private Object convertToArray(Object value, Class<?> arrayType) {
+        if (value instanceof Iterable) {
+            Iterable<?> iterable = (Iterable<?>) value;
+            Class<?> componentType = arrayType.getComponentType();
+
+            // Convert to array
+            if (componentType == String.class) {
+                if (iterable instanceof Collection) {
+                    return ((Collection<?>) iterable).toArray(new String[0]);
+                }
+                else {
+                    // Handle non-Collection Iterable
+                    StringBuilder sb = new StringBuilder();
+                    for (Object item : iterable) {
+                        sb.append(item.toString());
+                    }
+                    return new String[] {
+                        sb.toString()
+                    };
+                }
+            }
+            else if (componentType == Integer.class || componentType == int.class) {
+                int[] intArray = new int[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
+                int index = 0;
+                for (Object item : iterable) {
+                    intArray[index++] = Integer.valueOf(item.toString());
+                }
+                return intArray;
+            }
+            else if (componentType == Long.class || componentType == long.class) {
+                long[] longArray = new long[iterable instanceof Collection ? ((Collection<?>) iterable).size() : 10];
+                int index = 0;
+                for (Object item : iterable) {
+                    longArray[index++] = Long.valueOf(item.toString());
+                }
+                return longArray;
+            }
+            else if (componentType == Double.class || componentType == double.class) {
+                double[] doubleArray = new double[iterable instanceof Collection ? ((Collection<?>) iterable).size()
+                    : 10];
+                int index = 0;
+                for (Object item : iterable) {
+                    doubleArray[index++] = Double.valueOf(item.toString());
+                }
+                return doubleArray;
+            }
+            else if (componentType == Boolean.class || componentType == boolean.class) {
+                boolean[] booleanArray = new boolean[iterable instanceof Collection ? ((Collection<?>) iterable).size()
+                    : 10];
+                int index = 0;
+                for (Object item : iterable) {
+                    booleanArray[index++] = Boolean.valueOf(item.toString());
+                }
+                return booleanArray;
+            }
+            else {
+                // For complex types, try to convert from JSON
+                Object[] objectArray = new Object[iterable instanceof Collection ? ((Collection<?>) iterable).size()
+                    : 10];
+                int index = 0;
+                for (Object item : iterable) {
+                    objectArray[index++] = objectMapper.convertValue(item, componentType);
+                }
+                return objectArray;
+            }
+        }
+        else {
+            // Handle as single value array
+            Class<?> componentType = arrayType.getComponentType();
+            if (componentType == String.class) {
+                return new String[] {
+                    value.toString()
+                };
+            }
+            else if (componentType == Integer.class || componentType == int.class) {
+                return new int[] {
+                    Integer.valueOf(value.toString())
+                };
+            }
+            else if (componentType == Long.class || componentType == long.class) {
+                return new long[] {
+                    Long.valueOf(value.toString())
+                };
+            }
+            else if (componentType == Double.class || componentType == double.class) {
+                return new double[] {
+                    Double.valueOf(value.toString())
+                };
+            }
+            else if (componentType == Boolean.class || componentType == boolean.class) {
+                return new boolean[] {
+                    Boolean.valueOf(value.toString())
+                };
+            }
+            else {
+                // For complex types, try to convert from JSON
+                Object[] objectArray = new Object[1];
+                objectArray[0] = objectMapper.convertValue(value, componentType);
+                return objectArray;
+            }
+        }
+    }
+
+    /**
+     * Convert a value to a collection
+     * 
+     * @param value The value to convert
+     * @return The converted collection
+     */
+    private Object convertToCollection(Object value) {
+        // Handle Collection types (List, Set, etc.)
+        if (value instanceof Iterable) {
+            Iterable<?> iterable = (Iterable<?>) value;
+            // Convert to List
+            if (iterable instanceof Collection) {
+                return iterable;
+            }
+            else {
+                // Convert non-Collection Iterable to List
+                List<Object> list = new ArrayList<>();
+                for (Object item : iterable) {
+                    list.add(item);
+                }
+                return list;
+            }
+        }
+        else {
+            // Handle as single value collection
+            List<Object> list = new ArrayList<>();
+            list.add(value);
+            return list;
         }
     }
 }
