@@ -8,6 +8,10 @@ package com.hbasesoft.framework.ai.agent.tool;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Proxy;
+
+import org.springframework.aop.framework.AopProxyUtils;
+import org.springframework.aop.support.AopUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +51,44 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         this.method = method;
         this.actionAnnotation = actionAnnotation;
         this.objectMapper = objectMapper;
+    }
+
+    /**
+     * Get ActionParam annotation from parameter, handling Spring proxy objects
+     * 
+     * @param param The parameter to get annotation from
+     * @return The ActionParam annotation or null if not found
+     */
+    private ActionParam getActionParamAnnotation(Parameter param) {
+        // First try to get annotation directly from the parameter
+        ActionParam actionParam = param.getAnnotation(ActionParam.class);
+        if (actionParam != null) {
+            return actionParam;
+        }
+
+        // If not found and targetObject is a Spring proxy, try to get from target method
+        if (AopUtils.isAopProxy(targetObject)) {
+            try {
+                // Get the target class
+                Class<?> targetClass = AopProxyUtils.ultimateTargetClass(targetObject);
+                
+                // Find the corresponding method in the target class
+                Method targetMethod = targetClass.getMethod(method.getName(), method.getParameterTypes());
+                
+                // Get the parameter from the target method at the same index
+                Parameter[] targetParameters = targetMethod.getParameters();
+                int paramIndex = java.util.Arrays.asList(method.getParameters()).indexOf(param);
+                
+                if (paramIndex >= 0 && paramIndex < targetParameters.length) {
+                    return targetParameters[paramIndex].getAnnotation(ActionParam.class);
+                }
+            } catch (NoSuchMethodException e) {
+                // If we can't find the method in the target class, return null
+                return null;
+            }
+        }
+        
+        return null;
     }
 
     @Override
@@ -92,7 +134,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
         // Add required parameters
         ArrayNode requiredArray = objectMapper.createArrayNode();
         for (Parameter param : methodParameters) {
-            ActionParam actionParam = param.getAnnotation(ActionParam.class);
+            ActionParam actionParam = getActionParamAnnotation(param);
             if (actionParam == null || actionParam.required()) {
                 requiredArray.add(param.getName());
             }
@@ -217,7 +259,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
             // Process parameter type
             processType(param.getType(), node);
 
-            ActionParam actionParam = param.getAnnotation(ActionParam.class);
+            ActionParam actionParam = getActionParamAnnotation(param);
             if (actionParam != null) {
                 if (!actionParam.description().isEmpty()) {
                     node.put("description", actionParam.description());
@@ -299,7 +341,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
                 }
                 else {
                     // Check if parameter is required
-                    ActionParam actionParam = param.getAnnotation(ActionParam.class);
+                    ActionParam actionParam = getActionParamAnnotation(param);
                     if (actionParam != null && actionParam.required()) {
                         throw new IllegalArgumentException("Required parameter '" + paramName + "' is missing");
                     }
