@@ -56,7 +56,7 @@ public abstract class ReActAgent extends BaseAgent {
         boolean shouldAct = think(currentStep);
         if (!shouldAct) {
             AgentExecResult result = new AgentExecResult("Thinking complete - no action needed",
-                AgentState.IN_PROGRESS);
+                AgentState.COMPLETED);
 
             return result;
         }

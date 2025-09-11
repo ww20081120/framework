@@ -137,9 +137,8 @@ public class PlanCreator {
                     }
                 }
                 catch (Exception e) {
-                    LoggerUtil.warn("Exception during plan creation attempt {0}: {1}", attempt, e.getMessage());
-                    e.printStackTrace();
-                    if (attempt == maxRetries) {
+                    LoggerUtil.warn(e, "Exception during plan creation attempt {0}: {1}", attempt, e.getMessage());
+                    if (attempt >= maxRetries || Thread.currentThread().isInterrupted()) {
                         throw e;
                     }
                 }

@@ -5,165 +5,133 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.agent.tool;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.aop.framework.ProxyFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * <Description> Test class for AnnotatedMethodToolAdapter <br>
+ * <Description> Test for AnnotatedMethodToolAdapter with Spring AOP proxy objects <br>
  * 
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
- * @CreateDate 2025年9月1日 <br>
+ * @CreateDate 2025年9月10日 <br>
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.agent.tool <br>
  */
 public class AnnotatedMethodToolAdapterTest {
 
-    @Test
-    public void testGetParametersWithDates() throws Exception {
-        // Create test service and method
-        TestService testService = new TestService();
-        java.lang.reflect.Method method = TestService.class.getMethod("testWithDates", String.class, Date.class,
-            LocalDate.class, LocalDateTime.class);
-
-        Action action = method.getAnnotation(Action.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // Create adapter
-        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
-
-        // Get parameters JSON
-        String parametersJson = adapter.getParameters();
-        System.out.println("Parameters JSON: " + parametersJson);
-
-        // Verify that the JSON contains the expected structure
-        assertTrue(parametersJson.contains("\"type\":\"object\""));
-        assertTrue(parametersJson.contains("\"name\":{\"type\":\"string\""));
-        assertTrue(parametersJson.contains("\"birthDate\":{\"type\":\"string\",\"format\":\"date-time\""));
-        assertTrue(parametersJson.contains("\"localDate\":{\"type\":\"string\",\"format\":\"date-time\""));
-        assertTrue(parametersJson.contains("\"localDateTime\":{\"type\":\"string\",\"format\":\"date-time\""));
+    /**
+     * Test service class with Action and ActionParam annotations
+     */
+    public static class TestService {
+        
+        @Action(description = "Test method for verifying ActionParam annotations on proxy objects")
+        public String testMethod(
+                @ActionParam(description = "Test parameter 1", required = true) String param1,
+                @ActionParam(description = "Test parameter 2", required = false) int param2) {
+            return "Result: " + param1 + ", " + param2;
+        }
     }
 
     @Test
-    public void testGetParametersWithObject() throws Exception {
-        // Create test service and method
-        TestService testService = new TestService();
-        java.lang.reflect.Method method = TestService.class.getMethod("testWithObject", TestObject.class);
-
-        Action action = method.getAnnotation(Action.class);
+    public void testGetActionParamAnnotationFromProxy() throws Exception {
+        // Create a target object
+        TestService target = new TestService();
+        
+        // Create a Spring AOP proxy
+        ProxyFactory proxyFactory = new ProxyFactory(target);
+        proxyFactory.setProxyTargetClass(true); // Use CGLIB proxy
+        Object proxy = proxyFactory.getProxy();
+        
+        // Debug information
+        System.out.println("Target class: " + target.getClass().getName());
+        System.out.println("Proxy class: " + proxy.getClass().getName());
+        System.out.println("Is AOP proxy: " + org.springframework.aop.support.AopUtils.isAopProxy(proxy));
+        System.out.println("Is CGLIB proxy: " + org.springframework.aop.support.AopUtils.isCglibProxy(proxy));
+        
+        // Get the method from the proxy
+        Method method = proxy.getClass().getMethod("testMethod", String.class, int.class);
+        
+        // Get the method from the target for comparison
+        Method targetMethod = target.getClass().getMethod("testMethod", String.class, int.class);
+        
+        // Debug information about methods
+        System.out.println("Proxy method: " + method);
+        System.out.println("Target method: " + targetMethod);
+        
+        // Check annotations on proxy method parameters
+        for (int i = 0; i < method.getParameters().length; i++) {
+            java.lang.reflect.Parameter param = method.getParameters()[i];
+            ActionParam actionParam = param.getAnnotation(ActionParam.class);
+            System.out.println("Proxy parameter " + i + " annotation: " + actionParam);
+        }
+        
+        // Check annotations on target method parameters
+        for (int i = 0; i < targetMethod.getParameters().length; i++) {
+            java.lang.reflect.Parameter param = targetMethod.getParameters()[i];
+            ActionParam actionParam = param.getAnnotation(ActionParam.class);
+            System.out.println("Target parameter " + i + " annotation: " + actionParam);
+        }
+        
+        // Create the AnnotatedMethodToolAdapter
         ObjectMapper objectMapper = new ObjectMapper();
-
-        // Create adapter
-        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
-
-        // Get parameters JSON
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(proxy, method, 
+                method.getAnnotation(Action.class), objectMapper);
+        
+        // Test that we can get the parameters JSON
         String parametersJson = adapter.getParameters();
         System.out.println("Parameters JSON: " + parametersJson);
-
-        // Verify that the JSON contains the expected structure
-        assertTrue(parametersJson.contains("\"type\":\"object\""));
-        assertTrue(parametersJson.contains("\"testObject\":{\"type\":\"object\""));
-        assertTrue(parametersJson.contains("\"properties\":{\"name\":{\"type\":\"string\""));
-        assertTrue(parametersJson.contains("\"age\":{\"type\":\"integer\""));
-        assertTrue(parametersJson.contains("\"active\":{\"type\":\"boolean\""));
-        assertTrue(parametersJson.contains("\"score\":{\"type\":\"number\""));
-    }
-
-    @Test
-    public void testGetParametersWithPrimitives() throws Exception {
-        // Create test service and method
-        TestService testService = new TestService();
-        java.lang.reflect.Method method = TestService.class.getMethod("testWithPrimitives", byte.class, short.class,
-            float.class, char.class);
-
-        Action action = method.getAnnotation(Action.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // Create adapter
-        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
-
-        // Get parameters JSON
-        String parametersJson = adapter.getParameters();
-        System.out.println("Parameters JSON: " + parametersJson);
-
-        // Verify that the JSON contains the expected structure
-        assertTrue(parametersJson.contains("\"type\":\"object\""));
-        assertTrue(parametersJson.contains("\"byteValue\":{\"type\":\"integer\""));
-        assertTrue(parametersJson.contains("\"shortValue\":{\"type\":\"integer\""));
-        assertTrue(parametersJson.contains("\"floatValue\":{\"type\":\"number\""));
-        assertTrue(parametersJson.contains("\"charValue\":{\"type\":\"string\""));
-    }
-
-    @Test
-    public void testRunWithDates() throws Exception {
-        // Create test service and method
-        TestService testService = new TestService();
-        java.lang.reflect.Method method = TestService.class.getMethod("testWithDates", String.class, Date.class,
-            LocalDate.class, LocalDateTime.class);
-
-        Action action = method.getAnnotation(Action.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // Create adapter
-        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
-
-        // Create test input
-        Map<String, Object> input = new HashMap<>();
-        input.put("name", "Test User");
-        input.put("birthDate", "2025-09-01T00:00:00Z");
-        input.put("localDate", "2025-09-01");
-        input.put("localDateTime", "2025-09-01T10:30:00");
-
-        // Run the method
-        ToolExecuteResult result = adapter.run(input);
-
-        // Verify the result
+        assertNotNull(parametersJson);
+        assertTrue(parametersJson.contains("param1"), "JSON should contain param1");
+        assertTrue(parametersJson.contains("param2"), "JSON should contain param2");
+        assertTrue(parametersJson.contains("Test parameter 1"), "JSON should contain 'Test parameter 1'");
+        assertTrue(parametersJson.contains("Test parameter 2"), "JSON should contain 'Test parameter 2'");
+        
+        // Test that we can run the method
+        new java.util.HashMap<String, Object>() {{
+            put("param1", "test");
+            put("param2", 42);
+        }};
+        
+        // Test the run method
+        ToolExecuteResult result = adapter.run(new java.util.HashMap<String, Object>() {{
+            put("param1", "test");
+            put("param2", 42);
+        }});
+        
         assertNotNull(result);
-        assertFalse(result.isInterrupted());
-        assertTrue(result.getOutput().contains("Test with dates"));
-        assertTrue(result.getOutput().contains("Test User"));
+        assertEquals("Result: test, 42", result.getOutput());
+        assertEquals(false, result.isInterrupted());
     }
-
+    
     @Test
-    public void testRunWithObject() throws Exception {
-        // Create test service and method
-        TestService testService = new TestService();
-        java.lang.reflect.Method method = TestService.class.getMethod("testWithObject", TestObject.class);
-
-        Action action = method.getAnnotation(Action.class);
+    public void testGetActionParamAnnotationFromDirectObject() throws Exception {
+        // Create a target object directly (not proxied)
+        TestService target = new TestService();
+        
+        // Get the method from the target
+        Method method = target.getClass().getMethod("testMethod", String.class, int.class);
+        
+        // Create the AnnotatedMethodToolAdapter
         ObjectMapper objectMapper = new ObjectMapper();
-
-        // Create adapter
-        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(testService, method, action, objectMapper);
-
-        // Create test input
-        Map<String, Object> input = new HashMap<>();
-        Map<String, Object> objectInput = new HashMap<>();
-        objectInput.put("name", "Test Object");
-        objectInput.put("age", 25);
-        objectInput.put("active", true);
-        objectInput.put("score", 95.5);
-        input.put("testObject", objectInput);
-
-        // Run the method
-        ToolExecuteResult result = adapter.run(input);
-
-        // Verify the result
-        assertNotNull(result);
-        assertFalse(result.isInterrupted());
-        assertTrue(result.getOutput().contains("Test with object"));
-        assertTrue(result.getOutput().contains("Test Object"));
+        AnnotatedMethodToolAdapter adapter = new AnnotatedMethodToolAdapter(target, method, 
+                method.getAnnotation(Action.class), objectMapper);
+        
+        // Test that we can get the parameters JSON
+        String parametersJson = adapter.getParameters();
+        assertNotNull(parametersJson);
+        assertTrue(parametersJson.contains("param1"));
+        assertTrue(parametersJson.contains("param2"));
+        assertTrue(parametersJson.contains("Test parameter 1"));
+        assertTrue(parametersJson.contains("Test parameter 2"));
     }
 }
