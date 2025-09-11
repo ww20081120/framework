@@ -20,7 +20,7 @@ Framework框架集成了tracing、cache、db、message、rule、tx、ai等模块
 + [framework-dependencies] 项目依赖，解决版本包依赖问题
 + [framework-shell] 控制台方式提供命令操作，支持自定义各种命令，做各种小工具使用。
 + [framework-langchain4j] 对langchain4j的补充，支持国内的大模型，让大家更高效的开发AIGC应用。
-+ [framework-ai] AI相关功能模块，包括核心AI功能和NL2SQL等演示应用。
++ [framework-ai] AI相关功能模块，包括核心AI功能、NL2SQL等演示应用以及强大的Agent框架。
 
 > jdk1.8请使用framework3.X版本，framework4.X已升级至jdk21版本
 
@@ -185,4 +185,3 @@ public class TestProducter {
 ---
 - Author:王伟 
 - E-mail:[ww20081120@126.com](mail://ww20081120@126.com)
-
