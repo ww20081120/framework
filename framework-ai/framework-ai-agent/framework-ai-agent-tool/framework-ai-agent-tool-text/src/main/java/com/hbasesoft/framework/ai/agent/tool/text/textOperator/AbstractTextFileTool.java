@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.slf4j.Logger;
@@ -26,7 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import com.hbasesoft.framework.ai.agent.tool.AbstractBaseTool;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingService;
+import com.hbasesoft.framework.ai.agent.tool.filesystem.IUnifiedDirectoryManager;
+import com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator.TextFileService;
 
 public abstract class AbstractTextFileTool<T> extends AbstractBaseTool<T> {
 
@@ -34,49 +36,40 @@ public abstract class AbstractTextFileTool<T> extends AbstractBaseTool<T> {
 
     protected final TextFileService textFileService;
 
-    protected final ISmartContentSavingService innerStorageService;
+    protected final IUnifiedDirectoryManager unifiedDirectoryManager;
 
-    public AbstractTextFileTool(TextFileService textFileService, ISmartContentSavingService innerStorageService) {
+    public AbstractTextFileTool(TextFileService textFileService, IUnifiedDirectoryManager unifiedDirectoryManager) {
         this.textFileService = textFileService;
-        this.innerStorageService = innerStorageService;
+        this.unifiedDirectoryManager = unifiedDirectoryManager;
     }
 
     /**
      * Ensure file is opened, create if it doesn't exist
      */
-    protected ToolExecuteResult ensureFileOpen(String planId, String filePath) {
-        try {
-            // Check file type
-            if (!textFileService.isSupportedFileType(filePath)) {
-                textFileService.updateFileState(planId, filePath, "Error: Unsupported file type");
-                return new ToolExecuteResult("Unsupported file type. Only text-based files are supported.");
-            }
-
-            // Use TextFileService to validate and get the absolute path
-            Path absolutePath = textFileService.validateFilePath(planId, filePath);
-
-            // If file doesn't exist, create parent directory first
-            if (!Files.exists(absolutePath)) {
-                try {
-                    Files.createDirectories(absolutePath.getParent());
-                    Files.createFile(absolutePath);
-                    textFileService.updateFileState(planId, filePath, "Success: New file created");
-                    return new ToolExecuteResult("New file created successfully: " + absolutePath);
-                }
-                catch (IOException e) {
-                    textFileService.updateFileState(planId, filePath,
-                        "Error: Failed to create file: " + e.getMessage());
-                    return new ToolExecuteResult("Failed to create file: " + e.getMessage());
-                }
-            }
-
-            textFileService.updateFileState(planId, filePath, "Success: File opened");
-            return new ToolExecuteResult("File opened successfully: " + absolutePath);
+    protected ToolExecuteResult ensureFileOpen(String filePath) {
+        // Check file type
+        if (!textFileService.isSupportedFileType(filePath)) {
+            return new ToolExecuteResult("Unsupported file type. Only text-based files are supported.");
         }
-        catch (IOException e) {
-            textFileService.updateFileState(planId, filePath, "Error: " + e.getMessage());
-            return new ToolExecuteResult("Error opening file: " + e.getMessage());
+        Path path = Paths.get(filePath);
+
+        if (unifiedDirectoryManager.isPathAllowed(path)) {
+            return new ToolExecuteResult("File path not allowed. " + path.toAbsolutePath().toString());
         }
+
+        // If file doesn't exist, create parent directory first
+        if (!Files.exists(path)) {
+            try {
+                Files.createDirectories(path.getParent());
+                Files.createFile(path);
+                return new ToolExecuteResult("New file created successfully: " + path.toString());
+            }
+            catch (IOException e) {
+                return new ToolExecuteResult("Failed to create file: " + e.getMessage());
+            }
+        }
+        return new ToolExecuteResult("File opened successfully: " + path.toAbsolutePath().toString());
+
     }
 
     protected void forceFlushFile(Path absolutePath) throws IOException {
@@ -87,9 +80,7 @@ public abstract class AbstractTextFileTool<T> extends AbstractBaseTool<T> {
 
     @Override
     public String getCurrentToolStateString() {
-        String planId = this.currentPlanId;
         try {
-            Path workingDir = textFileService.getAbsolutePath(planId, "");
             return String.format(
                 """
                     Current Text File Operation State:
@@ -99,24 +90,14 @@ public abstract class AbstractTextFileTool<T> extends AbstractBaseTool<T> {
                     - Operations are automatically handled (no manual file opening/closing required)
                     - All file operations (open, save) are performed automatically
                     - Supported file types: txt, md, html, css, java, py, js, ts, xml, json, yaml, properties, sh, bat, log, etc.
-
-                    - Last Operation Result:
-                    %s
                     """,
-                workingDir.toString(),
-                textFileService.getLastOperationResult(planId).isEmpty() ? "No operation performed yet"
-                    : textFileService.getLastOperationResult(planId));
+                unifiedDirectoryManager.getWorkingDirectory().toString());
         }
         catch (Exception e) {
             return String.format("""
                 Current Text File Operation State:
                 - Error getting working directory: %s
-
-                - Last Operation Result:
-                %s
-                """, e.getMessage(),
-                textFileService.getLastOperationResult(planId).isEmpty() ? "No operation performed yet"
-                    : textFileService.getLastOperationResult(planId));
+                """, e.getMessage());
         }
     }
 
@@ -127,9 +108,5 @@ public abstract class AbstractTextFileTool<T> extends AbstractBaseTool<T> {
 
     @Override
     public void cleanup(String planId) {
-        if (planId != null) {
-            log.info("Cleaning up text file resources for plan: {}", planId);
-            textFileService.cleanupPlanDirectory(planId);
-        }
     }
 }

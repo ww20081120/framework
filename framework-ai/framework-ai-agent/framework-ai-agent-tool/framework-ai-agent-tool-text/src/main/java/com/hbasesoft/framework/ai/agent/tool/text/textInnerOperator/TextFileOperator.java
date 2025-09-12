@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hbasesoft.framework.ai.agent.tool.text.textOperator;
+package com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -34,7 +34,6 @@ import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingSer
 import com.hbasesoft.framework.ai.agent.tool.innerStorage.SmartProcessResult;
 
 @Component
-@Deprecated
 public class TextFileOperator extends AbstractBaseTool<TextFileOperator.TextFileInput> {
 
     private static final Logger log = LoggerFactory.getLogger(TextFileOperator.class);

@@ -18,13 +18,14 @@ package com.hbasesoft.framework.ai.agent.tool.text.textOperator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingService;
+import com.hbasesoft.framework.ai.agent.tool.filesystem.IUnifiedDirectoryManager;
+import com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator.TextFileService;
 
 @Component
 public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextTool.TextFileGetTextInput> {
@@ -64,19 +65,14 @@ public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextToo
         }
     }
 
-    private final ObjectMapper objectMapper;
-
-    public TextFileGetTextTool(TextFileService textFileService, ISmartContentSavingService innerStorageService,
-        ObjectMapper objectMapper) {
-        super(textFileService, innerStorageService);
-        this.objectMapper = objectMapper;
+    public TextFileGetTextTool(TextFileService textFileService, IUnifiedDirectoryManager unifiedDirectoryManager) {
+        super(textFileService, unifiedDirectoryManager);
     }
 
     @Override
     public ToolExecuteResult run(TextFileGetTextInput input) {
         log.info("TextFileGetTextTool input: filePath={}", input.getFilePath());
         try {
-            String planId = this.currentPlanId;
             String filePath = input.getFilePath();
             Integer startLine = input.getStartLine();
             Integer endLine = input.getEndLine();
@@ -89,17 +85,14 @@ public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextToo
                 return new ToolExecuteResult("Error: get_text operation requires start_line and end_line parameters");
             }
 
-            return getTextByLines(planId, filePath, startLine, endLine);
+            return getTextByLines(filePath, startLine, endLine);
         }
         catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
             return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
         }
     }
 
-    private ToolExecuteResult getTextByLines(String planId, String filePath, Integer startLine, Integer endLine) {
+    private ToolExecuteResult getTextByLines(String filePath, Integer startLine, Integer endLine) {
         try {
             // Parameter validation
             if (startLine < 1 || endLine < 1) {
@@ -118,16 +111,15 @@ public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextToo
             }
 
             // Automatically open file
-            ToolExecuteResult openResult = ensureFileOpen(planId, filePath);
+            ToolExecuteResult openResult = ensureFileOpen(filePath);
             if (!openResult.getOutput().toLowerCase().contains("success")) {
                 return openResult;
             }
 
-            Path absolutePath = textFileService.validateFilePath(planId, filePath);
+            Path absolutePath = Paths.get(filePath);
             List<String> lines = Files.readAllLines(absolutePath);
 
             if (lines.isEmpty()) {
-                textFileService.updateFileState(planId, filePath, "Success: File is empty");
                 return new ToolExecuteResult("File is empty");
             }
 
@@ -155,11 +147,9 @@ public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextToo
                     .append(lines.size()).append("), you can continue calling get_text to retrieve.");
             }
 
-            textFileService.updateFileState(planId, filePath, "Success: Retrieved text lines");
             return new ToolExecuteResult(result.toString());
         }
         catch (IOException e) {
-            textFileService.updateFileState(planId, filePath, "Error: " + e.getMessage());
             return new ToolExecuteResult("Error retrieving text lines: " + e.getMessage());
         }
     }

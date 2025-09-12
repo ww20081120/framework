@@ -19,13 +19,14 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingService;
+import com.hbasesoft.framework.ai.agent.tool.filesystem.IUnifiedDirectoryManager;
+import com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator.TextFileService;
 
 @Component
 public class TextFileReplaceTool extends AbstractTextFileTool<TextFileReplaceTool.TextFileReplaceInput> {
@@ -65,19 +66,14 @@ public class TextFileReplaceTool extends AbstractTextFileTool<TextFileReplaceToo
         }
     }
 
-    private final ObjectMapper objectMapper;
-
-    public TextFileReplaceTool(TextFileService textFileService, ISmartContentSavingService innerStorageService,
-        ObjectMapper objectMapper) {
-        super(textFileService, innerStorageService);
-        this.objectMapper = objectMapper;
+    public TextFileReplaceTool(TextFileService textFileService, IUnifiedDirectoryManager unifiedDirectoryManager) {
+        super(textFileService, unifiedDirectoryManager);
     }
 
     @Override
     public ToolExecuteResult run(TextFileReplaceInput input) {
         log.info("TextFileReplaceTool input: filePath={}", input.getFilePath());
         try {
-            String planId = this.currentPlanId;
             String filePath = input.getFilePath();
             String sourceText = input.getSourceText();
             String targetText = input.getTargetText();
@@ -91,25 +87,22 @@ public class TextFileReplaceTool extends AbstractTextFileTool<TextFileReplaceToo
                     "Error: replace operation requires source_text and target_text parameters");
             }
 
-            return replaceText(planId, filePath, sourceText, targetText);
+            return replaceText(filePath, sourceText, targetText);
         }
         catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
             return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
         }
     }
 
-    private ToolExecuteResult replaceText(String planId, String filePath, String sourceText, String targetText) {
+    private ToolExecuteResult replaceText(String filePath, String sourceText, String targetText) {
         try {
             // Automatically open file
-            ToolExecuteResult openResult = ensureFileOpen(planId, filePath);
+            ToolExecuteResult openResult = ensureFileOpen(filePath);
             if (!openResult.getOutput().toLowerCase().contains("success")) {
                 return openResult;
             }
 
-            Path absolutePath = textFileService.validateFilePath(planId, filePath);
+            Path absolutePath = Paths.get(filePath);
             String content = Files.readString(absolutePath);
             String newContent = content.replace(sourceText, targetText);
             Files.writeString(absolutePath, newContent);
@@ -119,11 +112,9 @@ public class TextFileReplaceTool extends AbstractTextFileTool<TextFileReplaceToo
                 channel.force(true);
             }
 
-            textFileService.updateFileState(planId, filePath, "Success: Text replaced and saved");
             return new ToolExecuteResult("Text replaced and saved successfully");
         }
         catch (IOException e) {
-            textFileService.updateFileState(planId, filePath, "Error: " + e.getMessage());
             return new ToolExecuteResult("Error replacing text: " + e.getMessage());
         }
     }

@@ -19,14 +19,14 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingService;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.SmartProcessResult;
+import com.hbasesoft.framework.ai.agent.tool.filesystem.IUnifiedDirectoryManager;
+import com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator.TextFileService;
 
 @Component
 public class TextFileGetAllTextTool extends AbstractTextFileTool<TextFileGetAllTextTool.TextFileGetAllTextInput> {
@@ -46,19 +46,14 @@ public class TextFileGetAllTextTool extends AbstractTextFileTool<TextFileGetAllT
         }
     }
 
-    private final ObjectMapper objectMapper;
-
-    public TextFileGetAllTextTool(TextFileService textFileService, ISmartContentSavingService innerStorageService,
-        ObjectMapper objectMapper) {
-        super(textFileService, innerStorageService);
-        this.objectMapper = objectMapper;
+    public TextFileGetAllTextTool(TextFileService textFileService, IUnifiedDirectoryManager unifiedDirectoryManager) {
+        super(textFileService, unifiedDirectoryManager);
     }
 
     @Override
     public ToolExecuteResult run(TextFileGetAllTextInput input) {
         log.info("TextFileGetAllTextTool input: filePath={}", input.getFilePath());
         try {
-            String planId = this.currentPlanId;
             String filePath = input.getFilePath();
 
             // Basic parameter validation
@@ -66,56 +61,32 @@ public class TextFileGetAllTextTool extends AbstractTextFileTool<TextFileGetAllT
                 return new ToolExecuteResult("Error: file_path parameter is required");
             }
 
-            return getAllText(planId, filePath);
+            return getAllText(filePath);
         }
         catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
             return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
         }
     }
 
-    public ToolExecuteResult run(String toolInput) {
-        log.info("TextFileGetAllTextTool toolInput:{}", toolInput);
-        try {
-            TextFileGetAllTextInput input = objectMapper.readValue(toolInput, TextFileGetAllTextInput.class);
-            return run(input);
-        }
-        catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
-            return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
-        }
-    }
-
-    private ToolExecuteResult getAllText(String planId, String filePath) {
+    private ToolExecuteResult getAllText(String filePath) {
         try {
             // Automatically open file
-            ToolExecuteResult openResult = ensureFileOpen(planId, filePath);
+            ToolExecuteResult openResult = ensureFileOpen(filePath);
             if (!openResult.getOutput().toLowerCase().contains("success")) {
                 return openResult;
             }
 
             // Read file content
-            Path absolutePath = textFileService.validateFilePath(planId, filePath);
+            Path absolutePath = Paths.get(filePath);
             String content = Files.readString(absolutePath);
 
             // Force flush to disk to ensure data consistency
             try (FileChannel channel = FileChannel.open(absolutePath, StandardOpenOption.READ)) {
                 channel.force(true);
             }
-
-            textFileService.updateFileState(planId, filePath, "Success: Retrieved all text");
-
-            // Use InnerStorageService to intelligently process content
-            SmartProcessResult processedResult = innerStorageService.processContent(planId, content, "get_all_text");
-
-            return new ToolExecuteResult(processedResult.getSummary());
+            return new ToolExecuteResult(content);
         }
         catch (IOException e) {
-            textFileService.updateFileState(planId, filePath, "Error: " + e.getMessage());
             return new ToolExecuteResult("Error retrieving all text: " + e.getMessage());
         }
     }

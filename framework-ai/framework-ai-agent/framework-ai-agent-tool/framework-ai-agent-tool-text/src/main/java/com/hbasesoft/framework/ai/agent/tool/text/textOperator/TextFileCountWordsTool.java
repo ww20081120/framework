@@ -18,12 +18,13 @@ package com.hbasesoft.framework.ai.agent.tool.text.textOperator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingService;
+import com.hbasesoft.framework.ai.agent.tool.filesystem.IUnifiedDirectoryManager;
+import com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator.TextFileService;
 
 @Component
 public class TextFileCountWordsTool extends AbstractTextFileTool<TextFileCountWordsTool.TextFileCountWordsInput> {
@@ -43,19 +44,14 @@ public class TextFileCountWordsTool extends AbstractTextFileTool<TextFileCountWo
         }
     }
 
-    private final ObjectMapper objectMapper;
-
-    public TextFileCountWordsTool(TextFileService textFileService, ISmartContentSavingService innerStorageService,
-        ObjectMapper objectMapper) {
-        super(textFileService, innerStorageService);
-        this.objectMapper = objectMapper;
+    public TextFileCountWordsTool(TextFileService textFileService, IUnifiedDirectoryManager unifiedDirectoryManager) {
+        super(textFileService, unifiedDirectoryManager);
     }
 
     @Override
     public ToolExecuteResult run(TextFileCountWordsInput input) {
         log.info("TextFileCountWordsTool input: filePath={}", input.getFilePath());
         try {
-            String planId = this.currentPlanId;
             String filePath = input.getFilePath();
 
             // Basic parameter validation
@@ -63,47 +59,28 @@ public class TextFileCountWordsTool extends AbstractTextFileTool<TextFileCountWo
                 return new ToolExecuteResult("Error: file_path parameter is required");
             }
 
-            return countWords(planId, filePath);
+            return countWords(filePath);
         }
         catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
             return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
         }
     }
 
-    public ToolExecuteResult run(String toolInput) {
-        log.info("TextFileCountWordsTool toolInput:{}", toolInput);
-        try {
-            TextFileCountWordsInput input = objectMapper.readValue(toolInput, TextFileCountWordsInput.class);
-            return run(input);
-        }
-        catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
-            return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
-        }
-    }
-
-    private ToolExecuteResult countWords(String planId, String filePath) {
+    private ToolExecuteResult countWords(String filePath) {
         try {
             // Automatically open file
-            ToolExecuteResult openResult = ensureFileOpen(planId, filePath);
+            ToolExecuteResult openResult = ensureFileOpen(filePath);
             if (!openResult.getOutput().toLowerCase().contains("success")) {
                 return openResult;
             }
 
-            Path absolutePath = textFileService.validateFilePath(planId, filePath);
+            Path absolutePath = Paths.get(filePath);
             String content = Files.readString(absolutePath);
             int wordCount = content.isEmpty() ? 0 : content.split("\\s+").length;
 
-            textFileService.updateFileState(planId, filePath, "Success: Counted words");
             return new ToolExecuteResult(String.format("Total word count (including Markdown symbols): %d", wordCount));
         }
         catch (IOException e) {
-            textFileService.updateFileState(planId, filePath, "Error: " + e.getMessage());
             return new ToolExecuteResult("Error counting words: " + e.getMessage());
         }
     }

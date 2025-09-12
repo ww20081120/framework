@@ -19,55 +19,39 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hbasesoft.framework.ai.agent.tool.ToolExecuteResult;
-import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingService;
+import com.hbasesoft.framework.ai.agent.tool.filesystem.IUnifiedDirectoryManager;
+import com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator.TextFileService;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Component
 public class TextFileAppendTool extends AbstractTextFileTool<TextFileAppendTool.TextFileAppendInput> {
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TextFileAppendInput {
         private String filePath;
 
         private String content;
-
-        public TextFileAppendInput() {
-        }
-
-        public String getFilePath() {
-            return filePath;
-        }
-
-        public void setFilePath(String filePath) {
-            this.filePath = filePath;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
     }
 
-    private final ObjectMapper objectMapper;
-
-    public TextFileAppendTool(TextFileService textFileService, ISmartContentSavingService innerStorageService,
-        ObjectMapper objectMapper) {
-        super(textFileService, innerStorageService);
-        this.objectMapper = objectMapper;
+    public TextFileAppendTool(TextFileService textFileService, IUnifiedDirectoryManager unifiedDirectoryManager) {
+        super(textFileService, unifiedDirectoryManager);
     }
 
     @Override
     public ToolExecuteResult run(TextFileAppendInput input) {
         log.info("TextFileAppendTool input: filePath={}", input.getFilePath());
         try {
-            String planId = this.currentPlanId;
             String filePath = input.getFilePath();
             String content = input.getContent();
 
@@ -79,44 +63,26 @@ public class TextFileAppendTool extends AbstractTextFileTool<TextFileAppendTool.
                 return new ToolExecuteResult("Error: append operation requires content parameter");
             }
 
-            return appendToFile(planId, filePath, content);
+            return appendToFile(filePath, content);
         }
         catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
             return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
         }
     }
 
-    public ToolExecuteResult run(String toolInput) {
-        log.info("TextFileAppendTool toolInput:{}", toolInput);
-        try {
-            TextFileAppendInput input = objectMapper.readValue(toolInput, TextFileAppendInput.class);
-            return run(input);
-        }
-        catch (Exception e) {
-            String planId = this.currentPlanId;
-            textFileService.updateFileState(planId, textFileService.getCurrentFilePath(planId),
-                "Error: " + e.getMessage());
-            return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
-        }
-    }
-
-    private ToolExecuteResult appendToFile(String planId, String filePath, String content) {
+    private ToolExecuteResult appendToFile(String filePath, String content) {
         try {
             if (content == null || content.isEmpty()) {
-                textFileService.updateFileState(planId, filePath, "Error: No content to append");
                 return new ToolExecuteResult("Error: No content to append");
             }
 
             // Automatically open file
-            ToolExecuteResult openResult = ensureFileOpen(planId, filePath);
+            ToolExecuteResult openResult = ensureFileOpen(filePath);
             if (!openResult.getOutput().toLowerCase().contains("success")) {
                 return openResult;
             }
 
-            Path absolutePath = textFileService.validateFilePath(planId, filePath);
+            Path absolutePath = Paths.get(filePath);
             Files.writeString(absolutePath, "\n" + content, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 
             // Automatically save file
@@ -124,11 +90,9 @@ public class TextFileAppendTool extends AbstractTextFileTool<TextFileAppendTool.
                 channel.force(true);
             }
 
-            textFileService.updateFileState(planId, filePath, "Success: Content appended and saved");
             return new ToolExecuteResult("Content appended and saved successfully");
         }
         catch (IOException e) {
-            textFileService.updateFileState(planId, filePath, "Error: " + e.getMessage());
             return new ToolExecuteResult("Error appending to file: " + e.getMessage());
         }
     }
