@@ -34,6 +34,7 @@ import com.hbasesoft.framework.ai.agent.tool.innerStorage.ISmartContentSavingSer
 import com.hbasesoft.framework.ai.agent.tool.innerStorage.SmartProcessResult;
 
 @Component
+@Deprecated
 public class TextFileOperator extends AbstractBaseTool<TextFileOperator.TextFileInput> {
 
     private static final Logger log = LoggerFactory.getLogger(TextFileOperator.class);
@@ -528,7 +529,14 @@ public class TextFileOperator extends AbstractBaseTool<TextFileOperator.TextFile
     @Override
     public String getDescription() {
         return """
-            Perform various operations on text files (including md, html, css, java, etc.).
+            [DEPRECATED] Perform various operations on text files (including md, html, css, java, etc.).
+
+            This tool is deprecated. Please use the specialized tools instead:
+            - text_file_replace: Replace specific text in file
+            - text_file_get_text: Get content from specified line range in file
+            - text_file_get_all_text: Get all content from file
+            - text_file_append: Append content to file
+            - text_file_count_words: Count words in current file
 
             Supported operations:
             - replace: Replace specific text in file, requires source_text and target_text parameters
