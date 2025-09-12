@@ -53,7 +53,7 @@ public abstract class AbstractTextFileTool<T> extends AbstractBaseTool<T> {
         }
         Path path = Paths.get(filePath);
 
-        if (unifiedDirectoryManager.isPathAllowed(path)) {
+        if (!unifiedDirectoryManager.isPathAllowed(path)) {
             return new ToolExecuteResult("File path not allowed. " + path.toAbsolutePath().toString());
         }
 

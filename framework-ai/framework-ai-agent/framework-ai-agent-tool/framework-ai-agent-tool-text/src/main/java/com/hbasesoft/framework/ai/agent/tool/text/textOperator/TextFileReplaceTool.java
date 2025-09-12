@@ -145,20 +145,20 @@ public class TextFileReplaceTool extends AbstractTextFileTool<TextFileReplaceToo
             {
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "filePath": {
                         "type": "string",
                         "description": "File path to operate on"
                     },
-                    "source_text": {
+                    "sourceText": {
                         "type": "string",
                         "description": "Text to be replaced"
                     },
-                    "target_text": {
+                    "targetText": {
                         "type": "string",
                         "description": "Replacement text"
                     }
                 },
-                "required": ["file_path", "source_text", "target_text"],
+                "required": ["filePath", "sourceText", "targetText"],
                 "additionalProperties": false
             }
             """;
