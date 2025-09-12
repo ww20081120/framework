@@ -58,7 +58,7 @@ public class TextFileGetAllTextTool extends AbstractTextFileTool<TextFileGetAllT
 
             // Basic parameter validation
             if (filePath == null) {
-                return new ToolExecuteResult("Error: file_path parameter is required");
+                return new ToolExecuteResult("Error: filePath parameter is required");
             }
 
             return getAllText(filePath);
@@ -119,12 +119,12 @@ public class TextFileGetAllTextTool extends AbstractTextFileTool<TextFileGetAllT
             {
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "filePath": {
                         "type": "string",
                         "description": "File path to read all content. Note: If file is too long, content will be stored in temporary file and return file path"
                     }
                 },
-                "required": ["file_path"],
+                "required": ["filePath"],
                 "additionalProperties": false
             }
             """;

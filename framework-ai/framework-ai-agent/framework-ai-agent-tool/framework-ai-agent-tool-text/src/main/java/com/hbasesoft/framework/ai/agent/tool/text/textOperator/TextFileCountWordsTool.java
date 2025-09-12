@@ -56,7 +56,7 @@ public class TextFileCountWordsTool extends AbstractTextFileTool<TextFileCountWo
 
             // Basic parameter validation
             if (filePath == null) {
-                return new ToolExecuteResult("Error: file_path parameter is required");
+                return new ToolExecuteResult("Error: filePath parameter is required");
             }
 
             return countWords(filePath);
@@ -111,12 +111,12 @@ public class TextFileCountWordsTool extends AbstractTextFileTool<TextFileCountWo
             {
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "filePath": {
                         "type": "string",
                         "description": "File path to count words"
                     }
                 },
-                "required": ["file_path"],
+                "required": ["filePath"],
                 "additionalProperties": false
             }
             """;

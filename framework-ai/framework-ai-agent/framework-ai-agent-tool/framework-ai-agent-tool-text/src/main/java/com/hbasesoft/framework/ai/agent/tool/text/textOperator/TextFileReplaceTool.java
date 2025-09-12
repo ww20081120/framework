@@ -80,11 +80,11 @@ public class TextFileReplaceTool extends AbstractTextFileTool<TextFileReplaceToo
 
             // Basic parameter validation
             if (filePath == null) {
-                return new ToolExecuteResult("Error: file_path parameter is required");
+                return new ToolExecuteResult("Error: filePath parameter is required");
             }
             if (sourceText == null || targetText == null) {
                 return new ToolExecuteResult(
-                    "Error: replace operation requires source_text and target_text parameters");
+                    "Error: replace operation requires sourceText and targetText parameters");
             }
 
             return replaceText(filePath, sourceText, targetText);

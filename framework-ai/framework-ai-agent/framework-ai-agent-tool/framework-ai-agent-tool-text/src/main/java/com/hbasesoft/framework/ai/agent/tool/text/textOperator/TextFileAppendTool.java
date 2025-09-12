@@ -57,7 +57,7 @@ public class TextFileAppendTool extends AbstractTextFileTool<TextFileAppendTool.
 
             // Basic parameter validation
             if (filePath == null) {
-                return new ToolExecuteResult("Error: file_path parameter is required");
+                return new ToolExecuteResult("Error: filePath parameter is required");
             }
             if (content == null || content.isEmpty()) {
                 return new ToolExecuteResult("Error: append operation requires content parameter");
@@ -123,7 +123,7 @@ public class TextFileAppendTool extends AbstractTextFileTool<TextFileAppendTool.
             {
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "filePath": {
                         "type": "string",
                         "description": "File path to operate on"
                     },
@@ -132,7 +132,7 @@ public class TextFileAppendTool extends AbstractTextFileTool<TextFileAppendTool.
                         "description": "Content to append to the file"
                     }
                 },
-                "required": ["file_path", "content"],
+                "required": ["filePath", "content"],
                 "additionalProperties": false
             }
             """;

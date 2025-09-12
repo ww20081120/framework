@@ -79,10 +79,10 @@ public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextToo
 
             // Basic parameter validation
             if (filePath == null) {
-                return new ToolExecuteResult("Error: file_path parameter is required");
+                return new ToolExecuteResult("Error: filePath parameter is required");
             }
             if (startLine == null || endLine == null) {
-                return new ToolExecuteResult("Error: get_text operation requires start_line and end_line parameters");
+                return new ToolExecuteResult("Error: getText operation requires startLine and endLine parameters");
             }
 
             return getTextByLines(filePath, startLine, endLine);
@@ -182,20 +182,20 @@ public class TextFileGetTextTool extends AbstractTextFileTool<TextFileGetTextToo
             {
                 "type": "object",
                 "properties": {
-                    "file_path": {
+                    "filePath": {
                         "type": "string",
                         "description": "File path to read"
                     },
-                    "start_line": {
+                    "startLine": {
                         "type": "integer",
                         "description": "Starting line number (starts from 1)"
                     },
-                    "end_line": {
+                    "endLine": {
                         "type": "integer",
                         "description": "Ending line number (inclusive). Note: Maximum 500 lines per call, use multiple calls for more content"
                     }
                 },
-                "required": ["file_path", "start_line", "end_line"],
+                "required": ["filePath", "startLine", "endLine"],
                 "additionalProperties": false
             }
             """;
