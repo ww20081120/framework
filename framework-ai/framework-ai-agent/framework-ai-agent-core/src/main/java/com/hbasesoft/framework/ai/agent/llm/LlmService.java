@@ -11,6 +11,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.observation.ChatModelObservationConvention;
 import org.springframework.ai.model.SimpleApiKey;
 import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
@@ -22,13 +23,13 @@ import org.springframework.ai.retry.RetryUtils;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.hbasesoft.framework.ai.agent.config.IManusProperties;
 import com.hbasesoft.framework.ai.agent.dynamic.model.model.vo.ModelConfig;
 import com.hbasesoft.framework.ai.agent.dynamic.model.service.DynamicModelService;
 import com.hbasesoft.framework.ai.agent.event.JmanusListener;
@@ -37,6 +38,8 @@ import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 import io.micrometer.observation.ObservationRegistry;
 import reactor.core.publisher.Flux;
+import reactor.netty.http.HttpProtocol;
+import reactor.netty.http.client.HttpClient;
 
 /**
  * LLM service implementation
@@ -91,9 +94,6 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
 
     @Autowired
     private ObjectProvider<ToolExecutionEligibilityPredicate> openAiToolExecutionEligibilityPredicate;
-
-    @Autowired(required = false)
-    private IManusProperties manusProperties;
 
     @Autowired
     private DynamicModelService dynamicModelService;
@@ -368,14 +368,14 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
     }
 
     private ChatClient buildPlanningChatClient(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
-        OpenAiChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
+        ChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
         return ChatClient.builder(chatModel).defaultAdvisors(new SimpleLoggerAdvisor())
             .defaultOptions(OpenAiChatOptions.fromOptions(defaultOptions)).build();
     }
 
     private ChatClient buildAgentExecutionClient(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
         defaultOptions.setInternalToolExecutionEnabled(false);
-        OpenAiChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
+        ChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
         return ChatClient.builder(chatModel)
             // .defaultAdvisors(MessageChatMemoryAdvisor.builder(agentMemory).build())
             .defaultAdvisors(new SimpleLoggerAdvisor()).defaultOptions(OpenAiChatOptions.fromOptions(defaultOptions))
@@ -383,13 +383,13 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
     }
 
     private ChatClient buildFinalizeChatClient(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
-        OpenAiChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
+        ChatModel chatModel = openAiChatModel(dynamicModelPo, defaultOptions);
         return ChatClient.builder(chatModel)
             // .defaultAdvisors(MessageChatMemoryAdvisor.builder(conversationMemory).build())
             .defaultAdvisors(new SimpleLoggerAdvisor()).build();
     }
 
-    public OpenAiChatModel openAiChatModel(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
+    public ChatModel openAiChatModel(ModelConfig dynamicModelPo, OpenAiChatOptions defaultOptions) {
         defaultOptions.setModel(dynamicModelPo.getModelName());
         if (defaultOptions.getTemperature() == null && dynamicModelPo.getTemperature() != null) {
             defaultOptions.setTemperature(dynamicModelPo.getTemperature());
@@ -458,8 +458,9 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         // Clone WebClient.Builder and add timeout configuration
         WebClient.Builder enhancedWebClientBuilder = webClientBuilder.clone()
             // Add 5 minutes default timeout setting
-            .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
-            .filter((request, next) -> next.exchange(request).timeout(Duration.ofMinutes(10)));
+           .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
+           .filter((request, next) -> next.exchange(request).timeout(Duration.ofMinutes(10)))
+           .clientConnector(new ReactorClientHttpConnector(HttpClient.create().protocol(HttpProtocol.HTTP11)));
 
         String completionsPath = dynamicModelPo.getCompletionsPath();
 
