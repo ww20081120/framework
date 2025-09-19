@@ -8,8 +8,10 @@ package com.hbasesoft.framework.common.utils;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -350,4 +352,24 @@ public final class CommonUtil {
         return StringUtils.trim(dest);
     }
 
+    /**
+     * Description: 从map里面获取值，如果没有就设置初始值<br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param <K> K key 类型
+     * @param <V> V value 类型
+     * @param map 取值的map
+     * @param key key
+     * @param defaultValueSupplier 默认值生成器
+     * @return <br>
+     */
+    public static <K, V> V getOrSetDefault(Map<K, V> map, K key, Supplier<V> defaultValueSupplier) {
+        V v = map.get(key);
+        if (v == null) {
+            v = defaultValueSupplier.get();
+            map.put(key, v);
+        }
+        return v;
+    }
 }
