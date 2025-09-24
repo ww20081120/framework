@@ -40,7 +40,7 @@
         <ognl.version>3.4.7</ognl.version>
         <velocity.version>2.4.1</velocity.version>
         <thumbnailator.version>0.4.20</thumbnailator.version>
-        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-beanutils.version>1.10.1</commons-beanutils.version>
         <commons-io.version>2.19.0</commons-io.version>
