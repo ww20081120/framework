@@ -16,11 +16,15 @@ import java.util.Properties;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.yaml.snakeyaml.Yaml;
 
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.ContextHolder;
 
 /**
  * <Description> <br>
@@ -54,6 +58,10 @@ public class LocalProperty implements Property {
      */
     @Override
     public String getProperty(final String property) {
+        ApplicationContext context = ContextHolder.getContext();
+        if (context != null && context.getEnvironment() instanceof ConfigurableEnvironment ce) {
+            return ce.getProperty(property);
+        }
         return props.get(property);
     }
 
@@ -66,6 +74,20 @@ public class LocalProperty implements Property {
      */
     @Override
     public Map<String, String> getProperties() {
+        ApplicationContext context = ContextHolder.getContext();
+        if (context != null && context.getEnvironment() instanceof ConfigurableEnvironment ce) {
+            Map<String, String> allProperties = new HashMap<>();
+            for (var propertySource : ce.getPropertySources()) {
+                if (propertySource instanceof EnumerablePropertySource) {
+                    EnumerablePropertySource<?> enumerableSource = (EnumerablePropertySource<?>) propertySource;
+                    for (String key : enumerableSource.getPropertyNames()) {
+                        String value = ce.getProperty(key);
+                        allProperties.put(key, value);
+                    }
+                }
+            }
+            return allProperties;
+        }
         return props;
     }
 
