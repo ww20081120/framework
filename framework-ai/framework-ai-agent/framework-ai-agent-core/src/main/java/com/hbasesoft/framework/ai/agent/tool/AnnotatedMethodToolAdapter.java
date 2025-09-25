@@ -21,9 +21,11 @@ import java.util.Map;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.aop.support.AopUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
@@ -541,11 +543,22 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
                 return objectArray;
             }
         }
+        else if (value instanceof String s) {
+            try {
+                if (s.startsWith("[")) {
+                    return objectMapper.readValue(s, arrayType);
+                }
+                else {
+                    Class<?> componentType = arrayType.getComponentType();
+                    return objectMapper.readValue(s, componentType);
+                }
+            }
+            catch (JsonProcessingException e) {
+                throw new ServiceException(e);
+            }
+        }
         else {
-            // Handle as single value array
-            Class<?> componentType = arrayType.getComponentType();
-            // For complex types, try to convert from JSON
-            return objectMapper.convertValue(value, componentType);
+            return objectMapper.convertValue(value, arrayType);
         }
     }
 
