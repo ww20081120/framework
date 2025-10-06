@@ -154,17 +154,26 @@ public class RecorderServiceImpl implements RecorderService {
                 return;
             }
 
-            // 获取目录中的所有JSON文件并按修改时间排序（从最旧到最新）
+            // 获取目录中的计划文件（以planId命名的JSON文件）并按修改时间排序（从最新到最旧）
             try (Stream<Path> files = Files.list(directory)
-                    .filter(path -> path.toString().endsWith(".json"))
-                    .sorted(Comparator.comparingLong(path -> {
+                    .filter(path -> {
+                        String fileName = path.getFileName().toString();
+                        // 只处理计划文件，即以.json结尾但不是其他配置文件的文件
+                        // 计划文件格式为 {planId}.json，所以我们排除特定的配置文件名
+                        return fileName.endsWith(".json") && 
+                               !fileName.equals("prompt.json") && 
+                               !fileName.equals("config.json") && 
+                               !fileName.equals("settings.json") && 
+                               !fileName.equals("metadata.json");
+                    })
+                    .sorted(Comparator.comparingLong((Path path) -> {
                         try {
                             return Files.getLastModifiedTime(path).toMillis();
                         } catch (IOException e) {
                             LoggerUtil.error(e, "获取文件修改时间失败: {0}", path);
                             return 0L;
                         }
-                    }))) {
+                    }).reversed())) { // 按修改时间从新到旧排序
 
                 // 跳过最新的maxFileCount个文件，删除其余的旧文件
                 files.skip(maxFileCount)
