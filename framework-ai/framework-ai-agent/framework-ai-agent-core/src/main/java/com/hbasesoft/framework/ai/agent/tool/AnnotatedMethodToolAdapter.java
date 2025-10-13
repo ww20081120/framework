@@ -62,7 +62,7 @@ public class AnnotatedMethodToolAdapter extends AbstractBaseTool<Map<String, Obj
     @Override
     public String getName() {
         // Use class name + method name as tool name to prevent conflicts
-        return targetObject.getClass().getSimpleName() + "." + method.getName();
+        return method.getName();
     }
 
     @Override

@@ -10,6 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.UtilException;
+
 /**
  * <Description> Registry for tools created from annotated methods <br>
  * 
@@ -33,6 +36,9 @@ public class AnnotatedToolRegistry {
      * @param tool The tool instance
      */
     public void registerTool(ToolCallBiFunctionDef<?> tool) {
+        if (ANNOTATED_TOOLS.containsKey(tool.getName())) {
+            throw new UtilException(ErrorCodeDef.PARAM_REPEAT, tool.getName());
+        }
         ANNOTATED_TOOLS.put(tool.getName(), tool);
     }
 

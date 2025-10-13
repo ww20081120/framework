@@ -28,7 +28,9 @@ import com.hbasesoft.framework.ai.agent.planning.IPlanningFactory;
 import com.hbasesoft.framework.ai.agent.tool.Action;
 import com.hbasesoft.framework.ai.agent.tool.AnnotatedMethodToolAdapter;
 import com.hbasesoft.framework.ai.agent.tool.AnnotatedToolRegistry;
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.common.utils.UtilException;
 
 /**
  * <Description> <br>
@@ -259,9 +261,10 @@ public class AgentServiceImpl extends AbstractAgentService {
                 // 将工具适配器注册到工具注册表中
                 toolRegistry.registerTool(toolAdapter);
 
-                if (!config.getAvailableTools().contains(toolAdapter.getName())) {
-                    config.getAvailableTools().add(toolAdapter.getName());
+                if (config.getAvailableTools().contains(toolAdapter.getName())) {
+                   throw new UtilException(ErrorCodeDef.PARAM_REPEAT, toolAdapter.getName());
                 }
+                config.getAvailableTools().add(toolAdapter.getName());
             }
         }
     }
