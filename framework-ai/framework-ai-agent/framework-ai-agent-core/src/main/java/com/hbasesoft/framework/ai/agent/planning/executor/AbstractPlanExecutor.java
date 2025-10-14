@@ -100,25 +100,48 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
                 });
             }
 
+            // 通知监听器步骤开始
+            context.notifyStepStart(step);
+            context.notifyStatusChange("开始执行步骤: " + stepText);
+
             BaseAgent executor = getExecutorForStep(stepType, context, initSettings, expectedReturnInfo);
             if (executor == null) {
                 LoggerUtil.error("No executor found for step type: {0}", stepType);
-                step.setResult("No executor found for step type: " + stepType);
+                String errorMsg = "No executor found for step type: " + stepType;
+                step.setResult(errorMsg);
+                context.notifyStepProgress(step, "执行器未找到: " + stepType);
+                context.notifyStepComplete(step, errorMsg);
                 return null;
             }
 
             step.setAgent(executor);
             executor.setState(AgentState.IN_PROGRESS);
 
+            // 通知监听器步骤进度
+            context.notifyStepProgress(step, "执行器已准备就绪: " + stepType);
+
             recorder.recordStepStart(step, context);
+            
+            // 通知监听器步骤进度
+            context.notifyStepProgress(step, "开始执行代理: " + executor.getClass().getSimpleName());
+            
             String stepResultStr = executor.run();
             step.setResult(stepResultStr);
+
+            // 通知监听器步骤完成
+            context.notifyStepComplete(step, stepResultStr);
+            context.notifyStatusChange("步骤执行完成: " + stepText);
 
             return executor;
         }
         catch (Exception e) {
             LoggerUtil.error("Error executing step: {0}", step.getStepRequirement(), e);
-            step.setResult("Execution failed: " + e.getMessage());
+            String errorMsg = "Execution failed: " + e.getMessage();
+            step.setResult(errorMsg);
+            
+            // 通知监听器错误
+            context.notifyStepProgress(step, "执行失败: " + e.getMessage());
+            context.notifyError(e);
         }
         finally {
             recorder.recordStepEnd(step, context);

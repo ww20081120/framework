@@ -16,7 +16,12 @@
 package com.hbasesoft.framework.ai.agent.planning.model.vo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import com.hbasesoft.framework.ai.agent.planning.listener.ExecutionEventType;
+import com.hbasesoft.framework.ai.agent.planning.listener.ExecutionListener;
 
 /**
  * Execution context class for passing and maintaining state information during the creation, execution, and
@@ -72,6 +77,11 @@ public class ExecutionContext {
      * Memory ID for memory usage
      */
     private String memoryId;
+
+    /**
+     * 执行监听器列表，用于监听计划执行过程中的各种事件
+     */
+    private List<ExecutionListener> listeners = new CopyOnWriteArrayList<>();
 
     /**
      * Get plan ID
@@ -247,6 +257,179 @@ public class ExecutionContext {
 
     public void setMemoryId(String memoryId) {
         this.memoryId = memoryId;
+    }
+
+    /**
+     * 添加执行监听器
+     * 
+     * @param listener 要添加的监听器
+     */
+    public void addListener(ExecutionListener listener) {
+        if (listener != null && !listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    /**
+     * 移除执行监听器
+     * 
+     * @param listener 要移除的监听器
+     */
+    public void removeListener(ExecutionListener listener) {
+        listeners.remove(listener);
+    }
+
+    /**
+     * 清除所有监听器
+     */
+    public void clearListeners() {
+        listeners.clear();
+    }
+
+    /**
+     * 获取所有监听器
+     * 
+     * @return 监听器列表
+     */
+    public List<ExecutionListener> getListeners() {
+        return new CopyOnWriteArrayList<>(listeners);
+    }
+
+    /**
+     * 通知所有监听器计划创建完成
+     * 
+     * @param plan 创建的计划
+     */
+    public void notifyPlanCreated(PlanInterface plan) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onPlanCreated(plan);
+            } catch (Exception e) {
+                // 监听器异常不应影响主流程
+                System.err.println("Error notifying listener for plan created: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器步骤开始
+     * 
+     * @param step 开始的步骤
+     */
+    public void notifyStepStart(ExecutionStep step) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onStepStart(step);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for step start: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器步骤进度
+     * 
+     * @param step 当前步骤
+     * @param progress 进度信息
+     */
+    public void notifyStepProgress(ExecutionStep step, String progress) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onStepProgress(step, progress);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for step progress: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器步骤完成
+     * 
+     * @param step 完成的步骤
+     * @param result 执行结果
+     */
+    public void notifyStepComplete(ExecutionStep step, String result) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onStepComplete(step, result);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for step complete: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器总结流式输出
+     * 
+     * @param chunk 流式文本片段
+     */
+    public void notifySummaryStream(String chunk) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onSummaryStream(chunk);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for summary stream: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器执行完成
+     */
+    public void notifyExecutionComplete() {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onExecutionComplete(this);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for execution complete: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器发生错误
+     * 
+     * @param error 错误信息
+     */
+    public void notifyError(Exception error) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onError(error);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for error: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器状态变化
+     * 
+     * @param status 状态描述
+     */
+    public void notifyStatusChange(String status) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onStatusChange(this, status);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for status change: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * 通知所有监听器大模型流式响应
+     * 
+     * @param response 流式响应片段
+     * @param responseType 响应类型
+     */
+    public void notifyLlmResponseStream(String response, String responseType) {
+        for (ExecutionListener listener : listeners) {
+            try {
+                listener.onLlmResponseStream(this, response, responseType);
+            } catch (Exception e) {
+                System.err.println("Error notifying listener for LLM response stream: " + e.getMessage());
+            }
+        }
     }
 
 }
