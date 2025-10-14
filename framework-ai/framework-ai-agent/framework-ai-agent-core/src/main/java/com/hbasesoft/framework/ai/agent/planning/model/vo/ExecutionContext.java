@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.hbasesoft.framework.ai.agent.planning.listener.ExecutionEventType;
 import com.hbasesoft.framework.ai.agent.planning.listener.ExecutionListener;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 
 /**
  * Execution context class for passing and maintaining state information during the creation, execution, and
@@ -304,9 +304,10 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onPlanCreated(plan);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 // 监听器异常不应影响主流程
-                System.err.println("Error notifying listener for plan created: " + e.getMessage());
+                LoggerUtil.error(e);
             }
         }
     }
@@ -320,8 +321,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onStepStart(step);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for step start: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -336,8 +338,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onStepProgress(step, progress);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for step progress: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -352,8 +355,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onStepComplete(step, result);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for step complete: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -367,8 +371,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onSummaryStream(chunk);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for summary stream: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -380,8 +385,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onExecutionComplete(this);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for execution complete: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -395,8 +401,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onError(error);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for error: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -410,8 +417,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onStatusChange(this, status);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for status change: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }
@@ -426,8 +434,9 @@ public class ExecutionContext {
         for (ExecutionListener listener : listeners) {
             try {
                 listener.onLlmResponseStream(this, response, responseType);
-            } catch (Exception e) {
-                System.err.println("Error notifying listener for LLM response stream: " + e.getMessage());
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
             }
         }
     }

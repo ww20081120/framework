@@ -48,7 +48,7 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
     public Flux<String> executePlanWithSummaryStream(ExecutionContext context) {
         LoggerUtil.info("Executing plan with summary stream for planId: {0}", context.getCurrentPlanId());
         context.setUseMemory(true);
-        
+
         // 通知监听器开始执行
         context.notifyStatusChange("开始执行流式计划流程");
 
@@ -60,8 +60,10 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
             PlanInterface plan = context.getPlan();
             if (plan == null) {
                 LoggerUtil.error("No plan found in context for planId: {0}", context.getCurrentPlanId());
-                context.notifyError(new IllegalStateException("Plan creation failed, no plan found in execution context"));
-                return Flux.error(new IllegalStateException("Plan creation failed, no plan found in execution context"));
+                context
+                    .notifyError(new IllegalStateException("Plan creation failed, no plan found in execution context"));
+                return Flux
+                    .error(new IllegalStateException("Plan creation failed, no plan found in execution context"));
             }
 
             // 通知监听器计划创建完成
@@ -72,20 +74,9 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
             if (plan.isDirectResponse()) {
                 // 直接响应模式
                 context.notifyStatusChange("使用直接响应模式");
-                PlanExecutorInterface executor = getPlanExecutorFactory().createExecutor(plan);
-                executor.executeAllSteps(context);
-
-                // 生成直接响应
-                context.notifyStatusChange("生成直接响应");
-                getPlanFinalizer().generateDirectResponse(context);
-                
-                // 通知执行完成
-                context.notifyExecutionComplete();
-                
-                // 返回结果作为流
-                String result = context.getResultSummary();
-                return result != null ? Flux.just(result) : Flux.empty();
-            } else {
+                return generateSummaryStreamOnly(context);
+            }
+            else {
                 // 正常计划执行
                 context.notifyStatusChange("开始执行计划步骤");
                 PlanExecutorInterface executor = getPlanExecutorFactory().createExecutor(plan);
@@ -93,19 +84,17 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
 
                 // 3. 生成流式总结
                 context.notifyStatusChange("开始生成流式总结");
-                return getPlanFinalizer().generateSummaryStreaming(context)
-                    .doOnComplete(() -> {
-                        LoggerUtil.info("Plan execution with streaming completed successfully for planId: {0}", 
-                            context.getCurrentPlanId());
-                        context.notifyExecutionComplete();
-                    })
-                    .doOnError(error -> {
-                        LoggerUtil.error("Error in streaming execution for planId: {0}", 
-                            context.getCurrentPlanId(), error);
-                        context.notifyError(error instanceof Exception ? (Exception) error : new RuntimeException(error));
-                    });
+                return getPlanFinalizer().generateSummaryStreaming(context).doOnComplete(() -> {
+                    LoggerUtil.info("Plan execution with streaming completed successfully for planId: {0}",
+                        context.getCurrentPlanId());
+                    context.notifyExecutionComplete();
+                }).doOnError(error -> {
+                    LoggerUtil.error("Error in streaming execution for planId: {0}", context.getCurrentPlanId(), error);
+                    context.notifyError(error instanceof Exception ? (Exception) error : new RuntimeException(error));
+                });
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LoggerUtil.error("Error executing plan with stream for planId: {0}", context.getCurrentPlanId(), e);
             context.notifyError(e);
             return Flux.error(new RuntimeException("Failed to execute plan with stream", e));
@@ -118,10 +107,10 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
      * @param context 执行上下文
      * @return 执行上下文
      */
-    public ExecutionContext executePlanWithListener(ExecutionContext context) {
+    public ExecutionContext executePlan(ExecutionContext context) {
         LoggerUtil.info("Executing plan with listener support for planId: {0}", context.getCurrentPlanId());
         context.setUseMemory(true);
-        
+
         // 通知监听器开始执行
         context.notifyStatusChange("开始执行带监听器的计划流程");
 
@@ -133,7 +122,8 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
             PlanInterface plan = context.getPlan();
             if (plan == null) {
                 LoggerUtil.error("No plan found in context for planId: {0}", context.getCurrentPlanId());
-                context.notifyError(new IllegalStateException("Plan creation failed, no plan found in execution context"));
+                context
+                    .notifyError(new IllegalStateException("Plan creation failed, no plan found in execution context"));
                 throw new IllegalStateException("Plan creation failed, no plan found in execution context");
             }
 
@@ -147,11 +137,14 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
                 context.notifyStatusChange("使用直接响应模式");
                 PlanExecutorInterface executor = getPlanExecutorFactory().createExecutor(plan);
                 executor.executeAllSteps(context);
+                
+                context.setNeedSummary(true);
 
                 // 生成直接响应
                 context.notifyStatusChange("生成直接响应");
-                getPlanFinalizer().generateDirectResponse(context);
-            } else {
+                getPlanFinalizer().generateSummaryWithListener(context);
+            }
+            else {
                 // 正常计划执行
                 context.notifyStatusChange("开始执行计划步骤");
                 PlanExecutorInterface executor = getPlanExecutorFactory().createExecutor(plan);
@@ -162,18 +155,19 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
                 getPlanFinalizer().generateSummaryWithListener(context);
             }
 
-            LoggerUtil.info("Plan execution with listener completed successfully for planId: {0}", 
+            LoggerUtil.info("Plan execution with listener completed successfully for planId: {0}",
                 context.getCurrentPlanId());
-            
+
             // 通知监听器执行完成
             context.notifyExecutionComplete();
-            
-        } catch (Exception e) {
+
+        }
+        catch (Exception e) {
             LoggerUtil.error("Error executing plan with listener for planId: {0}", context.getCurrentPlanId(), e);
             context.notifyError(e);
             throw e;
         }
-        
+
         return context;
     }
 
@@ -183,25 +177,22 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
      * @param context 执行上下文（必须包含已执行的计划）
      * @return 总结的流式Flux
      */
-    public Flux<String> generateSummaryStreamOnly(ExecutionContext context) {
+    private Flux<String> generateSummaryStreamOnly(ExecutionContext context) {
         LoggerUtil.info("Generating summary stream only for planId: {0}", context.getCurrentPlanId());
-        
+
         if (context.getPlan() == null) {
             LoggerUtil.error("No plan found in context for planId: {0}", context.getCurrentPlanId());
             return Flux.error(new IllegalArgumentException("No plan found in execution context"));
         }
 
         context.notifyStatusChange("开始生成流式总结");
-        return getPlanFinalizer().generateSummaryStreaming(context)
-            .doOnComplete(() -> {
-                LoggerUtil.info("Summary stream generation completed for planId: {0}", context.getCurrentPlanId());
-                context.notifyExecutionComplete();
-            })
-            .doOnError(error -> {
-                LoggerUtil.error("Error in summary stream generation for planId: {0}", 
-                    context.getCurrentPlanId(), error);
-                context.notifyError(error instanceof Exception ? (Exception) error : new RuntimeException(error));
-            });
+        return getPlanFinalizer().generateSummaryStreaming(context).doOnComplete(() -> {
+            LoggerUtil.info("Summary stream generation completed for planId: {0}", context.getCurrentPlanId());
+            context.notifyExecutionComplete();
+        }).doOnError(error -> {
+            LoggerUtil.error("Error in summary stream generation for planId: {0}", context.getCurrentPlanId(), error);
+            context.notifyError(error instanceof Exception ? (Exception) error : new RuntimeException(error));
+        });
     }
 
     // 获取私有成员的辅助方法
@@ -210,7 +201,8 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
             java.lang.reflect.Field field = PlanningCoordinator.class.getDeclaredField("planCreator");
             field.setAccessible(true);
             return (PlanCreator) field.get(this);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException("Failed to access planCreator", e);
         }
     }
@@ -220,7 +212,8 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
             java.lang.reflect.Field field = PlanningCoordinator.class.getDeclaredField("planExecutorFactory");
             field.setAccessible(true);
             return (PlanExecutorFactory) field.get(this);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException("Failed to access planExecutorFactory", e);
         }
     }
@@ -230,7 +223,8 @@ public class StreamingPlanningCoordinator extends PlanningCoordinator {
             java.lang.reflect.Field field = PlanningCoordinator.class.getDeclaredField("planFinalizer");
             field.setAccessible(true);
             return (PlanFinalizer) field.get(this);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException("Failed to access planFinalizer", e);
         }
     }
