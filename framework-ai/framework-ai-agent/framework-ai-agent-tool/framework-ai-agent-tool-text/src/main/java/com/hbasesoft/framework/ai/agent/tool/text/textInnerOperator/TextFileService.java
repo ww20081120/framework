@@ -55,15 +55,40 @@ public class TextFileService implements ITextFileService {
     /**
      * Set of supported text file extensions Plain text and Markdown
      */
-    private static final Set<String> SUPPORTED_EXTENSIONS = new HashSet<>(
-        Set.of(".txt", ".md", ".markdown", ".java", ".py", ".js", ".ts", ".jsx", ".tsx", // Common programming
-                                                                                         // languages
-            ".html", ".htm", ".css", ".scss", ".sass", ".less", // Web-related
-            ".xml", ".json", ".yaml", ".yml", ".properties", // Configuration files
-            ".sql", ".sh", ".bat", ".cmd", // Scripts and database
-            ".log", ".conf", ".ini", // Logs and configuration
-            ".gradle", ".pom", ".mvn", // Build tools
-            ".csv"));
+    private static final Set<String> SUPPORTED_EXTENSIONS = new HashSet<>(Set.of(".txt", ".md", ".markdown", // Plain
+        // text and
+        // documentation
+        ".java", ".py", ".js", ".ts", ".jsx", ".tsx", // Common programming languages
+        ".go", ".php", // Go and PHP
+        ".c", ".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hxx", // C/C++ languages
+        ".cs", // C#
+        ".rs", // Rust
+        ".kt", ".kts", // Kotlin
+        ".swift", // Swift
+        ".m", ".mm", // Objective-C
+        ".scala", ".sc", // Scala
+        ".rb", // Ruby
+        ".pl", ".pm", // Perl
+        ".r", ".R", // R language
+        ".dart", // Dart
+        ".lua", // Lua
+        ".vue", ".svelte", ".elm", // Modern frontend frameworks
+        ".html", ".htm", ".css", ".scss", ".sass", ".less", // Web-related
+        ".xml", ".json", ".yaml", ".yml", ".properties", ".toml", ".ini", // Configuration files
+        ".sql", ".sh", ".bat", ".cmd", ".ps1", ".zsh", ".fish", // Scripts and database
+        ".log", ".conf", // Logs and configuration
+        ".gradle", ".pom", ".mvn", // Build tools
+        ".csv", ".tsv", // Data files
+        ".dockerfile", ".dockerignore", // Docker files
+        ".gitignore", ".gitattributes", ".gitmodules", // Git files
+        ".mk", ".cmake", // Make and CMake files
+        ".env", ".env.example", ".env.local", // Environment files
+        ".lock", // Lock files
+        ".eslintrc", ".prettierrc", ".babelrc", // Code quality config files
+        "Makefile", "Pipfile", // Common config files
+        ".mod", ".sum", "Gemfile", // Dependency files
+        "dockerfile", ".config" // Build config files
+    ));
 
     private final ConcurrentHashMap<String, FileState> fileStates = new ConcurrentHashMap<>();
 
