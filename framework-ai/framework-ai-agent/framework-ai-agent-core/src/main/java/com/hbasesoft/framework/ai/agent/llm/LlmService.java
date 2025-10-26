@@ -249,7 +249,8 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         String apiKey = model.getApiKey();
         String modelName = model.getModelName();
         Map<String, String> headers = model.getHeaders();
-        OpenAiApi openAiApi = OpenAiApi.builder().baseUrl(host).apiKey(apiKey).build();
+        OpenAiApi openAiApi = OpenAiApi.builder().baseUrl(host).completionsPath(model.getCompletionsPath())
+            .apiKey(apiKey).build();
 
         OpenAiChatOptions.Builder chatOptionsBuilder = OpenAiChatOptions.builder().model(modelName);
 
@@ -458,9 +459,9 @@ public class LlmService implements ILlmService, JmanusListener<ModelChangeEvent>
         // Clone WebClient.Builder and add timeout configuration
         WebClient.Builder enhancedWebClientBuilder = webClientBuilder.clone()
             // Add 5 minutes default timeout setting
-           .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
-           .filter((request, next) -> next.exchange(request).timeout(Duration.ofMinutes(10)))
-           .clientConnector(new ReactorClientHttpConnector(HttpClient.create().protocol(HttpProtocol.HTTP11)));
+            .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
+            .filter((request, next) -> next.exchange(request).timeout(Duration.ofMinutes(10)))
+            .clientConnector(new ReactorClientHttpConnector(HttpClient.create().protocol(HttpProtocol.HTTP11)));
 
         String completionsPath = dynamicModelPo.getCompletionsPath();
 
