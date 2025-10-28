@@ -45,7 +45,7 @@ public class MultipartBodyPublisher {
      */
     public HttpRequest.BodyPublisher build() {
         if (partsSpecificationList.isEmpty()) {
-            throw new IllegalStateException("必须至少有一个部件才能构建 multipart 消息。");
+            return HttpRequest.BodyPublishers.noBody();
         }
         addFinalBoundaryPart(); // 添加结束边界
         // 返回一个按需生成字节数据的 BodyPublisher
@@ -86,8 +86,8 @@ public class MultipartBodyPublisher {
      * @return 当前实例，支持链式调用
      * @throws IOException 文件读取异常
      */
-    public MultipartBodyPublisher addFilePart(final String name, final Path filePath,
-        final String contentType) throws IOException {
+    public MultipartBodyPublisher addFilePart(final String name, final Path filePath, final String contentType)
+        throws IOException {
         PartsSpecification newPart = new PartsSpecification();
         newPart.type = PartsSpecification.TYPE.FILE;
         newPart.name = name;
