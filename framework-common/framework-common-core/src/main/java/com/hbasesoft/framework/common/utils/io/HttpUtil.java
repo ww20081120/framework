@@ -630,7 +630,7 @@ public final class HttpUtil {
      * @Date 2025/9/24
      */
     public static HttpClient getHttpClient() {
-        return client;
+        return HTTP_CLIENT;
     }
 
     /**
