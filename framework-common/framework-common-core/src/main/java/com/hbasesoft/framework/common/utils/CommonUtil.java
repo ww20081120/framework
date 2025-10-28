@@ -364,7 +364,8 @@ public final class CommonUtil {
      * @param defaultValueSupplier 默认值生成器
      * @return <br>
      */
-    public static <K, V> V getOrSetDefault(Map<K, V> map, K key, Supplier<V> defaultValueSupplier) {
+    public static <K, V> V getOrSetDefault(final Map<K, V> map, final K key,
+        final Supplier<V> defaultValueSupplier) {
         V v = map.get(key);
         if (v == null) {
             v = defaultValueSupplier.get();

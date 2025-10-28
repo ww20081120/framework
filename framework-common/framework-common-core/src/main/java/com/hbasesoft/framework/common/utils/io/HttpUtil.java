@@ -14,9 +14,7 @@ import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -65,8 +63,8 @@ public final class HttpUtil {
     /** 最大参数 */
     private static final int MAX_PARAMS = 16;
 
-    /** httpClient */
-    private static final HttpClient httpClient = createHttpClient();
+    /** HTTP_CLIENT */
+    private static final HttpClient HTTP_CLIENT = createHttpClient();
 
     /**
      * <p>
@@ -132,39 +130,6 @@ public final class HttpUtil {
 
         HttpRequest request = requestBuilder.build();
         return getStringRequest(request, charset);
-    }
-
-    /**
-     * Description: 拼接url请求参数 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param params
-     * @param encode
-     * @return <br>
-     */
-    public static String paramsToString(final Map<String, String> params, final boolean encode) {
-        if (MapUtils.isNotEmpty(params)) {
-            List<String> paramList = new ArrayList<>();
-            try {
-                for (Entry<String, String> entry : params.entrySet()) {
-                    if (entry.getValue() == null) {
-                        paramList.add(entry.getKey() + "=");
-                    }
-                    else {
-                        paramList.add(entry.getKey() + "="
-                            + (encode ? URLUtil.encode(entry.getValue(), GlobalConstants.DEFAULT_CHARSET)
-                                : entry.getValue()));
-                    }
-                }
-            }
-            catch (Exception e) {
-                LoggerUtil.error(e);
-                throw new UtilException(e);
-            }
-            return String.join("&", paramList);
-        }
-        return GlobalConstants.BLANK;
     }
 
     /**
@@ -271,9 +236,14 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String doPost(final String url, final Map<String, String> paramMap, final Charset charset) {
-        String body = paramsToString(paramMap, false);
+        MultipartBodyPublisher bodyPublisher = new MultipartBodyPublisher();
+        if (MapUtils.isNotEmpty(paramMap)) {
+            for (Entry<String, String> entry : paramMap.entrySet()) {
+                bodyPublisher.addTextPart(entry.getKey(), entry.getValue());
+            }
+        }
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
-            .header("Content-Type", "application/x-www-form-urlencoded").POST(BodyPublishers.ofString(body));
+            .header("Content-Type", "multipart/form-data").POST(bodyPublisher.build());
 
         HttpRequest request = requestBuilder.build();
         return getStringRequest(request, charset);
@@ -292,9 +262,14 @@ public final class HttpUtil {
      */
     public static String doPost(final String url, final Map<String, String> paramMap, final Charset charset,
         final Map<String, String> headers) {
-        String body = paramsToString(paramMap, false);
+        MultipartBodyPublisher bodyPublisher = new MultipartBodyPublisher();
+        if (MapUtils.isNotEmpty(paramMap)) {
+            for (Entry<String, String> entry : paramMap.entrySet()) {
+                bodyPublisher.addTextPart(entry.getKey(), entry.getValue());
+            }
+        }
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
-            .header("Content-Type", "application/x-www-form-urlencoded").POST(BodyPublishers.ofString(body));
+            .header("Content-Type", "multipart/form-data").POST(bodyPublisher.build());
 
         if (headers != null && !headers.isEmpty()) {
             for (Map.Entry<String, String> header : headers.entrySet()) {
@@ -435,9 +410,14 @@ public final class HttpUtil {
 
         if (paramMap != null && !paramMap.isEmpty()) {
             // 如果有参数映射，则构建表单数据
-            String formBody = paramsToString(paramMap, false);
+            MultipartBodyPublisher bodyPublisher = new MultipartBodyPublisher();
+            if (MapUtils.isNotEmpty(paramMap)) {
+                for (Entry<String, String> entry : paramMap.entrySet()) {
+                    bodyPublisher.addTextPart(entry.getKey(), entry.getValue());
+                }
+            }
             requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
-                .header("Content-Type", "application/x-www-form-urlencoded").POST(BodyPublishers.ofString(formBody));
+                .header("Content-Type", "application/x-www-form-urlencoded").POST(bodyPublisher.build());
         }
         else {
             // 否则使用提供的body
@@ -465,10 +445,10 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String getStringRequest(final HttpRequest request, final Charset charset) {
-        HttpClient httpClient = getHttpClient();
+        HttpClient client = HTTP_CLIENT;
         try {
             // 在请求级别设置超时时间
-            HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString(charset));
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString(charset));
             return response.body();
         }
         catch (IOException | InterruptedException e) {
@@ -499,9 +479,9 @@ public final class HttpUtil {
      */
     public static InputStream downloadFile(final String url) {
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout()).GET().build();
-        HttpClient httpClient = getHttpClient();
+        HttpClient client = HTTP_CLIENT;
         try {
-            HttpResponse<InputStream> response = httpClient.send(request, BodyHandlers.ofInputStream());
+            HttpResponse<InputStream> response = client.send(request, BodyHandlers.ofInputStream());
             return response.body();
         }
         catch (IOException | InterruptedException e) {
@@ -650,7 +630,7 @@ public final class HttpUtil {
      * @Date 2025/9/24
      */
     public static HttpClient getHttpClient() {
-        return httpClient;
+        return client;
     }
 
     /**
