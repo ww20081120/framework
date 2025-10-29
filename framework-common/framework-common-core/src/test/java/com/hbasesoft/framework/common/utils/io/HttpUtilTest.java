@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+
+import com.hbasesoft.framework.common.utils.security.URLUtil;
+
 import org.junit.jupiter.api.Disabled;
 
 /**
@@ -113,10 +116,10 @@ public class HttpUtilTest {
         params.put("key2", "value2");
         params.put("key3", "特殊字符&测试");
         
-        String result = HttpUtil.paramsToString(params, true);
+        String result = UrlBuilder.paramsToString(params, true);
         System.out.println("Encoded params: " + result);
         
-        String result2 = HttpUtil.paramsToString(params, false);
+        String result2 = UrlBuilder.paramsToString(params, false);
         System.out.println("Unencoded params: " + result2);
     }
 

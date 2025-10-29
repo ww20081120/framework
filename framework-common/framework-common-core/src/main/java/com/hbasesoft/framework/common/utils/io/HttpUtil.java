@@ -451,7 +451,10 @@ public final class HttpUtil {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString(charset));
             return response.body();
         }
-        catch (IOException | InterruptedException e) {
+        catch (IOException e) {
+            throw new UtilException(e);
+        }
+        catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // 重置中断状态
             throw new UtilException(e);
         }
@@ -484,7 +487,10 @@ public final class HttpUtil {
             HttpResponse<InputStream> response = client.send(request, BodyHandlers.ofInputStream());
             return response.body();
         }
-        catch (IOException | InterruptedException e) {
+        catch (IOException e) {
+            throw new UtilException(e);
+        }
+        catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // 重置中断状态
             throw new UtilException(e);
         }
