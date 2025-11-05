@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.hbasesoft.framework</groupId>
     <artifactId>framework-ai-agent</artifactId>
-    <version>4.1</version>
+    <version>4.1.1</version>
   </parent>
   <artifactId>framework-ai-agent-jpa</artifactId>
   <description>Agent信息都存在数据库中</description>
