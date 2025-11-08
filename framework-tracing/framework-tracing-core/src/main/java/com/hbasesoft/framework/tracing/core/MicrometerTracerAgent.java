@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import com.hbasesoft.framework.common.utils.ContextHolder;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 
+import io.micrometer.tracing.CurrentTraceContext;
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
 import io.micrometer.tracing.Tracer.SpanInScope;
@@ -50,8 +51,11 @@ public class MicrometerTracerAgent implements TracerAgent {
     public String getTraceId() {
         Tracer tc = getTracer();
         if (tc != null) {
-            // 使用CurrentTraceContext来获取当前活跃的Span
-            return tc.currentTraceContext().context().traceId();
+            CurrentTraceContext ctc = tc.currentTraceContext();
+            if (ctc != null && ctc.context() != null) {
+                // 使用CurrentTraceContext来获取当前活跃的Span
+                return ctc.context().traceId();
+            }
         }
         return "No Trace in context";
     }
