@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hbasesoft.framework.ai.agent.tool.text.textOperator;
+package com.hbasesoft.framework.ai.agent.tool.text.textInnerOperator;
 
 public class FileState {
 

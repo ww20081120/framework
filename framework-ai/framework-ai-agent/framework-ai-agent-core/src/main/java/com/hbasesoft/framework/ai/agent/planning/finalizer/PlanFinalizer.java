@@ -19,6 +19,7 @@ import com.hbasesoft.framework.ai.agent.dynamic.memory.advisor.CustomMessageChat
 import com.hbasesoft.framework.ai.agent.dynamic.prompt.model.enums.PromptEnum;
 import com.hbasesoft.framework.ai.agent.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.agent.llm.ILlmService;
+import com.hbasesoft.framework.ai.agent.llm.NonBlockingStreamingHandler;
 import com.hbasesoft.framework.ai.agent.llm.StreamingResponseHandler;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.ExecutionContext;
 import com.hbasesoft.framework.ai.agent.planning.model.vo.PlanInterface;
@@ -49,6 +50,8 @@ public class PlanFinalizer {
 
     private final StreamingResponseHandler streamingResponseHandler;
 
+    private final NonBlockingStreamingHandler nonBlockingStreamingHandler;
+
     public PlanFinalizer(ILlmService llmService, PlanExecutionRecorder recorder, PromptService promptService,
         IManusProperties manusProperties, StreamingResponseHandler streamingResponseHandler) {
         this.llmService = llmService;
@@ -56,6 +59,7 @@ public class PlanFinalizer {
         this.promptService = promptService;
         this.manusProperties = manusProperties;
         this.streamingResponseHandler = streamingResponseHandler;
+        this.nonBlockingStreamingHandler = new NonBlockingStreamingHandler();
     }
 
     /**
@@ -128,6 +132,118 @@ public class PlanFinalizer {
         Long thinkActRecordId = context.getThinkActRecordId();
 
         recorder.recordPlanCompletion(currentPlanId, rootPlanId, thinkActRecordId, summary);
+    }
+
+    /**
+     * Generate the execution summary of the plan with listener support
+     * 
+     * @param context execution context, containing the user request and the execution process information
+     */
+    public void generateSummaryWithListener(ExecutionContext context) {
+        if (context == null || context.getPlan() == null) {
+            throw new IllegalArgumentException("ExecutionContext or its plan cannot be null");
+        }
+        if (!context.isNeedSummary()) {
+            LoggerUtil.info("No need to generate summary, use code generate summary instead");
+            String summary = context.getPlan().getPlanExecutionStateStringFormat(false);
+            context.setResultSummary(summary);
+            recordPlanCompletion(context, summary);
+            return;
+        }
+
+        PlanInterface plan = context.getPlan();
+        String executionDetail = plan.getPlanExecutionStateStringFormat(false);
+        try {
+            String userRequest = context.getUserRequest();
+
+            Message combinedMessage = promptService.createUserMessage(
+                PromptEnum.PLANNING_PLAN_FINALIZER.getPromptName(),
+                Map.of("executionDetail", executionDetail, "userRequest", userRequest));
+
+            Prompt prompt = new Prompt(List.of(combinedMessage));
+
+            ChatClient.ChatClientRequestSpec requestSpec = llmService.getPlanningChatClient().prompt(prompt);
+            if (context.isUseMemory()) {
+                requestSpec
+                    .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, context.getMemoryId()));
+                requestSpec.advisors(CustomMessageChatMemoryAdvisor
+                    .builder(llmService.getConversationMemory(manusProperties.getMaxMemory()), context.getUserRequest(),
+                        CustomMessageChatMemoryAdvisor.AdvisorType.AFTER)
+                    .build());
+            }
+
+            // Use non-blocking streaming handler with listener support
+            Flux<ChatResponse> responseFlux = requestSpec.stream().chatResponse();
+            String summary = nonBlockingStreamingHandler.processStreamingTextResponseWithListener(
+                responseFlux, "Summary generation", context, "SUMMARY");
+            context.setResultSummary(summary);
+
+            recordPlanCompletion(context, summary);
+            LoggerUtil.info("Generated summary with listener: {0}", summary);
+        }
+        catch (Exception e) {
+            LoggerUtil.error("Error generating summary with LLM", e);
+            context.notifyError(e);
+            throw new RuntimeException("Failed to generate summary", e);
+        }
+    }
+
+    /**
+     * Generate the execution summary of the plan and return streaming Flux
+     * 
+     * @param context execution context, containing the user request and the execution process information
+     * @return Flux of summary chunks
+     */
+    public Flux<String> generateSummaryStreaming(ExecutionContext context) {
+        if (context == null || context.getPlan() == null) {
+            return Flux.error(new IllegalArgumentException("ExecutionContext or its plan cannot be null"));
+        }
+        if (!context.isNeedSummary()) {
+            LoggerUtil.info("No need to generate summary, use code generate summary instead");
+            String summary = context.getPlan().getPlanExecutionStateStringFormat(false);
+            return Flux.just(summary);
+        }
+
+        try {
+            PlanInterface plan = context.getPlan();
+            String executionDetail = plan.getPlanExecutionStateStringFormat(false);
+            String userRequest = context.getUserRequest();
+
+            Message combinedMessage = promptService.createUserMessage(
+                PromptEnum.PLANNING_PLAN_FINALIZER.getPromptName(),
+                Map.of("executionDetail", executionDetail, "userRequest", userRequest));
+
+            Prompt prompt = new Prompt(List.of(combinedMessage));
+
+            ChatClient.ChatClientRequestSpec requestSpec = llmService.getPlanningChatClient().prompt(prompt);
+            if (context.isUseMemory()) {
+                requestSpec
+                    .advisors(memoryAdvisor -> memoryAdvisor.param(ChatMemory.CONVERSATION_ID, context.getMemoryId()));
+                requestSpec.advisors(CustomMessageChatMemoryAdvisor
+                    .builder(llmService.getConversationMemory(manusProperties.getMaxMemory()), context.getUserRequest(),
+                        CustomMessageChatMemoryAdvisor.AdvisorType.AFTER)
+                    .build());
+            }
+
+            // Return streaming Flux
+            Flux<ChatResponse> responseFlux = requestSpec.stream().chatResponse();
+            return nonBlockingStreamingHandler.processStreamingTextResponseNonBlocking(
+                responseFlux, "Summary generation", context, "SUMMARY")
+                .doOnComplete(() -> {
+                    // Record completion when stream finishes
+                    String fullSummary = context.getResultSummary();
+                    recordPlanCompletion(context, fullSummary);
+                })
+                .doOnError(error -> {
+                    LoggerUtil.error("Error in summary streaming", error);
+                    context.notifyError(error instanceof Exception ? (Exception) error : new RuntimeException(error));
+                });
+        }
+        catch (Exception e) {
+            LoggerUtil.error("Error setting up summary streaming", e);
+            context.notifyError(e);
+            return Flux.error(new RuntimeException("Failed to set up summary streaming", e));
+        }
     }
 
     /**

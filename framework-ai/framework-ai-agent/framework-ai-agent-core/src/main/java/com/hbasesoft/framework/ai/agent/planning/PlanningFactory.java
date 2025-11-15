@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -43,6 +44,7 @@ import com.hbasesoft.framework.ai.agent.dynamic.prompt.service.PromptService;
 import com.hbasesoft.framework.ai.agent.llm.ILlmService;
 import com.hbasesoft.framework.ai.agent.llm.StreamingResponseHandler;
 import com.hbasesoft.framework.ai.agent.planning.coordinator.PlanningCoordinator;
+import com.hbasesoft.framework.ai.agent.planning.coordinator.StreamingPlanningCoordinator;
 import com.hbasesoft.framework.ai.agent.planning.creator.PlanCreator;
 import com.hbasesoft.framework.ai.agent.planning.executor.factory.PlanExecutorFactory;
 import com.hbasesoft.framework.ai.agent.planning.finalizer.PlanFinalizer;
@@ -152,8 +154,14 @@ public class PlanningFactory implements IPlanningFactory {
         PlanFinalizer planFinalizer = new PlanFinalizer(llmService, recorder, promptService, manusProperties,
             streamingResponseHandler);
 
-        PlanningCoordinator planningCoordinator = new PlanningCoordinator(planCreator, planExecutorFactory,
-            planFinalizer);
+        PlanningCoordinator planningCoordinator = null;
+
+        if (CollectionUtils.isNotEmpty(context.getListeners())) {
+            planningCoordinator = new StreamingPlanningCoordinator(planCreator, planExecutorFactory, planFinalizer);
+        }
+        else {
+            planningCoordinator = new PlanningCoordinator(planCreator, planExecutorFactory, planFinalizer);
+        }
 
         return planningCoordinator;
     }

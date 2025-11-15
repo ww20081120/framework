@@ -1,14 +1,21 @@
 package com.hbasesoft.framework.common.utils.io;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.UtilException;
+import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
+import com.hbasesoft.framework.common.utils.security.URLUtil;
 
 import lombok.Setter;
 
@@ -87,8 +94,41 @@ public final class UrlBuilder {
             return this.baseUrl;
         }
         String url = appendIfNotContain(this.baseUrl, "?", "&");
-        String paramString = HttpUtil.paramsToString(this.params, encode);
+        String paramString = paramsToString(this.params, encode);
         return url + paramString;
+    }
+    
+    /**
+     * Description: 拼接url请求参数 <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param params
+     * @param encode
+     * @return <br>
+     */
+    public static String paramsToString(final Map<String, String> params, final boolean encode) {
+        if (MapUtils.isNotEmpty(params)) {
+            List<String> paramList = new ArrayList<>();
+            try {
+                for (Entry<String, String> entry : params.entrySet()) {
+                    if (entry.getValue() == null) {
+                        paramList.add(entry.getKey() + "=");
+                    }
+                    else {
+                        paramList.add(entry.getKey() + "="
+                            + (encode ? URLUtil.encode(entry.getValue(), GlobalConstants.DEFAULT_CHARSET)
+                                : entry.getValue()));
+                    }
+                }
+            }
+            catch (Exception e) {
+                LoggerUtil.error(e);
+                throw new UtilException(e);
+            }
+            return String.join("&", paramList);
+        }
+        return GlobalConstants.BLANK;
     }
 
     /**

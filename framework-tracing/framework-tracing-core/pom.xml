@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-tracing</artifactId>
-		<version>4.1</version>
+		<version>4.1.1</version>
 	</parent>
 	<artifactId>framework-tracing-core</artifactId>
 	<properties>

@@ -2,22 +2,23 @@ package com.hbasesoft.framework.common.utils.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.UnknownHostException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
+import java.time.Duration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -33,15 +34,6 @@ import com.hbasesoft.framework.common.utils.security.URLUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.FormBody.Builder;
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * <Description>Http 工具类 <br>
@@ -66,13 +58,13 @@ public final class HttpUtil {
     public static final Long CONNECT_TIMEOUT = 5000L;
 
     /** READ_TIMEOUT */
-    public static final Long READDING_TIMEOUT = 30000L;
+    public static final Long READING_TIMEOUT = 30000L;
 
     /** 最大参数 */
     private static final int MAX_PARAMS = 16;
 
-    /** httpClientHold */
-    private static ThreadLocal<OkHttpClient> httpClientHold = new ThreadLocal<>();
+    /** HTTP_CLIENT */
+    private static final HttpClient HTTP_CLIENT = createHttpClient();
 
     /**
      * <p>
@@ -96,8 +88,12 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String doGet(final String url, final Charset charset) {
-        Request request = new Request.Builder().url(url).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout()).GET().build();
         return getStringRequest(request, charset);
+    }
+
+    public static Duration getTimeout() {
+        return Duration.ofMillis(PropertyHolder.getLongProperty("ribbon.ReadTimeout", READING_TIMEOUT));
     }
 
     /**
@@ -109,7 +105,7 @@ public final class HttpUtil {
      * @param headers
      * @return <br>
      */
-    public static String doGet(final String url, final Headers headers) {
+    public static String doGet(final String url, final Map<String, String> headers) {
         return doGet(url, GlobalConstants.DEFAULT_CHARSET, headers);
     }
 
@@ -123,42 +119,17 @@ public final class HttpUtil {
      * @param headers
      * @return <br>
      */
-    public static String doGet(final String url, final Charset charset, final Headers headers) {
-        Request request = new Request.Builder().url(url).headers(headers).build();
-        return getStringRequest(request, charset);
-    }
+    public static String doGet(final String url, final Charset charset, final Map<String, String> headers) {
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout()).GET();
 
-    /**
-     * Description: 拼接url请求参数 <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param params
-     * @param encode
-     * @return <br>
-     */
-    public static String paramsToString(final Map<String, String> params, final boolean encode) {
-        if (MapUtils.isNotEmpty(params)) {
-            List<String> paramList = new ArrayList<>();
-            try {
-                for (Entry<String, String> entry : params.entrySet()) {
-                    if (entry.getValue() == null) {
-                        paramList.add(entry.getValue() + "=");
-                    }
-                    else {
-                        paramList.add(entry.getValue() + "="
-                            + (encode ? URLUtil.encode(entry.getValue(), GlobalConstants.DEFAULT_CHARSET)
-                                : entry.getValue()));
-                    }
-                }
+        if (headers != null && !headers.isEmpty()) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                requestBuilder.header(header.getKey(), header.getValue());
             }
-            catch (Exception e) {
-                LoggerUtil.error(e);
-                throw new UtilException(e);
-            }
-            return String.join("&", paramList);
         }
-        return GlobalConstants.BLANK;
+
+        HttpRequest request = requestBuilder.build();
+        return getStringRequest(request, charset);
     }
 
     /**
@@ -242,19 +213,6 @@ public final class HttpUtil {
     }
 
     /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param url
-     * @param headers
-     * @return <br>
-     */
-    public static String doPost(final String url, final Headers headers) {
-        return doPost(url, new HashMap<>(), headers);
-    }
-
-    /**
      * Description: 执行Post请求<br>
      * 
      * @author 王伟<br>
@@ -278,28 +236,17 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String doPost(final String url, final Map<String, String> paramMap, final Charset charset) {
-        Builder builder = new FormBody.Builder();
+        MultipartBodyPublisher bodyPublisher = new MultipartBodyPublisher();
         if (MapUtils.isNotEmpty(paramMap)) {
-            for (Entry<String, String> param : paramMap.entrySet()) {
-                builder.add(param.getKey(), param.getValue());
+            for (Entry<String, String> entry : paramMap.entrySet()) {
+                bodyPublisher.addTextPart(entry.getKey(), entry.getValue());
             }
         }
-        Request request = new Request.Builder().url(url).post(builder.build()).build();
-        return getStringRequest(request, charset);
-    }
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
+            .header("Content-Type", "multipart/form-data").POST(bodyPublisher.build());
 
-    /**
-     * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param url
-     * @param paramMap
-     * @param headers
-     * @return <br>
-     */
-    public static String doPost(final String url, final Map<String, String> paramMap, final Headers headers) {
-        return doPost(url, paramMap, GlobalConstants.DEFAULT_CHARSET, headers);
+        HttpRequest request = requestBuilder.build();
+        return getStringRequest(request, charset);
     }
 
     /**
@@ -314,15 +261,39 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String doPost(final String url, final Map<String, String> paramMap, final Charset charset,
-        final Headers headers) {
-        Builder builder = new FormBody.Builder();
+        final Map<String, String> headers) {
+        MultipartBodyPublisher bodyPublisher = new MultipartBodyPublisher();
         if (MapUtils.isNotEmpty(paramMap)) {
-            for (Entry<String, String> param : paramMap.entrySet()) {
-                builder.add(param.getKey(), param.getValue());
+            for (Entry<String, String> entry : paramMap.entrySet()) {
+                bodyPublisher.addTextPart(entry.getKey(), entry.getValue());
             }
         }
-        Request request = new Request.Builder().url(url).headers(headers).post(builder.build()).build();
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
+            .header("Content-Type", "multipart/form-data").POST(bodyPublisher.build());
+
+        if (headers != null && !headers.isEmpty()) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                requestBuilder.header(header.getKey(), header.getValue());
+            }
+        }
+
+        HttpRequest request = requestBuilder.build();
         return getStringRequest(request, charset);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param url
+     * @param paramMap
+     * @param headers
+     * @return <br>
+     */
+    public static String doPost(final String url, final Map<String, String> paramMap,
+        final Map<String, String> headers) {
+        return doPost(url, paramMap, GlobalConstants.DEFAULT_CHARSET, headers);
     }
 
     /**
@@ -359,7 +330,7 @@ public final class HttpUtil {
      * @param headers
      * @return <br>
      */
-    public static String doPost(final String url, final String body, final Headers headers) {
+    public static String doPost(final String url, final String body, final Map<String, String> headers) {
         if (StringUtils.isEmpty(body)) {
             return doPost(url);
         }
@@ -416,7 +387,7 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String doPost(final String url, final String body, final String contentType, final Charset charset,
-        final Headers headers) {
+        final Map<String, String> headers) {
         return doPost(url, body, null, contentType, charset, headers);
     }
 
@@ -434,17 +405,33 @@ public final class HttpUtil {
      * @return <br>
      */
     public static String doPost(final String url, final String body, final Map<String, String> paramMap,
-        final String contentType, final Charset charset, final Headers headers) {
-        Request.Builder builder = new Request.Builder();
-        builder.headers(headers).url(url);
-        if (MapUtils.isNotEmpty(paramMap)) {
-            for (Entry<String, String> param : paramMap.entrySet()) {
-                builder.addHeader(param.getKey(), param.getValue());
+        final String contentType, final Charset charset, final Map<String, String> headers) {
+        HttpRequest.Builder requestBuilder;
+
+        if (paramMap != null && !paramMap.isEmpty()) {
+            // 如果有参数映射，则构建表单数据
+            MultipartBodyPublisher bodyPublisher = new MultipartBodyPublisher();
+            if (MapUtils.isNotEmpty(paramMap)) {
+                for (Entry<String, String> entry : paramMap.entrySet()) {
+                    bodyPublisher.addTextPart(entry.getKey(), entry.getValue());
+                }
+            }
+            requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
+                .header("Content-Type", "application/x-www-form-urlencoded").POST(bodyPublisher.build());
+        }
+        else {
+            // 否则使用提供的body
+            requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
+                .header("Content-Type", contentType).POST(BodyPublishers.ofString(body == null ? "" : body));
+        }
+
+        if (headers != null && !headers.isEmpty()) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                requestBuilder.header(header.getKey(), header.getValue());
             }
         }
-        MediaType mediaType = MediaType.parse(contentType);
-        RequestBody requestBody = RequestBody.create(body == null ? null : body.getBytes(), mediaType);
-        Request request = builder.post(requestBody).build();
+
+        HttpRequest request = requestBuilder.build();
         return getStringRequest(request, charset);
     }
 
@@ -457,14 +444,18 @@ public final class HttpUtil {
      * @param charset
      * @return <br>
      */
-    public static String getStringRequest(final Request request, final Charset charset) {
-
-        Call call = getOkHttpClient().newCall(request);
+    public static String getStringRequest(final HttpRequest request, final Charset charset) {
+        HttpClient client = HTTP_CLIENT;
         try {
-            Response response = call.execute();
-            return IOUtil.readString(new InputStreamReader(response.body().byteStream(), charset));
+            // 在请求级别设置超时时间
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString(charset));
+            return response.body();
         }
         catch (IOException e) {
+            throw new UtilException(e);
+        }
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // 重置中断状态
             throw new UtilException(e);
         }
     }
@@ -490,17 +481,19 @@ public final class HttpUtil {
      * @return InputStream <br>
      */
     public static InputStream downloadFile(final String url) {
-        Request request = new Request.Builder().url(url).build();
-        OkHttpClient okHttpClient = getOkHttpClient();
-        Call call = okHttpClient.newCall(request);
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout()).GET().build();
+        HttpClient client = HTTP_CLIENT;
         try {
-            Response response = call.execute();
-            return response.body().byteStream();
+            HttpResponse<InputStream> response = client.send(request, BodyHandlers.ofInputStream());
+            return response.body();
         }
         catch (IOException e) {
             throw new UtilException(e);
         }
-
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // 重置中断状态
+            throw new UtilException(e);
+        }
     }
 
     /**
@@ -592,7 +585,7 @@ public final class HttpUtil {
                 ip = ip.substring(0, index);
             }
         }
-        return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+        return ip.equals("0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
     /**
@@ -635,56 +628,79 @@ public final class HttpUtil {
     }
 
     /**
-     * @Method getOkHttpClient
+     * @Method getHttpClient
      * @param
-     * @return okhttp3.OkHttpClient
-     * @Author 李煜龙
-     * @Description TODD
-     * @Date 2023/1/29 11:25
+     * @return java.net.http.HttpClient
+     * @Author 王伟
+     * @Description 获取HttpClient实例
+     * @Date 2025/9/24
      */
-    public static OkHttpClient getOkHttpClient() {
-        OkHttpClient okHttpClient = httpClientHold.get();
-        if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", CONNECT_TIMEOUT),
-                    TimeUnit.MILLISECONDS)
-                .readTimeout(PropertyHolder.getLongProperty("ribbon.ReadTimeout", READDING_TIMEOUT),
-                    TimeUnit.MILLISECONDS)
-                .sslSocketFactory(getSSLSocketFactory(), TrustManagerUtil.getAcceptAllTrustManager())
-                .hostnameVerifier(getHostnameVerifier()).build();
-            httpClientHold.set(okHttpClient);
-        }
-        return okHttpClient;
+    public static HttpClient getHttpClient() {
+        return HTTP_CLIENT;
     }
 
     /**
-     * @Method getSSLSocketFactory
+     * @Method createHttpClient
      * @param
-     * @return javax.net.ssl.SSLSocketFactory
-     * @Author 李煜龙
-     * @Description TODD
-     * @Date 2023/1/29 11:27
+     * @return java.net.http.HttpClient
+     * @Author 王伟
+     * @Description 创建HttpClient实例
+     * @Date 2025/9/24
      */
-    public static SSLSocketFactory getSSLSocketFactory() {
+    private static HttpClient createHttpClient() {
         try {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, getTrustManager(), new SecureRandom());
-            return sslContext.getSocketFactory();
+            return HttpClient.newBuilder()
+                .connectTimeout(
+                    Duration.ofMillis(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", CONNECT_TIMEOUT)))
+                .sslContext(createSSLContext()).sslParameters(createSSLParameters()).build();
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to create HttpClient", e);
         }
+    }
+
+    /**
+     * @Method createSSLContext
+     * @param
+     * @return javax.net.ssl.SSLContext
+     * @Author 王伟
+     * @Description 创建SSLContext实例
+     * @Date 2025/9/24
+     */
+    private static SSLContext createSSLContext() {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, getTrustManager(), new SecureRandom());
+            return sslContext;
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to create SSLContext", e);
+        }
+    }
+
+    /**
+     * @Method createSSLParameters
+     * @param
+     * @return javax.net.ssl.SSLParameters
+     * @Author 王伟
+     * @Description 创建SSLParameters实例
+     * @Date 2025/9/24
+     */
+    private static javax.net.ssl.SSLParameters createSSLParameters() {
+        javax.net.ssl.SSLParameters sslParams = new javax.net.ssl.SSLParameters();
+        sslParams.setEndpointIdentificationAlgorithm(null); // 禁用主机名验证
+        return sslParams;
     }
 
     /**
      * @Method getTrustManager
      * @param
      * @return javax.net.ssl.TrustManager[]
-     * @Author 李煜龙
-     * @Description TODD
-     * @Date 2023/1/29 11:25
+     * @Author 王伟
+     * @Description 获取信任所有证书的TrustManager
+     * @Date 2025/9/24
      */
-    public static TrustManager[] getTrustManager() {
+    private static TrustManager[] getTrustManager() {
         TrustManager[] trustAllCerts = new TrustManager[] {
             new X509TrustManager() {
                 @Override
@@ -702,10 +718,6 @@ public final class HttpUtil {
             }
         };
         return trustAllCerts;
-    }
-
-    public static HostnameVerifier getHostnameVerifier() {
-        return (s, sslSession) -> true;
     }
 
     /**
