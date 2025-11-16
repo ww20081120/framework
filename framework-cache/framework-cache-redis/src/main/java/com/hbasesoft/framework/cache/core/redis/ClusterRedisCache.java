@@ -246,4 +246,50 @@ public class ClusterRedisCache extends AbstractRedisCache {
         }
         return false;
     }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
+    @Override
+    public boolean hasKey(String key) {
+        return cluster.exists(key);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hashKey
+     * @param subTaskCode
+     * @return <br>
+     */
+    @Override
+    public boolean hasNodeKey(String hashKey, String subTaskCode) {
+        return cluster.hexists(hashKey, subTaskCode);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds
+     * @param key
+     * @param startNum
+     * @return <br>
+     */
+    @Override
+    public long increment(int seconds, String key, long startNum) {
+        long number = cluster.incrBy(key, startNum);
+        if (seconds > 0) {
+            cluster.expire(key, seconds);
+        }
+        return number;
+    }
 }

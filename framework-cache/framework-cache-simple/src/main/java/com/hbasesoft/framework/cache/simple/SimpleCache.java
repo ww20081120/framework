@@ -132,9 +132,9 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     public void putNode(final byte[] key, final int seconds, final Map<byte[], byte[]> dataMap) {
-        Cache<String, byte[]> cache = buildCache(seconds);
+        String strkey = new String(key);
+        Cache<String, byte[]> cache = buildCache(strkey, seconds);
         cache.putAll(byte2StringMap(dataMap));
-        this.cachesMap.put(new String(key), cache);
     }
 
     /**
@@ -176,11 +176,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     public void putNodeValue(final byte[] nodeName, final int seconds, final byte[] key, final byte[] t) {
-        Cache<String, byte[]> defaultCache = this.cachesMap.get(new String(nodeName));
-        if (defaultCache == null) {
-            defaultCache = buildCache(seconds);
-            this.cachesMap.put(new String(nodeName), defaultCache);
-        }
+        Cache<String, byte[]> defaultCache = buildCache(new String(nodeName), seconds);
         defaultCache.put(new String(key), t);
     }
 
@@ -200,12 +196,17 @@ public class SimpleCache extends AbstractCache {
         }
     }
 
-    private Cache<String, byte[]> buildCache(final int seconds) {
-        Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
-        if (seconds > 0) {
-            builder.expireAfterWrite(seconds, TimeUnit.SECONDS);
+    private synchronized Cache<String, byte[]> buildCache(String strkey, final int seconds) {
+        Cache<String, byte[]> cache = this.cachesMap.get(strkey);
+        if (cache == null) {
+            Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
+            if (seconds > 0) {
+                builder.expireAfterWrite(seconds, TimeUnit.SECONDS);
+            }
+            cache = builder.build();
+            this.cachesMap.put(strkey, cache);
         }
-        return builder.build();
+        return cache;
     }
 
     private Map<String, byte[]> byte2StringMap(final Map<byte[], byte[]> map) {
@@ -226,5 +227,56 @@ public class SimpleCache extends AbstractCache {
             }
         }
         return m;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
+    @Override
+    public boolean hasKey(String key) {
+        return get(key) != null;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hashKey
+     * @param subTaskCode
+     * @return <br>
+     */
+    @Override
+    public boolean hasNodeKey(String hashKey, String subTaskCode) {
+        return getNodeValue(subTaskCode, hashKey) != null;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds
+     * @param key
+     * @param startNum
+     * @return <br>
+     */
+    @Override
+    public synchronized long increment(int seconds, String key, long startNum) {
+        Long number = get(key);
+        if (number == null) {
+            number = startNum;
+            put(key, seconds, number);
+        }
+        else {
+            number = number.longValue() + startNum;
+            put(key, seconds, number);
+        }
+        return number;
     }
 }

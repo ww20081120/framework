@@ -339,4 +339,77 @@ public class RedisCache extends AbstractRedisCache {
         return false;
     }
 
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
+    @Override
+    public boolean hasKey(String key) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.exists(key);
+        }
+        finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hashKey
+     * @param subTaskCode
+     * @return <br>
+     */
+    @Override
+    public boolean hasNodeKey(String hashKey, String subTaskCode) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.hexists(hashKey, subTaskCode);
+        }
+        finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds
+     * @param key
+     * @param startNum
+     * @return <br>
+     */
+    @Override
+    public long increment(int seconds, String key, long startNum) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            long number = jedis.incrBy(key, startNum);
+            if (seconds > 0) {
+                jedis.expire(key, seconds);
+            }
+            return number;
+        }
+        finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
+
 }
