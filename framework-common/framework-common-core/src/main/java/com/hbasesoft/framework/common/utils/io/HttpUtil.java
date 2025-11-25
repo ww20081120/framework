@@ -243,7 +243,8 @@ public final class HttpUtil {
             }
         }
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
-            .header("Content-Type", "multipart/form-data").POST(bodyPublisher.build());
+            .header("Content-Type", "multipart/form-data; boundary=" + bodyPublisher.getBoundary())
+            .POST(bodyPublisher.build());
 
         HttpRequest request = requestBuilder.build();
         return getStringRequest(request, charset);
