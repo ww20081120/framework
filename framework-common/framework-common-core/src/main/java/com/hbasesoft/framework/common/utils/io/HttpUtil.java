@@ -653,6 +653,7 @@ public final class HttpUtil {
             return HttpClient.newBuilder()
                 .connectTimeout(
                     Duration.ofMillis(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", CONNECT_TIMEOUT)))
+                .followRedirects(HttpClient.Redirect.NORMAL) // 支持HTTP重定向(包括302)
                 .sslContext(createSSLContext()).sslParameters(createSSLParameters()).build();
         }
         catch (Exception e) {
