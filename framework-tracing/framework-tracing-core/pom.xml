@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-tracing-core</artifactId>
+	<name>framework-tracing-core</name>
+	<description>链路追踪框架核心模块</description>
 	<properties>
 	</properties>
 	<dependencies>

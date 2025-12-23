@@ -8,6 +8,7 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-agent-jpa</artifactId>
+  <name>framework-ai-agent-jpa</name>
   <description>Agent信息都存在数据库中</description>
    <dependencies>
         <dependency>

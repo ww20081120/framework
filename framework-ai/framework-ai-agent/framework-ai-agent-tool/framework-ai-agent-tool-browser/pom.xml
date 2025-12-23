@@ -8,6 +8,7 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-agent-tool-browser</artifactId>
+  <name>framework-ai-agent-tool-browser</name>
   <description>浏览器工具</description>
   <dependencies>
         <dependency>

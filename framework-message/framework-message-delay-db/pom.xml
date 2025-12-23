@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-message-delay-db</artifactId>
+	<name>framework-message-delay-db</name>
+	<description>消息框架延迟数据库实现</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-tracing-zipkin</artifactId>
+	<name>framework-tracing-zipkin</name>
+	<description>链路追踪框架Zipkin实现</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

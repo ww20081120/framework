@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-db-core</artifactId>
+	<name>framework-db-core</name>
+	<description>数据库访问核心模块</description>
 	<properties></properties>
 	<dependencies>
 		<dependency>

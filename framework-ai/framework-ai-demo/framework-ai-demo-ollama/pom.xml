@@ -8,6 +8,8 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-demo-ollama</artifactId>
+  <name>framework-ai-demo-ollama</name>
+  <description>AI框架Ollama演示模块</description>
   <dependencies>
        <dependency>
 		   <groupId>org.springframework.ai</groupId>

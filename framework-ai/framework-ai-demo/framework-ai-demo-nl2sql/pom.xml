@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-ai-demo-nl2sql</artifactId>
+	<name>framework-ai-demo-nl2sql</name>
+	<description>AI框架自然语言转SQL演示模块</description>
 
 	<dependencies>
 		<dependency>

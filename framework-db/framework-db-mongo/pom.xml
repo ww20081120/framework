@@ -8,7 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-db-mongo</artifactId>
-	<description>芒果db</description>
+	<name>framework-db-mongo</name>
+	<description>MongoDB数据库访问模块</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

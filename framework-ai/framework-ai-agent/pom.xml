@@ -8,6 +8,8 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-agent</artifactId>
+  <name>framework-ai-agent</name>
+  <description>AI智能体框架</description>
   <packaging>pom</packaging>
   <modules>
   	<module>framework-ai-agent-core</module>

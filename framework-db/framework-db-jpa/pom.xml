@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-db-jpa</artifactId>
+	<name>framework-db-jpa</name>
+	<description>JPA数据库访问模块</description>
 	<properties>
 	</properties>
 	<dependencies>

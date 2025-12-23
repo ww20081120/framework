@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-tx-demo</artifactId>
+	<name>framework-tx-demo</name>
+	<description>分布式事务示例模块</description>
 	<packaging>pom</packaging>
 	<modules>
 		<module>framework-tx-demo-client</module>

@@ -8,6 +8,8 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-agent-file</artifactId>
+  <name>framework-ai-agent-file</name>
+  <description>AI智能体文件处理模块</description>
   <dependencies>
         <dependency>
             <groupId>com.hbasesoft.framework</groupId>

@@ -8,7 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-tx-server-storage-cassandra</artifactId>
-	<name>cassandra </name>
+	<name>framework-tx-server-storage-cassandra</name>
+	<description>Cassandra数据库存储模块</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

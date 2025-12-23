@@ -8,6 +8,8 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-agent-core</artifactId>
+  <name>framework-ai-agent-core</name>
+  <description>AI智能体核心模块</description>
   <dependencies>
         <dependency>
             <groupId>com.hbasesoft.framework</groupId>

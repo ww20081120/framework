@@ -8,6 +8,8 @@
 		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-cache-core</artifactId>
+	<name>framework-cache-core</name>
+	<description>缓存框架核心模块</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>

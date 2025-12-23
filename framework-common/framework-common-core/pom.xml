@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>framework-common-core</artifactId>
 	<name>公共模块</name>
+	<description>通用框架核心模块</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>

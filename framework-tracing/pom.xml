@@ -8,6 +8,8 @@
     <version>4.1.2</version>
   </parent>
   <artifactId>framework-tracing</artifactId>
+  <name>framework-tracing</name>
+  <description>链路追踪框架</description>
   <packaging>pom</packaging>
   <modules>
   	<module>framework-tracing-core</module>
