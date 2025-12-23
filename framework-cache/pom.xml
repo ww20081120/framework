@@ -5,9 +5,11 @@
   <parent>
     <groupId>com.hbasesoft.framework</groupId>
     <artifactId>framework</artifactId>
-    <version>4.1.1</version>
+    <version>4.1.2</version>
   </parent>
   <artifactId>framework-cache</artifactId>
+  <name>framework-cache</name>
+  <description>缓存框架</description>
   <packaging>pom</packaging>
   <modules>
   	<module>framework-cache-core</module>

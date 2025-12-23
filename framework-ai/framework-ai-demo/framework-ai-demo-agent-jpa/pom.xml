@@ -5,9 +5,11 @@
   <parent>
     <groupId>com.hbasesoft.framework</groupId>
     <artifactId>framework-ai-demo</artifactId>
-    <version>4.1.1</version>
+    <version>4.1.2</version>
   </parent>
   <artifactId>framework-ai-demo-agent-jpa</artifactId>
+  <name>framework-ai-demo-agent-jpa</name>
+  <description>AI智能体JPA演示模块</description>
   <dependencies>
         <dependency>
             <groupId>com.hbasesoft.framework</groupId>

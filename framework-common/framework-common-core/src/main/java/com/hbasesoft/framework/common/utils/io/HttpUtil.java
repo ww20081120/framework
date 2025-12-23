@@ -243,7 +243,8 @@ public final class HttpUtil {
             }
         }
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder().uri(URI.create(url)).timeout(getTimeout())
-            .header("Content-Type", "multipart/form-data").POST(bodyPublisher.build());
+            .header("Content-Type", "multipart/form-data; boundary=" + bodyPublisher.getBoundary())
+            .POST(bodyPublisher.build());
 
         HttpRequest request = requestBuilder.build();
         return getStringRequest(request, charset);
@@ -652,6 +653,7 @@ public final class HttpUtil {
             return HttpClient.newBuilder()
                 .connectTimeout(
                     Duration.ofMillis(PropertyHolder.getLongProperty("ribbon.ConnectTimeout", CONNECT_TIMEOUT)))
+                .followRedirects(HttpClient.Redirect.NORMAL) // 支持HTTP重定向(包括302)
                 .sslContext(createSSLContext()).sslParameters(createSSLParameters()).build();
         }
         catch (Exception e) {

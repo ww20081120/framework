@@ -5,9 +5,11 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-db</artifactId>
-		<version>4.1.1</version>
+		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-db-core</artifactId>
+	<name>framework-db-core</name>
+	<description>数据库访问核心模块</description>
 	<properties></properties>
 	<dependencies>
 		<dependency>

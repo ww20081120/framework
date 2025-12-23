@@ -5,9 +5,11 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-db</artifactId>
-		<version>4.1.1</version>
+		<version>4.1.2</version>
 	</parent>
 	<artifactId>framework-db-jpa</artifactId>
+	<name>framework-db-jpa</name>
+	<description>JPA数据库访问模块</description>
 	<properties>
 	</properties>
 	<dependencies>

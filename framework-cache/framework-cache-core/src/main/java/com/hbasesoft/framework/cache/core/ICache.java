@@ -25,7 +25,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:34
-    */
+     */
     String getName();
 
     /**
@@ -36,7 +36,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:34
-    */
+     */
     <T> T get(String key);
 
     /**
@@ -47,7 +47,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:34
-    */
+     */
     default <T> void put(String key, T t) {
         put(key, 0, t);
     };
@@ -61,7 +61,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:36
-    */
+     */
     <T> void put(String key, int seconds, T t);
 
     /**
@@ -70,7 +70,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:38
-    */
+     */
     void remove(String key);
 
     /**
@@ -80,7 +80,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:38
-    */
+     */
     default Map<String, String> getNode(String nodeName) {
         return getNode(nodeName, String.class);
     };
@@ -94,7 +94,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:38
-    */
+     */
     <T> Map<String, T> getNode(String nodeName, Class<T> clazz);
 
     /**
@@ -105,7 +105,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:38
-    */
+     */
     default <T> void putNode(String nodeName, Map<String, T> node) {
         putNode(nodeName, 0, node);
     }
@@ -119,7 +119,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:39
-    */
+     */
     <T> void putNode(String nodeName, int seconds, Map<String, T> node);
 
     /**
@@ -131,7 +131,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:39
-    */
+     */
     <T> T getNodeValue(String nodeName, String key);
 
     /**
@@ -144,7 +144,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:39
-    */
+     */
     <T> void putNodeValue(String nodeName, int seconds, String key, T t);
 
     /**
@@ -152,11 +152,11 @@ public interface ICache {
      * @param nodeName
      * @param key
      * @param t
-     * @param  <T>
+     * @param <T>
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:39
-    */
+     */
     default <T> void putNodeValue(String nodeName, String key, T t) {
         putNodeValue(nodeName, 0, key, t);
     };
@@ -168,7 +168,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     void removeNodeValue(String nodeName, String key);
 
     /**
@@ -177,7 +177,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     void clear();
 
     /**
@@ -187,7 +187,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     Object getNativeCache();
 
     /**
@@ -197,7 +197,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     byte[] get(byte[] key);
 
     /**
@@ -208,7 +208,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     void put(byte[] key, int seconds, byte[] value);
 
     /**
@@ -217,7 +217,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     void remove(byte[] key);
 
     /**
@@ -227,7 +227,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:40
-    */
+     */
     Map<byte[], byte[]> getNode(byte[] node);
 
     /**
@@ -238,7 +238,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:41
-    */
+     */
     void putNode(byte[] key, int seconds, Map<byte[], byte[]> dataMap);
 
     /**
@@ -249,7 +249,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:41
-    */
+     */
     byte[] getNodeValue(byte[] nodeName, byte[] key);
 
     /**
@@ -261,7 +261,7 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:41
-    */
+     */
     void putNodeValue(byte[] nodeName, int seconds, byte[] key, byte[] t);
 
     /**
@@ -271,6 +271,77 @@ public interface ICache {
      * @Author 李煜龙
      * @Description TODD
      * @Date 2023/1/29 11:41
-    */
+     */
     void removeNodeValue(byte[] nodeName, byte[] key);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
+    boolean hasKey(String key);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param hashKey
+     * @param subTaskCode
+     * @return <br>
+     */
+    boolean hasNodeKey(String hashKey, String subTaskCode);
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds
+     * @param key
+     * @return <br>
+     */
+    default long increment(int seconds, String key) {
+        return increment(seconds, key, 1l);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @return <br>
+     */
+    default long increment(String key) {
+        return increment(0, key, 1l);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param startNum
+     * @return <br>
+     */
+    default long increment(String key, long startNum) {
+        return increment(0, key, startNum);
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param seconds
+     * @param key
+     * @param startNum
+     * @return <br>
+     */
+    long increment(int seconds, String key, long startNum);
 }
