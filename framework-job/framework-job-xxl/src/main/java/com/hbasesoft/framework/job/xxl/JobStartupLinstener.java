@@ -65,8 +65,8 @@ public class JobStartupLinstener implements StartupListener {
                     }
 
                     if (SimpleJob.class.isAssignableFrom(clazz)) {
-                        XxlJobSpringExecutor.registJobHandler(name, new ProxyJob(name, targetBean));
-                        LoggerUtil.info("    success create job [{0}] with name {1}", clazz.getName(), name);
+                        XxlJobSpringExecutor.registryJobHandler(name, new ProxyJob(name, targetBean));
+                        LoggerUtil.info("success create job [{0}] with name {1}", clazz.getName(), name);
                     }
                 }
 

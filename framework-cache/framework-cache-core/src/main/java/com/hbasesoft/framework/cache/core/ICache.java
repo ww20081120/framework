@@ -305,7 +305,7 @@ public interface ICache {
      * @return <br>
      */
     default long increment(int seconds, String key) {
-        return increment(seconds, key, 1l);
+        return increment(seconds, key, 1L);
     }
 
     /**
@@ -317,7 +317,7 @@ public interface ICache {
      * @return <br>
      */
     default long increment(String key) {
-        return increment(0, key, 1l);
+        return increment(0, key, 1L);
     }
 
     /**
