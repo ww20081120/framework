@@ -348,7 +348,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public boolean hasKey(String key) {
+    public boolean hasKey(final String key) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -371,7 +371,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public boolean hasNodeKey(String hashKey, String subTaskCode) {
+    public boolean hasNodeKey(final String hashKey, final String subTaskCode) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -395,7 +395,7 @@ public class RedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public long increment(int seconds, String key, long startNum) {
+    public long increment(final int seconds, final String key, final long startNum) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();

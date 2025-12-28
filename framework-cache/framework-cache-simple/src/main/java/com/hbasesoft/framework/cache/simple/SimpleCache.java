@@ -196,7 +196,7 @@ public class SimpleCache extends AbstractCache {
         }
     }
 
-    private synchronized Cache<String, byte[]> buildCache(String strkey, final int seconds) {
+    private synchronized Cache<String, byte[]> buildCache(final String strkey, final int seconds) {
         Cache<String, byte[]> cache = this.cachesMap.get(strkey);
         if (cache == null) {
             Caffeine<Object, Object> builder = Caffeine.newBuilder().maximumSize(MAX_SIZE);
@@ -238,7 +238,7 @@ public class SimpleCache extends AbstractCache {
      * @return <br>
      */
     @Override
-    public boolean hasKey(String key) {
+    public boolean hasKey(final String key) {
         return get(key) != null;
     }
 
@@ -252,7 +252,7 @@ public class SimpleCache extends AbstractCache {
      * @return <br>
      */
     @Override
-    public boolean hasNodeKey(String hashKey, String subTaskCode) {
+    public boolean hasNodeKey(final String hashKey, final String subTaskCode) {
         return getNodeValue(subTaskCode, hashKey) != null;
     }
 
@@ -267,7 +267,7 @@ public class SimpleCache extends AbstractCache {
      * @return <br>
      */
     @Override
-    public synchronized long increment(int seconds, String key, long startNum) {
+    public synchronized long increment(final int seconds, final String key, final long startNum) {
         Long number = get(key);
         if (number == null) {
             number = startNum;
