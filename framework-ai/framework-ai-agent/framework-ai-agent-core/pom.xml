@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework-ai-agent</artifactId>
+		<version>4.2.0</version>
+	</parent>
+	<artifactId>framework-ai-agent-core</artifactId>
+	<name>agent 核心模块</name>
+	<description>依赖spring ai相关的包</description>
+	<properties>
+		<ai-alibaba.version>1.1.0.0-RC2</ai-alibaba.version>
+		<ai-spring.version>1.1.0</ai-spring.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-common-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.cloud.ai</groupId>
+			<artifactId>spring-ai-alibaba-agent-framework</artifactId>
+			<version>${ai-alibaba.version}</version>
+		</dependency>
+	</dependencies>
+</project>

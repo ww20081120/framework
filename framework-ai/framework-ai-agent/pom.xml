@@ -12,5 +12,6 @@
   <description>AI智能体框架</description>
   <packaging>pom</packaging>
   <modules>
+  <module>framework-ai-agent-core</module>
   </modules>
 </project>

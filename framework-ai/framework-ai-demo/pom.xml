@@ -12,5 +12,6 @@
   <description>AI框架演示模块</description>
   <packaging>pom</packaging>
   <modules>
+  <module>framework-ai-demo-openai</module>
   </modules>
 </project>
