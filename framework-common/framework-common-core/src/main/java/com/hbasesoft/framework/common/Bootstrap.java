@@ -113,6 +113,7 @@ public final class Bootstrap {
         String protocol = PropertyHolder.getBooleanProperty("server.ssl.enabled", false) ? "https" : "http";
 
         String port = context.getEnvironment().getProperty("server.port", "8080");
+        sb.append("      ").append(protocol).append("://localhost:").append(port).append('\n');
         for (String ip : listAllIpAddresses()) {
             sb.append("      ").append(protocol).append("://").append(ip).append(":").append(port).append('\n');
         }

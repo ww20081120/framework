@@ -222,53 +222,7 @@
 				<artifactId>framework-ai-agent-core</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-file</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-jpa</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-tool-browser</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-tool-oa</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-tool-shell</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-tool-text</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-tool-web</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
 
-			<!--framework-langchain4j-->
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-langchain4j-dashscope</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-langchain4j-elasticsearch</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>

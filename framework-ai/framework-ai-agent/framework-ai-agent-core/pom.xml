@@ -10,10 +10,6 @@
 	<artifactId>framework-ai-agent-core</artifactId>
 	<name>agent 核心模块</name>
 	<description>依赖spring ai相关的包</description>
-	<properties>
-		<ai-alibaba.version>1.1.0.0-RC2</ai-alibaba.version>
-		<ai-spring.version>1.1.0</ai-spring.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -23,7 +19,6 @@
 		<dependency>
 			<groupId>com.alibaba.cloud.ai</groupId>
 			<artifactId>spring-ai-alibaba-agent-framework</artifactId>
-			<version>${ai-alibaba.version}</version>
 		</dependency>
 	</dependencies>
 </project>
