@@ -16,12 +16,14 @@ import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.cloud.ai.graph.agent.ReactAgent;
+import com.alibaba.cloud.ai.graph.agent.hook.modelcalllimit.ModelCallLimitHook;
 
 /**
  * <Description> <br>
@@ -45,6 +47,9 @@ public class TestController {
 
     /** 默认核心采样参数 */
     private static final double DEFAULT_TOP_P = 0.9;
+
+    /** 最大执行次数 */
+    private static final int MAX_TIMES = 5;
 
     /** agent */
     private ReactAgent agent;
@@ -105,7 +110,8 @@ public class TestController {
 
         chatModel = OpenAiChatModel.builder().defaultOptions(chatOptions).openAiApi(openAiApi).build();
 
-        agent = ReactAgent.builder().model(chatModel).name("weather agent").tools(ToolCallbacks.from(new SearchTool()))
+        agent = ReactAgent.builder().model(chatModel).name("weather agent")
+            .hooks(ModelCallLimitHook.builder().runLimit(MAX_TIMES).build()).tools(ToolCallbacks.from(new SearchTool()))
             .build();
     }
 
@@ -118,7 +124,7 @@ public class TestController {
      * @return <br>
      */
     @GetMapping("/say")
-    public String say(final @RequestParam("text") String text) {
+    public String say(final @RequestParam("text") @NonNull String text) {
         try {
             UserMessage userMessage = new UserMessage(text);
             AssistantMessage response = agent.call(userMessage);
