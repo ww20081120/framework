@@ -111,40 +111,40 @@ public class DateUtilTest {
     public void date2string() {
         Date date = new Date(NUM_C);
         String d8 = DateUtil.format(date, DateUtil.DATE_FORMAT_8);
-        Assert.equals(d8, "20180912", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d8, "20180912", ErrorCodeDef.FAILURE);
 
         String d11 = DateUtil.format(date, DateUtil.DATE_FORMAT_11);
-        Assert.equals(d11, "2018年09月12日", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d11, "2018年09月12日", ErrorCodeDef.FAILURE);
 
         String d10 = DateUtil.format(date, DateUtil.DATE_FORMAT_10);
-        Assert.equals(d10, "2018-09-12", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d10, "2018-09-12", ErrorCodeDef.FAILURE);
 
         String d102 = DateUtil.format(date, DateUtil.DATE_FORMAT_10_2);
-        Assert.equals(d102, "2018/09/12", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d102, "2018/09/12", ErrorCodeDef.FAILURE);
 
         String d14 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_14);
-        Assert.equals(d14, "20180912105355", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d14, "20180912105355", ErrorCodeDef.FAILURE);
 
         String d17 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_17);
-        Assert.equals(d17, "20180912105355123", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d17, "20180912105355123", ErrorCodeDef.FAILURE);
 
         String d19 = DateUtil.format(date);
-        Assert.equals(d19, "2018-09-12 10:53:55", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d19, "2018-09-12 10:53:55", ErrorCodeDef.FAILURE);
 
         String d192 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_19_2);
-        Assert.equals(d192, "2018/09/12 10:53:55", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d192, "2018/09/12 10:53:55", ErrorCodeDef.FAILURE);
 
         String d21 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_21);
-        Assert.equals(d21, "2018年09月12日 10时53分55秒", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d21, "2018年09月12日 10时53分55秒", ErrorCodeDef.FAILURE);
 
         String d23 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_23);
-        Assert.equals(d23, "2018-09-12 10:53:55.123", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d23, "2018-09-12 10:53:55.123", ErrorCodeDef.FAILURE);
 
         String d232 = DateUtil.format(date, DateUtil.DATETIME_FORMAT_23_2);
-        Assert.equals(d232, "2018/09/12 10:53:55.123", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(d232, "2018/09/12 10:53:55.123", ErrorCodeDef.FAILURE);
 
         String str = DateUtil.format(date, "yy年M月dd号hh点mm分ss秒");
-        Assert.equals(str, "18年9月12号10点53分55秒", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str, "18年9月12号10点53分55秒", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -216,7 +216,7 @@ public class DateUtilTest {
         Date t1 = DateUtil.parse("2018-02-20");
         Date t2 = DateUtil.monthLastDay(t1);
         String str = DateUtil.format(t2, DateUtil.DATE_FORMAT_10);
-        Assert.equals(str, "2018-02-28", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str, "2018-02-28", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -231,6 +231,6 @@ public class DateUtilTest {
         Date t1 = DateUtil.parse("2018-02-20");
         Date t2 = DateUtil.monthFirstDay(t1);
         String str = DateUtil.format(t2, DateUtil.DATE_FORMAT_10);
-        Assert.equals(str, "2018-02-01", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str, "2018-02-01", ErrorCodeDef.FAILURE);
     }
 }

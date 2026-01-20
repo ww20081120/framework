@@ -66,7 +66,7 @@ public final class IOUtil {
             in = new BufferedInputStream(new FileInputStream(src));
             IOUtils.copy(in, out);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
         }
         finally {
@@ -103,7 +103,7 @@ public final class IOUtil {
             out = new BufferedOutputStream(new FileOutputStream(filePath));
             IOUtils.copy(in, out);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
         }
         finally {
@@ -125,7 +125,7 @@ public final class IOUtil {
         try {
             return IOUtils.toString(in, GlobalConstants.DEFAULT_CHARSET);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         finally {
@@ -150,7 +150,7 @@ public final class IOUtil {
                 return readString(in);
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         return null;
@@ -169,7 +169,7 @@ public final class IOUtil {
         try {
             return IOUtils.toString(in);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         finally {
@@ -248,7 +248,7 @@ public final class IOUtil {
                     }
                 }
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -319,12 +319,12 @@ public final class IOUtil {
                         }
                     }
                 }
-                if (list.size() != 0) {
+                if (!list.isEmpty()) {
                     batchProcessor.process(list, ++i, pageSize);
                     list.clear();
                 }
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -350,7 +350,7 @@ public final class IOUtil {
                 out.write(content);
                 out.flush();
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -375,7 +375,7 @@ public final class IOUtil {
                 out.write(contents);
                 out.flush();
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -393,10 +393,8 @@ public final class IOUtil {
      */
     public static File createTempFile() {
         File dir = new File(tempFileDir);
-        if (!dir.exists() || dir.isFile()) {
-            if (!dir.mkdirs()) {
-                throw new UtilException(ErrorCodeDef.CREATE_TEMP_FILE_ERROR, dir.getAbsolutePath());
-            }
+        if ((!dir.exists() || dir.isFile()) && !dir.mkdirs()) {
+            throw new UtilException(ErrorCodeDef.CREATE_TEMP_FILE_ERROR, dir.getAbsolutePath());
         }
         return new File(dir, CommonUtil.getTransactionID());
     }

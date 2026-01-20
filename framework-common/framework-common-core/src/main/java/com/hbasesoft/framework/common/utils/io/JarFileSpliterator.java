@@ -190,7 +190,7 @@ public final class JarFileSpliterator implements Spliterator<String> {
                 return true;
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(e);
         }
         return false;

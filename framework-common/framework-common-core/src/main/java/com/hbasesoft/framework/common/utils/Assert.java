@@ -209,7 +209,8 @@ public final class Assert {
      * @param errorCode
      * @param params <br>
      */
-    public static void equals(final Object obj1, final Object obj2, final ErrorCode errorCode, final Object... params) {
+    public static void assertEqual(final Object obj1, final Object obj2,
+        final ErrorCode errorCode, final Object... params) {
         if (!(obj1 != null && obj1.equals(obj2))) {
             throw new AssertException(errorCode, params);
         }

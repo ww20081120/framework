@@ -137,12 +137,12 @@ public class AssertTest {
     public void equals() {
         String a = "abc";
         String b = "abc";
-        Assert.equals(a, b, ErrorCodeDef.FAILURE);
+        Assert.assertEqual(a, b, ErrorCodeDef.FAILURE);
         System.out.println("字符串a equals 字符串b");
 
         Object c = new Object();
         Object d = c;
-        Assert.equals(c, d, ErrorCodeDef.FAILURE);
+        Assert.assertEqual(c, d, ErrorCodeDef.FAILURE);
         System.out.println("对象c equals 对象d");
     }
 

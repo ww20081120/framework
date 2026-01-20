@@ -154,7 +154,7 @@ public final class HttpUtil {
         }
 
         final int len = str.length();
-        String name = null;
+        String name = null; // NOPMD
         // 未处理字符开始位置
         int pos = 0;
         // 未处理字符结束位置
@@ -179,7 +179,7 @@ public final class HttpUtil {
                 }
                 else if (name != null) {
                     addParam(params, name, str.substring(pos, i), decode);
-                    name = null;
+                    name = null; // NOPMD - Reset to mark parameter as processed
                 }
                 pos = i + 1;
             }
@@ -657,8 +657,8 @@ public final class HttpUtil {
                 .followRedirects(HttpClient.Redirect.NORMAL) // 支持HTTP重定向(包括302)
                 .sslContext(createSSLContext()).sslParameters(createSSLParameters()).build();
         }
-        catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.ERROR, "Failed to create HttpClient", e);
+        catch (RuntimeException e) {
+            throw new UtilException(ErrorCodeDef.FAILURE, "Failed to create HttpClient", e);
         }
     }
 
@@ -676,8 +676,8 @@ public final class HttpUtil {
             sslContext.init(null, getTrustManager(), new SecureRandom());
             return sslContext;
         }
-        catch (Exception e) {
-            throw new UtilException(ErrorCodeDef.ERROR, "Failed to create SSLContext", e);
+        catch (java.security.GeneralSecurityException e) {
+            throw new UtilException(ErrorCodeDef.FAILURE, "Failed to create SSLContext", e);
         }
     }
 

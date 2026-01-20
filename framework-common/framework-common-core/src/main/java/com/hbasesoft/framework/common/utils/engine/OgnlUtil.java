@@ -26,8 +26,15 @@ import ognl.OgnlException;
 public final class OgnlUtil {
 
     /**
+     * 私有构造器，防止实例化
+     */
+    private OgnlUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param script

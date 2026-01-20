@@ -12,8 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.apache.commons.io.IOUtils;
-
 import com.esotericsoftware.kryo.kryo5.Kryo;
 import com.esotericsoftware.kryo.kryo5.io.Input;
 import com.esotericsoftware.kryo.kryo5.io.Output;
@@ -129,7 +127,7 @@ public final class SerializationUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T unserial(final Class<T> clazz, final byte[] data) throws UtilException {
-        T result = null;
+        T result = null; // NOPMD
         if (data != null && data.length > 0) {
             try (Input input = new Input(data)) {
                 Kryo kryo = KRYO_LOCAL.get();

@@ -29,11 +29,18 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @see com.hbasesoft.vcc.sgp.plat.configuration.util <br>
  * @since V1.0<br>
  */
-public class FileZipUtil {
+public final class FileZipUtil {
     /**
      *
      */
     private static final int BUFFER_SIZE = 1024;
+
+    /**
+     * 私有构造器，防止实例化
+     */
+    private FileZipUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
 
     /**
      *
@@ -68,7 +75,7 @@ public class FileZipUtil {
                     org.apache.commons.io.FileUtils.forceDelete(zipFile);
                 }
                 catch (IOException e) {
-                    throw new UtilException(ErrorCodeDef.ERROR, "无法删除已存在的文件: " + zipFile.getAbsolutePath(), e);
+                    throw new UtilException(ErrorCodeDef.FAILURE, "无法删除已存在的文件: " + zipFile.getAbsolutePath(), e);
                 }
             }
             cos = new CheckedOutputStream(new FileOutputStream(zipFile), new CRC32());
@@ -207,7 +214,7 @@ public class FileZipUtil {
                         org.apache.commons.io.FileUtils.forceDelete(entryFile);
                     }
                     catch (IOException e) {
-                        throw new UtilException(ErrorCodeDef.ERROR, "无法删除已存在的文件: " + entryFile.getAbsolutePath(), e);
+                        throw new UtilException(ErrorCodeDef.FAILURE, "无法删除已存在的文件: " + entryFile.getAbsolutePath(), e);
                     }
                 }
                 // 写入文件

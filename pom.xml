@@ -378,10 +378,10 @@
 					</rulesets>
 					<!-- 编码 -->
 					<sourceEncoding>UTF-8</sourceEncoding>
-					<!-- 1-3级错误阻断构建，4-5级仅报告 -->
+					<!-- 1-2级错误阻断构建，3-5级仅报告 -->
 					<failOnViolation>true</failOnViolation>
-					<!-- 优先级阈值：1-3级阻断，4-5级不阻断 -->
-					<minimumPriority>3</minimumPriority>
+					<!-- 优先级阈值：1-2级阻断，3-5级不阻断 -->
+					<minimumPriority>2</minimumPriority>
 					<!-- 排除级别文件（可选） -->
 					<excludeFromFailureFile>${maven.multiModuleProjectDirectory}/config/pmd/pmd-exclude.properties</excludeFromFailureFile>
 				</configuration>

@@ -110,19 +110,19 @@ public class PropertyHolderTest {
     @Test
     public void getProperty() {
         String a = PropertyHolder.getProperty("test.str.str2");
-        Assert.equals(a, "bcd", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(a, "bcd", ErrorCodeDef.FAILURE);
 
         a = PropertyHolder.getProperty("test.str.none", "abcdefg");
-        Assert.equals(a, "abcdefg", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(a, "abcdefg", ErrorCodeDef.FAILURE);
 
         a = PropertyHolder.getProperty("test.int.int2");
-        Assert.equals(a, "-1", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(a, "-1", ErrorCodeDef.FAILURE);
 
         a = PropertyHolder.getProperty("test.long.long2");
-        Assert.equals(a, "3000", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(a, "3000", ErrorCodeDef.FAILURE);
 
         a = PropertyHolder.getProperty("test.bool.bool2");
-        Assert.equals(a, "false", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(a, "false", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -135,6 +135,6 @@ public class PropertyHolderTest {
     @Test
     public void getProjectName() {
         String projectName = PropertyHolder.getProjectName();
-        Assert.equals(projectName, "demo", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(projectName, "demo", ErrorCodeDef.FAILURE);
     }
 }

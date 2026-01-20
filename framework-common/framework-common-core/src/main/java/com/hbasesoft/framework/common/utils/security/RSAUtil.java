@@ -62,7 +62,7 @@ public final class RSAUtil {
             generator.initialize(MAX_ENCRYPT_BLOCK);
             return generator.generateKeyPair();
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -97,7 +97,7 @@ public final class RSAUtil {
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedKey);
             return keyFactory.generatePrivate(keySpec);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -117,7 +117,7 @@ public final class RSAUtil {
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
             return keyFactory.generatePublic(keySpec);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -172,7 +172,7 @@ public final class RSAUtil {
             // 加密后的字符串
             return DataUtil.base64Encode(encryptedData);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.ENCRYPTION_ERROR, e);
         }
     }
@@ -226,7 +226,7 @@ public final class RSAUtil {
             // 解密后的内容
             return new String(decryptedData, GlobalConstants.DEFAULT_CHARSET);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -264,7 +264,7 @@ public final class RSAUtil {
             signature.update(data.getBytes(StandardCharsets.UTF_8));
             return DataUtil.base64Encode(signature.sign());
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.ENCRYPTION_ERROR, e);
         }
     }
@@ -304,7 +304,7 @@ public final class RSAUtil {
             signature.update(srcData.getBytes(StandardCharsets.UTF_8));
             return signature.verify(DataUtil.base64Decode(sign));
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }

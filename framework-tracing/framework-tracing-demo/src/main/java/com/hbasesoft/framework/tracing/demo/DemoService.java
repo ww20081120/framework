@@ -7,7 +7,7 @@ package com.hbasesoft.framework.tracing.demo;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -15,6 +15,7 @@ package com.hbasesoft.framework.tracing.demo;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.tracing.demo <br>
  */
+@FunctionalInterface
 public interface DemoService {
 
     /**

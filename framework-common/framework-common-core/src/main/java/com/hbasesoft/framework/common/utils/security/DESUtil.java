@@ -23,7 +23,7 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @see com.hbasesoft.cloud.common.util <br>
  * @since V1.0<br>
  */
-public class DESUtil {
+public final class DESUtil {
 
     /** */
     private static final String CRYPTION_SECRET_KEY = "hbasesof";
@@ -32,8 +32,15 @@ public class DESUtil {
     private static final String DES_ALGORITHM = "DES";
 
     /**
+     * 私有构造器，防止实例化
+     */
+    private DESUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    /**
      * Description: DES加密<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param plainData
@@ -62,7 +69,7 @@ public class DESUtil {
             byte[] buf = cipher.doFinal(plainData.getBytes(StandardCharsets.UTF_8));
             return DataUtil.base64Encode(buf);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.ENCRYPTION_ERROR, e);
         }
     }
@@ -94,7 +101,7 @@ public class DESUtil {
             byte[] buf = cipher.doFinal(DataUtil.base64Decode(secretData));
             return new String(buf, StandardCharsets.UTF_8);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }

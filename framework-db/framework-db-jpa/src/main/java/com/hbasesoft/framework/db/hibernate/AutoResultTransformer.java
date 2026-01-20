@@ -63,7 +63,6 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
     public AutoResultTransformer(final Class<T> resultClass) {
         // 先快速赋值所有字段为默认值,避免构造函数抛出异常时对象处于部分初始化状态
         this.resultClass = resultClass;
-        this.isSimpleClass = false;
 
         // 再执行可能抛出异常的初始化逻辑
         if (this.resultClass == null) {

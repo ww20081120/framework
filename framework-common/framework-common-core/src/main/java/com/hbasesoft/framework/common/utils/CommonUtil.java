@@ -147,7 +147,7 @@ public final class CommonUtil {
      * @return <br>
      */
     public static String getString(final Object obj) {
-        String result = null;
+        String result = null; // NOPMD
         if (obj != null) {
             if (obj instanceof String) {
                 result = (String) obj;

@@ -216,7 +216,7 @@ public final class DateUtil {
      * @return <br>
      */
     public static String format(final Date date, final String format) {
-        String result = null;
+        String result = null; // NOPMD
         if (date != null) {
             DateFormat sdf = new SimpleDateFormat(format);
             result = sdf.format(date);

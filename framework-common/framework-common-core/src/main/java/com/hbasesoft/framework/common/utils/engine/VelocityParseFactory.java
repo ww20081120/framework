@@ -3,6 +3,8 @@
  */
 package com.hbasesoft.framework.common.utils.engine;
 
+import java.io.IOException;
+
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
@@ -99,7 +101,7 @@ public final class VelocityParseFactory {
 
             Velocity.init(properties);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Velocity.init() may throw various exceptions during initialization
             logger.error("初始化Velocity模板失败", e);
             throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
         }
@@ -140,7 +142,7 @@ public final class VelocityParseFactory {
             writer.flush();
             return sb.toString();
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.PARSE_TEPLATE_ERROR, e);
         }
     }

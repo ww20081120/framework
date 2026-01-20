@@ -7,9 +7,9 @@ package com.hbasesoft.framework.db.core;
 
 import org.springframework.transaction.PlatformTransactionManager;
 
-/** 
- * <Description> <br> 
- *  
+/**
+ * <Description> <br>
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -17,6 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.db.core <br>
  */
+@FunctionalInterface
 public interface ITransactionManager {
 
     /**

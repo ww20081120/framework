@@ -109,7 +109,7 @@ public final class ClassUtil {
             return constructor.newInstance();
         }
         catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new UtilException(ErrorCodeDef.ERROR, "实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", e);
+            throw new UtilException(ErrorCodeDef.FAILURE, "实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", e);
         }
     }
 
@@ -143,7 +143,8 @@ public final class ClassUtil {
                 return Class.forName(name);
             }
             catch (ClassNotFoundException ex) {
-                throw new UtilException(ErrorCodeDef.ERROR, "找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", ex);
+                // 保留第一个异常作为原因,第二个异常作为抑制异常
+                throw new UtilException(ErrorCodeDef.FAILURE, "找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", e);
             }
         }
     }

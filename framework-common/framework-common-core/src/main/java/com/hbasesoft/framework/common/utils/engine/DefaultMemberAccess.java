@@ -134,7 +134,7 @@ public class DefaultMemberAccess implements MemberAccess {
     @Override
     public Object setup(final OgnlContext context, final Object target, final Member member, 
             final String propertyName) {
-        Object result = null;
+        Object result = null; // NOPMD
 
         if (isAccessible(context, target, member, propertyName)) {
             AccessibleObject accessible = (AccessibleObject) member;
