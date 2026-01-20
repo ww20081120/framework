@@ -67,18 +67,18 @@ public final class BasePackagesUtil {
                 componentScaned = true;
             }
         }
-        return registPackages;
+        return new ArrayList<>(registPackages);
     }
 
     /**
      * Description: 获取基础包路径 <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return basePackages <br>
      */
     public static List<String> getBasePackages() {
-        return registPackages;
+        return new ArrayList<>(registPackages);
     }
 
     /**

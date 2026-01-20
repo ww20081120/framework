@@ -56,14 +56,19 @@ public class FileZipUtil {
             File zipDir = new File(zipPath);
             // 判断压缩文件的路径是否存在，不存在创建
             if (!zipDir.exists() || !zipDir.isDirectory()) {
-                zipDir.mkdirs();
+                org.apache.commons.io.FileUtils.forceMkdir(zipDir);
             }
             StringBuffer sb = new StringBuffer();
             String zipFilePath = sb.append(zipPath).append(File.separator).append(zipFileName).toString();
             File zipFile = new File(zipFilePath);
             if (zipFile.exists()) {
                 // 检查文件是否允许删除，不允许则抛出SecurityException
-                zipFile.delete();
+                try {
+                    org.apache.commons.io.FileUtils.forceDelete(zipFile);
+                }
+                catch (IOException e) {
+                    throw new RuntimeException("无法删除已存在的文件: " + zipFile.getAbsolutePath(), e);
+                }
             }
             cos = new CheckedOutputStream(new FileOutputStream(zipFile), new CRC32());
             zos = new ZipOutputStream(cos);
@@ -121,9 +126,7 @@ public class FileZipUtil {
                 if (bis != null) {
                     bis.close();
                 }
-                if (zos != null) {
-                    zos.closeEntry();
-                }
+                zos.closeEntry();
             }
         }
         else {
@@ -161,7 +164,7 @@ public class FileZipUtil {
         // 创建解压缩文件的保存路径
         File unzipFileDir = new File(newUnzipFilePath);
         if (!unzipFileDir.exists() || !unzipFileDir.isDirectory()) {
-            unzipFileDir.mkdirs();
+            org.apache.commons.io.FileUtils.forceMkdir(unzipFileDir);
         }
         // 开始解压
         ZipEntry entry = null;
@@ -192,14 +195,19 @@ public class FileZipUtil {
                 entryDir = new File(entryDirPath);
                 // 如果文件夹路径不存在，创建文件夹
                 if (!entryDir.exists() || !entryDir.isDirectory()) {
-                    entryDir.mkdirs();
+                    org.apache.commons.io.FileUtils.forceMkdir(entryDir);
                 }
                 // 创建解压文件
                 entryFile = new File(entryFilePath);
                 if (entryFile.exists()) {
                     // 检查文件是否允许删除，不允许抛出SecurityException
                     // 删除已存在的文件
-                    entryFile.delete();
+                    try {
+                        org.apache.commons.io.FileUtils.forceDelete(entryFile);
+                    }
+                    catch (IOException e) {
+                        throw new RuntimeException("无法删除已存在的文件: " + entryFile.getAbsolutePath(), e);
+                    }
                 }
                 // 写入文件
                 try {

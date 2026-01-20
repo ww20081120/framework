@@ -28,7 +28,7 @@ import com.hbasesoft.framework.common.utils.ContextHolder;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -36,7 +36,7 @@ import com.hbasesoft.framework.common.utils.ContextHolder;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.config <br>
  */
-public class LocalProperty implements Property {
+public final class LocalProperty implements Property {
 
     /** properties */
     private final Map<String, String> props = new HashMap<>();
@@ -88,7 +88,7 @@ public class LocalProperty implements Property {
             }
             return allProperties;
         }
-        return props;
+        return new HashMap<>(props);
     }
 
     /**

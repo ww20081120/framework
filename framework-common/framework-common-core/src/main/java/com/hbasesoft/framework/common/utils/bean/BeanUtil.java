@@ -273,7 +273,8 @@ public final class BeanUtil {
             }
         });
         // 循环所有文件
-        for (File file : dirfiles) {
+        if (dirfiles != null) {
+            for (File file : dirfiles) {
             // 如果是目录 则继续扫描
             if (file.isDirectory()) {
                 findAndAddClassesInPackageByFile(packageName + "." + file.getName(), packArr, file.getAbsolutePath(),
@@ -319,6 +320,7 @@ public final class BeanUtil {
                 catch (NoClassDefFoundError e) {
                     logger.warn(CommonUtil.messageFormat("添加用户自定义视图类错误 找不到{0}此类关联的类{1}", className, e.getMessage()));
                 }
+            }
             }
         }
     }

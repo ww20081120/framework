@@ -55,7 +55,7 @@ public class ContextHolder implements ApplicationContextAware {
 
         /**
          * Description: <br>
-         * 
+         *
          * @author 王伟<br>
          * @taskId <br>
          * @return <br>
@@ -67,7 +67,7 @@ public class ContextHolder implements ApplicationContextAware {
 
         /**
          * Description: <br>
-         * 
+         *
          * @author 王伟<br>
          * @taskId <br>
          * @param c
@@ -75,7 +75,7 @@ public class ContextHolder implements ApplicationContextAware {
          */
         @Override
         public void complete(final ApplicationContext c) throws FrameworkException {
-            ContextHolder.context = c;
+            setContext(c);
         }
     }
 

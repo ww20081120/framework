@@ -35,6 +35,9 @@ public class UUIDUtil {
     private static Random random;
 
     /** */
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    /** */
     private static final long LEAST_SIG_BITS;
 
     /** */
@@ -82,7 +85,7 @@ public class UUIDUtil {
             LoggerUtil.error(e);
         }
 
-        byte[] seed = new SecureRandom().generateSeed(NUM_8);
+        byte[] seed = SECURE_RANDOM.generateSeed(NUM_8);
         LEAST_SIG_BITS = new BigInteger(seed).longValue();
         if (!isThreadlocalrandomAvailable) {
             random = new Random(LEAST_SIG_BITS);

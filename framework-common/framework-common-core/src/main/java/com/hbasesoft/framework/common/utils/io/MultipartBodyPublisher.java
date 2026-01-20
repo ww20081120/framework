@@ -213,7 +213,11 @@ public class MultipartBodyPublisher {
                 }
                 // 处理文件部件
                 if (PartsSpecification.TYPE.FILE.equals(nextPart.type)) {
-                    String filename = nextPart.path.getFileName().toString();
+                    Path fileName = nextPart.path.getFileName();
+                    if (fileName == null) {
+                        throw new IOException("无法获取文件名: " + nextPart.path);
+                    }
+                    String filename = fileName.toString();
                     String partHeader = "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=\""
                         + nextPart.name + "\"; filename=\"" + filename + "\"\r\n" + "Content-Type: "
                         + nextPart.contentType + "\r\n\r\n";

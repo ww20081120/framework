@@ -24,7 +24,7 @@ import com.hbasesoft.framework.common.utils.security.URLUtil;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -32,7 +32,7 @@ import com.hbasesoft.framework.common.utils.security.URLUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
-public class JarFileSpliterator implements Spliterator<String> {
+public final class JarFileSpliterator implements Spliterator<String> {
 
     /** */
     private final String prefix;
