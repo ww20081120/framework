@@ -57,15 +57,19 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
 
     /**
      * 默认构造函数
-     * 
+     *
      * @param resultClass <br>
      */
     public AutoResultTransformer(final Class<T> resultClass) {
-        if (resultClass == null) {
+        // 先快速赋值所有字段为默认值,避免构造函数抛出异常时对象处于部分初始化状态
+        this.resultClass = resultClass;
+        this.isSimpleClass = false;
+
+        // 再执行可能抛出异常的初始化逻辑
+        if (this.resultClass == null) {
             throw new IllegalArgumentException("resultClass cannot be null");
         }
-        this.resultClass = resultClass;
-        this.isSimpleClass = BeanUtil.isSimpleValueType(resultClass) || Date.class.equals(resultClass);
+        this.isSimpleClass = BeanUtil.isSimpleValueType(this.resultClass) || Date.class.equals(this.resultClass);
     }
 
     /**
@@ -169,8 +173,15 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
                         Reader inStreamDoc = clob.getCharacterStream();
                         try {
                             char[] tempDoc = new char[(int) clob.length()];
-                            inStreamDoc.read(tempDoc);
-                            tuple[i] = new String(tempDoc);
+                            int readCount = inStreamDoc.read(tempDoc);
+                            // 检查读取的字符数，确保数据完整
+                            if (readCount == -1) {
+                                tuple[i] = "";
+                            } else if (readCount < tempDoc.length) {
+                                tuple[i] = new String(tempDoc, 0, readCount);
+                            } else {
+                                tuple[i] = new String(tempDoc);
+                            }
                         }
                         finally {
                             inStreamDoc.close();

@@ -1151,7 +1151,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
         }
         catch (IllegalAccessException e) {
             logger.error(e.getMessage(), e);
-            new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
+            throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
         }
         return columnValues;
     }

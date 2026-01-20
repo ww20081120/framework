@@ -56,23 +56,37 @@ public class LambdaSett {
      * @param filedName
      */
     public LambdaSett(final SerializedLambda lambda, final String filedName) {
+        // 先快速赋值所有字段为默认值,避免构造函数抛出异常时对象处于部分初始化状态
         this.implClass = lambda.getImplClass();
-        field = ClassUtil.getDeclaredField(lambda.getImplClass(), filedName);
+        this.field = null;
         this.filedName = filedName;
-        Class<?> type = field.getType();
-        if (type == String.class) {
-            fieldType = STR;
-        }
-        else if (type == Number.class || Number.class.isAssignableFrom(type)) {
-            fieldType = NUMBER;
-        }
-        else if (type == Date.class || Date.class.isAssignableFrom(type)) {
-            fieldType = DATE;
-        }
-        else {
-            throw new DaoException(ErrorCodeDef.PARAM_ERROR, 
-                lambda.getImplClass().getName() + "." + filedName
-                + " 类型错误， Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
+        this.fieldType = STR;
+
+        // 再执行可能抛出异常的初始化逻辑
+        try {
+            this.field = ClassUtil.getDeclaredField(this.implClass, filedName);
+            Class<?> type = this.field.getType();
+
+            if (type == String.class) {
+                this.fieldType = STR;
+            }
+            else if (type == Number.class || Number.class.isAssignableFrom(type)) {
+                this.fieldType = NUMBER;
+            }
+            else if (type == Date.class || Date.class.isAssignableFrom(type)) {
+                this.fieldType = DATE;
+            }
+            else {
+                throw new DaoException(ErrorCodeDef.PARAM_ERROR,
+                    this.implClass.getName() + "." + filedName
+                    + " 类型错误， Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
+            }
+        } catch (Exception e) {
+            // 如果初始化失败，重置字段为安全默认值
+            this.field = null;
+            this.filedName = null;
+            this.fieldType = STR;
+            throw e;
         }
     }
 

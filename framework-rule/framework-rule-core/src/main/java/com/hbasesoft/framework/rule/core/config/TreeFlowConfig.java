@@ -47,7 +47,7 @@ public class TreeFlowConfig implements FlowConfig {
 
     /** component */
     @SuppressWarnings("rawtypes")
-    private FlowComponent component;
+    private transient FlowComponent component;
 
     /**
      * Description: <br>

@@ -184,14 +184,43 @@ public class DbParam extends BaseEntity {
      * @param prefix
      */
     public DbParam(final String prefix) {
-        this.url = PropertyHolder.getProperty(prefix + ".url");
-        Assert.notEmpty(this.url, ErrorCodeDef.DB_URL_NOT_SET, prefix);
-        this.username = PropertyHolder.getProperty(prefix + ".username");
-        // Assert.notEmpty(this.username, ErrorCodeDef.DB_USERNAME_NOT_SET, prefix);
-        String pw = PropertyHolder.getProperty(prefix + ".password");
-        // Assert.notEmpty(password, ErrorCodeDef.DB_PASSWORD_NOT_SET, prefix);
-        setPassword(pw);
-        init(prefix);
+        // 先快速赋值所有字段为默认值,避免构造函数抛出异常时对象处于部分初始化状态
+        this.url = null;
+        this.username = null;
+        this.password = null;
+        this.code = prefix;
+        this.dbType = "mysql";
+        this.initialSize = INITIAL_SIZE;
+        this.maxActive = MAX_ACTIVE;
+        this.minIdle = MIN_IDLE;
+        this.maxWait = MAX_WAIT_TIME;
+        this.validationQuery = "SELECT 1";
+        this.testOnBorrow = true;
+        this.testOnReturn = false;
+        this.testWhileIdle = true;
+        this.timeBetweenEvictionRunsMillis = TIME_BETWEEN_EVICTION_RUNS_MILLIS;
+        this.minEvictableIdleTimeMillis = MIN_EVICTABLE_IDLE_TIME_MILLIS;
+        this.removeAbandoned = true;
+        this.removeAbandonedTimeout = REMOVE_ABANDONED_TIMEOUT;
+        this.logAbandoned = true;
+        this.driverClass = null;
+        this.filters = "stat";
+        this.keyspace = null;
+        this.authDb = null;
+
+        // 再执行可能抛出异常的初始化逻辑
+        try {
+            String urlValue = PropertyHolder.getProperty(prefix + ".url");
+            Assert.notEmpty(urlValue, ErrorCodeDef.DB_URL_NOT_SET, prefix);
+            this.url = urlValue;
+            this.username = PropertyHolder.getProperty(prefix + ".username");
+            String pw = PropertyHolder.getProperty(prefix + ".password");
+            setPassword(pw);
+            init(prefix);
+        } catch (Exception e) {
+            // 如果初始化失败，保持对象处于默认状态
+            throw e;
+        }
     }
 
     private void init(final String prefix) {

@@ -51,22 +51,22 @@ public class AntVFlowConfig implements FlowConfig {
     private static final long serialVersionUID = -5870298427253572010L;
 
     /** 配置表 */
-    private Map<String, Component> nodeMap;
+    private transient Map<String, Component> nodeMap;
 
     /** 线 */
-    private Map<String, List<String>> edgeMap;
+    private transient Map<String, List<String>> edgeMap;
 
     /** 当前的节点 */
-    private String currentNode;
+    private transient String currentNode;
 
     /** 栈 */
-    private Stack<String> stack;
+    private transient Stack<String> stack;
 
     /** 深度 */
-    private int depth;
+    private transient int depth;
 
     /** 最大深度 */
-    private int maxDepth;
+    private transient int maxDepth;
 
     /**
      * Description: <br>

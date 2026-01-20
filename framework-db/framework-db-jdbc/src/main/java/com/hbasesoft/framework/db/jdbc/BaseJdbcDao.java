@@ -1191,7 +1191,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
         catch (IllegalAccessException e) {
             logger.error(e.getMessage(), e);
-            new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
+            throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
         }
         return columnValues;
     }
@@ -1229,7 +1229,7 @@ public class BaseJdbcDao<T extends BaseEntity> implements IBaseDao4Jdbc<T> {
         }
         catch (IllegalAccessException e) {
             logger.error(e.getMessage(), e);
-            new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
+            throw new DaoException(ErrorCodeDef.ANALYSIS_ENTITY_ERROR, e);
         }
         return columnValues;
     }

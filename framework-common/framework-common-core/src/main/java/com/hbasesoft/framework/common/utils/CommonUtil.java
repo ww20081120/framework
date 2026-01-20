@@ -131,6 +131,8 @@ public final class CommonUtil {
                     sb.append((char) ('A' + RANDOM.nextInt(NEXT_CHAR)));
                     break;
                 default:
+                    // 理论上不会进入，但作为防御性编程
+                    throw new IllegalStateException("Unexpected random value");
             }
         }
         return sb.toString();

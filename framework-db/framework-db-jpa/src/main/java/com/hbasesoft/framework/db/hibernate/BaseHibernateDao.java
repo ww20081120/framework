@@ -525,7 +525,8 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
                 resultList = new PagerList();
                 resultList.setPageIndex(param.getPageIndex());
                 resultList.setPageSize(param.getPageSize());
-                resultList.setTotalCount(Long.valueOf(countQuery.uniqueResult().toString()));
+                Object countResult = countQuery.uniqueResult();
+                resultList.setTotalCount(countResult instanceof Number ? ((Number) countResult).longValue() : 0L);
                 isPager = true;
             }
 
@@ -742,7 +743,8 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         resultList.setTotalCount(totalCount);
 
         // 如果还有数据，则分页查询
-        if (totalCount > (pageIndex - 1) * pageSize) {
+        // 将一个操作数转为 long 避免整数溢出
+        if (totalCount > (long) (pageIndex - 1) * pageSize) {
             org.hibernate.query.Query<M> query = getSession().createQuery(criteria);
             query.setFirstResult((pageIndex - 1) * pageSize);
             query.setMaxResults(pageSize);
@@ -796,7 +798,8 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         resultList.setTotalCount(totalCount);
 
         // 如果还有数据，则分页查询
-        if (totalCount > (pageIndex - 1) * pageSize) {
+        // 将一个操作数转为 long 避免整数溢出
+        if (totalCount > (long) (pageIndex - 1) * pageSize) {
             org.hibernate.query.Query query = getSession().createQuery(criteria);
             if (Map.class.isAssignableFrom(clazz)) {
                 query.setTupleTransformer(NativeQueryMapTransformer.INSTANCE);

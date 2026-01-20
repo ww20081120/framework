@@ -73,33 +73,43 @@ public class AbstractAnnotationHandler {
 
     /**
      * 默认构造函数
-     * 
+     *
      * @param daoConfig
      */
     public AbstractAnnotationHandler(final DaoConfig daoConfig) {
+        // 先快速赋值所有字段，避免构造函数抛出异常时对象处于部分初始化状态
         this.daoConfig = daoConfig;
-        Class<?> daoClazz = daoConfig.getBaseDaoType();
-        if (daoClazz != null) {
-            genericBaseDaoMethodMap = genericBaseDaoMethodMapHolder.get(daoClazz.getName());
-            if (MapUtils.isEmpty(genericBaseDaoMethodMap)) {
-                genericBaseDaoMethodMap = new HashMap<>();
-                List<Method> methods = getAllPublicMethods(daoClazz);
-                for (Method m : methods) {
-                    genericBaseDaoMethodMap.put(getMethodSignature(m), m);
-                }
-                // 获取类实现的接口
-                Class<?>[] interfaces = daoClazz.getInterfaces();
-                if (ArrayUtils.isNotEmpty(interfaces)) {
-                    for (Class<?> iface : interfaces) {
-                        for (Method method : iface.getMethods()) {
-                            if (method.isDefault()) {
-                                genericBaseDaoMethodMap.put(getMethodSignature(method), method);
+        this.genericBaseDaoMethodMap = new HashMap<>();
+
+        // 再执行可能抛出异常的初始化逻辑
+        try {
+            Class<?> daoClazz = daoConfig.getBaseDaoType();
+            if (daoClazz != null) {
+                this.genericBaseDaoMethodMap = genericBaseDaoMethodMapHolder.get(daoClazz.getName());
+                if (MapUtils.isEmpty(this.genericBaseDaoMethodMap)) {
+                    this.genericBaseDaoMethodMap = new HashMap<>();
+                    List<Method> methods = getAllPublicMethods(daoClazz);
+                    for (Method m : methods) {
+                        this.genericBaseDaoMethodMap.put(getMethodSignature(m), m);
+                    }
+                    // 获取类实现的接口
+                    Class<?>[] interfaces = daoClazz.getInterfaces();
+                    if (ArrayUtils.isNotEmpty(interfaces)) {
+                        for (Class<?> iface : interfaces) {
+                            for (Method method : iface.getMethods()) {
+                                if (method.isDefault()) {
+                                    this.genericBaseDaoMethodMap.put(getMethodSignature(method), method);
+                                }
                             }
                         }
+                        genericBaseDaoMethodMapHolder.put(daoClazz.getName(), this.genericBaseDaoMethodMap);
                     }
-                    genericBaseDaoMethodMapHolder.put(daoClazz.getName(), genericBaseDaoMethodMap);
                 }
             }
+        } catch (Exception e) {
+            // 如果初始化失败，重置为空映射，确保对象状态一致
+            this.genericBaseDaoMethodMap = new HashMap<>();
+            throw e;
         }
     }
 
@@ -356,7 +366,7 @@ public class AbstractAnnotationHandler {
 
     /**
      * DaoConfig
-     * 
+     *
      * @return the daoConfig
      */
     public DaoConfig getDaoConfig() {
@@ -365,7 +375,7 @@ public class AbstractAnnotationHandler {
 
     /**
      * setDaoConfig
-     * 
+     *
      * @param dc the daoConfig to set
      */
     public void setDaoConfig(final DaoConfig dc) {
