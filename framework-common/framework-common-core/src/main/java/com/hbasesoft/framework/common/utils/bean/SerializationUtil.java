@@ -90,7 +90,7 @@ public final class SerializationUtil {
                 throw new UtilException(e);
             }
         }
-        return null;
+        return new byte[0];
     }
 
     /**
@@ -102,11 +102,9 @@ public final class SerializationUtil {
      * @return <br>
      */
     public static byte[] jdkSerial(final Object obj) throws UtilException {
-        byte[] bytes = null;
-        ObjectOutputStream out = null;
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            out = new ObjectOutputStream(byteArrayOutputStream);
+        byte[] bytes = new byte[0];
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(byteArrayOutputStream)) {
             out.writeObject(obj);
             out.flush();
             bytes = byteArrayOutputStream.toByteArray();
@@ -114,9 +112,6 @@ public final class SerializationUtil {
         catch (IOException e) {
             LoggerUtil.error(e);
             throw new UtilException(e, ErrorCodeDef.JDK_SERIALIZE_ERROR, obj);
-        }
-        finally {
-            IOUtils.closeQuietly(out);
         }
         return bytes;
     }
@@ -155,27 +150,15 @@ public final class SerializationUtil {
      * @throws ClassNotFoundException
      */
     public static Object jdkUnserial(final byte[] data) throws UtilException {
-        Object result = null;
         if (data != null && data.length > 0) {
-            ObjectInputStream in = null;
-            try {
-                in = new ObjectInputStream(new ByteArrayInputStream(data));
-                result = in.readObject();
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+                ObjectInputStream in = new ObjectInputStream(byteArrayInputStream)) {
+                return in.readObject();
             }
-            catch (Exception e) {
+            catch (IOException | ClassNotFoundException e) {
                 throw new UtilException(e, ErrorCodeDef.JDK_UNSERIALIZE_ERROR, DataUtil.byte2HexStr(data));
             }
-            finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    }
-                    catch (IOException e) {
-                        throw new UtilException(ErrorCodeDef.JDK_UNSERIALIZE_ERROR);
-                    }
-                }
-            }
         }
-        return result;
+        return null;
     }
 }

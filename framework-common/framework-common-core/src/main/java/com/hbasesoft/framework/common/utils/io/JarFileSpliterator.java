@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Stack;
 import java.util.function.Consumer;
@@ -181,9 +182,7 @@ public final class JarFileSpliterator implements Spliterator<String> {
      */
     @Override
     public boolean tryAdvance(final Consumer<? super String> action) {
-        if (action == null) {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(action, "action must not be null");
         try {
             String url = getNextURL();
             if (url != null) {

@@ -46,6 +46,13 @@ public final class Bootstrap {
     private static List<StartupListener> listenerList = null;
 
     /**
+     * 私有构造器，防止实例化
+     */
+    private Bootstrap() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
+    /**
      * Description: <br>
      * 
      * @author 王伟<br>

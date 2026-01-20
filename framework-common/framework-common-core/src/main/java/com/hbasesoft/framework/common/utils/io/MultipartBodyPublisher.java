@@ -197,7 +197,7 @@ public class MultipartBodyPublisher {
         private byte[] computeNext() throws IOException {
             if (currentFileInput == null) {
                 if (!iter.hasNext()) {
-                    return null;
+                    return new byte[0];
                 }
                 PartsSpecification nextPart = iter.next();
                 // 处理文本部件
@@ -240,7 +240,7 @@ public class MultipartBodyPublisher {
                     return "\r\n".getBytes(StandardCharsets.UTF_8); // 文件读取结束，换行
                 }
             }
-            return null;
+            return new byte[0];
         }
     }
 }

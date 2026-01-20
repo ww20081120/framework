@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.UtilException;
 
 /**
  * <p>
@@ -108,7 +109,7 @@ public final class ClassUtil {
             return constructor.newInstance();
         }
         catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("实例化对象时出现错误,请尝试给 %s 添加无参的构造方法");
+            throw new UtilException(ErrorCodeDef.ERROR, "实例化对象时出现错误,请尝试给 %s 添加无参的构造方法", e);
         }
     }
 
@@ -142,7 +143,7 @@ public final class ClassUtil {
                 return Class.forName(name);
             }
             catch (ClassNotFoundException ex) {
-                throw new RuntimeException("找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", e);
+                throw new UtilException(ErrorCodeDef.ERROR, "找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", ex);
             }
         }
     }
@@ -189,18 +190,23 @@ public final class ClassUtil {
         try {
             cl = Thread.currentThread().getContextClassLoader();
         }
-        catch (Throwable ex) {
+        catch (SecurityException ex) {
             // Cannot access thread context ClassLoader - falling back...
         }
         if (cl == null) {
             // No thread context class loader -> use class loader of this class.
-            cl = ClassUtil.class.getClassLoader();
+            try {
+                cl = ClassUtil.class.getClassLoader();
+            }
+            catch (SecurityException ex) {
+                // Cannot access class loader - falling back to system class loader
+            }
             if (cl == null) {
                 // getClassLoader() returning null indicates the bootstrap ClassLoader
                 try {
                     cl = ClassLoader.getSystemClassLoader();
                 }
-                catch (Throwable ex) {
+                catch (SecurityException ex) {
                     // Cannot access system ClassLoader - oh well, maybe the caller can live with null...
                 }
             }
@@ -217,17 +223,13 @@ public final class ClassUtil {
      */
 
     public static Field getDeclaredField(final Class<?> finalClazz, final String fieldName) {
-        Field field = null;
         Class<?> clazz = finalClazz;
-        for (; finalClazz != Object.class; clazz = finalClazz.getSuperclass()) {
+        for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             try {
-                field = clazz.getDeclaredField(fieldName);
-                return field;
+                return clazz.getDeclaredField(fieldName);
             }
-            catch (Exception e) {
-                // 这里甚么都不要做！并且这里的异常必须这样写，不能抛出去。
-                // 如果这里的异常打印或者往外抛，则就不会执行clazz = clazz.getSuperclass(),最后就不会进入到父类中了
-
+            catch (NoSuchFieldException | SecurityException e) {
+                // 继续查找父类
             }
         }
 

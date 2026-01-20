@@ -25,6 +25,7 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
@@ -657,7 +658,7 @@ public final class HttpUtil {
                 .sslContext(createSSLContext()).sslParameters(createSSLParameters()).build();
         }
         catch (Exception e) {
-            throw new RuntimeException("Failed to create HttpClient", e);
+            throw new UtilException(ErrorCodeDef.ERROR, "Failed to create HttpClient", e);
         }
     }
 
@@ -676,7 +677,7 @@ public final class HttpUtil {
             return sslContext;
         }
         catch (Exception e) {
-            throw new RuntimeException("Failed to create SSLContext", e);
+            throw new UtilException(ErrorCodeDef.ERROR, "Failed to create SSLContext", e);
         }
     }
 

@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.UtilException;
 
 /**
  * <Description> 将文件或文件夹压缩为zip格式， 以及将zip压缩文件解压 <br>
@@ -67,7 +68,7 @@ public class FileZipUtil {
                     org.apache.commons.io.FileUtils.forceDelete(zipFile);
                 }
                 catch (IOException e) {
-                    throw new RuntimeException("无法删除已存在的文件: " + zipFile.getAbsolutePath(), e);
+                    throw new UtilException(ErrorCodeDef.ERROR, "无法删除已存在的文件: " + zipFile.getAbsolutePath(), e);
                 }
             }
             cos = new CheckedOutputStream(new FileOutputStream(zipFile), new CRC32());
@@ -206,7 +207,7 @@ public class FileZipUtil {
                         org.apache.commons.io.FileUtils.forceDelete(entryFile);
                     }
                     catch (IOException e) {
-                        throw new RuntimeException("无法删除已存在的文件: " + entryFile.getAbsolutePath(), e);
+                        throw new UtilException(ErrorCodeDef.ERROR, "无法删除已存在的文件: " + entryFile.getAbsolutePath(), e);
                     }
                 }
                 // 写入文件

@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.common.utils.security;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -92,7 +93,7 @@ public final class JWTUtil {
                 return JSONObject.parseObject(new String(DataUtil.base64Decode(data[1]), StandardCharsets.UTF_8));
             }
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     /**
@@ -120,6 +121,6 @@ public final class JWTUtil {
                 }
             }
         }
-        return null;
+        return Collections.emptyMap();
     }
 }
