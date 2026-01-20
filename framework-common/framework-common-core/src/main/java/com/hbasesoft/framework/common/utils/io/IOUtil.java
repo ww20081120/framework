@@ -16,8 +16,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -215,7 +218,7 @@ public final class IOUtil {
      */
     public static String readFile(final File file) throws IOException {
         if (file.exists() && file.isFile()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 return readString(reader);
             }
         }
@@ -238,7 +241,7 @@ public final class IOUtil {
             BufferedReader in = null;
             String line = null;
             try {
-                in = new BufferedReader(new FileReader(file));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 while ((line = in.readLine()) != null) {
                     T t = transfer.apply(line);
                     if (t != null) {
@@ -300,7 +303,7 @@ public final class IOUtil {
             BufferedReader in = null;
             String line = null;
             try {
-                in = new BufferedReader(new FileReader(file));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 List<T> list = new ArrayList<>();
                 int i = 0;
                 while ((line = in.readLine()) != null) {
@@ -369,7 +372,7 @@ public final class IOUtil {
         if (file != null) {
             BufferedWriter out = null;
             try {
-                out = new BufferedWriter(new FileWriter(file));
+                out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
                 out.write(contents);
                 out.flush();
             }

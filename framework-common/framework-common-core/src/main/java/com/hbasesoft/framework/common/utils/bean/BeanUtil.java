@@ -290,7 +290,7 @@ public final class BeanUtil {
                     String classUrl = packageName + '.' + className;
                     // 判断是否是以点开头
                     if (classUrl.startsWith(".")) {
-                        classUrl = classUrl.replaceFirst(".", "");
+                        classUrl = classUrl.substring(1);
                     }
 
                     boolean flag = true;

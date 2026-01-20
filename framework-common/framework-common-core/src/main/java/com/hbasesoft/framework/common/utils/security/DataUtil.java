@@ -3,6 +3,7 @@
  */
 package com.hbasesoft.framework.common.utils.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -91,7 +92,7 @@ public final class DataUtil {
      * @throws UtilException 异常
      */
     public static String md5(final String msg) {
-        byte[] msgBytes = msg.getBytes();
+        byte[] msgBytes = msg.getBytes(StandardCharsets.UTF_8);
         try {
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
             mdInst.update(msgBytes);

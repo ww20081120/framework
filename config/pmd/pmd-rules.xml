@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<ruleset name="Hbasesoft Custom Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        Hbasesoft 自定义 PMD 规则集 - 基于 Java 最佳实践
+    </description>
+
+    <!-- 基础代码规范 -->
+    <rule ref="category/java/bestpractices.xml"/>
+
+    <!-- 代码风格 -->
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="ShortVariable"/>
+        <exclude name="LongVariable"/>
+        <exclude name="CommentDefaultAccessModifier"/>
+    </rule>
+
+    <!-- 设计规范 -->
+    <rule ref="category/java/design.xml">
+        <exclude name="CyclomaticComplexity"/>
+    </rule>
+
+    <!-- 错误倾向 -->
+    <rule ref="category/java/errorprone.xml"/>
+
+    <!-- 多线程规范 -->
+    <rule ref="category/java/multithreading.xml"/>
+
+</ruleset>

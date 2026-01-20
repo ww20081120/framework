@@ -31,9 +31,6 @@
 	</modules>
 	<properties>
 		<java.version>21</java.version>
-		<!-- 解决文件拷贝时的编码 -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- 解决编译时中文乱码-->
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 		<spring-cloud.version>2025.1.0</spring-cloud.version>
@@ -62,6 +59,14 @@
 		<opentelemetry.version>1.57.0</opentelemetry.version>
 		<opentelemetry-semconv.version>1.37.0</opentelemetry-semconv.version>
 		<otel.version>1.6.1</otel.version>
+		<!-- 代码质量检查工具版本 -->
+		<checkstyle.version>3.6.0</checkstyle.version>
+		<pmd.version>3.28.0</pmd.version>
+		<spotbugs.version>4.9.8</spotbugs.version>
+		<spotbugs-maven-plugin.version>4.9.8.2</spotbugs-maven-plugin.version>
+		<githook.version>1.0.5</githook.version>
+		<!-- 代码质量检查开关：true=启用检查，false=跳过检查（默认启用） -->
+		<code.quality.checks.enabled>true</code.quality.checks.enabled>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -331,7 +336,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>${checkstyle.version}</version>
 				<configuration>
 					<configLocation>config/checkstyle/hbasesoft-check-1.0.xml</configLocation>
 				</configuration>
@@ -349,13 +354,87 @@
 				</executions>
 			</plugin>
 
-			<!-- 在提交代码的时候自动做checkstyle的插件 -->
+			<!-- PMD代码质量检查插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>${pmd.version}</version>
+				<configuration>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>${java.version}</targetJdk>
+					<excludes>
+						<!-- 排除生成的代码 -->
+						<exclude>**/generated/**</exclude>
+						<exclude>**/generated-sources/**</exclude>
+						<!-- 排除测试代码（可选） -->
+						<exclude>**/test/**</exclude>
+					</excludes>
+					<excludeRoots>
+						<excludeRoot>target/generated-sources/stubs</excludeRoot>
+					</excludeRoots>
+					<!-- 使用自定义规则集 - 使用项目根目录的绝对路径 -->
+					<rulesets>
+						<ruleset>${maven.multiModuleProjectDirectory}/config/pmd/pmd-rules.xml</ruleset>
+					</rulesets>
+					<!-- 编码 -->
+					<sourceEncoding>UTF-8</sourceEncoding>
+					<!-- 1-3级错误阻断构建，4-5级仅报告 -->
+					<failOnViolation>true</failOnViolation>
+					<!-- 优先级阈值：1-3级阻断，4-5级不阻断 -->
+					<minimumPriority>3</minimumPriority>
+					<!-- 排除级别文件（可选） -->
+					<excludeFromFailureFile>${maven.multiModuleProjectDirectory}/config/pmd/pmd-exclude.properties</excludeFromFailureFile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pmd</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- SpotBugs代码质量检查插件 -->
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>${spotbugs-maven-plugin.version}</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Medium</threshold>
+					<xmlOutput>true</xmlOutput>
+					<!-- 使用项目根目录的绝对路径 -->
+					<excludeFilterFile>${maven.multiModuleProjectDirectory}/config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.github.spotbugs</groupId>
+						<artifactId>spotbugs</artifactId>
+						<version>${spotbugs.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>spotbugs</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 在编译时自动安装git hooks的插件 -->
 			<plugin>
 				<groupId>io.github.phillipuniverse</groupId>
 				<artifactId>githook-maven-plugin</artifactId>
-				<version>1.0.5</version>
+				<version>${githook.version}</version>
 				<executions>
 					<execution>
+						<!-- 绑定到initialize阶段，确保在编译前就安装hooks -->
+						<phase>initialize</phase>
 						<goals>
 							<goal>install</goal>
 						</goals>
@@ -364,10 +443,65 @@
 								<!--
 								注意这里是调用shell命令去执行mvn命令，默认生成的hook文件执行路径可能与项目的pom.xml文件不一致，所以我这里用`-f`重新指定了本项目的pom文件路径 -->
 								<pre-commit>
-									echo "begin to execute hook"
+									# 代码质量检查开关（从 pom.xml 读取并替换）
+									CODE_QUALITY_CHECKS_ENABLED="${code.quality.checks.enabled}"
+
+									if [ "$CODE_QUALITY_CHECKS_ENABLED" != "true" ]; then
+										echo "⚠️  代码质量检查已禁用 (code.quality.checks.enabled=$CODE_QUALITY_CHECKS_ENABLED)"
+										echo "💡 如需启用检查，请在 pom.xml 中设置 code.quality.checks.enabled=true"
+										exit 0
+									fi
+
+									# 查找项目根目录（包含 pom.xml 的目录）
+									PROJECT_ROOT=$(git rev-parse --show-toplevel)
+									if [ ! -f "$PROJECT_ROOT/pom.xml" ]; then
+										echo "⚠️  无法找到项目根目录的 pom.xml"
+										exit 1
+									fi
+
+									echo "========================================"
+									echo "开始执行代码质量检查..."
+									echo "项目根目录: $PROJECT_ROOT"
+									echo "========================================"
+
+									# CheckStyle 检查
+									echo "1. 执行 CheckStyle 检查..."
+									cd "$PROJECT_ROOT"
 									mvn checkstyle:check
 									RESULT=$?
-									exit $RESULT
+									if [ $RESULT -ne 0 ]; then
+										echo "❌ CheckStyle 检查失败，请修复代码风格问题后再提交"
+										exit $RESULT
+									fi
+									echo "✅ CheckStyle 检查通过"
+
+									# PMD 检查（需要从项目根目录运行）
+									echo "2. 执行 PMD 检查..."
+									cd "$PROJECT_ROOT"
+									mvn pmd:check
+									RESULT=$?
+									if [ $RESULT -ne 0 ]; then
+										echo "❌ PMD 检查失败，请修复代码质量问题后再提交"
+										echo "💡 查看 target/pmd.xml 获取详细报告"
+										exit $RESULT
+									fi
+									echo "✅ PMD 检查通过"
+
+									# SpotBugs 检查
+									echo "3. 执行 SpotBugs 检查..."
+									cd "$PROJECT_ROOT"
+									mvn spotbugs:check
+									RESULT=$?
+									if [ $RESULT -ne 0 ]; then
+										echo "❌ SpotBugs 检查失败，请修复潜在 Bug 后再提交"
+										exit $RESULT
+									fi
+									echo "✅ SpotBugs 检查通过"
+
+									echo "========================================"
+									echo "✅ 所有代码质量检查通过！"
+									echo "========================================"
+									exit 0
 								</pre-commit>
 							</hooks>
 						</configuration>
