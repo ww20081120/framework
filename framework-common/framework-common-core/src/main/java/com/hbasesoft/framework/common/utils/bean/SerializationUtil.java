@@ -100,7 +100,7 @@ public final class SerializationUtil {
      * @return <br>
      */
     public static byte[] jdkSerial(final Object obj) throws UtilException {
-        byte[] bytes = new byte[0];
+        byte[] bytes;
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(byteArrayOutputStream)) {
             out.writeObject(obj);

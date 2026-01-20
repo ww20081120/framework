@@ -162,7 +162,7 @@ public class MultipartBodyPublisher {
             if (done) {
                 return false;
             }
-            if (next != null) {
+            if (next != null && next.length > 0) {
                 return true;
             }
             try {
@@ -171,7 +171,7 @@ public class MultipartBodyPublisher {
             catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
-            if (next == null) {
+            if (next.length == 0) {
                 done = true;
                 return false;
             }
