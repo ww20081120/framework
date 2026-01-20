@@ -29,7 +29,10 @@ import lombok.NoArgsConstructor;
 public final class JWTUtil {
 
     /** 固定的头部 */
-    private static final String HEADER = DataUtil.base64UrlEncode("{\"alg\":\"RS256\",\"typ\":\"JWT\"}".getBytes(StandardCharsets.UTF_8))
+    private static final String JWT_HEADER = "{\"alg\":\"RS256\",\"typ\":\"JWT\"}";
+
+    /** 固定的头部 */
+    private static final String HEADER = DataUtil.base64UrlEncode(JWT_HEADER.getBytes(StandardCharsets.UTF_8))
         + ".";
 
     /** jwt固定为3段 */
@@ -48,7 +51,8 @@ public final class JWTUtil {
     public static String createToken(final long expireTime, final Map<String, Object> payload,
         final String privateKey) {
         payload.put("exp", expireTime);
-        String jsonPayload = DataUtil.base64UrlEncode(JSONObject.toJSONString(payload).getBytes(StandardCharsets.UTF_8));
+        byte[] payloadBytes = JSONObject.toJSONString(payload).getBytes(StandardCharsets.UTF_8);
+        String jsonPayload = DataUtil.base64UrlEncode(payloadBytes);
         String data = HEADER + jsonPayload;
         String sign = RSAUtil.sign(data, privateKey);
         return new StringBuilder().append(data).append('.').append(sign).toString();
@@ -106,7 +110,9 @@ public final class JWTUtil {
             if (data.length == FIX_LENGTH) {
                 String vd = token.substring(0, token.lastIndexOf("."));
                 if (RSAUtil.verify(vd, publicKey, data[2])) {
-                    JSONObject payload = JSONObject.parseObject(new String(DataUtil.base64Decode(data[1]), StandardCharsets.UTF_8));
+                    byte[] decodedBytes = DataUtil.base64Decode(data[1]);
+                    String decodedStr = new String(decodedBytes, StandardCharsets.UTF_8);
+                    JSONObject payload = JSONObject.parseObject(decodedStr);
                     Long exp = payload.getLong("exp");
                     if (exp != null && System.currentTimeMillis() < exp) {
                         return payload;

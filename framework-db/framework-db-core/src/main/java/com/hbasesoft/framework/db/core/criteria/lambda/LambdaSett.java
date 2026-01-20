@@ -81,7 +81,8 @@ public class LambdaSett {
                     this.implClass.getName() + "." + filedName
                     + " 类型错误， Wrapper<T> 只能用于 number string date, 注意：数字必须要用包装类型 ");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // 如果初始化失败，重置字段为安全默认值
             this.field = null;
             this.filedName = null;

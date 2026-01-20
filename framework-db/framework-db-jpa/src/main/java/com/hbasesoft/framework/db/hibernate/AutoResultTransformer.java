@@ -177,9 +177,11 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
                             // 检查读取的字符数，确保数据完整
                             if (readCount == -1) {
                                 tuple[i] = "";
-                            } else if (readCount < tempDoc.length) {
+                            }
+                            else if (readCount < tempDoc.length) {
                                 tuple[i] = new String(tempDoc, 0, readCount);
-                            } else {
+                            }
+                            else {
                                 tuple[i] = new String(tempDoc);
                             }
                         }

@@ -106,7 +106,8 @@ public class AbstractAnnotationHandler {
                     }
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // 如果初始化失败，重置为空映射，确保对象状态一致
             this.genericBaseDaoMethodMap = new HashMap<>();
             throw e;

@@ -12,8 +12,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -218,7 +216,8 @@ public final class IOUtil {
      */
     public static String readFile(final File file) throws IOException {
         if (file.exists() && file.isFile()) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
+            try (BufferedReader reader = new BufferedReader(isr)) {
                 return readString(reader);
             }
         }

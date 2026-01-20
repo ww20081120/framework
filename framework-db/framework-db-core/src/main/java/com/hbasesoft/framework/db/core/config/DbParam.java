@@ -217,7 +217,8 @@ public class DbParam extends BaseEntity {
             String pw = PropertyHolder.getProperty(prefix + ".password");
             setPassword(pw);
             init(prefix);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // 如果初始化失败，保持对象处于默认状态
             throw e;
         }
