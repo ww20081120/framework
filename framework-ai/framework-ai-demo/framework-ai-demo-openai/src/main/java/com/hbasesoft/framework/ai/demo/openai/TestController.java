@@ -104,7 +104,7 @@ public class TestController {
         OpenAiApi openAiApi = OpenAiApi.builder().baseUrl("http://127.0.0.1:11434").apiKey("your api key").build();
 
         OpenAiChatOptions chatOptions = OpenAiChatOptions.builder().temperature(DEFAULT_TEMPERATURE) // 控制随机性
-            .model("qwen3:8b").maxTokens(DEFAULT_MAX_TOKENS) // 最大输出长度
+            .model("qwen3-coder:30b-a3b-fp16").maxTokens(DEFAULT_MAX_TOKENS) // 最大输出长度
             .topP(DEFAULT_TOP_P) // 核采样参数
             .streamUsage(true).build();
 

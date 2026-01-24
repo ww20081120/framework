@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AnnotationUtils;
 
@@ -47,7 +48,7 @@ public final class BasePackagesUtil {
      * @param beanFactory beanFactory
      * @return basePackages <br>
      */
-    public static List<String> getBasePackages(final ConfigurableListableBeanFactory beanFactory) {
+    public static List<String> getBasePackages(final Object beanFactory) {
         synchronized (BasePackagesUtil.class) {
             if (!componentScaned) {
                 ComponentScan componentScan = findComponentScanAnnotation(beanFactory);
@@ -109,19 +110,37 @@ public final class BasePackagesUtil {
         }
     }
 
-    private static ComponentScan findComponentScanAnnotation(final ConfigurableListableBeanFactory beanFactory) {
-        for (String beanName : beanFactory.getBeanDefinitionNames()) {
-            BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
-            Class<?> beanClass;
-            try {
-                beanClass = Class.forName(beanDefinition.getBeanClassName());
-                ComponentScan componentScan = AnnotationUtils.findAnnotation(beanClass, ComponentScan.class);
-                if (componentScan != null) {
-                    return componentScan;
+    private static ComponentScan findComponentScanAnnotation(final Object target) {
+        if (target instanceof ConfigurableListableBeanFactory beanFactory) {
+            for (String beanName : beanFactory.getBeanDefinitionNames()) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+                Class<?> beanClass;
+                try {
+                    beanClass = Class.forName(beanDefinition.getBeanClassName());
+                    ComponentScan componentScan = AnnotationUtils.findAnnotation(beanClass, ComponentScan.class);
+                    if (componentScan != null) {
+                        return componentScan;
+                    }
+                }
+                catch (ClassNotFoundException e) {
+                    LoggerUtil.error(e);
                 }
             }
-            catch (ClassNotFoundException e) {
-                LoggerUtil.error(e);
+        }
+        else if (target instanceof BeanDefinitionRegistry beanFactory) {
+            for (String beanName : beanFactory.getBeanDefinitionNames()) {
+                BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
+                Class<?> beanClass;
+                try {
+                    beanClass = Class.forName(beanDefinition.getBeanClassName());
+                    ComponentScan componentScan = AnnotationUtils.findAnnotation(beanClass, ComponentScan.class);
+                    if (componentScan != null) {
+                        return componentScan;
+                    }
+                }
+                catch (ClassNotFoundException e) {
+                    LoggerUtil.error(e);
+                }
             }
         }
         return null;

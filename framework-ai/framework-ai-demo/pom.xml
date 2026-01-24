@@ -13,5 +13,6 @@
   <packaging>pom</packaging>
   <modules>
   <module>framework-ai-demo-openai</module>
+  <module>framework-ai-demo-agentscope</module>
   </modules>
 </project>

@@ -12,28 +12,11 @@
 	<description>AI人工智能框架</description>
 	<packaging>pom</packaging>
 	<properties>
-		<spring-ai.version>1.1.2</spring-ai.version>
-		<alibaba-ai.version>1.1.0.0-RC2</alibaba-ai.version>
 	</properties>
 	<modules>
 		<module>framework-ai-demo</module>
-		<module>framework-ai-agent</module>
+		<module>framework-ai-core</module>
+		<module>framework-ai-agentscope</module>
+		<module>framework-ai-spring</module>
 	</modules>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.ai</groupId>
-				<artifactId>spring-ai-bom</artifactId>
-				<version>${spring-ai.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>com.alibaba.cloud.ai</groupId>
-				<artifactId>spring-ai-alibaba-agent-framework</artifactId>
-				<version>${alibaba-ai.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>
