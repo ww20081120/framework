@@ -35,6 +35,9 @@ import io.agentscope.core.tool.ToolExecutionContext;
  */
 public interface AgentConfig {
 
+    /** 默认最大迭代次数 */
+    int DEFAULT_MAX_ITERS = 10;
+
     /**
      * 设置Agent的描述<br>
      *
@@ -98,7 +101,7 @@ public interface AgentConfig {
      * @return 最大迭代次数，默认为10<br>
      */
     default int maxIters() {
-        return 10;
+        return DEFAULT_MAX_ITERS;
     }
 
     /**

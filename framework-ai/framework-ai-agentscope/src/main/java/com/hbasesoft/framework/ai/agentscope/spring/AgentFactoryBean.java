@@ -30,6 +30,7 @@ import lombok.Setter;
 @Setter
 public class AgentFactoryBean implements FactoryBean<ReActAgent>, BeanFactoryAware {
 
+    /** 日志记录器 */
     private static final Logger LOGGER = new Logger(AgentFactoryBean.class);
 
     /** Agent类 */

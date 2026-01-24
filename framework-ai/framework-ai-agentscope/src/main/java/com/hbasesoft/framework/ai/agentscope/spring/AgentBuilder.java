@@ -40,7 +40,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AgentBuilder {
 
+    /** 日志记录器 */
     private static final Logger LOGGER = new Logger(AgentBuilder.class);
+
+    /** 日志最大显示长度 */
+    private static final int LOG_MAX_LENGTH = 50;
 
     /**
      * 构建ReActAgent<br>
@@ -54,8 +58,8 @@ public class AgentBuilder {
      * @param beanFactory Spring BeanFactory（用于延迟获取Bean）
      * @return ReActAgent实例<br>
      */
-    public static ReActAgent build(final AgentConfig config, final Agent agentAnnotation, boolean hasToolsMethods,
-        String toolBeanName, BeanFactory beanFactory) {
+    public static ReActAgent build(final AgentConfig config, final Agent agentAnnotation, final boolean hasToolsMethods,
+        final String toolBeanName, final BeanFactory beanFactory) {
         // 创建Builder
         ReActAgent.Builder builder = ReActAgent.builder();
 
@@ -78,8 +82,9 @@ public class AgentBuilder {
             config != null ? config.systemPrompt() : null);
         if (StringUtils.isNotBlank(systemPrompt)) {
             builder.sysPrompt(systemPrompt);
-            LOGGER.debug("设置系统提示词: {0}",
-                systemPrompt.length() > 50 ? systemPrompt.substring(0, 50) + "..." : systemPrompt);
+            String displayPrompt = systemPrompt.length() > LOG_MAX_LENGTH
+                ? systemPrompt.substring(0, LOG_MAX_LENGTH) + "..." : systemPrompt;
+            LOGGER.debug("设置系统提示词: {0}", displayPrompt);
         }
 
         // 4. 设置模型（优先级：AgentConfig > @Agent注解Bean名称）

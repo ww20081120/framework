@@ -39,10 +39,14 @@ import io.agentscope.core.tool.Tool;
  */
 public class AgentDefinitionProcessor implements BeanDefinitionRegistryPostProcessor {
 
+    /** 日志记录器 */
     private static final Logger LOGGER = new Logger(AgentDefinitionProcessor.class);
 
     /** 扫描分隔线标记 */
     private static final String SEPARATOR_LINE = "**************************************************************";
+
+    /** UUID截取长度 */
+    private static final int UUID_SUBSTRING_LENGTH = 8;
 
     @Override
     public void postProcessBeanDefinitionRegistry(final @NonNull BeanDefinitionRegistry registry)
@@ -211,7 +215,7 @@ public class AgentDefinitionProcessor implements BeanDefinitionRegistryPostProce
      */
     private String generateUniqueToolBeanName(final Class<?> clazz) {
         String className = clazz.getSimpleName();
-        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, UUID_SUBSTRING_LENGTH);
         return className + uuid + "Tool";
     }
 }

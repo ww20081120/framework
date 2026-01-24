@@ -28,6 +28,7 @@ import io.agentscope.core.ReActAgent;
 @ConditionalOnClass({ReActAgent.class, Agent.class})
 public class AgentAutoConfiguration {
 
+    /** 日志记录器 */
     private static final Logger LOGGER = new Logger(AgentAutoConfiguration.class);
 
     /**
