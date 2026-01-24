@@ -53,13 +53,14 @@ public class TestAgent implements AgentConfig {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
+     * @param city 城市名称<br>
      * @return <br>
      */
     @Tool(description = "查询天气的工具")
-    public String weather(@ToolParam(name = "city", description = "城市名称") String city) {
+    public String weather(@ToolParam(name = "city", description = "城市名称") final String city) {
         return "今天是晴天";
     }
 }

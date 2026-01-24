@@ -30,6 +30,7 @@ import reactor.core.publisher.Mono;
 @RestController
 public class TestController {
 
+    /** Agent代理实例 */
     @Resource(name = "TestAgent")
     private ReActAgent agent;
 
