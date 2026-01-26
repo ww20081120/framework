@@ -9,7 +9,7 @@ import com.hbasesoft.framework.ai.agentscope.AgentConfig;
 import com.hbasesoft.framework.ai.core.Agent;
 
 import io.agentscope.core.model.Model;
-import io.agentscope.core.model.OllamaChatModel;
+import io.agentscope.core.model.OpenAIChatModel;
 import io.agentscope.core.tool.Tool;
 import io.agentscope.core.tool.ToolParam;
 
@@ -47,7 +47,7 @@ public class TestAgent implements AgentConfig {
      */
     @Override
     public Model model() {
-        return OllamaChatModel.builder().baseUrl("http://127.0.0.1:11434").modelName("qwen3-coder:30b-a3b-fp16")
+        return OpenAIChatModel.builder().baseUrl("http://127.0.0.1:11434").modelName("qwen3-coder:30b-a3b-fp16")
             .build();
     }
 
