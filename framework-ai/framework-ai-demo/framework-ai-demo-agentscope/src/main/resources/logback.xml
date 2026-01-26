@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+	<property name="springAppName" value="@project.artifactId@"></property>
+
+	<property name="LOG_FILE"
+		value="${user.home}/log/hbasesoft/${springAppName}" />
+
+	<property name="MAX_FIILE_SIZE" value="20MB" />
+	<property name="MAX_HISTORY" value="7" />
+	<property name="TOTAL_SIZE_CAP" value="10GB" />
+
+	<property name="CONSOLE_LOG_PATTERN"
+		value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{traceId:-},%X{spanId:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+
+
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<!-- Appender to log to console -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<!-- Minimum logging level to be presented in the console logs -->
+			<level>DEBUG</level>
+		</filter>
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<!-- Appender to log to file -->
+	<appender name="debugAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}/debug.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/debug.%d{yyyy-MM-dd}.%i.gz
+			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="infoAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}/info.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/info.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="warnAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}/warn.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/warn.%d{yyyy-MM-dd}.%i.gz
+			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="errorAppender"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}/error.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}/error.%d{yyyy-MM-dd}.%i.gz
+			</fileNamePattern>
+			<!--日志大小 -->
+			<maxFileSize>${MAX_FIILE_SIZE}</maxFileSize>
+			<!--日志保留时长 -->
+			<maxHistory>${MAX_HISTORY}</maxHistory>
+			<totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<encoder>
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="debugAppender" />
+		<appender-ref ref="infoAppender" />
+		<appender-ref ref="warnAppender" />
+		<appender-ref ref="errorAppender" />
+	</root>
+</configuration>

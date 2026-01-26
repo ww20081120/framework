@@ -268,12 +268,14 @@ public final class BeanUtil {
         // 如果存在 就获取包下的所有文件 包括目录
         File[] dirfiles = dir.listFiles(new FileFilter() {
             // 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
+            @Override
             public boolean accept(final File file) {
                 return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
             }
         });
         // 循环所有文件
-        for (File file : dirfiles) {
+        if (dirfiles != null) {
+            for (File file : dirfiles) {
             // 如果是目录 则继续扫描
             if (file.isDirectory()) {
                 findAndAddClassesInPackageByFile(packageName + "." + file.getName(), packArr, file.getAbsolutePath(),
@@ -290,7 +292,7 @@ public final class BeanUtil {
                     String classUrl = packageName + '.' + className;
                     // 判断是否是以点开头
                     if (classUrl.startsWith(".")) {
-                        classUrl = classUrl.replaceFirst(".", "");
+                        classUrl = classUrl.substring(1);
                     }
 
                     boolean flag = true;
@@ -319,6 +321,7 @@ public final class BeanUtil {
                 catch (NoClassDefFoundError e) {
                     logger.warn(CommonUtil.messageFormat("添加用户自定义视图类错误 找不到{0}此类关联的类{1}", className, e.getMessage()));
                 }
+            }
             }
         }
     }
@@ -367,37 +370,34 @@ public final class BeanUtil {
                         // 获取包名 把"/"替换成"."
                         packageName = name.substring(0, idx).replace('/', '.');
                     }
-                    // 如果可以迭代下去 并且是一个包
-                    if ((idx != -1) || recursive) {
-                        // 如果是一个.class文件 而且不是目录
-                        if (name.endsWith(".class") && !entry.isDirectory()) {
-                            // 去掉后面的".class" 获取真正的类名
-                            String className = name.substring(packageName.length() + 1, name.length() - CLAZZ_LENGTH);
-                            try {
-                                // 添加到classes
+                    // 如果可以迭代下去 并且是一个包,且是一个.class文件而且不是目录
+                    if (((idx != -1) || recursive) && name.endsWith(".class") && !entry.isDirectory()) {
+                        // 去掉后面的".class" 获取真正的类名
+                        String className = name.substring(packageName.length() + 1, name.length() - CLAZZ_LENGTH);
+                        try {
+                            // 添加到classes
 
-                                boolean flag = true;
-                                if (packArr.length > 1) {
-                                    for (int i = 1; i < packArr.length; i++) {
-                                        if (packageName.indexOf(packArr[i]) <= -1) {
-                                            flag = flag & false;
-                                        }
-                                        else {
-                                            flag = flag & true;
-                                        }
+                            boolean flag = true;
+                            if (packArr.length > 1) {
+                                for (int i = 1; i < packArr.length; i++) {
+                                    if (packageName.indexOf(packArr[i]) <= -1) {
+                                        flag = flag & false;
                                     }
-                                }
-
-                                if (flag) {
-                                    Class<?> clazz = Class.forName(packageName + '.' + className);
-                                    if (filter == null || filter.accept(clazz)) {
-                                        classes.add(clazz);
+                                    else {
+                                        flag = flag & true;
                                     }
                                 }
                             }
-                            catch (ClassNotFoundException e) {
-                                logger.error("添加用户自定义视图类错误 找不到此类的.class文件", e);
+
+                            if (flag) {
+                                Class<?> clazz = Class.forName(packageName + '.' + className);
+                                if (filter == null || filter.accept(clazz)) {
+                                    classes.add(clazz);
+                                }
                             }
+                        }
+                        catch (ClassNotFoundException e) {
+                            logger.error("添加用户自定义视图类错误 找不到此类的.class文件", e);
                         }
                     }
                 }
@@ -432,12 +432,13 @@ public final class BeanUtil {
                 nextUpperCase = Character.isUpperCase(s.charAt(i + 1));
             }
 
-            if ((i >= 0) && Character.isUpperCase(c)) {
-                if (!upperCase || !nextUpperCase) {
-                    if (i > 0) {
-                        sb.append(GlobalConstants.UNDERLINE);
-                    }
+            if ((i >= 0) && Character.isUpperCase(c) && (!upperCase || !nextUpperCase)) {
+                if (i > 0) {
+                    sb.append(GlobalConstants.UNDERLINE);
                 }
+                upperCase = true;
+            }
+            else if ((i >= 0) && Character.isUpperCase(c)) {
                 upperCase = true;
             }
             else {

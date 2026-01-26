@@ -28,7 +28,7 @@ import com.hbasesoft.framework.common.utils.ContextHolder;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -36,7 +36,7 @@ import com.hbasesoft.framework.common.utils.ContextHolder;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.config <br>
  */
-public class LocalProperty implements Property {
+public final class LocalProperty implements Property {
 
     /** properties */
     private final Map<String, String> props = new HashMap<>();
@@ -88,7 +88,7 @@ public class LocalProperty implements Property {
             }
             return allProperties;
         }
-        return props;
+        return new HashMap<>(props);
     }
 
     /**
@@ -149,11 +149,12 @@ public class LocalProperty implements Property {
     /**
      * Description: 本方法中的日志只能输出中文，因为APDPlatLoggerImpl中默认指定输出中文 只有配置项加载完毕，调用了指定日志输出语言方法LOG.setLocale(getLogLanguage())
      * 之后，配置的日志输出语言才会生效<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      *         <br>
      */
+    @SuppressWarnings("PMD.SystemPrintln")
     private void init() {
         String systemConfig = "/application.yml";
         ClassPathResource cr = null;
@@ -169,7 +170,7 @@ public class LocalProperty implements Property {
             }
             System.out.println("装入主配置文件:" + systemConfig);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             System.out.println("装入主配置文件" + systemConfig + "失败!");
             e.printStackTrace();
             // throw new InitializationException(e);
@@ -189,11 +190,12 @@ public class LocalProperty implements Property {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      *         <br>
      */
+    @SuppressWarnings("PMD.SystemPrintln")
     private void loadExtendFiles() {
         String extendPropertyFiles = props.get("extend.property.files");
         String springIncloud = props.get("spring.profiles.include");
@@ -227,7 +229,7 @@ public class LocalProperty implements Property {
                         System.out.println("装入扩展配置文件：" + file);
                     }
                 }
-                catch (Exception e) {
+                catch (IOException e) {
                     System.out.println("装入扩展配置文件" + file + "失败！");
                     e.printStackTrace();
                     throw new InitializationException(e);

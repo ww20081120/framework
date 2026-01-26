@@ -12,12 +12,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -65,7 +66,7 @@ public final class IOUtil {
             in = new BufferedInputStream(new FileInputStream(src));
             IOUtils.copy(in, out);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
         }
         finally {
@@ -102,7 +103,7 @@ public final class IOUtil {
             out = new BufferedOutputStream(new FileOutputStream(filePath));
             IOUtils.copy(in, out);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
         }
         finally {
@@ -124,7 +125,7 @@ public final class IOUtil {
         try {
             return IOUtils.toString(in, GlobalConstants.DEFAULT_CHARSET);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         finally {
@@ -149,7 +150,7 @@ public final class IOUtil {
                 return readString(in);
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         return null;
@@ -168,7 +169,7 @@ public final class IOUtil {
         try {
             return IOUtils.toString(in);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(ErrorCodeDef.READ_PARAM_ERROR, e);
         }
         finally {
@@ -215,7 +216,8 @@ public final class IOUtil {
      */
     public static String readFile(final File file) throws IOException {
         if (file.exists() && file.isFile()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            InputStreamReader isr = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
+            try (BufferedReader reader = new BufferedReader(isr)) {
                 return readString(reader);
             }
         }
@@ -238,7 +240,7 @@ public final class IOUtil {
             BufferedReader in = null;
             String line = null;
             try {
-                in = new BufferedReader(new FileReader(file));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 while ((line = in.readLine()) != null) {
                     T t = transfer.apply(line);
                     if (t != null) {
@@ -246,7 +248,7 @@ public final class IOUtil {
                     }
                 }
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -300,7 +302,7 @@ public final class IOUtil {
             BufferedReader in = null;
             String line = null;
             try {
-                in = new BufferedReader(new FileReader(file));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                 List<T> list = new ArrayList<>();
                 int i = 0;
                 while ((line = in.readLine()) != null) {
@@ -317,12 +319,12 @@ public final class IOUtil {
                         }
                     }
                 }
-                if (list.size() != 0) {
+                if (!list.isEmpty()) {
                     batchProcessor.process(list, ++i, pageSize);
                     list.clear();
                 }
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -348,7 +350,7 @@ public final class IOUtil {
                 out.write(content);
                 out.flush();
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -369,11 +371,11 @@ public final class IOUtil {
         if (file != null) {
             BufferedWriter out = null;
             try {
-                out = new BufferedWriter(new FileWriter(file));
+                out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
                 out.write(contents);
                 out.flush();
             }
-            catch (Exception e) {
+            catch (IOException e) {
                 throw new UtilException(ErrorCodeDef.WRITE_FILE_ERROR, e);
             }
             finally {
@@ -391,10 +393,8 @@ public final class IOUtil {
      */
     public static File createTempFile() {
         File dir = new File(tempFileDir);
-        if (!dir.exists() || dir.isFile()) {
-            if (!dir.mkdirs()) {
-                throw new UtilException(ErrorCodeDef.CREATE_TEMP_FILE_ERROR, dir.getAbsolutePath());
-            }
+        if ((!dir.exists() || dir.isFile()) && !dir.mkdirs()) {
+            throw new UtilException(ErrorCodeDef.CREATE_TEMP_FILE_ERROR, dir.getAbsolutePath());
         }
         return new File(dir, CommonUtil.getTransactionID());
     }

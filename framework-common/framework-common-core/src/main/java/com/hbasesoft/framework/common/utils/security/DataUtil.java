@@ -3,6 +3,7 @@
  */
 package com.hbasesoft.framework.common.utils.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -91,7 +92,7 @@ public final class DataUtil {
      * @throws UtilException 异常
      */
     public static String md5(final String msg) {
-        byte[] msgBytes = msg.getBytes();
+        byte[] msgBytes = msg.getBytes(StandardCharsets.UTF_8);
         try {
             MessageDigest mdInst = MessageDigest.getInstance("MD5");
             mdInst.update(msgBytes);
@@ -129,7 +130,7 @@ public final class DataUtil {
             messageDigest.update(msg.getBytes(GlobalConstants.DEFAULT_CHARSET));
             return byte2HexStr(messageDigest.digest());
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Hash operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.SHA256_ERROR, e);
         }
     }
@@ -173,7 +174,7 @@ public final class DataUtil {
         try {
             return Base64.encodeBase64URLSafeString(content);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Hash operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.BASE64_ERROR, e);
         }
     }
@@ -258,10 +259,10 @@ public final class DataUtil {
         char[] chars = HEX_DIGIT.toCharArray();
         StringBuilder sb = new StringBuilder();
         int bit;
-        for (int i = 0; i < bs.length; i++) {
-            bit = (bs[i] & NUM_0X0F0) >> NUM_4;
+        for (byte b : bs) {
+            bit = (b & NUM_0X0F0) >> NUM_4;
             sb.append(chars[bit]);
-            bit = bs[i] & NUM_0X0F;
+            bit = b & NUM_0X0F;
             sb.append(chars[bit]);
         }
         return sb.toString();

@@ -98,7 +98,10 @@ public final class PropertyHolder {
      */
     public static Boolean getBooleanProperty(final String name, final Boolean defaultValue) {
         String value = getProperty(name);
-        return StringUtils.isNotEmpty(value) ? "true".equals(value) : defaultValue;
+        if (StringUtils.isNotEmpty(value)) {
+            return Boolean.valueOf("true".equals(value));
+        }
+        return defaultValue;
     }
 
     /**

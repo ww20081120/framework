@@ -11,75 +11,76 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟 <br>
  * @version 1.0 <br>
  * @CreateDate 2014年10月24日 <br>
  * @see com.hbasesoft.framework.common.constant <br>
  */
-public interface GlobalConstants {
+public final class GlobalConstants {
 
     /** 分隔符 */
-    String SPLITOR = ",";
+    public static final String SPLITOR = ",";
 
     /** 分隔符 */
-    String PARAM_SPLITOR = "&";
+    public static final String PARAM_SPLITOR = "&";
 
     /** 路径分割符 */
-    String PATH_SPLITOR = "/";
+    public static final String PATH_SPLITOR = "/";
 
     /** 竖线 */
-    String VERTICAL_LINE = "|";
+    public static final String VERTICAL_LINE = "|";
 
     /** SQL语句分隔符 */
-    String SQL_SPLITOR = ";";
+    public static final String SQL_SPLITOR = ";";
 
     /** 等号分隔符 */
-    String EQUAL_SPLITER = "=";
+    public static final String EQUAL_SPLITER = "=";
 
     /** 下划线 */
-    char UNDERLINE = '_';
+    public static final char UNDERLINE = '_';
 
     /** 横杠 */
-    String LINE = "-";
+    public static final String LINE = "-";
 
     /** 空白 */
-    String BLANK = "";
+    public static final String BLANK = "";
 
     /** 星号 */
-    String ASTERISK = "*";
+    public static final String ASTERISK = "*";
 
     /** 默认编码 */
-    Charset DEFAULT_CHARSET = Charset.forName("utf-8");
+    public static final Charset DEFAULT_CHARSET = Charset.forName("utf-8");
 
     /** 默认语言 */
-    String DEFAULT_LANGUAGE = "zh_CN";
+    public static final String DEFAULT_LANGUAGE = "zh_CN";
 
     /** 百分号 */
-    String PERCENT = "%";
+    public static final String PERCENT = "%";
 
     /** 句号 */
-    String PERIOD = ".";
+    public static final String PERIOD = ".";
 
     /** 符号校验 */
-    String SYMBOL_REGULAR = "[\\pP\\p{Punct}]";
+    public static final String SYMBOL_REGULAR = "[\\pP\\p{Punct}]";
 
     /** 取值表达式 */
-    String DOLLAR_BRACE = "${";
+    public static final String DOLLAR_BRACE = "${";
 
     /** MINUTES */
-    int MINUTES = 60;
+    public static final int MINUTES = 60;
 
     /** 一秒等于1000毫秒 */
-    int SECONDS = 1000;
+    public static final int SECONDS = 1000;
 
     /** 默认行 */
-    int DEFAULT_LINES = 1000;
+    public static final int DEFAULT_LINES = 1000;
 
     /** 全局文件路径 */
-    String FILE_STORAGE_PATH = PropertyHolder.getProperty("server.fileupload.filePath", System.getProperty("user.home"))
-        + "/uploadFiles";
+    public static final String FILE_STORAGE_PATH =
+        PropertyHolder.getProperty("server.fileupload.filePath", System.getProperty("user.home"))
+            + "/uploadFiles";
 
     /** 系统错错误码前缀 */
-    int SYSTEM_PREFIX = 0;
+    public static final int SYSTEM_PREFIX = 0;
 }

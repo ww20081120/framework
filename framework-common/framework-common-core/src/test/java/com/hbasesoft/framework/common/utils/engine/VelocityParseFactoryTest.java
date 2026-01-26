@@ -44,6 +44,6 @@ public class VelocityParseFactoryTest {
 
         String template = "你好，我的名字叫${b.name}";
         String str = VelocityParseFactory.parse(template, params);
-        Assert.equals(str, "你好，我的名字叫张三", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str, "你好，我的名字叫张三", ErrorCodeDef.FAILURE);
     }
 }

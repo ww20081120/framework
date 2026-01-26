@@ -1,18 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.hbasesoft.framework</groupId>
-    <artifactId>framework</artifactId>
-    <version>4.1.2</version>
-  </parent>
-  <artifactId>framework-ai</artifactId>
-  <name>framework-ai</name>
-  <description>AI人工智能框架</description>
-  <packaging>pom</packaging>
-  <modules>
-      <module>framework-ai-demo</module>
-      <module>framework-ai-agent</module>
-  </modules>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework</artifactId>
+		<version>4.2.0</version>
+	</parent>
+	<artifactId>framework-ai</artifactId>
+	<name>framework-ai</name>
+	<description>AI人工智能框架</description>
+	<packaging>pom</packaging>
+	<properties>
+	</properties>
+	<modules>
+		<module>framework-ai-demo</module>
+		<module>framework-ai-core</module>
+		<module>framework-ai-agentscope</module>
+		<module>framework-ai-spring</module>
+	</modules>
 </project>

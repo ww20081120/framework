@@ -352,7 +352,7 @@ public class IBaseDaoTester {
     @Transactional
     public void get() {
         StudentEntity entity = studentDao.get("1");
-        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(entity.getName(), "张三", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -367,7 +367,7 @@ public class IBaseDaoTester {
     public void getByHql() {
 //        StudentEntity entity = iStudentDao
 //            .getByHql("from com.hbasesoft.framework.db.demo.entity.StudentEntity where id = '1'");
-//        Assert.equals(entity.getName(), "张三", ErrorCodeDef.FAILURE);
+//        Assert.assertEqual(entity.getName(), "张三", ErrorCodeDef.FAILURE);
 
     }
 
@@ -382,7 +382,7 @@ public class IBaseDaoTester {
     @Transactional
     public void getByProperty() {
         CourseEntity entity = iCourseMySqlDao.get(q -> q.eq(CourseEntity.COURSE_NAME, "语文"));
-        Assert.equals(entity.getId(), "1", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(entity.getId(), "1", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -523,7 +523,7 @@ public class IBaseDaoTester {
         String id = entity.getId();
 
         entity = studentDao.get(id);
-        Assert.equals(entity.getName(), "张三丰", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(entity.getName(), "张三丰", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -573,7 +573,7 @@ public class IBaseDaoTester {
         studentDao.update(entity);
 
         StudentEntity e2 = studentDao.get("1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(e2.getName(), "李四", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -613,6 +613,6 @@ public class IBaseDaoTester {
 //        iStudentDao.clear();
 
         StudentEntity e2 = studentDao.get("1");
-        Assert.equals(e2.getName(), "李四", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(e2.getName(), "李四", ErrorCodeDef.FAILURE);
     }
 }

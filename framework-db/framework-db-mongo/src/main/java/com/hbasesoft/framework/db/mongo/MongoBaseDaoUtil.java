@@ -570,7 +570,7 @@ public final class MongoBaseDaoUtil {
                     }
                     else if (item instanceof String && ((String) item).startsWith("$")) {
                         // 替换列表中的字符串占位符
-                        list.set(i, parseValue((String) value, dataMap));
+                        list.set(i, parseValue((String) item, dataMap));
                     }
                 }
             }

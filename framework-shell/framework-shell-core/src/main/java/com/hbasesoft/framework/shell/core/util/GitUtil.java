@@ -37,7 +37,7 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -45,7 +45,7 @@ import com.hbasesoft.framework.common.utils.date.DateUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.vcc.tools.util <br>
  */
-public class GitUtil {
+public final class GitUtil {
 
     /** */
     private static final String REMOTE_NAME = "origin";

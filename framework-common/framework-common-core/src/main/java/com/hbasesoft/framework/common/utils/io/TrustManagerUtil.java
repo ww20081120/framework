@@ -27,6 +27,13 @@ public final class TrustManagerUtil {
     /** */
     private static final X509Certificate[] EMPTY_X509CERTIFICATE_ARRAY = new X509Certificate[] {};
 
+    /**
+     * 私有构造器，防止实例化
+     */
+    private TrustManagerUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
     private static class TrustManager implements X509TrustManager {
 
         /** */
@@ -44,15 +51,17 @@ public final class TrustManagerUtil {
          * @Description TODD
          * @Date 2023/1/29 15:03
          */
+        @Override
         public void checkClientTrusted(final X509Certificate[] certificates, final String authType) {
             return;
         }
 
+        @Override
         public void checkServerTrusted(final X509Certificate[] certificates, final String authType)
             throws CertificateException {
             if (checkServerValidity) {
-                for (int i = 0; i < certificates.length; ++i) {
-                    certificates[i].checkValidity();
+                for (X509Certificate certificate : certificates) {
+                    certificate.checkValidity();
                 }
             }
         }
@@ -60,6 +69,7 @@ public final class TrustManagerUtil {
         /**
          * @return an empty array of certificates
          */
+        @Override
         public X509Certificate[] getAcceptedIssuers() {
             return EMPTY_X509CERTIFICATE_ARRAY;
         }

@@ -111,11 +111,12 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * getParamNames
-     * 
+     *
      * @return the paramNames <br>
      */
     public String[] getParamNames() {
-        return paramNames;
+        // 返回防御性拷贝，避免外部修改影响内部状态
+        return paramNames == null ? null : paramNames.clone();
     }
 
     /**
@@ -218,13 +219,14 @@ public class ParamMetadata extends BaseEntity {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param paramNames <br>
      */
     public void setParamNames(final String[] paramNames) {
-        this.paramNames = paramNames;
+        // 创建防御性拷贝，避免外部修改影响内部状态
+        this.paramNames = paramNames == null ? null : paramNames.clone();
     }
 
 }

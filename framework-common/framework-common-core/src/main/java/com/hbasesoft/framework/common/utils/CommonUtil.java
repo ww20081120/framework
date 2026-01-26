@@ -51,6 +51,9 @@ public final class CommonUtil {
     /** NEXT_CHAR */
     private static final int NEXT_CHAR = 26;
 
+    /** Random instance for random number generation */
+    private static final Random RANDOM = new Random();
+
     /** pattern */
     private static final Pattern PATTERN = Pattern.compile("\\s*|\t|\r|\n");
 
@@ -100,9 +103,8 @@ public final class CommonUtil {
      */
     public static String getRandomNumber(final int size) {
         StringBuilder sb = new StringBuilder();
-        Random random = new Random();
         for (int i = 0; i < size; i++) {
-            sb.append((char) ('0' + random.nextInt(NEXT_INT)));
+            sb.append((char) ('0' + RANDOM.nextInt(NEXT_INT)));
         }
         return sb.toString();
     }
@@ -117,19 +119,20 @@ public final class CommonUtil {
      */
     public static String getRandomChar(final int size) {
         StringBuilder sb = new StringBuilder();
-        Random random = new Random();
         for (int i = 0; i < size; i++) {
-            switch (random.nextInt(NEXT_INT) % NEXT_INT_3) {
+            switch (RANDOM.nextInt(NEXT_INT) % NEXT_INT_3) {
                 case 0:
-                    sb.append((char) ('0' + random.nextInt(NEXT_INT)));
+                    sb.append((char) ('0' + RANDOM.nextInt(NEXT_INT)));
                     break;
                 case 1:
-                    sb.append((char) ('a' + random.nextInt(NEXT_CHAR)));
+                    sb.append((char) ('a' + RANDOM.nextInt(NEXT_CHAR)));
                     break;
                 case 2:
-                    sb.append((char) ('A' + random.nextInt(NEXT_CHAR)));
+                    sb.append((char) ('A' + RANDOM.nextInt(NEXT_CHAR)));
                     break;
                 default:
+                    // 理论上不会进入，但作为防御性编程
+                    throw new IllegalStateException("Unexpected random value");
             }
         }
         return sb.toString();
@@ -144,7 +147,7 @@ public final class CommonUtil {
      * @return <br>
      */
     public static String getString(final Object obj) {
-        String result = null;
+        String result = null; // NOPMD
         if (obj != null) {
             if (obj instanceof String) {
                 result = (String) obj;

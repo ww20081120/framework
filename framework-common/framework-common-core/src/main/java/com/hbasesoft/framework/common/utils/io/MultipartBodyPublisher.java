@@ -162,7 +162,7 @@ public class MultipartBodyPublisher {
             if (done) {
                 return false;
             }
-            if (next != null) {
+            if (next != null && next.length > 0) {
                 return true;
             }
             try {
@@ -171,7 +171,7 @@ public class MultipartBodyPublisher {
             catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
-            if (next == null) {
+            if (next.length == 0) {
                 done = true;
                 return false;
             }
@@ -197,7 +197,7 @@ public class MultipartBodyPublisher {
         private byte[] computeNext() throws IOException {
             if (currentFileInput == null) {
                 if (!iter.hasNext()) {
-                    return null;
+                    return new byte[0];
                 }
                 PartsSpecification nextPart = iter.next();
                 // 处理文本部件
@@ -213,7 +213,11 @@ public class MultipartBodyPublisher {
                 }
                 // 处理文件部件
                 if (PartsSpecification.TYPE.FILE.equals(nextPart.type)) {
-                    String filename = nextPart.path.getFileName().toString();
+                    Path fileName = nextPart.path.getFileName();
+                    if (fileName == null) {
+                        throw new IOException("无法获取文件名: " + nextPart.path);
+                    }
+                    String filename = fileName.toString();
                     String partHeader = "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=\""
                         + nextPart.name + "\"; filename=\"" + filename + "\"\r\n" + "Content-Type: "
                         + nextPart.contentType + "\r\n\r\n";
@@ -236,7 +240,7 @@ public class MultipartBodyPublisher {
                     return "\r\n".getBytes(StandardCharsets.UTF_8); // 文件读取结束，换行
                 }
             }
-            return null;
+            return new byte[0];
         }
     }
 }

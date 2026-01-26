@@ -18,6 +18,7 @@ import java.util.Map;
  * @see com.hbasesoft.framework.message.core <br>
  * @since V1.0<br>
  */
+@FunctionalInterface
 public interface MessageSubscriber {
 
     /**

@@ -1,5 +1,6 @@
 package com.hbasesoft.framework.common.utils.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -22,7 +23,7 @@ import com.hbasesoft.framework.common.utils.UtilException;
  * @see com.hbasesoft.cloud.common.util <br>
  * @since V1.0<br>
  */
-public class DESUtil {
+public final class DESUtil {
 
     /** */
     private static final String CRYPTION_SECRET_KEY = "hbasesof";
@@ -31,8 +32,15 @@ public class DESUtil {
     private static final String DES_ALGORITHM = "DES";
 
     /**
+     * 私有构造器，防止实例化
+     */
+    private DESUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    /**
      * Description: DES加密<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param plainData
@@ -58,10 +66,10 @@ public class DESUtil {
             // 为了防止解密时报javax.crypto.IllegalBlockSizeException: Input length must
             // be multiple of 8 when decrypting with padded cipher异常，
             // 不能把加密后的字节数组直接转换成字符串
-            byte[] buf = cipher.doFinal(plainData.getBytes());
+            byte[] buf = cipher.doFinal(plainData.getBytes(StandardCharsets.UTF_8));
             return DataUtil.base64Encode(buf);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.ENCRYPTION_ERROR, e);
         }
     }
@@ -91,9 +99,9 @@ public class DESUtil {
             cipher = Cipher.getInstance(DES_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, generateKey(secretKey));
             byte[] buf = cipher.doFinal(DataUtil.base64Decode(secretData));
-            return new String(buf);
+            return new String(buf, StandardCharsets.UTF_8);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -110,7 +118,7 @@ public class DESUtil {
     private static SecretKey generateKey(final String secretKey)
         throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES_ALGORITHM);
-        DESKeySpec keySpec = new DESKeySpec(secretKey.getBytes());
+        DESKeySpec keySpec = new DESKeySpec(secretKey.getBytes(StandardCharsets.UTF_8));
         keyFactory.generateSecret(keySpec);
         return keyFactory.generateSecret(keySpec);
     }

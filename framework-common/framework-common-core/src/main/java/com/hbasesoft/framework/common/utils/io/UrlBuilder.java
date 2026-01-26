@@ -122,7 +122,7 @@ public final class UrlBuilder {
                     }
                 }
             }
-            catch (Exception e) {
+            catch (RuntimeException e) {
                 LoggerUtil.error(e);
                 throw new UtilException(e);
             }

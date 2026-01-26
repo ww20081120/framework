@@ -55,7 +55,7 @@ public class BeanUtilTest {
     // Method[] methods = Bootstrap.class.getDeclaredMethods();
     // Method method = methods[1];
     // String[] names = BeanUtil.getMethodParamNames(method);
-    // Assert.equals(names[0], "context", ErrorCodeDef.FAILURE);
+    // Assert.assertEqual(names[0], "context", ErrorCodeDef.FAILURE);
     // System.out.println("获取到了Bootstrap after方法中的参数名称");
     // }
 
@@ -86,7 +86,7 @@ public class BeanUtilTest {
     public void toUnderlineName() {
         String str1 = "toUnderlineName";
         String str2 = BeanUtil.toUnderlineName(str1);
-        Assert.equals(str2, "to_underline_name", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str2, "to_underline_name", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -100,7 +100,7 @@ public class BeanUtilTest {
     public void toCamelCase() {
         String str1 = "To_CAmEL_CaSE";
         String str2 = BeanUtil.toCamelCase(str1);
-        Assert.equals(str2, "toCamelCase", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str2, "toCamelCase", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -114,7 +114,7 @@ public class BeanUtilTest {
     public void camelStr2underLine() {
         String str1 = "camelStr2underLine";
         String str2 = BeanUtil.camelStr2underLine(str1);
-        Assert.equals(str2, "camel_str2under_line", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str2, "camel_str2under_line", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -128,7 +128,7 @@ public class BeanUtilTest {
     public void toCapitalizeCamelCase() {
         String str1 = "to_caPitaLize_CaMel_case";
         String str2 = BeanUtil.toCapitalizeCamelCase(str1);
-        Assert.equals(str2, "ToCapitalizeCamelCase", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(str2, "ToCapitalizeCamelCase", ErrorCodeDef.FAILURE);
     }
 
     /**

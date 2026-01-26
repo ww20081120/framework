@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.common.utils.security;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -61,7 +62,7 @@ public final class RSAUtil {
             generator.initialize(MAX_ENCRYPT_BLOCK);
             return generator.generateKeyPair();
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -96,7 +97,7 @@ public final class RSAUtil {
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedKey);
             return keyFactory.generatePrivate(keySpec);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -116,7 +117,7 @@ public final class RSAUtil {
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
             return keyFactory.generatePublic(keySpec);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -147,7 +148,8 @@ public final class RSAUtil {
         try {
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            int inputLen = data.getBytes().length;
+            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+            int inputLen = dataBytes.length;
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             int offset = 0;
             byte[] cache;
@@ -155,10 +157,10 @@ public final class RSAUtil {
             // 对数据分段加密
             while (inputLen - offset > 0) {
                 if (inputLen - offset > MAX_ENCRYPT_BLOCK) {
-                    cache = cipher.doFinal(data.getBytes(), offset, MAX_ENCRYPT_BLOCK);
+                    cache = cipher.doFinal(dataBytes, offset, MAX_ENCRYPT_BLOCK);
                 }
                 else {
-                    cache = cipher.doFinal(data.getBytes(), offset, inputLen - offset);
+                    cache = cipher.doFinal(dataBytes, offset, inputLen - offset);
                 }
                 out.write(cache, 0, cache.length);
                 i++;
@@ -170,7 +172,7 @@ public final class RSAUtil {
             // 加密后的字符串
             return DataUtil.base64Encode(encryptedData);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.ENCRYPTION_ERROR, e);
         }
     }
@@ -224,7 +226,7 @@ public final class RSAUtil {
             // 解密后的内容
             return new String(decryptedData, GlobalConstants.DEFAULT_CHARSET);
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }
@@ -259,10 +261,10 @@ public final class RSAUtil {
             PrivateKey key = keyFactory.generatePrivate(keySpec);
             Signature signature = Signature.getInstance("MD5withRSA");
             signature.initSign(key);
-            signature.update(data.getBytes());
+            signature.update(data.getBytes(StandardCharsets.UTF_8));
             return DataUtil.base64Encode(signature.sign());
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.ENCRYPTION_ERROR, e);
         }
     }
@@ -299,10 +301,10 @@ public final class RSAUtil {
             PublicKey key = keyFactory.generatePublic(keySpec);
             Signature signature = Signature.getInstance("MD5withRSA");
             signature.initVerify(key);
-            signature.update(srcData.getBytes());
+            signature.update(srcData.getBytes(StandardCharsets.UTF_8));
             return signature.verify(DataUtil.base64Decode(sign));
         }
-        catch (Exception e) {
+        catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions
             throw new UtilException(ErrorCodeDef.DECRYPTION_ERROR, e);
         }
     }

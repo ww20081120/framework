@@ -33,7 +33,7 @@ public abstract class AbstractWrapper<T> {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -44,7 +44,7 @@ public abstract class AbstractWrapper<T> {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Stack;
 import java.util.function.Consumer;
@@ -24,7 +25,7 @@ import com.hbasesoft.framework.common.utils.security.URLUtil;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -32,7 +33,7 @@ import com.hbasesoft.framework.common.utils.security.URLUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.common.utils.io <br>
  */
-public class JarFileSpliterator implements Spliterator<String> {
+public final class JarFileSpliterator implements Spliterator<String> {
 
     /** */
     private final String prefix;
@@ -181,9 +182,7 @@ public class JarFileSpliterator implements Spliterator<String> {
      */
     @Override
     public boolean tryAdvance(final Consumer<? super String> action) {
-        if (action == null) {
-            throw new NullPointerException();
-        }
+        Objects.requireNonNull(action, "action must not be null");
         try {
             String url = getNextURL();
             if (url != null) {
@@ -191,7 +190,7 @@ public class JarFileSpliterator implements Spliterator<String> {
                 return true;
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             throw new UtilException(e);
         }
         return false;

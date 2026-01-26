@@ -38,7 +38,7 @@ public abstract class AbstractQueryWrapper<T> extends AbstractWrapper<T> {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -49,7 +49,7 @@ public abstract class AbstractQueryWrapper<T> extends AbstractWrapper<T> {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -60,7 +60,7 @@ public abstract class AbstractQueryWrapper<T> extends AbstractWrapper<T> {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>

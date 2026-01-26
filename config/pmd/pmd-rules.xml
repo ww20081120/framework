@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<ruleset name="Hbasesoft Custom Rules"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        Hbasesoft 自定义 PMD 规则集 - 专注于代码质量问题检测
+        注：代码风格检查由 checkstyle 负责，PMD 仅检测潜在 bug、设计缺陷和错误倾向
+    </description>
+
+    <!-- 最佳实践 - 检测常见的编程错误和不当做法 -->
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="GuardLogStatement"/>
+        <!-- 排除SystemPrintln检查 - demo和测试代码需要输出信息 -->
+        <exclude name="SystemPrintln"/>
+        <!-- 排除隐式函数式接口检查 - 框架需要接口定义 -->
+        <exclude name="ImplicitFunctionalInterface"/>
+    </rule>
+
+    <!-- 设计规范 - 检测设计缺陷和架构问题 -->
+    <rule ref="category/java/design.xml">
+        <exclude name="CyclomaticComplexity"/>
+        <exclude name="TooManyMethods"/>
+        <exclude name="LawOfDemeter"/>
+        <exclude name="CognitiveComplexity"/>
+        <exclude name="GodClass"/>
+        <exclude name="AvoidDeeplyNestedIfStmts"/>
+        <!-- 排除常量类的DataClass检查 -->
+        <exclude name="DataClass"/>
+        <!-- 排除未检查异常签名检查 - 用于文档化目的 -->
+        <exclude name="AvoidUncheckedExceptionsInSignatures"/>
+        <!-- 排除抛出原始异常类型检查 - 框架的异常处理设计 -->
+        <exclude name="AvoidThrowingRawExceptionTypes"/>
+        <!-- 排除抽象类无方法检查 - 选项基类设计 -->
+        <exclude name="AbstractClassWithoutAnyMethod"/>
+    </rule>
+
+    <!-- 错误倾向 - 检测容易出错的代码模式 -->
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="ReplaceJavaUtilDate"/>
+        <exclude name="ReplaceJavaUtilCalendar"/>
+        <exclude name="AvoidLiteralsInIfCondition"/>
+        <exclude name="NullAssignment"/>
+        <exclude name="UseLocaleWithCaseConversions"/>
+        <!-- 排除反射访问检查 - 框架需要使用setAccessible -->
+        <exclude name="AvoidAccessibilityAlteration"/>
+        <!-- 排除ClassLoader检查 - 框架的特殊场景 -->
+        <exclude name="UseProperClassLoader"/>
+        <!-- 排除构造函数调用可重写方法检查 - 框架的核心设计 -->
+        <exclude name="ConstructorCallsOverridableMethod"/>
+        <!-- 排除返回空集合而非null检查 - 框架需要null表示特殊状态 -->
+        <exclude name="ReturnEmptyCollectionRatherThanNull"/>
+        <!-- 排除循环中分支语句检查 - MongoDB查询的正常行为 -->
+        <exclude name="AvoidBranchingStatementAsLastInLoop"/>
+        <!-- 排除单例类返回新实例检查 - 框架的锁加载器设计 -->
+        <exclude name="SingletonClassReturningNewInstance"/>
+        <!-- 排除可疑equals方法名检查 - 断言类的需要 -->
+        <exclude name="SuspiciousEqualsMethodName"/>
+    </rule>
+
+    <!-- 多线程规范 - 检测并发安全和线程问题 -->
+    <rule ref="category/java/multithreading.xml">
+        <exclude name="UseConcurrentHashMap"/>
+        <exclude name="DoNotUseThreads"/>
+        <!-- 排除synchronized检查 - 框架的特殊场景 -->
+        <exclude name="AvoidSynchronizedStatement"/>
+    </rule>
+
+    <!-- 排除测试相关的检查（测试代码在excludes中已配置） -->
+
+</ruleset>

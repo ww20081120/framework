@@ -50,7 +50,7 @@ public class UpdateWrapper<T> extends AbstractWrapper<T> {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>

@@ -256,7 +256,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public boolean hasKey(String key) {
+    public boolean hasKey(final String key) {
         return cluster.exists(key);
     }
 
@@ -270,7 +270,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public boolean hasNodeKey(String hashKey, String subTaskCode) {
+    public boolean hasNodeKey(final String hashKey, final String subTaskCode) {
         return cluster.hexists(hashKey, subTaskCode);
     }
 
@@ -285,7 +285,7 @@ public class ClusterRedisCache extends AbstractRedisCache {
      * @return <br>
      */
     @Override
-    public long increment(int seconds, String key, long startNum) {
+    public long increment(final int seconds, final String key, final long startNum) {
         long number = cluster.incrBy(key, startNum);
         if (seconds > 0) {
             cluster.expire(key, seconds);

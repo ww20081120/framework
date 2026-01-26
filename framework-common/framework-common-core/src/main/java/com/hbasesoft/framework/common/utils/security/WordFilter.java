@@ -43,7 +43,7 @@ public class WordFilter {
      */
     @SuppressWarnings("unchecked")
     public void init(final Collection<String> filterWordList) {
-        if (filterMap != null && filterMap.size() > 0) {
+        if (filterMap != null && !filterMap.isEmpty()) {
             filterMap.clear();
         }
 

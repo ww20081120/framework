@@ -28,7 +28,7 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -36,7 +36,7 @@ import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.test.rule.file <br>
  */
-public class JsonFileFlowLoader implements FlowLoader {
+public final class JsonFileFlowLoader implements FlowLoader {
 
     /** default path */
     private static final String DEFAULT_PATH = "META-INF/rules";

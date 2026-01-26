@@ -18,8 +18,15 @@ package com.hbasesoft.framework.common.utils.thread;
 public final class ThreadUtil {
 
     /**
+     * 私有构造器，防止实例化
+     */
+    private ThreadUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    /**
      * Description: 通过线程池来处理消息<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param name

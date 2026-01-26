@@ -81,7 +81,7 @@ public class SerializationUtilTest {
         TestBean bean = new TestBean("hello world", NUM_18);
         byte[] bs = SerializationUtil.serial(Arrays.asList(bean));
         List<TestBean> beans = SerializationUtil.unserial(List.class, bs);
-        Assert.equals(beans.get(0).getName(), "hello world", ErrorCodeDef.FAILURE);
+        Assert.assertEqual(beans.get(0).getName(), "hello world", ErrorCodeDef.FAILURE);
     }
 
     /**
@@ -96,7 +96,7 @@ public class SerializationUtilTest {
         TestBean bean = new TestBean("hello world", NUM_18);
         byte[] bs = SerializationUtil.jdkSerial(bean);
         TestBean bean2 = (TestBean) SerializationUtil.jdkUnserial(bs);
-        Assert.equals(bean2.getName(), bean.getName(), ErrorCodeDef.FAILURE);
+        Assert.assertEqual(bean2.getName(), bean.getName(), ErrorCodeDef.FAILURE);
 
     }
 }
