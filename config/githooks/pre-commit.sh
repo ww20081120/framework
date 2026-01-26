@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# 代码质量检查开关（从 pom.xml 读取并替换）
-CODE_QUALITY_CHECKS_ENABLED="${code.quality.checks.enabled}"
-
-if [ "$CODE_QUALITY_CHECKS_ENABLED" != "true" ]; then
-    echo "⚠️  代码质量检查已禁用 (code.quality.checks.enabled=$CODE_QUALITY_CHECKS_ENABLED)"
-    echo "💡 如需启用检查，请在 pom.xml 中设置 code.quality.checks.enabled=true"
-    exit 0
-fi
-
 # 查找项目根目录（包含 pom.xml 的目录）
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 if [ ! -f "$PROJECT_ROOT/pom.xml" ]; then

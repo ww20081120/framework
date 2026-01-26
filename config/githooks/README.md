@@ -15,12 +15,13 @@ Git pre-commit hook 脚本，在每次执行 `git commit` 前自动运行以下�
 
 1. `pom.xml` 中配置了 `githook-maven-plugin` 插件
 2. 当执行 `mvn initialize` 时，插件会自动安装 git hooks
-3. 安装的 hook 会调用本目录下的 `pre-commit.sh` 脚本
-4. 脚本通过 `${maven.multiModuleProjectDirectory}` 变量定位项目根目录
+3. **安装的 hook 首先检查 `pom.xml` 中的 `code.quality.checks.enabled` 配置**
+4. 如果配置为 `true`，则调用本目录下的 `pre-commit.sh` 脚本执行检查
+5. 脚本通过 `${maven.multiModuleProjectDirectory}` 变量定位项目根目录
 
 ## 配置开关
 
-代码质量检查可以通过 `pom.xml` 中的属性控制：
+代码质量检查通过 `pom.xml` 中的属性控制（pom.xml:69）：
 
 ```xml
 <code.quality.checks.enabled>true</code.quality.checks.enabled>
@@ -28,6 +29,8 @@ Git pre-commit hook 脚本，在每次执行 `git commit` 前自动运行以下�
 
 - `true` - 启用检查（默认）
 - `false` - 禁用检查
+
+**注意**：配置开关在 pom.xml 的 pre-commit hook 中判断，Maven 会在安装 hook 时替换变量值。
 
 ## 手动测试
 
