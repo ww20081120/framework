@@ -5,6 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.demo.agentscope;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.agentscope.core.ReActAgent;
 import io.agentscope.core.message.Msg;
+import io.agentscope.core.studio.StudioManager;
+import io.agentscope.core.studio.StudioUserAgent;
 import jakarta.annotation.Resource;
 import reactor.core.publisher.Mono;
 
@@ -28,7 +31,7 @@ import reactor.core.publisher.Mono;
  */
 @RequestMapping("/test")
 @RestController
-public class TestController {
+public class TestController implements CommandLineRunner {
 
     /** Agent代理实例 */
     @Resource(name = "TestAgent")
@@ -52,5 +55,50 @@ public class TestController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param args
+     * @throws Exception <br>
+     */
+    @Override
+    public void run(final String... args) throws Exception {
+        try {
+            // 创建用户 Agent
+            StudioUserAgent user = StudioUserAgent.builder().name("User").studioClient(StudioManager.getClient())
+                .webSocketClient(StudioManager.getWebSocketClient()).build();
+
+            // 对话循环
+            System.out.println("Starting conversation (type 'exit' to quit)");
+            System.out.println("Open http://localhost:3000 to interact\n");
+            Msg msg = null;
+            int turn = 1;
+            while (true) {
+                System.out.println("[Turn " + turn + "] Waiting for user input...");
+                msg = user.call(msg).block();
+
+                if (msg == null || "exit".equalsIgnoreCase(msg.getTextContent())) {
+                    System.out.println("\nConversation ended");
+                    break;
+                }
+
+                System.out.println("[Turn " + turn + "] User: " + msg.getTextContent());
+                msg = agent.call(msg).block();
+
+                if (msg != null) {
+                    System.out.println("[Turn " + turn + "] Agent: " + msg.getTextContent() + "\n");
+                }
+                turn++;
+            }
+        }
+        finally {
+            System.out.println("\nShutting down...");
+            StudioManager.shutdown();
+            System.out.println("Done\n");
+        }
     }
 }

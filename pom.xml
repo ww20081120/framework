@@ -100,6 +100,42 @@
 				<artifactId>agentscope</artifactId>
 				<version>${agentscope.version}</version>
 			</dependency>
+			<!-- AgentScope Extensions -->
+			<dependency>
+				<groupId>io.agentscope</groupId>
+				<artifactId>agentscope-extensions-rag-bailian</artifactId>
+				<version>${agentscope.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.agentscope</groupId>
+				<artifactId>agentscope-extensions-rag-simple</artifactId>
+				<version>${agentscope.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.agentscope</groupId>
+				<artifactId>agentscope-extensions-mem0</artifactId>
+				<version>${agentscope.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.agentscope</groupId>
+				<artifactId>agentscope-extensions-reme</artifactId>
+				<version>${agentscope.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.agentscope</groupId>
+				<artifactId>agentscope-extensions-studio</artifactId>
+				<version>${agentscope.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.agentscope</groupId>
+				<artifactId>agentscope-extensions-autocontext-memory</artifactId>
+				<version>${agentscope.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.jcommander</groupId>

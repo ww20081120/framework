@@ -22,6 +22,7 @@ import io.agentscope.core.ReActAgent;
 import io.agentscope.core.hook.Hook;
 import io.agentscope.core.memory.Memory;
 import io.agentscope.core.model.Model;
+import io.agentscope.core.tool.AgentTool;
 import io.agentscope.core.tool.Toolkit;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -83,29 +84,30 @@ public class AgentBuilder {
         if (StringUtils.isNotBlank(systemPrompt)) {
             builder.sysPrompt(systemPrompt);
             String displayPrompt = systemPrompt.length() > LOG_MAX_LENGTH
-                ? systemPrompt.substring(0, LOG_MAX_LENGTH) + "..." : systemPrompt;
+                ? systemPrompt.substring(0, LOG_MAX_LENGTH) + "..."
+                : systemPrompt;
             LOGGER.debug("设置系统提示词: {0}", displayPrompt);
         }
 
         // 4. 设置模型（优先级：AgentConfig > @Agent注解Bean名称）
-        Model model = getConfigBean(agentAnnotation.model(), Model.class,
-            config != null ? config.model() : null, beanFactory);
+        Model model = getConfigBean(agentAnnotation.model(), Model.class, config != null ? config.model() : null,
+            beanFactory);
         if (model != null) {
             builder.model(model);
             LOGGER.debug("设置模型: {0}", model.getClass().getSimpleName());
         }
 
         // 5. 设置记忆（优先级：AgentConfig > @Agent注解Bean名称）
-        Memory memory = getConfigBean(agentAnnotation.memery(), Memory.class,
-            config != null ? config.memory() : null, beanFactory);
+        Memory memory = getConfigBean(agentAnnotation.memery(), Memory.class, config != null ? config.memory() : null,
+            beanFactory);
         if (memory != null) {
             builder.memory(memory);
             LOGGER.debug("设置记忆: {0}", memory.getClass().getSimpleName());
         }
 
         // 6. 设置钩子（优先级：AgentConfig > @Agent注解Bean名称）
-        List<Hook> hooks = getConfigBeans(agentAnnotation.hooks(), Hook.class,
-            config != null ? config.hooks() : null, beanFactory);
+        List<Hook> hooks = getConfigBeans(agentAnnotation.hooks(), Hook.class, config != null ? config.hooks() : null,
+            beanFactory);
         if (hooks != null && !hooks.isEmpty()) {
             builder.hooks(hooks);
             LOGGER.debug("设置钩子数量: {0}", hooks.size());
@@ -116,19 +118,20 @@ public class AgentBuilder {
             applyConfigFromInterface(builder, config);
         }
 
+        Toolkit toolkit = new Toolkit();
         // 8. 设置注解上的工具
-        List<Toolkit> toolkits = getConfigBeans(agentAnnotation.tools(), Toolkit.class, null, beanFactory);
-        if (CollectionUtils.isNotEmpty(toolkits)) {
-            toolkits.forEach(t -> {
-                builder.toolkit(t);
+        List<AgentTool> agentTools = getConfigBeans(agentAnnotation.tools(), AgentTool.class, null, beanFactory);
+        if (CollectionUtils.isNotEmpty(agentTools)) {
+            agentTools.forEach(tool -> {
+                toolkit.registerAgentTool(tool);
             });
+            builder.toolkit(toolkit);
             LOGGER.debug("设置注解上的工具: {0}", Arrays.toString(agentAnnotation.tools()));
         }
 
         // 9. 设置对象上的工具
         if (hasToolsMethods && StringUtils.isNotEmpty(toolBeanName)) {
             Object toolBean = beanFactory.getBean(toolBeanName);
-            Toolkit toolkit = new Toolkit();
             toolkit.registerTool(toolBean);
             builder.toolkit(toolkit);
             LOGGER.debug("设置Agent上的工具: {0}", toolBeanName);

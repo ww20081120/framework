@@ -5,11 +5,15 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.ai.demo.agentscope.agent;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.hbasesoft.framework.ai.agentscope.AgentConfig;
 import com.hbasesoft.framework.ai.core.Agent;
 
-import io.agentscope.core.model.Model;
-import io.agentscope.core.model.OpenAIChatModel;
+import io.agentscope.core.hook.Hook;
+import io.agentscope.core.studio.StudioManager;
+import io.agentscope.core.studio.StudioMessageHook;
 import io.agentscope.core.tool.Tool;
 import io.agentscope.core.tool.ToolParam;
 
@@ -23,7 +27,7 @@ import io.agentscope.core.tool.ToolParam;
  * @since V1.0<br>
  * @see com.hbasesoft.framework.ai.demo.agentscope.agent <br>
  */
-@Agent(name = "TestAgent")
+@Agent(name = "TestAgent", model = "defaultModel", tools = "shellCommandTool")
 public class TestAgent implements AgentConfig {
 
     /**
@@ -40,19 +44,6 @@ public class TestAgent implements AgentConfig {
 
     /**
      * Description: <br>
-     * 
-     * @author 王伟<br>
-     * @taskId <br>
-     * @return <br>
-     */
-    @Override
-    public Model model() {
-        return OpenAIChatModel.builder().baseUrl("http://127.0.0.1:11434").modelName("qwen3-coder:30b-a3b-fp16")
-            .build();
-    }
-
-    /**
-     * Description: <br>
      *
      * @author 王伟<br>
      * @taskId <br>
@@ -62,5 +53,17 @@ public class TestAgent implements AgentConfig {
     @Tool(description = "查询天气的工具")
     public String weather(@ToolParam(name = "city", description = "城市名称") final String city) {
         return "今天是晴天";
+    }
+
+    /**
+     * Description: <br>
+     * 
+     * @author 王伟<br>
+     * @taskId <br>
+     * @return <br>
+     */
+    @Override
+    public List<Hook> hooks() {
+        return Arrays.asList(new StudioMessageHook(StudioManager.getClient()));
     }
 }
