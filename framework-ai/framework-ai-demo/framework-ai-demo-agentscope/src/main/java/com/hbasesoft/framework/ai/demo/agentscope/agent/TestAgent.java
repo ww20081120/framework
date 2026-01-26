@@ -47,7 +47,7 @@ public class TestAgent implements AgentConfig {
      */
     @Override
     public Model model() {
-        return OllamaChatModel.builder().baseUrl("http://127.0.0.1:11434").modelName("qwen3:8b")
+        return OllamaChatModel.builder().baseUrl("http://127.0.0.1:11434").modelName("qwen3-coder:30b-a3b-fp16")
             .build();
     }
 
