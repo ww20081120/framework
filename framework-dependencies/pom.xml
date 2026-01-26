@@ -219,10 +219,19 @@
 			<!--framework-ai-->
 			<dependency>
 				<groupId>com.hbasesoft.framework</groupId>
-				<artifactId>framework-ai-agent-core</artifactId>
+				<artifactId>framework-ai-core</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-ai-agentscope</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-ai-spring</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>
