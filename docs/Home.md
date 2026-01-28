@@ -3,6 +3,7 @@
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Framework属于企业级底层开发框架，集成了log、cache、db、message、rule、tx、ai等模块，每块都以模块形式组织，可以根据项目需要获取模块。我们的初衷是屏蔽项目中各种第三方库之间的版本冲突，打造一套屏蔽底层中间件的全新API，提高项目代码的适配能力。
  
  + [framework-common](基础工具) 定义公用的常量、工具类 采用了spring-boot方式启动， 启动类为Application， 也可以支持web方式启动。
++ [framework-tracing](跟踪日志) 分布式链路追踪模块，支持SkyWalking、Zipkin等主流追踪系统。
 + [framework-log](跟踪日志) 分布式集成日志模块，详细的记录了每个方法执行的参数、返回结果、执行时间，可以很方便的排查问题或告警，通过远程接口上传服务器（支持直连服务端，也支持通过kafka发送）
 + [framework-cache](缓存) 定义了缓存的获取。  支持注解方式访问缓存， 支持基于Redis的分布式锁
 + [framework-db](数据库) 是简单易用的轻量级DAO(Data Access Object)框架，它集成了Hibernate实体维护和Mybaits SQL分离的两大优势，提供了非入侵式API，可以与Hibernate、SpringJdbc等数据库框架很好的集成 
@@ -10,10 +11,14 @@
 + [framework-message](异步消息) 消息模块，通过简单的api发布和订阅事件， 目前支持kafka、redis、rocketMq
 + [framework-rule](规则引擎) 规则引擎，基于json的轻量级规则引擎， 支持多种插件及扩展， 例如：基于状态机的工作流引擎
 + [framework-tx](分布式事务) 分布式事务，支持各种远程接口、同步异步消息。
-+ [framework-ai](人工智能) AI功能模块，基于langchain4j和国内大模型API，提供自然语言处理、图像处理、NL2SQL等功能。
++ [framework-ai](人工智能) AI功能模块，集成了多种AI能力：
+  + [framework-ai-core](AI核心) 核心AI能力封装，提供统一的AI服务接口
+  + [framework-ai-spring](AI集成) Spring集成的AI模块，简化AI在Spring项目中的使用
+  + [framework-ai-agent](AI智能体) 支持智能体开发，提供复杂的AI交互能力
+  + [framework-ai-agentscope](AI智能体框架) 基于AgentScope的AI智能体开发框架
+  + [framework-ai-demo](AI示例) 包含OpenAI和AgentScope的示例项目
 + [framework-dependencies] 项目依赖，解决版本包依赖问题
 + [framework-shell] 控制台方式提供命令操作，支持自定义各种命令，做各种小工具使用。
-+ [framework-langchain4j] 对langchain4j的补充，支持国内的大模型，让大家更高效的开发AIGC应用。
 
 jdk1.8请使用framework3.X版本，framework4.X已升级至jdk21版本
 
@@ -28,7 +33,7 @@ jdk1.8请使用framework3.X版本，framework4.X已升级至jdk21版本
 * 16年7月21日发布2.0版本，web模块和jeecg合并单独组成framework-manager， framework专门解决项目底层问题
 * 17年9月24日发布3.0版本，升级了spring boot版本至2.0， 去掉了dubbox这个rpc框架，引入spring-cloud框架。前端也放弃了jeecg，基于[ant-design-pro](https://pro.ant.design/index-cn) 实现的一套web框架(目前还未从项目中分离出来，暂未开源)
 * 20年2月4日发布了3.4版本， 增加了framework-tx模块，正式支持分布式事务。
-* 23年人工智能比较火，又增加了framework-langchain4j，专门扩展国内的一些大模型。
+* 23年人工智能比较火，增加了framework-ai模块，集成了多种AI能力，包括智能体、OpenAI和AgentScope等子模块。
 
 ### 3.采用项目
 1.  [中兴视通网上营业厅项目V1.0](https://www.seecom.com.cn)

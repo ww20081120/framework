@@ -4,18 +4,18 @@
 
 * **核心语言**: Java 21
 * **构建工具**: Apache Maven
-* **核心框架**: 
-    * Spring Boot 3.5
-    * Spring Cloud 2025.0.0
+* **核心框架**:
+    * Spring Boot 3.5.9
+    * Spring Cloud 2025.1.0
     * Spring Framework (通过Spring Boot引入)
 
 ## 2. 核心中间件与技术
 
 ### 数据存储
-* **关系型数据库**: MySQL 9.3.0 (主要)。通过Hibernate支持其他数据库。
+* **关系型数据库**: MySQL 9.5.0 (主要)。通过Hibernate支持其他数据库。
 * **NoSQL数据库**: MongoDB (通过`framework-db-mongo`支持)。
 * **缓存**: Redis。通过`framework-cache-redis`模块提供分布式缓存和分布式锁。
-* **搜索引擎**: Elasticsearch 8.10.4 (通过`framework-langchain4j-elasticsearch`用于AI向量存储)。
+* **搜索引擎**: Elasticsearch (通过AI模块用于向量存储)。
 
 ### 消息中间件
 * **Apache Kafka**: 通过`framework-message-kafka`模块支持异步消息和事件驱动。
@@ -32,34 +32,35 @@
 
 ### 日志与追踪
 * **日志框架**: SLF4J, Logback (由Spring Boot引入)。
-* **分布式追踪**: 
-    * Apache SkyWalking 9.4.0 (通过`framework-tracing-skywalking`模块)。
-    * OpenTelemetry 1.45.0 (通过`framework-tracing-otlp`模块)。
+* **分布式追踪**:
+    * Apache SkyWalking 9.5.0 (通过`framework-tracing-skywalking`模块)。
+    * OpenTelemetry 1.57.0 (通过`framework-tracing-otlp`模块)。
     * Zipkin (通过`framework-tracing-zipkin`模块)。
 
 ### 规则引擎
 * **自研JSON规则引擎**: `framework-rule`模块。支持基于状态机的工作流引擎等插件。
 
 ### 人工智能
-* **Langchain4j**: 0.23.0。用于构建AI应用的核心库。
-* **国内大模型API**: 阿里云 DashScope 2.19.5 (通义千问)。
+* **Spring AI**: 1.1.2。用于构建AI应用的核心框架。
+* **阿里云AI**: Spring AI Alibaba Agent Framework 1.1.0.0。
+* **AgentScope**: 1.0.7。AI Agent框架，支持RAG、记忆管理、Studio可视化等扩展。
 * **向量数据库**: Elasticsearch (作为向量存储)。
 
 ### 其他工具与库
-* **JSON处理**: Alibaba Fastjson2 2.0.57
-* **表达式语言**: OGNL 3.4.7
+* **JSON处理**: Alibaba Fastjson2 2.0.60
+* **表达式语言**: OGNL 3.4.9
 * **模板引擎**: Apache Velocity 2.4.1
-* **图像处理**: Thumbnailator 0.4.20
-* **通用工具库**: Apache Commons (Lang3 3.17.0, Collections4 4.4, Beanutils 1.10.1, IO 2.19.0)
+* **图像处理**: Thumbnailator 0.4.21
+* **通用工具库**: Apache Commons (Lang3 3.20.0, Collections4 4.5.0, Beanutils 1.11.0, IO 2.21.0)
 * **配置加密**: Jasypt 1.9.3
 * **序列化**: Kryo 5.6.2
-* **数据库连接池**: Alibaba Druid 1.2.24
-* **XML处理**: Dom4j 2.1.4
-* **缓存库**: Caffeine 3.2.2
+* **数据库连接池**: Alibaba Druid 1.2.27
+* **XML处理**: Dom4j 2.2.0
+* **缓存库**: Caffeine 3.2.3
 * **SSH**: JSch 0.1.55
-* **JAXB**: 4.0.5 (用于XML绑定)
-* **Lombok**: 1.18.38 (用于简化Java代码)
-* **Micrometer**: 1.4.1 (用于应用指标监控和追踪桥接)
+* **JAXB**: 4.0.6 (用于XML绑定)
+* **Lombok**: 1.18.42 (用于简化Java代码)
+* **Micrometer**: 1.6.1 (用于应用指标监控和追踪桥接)
 
 ## 3. 开发与运维工具
 

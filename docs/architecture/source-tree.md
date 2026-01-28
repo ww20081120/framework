@@ -15,7 +15,6 @@
 * `framework-rule/` - 规则引擎模块
 * `framework-shell/` - 控制台模块
 * `framework-ai/` - AI功能模块
-* `framework-langchain4j/` - Langchain4j扩展模块
 * `framework-dependencies/` - 项目依赖管理模块
 
 ## 各模块子目录结构
@@ -88,14 +87,12 @@
 
 ### framework-ai
 * `framework-ai-core/` - 核心实现
+* `framework-ai-spring/` - Spring集成
+* `framework-ai-agentscope/` - AgentScope集成
+* `framework-ai-agent/` - Agent工具模块（开发中）
 * `framework-ai-demo/` - 示例
-* `framework-ai-demo-nl2sql/` - NL2SQL示例
-* `framework-ai-jmanus/` - 特定集成
-
-### framework-langchain4j
-* `framework-langchain4j-dashscope/` - 通义千问集成
-* `framework-langchain4j-demo/` - 示例
-* `framework-langchain4j-elasticsearch/` - Elasticsearch向量存储
+    * `framework-ai-demo-openai/` - OpenAI示例
+    * `framework-ai-demo-agentscope/` - AgentScope示例
 
 ### framework-dependencies
 * `pom.xml` - 管理所有子模块和第三方依赖的版本
