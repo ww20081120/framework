@@ -6,6 +6,7 @@ Framework 4.X 框架说明
 --- | --- | --- | ---
 4.0 | 使用jdk17版本，spring cloud使用2021.0.4版本| 2022年9月20 | 王伟
 4.1 | 使用jdk21版本，spring boot 使用3.5版本，spring cloud使用2025.0.0版本| 2024年3月31 | 王伟
+4.2 | AI模块升级，集成AgentScope和Spring AI，优化框架架构| 2026年1月28 | 王伟
 
 # 框架介绍
 Framework框架集成了tracing、cache、db、message、rule、tx、ai等模块，每块都以模块形式组织，可以根据项目需要获取模块。
@@ -19,8 +20,7 @@ Framework框架集成了tracing、cache、db、message、rule、tx、ai等模块
 + [framework-tx](https://github.com/ww20081120/framework/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1) 分布式事务，支持各种远程接口、同步异步消息。
 + [framework-dependencies] 项目依赖，解决版本包依赖问题
 + [framework-shell] 控制台方式提供命令操作，支持自定义各种命令，做各种小工具使用。
-+ [framework-langchain4j] 对langchain4j的补充，支持国内的大模型，让大家更高效的开发AIGC应用。
-+ [framework-ai] AI相关功能模块，包括核心AI功能、NL2SQL等演示应用以及强大的Agent框架。
++ [framework-ai] AI相关功能模块，包含核心AI框架、AgentScope集成、Spring AI集成、NL2SQL演示等强大AI能力。
 
 > jdk1.8请使用framework3.X版本，framework4.X已升级至jdk21版本
 
