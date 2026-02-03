@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.9</version>
+		<version>3.5.10</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
@@ -33,7 +33,7 @@
 		<java.version>21</java.version>
 		<!-- 解决编译时中文乱码-->
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-		<fastjson2.version>2.0.60</fastjson2.version>
+		<fastjson2.version>2.0.59</fastjson2.version>
 		<ognl.version>3.4.9</ognl.version>
 		<velocity.version>2.4.1</velocity.version>
 		<thumbnailator.version>0.4.21</thumbnailator.version>
