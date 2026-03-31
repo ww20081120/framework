@@ -334,13 +334,15 @@ class OgnlUtilTest {
     }
 
     @Test
-    @DisplayName("getValue - 访问不存在的属性应返回 null")
+    @DisplayName("getValue - 访问不存在的属性应抛出异常")
     void testGetValue_NonExistentProperty() {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("person", new TestPerson());
 
-        Object result = OgnlUtil.getValue("person.nonExistentProperty", paramMap);
-        assertThat(result).isNull();
+        // OGNL 访问不存在的属性会抛出异常，被包装为 UtilException
+        assertThatThrownBy(() -> OgnlUtil.getValue("person.nonExistentProperty", paramMap))
+            .isInstanceOf(UtilException.class)
+            .hasCauseInstanceOf(ognl.OgnlException.class);
     }
 
     @Test
