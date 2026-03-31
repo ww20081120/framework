@@ -65,4 +65,109 @@ class CommonUtilTest {
         String result = CommonUtil.replaceAllBlank("  a  b\t\nc  ");
         assertThat(result).isEqualTo("abc");
     }
+
+    @Test
+    @DisplayName("应返回对象toString结果 - 非null对象")
+    void should_returnToStringResult_when_objectIsNotNull() {
+        Object obj = new Object();
+        String result = CommonUtil.getString(obj);
+        assertThat(result).isEqualTo(obj.toString());
+    }
+
+    @Test
+    @DisplayName("应返回null - null对象")
+    void should_returnNull_when_objectIsNull() {
+        String result = CommonUtil.getString(null);
+        assertThat(result).isNull();
+    }
+
+    @Test
+    @DisplayName("应返回空字符串 - null输入")
+    void should_returnEmptyString_when_inputIsNull() {
+        String result = CommonUtil.notNullStr(null);
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("应返回原字符串 - 非null输入")
+    void should_returnOriginalString_when_inputIsNotNull() {
+        String original = "test";
+        String result = CommonUtil.notNullStr(original);
+        assertThat(result).isEqualTo(original);
+    }
+
+    @Test
+    @DisplayName("应分割字符串为Integer数组 - 逗号分隔")
+    void should_splitStringToIntegerArray_when_commaDelimited() {
+        String idStr = "1,2,3,4";
+        Integer[] ids = CommonUtil.splitId(idStr);
+        assertThat(ids).hasSize(4);
+        assertThat(ids[2]).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("应分割字符串为Integer数组 - 竖线分隔")
+    void should_splitStringToIntegerArray_when_pipeDelimited() {
+        String idStr = "1|2|3|4";
+        Integer[] ids = CommonUtil.splitId(idStr, "|");
+        assertThat(ids).hasSize(4);
+        assertThat(ids[2]).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("应分割字符串为Long数组")
+    void should_splitStringToLongArray_when_commaDelimited() {
+        String idStr = "1,2,3,4";
+        Long[] ids = CommonUtil.splitIdsByLong(idStr, ",");
+        assertThat(ids).hasSize(4);
+        assertThat(ids[2]).isEqualTo(3L);
+    }
+
+    @Test
+    @DisplayName("应匹配成功 - 值在规则中")
+    void should_matchTrue_when_valueInRules() {
+        String rule = "10,100, 110";
+        String value = "10";
+        assertThat(CommonUtil.match(rule, value)).isTrue();
+    }
+
+    @Test
+    @DisplayName("应匹配失败 - 值不在规则中")
+    void should_matchFalse_when_valueNotInRules() {
+        String rule = "10,100, 110";
+        String value = "1";
+        assertThat(CommonUtil.match(rule, value)).isFalse();
+    }
+
+    @Test
+    @DisplayName("应匹配成功 - NOT前缀且值不在规则中")
+    void should_matchTrue_when_NOTPrefixAndValueNotInRules() {
+        String rule = "NOT:10,100,110";
+        String value = "1";
+        assertThat(CommonUtil.match(rule, value)).isTrue();
+    }
+
+    @Test
+    @DisplayName("应匹配失败 - NOT前缀但值在规则中")
+    void should_matchFalse_when_NOTPrefixAndValueInRules() {
+        String rule = "NOT:10,100,110";
+        String value = "10";
+        assertThat(CommonUtil.match(rule, value)).isFalse();
+    }
+
+    @Test
+    @DisplayName("应去除多余空白并保留单个空格")
+    void should_replaceRedundantBlank_andKeepSingleSpace() {
+        String input = "       你好 呀\n       你在干什么\t\n";
+        String result = CommonUtil.replaceRedundantBlank(input);
+        assertThat(result).isEqualTo("你好 呀 你在干什么");
+    }
+
+    @Test
+    @DisplayName("应去除首尾空白和多余空白")
+    void should_trimAndReplaceRedundantBlank() {
+        String input = "  hello    world  ";
+        String result = CommonUtil.replaceRedundantBlank(input);
+        assertThat(result).isEqualTo("hello world");
+    }
 }
