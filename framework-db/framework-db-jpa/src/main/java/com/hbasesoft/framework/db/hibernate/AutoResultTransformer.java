@@ -18,8 +18,6 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.engine.jdbc.SerializableBlobProxy;
-import org.hibernate.engine.jdbc.SerializableClobProxy;
 import org.hibernate.query.ResultListTransformer;
 import org.hibernate.query.TupleTransformer;
 import org.springframework.beans.BeanUtils;
@@ -166,9 +164,8 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
                 if (!"ROWNUM_".equals(alias)) {
                     String property = alias.indexOf('_') == -1 ? alias : BeanUtil.toCamelCase(alias);
                     if (tuple[i] instanceof Clob) {
-                        // clob转成String
-                        SerializableClobProxy proxy = (SerializableClobProxy) Proxy.getInvocationHandler(tuple[i]);
-                        Clob clob = proxy.getWrappedClob();
+                        // clob转成String (Hibernate 6 兼容)
+                        Clob clob = (Clob) tuple[i];
                         Reader inStreamDoc = clob.getCharacterStream();
                         try {
                             char[] tempDoc = new char[(int) clob.length()];
@@ -189,9 +186,8 @@ public class AutoResultTransformer<T> implements TupleTransformer<T>, ResultList
                         }
                     }
                     else if (tuple[i] instanceof Blob) {
-                        // blob 转化成byte[]
-                        SerializableBlobProxy proxy = (SerializableBlobProxy) Proxy.getInvocationHandler(tuple[i]);
-                        Blob blob = proxy.getWrappedBlob();
+                        // blob 转化成byte[] (Hibernate 6 兼容)
+                        Blob blob = (Blob) tuple[i];
                         InputStream in = blob.getBinaryStream();
                         ByteArrayOutputStream out = new ByteArrayOutputStream();
                         try {

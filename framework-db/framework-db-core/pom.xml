@@ -18,10 +18,10 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!--
-		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aspectj -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
+			<artifactId>spring-boot-starter-aspectj</artifactId>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->

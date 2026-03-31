@@ -33,6 +33,7 @@
 		<java.version>21</java.version>
 		<!-- 解决编译时中文乱码-->
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+			<spring-boot.version>4.0.5</spring-boot.version>
 		<fastjson2.version>2.0.61</fastjson2.version>
 		<ognl.version>3.4.9</ognl.version>
 		<velocity.version>2.4.1</velocity.version>
@@ -48,7 +49,7 @@
 		<jcommander.version>3.0</jcommander.version>
 		<dom4j.version>2.2.0</dom4j.version>
 		<caffeine.version>3.2.3</caffeine.version>
-		<elasticjob.version>3.0.5</elasticjob.version>
+		<elasticjob.version>3.0.4</elasticjob.version>
 		<jaxb.version>4.0.6</jaxb.version>
 		<xxl-job.version>3.3.1</xxl-job.version>
 		<mysql.version>9.5.0</mysql.version>
@@ -71,7 +72,7 @@
 		<alibaba-ai.version>1.1.0.0</alibaba-ai.version>
 		<agentscope.version>1.0.7</agentscope.version>
 		<!-- git工具 -->
-		<jgit.version>7.6.0</jgit.version>
+		<jgit.version>7.5.0.202512021534-r</jgit.version>
 		<feign.version>13.6</feign.version>
 	</properties>
 	<dependencyManagement>
@@ -350,6 +351,13 @@
 			    <artifactId>feign-core</artifactId>
 			    <version>${feign.version}</version>
 		    </dependency>
+
+				<!-- Kafka 依赖版本管理 -->
+				<dependency>
+					<groupId>org.apache.kafka</groupId>
+					<artifactId>kafka_2.12</artifactId>
+					<version>3.8.0</version>
+				</dependency>
 		</dependencies>
 	</dependencyManagement>
 
