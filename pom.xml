@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
-	<version>4.2.1</version>
+	<version>4.3.0</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 	<description>轻量级企业级开发框架，提供分布式事务、缓存、消息队列、任务调度、规则引擎、AI集成等核心能力</description>
