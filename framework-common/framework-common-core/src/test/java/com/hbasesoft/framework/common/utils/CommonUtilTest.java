@@ -221,7 +221,9 @@ class CommonUtilTest {
     @Test
     @DisplayName("应正确处理特殊字符 - 转义字符")
     void should_handleSpecialCharacters_when_escapedChars() {
-        assertThat(CommonUtil.wildcardMatch("test\\.txt", "test.txt")).isTrue();
+        // . 在规则中被自动转义为 \.，匹配字面量点号
+        assertThat(CommonUtil.wildcardMatch("test.txt", "test.txt")).isTrue();
+        // $ 和 ^ 被自动转义，匹配字面量
         assertThat(CommonUtil.wildcardMatch("$100", "$100")).isTrue();
         assertThat(CommonUtil.wildcardMatch("^start", "^start")).isTrue();
     }

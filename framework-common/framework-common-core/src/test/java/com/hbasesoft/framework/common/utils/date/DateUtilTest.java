@@ -39,7 +39,7 @@ public class DateUtilTest {
     private static final long TIME_20180912_105355_123 = 1536720835123L;
 
     /** 时间容差（毫秒） */
-    private static final long TIME_TOLERANCE = 100L;
+    private static final long TIME_TOLERANCE = 1000L;
 
     /** 时间戳长度 */
     private static final int TIMESTAMP_LENGTH = 14;

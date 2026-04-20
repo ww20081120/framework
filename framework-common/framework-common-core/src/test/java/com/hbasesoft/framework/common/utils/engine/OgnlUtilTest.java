@@ -8,6 +8,7 @@ package com.hbasesoft.framework.common.utils.engine;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
@@ -500,7 +501,7 @@ class OgnlUtilTest {
         Map<String, Object> paramMap = new HashMap<>();
 
         Object result = OgnlUtil.getValue("{1, 2, 3}", paramMap);
-        assertThat(result).isInstanceOf(Object[].class);
+        assertThat(result).isInstanceOf(List.class);
 
         result = OgnlUtil.getValue("#{'key1': 'value1', 'key2': 'value2'}", paramMap);
         assertThat(result).isInstanceOf(Map.class);

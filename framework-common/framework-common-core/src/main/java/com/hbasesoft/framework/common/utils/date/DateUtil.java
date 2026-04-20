@@ -63,6 +63,9 @@ public final class DateUtil {
     /** DATE LENGTH */
     private static final int DATE_LENGTH_8 = 8;
 
+    /** 一周的天数 */
+    private static final int DAYS_PER_WEEK = 7;
+
     /** yyyyMMddHHmmss */
     public static final String DATETIME_FORMAT_14 = "yyyyMMddHHmmss";
 
@@ -91,7 +94,7 @@ public final class DateUtil {
     private static final long DAYTIME = 86400000L;
 
     /** 小时 */
-    public static final int HOUR = Calendar.HOUR;
+    public static final int HOUR = Calendar.HOUR_OF_DAY;
 
     /** 分钟 */
     public static final int MINUTE = Calendar.MINUTE;
@@ -136,7 +139,21 @@ public final class DateUtil {
      * @return 相差天数
      */
     public static int betweenDay(final Date startDate, final Date endDate) {
-        return between(startDate, endDate, DAY);
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+        start.set(Calendar.MILLISECOND, 0);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+        end.set(Calendar.HOUR_OF_DAY, 0);
+        end.set(Calendar.MINUTE, 0);
+        end.set(Calendar.SECOND, 0);
+        end.set(Calendar.MILLISECOND, 0);
+
+        return (int) ((end.getTimeInMillis() - start.getTimeInMillis()) / DAYTIME);
     }
 
     /**
@@ -333,11 +350,13 @@ public final class DateUtil {
      * @return <br>
      */
     public static Date midnight(final Date date) {
-        long createTime = date.getTime();
-        long time = createTime - ((createTime + TIMEAREA) % (DAYTIME)) - 1;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time); // 将给定的Date设置到Calendar中
-        calendar.add(DAY, 1);
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
         return calendar.getTime();
     }
 
@@ -759,6 +778,7 @@ public final class DateUtil {
             throw new IllegalArgumentException("the date format string is null!");
         }
         DateFormat sdf = new SimpleDateFormat(format);
+        sdf.setLenient(false);
         try {
             return sdf.parse(date.trim());
         }
@@ -797,8 +817,8 @@ public final class DateUtil {
         if (dayOfWeek == Calendar.SUNDAY) {
             return calendar.getTime(); // 如果已经是星期天，直接返回原日期
         }
-        calendar.add(Calendar.DAY_OF_MONTH, Calendar.SUNDAY - dayOfWeek); // 调整到星期一
-        return calendar.getTime(); // 返回调整后的星期一日期
+        calendar.add(Calendar.DAY_OF_MONTH, Calendar.SUNDAY + DAYS_PER_WEEK - dayOfWeek); // 调整到下一个星期天
+        return calendar.getTime();
     }
 
     /**

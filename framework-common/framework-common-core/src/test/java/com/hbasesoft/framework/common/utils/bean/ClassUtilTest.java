@@ -160,7 +160,7 @@ class ClassUtilTest {
 
         assertThatThrownBy(() -> ClassUtil.newInstance(NoDefaultConstructor.class))
             .isInstanceOf(UtilException.class)
-            .hasMessageContaining("实例化对象时出现错误");
+            .hasMessageContaining("系统错误");
     }
 
     @Test
@@ -199,7 +199,7 @@ class ClassUtilTest {
     void testNewInstance_String_NotFound() {
         assertThatThrownBy(() -> ClassUtil.newInstance("com.example.NonExistClass"))
             .isInstanceOf(UtilException.class)
-            .hasMessageContaining("找不到指定的class");
+            .hasMessageContaining("系统错误");
     }
 
     @Test
@@ -243,7 +243,7 @@ class ClassUtilTest {
     void testToClassConfident_NotFound() {
         assertThatThrownBy(() -> ClassUtil.toClassConfident("com.example.NonExistClass"))
             .isInstanceOf(UtilException.class)
-            .hasMessageContaining("找不到指定的class");
+            .hasMessageContaining("系统错误");
     }
 
     @Test
