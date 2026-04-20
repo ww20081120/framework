@@ -40,7 +40,7 @@ master: #主数据库配置
 
 db框架底层使用的Hibernate实现的，所以PO的规则和Hibernate保持一致， 可以使用第三方工具生成，我们也提供一个工具直接可以根据数据库中的表生成PO和DAO(Data Access Object)。 
 
-![UI界面](images/1.png)
+![UI界面](../images/1.png)
 
 1. 直接运行com.hbasesoft.framework.db.cg.DBTable2JavaBean类中的main方法，会打开一个UI界面。
 2.  填写需要生成转化的表名称（不填会查询数据库中所有的表）

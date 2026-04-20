@@ -135,6 +135,9 @@ public final class ClassUtil {
      * @return 返回转换后的 Class
      */
     public static Class<?> toClassConfident(final String name) {
+        if (name == null || name.isEmpty()) {
+            throw new UtilException(ErrorCodeDef.FAILURE, "找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法");
+        }
         try {
             return Class.forName(name, false, getDefaultClassLoader());
         }
@@ -224,6 +227,9 @@ public final class ClassUtil {
      */
 
     public static Field getDeclaredField(final Class<?> finalClazz, final String fieldName) {
+        if (finalClazz == null || fieldName == null || fieldName.isEmpty()) {
+            return null;
+        }
         Class<?> clazz = finalClazz;
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             try {

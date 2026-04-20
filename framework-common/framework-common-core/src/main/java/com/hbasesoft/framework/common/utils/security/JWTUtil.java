@@ -61,7 +61,7 @@ public final class JWTUtil {
 
     /**
      * Description: 校验token<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param token
@@ -69,11 +69,18 @@ public final class JWTUtil {
      * @return <br>
      */
     public static boolean verify(final String token, final String publicKey) {
-        if (token != null && token.indexOf(".") != -1) {
-            int index = token.lastIndexOf(".");
-            String sign = token.substring(index + 1);
-            String data = token.substring(0, index);
-            return RSAUtil.verify(data, publicKey, sign);
+        if (token != null) {
+            try {
+                String[] data = StringUtils.split(token, ".");
+                if (data.length == FIX_LENGTH) {
+                    String vd = token.substring(0, token.lastIndexOf("."));
+                    return RSAUtil.verify(vd, publicKey, data[2]);
+                }
+            }
+            catch (Exception e) {
+                // 验签失败，返回 false
+                return false;
+            }
         }
         return false;
     }
@@ -98,7 +105,7 @@ public final class JWTUtil {
 
     /**
      * Description: 解析token并校验<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param token
@@ -110,14 +117,20 @@ public final class JWTUtil {
             String[] data = StringUtils.split(token, ".");
             if (data.length == FIX_LENGTH) {
                 String vd = token.substring(0, token.lastIndexOf("."));
-                if (RSAUtil.verify(vd, publicKey, data[2])) {
-                    byte[] decodedBytes = DataUtil.base64Decode(data[1]);
-                    String decodedStr = new String(decodedBytes, StandardCharsets.UTF_8);
-                    JSONObject payload = JSONObject.parseObject(decodedStr);
-                    Long exp = payload.getLong("exp");
-                    if (exp != null && System.currentTimeMillis() < exp) {
-                        return payload;
+                try {
+                    if (RSAUtil.verify(vd, publicKey, data[2])) {
+                        byte[] decodedBytes = DataUtil.base64Decode(data[1]);
+                        String decodedStr = new String(decodedBytes, StandardCharsets.UTF_8);
+                        JSONObject payload = JSONObject.parseObject(decodedStr);
+                        Long exp = payload.getLong("exp");
+                        if (exp != null && System.currentTimeMillis() < exp) {
+                            return payload;
+                        }
                     }
+                }
+                catch (Exception e) {
+                    // 验签失败或解析失败，返回空 map
+                    return Collections.emptyMap();
                 }
             }
         }

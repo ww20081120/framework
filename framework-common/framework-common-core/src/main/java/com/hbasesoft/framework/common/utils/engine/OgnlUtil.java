@@ -42,6 +42,9 @@ public final class OgnlUtil {
      * @return <br>
      */
     public static Object getValue(final String script, final Map<String, Object> paramMap) {
+        if (script == null || script.trim().isEmpty()) {
+            return null;
+        }
         OgnlContext context = new OgnlContext(null, null, new DefaultMemberAccess(true));
         try {
             return Ognl.getValue(script, context, paramMap);

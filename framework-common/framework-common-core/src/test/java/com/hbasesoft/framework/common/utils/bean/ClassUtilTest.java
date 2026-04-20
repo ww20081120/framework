@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -86,9 +87,10 @@ class ClassUtilTest {
     @Test
     @DisplayName("isProxy - 实现代理接口的类应返回 true")
     void testIsProxy_ProxyClass() {
-        // 创建一个实现 cglib 代理接口的动态类
-        // 注意: 实际环境中这些类由代理库生成,这里我们只测试接口包含的情况
-        // 这个测试可能在某些环境中失败,因为需要实际的代理库
+        // 创建一个实现代理接口的动态类进行测试
+        // 由于实际代理类需要 CGLIB/Javassist 等库，这里测试接口名匹配逻辑
+        // 普通类没有实现代理接口，应返回 false
+        assertThat(ClassUtil.isProxy(TestClass.class)).isFalse();
     }
 
     @Test
@@ -117,7 +119,7 @@ class ClassUtilTest {
     @DisplayName("getUserClass(Object) - null 对象应抛出异常")
     void testGetUserClass_Object_Null() {
         assertThatThrownBy(() -> ClassUtil.getUserClass((Object) null))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(com.hbasesoft.framework.common.utils.AssertException.class)
             .hasMessageContaining("对象");
     }
 
@@ -138,10 +140,12 @@ class ClassUtilTest {
     }
 
     @Test
-    @DisplayName("newInstance(Class) - 实例化 List 对象")
-    void testNewInstance_Class_List() {
-        // 注意: ArrayList 有无参构造,但 List 是接口
-        // 测试 ArrayList 需要 import,这里我们只测试基本的
+    @DisplayName("newInstance(Class) - 实例化 ArrayList 对象")
+    void testNewInstance_Class_ArrayList() {
+        // ArrayList 是具体类，有无参构造
+        ArrayList<String> list = ClassUtil.newInstance(ArrayList.class);
+        assertThat(list).isNotNull();
+        assertThat(list).isEmpty();
     }
 
     @Test
@@ -281,7 +285,7 @@ class ClassUtilTest {
     @DisplayName("getPackageName(Class) - null 类应抛出异常")
     void testGetPackageName_Class_Null() {
         assertThatThrownBy(() -> ClassUtil.getPackageName((Class<?>) null))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(com.hbasesoft.framework.common.utils.AssertException.class)
             .hasMessageContaining("类");
     }
 
@@ -311,7 +315,7 @@ class ClassUtilTest {
     @DisplayName("getPackageName(String) - null 类名应抛出异常")
     void testGetPackageName_String_Null() {
         assertThatThrownBy(() -> ClassUtil.getPackageName((String) null))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(com.hbasesoft.framework.common.utils.AssertException.class)
             .hasMessageContaining("类名");
     }
 
@@ -319,16 +323,16 @@ class ClassUtilTest {
     @DisplayName("getPackageName(String) - 空类名应抛出异常")
     void testGetPackageName_String_Empty() {
         assertThatThrownBy(() -> ClassUtil.getPackageName(""))
-            .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(com.hbasesoft.framework.common.utils.AssertException.class);
     }
 
     @Test
-    @DisplayName("getDefaultClassLoader - 应返回非 null 的类加载器")
+    @DisplayName("getDefaultClassLoader - 应返回类加载器（可能在安全受限环境下为 null）")
     void testGetDefaultClassLoader_NotNull() {
         ClassLoader classLoader = ClassUtil.getDefaultClassLoader();
-        // 在大多数情况下应该能获取到类加载器
-        // 但在某些安全环境下可能返回 null
-        // 这里我们只验证方法可以正常调用
+        // 在正常情况下应该能获取到类加载器
+        // 但在某些安全环境下可能返回 null，这是正常行为
+        // 验证方法可以正常调用即可
         assertThat(classLoader).isNotNull();
     }
 

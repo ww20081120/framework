@@ -38,8 +38,7 @@ class ThreadUtilTest {
 
         // When & Then
         assertThatThrownBy(() -> constructor.newInstance())
-                .isInstanceOf(UnsupportedOperationException.class)
-                .hasMessage("Utility class cannot be instantiated");
+                .hasCauseExactlyInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

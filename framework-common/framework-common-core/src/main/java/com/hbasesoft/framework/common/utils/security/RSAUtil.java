@@ -40,18 +40,24 @@ import lombok.NoArgsConstructor;
 public final class RSAUtil {
 
     /**
-     * RSA最大加密明文大小
+     * RSA密钥长度（位）
      */
-    private static final int MAX_ENCRYPT_BLOCK = 1024;
+    private static final int KEY_SIZE = 1024;
 
     /**
-     * RSA最大解密密文大小
+     * RSA最大加密明文大小（字节）
+     * RSA/ECB/PKCS1Padding 填充方式下，最大加密块 = 密钥长度(字节) - 11
      */
-    private static final int MAX_DECRYPT_BLOCK = 1024;
+    private static final int MAX_ENCRYPT_BLOCK = KEY_SIZE / 8 - 11;
+
+    /**
+     * RSA最大解密密文大小（字节）
+     */
+    private static final int MAX_DECRYPT_BLOCK = KEY_SIZE / 8;
 
     /**
      * Description: 获取密钥对 <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return 密钥对
@@ -59,7 +65,7 @@ public final class RSAUtil {
     public static KeyPair getKeyPair() {
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(MAX_ENCRYPT_BLOCK);
+            generator.initialize(KEY_SIZE);
             return generator.generateKeyPair();
         }
         catch (Exception e) { // NOPMD - Encryption operations may throw various checked exceptions

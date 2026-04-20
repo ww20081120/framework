@@ -8,13 +8,14 @@ package com.hbasesoft.framework.common.utils.bean;
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -26,6 +27,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class TestBean implements Serializable {
 
     /**

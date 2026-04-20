@@ -9,7 +9,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
-import java.lang.reflect.Proxy;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.util.Date;

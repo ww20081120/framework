@@ -91,10 +91,10 @@ spring: #应用配置
 ```
 
 在kibana里面做信息查询
-![信息查询](images/2.png)
+![信息查询](../images/2.png)
 
 在zipkin里面做信息查询
-![zipkin信息查询](images/3.png)
+![zipkin信息查询](../images/3.png)
 
 
 ### 配置参数说明

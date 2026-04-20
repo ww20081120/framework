@@ -1,0 +1,16 @@
+schema: spec-driven
+
+context: |
+  项目: Framework 4.X - 企业级 Java 底层开发框架
+  技术栈: Java 21, Spring Boot 3.5.x, Maven 多模块
+  模块: common, tracing, cache, db, job, message, rule, tx, ai, shell
+  编码规范: 遵循阿里巴巴《Java开发手册》，UTF-8，4空格缩进
+  测试框架: JUnit 5 + AssertJ
+  文档语言: 中文
+
+rules:
+  proposal:
+    - 所有文档使用中文撰写
+    - 包含"非目标"章节
+  tasks:
+    - 将任务拆分为最大 2 小时的块
