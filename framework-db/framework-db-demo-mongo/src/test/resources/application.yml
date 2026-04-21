@@ -1,0 +1,12 @@
+project:
+  name: db-demo-mongo
+
+spring:
+  application:
+    name: ${project.name}
+
+master:
+  db:
+    type: mongodb
+  mongodb:
+    url: mongodb://localhost:27017/test01?retryWrites=false

@@ -1,0 +1,9 @@
+project:
+  name: db-demo-mysql-test
+
+spring:
+  application:
+    name: ${project.name}
+  sql:
+    init:
+      mode: always

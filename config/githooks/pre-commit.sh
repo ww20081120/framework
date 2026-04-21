@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# 设置 JAVA_HOME（SpotBugs 等插件需要 Java 21+）
+if [ -z "$JAVA_HOME" ] || ! "$JAVA_HOME/bin/java" -version 2>&1 | grep -q 'version "2[1-9]'; then
+    export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
+fi
+
 # 查找项目根目录（包含 pom.xml 的目录）
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 if [ ! -f "$PROJECT_ROOT/pom.xml" ]; then
