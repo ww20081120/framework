@@ -56,7 +56,7 @@
 		<lombok.version>1.18.42</lombok.version>
 		<!--		<json-api.version>2.1.3</json-api.version>-->
 		<skywalking.version>9.5.0</skywalking.version>
-		<opentelemetry.version>1.57.0</opentelemetry.version>
+		<opentelemetry.version>1.62.0</opentelemetry.version>
 		<opentelemetry-semconv.version>1.37.0</opentelemetry-semconv.version>
 		<otel.version>1.6.1</otel.version>
 		<!-- 代码质量检查工具版本 -->
