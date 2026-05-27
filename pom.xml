@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.5</version>
+		<version>4.0.6</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
@@ -33,49 +33,49 @@
 		<java.version>21</java.version>
 		<!-- 解决编译时中文乱码-->
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-			<spring-boot.version>4.0.5</spring-boot.version>
-		<fastjson2.version>2.0.61</fastjson2.version>
+		<spring-boot.version>4.0.6</spring-boot.version>
+		<fastjson2.version>2.0.62</fastjson2.version>
 		<ognl.version>3.4.9</ognl.version>
 		<velocity.version>2.4.1</velocity.version>
 		<thumbnailator.version>0.4.21</thumbnailator.version>
 		<commons-lang3.version>3.20.0</commons-lang3.version>
 		<commons-collections4.version>4.5.0</commons-collections4.version>
 		<commons-beanutils.version>1.11.0</commons-beanutils.version>
-		<commons-io.version>2.21.0</commons-io.version>
+		<commons-io.version>2.22.0</commons-io.version>
 		<jasypt.version>1.9.3</jasypt.version>
 		<kryo.version>5.6.2</kryo.version>
-		<druid.version>1.2.27</druid.version>
+		<druid.version>1.2.28</druid.version>
 		<!--		<curator.version>5.9.0</curator.version>-->
 		<jcommander.version>3.0</jcommander.version>
 		<dom4j.version>2.2.0</dom4j.version>
-		<caffeine.version>3.2.3</caffeine.version>
+		<caffeine.version>3.2.4</caffeine.version>
 		<elasticjob.version>3.0.4</elasticjob.version>
-		<jaxb.version>4.0.6</jaxb.version>
-		<xxl-job.version>3.3.1</xxl-job.version>
-		<mysql.version>9.5.0</mysql.version>
-		<lombok.version>1.18.44</lombok.version>
+		<jaxb.version>4.0.8</jaxb.version>
+		<xxl-job.version>3.4.0</xxl-job.version>
+		<mysql.version>9.7.0</mysql.version>
+		<lombok.version>1.18.46</lombok.version>
 		<!--		<json-api.version>2.1.3</json-api.version>-->
 		<skywalking.version>9.6.0</skywalking.version>
-		<opentelemetry.version>1.57.0</opentelemetry.version>
-		<opentelemetry-semconv.version>1.37.0</opentelemetry-semconv.version>
+		<opentelemetry.version>1.62.0</opentelemetry.version>
+		<opentelemetry-semconv.version>1.41.1</opentelemetry-semconv.version>
 		<otel.version>1.6.1</otel.version>
 		<!-- 代码质量检查工具版本 -->
 		<checkstyle.version>3.6.0</checkstyle.version>
 		<pmd.version>3.28.0</pmd.version>
 		<spotbugs.version>4.9.8</spotbugs.version>
-		<spotbugs-maven-plugin.version>4.9.8.2</spotbugs-maven-plugin.version>
+		<spotbugs-maven-plugin.version>4.9.8.3</spotbugs-maven-plugin.version>
 		<githook.version>1.0.5</githook.version>
 		<!-- 代码质量检查开关：true=启用检查，false=跳过检查（默认启用） -->
 		<code.quality.checks.enabled>true</code.quality.checks.enabled>
 		<!-- AI -->
-		<spring-ai.version>2.0.0-M4</spring-ai.version>
-		<alibaba-ai.version>1.1.0.0</alibaba-ai.version>
+		<spring-ai.version>2.0.0-M7</spring-ai.version>
+		<alibaba-ai.version>1.1.2.3</alibaba-ai.version>
 		<agentscope.version>1.0.7</agentscope.version>
 		<!-- git工具 -->
-		<jgit.version>7.5.0.202512021534-r</jgit.version>
-		<feign.version>13.6</feign.version>
-			<hibernate.version>7.3.0.Final</hibernate.version>
-			<testcontainers.version>2.0.3</testcontainers.version>
+		<jgit.version>7.6.0.202603022253-r</jgit.version>
+		<feign.version>13.12</feign.version>
+		<hibernate.version>7.3.6.Final</hibernate.version>
+		<testcontainers.version>2.0.5</testcontainers.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -86,13 +86,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 
-				</dependency>
-				<dependency>
-					<groupId>org.testcontainers</groupId>
-					<artifactId>testcontainers-bom</artifactId>
-					<version>${testcontainers.version}</version>
-					<type>pom</type>
-					<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>${testcontainers.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 
 			<dependency>
@@ -348,7 +348,7 @@
 				<artifactId>micrometer-tracing-bridge-otel</artifactId>
 				<version>${otel.version}</version>
 			</dependency>
-			
+
 			<!-- Source:
 			https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit -->
 			<dependency>
@@ -357,24 +357,24 @@
 				<version>${jgit.version}</version>
 			</dependency>
 			<dependency>
-			    <groupId>io.github.openfeign</groupId>
-			    <artifactId>feign-core</artifactId>
-			    <version>${feign.version}</version>
-		    </dependency>
+				<groupId>io.github.openfeign</groupId>
+				<artifactId>feign-core</artifactId>
+				<version>${feign.version}</version>
+			</dependency>
 
-				<!-- Kafka 依赖版本管理 -->
-				<dependency>
-					<groupId>org.apache.kafka</groupId>
-					<artifactId>kafka_2.12</artifactId>
-					<version>3.8.0</version>
-				</dependency>
+			<!-- Kafka 依赖版本管理 -->
+			<dependency>
+				<groupId>org.apache.kafka</groupId>
+				<artifactId>kafka_2.12</artifactId>
+				<version>3.8.0</version>
+			</dependency>
 
-				<!-- Hibernate 版本管理 -->
-				<dependency>
-					<groupId>org.hibernate.orm</groupId>
-					<artifactId>hibernate-core</artifactId>
-					<version>${hibernate.version}</version>
-				</dependency>
+			<!-- Hibernate 版本管理 -->
+			<dependency>
+				<groupId>org.hibernate.orm</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -530,11 +530,13 @@
 								<pre-commit>
 									# 代码质量检查开关（从 pom.xml 读取并替换）
 									CODE_QUALITY_CHECKS_ENABLED="${code.quality.checks.enabled}"
-
-									if [ "$CODE_QUALITY_CHECKS_ENABLED" != "true" ]; then
-										echo "⚠️  代码质量检查已禁用 (code.quality.checks.enabled=$CODE_QUALITY_CHECKS_ENABLED)"
-										echo "💡 如需启用检查，请在 pom.xml 中设置 code.quality.checks.enabled=true"
-										exit 0
+									if [ "$CODE_QUALITY_CHECKS_ENABLED" !=
+									"true" ]; then
+									echo "⚠️ 代码质量检查已禁用
+									(code.quality.checks.enabled=$CODE_QUALITY_CHECKS_ENABLED)"
+									echo "💡 如需启用检查，请在 pom.xml 中设置
+									code.quality.checks.enabled=true"
+									exit 0
 									fi
 
 									# 动态获取项目根目录
@@ -544,21 +546,20 @@
 									# 引用外部脚本文件，避免 XML 格式化破坏 shell 脚本
 									# 脚本文件位于 config/githooks/pre-commit.sh
 									PRE_COMMIT_SCRIPT="${PROJECT_ROOT}/config/githooks/pre-commit.sh"
-
 									if [ -f "$PRE_COMMIT_SCRIPT" ]; then
-										bash "$PRE_COMMIT_SCRIPT"
+									bash "$PRE_COMMIT_SCRIPT"
 									else
-										# 如果脚本不存在，直接运行 checkstyle 检查
-										echo "🔍 运行代码质量检查..."
-										cd "$PROJECT_ROOT" || exit 1
-										mvn checkstyle:check -q
+									# 如果脚本不存在，直接运行 checkstyle 检查
+									echo "🔍 运行代码质量检查..."
+									cd "$PROJECT_ROOT" || exit 1
+									mvn checkstyle:check -q
 
-										if [ $? -ne 0 ]; then
-											echo "❌ 代码质量检查失败，请修复后再提交"
-											exit 1
-										fi
+									if [ $? -ne 0 ]; then
+									echo "❌ 代码质量检查失败，请修复后再提交"
+									exit 1
+									fi
 
-										echo "✅ 代码质量检查通过"
+									echo "✅ 代码质量检查通过"
 									fi
 								</pre-commit>
 							</hooks>

@@ -22,5 +22,9 @@
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-openai</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+		</dependency>
 	</dependencies>
 </project>
