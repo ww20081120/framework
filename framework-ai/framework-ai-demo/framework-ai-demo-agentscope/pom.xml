@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework-ai-demo</artifactId>
-		<version>4.3.0</version>
+		<version>4.3.1</version>
 	</parent>
 	<artifactId>framework-ai-demo-agentscope</artifactId>
 	<name>Agentscope演示</name>
