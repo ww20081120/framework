@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# 代码质量检查开关（从 pom.xml 读取）
+CODE_QUALITY_CHECKS_ENABLED=$(grep -m1 'code.quality.checks.enabled' "$(git rev-parse --show-toplevel)/pom.xml" | sed 's/.*>\(.*\)<.*/\1/')
+
+if [ "$CODE_QUALITY_CHECKS_ENABLED" != "true" ]; then
+    echo "⚠️ 代码质量检查已禁用 (code.quality.checks.enabled=$CODE_QUALITY_CHECKS_ENABLED)"
+    echo "💡 如需启用检查，请在 pom.xml 中设置 code.quality.checks.enabled=true"
+    exit 0
+fi
+
 # 设置 JAVA_HOME（SpotBugs 等插件需要 Java 21+）
 if [ -z "$JAVA_HOME" ] || ! "$JAVA_HOME/bin/java" -version 2>&1 | grep -q 'version "2[1-9]'; then
     export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
