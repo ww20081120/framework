@@ -1,4 +1,4 @@
-/**************************************************************************************** 
+/****************************************************************************************
  Copyright © 2003-2012 hbasesoft Corporation. All rights reserved. Reproduction or       <br>
  transmission in whole or in part, in any form or by any means, electronic, mechanical <br>
  or otherwise, is prohibited without the prior written consent of the copyright owner. <br>
@@ -13,12 +13,11 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.ServiceException;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 import com.hbasesoft.framework.rule.core.config.FlowConfig;
@@ -28,10 +27,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * <Description> <br>
- * 
+ *
  * @author 王伟<br>
  * @version 1.0<br>
  * @taskId <br>
@@ -70,14 +72,14 @@ public class AntVFlowConfig implements FlowConfig {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param jsonRule
      * @return <br>
      */
     @SuppressWarnings("rawtypes")
-    public static AntVFlowConfig parse(final JSONObject jsonRule) {
+    public static AntVFlowConfig parse(final ObjectNode jsonRule) {
         AntVFlowConfig config = new AntVFlowConfig();
         config.nodeMap = new HashMap<>();
         config.edgeMap = new HashMap<>();
@@ -85,21 +87,23 @@ public class AntVFlowConfig implements FlowConfig {
         config.depth = 1;
         config.maxDepth = PropertyHolder.getIntProperty("antvFlow.maxDepth", DEFAULT_MAX_DEPTH);
 
-        JSONArray nodes = jsonRule.getJSONArray("nodes");
-        Assert.isTrue(nodes != null && nodes.size() > 0, ErrorCodeDef.PARAM_NOT_NULL, "nodes节点");
+        JsonNode nodesNode = jsonRule.get("nodes");
+        Assert.isTrue(nodesNode != null && nodesNode.isArray() && nodesNode.size() > 0,
+            ErrorCodeDef.PARAM_NOT_NULL, "nodes节点");
+        ArrayNode nodes = (ArrayNode) nodesNode;
         for (int i = 0, len = nodes.size(); i < len; i++) {
-            JSONObject node = nodes.getJSONObject(i);
+            ObjectNode node = (ObjectNode) nodes.get(i);
             if (node != null) {
-                String component = node.getString("component");
-                String id = node.getString("id");
+                String component = node.has("component") ? node.get("component").asText() : null;
+                String id = node.has("id") ? node.get("id").asText() : null;
                 Assert.isTrue(StringUtils.isNotEmpty(component) && StringUtils.isNotEmpty(id),
-                    ErrorCodeDef.PARAM_NOT_NULL, node.toJSONString() + "中component或者id节点");
+                    ErrorCodeDef.PARAM_NOT_NULL, JsonUtil.toJson(node) + "中component或者id节点");
 
                 FlowComponent flowComponent = ContextHolder.getContext().getBean(component, FlowComponent.class);
                 Assert.notNull(flowComponent, ErrorCodeDef.FLOW_COMPONENT_NOT_FOUND, component);
                 config.nodeMap.put(id, new Component(flowComponent, node));
 
-                boolean isStart = node.getBooleanValue("isStart");
+                boolean isStart = node.has("isStart") && node.get("isStart").asBoolean(false);
                 if (isStart) {
                     if (config.currentNode == null) {
                         config.currentNode = id;
@@ -111,15 +115,17 @@ public class AntVFlowConfig implements FlowConfig {
             }
         }
 
-        JSONArray edges = jsonRule.getJSONArray("edges");
-        Assert.isTrue(edges != null && edges.size() > 0, ErrorCodeDef.PARAM_NOT_NULL, "edges节点");
+        JsonNode edgesNode = jsonRule.get("edges");
+        Assert.isTrue(edgesNode != null && edgesNode.isArray() && edgesNode.size() > 0,
+            ErrorCodeDef.PARAM_NOT_NULL, "edges节点");
+        ArrayNode edges = (ArrayNode) edgesNode;
         for (int i = 0, len = edges.size(); i < len; i++) {
-            JSONObject edge = edges.getJSONObject(i);
+            ObjectNode edge = (ObjectNode) edges.get(i);
             if (edge != null) {
-                String source = edge.getString("source");
-                String target = edge.getString("target");
+                String source = edge.has("source") ? edge.get("source").asText() : null;
+                String target = edge.has("target") ? edge.get("target").asText() : null;
                 Assert.isTrue(StringUtils.isNotEmpty(source) && StringUtils.isNotEmpty(target),
-                    ErrorCodeDef.PARAM_NOT_NULL, edge.toJSONString() + "中source或者target节点");
+                    ErrorCodeDef.PARAM_NOT_NULL, JsonUtil.toJson(edge) + "中source或者target节点");
 
                 if (StringUtils.isEmpty(config.currentNode)) {
                     config.currentNode = source;
@@ -138,20 +144,25 @@ public class AntVFlowConfig implements FlowConfig {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
      */
     @Override
-    public JSONObject getConfigAttrMap() {
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getConfigAttrMap() {
         Component node = nodeMap.get(currentNode);
-        return node == null ? null : node.getAttrs();
+        if (node == null) {
+            return null;
+        }
+        ObjectNode attrs = node.getAttrs();
+        return JsonUtil.convertValue(attrs, Map.class);
     }
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @return <br>
@@ -163,7 +174,7 @@ public class AntVFlowConfig implements FlowConfig {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param currentNode <br>
@@ -174,7 +185,7 @@ public class AntVFlowConfig implements FlowConfig {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param <T>
@@ -194,7 +205,7 @@ public class AntVFlowConfig implements FlowConfig {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param lastSuccess <br>
@@ -228,6 +239,6 @@ public class AntVFlowConfig implements FlowConfig {
         private FlowComponent flowComponent;
 
         /** attrs */
-        private JSONObject attrs;
+        private ObjectNode attrs;
     }
 }

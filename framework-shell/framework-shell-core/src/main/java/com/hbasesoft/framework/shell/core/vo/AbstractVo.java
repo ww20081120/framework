@@ -7,7 +7,7 @@ package com.hbasesoft.framework.shell.core.vo;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson2.JSON;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 /**
  * <Description> 基础传输基类<br>
@@ -34,7 +34,7 @@ public class AbstractVo implements Serializable {
      */
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 
 }

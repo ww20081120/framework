@@ -9,14 +9,16 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 import com.hbasesoft.framework.rule.core.FlowContext;
 import com.hbasesoft.framework.rule.core.FlowHelper;
+
+import tools.jackson.databind.node.ObjectNode;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -48,7 +50,7 @@ public final class AntVFlowHelper {
      * @return <br>
      */
     public static <T extends Serializable> String flowStart(final T bean, final String flowConfig) {
-        return AntVFlowHelper.flowStart(bean, JSONObject.parseObject(flowConfig), null);
+        return AntVFlowHelper.flowStart(bean, JsonUtil.parseObject(flowConfig), null);
     }
 
     /**
@@ -61,7 +63,7 @@ public final class AntVFlowHelper {
      * @param flowConfig
      * @return <br>
      */
-    public static <T extends Serializable> String flowStart(final T bean, final JSONObject flowConfig) {
+    public static <T extends Serializable> String flowStart(final T bean, final ObjectNode flowConfig) {
         return AntVFlowHelper.flowStart(bean, flowConfig, null);
     }
 
@@ -76,7 +78,7 @@ public final class AntVFlowHelper {
      * @param currentNode
      * @return <br>
      */
-    public static <T extends Serializable> String flowStart(final T bean, final JSONObject flowConfig,
+    public static <T extends Serializable> String flowStart(final T bean, final ObjectNode flowConfig,
         final String currentNode) {
 
         Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");

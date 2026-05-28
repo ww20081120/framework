@@ -34,7 +34,6 @@
 		<!-- 解决编译时中文乱码-->
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 		<spring-boot.version>4.0.6</spring-boot.version>
-		<fastjson2.version>2.0.62</fastjson2.version>
 		<ognl.version>3.4.9</ognl.version>
 		<velocity.version>2.4.1</velocity.version>
 		<thumbnailator.version>0.4.21</thumbnailator.version>
@@ -169,24 +168,6 @@
 				<groupId>org.apache.velocity</groupId>
 				<artifactId>velocity-engine-core</artifactId>
 				<version>${velocity.version}</version>
-			</dependency>
-
-			<!--
-            https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
-			<dependency>
-				<groupId>com.alibaba.fastjson2</groupId>
-				<artifactId>fastjson2</artifactId>
-				<version>${fastjson2.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.alibaba.fastjson2</groupId>
-				<artifactId>fastjson2-extension</artifactId>
-				<version>${fastjson2.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.alibaba.fastjson2</groupId>
-				<artifactId>fastjson2-extension-spring6</artifactId>
-				<version>${fastjson2.version}</version>
 			</dependency>
 
 			<dependency>

@@ -3,7 +3,7 @@
  */
 package com.hbasesoft.framework.db.core;
 
-import com.alibaba.fastjson2.JSON;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 /**
  * <Description> <br>
@@ -29,6 +29,6 @@ public abstract class BaseEntity implements IBaseEntity {
      */
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 }

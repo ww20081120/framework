@@ -8,8 +8,8 @@ package com.hbasesoft.framework.tx.core;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.bean.SerializationUtil;
@@ -59,7 +59,7 @@ public final class TxInvokerProxy {
 
         Object[] args = ArgsSerializationUtil.unserialArgs(clientInfo.getArgs());
         LOGGER.info("registClient|{0}|{1}|{2}|{3}|{4}|{5}", clientInfo.getId(), clientInfo.getMark(),
-            clientInfo.getContext(), args == null ? GlobalConstants.BLANK : JSONArray.toJSONString(args),
+            clientInfo.getContext(), args == null ? GlobalConstants.BLANK : JsonUtil.toJson(args),
             clientInfo.getMaxRetryTimes(), clientInfo.getRetryConfigs());
 
         boolean flag = sd.registClient(clientInfo);

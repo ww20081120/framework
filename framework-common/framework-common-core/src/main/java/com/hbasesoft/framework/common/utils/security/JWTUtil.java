@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -52,7 +52,7 @@ public final class JWTUtil {
     public static String createToken(final long expireTime, final Map<String, Object> payload,
         final String privateKey) {
         payload.put("exp", expireTime);
-        byte[] payloadBytes = JSONObject.toJSONString(payload).getBytes(StandardCharsets.UTF_8);
+        byte[] payloadBytes = JsonUtil.toJson(payload).getBytes(StandardCharsets.UTF_8);
         String jsonPayload = DataUtil.base64UrlEncode(payloadBytes);
         String data = HEADER + jsonPayload;
         String sign = RSAUtil.sign(data, privateKey);
@@ -97,7 +97,7 @@ public final class JWTUtil {
         if (token != null) {
             String[] data = StringUtils.split(token, ".");
             if (data.length == FIX_LENGTH && StringUtils.isNotEmpty(data[1])) {
-                return JSONObject.parseObject(new String(DataUtil.base64Decode(data[1]), StandardCharsets.UTF_8));
+                return JsonUtil.parseMap(new String(DataUtil.base64Decode(data[1]), StandardCharsets.UTF_8));
             }
         }
         return Collections.emptyMap();
@@ -121,8 +121,9 @@ public final class JWTUtil {
                     if (RSAUtil.verify(vd, publicKey, data[2])) {
                         byte[] decodedBytes = DataUtil.base64Decode(data[1]);
                         String decodedStr = new String(decodedBytes, StandardCharsets.UTF_8);
-                        JSONObject payload = JSONObject.parseObject(decodedStr);
-                        Long exp = payload.getLong("exp");
+                        Map<String, Object> payload = JsonUtil.parseMap(decodedStr);
+                        Object expObj = payload.get("exp");
+                        Long exp = expObj instanceof Number ? ((Number) expObj).longValue() : null;
                         if (exp != null && System.currentTimeMillis() < exp) {
                             return payload;
                         }

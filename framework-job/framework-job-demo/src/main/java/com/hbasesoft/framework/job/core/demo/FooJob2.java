@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.job.core.demo;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.utils.date.DateUtil;
 import com.hbasesoft.framework.job.core.JobContext;
 import com.hbasesoft.framework.job.core.SimpleJob;
@@ -33,7 +33,7 @@ public class FooJob2 implements SimpleJob {
      */
     @Override
     public void execute(final JobContext jobContext) {
-        System.out.println(DateUtil.getCurrentTimestamp() + JSONObject.toJSONString(jobContext));
+        System.out.println(DateUtil.getCurrentTimestamp() + JsonUtil.toJson(jobContext));
     }
 
 }

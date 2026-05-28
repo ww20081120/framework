@@ -5,7 +5,7 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.db.cg;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 import lombok.Data;
 
@@ -66,6 +66,6 @@ public class ColumnInfo {
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 }

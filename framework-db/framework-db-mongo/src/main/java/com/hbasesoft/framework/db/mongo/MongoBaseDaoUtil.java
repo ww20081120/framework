@@ -29,9 +29,9 @@ import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.utils.logger.LoggerUtil;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.criteria.Operator;
@@ -112,7 +112,7 @@ public final class MongoBaseDaoUtil {
                 return value.toString();
             }
             else {
-                return JSONObject.toJSONString(value);
+                return JsonUtil.toJson(value);
             }
         }
         else if (Number.class.isAssignableFrom(targetType)) {
@@ -381,7 +381,7 @@ public final class MongoBaseDaoUtil {
                 else if (Map.class.isAssignableFrom(field.getType())) {
                     Map<String, Object> mongoMap;
                     if (!(fieldValue instanceof Map)) {
-                        mongoMap = JSONObject.parseObject((String) fieldValue, Map.class);
+                        mongoMap = JsonUtil.fromJson((String) fieldValue, Map.class);
                     }
                     else {
                         mongoMap = (Map<String, Object>) fieldValue;
@@ -502,7 +502,7 @@ public final class MongoBaseDaoUtil {
                 result = ((Map<?, ?>) result).get(parts[i]); // 获取下一层级的值
             }
             else {
-                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(result));
+                tools.jackson.databind.node.ObjectNode jsonObject = JsonUtil.parseObject(JsonUtil.toJson(result));
                 result = jsonObject.get((parts[i]));
             }
         }
