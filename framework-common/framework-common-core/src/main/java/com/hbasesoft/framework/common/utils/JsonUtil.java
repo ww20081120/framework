@@ -6,6 +6,7 @@
 package com.hbasesoft.framework.common.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
@@ -19,6 +20,7 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.type.CollectionType;
 
 /**
  * JSON 工具类，基于 Jackson 3 (tools.jackson) <br>
@@ -123,6 +125,25 @@ public final class JsonUtil {
         }
         catch (FrameworkException e) {
             throw e;
+        }
+        catch (Exception e) {
+            throw new FrameworkException(e, ErrorCodeDef.FAILURE);
+        }
+    }
+
+    /**
+     * 将 JSON 数组字符串解析为指定元素类型的 List
+     *
+     * @param json JSON 数组字符串
+     * @param elementClass 列表元素类型
+     * @param <T> 列表元素泛型
+     * @return 反序列化后的 List
+     */
+    public static <T> List<T> parseArray(final String json, final Class<T> elementClass) {
+        try {
+            CollectionType listType = OBJECT_MAPPER.getTypeFactory()
+                .constructCollectionType(List.class, elementClass);
+            return OBJECT_MAPPER.readValue(json, listType);
         }
         catch (Exception e) {
             throw new FrameworkException(e, ErrorCodeDef.FAILURE);
