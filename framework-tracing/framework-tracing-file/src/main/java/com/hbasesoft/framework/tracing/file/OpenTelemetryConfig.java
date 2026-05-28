@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.tracing.core.TraceLog;
 
+import io.micrometer.tracing.Tracer;
+import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
+import io.micrometer.tracing.otel.bridge.OtelTracer;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
@@ -52,5 +55,20 @@ public class OpenTelemetryConfig {
             .addSpanProcessor(SimpleSpanProcessor.create(exporter)).setResource(resource).build();
 
         return OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider).buildAndRegisterGlobal();
+    }
+
+    /**
+     * Description: 创建Micrometer Tracer桥接bean <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param openTelemetrySdk OpenTelemetry SDK实例
+     * @return Micrometer Tracer
+     */
+    @Bean
+    public Tracer micrometerTracer(final OpenTelemetrySdk openTelemetrySdk) {
+        io.opentelemetry.api.trace.Tracer otelTracer = openTelemetrySdk.getTracer(PropertyHolder.getProjectName());
+        OtelCurrentTraceContext currentTraceContext = new OtelCurrentTraceContext();
+        return new OtelTracer(otelTracer, currentTraceContext, event -> { });
     }
 }

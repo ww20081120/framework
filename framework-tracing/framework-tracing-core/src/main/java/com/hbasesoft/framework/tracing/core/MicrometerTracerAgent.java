@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.ServiceLoader;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.MDC;
 import org.springframework.context.ApplicationContext;
 
 import com.hbasesoft.framework.common.utils.ContextHolder;
@@ -17,6 +18,7 @@ import com.hbasesoft.framework.common.utils.PropertyHolder;
 
 import io.micrometer.tracing.CurrentTraceContext;
 import io.micrometer.tracing.Span;
+import io.micrometer.tracing.TraceContext;
 import io.micrometer.tracing.Tracer;
 import io.micrometer.tracing.Tracer.SpanInScope;
 
@@ -31,6 +33,12 @@ import io.micrometer.tracing.Tracer.SpanInScope;
  * @see com.hbasesoft.framework.tracing.core <br>
  */
 public class MicrometerTracerAgent implements TracerAgent {
+
+    /** MDC中traceId的key */
+    private static final String MDC_TRACE_ID = "traceId";
+
+    /** MDC中spanId的key */
+    private static final String MDC_SPAN_ID = "spanId";
 
     /** tracer */
     private Tracer tracer;
@@ -91,11 +99,14 @@ public class MicrometerTracerAgent implements TracerAgent {
 
             SpanInScope scope = tc.withSpan(span);
 
+            // 写入 MDC 供 logback 读取
+            putSpanToMdc(span.context());
+
             // 执行记录
             for (TraceLoggerService service : getTransLoggerServices()) {
                 service.before(span, parentSpan, beginTime, methodName, args);
             }
-            return scope;
+            return new MdcSpanScope(scope);
         }
 
         return null;
@@ -185,10 +196,68 @@ public class MicrometerTracerAgent implements TracerAgent {
         if (tracer == null) {
             ApplicationContext context = ContextHolder.getContext();
             if (context != null) {
-                tracer = context.getBean(Tracer.class);
+                try {
+                    tracer = context.getBean(Tracer.class);
+                }
+                catch (Exception e) {
+                    return null;
+                }
             }
         }
         return tracer;
+    }
+
+    private void putSpanToMdc(final TraceContext ctx) {
+        if (ctx != null) {
+            MDC.put(MDC_TRACE_ID, ctx.traceId());
+            MDC.put(MDC_SPAN_ID, ctx.spanId());
+        }
+    }
+
+    /**
+     * 包装 SpanInScope，关闭时同时清理 MDC。
+     */
+    private static class MdcSpanScope implements Closeable {
+
+        /** 关闭前需要恢复的traceId */
+        private final String previousTraceId;
+
+        /** 关闭前需要恢复的spanId */
+        private final String previousSpanId;
+
+        /** 被包装的SpanInScope */
+        private final SpanInScope scope;
+
+        MdcSpanScope(final SpanInScope scope) {
+            this.scope = scope;
+            this.previousTraceId = MDC.get(MDC_TRACE_ID);
+            this.previousSpanId = MDC.get(MDC_SPAN_ID);
+        }
+
+        @Override
+        public void close() {
+            try {
+                scope.close();
+            }
+            finally {
+                restoreMdc();
+            }
+        }
+
+        private void restoreMdc() {
+            if (previousTraceId != null) {
+                MDC.put(MDC_TRACE_ID, previousTraceId);
+            }
+            else {
+                MDC.remove(MDC_TRACE_ID);
+            }
+            if (previousSpanId != null) {
+                MDC.put(MDC_SPAN_ID, previousSpanId);
+            }
+            else {
+                MDC.remove(MDC_SPAN_ID);
+            }
+        }
     }
 
 }
