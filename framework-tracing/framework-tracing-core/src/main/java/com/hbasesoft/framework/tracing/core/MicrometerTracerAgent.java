@@ -102,11 +102,15 @@ public class MicrometerTracerAgent implements TracerAgent {
             // 写入 MDC 供 logback 读取
             putSpanToMdc(span.context());
 
+            // 先读取旧值再构造对象，避免构造函数抛异常
+            String prevTraceId = MDC.get(MDC_TRACE_ID);
+            String prevSpanId = MDC.get(MDC_SPAN_ID);
+
             // 执行记录
             for (TraceLoggerService service : getTransLoggerServices()) {
                 service.before(span, parentSpan, beginTime, methodName, args);
             }
-            return new MdcSpanScope(scope);
+            return new MdcSpanScope(scope, prevTraceId, prevSpanId);
         }
 
         return null;
@@ -217,7 +221,7 @@ public class MicrometerTracerAgent implements TracerAgent {
     /**
      * 包装 SpanInScope，关闭时同时清理 MDC。
      */
-    private static class MdcSpanScope implements Closeable {
+    private static final class MdcSpanScope implements Closeable {
 
         /** 关闭前需要恢复的traceId */
         private final String previousTraceId;
@@ -228,10 +232,10 @@ public class MicrometerTracerAgent implements TracerAgent {
         /** 被包装的SpanInScope */
         private final SpanInScope scope;
 
-        MdcSpanScope(final SpanInScope scope) {
+        MdcSpanScope(final SpanInScope scope, final String previousTraceId, final String previousSpanId) {
             this.scope = scope;
-            this.previousTraceId = MDC.get(MDC_TRACE_ID);
-            this.previousSpanId = MDC.get(MDC_SPAN_ID);
+            this.previousTraceId = previousTraceId;
+            this.previousSpanId = previousSpanId;
         }
 
         @Override

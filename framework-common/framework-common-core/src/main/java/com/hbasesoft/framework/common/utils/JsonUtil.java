@@ -5,10 +5,12 @@
  ****************************************************************************************/
 package com.hbasesoft.framework.common.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
+import com.hbasesoft.framework.common.utils.date.DateUtil;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -33,7 +35,7 @@ public final class JsonUtil {
     /** 共享的 ObjectMapper 实例 */
     private static final ObjectMapper OBJECT_MAPPER = tools.jackson.databind.json.JsonMapper.builder()
         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        .build();
+        .defaultDateFormat(new SimpleDateFormat(DateUtil.DATETIME_FORMAT_19)).build();
 
     /**
      * 将对象序列化为 JSON 字符串
@@ -53,9 +55,9 @@ public final class JsonUtil {
     /**
      * 将 JSON 字符串反序列化为指定类型
      *
-     * @param json  JSON 字符串
+     * @param json JSON 字符串
      * @param clazz 目标类型
-     * @param <T>   目标类型泛型
+     * @param <T> 目标类型泛型
      * @return 反序列化后的对象
      */
     public static <T> T fromJson(final String json, final Class<T> clazz) {
@@ -130,9 +132,9 @@ public final class JsonUtil {
     /**
      * 将 JsonNode 树节点转换为指定类型的 Java 对象
      *
-     * @param node  JsonNode 节点
+     * @param node JsonNode 节点
      * @param clazz 目标类型
-     * @param <T>   目标类型泛型
+     * @param <T> 目标类型泛型
      * @return 转换后的对象
      */
     public static <T> T treeToValue(final JsonNode node, final Class<T> clazz) {
