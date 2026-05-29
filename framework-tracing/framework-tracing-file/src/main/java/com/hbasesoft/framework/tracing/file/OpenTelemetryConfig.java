@@ -17,6 +17,7 @@ import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
 import io.micrometer.tracing.otel.bridge.OtelTracer;
 import io.opentelemetry.api.common.Attributes;
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
@@ -54,7 +55,14 @@ public class OpenTelemetryConfig {
         SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
             .addSpanProcessor(SimpleSpanProcessor.create(exporter)).setResource(resource).build();
 
-        return OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider).buildAndRegisterGlobal();
+        OpenTelemetrySdk sdk = OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider).build();
+        try {
+            GlobalOpenTelemetry.set(sdk);
+        }
+        catch (IllegalStateException e) {
+            // GlobalOpenTelemetry已被其他组件(如MySQL Connector/J)初始化，忽略重复注册
+        }
+        return sdk;
     }
 
     /**
