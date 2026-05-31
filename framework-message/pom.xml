@@ -16,9 +16,17 @@
 		<module>framework-message-redis</module>
 		<module>framework-message-kafka</module>
 		<module>framework-message-rocketMQ</module>
-		<module>framework-message-demo</module>
 		<module>framework-message-delay-db</module>
 		<module>framework-message-simple</module>
 		<module>framework-message-tx</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>with-demo</id>
+			<modules>
+				<module>framework-message-demo</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

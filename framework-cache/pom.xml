@@ -15,6 +15,14 @@
   	<module>framework-cache-core</module>
   	<module>framework-cache-redis</module>
   	<module>framework-cache-simple</module>
-  	<module>framework-cache-demo</module>
   </modules>
+
+  <profiles>
+  	<profile>
+  		<id>with-demo</id>
+  		<modules>
+  			<module>framework-cache-demo</module>
+  		</modules>
+  	</profile>
+  </profiles>
 </project>

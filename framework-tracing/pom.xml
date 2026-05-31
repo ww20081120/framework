@@ -14,9 +14,17 @@
   <modules>
   	<module>framework-tracing-core</module>
   	<module>framework-tracing-file</module>
-  	<module>framework-tracing-demo</module>
   	<module>framework-tracing-otlp</module>
   	<module>framework-tracing-zipkin</module>
   	<module>framework-tracing-skywalking</module>
   </modules>
+
+  <profiles>
+  	<profile>
+  		<id>with-demo</id>
+  		<modules>
+  			<module>framework-tracing-demo</module>
+  		</modules>
+  	</profile>
+  </profiles>
 </project>

@@ -14,11 +14,19 @@
 	<modules>
 		<module>framework-db-core</module>
 		<module>framework-db-jpa</module>
-		<module>framework-db-demo-mysql</module>
-		<module>framework-db-demo-mongo</module>
 		<module>framework-db-jdbc</module>
 		<module>framework-db-cg</module>
 		<module>framework-db-orm</module>
 		<module>framework-db-mongo</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>with-demo</id>
+			<modules>
+				<module>framework-db-demo-mysql</module>
+				<module>framework-db-demo-mongo</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

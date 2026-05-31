@@ -17,6 +17,14 @@
   	<module>framework-rule-plugin-event</module>
   	<module>framework-rule-plugin-transaction</module>
   	<module>framework-rule-plugin-stateMachine</module>
-  	<module>framework-rule-demo</module>
   </modules>
+
+  <profiles>
+  	<profile>
+  		<id>with-demo</id>
+  		<modules>
+  			<module>framework-rule-demo</module>
+  		</modules>
+  	</profile>
+  </profiles>
 </project>

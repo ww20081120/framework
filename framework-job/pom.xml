@@ -13,9 +13,17 @@
 	<description>分布式Job引擎</description>
 	<modules>
 		<module>framework-job-core</module>
-		<module>framework-job-demo</module>
 		<module>framework-job-elasticjob</module>
 		<module>framework-job-quartz</module>
 		<module>framework-job-xxl</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>with-demo</id>
+			<modules>
+				<module>framework-job-demo</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

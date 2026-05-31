@@ -14,9 +14,17 @@
 	<properties>
 	</properties>
 	<modules>
-		<module>framework-ai-demo</module>
 		<module>framework-ai-core</module>
 		<module>framework-ai-agentscope</module>
 		<module>framework-ai-spring</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>with-demo</id>
+			<modules>
+				<module>framework-ai-demo</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

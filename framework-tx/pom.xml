@@ -14,7 +14,15 @@
 	<modules>
 		<module>framework-tx-core</module>
 		<module>framework-tx-server</module>
-		<module>framework-tx-demo</module>
 		<module>framework-tx-integration</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>with-demo</id>
+			<modules>
+				<module>framework-tx-demo</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

@@ -66,6 +66,8 @@
 		<githook.version>1.0.5</githook.version>
 		<!-- 代码质量检查开关：true=启用检查，false=跳过检查（默认启用） -->
 		<code.quality.checks.enabled>true</code.quality.checks.enabled>
+		<!-- demo模块跳过部署：true=跳过demo模块部署（默认） -->
+		<skip.demo.modules>true</skip.demo.modules>
 		<!-- AI -->
 		<spring-ai.version>2.0.0-M7</spring-ai.version>
 		<alibaba-ai.version>1.1.2.3</alibaba-ai.version>
@@ -548,11 +550,13 @@
 					<plugin>
 						<groupId>org.sonatype.central</groupId>
 						<artifactId>central-publishing-maven-plugin</artifactId>
-						<version>0.9.0</version>
+						<version>0.10.0</version>
 						<extensions>true</extensions>
 						<configuration>
-							<publishingServerId>central</publishingServerId> <!--
-							与settings.xml中server的id一致 -->
+							<publishingServerId>central</publishingServerId>
+							<!-- 与settings.xml中server的id一致 -->
+							<autoPublish>true</autoPublish>
+							<waitUntil>published</waitUntil>
 						</configuration>
 					</plugin>
 
