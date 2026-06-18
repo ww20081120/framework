@@ -144,8 +144,18 @@ public class AbstractAnnotationHandler {
     }
 
     /**
+     * 判断方法是否需要加载SQL模板.
+     *
+     * @param method <br>
+     * @return <br>
+     */
+    protected boolean isSqlTemplateMethod(final Method method) {
+        return !method.isSynthetic() && !method.isBridge() && !method.isDefault();
+    }
+
+    /**
      * 获取对象的方法签名
-     * 
+     *
      * @param method <br>
      * @return <br>
      */
