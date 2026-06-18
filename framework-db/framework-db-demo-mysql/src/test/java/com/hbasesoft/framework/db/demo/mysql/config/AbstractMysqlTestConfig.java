@@ -1,20 +1,29 @@
 package com.hbasesoft.framework.db.demo.mysql.config;
 
-import com.hbasesoft.framework.db.demo.mysql.Application;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Map;
+
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mysql.MySQLContainer;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import com.hbasesoft.framework.common.Bootstrap;
+import com.hbasesoft.framework.common.utils.ContextHolder;
+import com.hbasesoft.framework.db.demo.mysql.Application;
 
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@ContextConfiguration(initializers = AbstractMysqlTestConfig.BootstrapInitializer.class)
 @Testcontainers
 public abstract class AbstractMysqlTestConfig {
 
@@ -44,5 +53,17 @@ public abstract class AbstractMysqlTestConfig {
         registry.add("master.db.url", MYSQL_CONTAINER::getJdbcUrl);
         registry.add("master.db.username", MYSQL_CONTAINER::getUsername);
         registry.add("master.db.password", MYSQL_CONTAINER::getPassword);
+    }
+
+    public static class BootstrapInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        @Override
+        public void initialize(final ConfigurableApplicationContext applicationContext) {
+            applicationContext.getEnvironment().getPropertySources().addFirst(new MapPropertySource("testcontainers",
+                Map.of("master.db.url", MYSQL_CONTAINER.getJdbcUrl(), "master.db.username", MYSQL_CONTAINER.getUsername(),
+                    "master.db.password", MYSQL_CONTAINER.getPassword())));
+            ContextHolder.setContext(applicationContext);
+            Bootstrap.before();
+        }
     }
 }

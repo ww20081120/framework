@@ -17,7 +17,6 @@ import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.InitializationException;
 import com.hbasesoft.framework.common.utils.UtilException;
-import com.hbasesoft.framework.common.utils.bean.BeanUtil;
 import com.hbasesoft.framework.common.utils.engine.OgnlUtil;
 import com.hbasesoft.framework.common.utils.engine.VelocityParseFactory;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -79,9 +78,9 @@ public class DaoHandler extends AbstractAnnotationHandler implements InvocationH
      * @throws Throwable <br>
      */
     public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-        // Step1:判断是否是抽象方法，如果是非抽象方法，则不执行代理拦截器
-        if (proxy != null && !BeanUtil.isAbstract(method)) {
-            return method.invoke(proxy, args);
+        // Step1:跳过编译器生成方法和已有实现的接口默认方法
+        if (!isSqlTemplateMethod(method)) {
+            return method.isDefault() && proxy != null ? InvocationHandler.invokeDefault(proxy, method, args) : null;
         }
 
         if (!method.getDeclaringClass().isInterface()) {

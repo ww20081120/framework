@@ -6,12 +6,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.hbasesoft.framework.common.Bootstrap;
 
-@TestConfiguration
+@TestConfiguration(proxyBeanMethods = false)
 public class GlobalConfig implements ApplicationListener<ContextRefreshedEvent> {
-
-    static {
-        Bootstrap.before();
-    }
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
