@@ -492,8 +492,10 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
             }
             else {
                 Class<?> beanType = param.getBeanType();
-                if (getEntityClazz() != null && List.class.isAssignableFrom(param.getReturnType())) {
+                if (beanType == null) {
                     beanType = getEntityClazz();
+                }
+                if (beanType != null && List.class.isAssignableFrom(param.getReturnType())) {
                     AutoResultTransformer atf = new AutoResultTransformer(beanType);
                     query.setTupleTransformer(atf);
                     query.setResultListTransformer(atf);
