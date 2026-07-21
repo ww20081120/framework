@@ -24,6 +24,11 @@ import java.util.Map;
 public final class EventIntercetorHolder {
 
     /**
+     * 私有锁对象，避免暴露类的内置锁
+     */
+    private static final Object LOCK = new Object();
+
+    /**
      * interceptor holder
      */
     private static Map<String, List<EventInterceptor>> intercetorHolder = new HashMap<String, List<EventInterceptor>>();
@@ -36,19 +41,21 @@ public final class EventIntercetorHolder {
      * @param interceptor interceptor
      * @param events <br>
      */
-    public static synchronized void registInterceptor(final EventInterceptor interceptor, final String... events) {
-        for (String event : events) {
-            List<EventInterceptor> interceptors = intercetorHolder.get(event);
-            if (interceptors == null) {
-                interceptors = new ArrayList<>();
+    public static void registInterceptor(final EventInterceptor interceptor, final String... events) {
+        synchronized (LOCK) {
+            for (String event : events) {
+                List<EventInterceptor> interceptors = intercetorHolder.get(event);
+                if (interceptors == null) {
+                    interceptors = new ArrayList<>();
+                }
+                if (!interceptors.contains(interceptor)) {
+                    interceptors.add(interceptor);
+                }
+                if (interceptors.size() >= 2) {
+                    Collections.sort(interceptors, (i1, i2) -> i1.order() - i2.order());
+                }
+                intercetorHolder.put(event, interceptors);
             }
-            if (!interceptors.contains(interceptor)) {
-                interceptors.add(interceptor);
-            }
-            if (interceptors.size() >= 2) {
-                Collections.sort(interceptors, (i1, i2) -> i1.order() - i2.order());
-            }
-            intercetorHolder.put(event, interceptors);
         }
     }
 
@@ -60,7 +67,9 @@ public final class EventIntercetorHolder {
      * @param event
      * @return <br>
      */
-    public static synchronized List<EventInterceptor> getInterceptors(final String event) {
-        return intercetorHolder.get(event);
+    public static List<EventInterceptor> getInterceptors(final String event) {
+        synchronized (LOCK) {
+            return intercetorHolder.get(event);
+        }
     }
 }

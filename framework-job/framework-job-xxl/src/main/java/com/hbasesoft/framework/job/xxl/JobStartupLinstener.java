@@ -47,6 +47,8 @@ public class JobStartupLinstener implements StartupListener {
         String[] beans = context.getBeanNamesForAnnotation(Job.class);
 
         try {
+            // 获取XxlJobSpringExecutor实例（xxl-job 3.4.x版本registryJobHandler改为实例方法）
+            XxlJobSpringExecutor executor = context.getBean(XxlJobSpringExecutor.class);
             for (String bean : beans) {
                 SimpleJob targetBean = context.getBean(bean, SimpleJob.class);
                 Class<?> clazz = targetBean.getClass();
@@ -65,7 +67,7 @@ public class JobStartupLinstener implements StartupListener {
                     }
 
                     if (SimpleJob.class.isAssignableFrom(clazz)) {
-                        XxlJobSpringExecutor.registryJobHandler(name, new ProxyJob(name, targetBean));
+                        executor.registryJobHandler(name, new ProxyJob(name, targetBean));
                         LoggerUtil.info("success create job [{0}] with name {1}", clazz.getName(), name);
                     }
                 }

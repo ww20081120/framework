@@ -45,6 +45,10 @@ public class SpringDaoHandler implements MethodInterceptor {
 
         try {
             DaoHandler handler = (DaoHandler) invocation.getThis();
+            if (handler == null) {
+                throw new IllegalStateException(
+                    "DaoHandler instance is null, cannot invoke method: " + method.getName());
+            }
             Object proxy = invocation instanceof ProxyMethodInvocation proxyMethodInvocation
                 ? proxyMethodInvocation.getProxy()
                 : null;
