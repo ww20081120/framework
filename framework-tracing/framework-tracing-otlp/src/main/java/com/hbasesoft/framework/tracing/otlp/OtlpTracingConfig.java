@@ -26,16 +26,11 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporterBuilder;
-import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter;
-import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporterBuilder;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.logs.SdkLoggerProvider;
 import io.opentelemetry.sdk.logs.export.BatchLogRecordProcessor;
-import io.opentelemetry.sdk.metrics.SdkMeterProvider;
-import io.opentelemetry.sdk.metrics.export.MetricExporter;
-import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
@@ -87,9 +82,6 @@ public class OtlpTracingConfig {
     /** 导出超时（毫秒） */
     private static final int EXPORT_TIMEOUT_MS = 30000;
 
-    /** Metrics导出间隔（秒） */
-    private static final int METRIC_EXPORT_INTERVAL_SEC = 30;
-
     /** URL协议前缀长度（"://"占3个字符） */
     private static final int SCHEME_SUFFIX_LEN = 3;
 
@@ -99,13 +91,9 @@ public class OtlpTracingConfig {
     /** HTTP协议 - Logs路径后缀 */
     private static final String PATH_LOGS = "/v1/logs";
 
-    /** HTTP协议 - Metrics路径后缀 */
-    private static final String PATH_METRICS = "/v1/metrics";
-
     /**
      * Description: 创建OpenTelemetry SDK实例 <br>
-     * 同时创建远程OTLP Trace导出、远程OTLP Logs导出和远程OTLP Metrics导出。
-     * 当 otlp.local-trace-enabled=true 时，额外保留本地 trans.log 输出。
+     * 同时创建远程OTLP Trace导出、远程OTLP Logs导出和远程OTLP Metrics导出。 当 otlp.local-trace-enabled=true 时，额外保留本地 trans.log 输出。
      *
      * @author 王伟<br>
      * @taskId <br>
@@ -136,16 +124,14 @@ public class OtlpTracingConfig {
         // 构建TracerProvider，可选添加本地文件导出
         var tracerBuilder = SdkTracerProvider.builder()
             .addSpanProcessor(BatchSpanProcessor.builder(otlpExporter)
-                .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS)
-                .setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
+                .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS).setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
                 .setExporterTimeout(EXPORT_TIMEOUT_MS, TimeUnit.MILLISECONDS).build())
             .setResource(resource);
 
         // 可选：保留本地 trans.log 输出（仅用于调试）
         if (localTraceEnabled) {
             tracerBuilder.addSpanProcessor(BatchSpanProcessor.builder(OtlpJsonLoggingSpanExporter.create())
-                .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS)
-                .setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
+                .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS).setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
                 .setExporterTimeout(EXPORT_TIMEOUT_MS, TimeUnit.MILLISECONDS).build());
         }
 
@@ -155,21 +141,12 @@ public class OtlpTracingConfig {
         SdkLoggerProvider loggerProvider = SdkLoggerProvider.builder()
             .addLogRecordProcessor(BatchLogRecordProcessor
                 .builder(createLogExporter(protocol, endpoint + PATH_LOGS, authorization, organization, streamName))
-                .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS)
-                .setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
+                .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS).setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
                 .setExporterTimeout(EXPORT_TIMEOUT_MS, TimeUnit.MILLISECONDS).build())
             .setResource(resource).build();
 
-        // 3. Metrics SDK
-        MetricExporter metricExporter = createMetricExporter(protocol, endpoint + PATH_METRICS, authorization,
-            organization, streamName);
-        SdkMeterProvider meterProvider = SdkMeterProvider.builder()
-            .registerMetricReader(PeriodicMetricReader.builder(metricExporter)
-                .setInterval(METRIC_EXPORT_INTERVAL_SEC, TimeUnit.SECONDS).build())
-            .setResource(resource).build();
-
         OpenTelemetrySdk sdk = OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider)
-            .setLoggerProvider(loggerProvider).setMeterProvider(meterProvider).build();
+            .setLoggerProvider(loggerProvider).build();
 
         try {
             GlobalOpenTelemetry.set(sdk);
@@ -218,8 +195,7 @@ public class OtlpTracingConfig {
 
         if ("grpc".equalsIgnoreCase(protocol)) {
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder()
-                .setEndpoint(normalizeGrpcEndpoint(endpoint))
-                .setCompression("gzip");
+                .setEndpoint(normalizeGrpcEndpoint(endpoint)).setCompression("gzip");
             headers.forEach(builder::addHeader);
             return builder.build();
         }
@@ -248,45 +224,13 @@ public class OtlpTracingConfig {
 
         if ("grpc".equalsIgnoreCase(protocol)) {
             OtlpGrpcLogRecordExporterBuilder builder = OtlpGrpcLogRecordExporter.builder()
-                .setEndpoint(normalizeGrpcEndpoint(endpoint))
-                .setCompression("gzip");
+                .setEndpoint(normalizeGrpcEndpoint(endpoint)).setCompression("gzip");
             headers.forEach(builder::addHeader);
             return builder.build();
         }
         else {
-            var builder = io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
-                .builder().setEndpoint(endpoint);
-            headers.forEach(builder::addHeader);
-            return builder.build();
-        }
-    }
-
-    /**
-     * Description: 创建Metric Exporter <br>
-     *
-     * @author 王伟<br>
-     * @taskId <br>
-     * @param protocol 协议类型
-     * @param endpoint 端点地址（含完整路径）
-     * @param authorization 认证信息
-     * @param organization 组织名称
-     * @param streamName 流名称
-     * @return MetricExporter实例
-     */
-    private MetricExporter createMetricExporter(final String protocol, final String endpoint,
-        final String authorization, final String organization, final String streamName) {
-        Map<String, String> headers = buildHeaders(protocol, authorization, organization, streamName);
-
-        if ("grpc".equalsIgnoreCase(protocol)) {
-            OtlpGrpcMetricExporterBuilder builder = OtlpGrpcMetricExporter.builder()
-                .setEndpoint(normalizeGrpcEndpoint(endpoint))
-                .setCompression("gzip");
-            headers.forEach(builder::addHeader);
-            return builder.build();
-        }
-        else {
-            var builder = io.opentelemetry.exporter.otlp.http.metrics.OtlpHttpMetricExporter
-                .builder().setEndpoint(endpoint);
+            var builder = io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter.builder()
+                .setEndpoint(endpoint);
             headers.forEach(builder::addHeader);
             return builder.build();
         }
@@ -295,8 +239,7 @@ public class OtlpTracingConfig {
     /**
      * Description: 规范化gRPC端点地址 <br>
      * <p>
-     * gRPC端点仅需 host:port，不需要路径后缀（如/v1/traces）。
-     * 移除路径部分，并保证带协议前缀（OTel SDK要求）。
+     * gRPC端点仅需 host:port，不需要路径后缀（如/v1/traces）。 移除路径部分，并保证带协议前缀（OTel SDK要求）。
      * </p>
      *
      * @author 王伟<br>
@@ -322,8 +265,7 @@ public class OtlpTracingConfig {
     /**
      * Description: 构建OpenObserve所需的HTTP Headers <br>
      * <p>
-     * 注意：gRPC协议的HTTP/2 header name必须是全小写（gRPC规范要求），
-     * 因此grpc模式下Authorization会被转为authorization。
+     * 注意：gRPC协议的HTTP/2 header name必须是全小写（gRPC规范要求）， 因此grpc模式下Authorization会被转为authorization。
      * </p>
      *
      * @author 王伟<br>

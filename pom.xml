@@ -332,11 +332,6 @@
 				<version>${opentelemetry.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>io.opentelemetry</groupId>
-				<artifactId>opentelemetry-sdk-metrics</artifactId>
-				<version>${opentelemetry.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>io.opentelemetry.semconv</groupId>
 				<artifactId>opentelemetry-semconv</artifactId>
 				<version>${opentelemetry-semconv.version}</version>
