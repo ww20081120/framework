@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>framework-tracing-otlp</artifactId>
 	<name>framework-tracing-otlp</name>
-	<description>链路追踪框架OTLP实现</description>
+	<description>链路追踪框架OTLP实现 - 支持OpenObserve等OTLP协议后端</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.hbasesoft.framework</groupId>
@@ -24,6 +24,20 @@
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-exporter-otlp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-sdk-logs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-logging-otlp</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

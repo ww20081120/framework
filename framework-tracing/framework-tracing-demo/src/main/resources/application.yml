@@ -1,20 +1,35 @@
 project: #项目信息
  name: log-demo
-  
+
 spring: #应用配置
   application:
-    name: ${project.name}   
- 
+    name: ${project.name}
+
 server: #系统配置
   port: 10000
-  
+
 management:
   tracing:
     sampling:
       probability: 1.0
-#  otlp:
-#    tracing:
-#      endpoint: http://localhost:4318/v1/traces
-#  zipkin:
-#    tracing:
-#      endpoint: http://localhost:9411/api/v2/spans
+
+# OpenObserve OTLP配置
+otlp:
+  enabled: true
+  # 是否保留本地trans.log输出（默认false，仅通过OTLP发送到OpenObserve）
+  local-trace-enabled: false
+  # 推荐使用http协议，gRPC在Java OTel SDK中存在认证头传递问题
+  protocol: http
+  # HTTP协议端点（OpenObserve默认端口5080，需完整路径）
+  trace-endpoint: http://localhost:5080/api/default/v1/traces
+  log-endpoint: http://localhost:5080/api/default/v1/logs
+  # gRPC协议端点（OpenObserve默认端口5081，仅需host:port）
+  # 注意：Java OTel SDK的gRPC sender存在Authorization header不传递的已知问题
+  # 如需使用gRPC，建议通过OTel Collector中转
+  # protocol: grpc
+  # trace-endpoint: http://localhost:5081
+  # log-endpoint: http://localhost:5081
+  # Basic认证（格式：Basic base64(username:password)）
+  authorization: Basic d3cyMDA4MTEyMEAxMjYuY29tOm8yb2lfZlk3UnU1cmJpY0RkMG50MDYwTVBYZFRUZGpwVWRoQVg=
+  organization: default
+  stream-name: default
