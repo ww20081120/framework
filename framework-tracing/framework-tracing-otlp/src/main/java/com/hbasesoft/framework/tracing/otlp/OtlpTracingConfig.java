@@ -26,11 +26,16 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter;
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporterBuilder;
+import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter;
+import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporterBuilder;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.logs.SdkLoggerProvider;
 import io.opentelemetry.sdk.logs.export.BatchLogRecordProcessor;
+import io.opentelemetry.sdk.metrics.SdkMeterProvider;
+import io.opentelemetry.sdk.metrics.export.MetricExporter;
+import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
@@ -38,13 +43,14 @@ import io.opentelemetry.sdk.trace.export.SpanExporter;
 import io.opentelemetry.semconv.ServiceAttributes;
 
 /**
- * <Description> OTLP链路追踪配置 - 将trace和logback日志异步发送到远程OTLP后端(如OpenObserve) <br>
+ * <Description> OTLP链路追踪配置 - 将trace、logback日志和metrics异步发送到远程OTLP后端(如OpenObserve) <br>
  * <p>
  * 通过 otlp.enabled=true 激活，所有导出均使用异步批量处理，不阻塞业务线程：
  * </p>
  * <ul>
  * <li>远程Trace导出：BatchSpanProcessor + OtlpHttpSpanExporter/OtlpGrpcSpanExporter</li>
  * <li>远程日志导出：BatchLogRecordProcessor + OtlpHttpLogRecordExporter/OtlpGrpcLogRecordExporter</li>
+ * <li>远程指标导出：PeriodicMetricReader + OtlpHttpMetricExporter/OtlpGrpcMetricExporter</li>
  * <li>可选本地trans.log：当 otlp.local-trace-enabled=true 时启用，仅用于调试</li>
  * </ul>
  * <p>
@@ -54,13 +60,12 @@ import io.opentelemetry.semconv.ServiceAttributes;
  * <pre>
  * otlp:
  *   enabled: true
- *   local-trace-enabled: false        # 是否保留本地trans.log（默认false）
- *   protocol: http                    # http 或 grpc
- *   trace-endpoint: http://localhost:5080/api/default/v1/traces
- *   log-endpoint: http://localhost:5080/api/default/v1/logs
- *   authorization: Basic d3cyMDA4...  # Basic认证token
- *   organization: default             # OpenObserve组织
- *   stream-name: default              # OpenObserve流名称
+ *   endpoint: http://localhost:5080/api/default   # 统一端点，路径后缀自动拼接
+ *   protocol: http                                # http 或 grpc
+ *   local-trace-enabled: false                    # 是否保留本地trans.log
+ *   authorization: Basic d3cyMDA4...              # Basic认证token
+ *   organization: default                         # OpenObserve组织
+ *   stream-name: default                          # OpenObserve流名称
  * </pre>
  *
  * @author wangwei<br>
@@ -82,19 +87,30 @@ public class OtlpTracingConfig {
     /** 导出超时（毫秒） */
     private static final int EXPORT_TIMEOUT_MS = 30000;
 
+    /** Metrics导出间隔（秒） */
+    private static final int METRIC_EXPORT_INTERVAL_SEC = 30;
+
     /** URL协议前缀长度（"://"占3个字符） */
     private static final int SCHEME_SUFFIX_LEN = 3;
 
+    /** HTTP协议 - Traces路径后缀 */
+    private static final String PATH_TRACES = "/v1/traces";
+
+    /** HTTP协议 - Logs路径后缀 */
+    private static final String PATH_LOGS = "/v1/logs";
+
+    /** HTTP协议 - Metrics路径后缀 */
+    private static final String PATH_METRICS = "/v1/metrics";
+
     /**
      * Description: 创建OpenTelemetry SDK实例 <br>
-     * 同时创建远程OTLP Trace导出和远程OTLP Logs导出。
+     * 同时创建远程OTLP Trace导出、远程OTLP Logs导出和远程OTLP Metrics导出。
      * 当 otlp.local-trace-enabled=true 时，额外保留本地 trans.log 输出。
      *
      * @author 王伟<br>
      * @taskId <br>
+     * @param endpoint 统一端点地址（如 http://localhost:5080/api/default）
      * @param protocol 协议类型 http/grpc
-     * @param traceEndpoint trace端点地址
-     * @param logEndpoint logs端点地址
      * @param authorization 认证信息（Basic token）
      * @param organization OpenObserve组织名称
      * @param streamName OpenObserve流名称
@@ -103,9 +119,8 @@ public class OtlpTracingConfig {
      */
     @Bean
     public OpenTelemetrySdk openTelemetrySdk(
+        @Value("${otlp.endpoint:http://localhost:5080/api/default}") final String endpoint,
         @Value("${otlp.protocol:http}") final String protocol,
-        @Value("${otlp.trace-endpoint:http://localhost:5080/api/default/v1/traces}") final String traceEndpoint,
-        @Value("${otlp.log-endpoint:http://localhost:5080/api/default/v1/logs}") final String logEndpoint,
         @Value("${otlp.authorization:}") final String authorization,
         @Value("${otlp.organization:default}") final String organization,
         @Value("${otlp.stream-name:default}") final String streamName,
@@ -115,7 +130,7 @@ public class OtlpTracingConfig {
             .merge(Resource.create(Attributes.of(ServiceAttributes.SERVICE_NAME, PropertyHolder.getProjectName())));
 
         // 1. 远程OTLP Trace导出
-        SpanExporter otlpExporter = createSpanExporter(protocol, traceEndpoint, authorization, organization,
+        SpanExporter otlpExporter = createSpanExporter(protocol, endpoint + PATH_TRACES, authorization, organization,
             streamName);
 
         // 构建TracerProvider，可选添加本地文件导出
@@ -139,14 +154,22 @@ public class OtlpTracingConfig {
         // 2. Logs SDK
         SdkLoggerProvider loggerProvider = SdkLoggerProvider.builder()
             .addLogRecordProcessor(BatchLogRecordProcessor
-                .builder(createLogExporter(protocol, logEndpoint, authorization, organization, streamName))
+                .builder(createLogExporter(protocol, endpoint + PATH_LOGS, authorization, organization, streamName))
                 .setScheduleDelay(SCHEDULE_DELAY_MS, TimeUnit.MILLISECONDS)
                 .setMaxExportBatchSize(MAX_EXPORT_BATCH_SIZE)
                 .setExporterTimeout(EXPORT_TIMEOUT_MS, TimeUnit.MILLISECONDS).build())
             .setResource(resource).build();
 
+        // 3. Metrics SDK
+        MetricExporter metricExporter = createMetricExporter(protocol, endpoint + PATH_METRICS, authorization,
+            organization, streamName);
+        SdkMeterProvider meterProvider = SdkMeterProvider.builder()
+            .registerMetricReader(PeriodicMetricReader.builder(metricExporter)
+                .setInterval(METRIC_EXPORT_INTERVAL_SEC, TimeUnit.SECONDS).build())
+            .setResource(resource).build();
+
         OpenTelemetrySdk sdk = OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider)
-            .setLoggerProvider(loggerProvider).build();
+            .setLoggerProvider(loggerProvider).setMeterProvider(meterProvider).build();
 
         try {
             GlobalOpenTelemetry.set(sdk);
@@ -183,7 +206,7 @@ public class OtlpTracingConfig {
      * @author 王伟<br>
      * @taskId <br>
      * @param protocol 协议类型
-     * @param endpoint 端点地址
+     * @param endpoint 端点地址（含完整路径）
      * @param authorization 认证信息
      * @param organization 组织名称
      * @param streamName 流名称
@@ -196,7 +219,6 @@ public class OtlpTracingConfig {
         if ("grpc".equalsIgnoreCase(protocol)) {
             OtlpGrpcSpanExporterBuilder builder = OtlpGrpcSpanExporter.builder()
                 .setEndpoint(normalizeGrpcEndpoint(endpoint))
-                // OpenObserve的gRPC要求设置grpc-encoding头，启用gzip压缩以满足该要求
                 .setCompression("gzip");
             headers.forEach(builder::addHeader);
             return builder.build();
@@ -214,7 +236,7 @@ public class OtlpTracingConfig {
      * @author 王伟<br>
      * @taskId <br>
      * @param protocol 协议类型
-     * @param endpoint 端点地址
+     * @param endpoint 端点地址（含完整路径）
      * @param authorization 认证信息
      * @param organization 组织名称
      * @param streamName 流名称
@@ -227,13 +249,43 @@ public class OtlpTracingConfig {
         if ("grpc".equalsIgnoreCase(protocol)) {
             OtlpGrpcLogRecordExporterBuilder builder = OtlpGrpcLogRecordExporter.builder()
                 .setEndpoint(normalizeGrpcEndpoint(endpoint))
-                // OpenObserve的gRPC要求设置grpc-encoding头，启用gzip压缩以满足该要求
                 .setCompression("gzip");
             headers.forEach(builder::addHeader);
             return builder.build();
         }
         else {
             var builder = io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
+                .builder().setEndpoint(endpoint);
+            headers.forEach(builder::addHeader);
+            return builder.build();
+        }
+    }
+
+    /**
+     * Description: 创建Metric Exporter <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param protocol 协议类型
+     * @param endpoint 端点地址（含完整路径）
+     * @param authorization 认证信息
+     * @param organization 组织名称
+     * @param streamName 流名称
+     * @return MetricExporter实例
+     */
+    private MetricExporter createMetricExporter(final String protocol, final String endpoint,
+        final String authorization, final String organization, final String streamName) {
+        Map<String, String> headers = buildHeaders(protocol, authorization, organization, streamName);
+
+        if ("grpc".equalsIgnoreCase(protocol)) {
+            OtlpGrpcMetricExporterBuilder builder = OtlpGrpcMetricExporter.builder()
+                .setEndpoint(normalizeGrpcEndpoint(endpoint))
+                .setCompression("gzip");
+            headers.forEach(builder::addHeader);
+            return builder.build();
+        }
+        else {
+            var builder = io.opentelemetry.exporter.otlp.http.metrics.OtlpHttpMetricExporter
                 .builder().setEndpoint(endpoint);
             headers.forEach(builder::addHeader);
             return builder.build();

@@ -31,6 +31,10 @@
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-sdk-metrics</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-exporter-logging-otlp</artifactId>
 		</dependency>
 
