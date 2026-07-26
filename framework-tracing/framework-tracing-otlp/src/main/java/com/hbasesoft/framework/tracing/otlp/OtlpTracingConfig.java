@@ -31,6 +31,7 @@ import io.micrometer.tracing.otel.bridge.Slf4JEventListener;
 import io.micrometer.tracing.propagation.Propagator;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.common.Attributes;
+import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter;
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporterBuilder;
@@ -45,6 +46,7 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.semconv.ServiceAttributes;
 
 /**
@@ -157,7 +159,10 @@ public class OtlpTracingConfig {
             .setResource(resource).build();
 
         OpenTelemetrySdk sdk = OpenTelemetrySdk.builder().setTracerProvider(sdkTracerProvider)
-            .setLoggerProvider(loggerProvider).build();
+            .setLoggerProvider(loggerProvider)
+            // 配置W3C Trace Context Propagator，使trace context可通过traceparent header跨服务传播
+            // OpenTelemetrySdkBuilder默认使用ContextPropagators.noop()，不配置则跨服务traceId无法打通
+            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance())).build();
 
         try {
             GlobalOpenTelemetry.set(sdk);
