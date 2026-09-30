@@ -350,7 +350,8 @@ public interface ICache {
      * 返回 true 表示占位成功（键此前不存在），false 表示键已存在（窗口内重复提交）。<br>
      * 实现必须基于底层原子原语（单次 set-if-absent），禁止以"先查后写"模拟；<br>
      * value 按原样字节存储，不承诺可通过 {@link #get(String)} 反序列化读取；<br>
-     * seconds 不大于 0 时占位常驻（不随时间释放）。<br>
+     * seconds 必须为正数（消费方契约）；非正数行为实现各异（内存实现常驻、
+     * Redis 历史实现占位立即失效），本接口不做统一承诺。<br>
      * 默认实现不支持该能力并抛出 {@link UnsupportedOperationException}（fail-closed），
      * 提供该能力的实现方应以原子原语覆盖本方法。
      *
@@ -358,7 +359,7 @@ public interface ICache {
      * @taskId <br>
      * @param key 占位键
      * @param value 占位值（原样存储）
-     * @param seconds 过期秒数，不大于 0 表示常驻
+     * @param seconds 过期秒数，必须为正数（非正数行为实现各异，不承诺）
      * @return true=占位成功（键原不存在），false=键已存在
      */
     default boolean setnx(String key, String value, int seconds) {
