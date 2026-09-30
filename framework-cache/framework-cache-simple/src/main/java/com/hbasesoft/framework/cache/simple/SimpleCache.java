@@ -279,4 +279,21 @@ public class SimpleCache extends AbstractCache {
         }
         return number;
     }
+
+    /**
+     * Description: 原子 set-if-absent 占位（与既有 putNodeValue 共用 buildCache 分桶与过期机制，
+     * seconds 大于 0 时桶创建即启用 expireAfterWrite；value 原样字节存储，对齐 Redis 实现语义）。<br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param key
+     * @param value
+     * @param seconds
+     * @return <br>
+     */
+    @Override
+    public boolean setnx(final String key, final String value, final int seconds) {
+        Cache<String, byte[]> cache = buildCache(DEFAULT_CACHE_DIR, seconds);
+        return cache.asMap().putIfAbsent(key, value.getBytes()) == null;
+    }
 }

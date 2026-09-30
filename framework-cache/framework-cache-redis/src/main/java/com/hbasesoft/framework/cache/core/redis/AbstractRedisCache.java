@@ -102,7 +102,7 @@ public abstract class AbstractRedisCache extends AbstractCache {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param key
@@ -110,5 +110,6 @@ public abstract class AbstractRedisCache extends AbstractCache {
      * @param expireTime
      * @return <br>
      */
+    @Override
     public abstract boolean setnx(String key, String value, int expireTime);
 }
