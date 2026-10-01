@@ -80,15 +80,6 @@ public class InterceptorContext {
     }
 
     /**
-     * 获取构造传入的 Criteria 语句原始引用。
-     *
-     * @return 构造传入的原始 {@link CommonAbstractCriteria} 引用
-     */
-    public CommonAbstractCriteria criteria() {
-        return criteriaQuery;
-    }
-
-    /**
      * 以查询语句形式取值（QUERY 场景）。
      *
      * @return 构造传入的原始 {@link CriteriaQuery} 引用
