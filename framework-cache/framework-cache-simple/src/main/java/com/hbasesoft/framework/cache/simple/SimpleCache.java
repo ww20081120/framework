@@ -38,6 +38,9 @@ public class SimpleCache extends AbstractCache {
      */
     public static final String CACHE_MODEL = "SIMPLE";
 
+    /** setnx 专用桶名后缀（按 seconds 拼接隔离，与业务 put 共享目录桶互不可见） */
+    private static final String SETNX_BUCKET_SUFFIX = "-setnx-";
+
     /** cachesMap */
     private Map<String, Cache<String, byte[]>> cachesMap;
 
@@ -281,8 +284,18 @@ public class SimpleCache extends AbstractCache {
     }
 
     /**
-     * Description: 原子 set-if-absent 占位（与既有 putNodeValue 共用 buildCache 分桶与过期机制，
-     * seconds 大于 0 时桶创建即启用 expireAfterWrite；value 原样字节存储，对齐 Redis 实现语义）。<br>
+     * Description: 原子 set-if-absent 占位——按 seconds 隔离的专用桶（桶名
+     * {@code <目录>-setnx-<seconds>}），不复用业务 put 的共享目录桶；value 原样字节
+     * 存储，对齐 Redis 实现语义。<br>
+     *
+     * <p><b>专用桶动因</b>（4.4.3 缺陷修复，FC24 sec-common-guards Task 5 端到端
+     * IT 抓出）：{@code buildCache} 按 strkey 复用桶实例且<b>首次建立者的 seconds
+     * 固化为整桶 TTL</b>——既有 {@code put(key, seconds, value)} 走
+     * {@code putNodeValue(node, 0, ...)}（seconds 丢弃传 0，永不过期桶），共享目录桶
+     * 在真实容器被业务写入（token / 验证码 / OTP 等登录链路 put）先建立为永驻桶后，
+     * setnx 的占位继承该桶 TTL——窗口永不释放（占位 10 秒后仍拒绝）。专用桶使占位
+     * TTL 恒等于本次 seconds：同 seconds 共桶（判重正确），跨 seconds 各自独立，
+     * 与业务桶互不可见（毒化免疫）；Redis 原生 setnx 的 TTL 亦属于本次调用，契约一致。</p>
      *
      * @author 王伟<br>
      * @taskId <br>
@@ -293,7 +306,7 @@ public class SimpleCache extends AbstractCache {
      */
     @Override
     public boolean setnx(final String key, final String value, final int seconds) {
-        Cache<String, byte[]> cache = buildCache(DEFAULT_CACHE_DIR, seconds);
+        Cache<String, byte[]> cache = buildCache(DEFAULT_CACHE_DIR + SETNX_BUCKET_SUFFIX + seconds, seconds);
         return cache.asMap().putIfAbsent(key, value.getBytes()) == null;
     }
 }

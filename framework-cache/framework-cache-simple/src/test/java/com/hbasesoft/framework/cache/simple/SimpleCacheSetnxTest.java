@@ -91,6 +91,29 @@ class SimpleCacheSetnxTest {
     }
 
     /**
+     * 业务 put 先建立共享目录桶（{@code put(byte[], seconds, byte[])} 丢弃 seconds 传 0，
+     * 桶永不过期）后，setnx 占位 TTL 仍恒等于本次 seconds——不得继承他人桶 TTL。
+     *
+     * <p>4.4.3 缺陷回归：修复前 setnx 复用共享目录桶，占位继承永驻 TTL——
+     * 真实容器登录链路（token/验证码 put）先建立业务桶后，幂等占位窗口永不释放
+     * （FC24 sec-common-guards Task 5 端到端 IT 抓出：占位 10 秒后仍拒绝）。
+     * 修复后 setnx 走按 seconds 隔离的专用桶，与业务桶互不可见。</p>
+     */
+    @Test
+    @Timeout(15)
+    void shouldNotInheritForeignTtlFromSharedDirectoryBucket() throws InterruptedException {
+        SimpleCache cache = new SimpleCache();
+        cache.put("login:token:abc".getBytes(), 3600, "x".getBytes());
+        assertTrue(cache.setnx("idempotent:poisoned", "holder", 1),
+            "业务桶先建立后 setnx 仍应占位成功");
+        assertFalse(cache.setnx("idempotent:poisoned", "holder", 1),
+            "占位窗口内同 key 判重不变");
+        TimeUnit.MILLISECONDS.sleep(1500);
+        assertTrue(cache.setnx("idempotent:poisoned", "holder", 1),
+            "占位应按本次 seconds（1 秒）过期释放，不得继承共享目录桶的永驻/长 TTL");
+    }
+
+    /**
      * N 线程并发 setnx 同一 key，恰好 1 次 true（原子 set-if-absent）。
      */
     @Test
