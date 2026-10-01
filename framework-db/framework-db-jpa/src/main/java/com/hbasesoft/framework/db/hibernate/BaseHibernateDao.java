@@ -37,6 +37,9 @@ import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.config.DataParam;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 import com.hbasesoft.framework.db.core.utils.SQlCheckUtil;
+import com.hbasesoft.framework.db.interceptor.DbInterceptorChain;
+import com.hbasesoft.framework.db.interceptor.DbOperationType;
+import com.hbasesoft.framework.db.interceptor.InterceptorContext;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Query;
@@ -426,6 +429,7 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         CriteriaQuery<Tuple> query = cb.createTupleQuery();
         Root root = query.from(getEntityClazz());
         specification.toPredicate(root, query, cb);
+        dispatchQueryInterceptor(root, query, cb);
         org.hibernate.query.Query q = getSession().createQuery(query);
 
         if (Map.class.isAssignableFrom(clazz)) {
@@ -656,6 +660,7 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         CriteriaQuery<Tuple> query = cb.createTupleQuery();
         Root root = query.from(getEntityClazz());
         specification.toPredicate(root, query, cb);
+        dispatchQueryInterceptor(root, query, cb);
         org.hibernate.query.Query q = getSession().createQuery(query);
         q.setMaxResults(MAX_SIZE);
         if (Map.class.isAssignableFrom(clazz)) {
@@ -780,6 +785,7 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         CriteriaQuery<Tuple> criteria = cb.createTupleQuery();
         Root entityRoot = criteria.from(getEntityClazz());
         specification.toPredicate(entityRoot, criteria, cb);
+        dispatchQueryInterceptor(entityRoot, criteria, cb);
 
         Long totalCount = null;
         TypedQuery<Long> countQuery = getSession().createQuery(((JpaCriteriaQuery) criteria).createCountQuery());
@@ -828,12 +834,13 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
      */
     @Override
     public void save(final BaseEntity entity) {
+        dispatchInsertInterceptor(entity);
         getSession().persist(entity);
     }
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param entitys <br>
@@ -845,6 +852,7 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         }
         Session session = getSession();
         for (int i = 0; i < entitys.size(); i++) {
+            dispatchInsertInterceptor(entitys.get(i));
             session.persist(entitys.get(i));
             if (i % NUM_100 == 0) {
                 // 1000个对象后才清理缓存，写入数据库
@@ -855,6 +863,34 @@ public class BaseHibernateDao<T extends BaseEntity> extends AbstractJpaBaseDao<T
         // 最后清理一下----防止大于1000小于2000的不保存
         session.flush();
         session.clear();
+    }
+
+    /**
+     * Description: 派发查询拦截——在 toPredicate 之后、语句执行之前调用，
+     * 拦截器可经上下文对 CriteriaQuery 追加谓词 <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param root 实体 Criteria 根对象
+     * @param criteria 查询语句
+     * @param cb Criteria 构造工厂
+     */
+    private void dispatchQueryInterceptor(final Root<?> root, final CriteriaQuery<?> criteria,
+        final CriteriaBuilder cb) {
+        DbInterceptorChain.dispatch(DbOperationType.QUERY, new InterceptorContext(root, criteria, cb, null,
+            getEntityClazz(), resolveTableName(getEntityClazz())));
+    }
+
+    /**
+     * Description: 派发插入拦截——在 persist 之前调用，拦截器可经上下文原地改写待持久化实体 <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entity 待持久化实体
+     */
+    private void dispatchInsertInterceptor(final BaseEntity entity) {
+        DbInterceptorChain.dispatch(DbOperationType.INSERT, new InterceptorContext(null, null, null, entity, entity
+            .getClass(), resolveTableName(entity.getClass())));
     }
 
     private void setParamMap(final Map<String, Object> paramMap, final NativeQuery<?> query) throws DaoException {

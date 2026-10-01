@@ -16,6 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.utils.Assert;
+import com.hbasesoft.framework.db.interceptor.DbInterceptorChain;
+import com.hbasesoft.framework.db.interceptor.DbOperationType;
+import com.hbasesoft.framework.db.interceptor.InterceptorContext;
 import com.hbasesoft.framework.db.core.BaseEntity;
 import com.hbasesoft.framework.db.core.DaoException;
 import com.hbasesoft.framework.db.core.criteria.AbstractQueryWrapper;
@@ -31,6 +34,7 @@ import com.hbasesoft.framework.db.core.criteria.UpdateWrapper;
 import com.hbasesoft.framework.db.core.utils.PagerList;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.criteria.CommonAbstractCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -231,6 +235,8 @@ public abstract class AbstractJpaBaseDao<T extends BaseEntity> implements BaseJp
         Root root = query.from(getEntityClazz());
         Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "删除条件");
         specification.toPredicate(root, query, cb);
+        DbInterceptorChain.dispatch(DbOperationType.DELETE, new InterceptorContext(root, query, cb, null,
+            getEntityClazz(), resolveTableName(getEntityClazz())));
         deleteByCriteria(query);
     }
 
@@ -949,7 +955,25 @@ public abstract class AbstractJpaBaseDao<T extends BaseEntity> implements BaseJp
         Root root = query.from(getEntityClazz());
         Assert.notNull(specification, ErrorCodeDef.PARAM_NOT_NULL, "修改条件");
         specification.toPredicate(root, query, cb);
+        DbInterceptorChain.dispatch(DbOperationType.UPDATE, new InterceptorContext(root, query, cb, null,
+            getEntityClazz(), resolveTableName(getEntityClazz())));
         updateByCriteria(query);
+    }
+
+    /**
+     * Description: 从实体元数据解析表名——优先取 &#64;Table 注解声明的名称，未注解时回退类简单名 <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     * @param entityClazz 实体类型
+     * @return 表名
+     */
+    protected static String resolveTableName(final Class<?> entityClazz) {
+        Table table = entityClazz.getAnnotation(Table.class);
+        if (table != null && StringUtils.isNotEmpty(table.name())) {
+            return table.name();
+        }
+        return entityClazz.getSimpleName();
     }
 
 }
