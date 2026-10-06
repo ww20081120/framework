@@ -37,10 +37,12 @@ public abstract class AbstractCache implements ICache {
 
     private <T> T getValue(final byte[] datas) {
         try {
-            CacheObject cacheObj = SerializationUtil.unserial(CacheObject.class, datas);
-            if (cacheObj != null) {
-                return cacheObj.getTarget();
+            Object value = SerializationUtil.unserial(Object.class, datas);
+            if (value instanceof CacheObject) {
+                // 历史版本写入的 CacheObject 包装字节（TTL 现由缓存实现层负责，此处仅兼容解包）
+                return ((CacheObject) value).getTarget();
             }
+            return (T) value;
         }
         catch (Exception e) {
             LoggerUtil.error("unserial failed!", e);
@@ -50,17 +52,7 @@ public abstract class AbstractCache implements ICache {
 
     private byte[] getData(final Object value) {
         try {
-            return SerializationUtil.serial(new CacheObject(value));
-        }
-        catch (Exception e) {
-            LoggerUtil.error("serial failed!", e);
-        }
-        return null;
-    }
-
-    private byte[] getData(final int seconds, final Object value) {
-        try {
-            return SerializationUtil.serial(new CacheObject(seconds, value));
+            return SerializationUtil.serial(value);
         }
         catch (Exception e) {
             LoggerUtil.error("serial failed!", e);
@@ -128,7 +120,7 @@ public abstract class AbstractCache implements ICache {
     public <T> void putNode(final String nodeName, final int seconds, final Map<String, T> node) {
         Map<byte[], byte[]> hmap = new HashMap<byte[], byte[]>();
         for (Entry<String, T> entry : node.entrySet()) {
-            byte[] value = getData(seconds, entry.getValue());
+            byte[] value = getData(entry.getValue());
             if (value != null) {
                 hmap.put(entry.getKey().getBytes(), value);
             }
@@ -177,7 +169,7 @@ public abstract class AbstractCache implements ICache {
      */
     @Override
     public <T> void putNodeValue(final String nodeName, final int seconds, final String key, final T t) {
-        putNodeValue(nodeName.getBytes(), seconds, key.getBytes(), getData(seconds, t));
+        putNodeValue(nodeName.getBytes(), seconds, key.getBytes(), getData(t));
     }
 
     /**
