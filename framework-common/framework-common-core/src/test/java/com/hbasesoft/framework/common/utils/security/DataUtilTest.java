@@ -128,8 +128,8 @@ public class DataUtilTest {
         String rawPassword = "123456";
 
         // When - 多次加密相同密码
-        String encrypted1 = DataUtil.encryptPassowrd(rawPassword);
-        String encrypted2 = DataUtil.encryptPassowrd(rawPassword);
+        String encrypted1 = DataUtil.encryptPassword(rawPassword);
+        String encrypted2 = DataUtil.encryptPassword(rawPassword);
 
         // Then - 验证加密结果不同（盐值随机性）
         assertThat(encrypted1)
@@ -142,7 +142,7 @@ public class DataUtilTest {
     void testMatchPasswordSuccess() {
         // Given
         String rawPassword = "123456";
-        String encryptedPassword = DataUtil.encryptPassowrd(rawPassword);
+        String encryptedPassword = DataUtil.encryptPassword(rawPassword);
 
         // When & Then
         assertThat(DataUtil.matchPassword(rawPassword, encryptedPassword)).isTrue();
@@ -154,7 +154,7 @@ public class DataUtilTest {
         // Given
         String rawPassword = "123456";
         String wrongPassword = "654321";
-        String encryptedPassword = DataUtil.encryptPassowrd(rawPassword);
+        String encryptedPassword = DataUtil.encryptPassword(rawPassword);
 
         // When & Then
         assertThat(DataUtil.matchPassword(wrongPassword, encryptedPassword)).isFalse();
@@ -333,8 +333,8 @@ public class DataUtilTest {
         String password2 = "password456";
 
         // When
-        String encrypted1 = DataUtil.encryptPassowrd(password1);
-        String encrypted2 = DataUtil.encryptPassowrd(password2);
+        String encrypted1 = DataUtil.encryptPassword(password1);
+        String encrypted2 = DataUtil.encryptPassword(password2);
 
         // Then
         assertThat(encrypted1).isNotEqualTo(encrypted2);
@@ -407,7 +407,7 @@ public class DataUtilTest {
         String password = "test123";
 
         // When
-        String encrypted = DataUtil.encryptPassowrd(password);
+        String encrypted = DataUtil.encryptPassword(password);
 
         // Then - Spring Security 的 DelegatingPasswordEncoder 会添加算法前缀
         assertThat(encrypted)
