@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
-	<version>4.4.5</version>
+	<version>4.5.0</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 	<description>轻量级企业级开发框架，提供分布式事务、缓存、消息队列、任务调度、规则引擎、AI集成等核心能力</description>
@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.7</version>
+		<version>4.1.1</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<modules>
@@ -33,36 +33,36 @@
 		<java.version>21</java.version>
 		<!-- 解决编译时中文乱码-->
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-		<spring-boot.version>4.0.7</spring-boot.version>
+		<spring-boot.version>4.1.1</spring-boot.version>
 		<ognl.version>3.4.9</ognl.version>
 		<velocity.version>2.4.1</velocity.version>
 		<thumbnailator.version>0.4.21</thumbnailator.version>
-		<commons-lang3.version>3.20.0</commons-lang3.version>
-		<commons-collections4.version>4.5.0</commons-collections4.version>
+		<commons-lang3.version>3.21.0</commons-lang3.version>
+		<commons-collections4.version>4.6.0</commons-collections4.version>
 		<commons-beanutils.version>1.11.0</commons-beanutils.version>
 		<commons-io.version>2.22.0</commons-io.version>
 		<jasypt.version>1.9.3</jasypt.version>
-		<kryo.version>5.6.2</kryo.version>
+		<kryo.version>5.7.1</kryo.version>
 		<druid.version>1.2.28</druid.version>
 		<!--		<curator.version>5.9.0</curator.version>-->
 		<jcommander.version>3.0</jcommander.version>
 		<dom4j.version>2.2.0</dom4j.version>
-		<caffeine.version>3.2.4</caffeine.version>
+		<caffeine.version>3.3.0</caffeine.version>
 		<elasticjob.version>3.0.4</elasticjob.version>
 		<jaxb.version>4.0.9</jaxb.version>
 		<xxl-job.version>3.4.2</xxl-job.version>
-		<mysql.version>9.7.0</mysql.version>
-		<lombok.version>1.18.46</lombok.version>
+		<mysql.version>26.7.0</mysql.version>
+		<lombok.version>1.18.48</lombok.version>
 		<!--		<json-api.version>2.1.3</json-api.version>-->
-		<skywalking.version>9.6.0</skywalking.version>
-		<opentelemetry.version>1.64.0</opentelemetry.version>
-		<opentelemetry-semconv.version>1.43.0</opentelemetry-semconv.version>
+		<skywalking.version>9.7.0</skywalking.version>
+		<opentelemetry.version>1.66.0</opentelemetry.version>
+		<opentelemetry-semconv.version>1.44.0</opentelemetry-semconv.version>
 		<otel.version>1.7.0</otel.version>
 		<!-- 代码质量检查工具版本 -->
 		<checkstyle.version>3.6.0</checkstyle.version>
 		<pmd.version>3.28.0</pmd.version>
-		<spotbugs.version>4.10.3</spotbugs.version>
-		<spotbugs-maven-plugin.version>4.10.3.0</spotbugs-maven-plugin.version>
+		<spotbugs.version>4.10.4</spotbugs.version>
+		<spotbugs-maven-plugin.version>4.10.4.1</spotbugs-maven-plugin.version>
 		<githook.version>1.0.5</githook.version>
 		<!-- 代码质量检查开关：true=启用检查，false=跳过检查（默认启用） -->
 		<code.quality.checks.enabled>true</code.quality.checks.enabled>
@@ -73,10 +73,14 @@
 		<alibaba-ai.version>1.1.2.3</alibaba-ai.version>
 		<agentscope.version>1.0.7</agentscope.version>
 		<!-- git工具 -->
-		<jgit.version>7.7.0.202606012155-r</jgit.version>
-		<feign.version>13.13</feign.version>
+		<jgit.version>7.8.0.202609011348-r</jgit.version>
+		<feign.version>13.17</feign.version>
 		<hibernate.version>7.3.6.Final</hibernate.version>
 		<testcontainers.version>2.0.5</testcontainers.version>
+		<!-- 消息与大数据组件（模块统一引用顶层版本） -->
+		<kafka.version>3.9.2</kafka.version>
+		<rocketmq.version>4.9.8</rocketmq.version>
+		<spark.version>3.5.9</spark.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -359,7 +363,21 @@
 			<dependency>
 				<groupId>org.apache.kafka</groupId>
 				<artifactId>kafka_2.12</artifactId>
-				<version>3.9.2</version>
+				<version>${kafka.version}</version>
+			</dependency>
+
+			<!-- RocketMQ 依赖版本管理 -->
+			<dependency>
+				<groupId>org.apache.rocketmq</groupId>
+				<artifactId>rocketmq-client</artifactId>
+				<version>${rocketmq.version}</version>
+			</dependency>
+
+			<!-- Spark 依赖版本管理 -->
+			<dependency>
+				<groupId>org.apache.spark</groupId>
+				<artifactId>spark-sql_2.12</artifactId>
+				<version>${spark.version}</version>
 			</dependency>
 
 			<!-- Hibernate 版本管理 -->
