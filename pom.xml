@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hbasesoft.framework</groupId>
 	<artifactId>framework</artifactId>
-	<version>4.5.2</version>
+	<version>4.5.3</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
 	<description>轻量级企业级开发框架，提供分布式事务、缓存、消息队列、任务调度、规则引擎、AI集成等核心能力</description>
@@ -81,6 +81,8 @@
 		<kafka.version>3.9.2</kafka.version>
 		<rocketmq.version>4.9.8</rocketmq.version>
 		<spark.version>3.5.9</spark.version>
+		<!-- Nacos 客户端（版本对齐 Spring Cloud Alibaba 2025.1.0.0 传递版本，framework-common-nacos 引用） -->
+		<nacos-client.version>3.1.1</nacos-client.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -378,6 +380,13 @@
 				<groupId>org.apache.spark</groupId>
 				<artifactId>spark-sql_2.12</artifactId>
 				<version>${spark.version}</version>
+			</dependency>
+
+			<!-- Nacos 客户端版本管理（framework-common-nacos；版本对齐 SCA 2025.1.0.0 传递版本） -->
+			<dependency>
+				<groupId>com.alibaba.nacos</groupId>
+				<artifactId>nacos-client</artifactId>
+				<version>${nacos-client.version}</version>
 			</dependency>
 
 			<!-- Hibernate 版本管理 -->

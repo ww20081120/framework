@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>4.5.2</version>
+		<version>4.5.3</version>
 	</parent>
 	<artifactId>framework-dependencies</artifactId>
 	<packaging>pom</packaging>
@@ -34,6 +34,11 @@
 			<dependency>
 				<groupId>com.hbasesoft.framework</groupId>
 				<artifactId>framework-common-core</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.hbasesoft.framework</groupId>
+				<artifactId>framework-common-nacos</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 

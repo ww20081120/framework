@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.hbasesoft.framework</groupId>
+		<artifactId>framework-common</artifactId>
+		<version>4.5.3</version>
+	</parent>
+	<artifactId>framework-common-nacos</artifactId>
+	<name>framework-common-nacos</name>
+	<description>通用框架Nacos配置模块（Property SPI 的 Nacos 配置中心后端）</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.hbasesoft.framework</groupId>
+			<artifactId>framework-common-core</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- Nacos 配置中心客户端（版本对齐 Spring Cloud Alibaba 2025.1.0.0 传递版本） -->
+		<dependency>
+			<groupId>com.alibaba.nacos</groupId>
+			<artifactId>nacos-client</artifactId>
+		</dependency>
+		<!-- yml 解析（与 framework-common-core 的 LocalProperty 同源依赖，显式声明供本模块直接使用） -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+		</dependency>
+
+		<!-- 单元测试 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
