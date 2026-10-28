@@ -243,16 +243,15 @@ public final class PropertyHolder {
             int end = value.indexOf("}", startIndex + 2);
             while (startIndex != -1 && end != -1) {
                 String key = value.substring(startIndex + 2, end);
-                if (!StringUtils.equals(name, key) && StringUtils.isNotEmpty(key)) {
-                    String kv = getProperty(property, key);
-                    if (kv == null && property != LOCAL_PROPERTY) {
-                        kv = LOCAL_PROPERTY.getProperty(key);
-                    }
-                    if (kv == null) {
-                        throw new UtilException(ErrorCodeDef.CONFIG_NOT_SET, key);
-                    }
-                    value = StringUtils.replace(value, "${" + key + "}", kv);
+                if (StringUtils.isEmpty(key) || StringUtils.equals(name, key)) {
+                    // 自引用或空占位符无法继续解析，保持原样返回，避免死循环
+                    break;
                 }
+                String kv = getProperty(key);
+                if (kv == null) {
+                    throw new UtilException(ErrorCodeDef.CONFIG_NOT_SET, key);
+                }
+                value = StringUtils.replace(value, "${" + key + "}", kv);
                 startIndex = value.indexOf("${");
                 end = value.indexOf("}", startIndex + 2);
             }
