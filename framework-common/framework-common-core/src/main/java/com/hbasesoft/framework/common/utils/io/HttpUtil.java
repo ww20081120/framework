@@ -168,8 +168,9 @@ public final class HttpUtil {
                 if (null == name) {
                     // name可以是""
                     name = str.substring(pos, i);
+                    pos = i + 1;
                 }
-                pos = i + 1;
+                // name已设置时，后续的=属于值的一部分，不更新pos
             }
             // 参数对的分界点
             else if (c == '&') {

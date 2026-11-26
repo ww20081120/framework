@@ -15,8 +15,8 @@ import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.InitializationException;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
@@ -63,7 +63,7 @@ public final class JsonFileFlowLoader implements FlowLoader {
     public FlowConfig load(final String flowName) {
         String content = flowConfigHolder.get(flowName);
         if (StringUtils.isNotEmpty(content)) {
-            return JsonConfigUtil.getFlowConfig(JSONObject.parseObject(content));
+            return JsonConfigUtil.getFlowConfig(JsonUtil.parseObject(content));
         }
         return null;
     }
@@ -122,8 +122,8 @@ public final class JsonFileFlowLoader implements FlowLoader {
     private void addFlowFile(final String content, final String fileName) {
         if (StringUtils.isNotEmpty(content)) {
             LoggerUtil.info("find workflow file [{0}]", fileName);
-            JSONObject json = JSONObject.parseObject(content);
-            String name = json.getString("name");
+            tools.jackson.databind.node.ObjectNode json = JsonUtil.parseObject(content);
+            String name = json.has("name") ? json.get("name").asText() : null;
             if (StringUtils.isEmpty(name)) {
                 name = fileName.substring(fileName.lastIndexOf("/") + 1, fileName.lastIndexOf("."));
             }

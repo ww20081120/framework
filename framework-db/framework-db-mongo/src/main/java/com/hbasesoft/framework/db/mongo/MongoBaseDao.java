@@ -38,8 +38,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.GlobalConstants;
 import com.hbasesoft.framework.common.utils.Assert;
 import com.hbasesoft.framework.common.utils.logger.Logger;
@@ -1211,7 +1211,7 @@ public class MongoBaseDao<T extends BaseEntity> implements BaseMongoDao<T> {
                 else if (Map.class.isAssignableFrom(field.getType())) {
                     Map<String, Object> mongoMap;
                     if (!(mongoFieldValue instanceof Map)) {
-                        mongoMap = JSONObject.parseObject((String) mongoFieldValue, Map.class);
+                        mongoMap = JsonUtil.fromJson((String) mongoFieldValue, Map.class);
                     }
                     else {
                         mongoMap = (Map<String, Object>) mongoFieldValue;

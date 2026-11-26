@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.hbasesoft.framework</groupId>
 		<artifactId>framework</artifactId>
-		<version>4.2.1</version>
+		<version>4.5.3</version>
 	</parent>
 	<artifactId>framework-tx</artifactId>
 	<packaging>pom</packaging>
@@ -14,7 +14,15 @@
 	<modules>
 		<module>framework-tx-core</module>
 		<module>framework-tx-server</module>
-		<module>framework-tx-demo</module>
 		<module>framework-tx-integration</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>with-demo</id>
+			<modules>
+				<module>framework-tx-demo</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

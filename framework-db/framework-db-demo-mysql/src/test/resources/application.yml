@@ -1,0 +1,17 @@
+project:
+  name: db-demo-mysql
+
+spring:
+  application:
+    name: ${project.name}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+master:
+  db:
+    type: mysql
+    url: jdbc:mysql://localhost:3306/test_db
+    username: root
+    password: root

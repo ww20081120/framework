@@ -22,6 +22,9 @@ import com.hbasesoft.framework.tx.core.annotation.Tx;
  */
 public final class TxEventHolder {
 
+    /** 私有锁对象，避免暴露类的内置锁 */
+    private static final Object LOCK = new Object();
+
     /** */
     private static final Map<String, Tx> TX_HOLDER = new HashMap<String, Tx>();
 
@@ -33,8 +36,10 @@ public final class TxEventHolder {
      * @Description TODD
      * @Date 2023/1/29 15:16
     */
-    public static synchronized void put(final String event, final Tx tx) {
-        TX_HOLDER.put(event, tx);
+    public static void put(final String event, final Tx tx) {
+        synchronized (LOCK) {
+            TX_HOLDER.put(event, tx);
+        }
     }
 
     /**

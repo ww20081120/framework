@@ -7,7 +7,6 @@ package com.hbasesoft.framework.tracing.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +24,7 @@ import com.hbasesoft.framework.tracing.core.TraceLog;
  * @since V1.0<br>
  * @see com.hbasesoft.vcc.sgp.bootstrap.plat <br>
  */
-@EnableAutoConfiguration(exclude = {
-    DataSourceAutoConfiguration.class
-})
+@EnableAutoConfiguration
 @TraceLog(basePackages = "com.hbasesoft.framework.tracing.demo")
 @ComponentScan(basePackages = "com.hbasesoft")
 @Configuration

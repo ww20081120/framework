@@ -6,8 +6,8 @@
 package com.hbasesoft.framework.rule.core.config;
 
 import java.io.Serializable;
+import java.util.Map;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 
 /**
@@ -29,7 +29,7 @@ public interface FlowConfig extends Serializable {
      * @taskId <br>
      * @return <br>
      */
-    JSONObject getConfigAttrMap();
+    Map<String, Object> getConfigAttrMap();
 
     /**
      * Description: 节点名称<br>

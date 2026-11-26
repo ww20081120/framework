@@ -8,7 +8,6 @@ package com.hbasesoft.framework.ai.demo.openai.agent;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 
@@ -59,14 +58,18 @@ public class TestAgent implements AgentConfig {
     @Override
     public ChatModel model() {
 
-        OpenAiApi openAiApi = OpenAiApi.builder().baseUrl("http://127.0.0.1:11434").apiKey("your api key").build();
-
-        OpenAiChatOptions chatOptions = OpenAiChatOptions.builder().temperature(DEFAULT_TEMPERATURE) // 控制随机性
-            .model("qwen3-coder:30b-a3b-fp16").maxTokens(DEFAULT_MAX_TOKENS) // 最大输出长度
+        // Spring AI 2.0.0: baseUrl和apiKey直接在OpenAiChatOptions中配置
+        OpenAiChatOptions chatOptions = OpenAiChatOptions.builder()
+            .baseUrl("http://127.0.0.1:11434")
+            .apiKey("your api key")
+            .temperature(DEFAULT_TEMPERATURE) // 控制随机性
+            .model("qwen3-coder:30b-a3b-fp16")
+            .maxTokens(DEFAULT_MAX_TOKENS) // 最大输出长度
             .topP(DEFAULT_TOP_P) // 核采样参数
-            .streamUsage(true).build();
+            .streamUsage(true)
+            .build();
 
-        return OpenAiChatModel.builder().defaultOptions(chatOptions).openAiApi(openAiApi).build();
+        return OpenAiChatModel.builder().options(chatOptions).build();
 
     }
 

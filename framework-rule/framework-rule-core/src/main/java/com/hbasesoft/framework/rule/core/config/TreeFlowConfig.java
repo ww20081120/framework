@@ -6,9 +6,9 @@
 package com.hbasesoft.framework.rule.core.config;
 
 import java.util.List;
+import java.util.Map;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.rule.core.FlowComponent;
 
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class TreeFlowConfig implements FlowConfig {
     private static final long serialVersionUID = 6738624692458576179L;
 
     /** configAttrMap */
-    private JSONObject configAttrMap;
+    private Map<String, Object> configAttrMap;
 
     /** hildren config list */
     private List<FlowConfig> childrenConfigList;
@@ -58,6 +58,6 @@ public class TreeFlowConfig implements FlowConfig {
      */
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 }

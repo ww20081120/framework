@@ -67,7 +67,7 @@ public final class SerializationUtil {
 
     /**
      * Description: <br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param obj
@@ -75,7 +75,7 @@ public final class SerializationUtil {
      * @return T
      */
     public static <T> byte[] serial(final T obj) {
-        if (obj != null && !(obj instanceof Void)) {
+        if (obj != null && !(obj instanceof Void) && !Void.TYPE.equals(obj)) {
             try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 Output output = new Output(byteArrayOutputStream);) {
                 Kryo kryo = KRYO_LOCAL.get();

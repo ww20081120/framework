@@ -45,6 +45,26 @@ public final class Bootstrap {
     /** listenerList */
     private static List<StartupListener> listenerList = null;
 
+    // fastjson2 safeMode 全局默认开启（反序列化 autoType 禁用），类加载时执行，早于一切 JSON 解析
+    static {
+        initFastjsonSafeMode();
+    }
+
+    /**
+     * Description: fastjson2 safeMode 全局默认开启（反序列化 autoType 禁用） <br>
+     *              外部已显式设置系统属性时尊重不覆盖（逃生门语义）；<br>
+     *              由静态块在类加载时调用，早于 before() 与一切 JSON 解析。 <br>
+     *
+     * @author 王伟<br>
+     * @taskId <br>
+     *         <br>
+     */
+    static void initFastjsonSafeMode() {
+        if (System.getProperty("fastjson2.parser.safeMode") == null) {
+            System.setProperty("fastjson2.parser.safeMode", "true");
+        }
+    }
+
     /**
      * 私有构造器，防止实例化
      */

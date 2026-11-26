@@ -6,12 +6,11 @@
 package com.hbasesoft.rule.plugin.statemachine;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
 import com.hbasesoft.framework.common.GlobalConstants;
@@ -77,7 +76,8 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
             Assert.notEmpty(state, ErrorCodeDef.BEGIN_STATE_NOT_EMPTY);
             String end = (String) attrMap.get("end");
             Assert.notEmpty(end, ErrorCodeDef.END_STATE_NOT_EMPTY);
-            JSONObject control = (JSONObject) attrMap.get("stateMachine");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> control = (Map<String, Object>) attrMap.get("stateMachine");
             Assert.notEmpty(control, ErrorCodeDef.CONTROL_NOT_NULL);
 
             String currentState = flowBean.getState();
@@ -89,21 +89,22 @@ public class StateMachineInterceptor extends AbstractFlowCompnentInterceptor {
             // 如果当前流程已经结束，则不往下继续走了
             if (!CommonUtil.match(end, currentState)) {
 
-                JSONArray matchEvents = control.getJSONArray(currentState);
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> matchEvents = (List<Map<String, Object>>) control.get(currentState);
                 Assert.notEmpty(matchEvents, ErrorCodeDef.STATE_NOT_MATCH, currentState);
 
                 for (int i = 0, size = matchEvents.size(); i < size; i++) {
-                    JSONObject eventObj = matchEvents.getJSONObject(i);
-                    String action = eventObj.getString("action");
+                    Map<String, Object> eventObj = matchEvents.get(i);
+                    String action = (String) eventObj.get("action");
                     Assert.notEmpty(action, ErrorCodeDef.EVENT_NOT_EMPTY);
-                    String endState = eventObj.getString("end");
-                    String gError = eventObj.getString("error");
+                    String endState = (String) eventObj.get("end");
+                    String gError = (String) eventObj.get("error");
 
                     if (StringUtils.isEmpty(endState)) {
                         endState = currentState;
                     }
 
-                    String errorState = eventObj.getString("error");
+                    String errorState = (String) eventObj.get("error");
                     if (StringUtils.isEmpty(errorState)) {
                         errorState = StringUtils.isEmpty(gError) ? gError : currentState;
                     }

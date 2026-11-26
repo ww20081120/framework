@@ -27,8 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.common.utils.io.IOUtil;
 import com.hbasesoft.framework.common.utils.security.DataUtil;
 
@@ -246,7 +246,7 @@ public class DBTable2JavaBean extends JFrame {
         paramMap.put("jdbcUrl", textFields[i++].getText());
         paramMap.put("username", textFields[i++].getText());
         paramMap.put("password", textFields[i++].getText());
-        String content = JSONObject.toJSONString(paramMap);
+        String content = JsonUtil.toJson(paramMap);
         try {
             IOUtil.writeFile(content,
                 new File(System.getProperties().getProperty("user.home") + "/frameworkCache/config.cfg"));
@@ -267,7 +267,7 @@ public class DBTable2JavaBean extends JFrame {
             try {
                 String content = IOUtil.readFile(f);
                 if (StringUtils.isNotEmpty(content)) {
-                    return JSONObject.parseObject(content);
+                    return JsonUtil.parseMap(content);
                 }
             }
             catch (Exception e) {

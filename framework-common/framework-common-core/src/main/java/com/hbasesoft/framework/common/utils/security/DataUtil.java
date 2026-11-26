@@ -9,12 +9,13 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
+import org.jasypt.iv.RandomIvGenerator;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.GlobalConstants;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 import lombok.AccessLevel;
@@ -52,13 +53,17 @@ public final class DataUtil {
     private static final int NUM_24 = 24;
 
     /** password */
-    private static final String SITE_WIDE_SECRET = "hbasesoft.com";
+    private static final String SITE_WIDE_SECRET = PropertyHolder.getProperty("framework.security.secret",
+        "hbasesoft.com");
 
     /** ALGORITHM */
-    private static final String ALGORITHM = "PBEWithMD5AndDES";
+    private static final String ALGORITHM = "PBEWithHmacSHA512AndAES_256";
 
     /** ENCODER */
     private static final PasswordEncoder ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+    /** ENCRYPTOR */
+    private static final StandardPBEStringEncryptor ENCRYPTOR = createEncryptor();
 
     /**
      * 16位字符串数组
@@ -187,7 +192,7 @@ public final class DataUtil {
      * @param rawPassword
      * @return <br>
      */
-    public static String encryptPassowrd(final String rawPassword) {
+    public static String encryptPassword(final String rawPassword) {
         return ENCODER.encode(rawPassword);
     }
 
@@ -204,47 +209,37 @@ public final class DataUtil {
         return ENCODER.matches(rawPassword, password);
     }
 
+    private static StandardPBEStringEncryptor createEncryptor() {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setAlgorithm(ALGORITHM);
+        encryptor.setPassword(SITE_WIDE_SECRET);
+        // AES 算法必须使用随机 IV，否则相同明文产生相同密文且存在 IV 重用风险
+        encryptor.setIvGenerator(new RandomIvGenerator());
+        return encryptor;
+    }
+
     /**
-     * Description: 可以解密的加密<br>
-     * 
+     * Description: 可以解密的加密（配置项 framework.security.secret 可自定义密钥）<br>
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param password
      * @return <br>
      */
     public static String encrypt(final String password) {
-        // 加密工具
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        // 加密配置
-        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
-        config.setAlgorithm(ALGORITHM);
-        // 自己在用的时候更改此密码
-        config.setPassword(SITE_WIDE_SECRET);
-        // 应用配置
-        encryptor.setConfig(config);
-        // 加密
-        return encryptor.encrypt(password);
+        return ENCRYPTOR.encrypt(password);
     }
 
     /**
-     * Description: 解密 <br>
-     * 
+     * Description: 解密（配置项 framework.security.secret 可自定义密钥）<br>
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param password
      * @return <br>
      */
     public static String decrypt(final String password) {
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        // 加密配置
-        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
-        config.setAlgorithm(ALGORITHM);
-        // 自己在用的时候更改此密码
-        config.setPassword(SITE_WIDE_SECRET);
-        // 应用配置
-        encryptor.setConfig(config);
-        // 解密
-        return encryptor.decrypt(password);
+        return ENCRYPTOR.decrypt(password);
     }
 
     /**

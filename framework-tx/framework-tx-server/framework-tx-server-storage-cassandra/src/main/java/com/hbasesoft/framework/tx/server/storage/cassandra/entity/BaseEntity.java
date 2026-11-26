@@ -5,7 +5,7 @@ package com.hbasesoft.framework.tx.server.storage.cassandra.entity;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson2.JSON;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 /**
  * <Description> <br>
@@ -31,6 +31,6 @@ public abstract class BaseEntity implements Serializable {
      */
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 }

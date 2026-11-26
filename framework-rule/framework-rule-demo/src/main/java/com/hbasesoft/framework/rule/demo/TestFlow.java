@@ -8,8 +8,8 @@ package com.hbasesoft.framework.rule.demo;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCode;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 import com.hbasesoft.framework.rule.core.FlowHelper;
 import com.hbasesoft.framework.rule.core.antv.AntVFlowHelper;
 import com.hbasesoft.framework.rule.demo.bean.FlowBean;
@@ -53,16 +53,16 @@ public class TestFlow {
     public void testStateMachineBean() {
         TestStateMachineBean bean = new TestStateMachineBean();
         bean.setEvent("e1");
-        System.out.println(JSONObject.toJSONString(bean));
+        System.out.println(JsonUtil.toJson(bean));
         ErrorCode result = FlowHelper.flowStart(bean, "stateMachine");
         System.out.println(result);
-        System.out.println(JSONObject.toJSONString(bean));
+        System.out.println(JsonUtil.toJson(bean));
         result = FlowHelper.flowStart(bean, "stateMachine");
         System.out.println(result);
-        System.out.println(JSONObject.toJSONString(bean));
+        System.out.println(JsonUtil.toJson(bean));
         result = FlowHelper.flowStart(bean, "stateMachine");
         System.out.println(result);
-        System.out.println(JSONObject.toJSONString(bean));
+        System.out.println(JsonUtil.toJson(bean));
     }
 
     /**

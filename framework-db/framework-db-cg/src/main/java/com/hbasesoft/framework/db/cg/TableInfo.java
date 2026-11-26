@@ -7,7 +7,7 @@ package com.hbasesoft.framework.db.cg;
 
 import java.util.List;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 import lombok.Data;
 
@@ -47,7 +47,7 @@ public class TableInfo {
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 
 }

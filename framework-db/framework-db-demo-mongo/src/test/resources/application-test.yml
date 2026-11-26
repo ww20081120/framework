@@ -1,0 +1,6 @@
+project:
+  name: db-demo-mongo-test
+
+spring:
+  application:
+    name: ${project.name}

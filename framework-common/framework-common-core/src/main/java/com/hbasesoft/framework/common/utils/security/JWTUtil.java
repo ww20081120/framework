@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.hbasesoft.framework.common.utils.JsonUtil;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -52,7 +52,7 @@ public final class JWTUtil {
     public static String createToken(final long expireTime, final Map<String, Object> payload,
         final String privateKey) {
         payload.put("exp", expireTime);
-        byte[] payloadBytes = JSONObject.toJSONString(payload).getBytes(StandardCharsets.UTF_8);
+        byte[] payloadBytes = JsonUtil.toJson(payload).getBytes(StandardCharsets.UTF_8);
         String jsonPayload = DataUtil.base64UrlEncode(payloadBytes);
         String data = HEADER + jsonPayload;
         String sign = RSAUtil.sign(data, privateKey);
@@ -61,7 +61,7 @@ public final class JWTUtil {
 
     /**
      * Description: 校验token<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param token
@@ -69,11 +69,18 @@ public final class JWTUtil {
      * @return <br>
      */
     public static boolean verify(final String token, final String publicKey) {
-        if (token != null && token.indexOf(".") != -1) {
-            int index = token.lastIndexOf(".");
-            String sign = token.substring(index + 1);
-            String data = token.substring(0, index);
-            return RSAUtil.verify(data, publicKey, sign);
+        if (token != null) {
+            try {
+                String[] data = StringUtils.split(token, ".");
+                if (data.length == FIX_LENGTH) {
+                    String vd = token.substring(0, token.lastIndexOf("."));
+                    return RSAUtil.verify(vd, publicKey, data[2]);
+                }
+            }
+            catch (Exception e) {
+                // 验签失败，返回 false
+                return false;
+            }
         }
         return false;
     }
@@ -90,7 +97,7 @@ public final class JWTUtil {
         if (token != null) {
             String[] data = StringUtils.split(token, ".");
             if (data.length == FIX_LENGTH && StringUtils.isNotEmpty(data[1])) {
-                return JSONObject.parseObject(new String(DataUtil.base64Decode(data[1]), StandardCharsets.UTF_8));
+                return JsonUtil.parseMap(new String(DataUtil.base64Decode(data[1]), StandardCharsets.UTF_8));
             }
         }
         return Collections.emptyMap();
@@ -98,7 +105,7 @@ public final class JWTUtil {
 
     /**
      * Description: 解析token并校验<br>
-     * 
+     *
      * @author 王伟<br>
      * @taskId <br>
      * @param token
@@ -110,14 +117,21 @@ public final class JWTUtil {
             String[] data = StringUtils.split(token, ".");
             if (data.length == FIX_LENGTH) {
                 String vd = token.substring(0, token.lastIndexOf("."));
-                if (RSAUtil.verify(vd, publicKey, data[2])) {
-                    byte[] decodedBytes = DataUtil.base64Decode(data[1]);
-                    String decodedStr = new String(decodedBytes, StandardCharsets.UTF_8);
-                    JSONObject payload = JSONObject.parseObject(decodedStr);
-                    Long exp = payload.getLong("exp");
-                    if (exp != null && System.currentTimeMillis() < exp) {
-                        return payload;
+                try {
+                    if (RSAUtil.verify(vd, publicKey, data[2])) {
+                        byte[] decodedBytes = DataUtil.base64Decode(data[1]);
+                        String decodedStr = new String(decodedBytes, StandardCharsets.UTF_8);
+                        Map<String, Object> payload = JsonUtil.parseMap(decodedStr);
+                        Object expObj = payload.get("exp");
+                        Long exp = expObj instanceof Number ? ((Number) expObj).longValue() : null;
+                        if (exp != null && System.currentTimeMillis() < exp) {
+                            return payload;
+                        }
                     }
+                }
+                catch (Exception e) {
+                    // 验签失败或解析失败，返回空 map
+                    return Collections.emptyMap();
                 }
             }
         }

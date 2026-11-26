@@ -11,6 +11,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 import com.hbasesoft.framework.common.ErrorCodeDef;
+import com.hbasesoft.framework.common.utils.PropertyHolder;
 import com.hbasesoft.framework.common.utils.UtilException;
 
 /**
@@ -25,8 +26,9 @@ import com.hbasesoft.framework.common.utils.UtilException;
  */
 public final class DESUtil {
 
-    /** */
-    private static final String CRYPTION_SECRET_KEY = "hbasesof";
+    /** 密钥，与 DataUtil 共用同一配置项，DES 密钥取前 8 字节 */
+    private static final String CRYPTION_SECRET_KEY = PropertyHolder.getProperty("framework.security.secret",
+        "hbasesoft.com");
 
     /** */
     private static final String DES_ALGORITHM = "DES";
@@ -119,7 +121,6 @@ public final class DESUtil {
         throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES_ALGORITHM);
         DESKeySpec keySpec = new DESKeySpec(secretKey.getBytes(StandardCharsets.UTF_8));
-        keyFactory.generateSecret(keySpec);
         return keyFactory.generateSecret(keySpec);
     }
 

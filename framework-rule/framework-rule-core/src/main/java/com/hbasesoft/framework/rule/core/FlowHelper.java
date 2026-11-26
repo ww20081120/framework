@@ -16,7 +16,6 @@ import java.util.ServiceLoader;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.hbasesoft.framework.common.ErrorCode;
 import com.hbasesoft.framework.common.ErrorCodeDef;
 import com.hbasesoft.framework.common.FrameworkException;
@@ -27,6 +26,8 @@ import com.hbasesoft.framework.rule.core.config.FlowConfig;
 import com.hbasesoft.framework.rule.core.config.FlowLoader;
 import com.hbasesoft.framework.rule.core.config.JsonConfigUtil;
 import com.hbasesoft.framework.rule.core.config.TreeFlowConfig;
+
+import tools.jackson.databind.node.ObjectNode;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -81,7 +82,7 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> ErrorCode flowStart(final T bean, final JSONObject flowConfig,
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final ObjectNode flowConfig,
         final boolean throwable) {
 
         Assert.notNull(bean, ErrorCodeDef.PARAM_NOT_NULL, "FlowBean");
@@ -170,7 +171,7 @@ public final class FlowHelper {
      * @param <T> T
      * @return <br>
      */
-    public static <T extends Serializable> ErrorCode flowStart(final T bean, final JSONObject flowConfig) {
+    public static <T extends Serializable> ErrorCode flowStart(final T bean, final ObjectNode flowConfig) {
         return flowStart(bean, flowConfig, false);
     }
 

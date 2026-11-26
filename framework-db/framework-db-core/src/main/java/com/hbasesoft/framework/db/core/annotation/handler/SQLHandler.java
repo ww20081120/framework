@@ -42,6 +42,11 @@ public class SQLHandler extends AbstractAnnotationHandler {
         Method[] methods = clazz.getDeclaredMethods();
         if (ArrayUtils.isNotEmpty(methods)) {
             for (Method method : methods) {
+                // Step0:跳过编译器生成方法和已有实现的接口默认方法
+                if (!isSqlTemplateMethod(method)) {
+                    continue;
+                }
+
                 // Step1:判断是否是BaseDaoExcutor方法
                 if (getBaseDaoExcutor(method) != null) {
                     continue;

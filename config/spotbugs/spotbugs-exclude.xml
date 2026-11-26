@@ -72,6 +72,15 @@
       以下是需要特殊处理的情况，经过评估后确认为合理的设计选择
     -->
 
+    <!-- InterceptorContext - 可变引用暴露是拦截 SPI 的设计核心：拦截器须原地改写 Criteria 语句与实体，拷贝语义会使改写失效 -->
+    <Match>
+        <Class name="com.hbasesoft.framework.db.interceptor.InterceptorContext" />
+        <Or>
+            <Bug pattern="EI_EXPOSE_REP" />
+            <Bug pattern="EI_EXPOSE_REP2" />
+        </Or>
+    </Match>
+
     <!-- 框架内部工具类 - DataSourceUtil 需要多步原子操作，必须在 ConcurrentHashMap 上同步 -->
     <Match>
         <Class name="com.hbasesoft.framework.db.orm.util.DataSourceUtil" />

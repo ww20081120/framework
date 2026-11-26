@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS t_staff (
+    id INT NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    position VARCHAR(100),
+    department VARCHAR(100),
+    salary DECIMAL(10, 2),
+    hire_date DATE,
+    name VARCHAR(200),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS T_STUDENT (
+    id VARCHAR(50) NOT NULL,
+    name VARCHAR(100),
+    AGE INT,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS T_COURSE (
+    id VARCHAR(50) NOT NULL,
+    COURSE_NAME VARCHAR(100),
+    REMARK VARCHAR(500),
+    PRIMARY KEY (id)
+);

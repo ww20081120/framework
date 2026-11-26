@@ -262,7 +262,7 @@ public final class CommonUtil {
             }), new String[] {
                 "*", "?"
             }, new String[] {
-                ".*", ".?"
+                ".*", "."
             });
         Pattern pp = Pattern.compile(tempRule);
         Matcher m = pp.matcher(matchValue);

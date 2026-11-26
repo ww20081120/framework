@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.aop.ProxyMethodInvocation;
 
 import com.hbasesoft.framework.common.utils.logger.Logger;
 import com.hbasesoft.framework.db.core.annotation.handler.DaoHandler;
@@ -44,7 +45,14 @@ public class SpringDaoHandler implements MethodInterceptor {
 
         try {
             DaoHandler handler = (DaoHandler) invocation.getThis();
-            return handler.invoke(null, method, args);
+            if (handler == null) {
+                throw new IllegalStateException(
+                    "DaoHandler instance is null, cannot invoke method: " + method.getName());
+            }
+            Object proxy = invocation instanceof ProxyMethodInvocation proxyMethodInvocation
+                ? proxyMethodInvocation.getProxy()
+                : null;
+            return handler.invoke(proxy, method, args);
         }
         catch (Exception e) {
             logger.error(e);
